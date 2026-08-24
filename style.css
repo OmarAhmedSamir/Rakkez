@@ -3447,25 +3447,35 @@ html[dir="ltr"] body{
 }
 
 /* =====================================================
-   DARK MODE — HEADER ONLY
-   DO NOT CHANGE BACKGROUND / TIMER / MAIN
+   RAKKEZ — DARK BLUE HEADER THEME
+   HEADER ONLY — NO BACKGROUND / TIMER CHANGES
+===================================================== */
+
+
+/* =====================================================
+   LOGO
 ===================================================== */
 
 body:not(.light) .logo{
 
-    color:#f5f7fb;
+    color:#f5f8ff;
+
+    text-shadow:
+        0 0 20px rgba(22,131,255,.08);
 
 }
 
+
 body:not(.light) .logo span{
 
-    color:#3c94ff;
+    color:#1683ff;
 
 }
 
 
 /* =====================================================
-   HEADER ICON BUTTONS
+   HEADER BUTTONS
+   Media / Tasks / Updates
 ===================================================== */
 
 body:not(.light) .icon-btn{
@@ -3473,26 +3483,26 @@ body:not(.light) .icon-btn{
     background:
         linear-gradient(
             145deg,
-            rgba(8,13,22,.92),
-            rgba(4,8,15,.88)
+            rgba(10,25,48,.92),
+            rgba(4,13,28,.88)
         );
 
     border:
-        1px solid rgba(255,255,255,.09);
+        1px solid rgba(35,131,255,.22);
 
     color:
-        rgba(255,255,255,.82);
+        rgba(225,238,255,.88);
 
     box-shadow:
 
         inset 0 1px 0
-        rgba(255,255,255,.055),
+        rgba(100,175,255,.07),
 
         inset 0 -1px 0
-        rgba(0,0,0,.25),
+        rgba(0,0,0,.30),
 
         0 8px 25px
-        rgba(0,0,0,.20);
+        rgba(0,35,90,.20);
 
 }
 
@@ -3502,8 +3512,8 @@ body:not(.light) .icon-btn::before{
     background:
         linear-gradient(
             135deg,
-            rgba(255,255,255,.045),
-            transparent 48%
+            rgba(65,150,255,.08),
+            transparent 50%
         );
 
 }
@@ -3514,65 +3524,32 @@ body:not(.light) .icon-btn:hover{
     background:
         linear-gradient(
             145deg,
-            rgba(14,21,34,.96),
-            rgba(6,11,19,.92)
+            rgba(15,38,70,.98),
+            rgba(5,17,35,.94)
         );
 
     border-color:
-        rgba(255,255,255,.17);
-
-    color:#fff;
-
-}
-
-
-/* =====================================================
-   BLOG BUTTON
-===================================================== */
-
-body:not(.light) .blog-btn{
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(8,13,22,.94),
-            rgba(4,8,15,.88)
-        );
-
-    border:
-        1px solid rgba(255,255,255,.10);
+        rgba(65,150,255,.42);
 
     color:#fff;
 
     box-shadow:
 
         inset 0 1px 0
-        rgba(255,255,255,.06),
+        rgba(110,180,255,.10),
 
-        0 8px 25px
-        rgba(0,0,0,.18);
+        0 12px 32px
+        rgba(0,55,130,.28),
 
-}
-
-
-body:not(.light) .blog-btn:hover{
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(15,23,37,.96),
-            rgba(6,11,20,.92)
-        );
-
-    border-color:
-        rgba(255,255,255,.18);
+        0 0 22px
+        rgba(20,120,255,.08);
 
 }
 
 
 /* =====================================================
    LANGUAGE BUTTON
-   KEEP BLUE
+   SAME BASE STYLE AS OTHER HEADER BUTTONS
 ===================================================== */
 
 body:not(.light) .language-btn{
@@ -3580,14 +3557,26 @@ body:not(.light) .language-btn{
     background:
         linear-gradient(
             145deg,
-            rgba(20,120,255,.22),
-            rgba(10,55,130,.16)
+            rgba(10,25,48,.92),
+            rgba(4,13,28,.88)
         );
 
     border:
-        1px solid rgba(65,150,255,.55);
+        1px solid rgba(35,131,255,.22);
 
-    color:#fff;
+    color:
+        rgba(225,238,255,.92);
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(100,175,255,.07),
+
+        inset 0 -1px 0
+        rgba(0,0,0,.30),
+
+        0 8px 25px
+        rgba(0,35,90,.20);
 
 }
 
@@ -3597,11 +3586,123 @@ body:not(.light) .language-btn:hover{
     background:
         linear-gradient(
             145deg,
-            rgba(30,135,255,.32),
-            rgba(15,70,155,.22)
+            rgba(15,38,70,.98),
+            rgba(5,17,35,.94)
         );
 
     border-color:
-        rgba(100,175,255,.70);
+        rgba(65,150,255,.42);
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(110,180,255,.10),
+
+        0 12px 32px
+        rgba(0,55,130,.28),
+
+        0 0 22px
+        rgba(20,120,255,.08);
+
+}
+
+
+/* =====================================================
+   BLOG BUTTON
+   SAME DARK BLUE STYLE — BUT SPECIAL
+===================================================== */
+
+body:not(.light) .blog-btn{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20,90,180,.38),
+            rgba(7,30,65,.88)
+        );
+
+    border:
+        1px solid rgba(65,150,255,.50);
+
+    color:#ffffff;
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(120,190,255,.12),
+
+        inset 0 -1px 0
+        rgba(0,20,60,.30),
+
+        0 8px 28px
+        rgba(0,70,160,.20),
+
+        0 0 18px
+        rgba(20,120,255,.05);
+
+}
+
+
+body:not(.light) .blog-btn:hover{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(28,110,215,.48),
+            rgba(8,38,80,.94)
+        );
+
+    border-color:
+        rgba(95,175,255,.72);
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(140,205,255,.16),
+
+        0 14px 35px
+        rgba(0,75,175,.30),
+
+        0 0 28px
+        rgba(30,130,255,.12);
+
+}
+
+
+/* =====================================================
+   ACTIVE
+===================================================== */
+
+body:not(.light) .icon-btn:active,
+body:not(.light) .language-btn:active,
+body:not(.light) .blog-btn:active{
+
+    transform:
+        translateY(0)
+        scale(.96);
+
+}
+
+
+/* =====================================================
+   FOCUS
+===================================================== */
+
+body:not(.light) .icon-btn:focus-visible,
+body:not(.light) .language-btn:focus-visible,
+body:not(.light) .blog-btn:focus-visible{
+
+    outline:none;
+
+    border-color:
+        rgba(80,160,255,.65);
+
+    box-shadow:
+
+        0 0 0 3px
+        rgba(20,120,255,.10),
+
+        0 10px 30px
+        rgba(0,35,90,.25);
 
 }
