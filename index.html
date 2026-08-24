@@ -1423,23 +1423,46 @@
 <script src="language.js"></script>
 
 <div id="pageLoader">
-    <div class="loader-logo">Rakke<span>Z</span></div>
-    <div class="loader-spinner"></div>
+    <div class="loader-content">
+        <div class="loader-logo">
+            Rakke<span>Z</span>
+        </div>
+
+        <div class="loader-spinner"></div>
+    </div>
 </div>
 
 <script>
-window.addEventListener("load", () => {
+(function () {
+
     const loader = document.getElementById("pageLoader");
 
-    setTimeout(() => {
+    if (!loader) return;
+
+    function hideLoader() {
+
         loader.classList.add("hidden");
 
         setTimeout(() => {
             loader.remove();
         }, 500);
+    }
 
-    }, 500);
-});
+    if (document.readyState === "complete") {
+
+        setTimeout(hideLoader, 300);
+
+    } else {
+
+        window.addEventListener("load", () => {
+
+            setTimeout(hideLoader, 300);
+
+        }, { once: true });
+
+    }
+
+})();
 </script>
 
 </body>
