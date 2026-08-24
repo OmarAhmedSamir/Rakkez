@@ -3011,4 +3011,51 @@ html[dir="ltr"] body{
 
     }
 
+   #pageLoader {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: #03050a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .5s ease, visibility .5s ease;
+}
+
+#pageLoader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-logo {
+    font-size: 38px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -1px;
+}
+
+.loader-logo span {
+    color: #1683ff;
+}
+
+.loader-spinner {
+    width: 26px;
+    height: 26px;
+    border: 3px solid rgba(255,255,255,.12);
+    border-top-color: #1683ff;
+    border-radius: 50%;
+    animation: loaderSpin .8s linear infinite;
+}
+
+@keyframes loaderSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 }
