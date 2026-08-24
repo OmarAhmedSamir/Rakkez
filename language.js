@@ -8,6 +8,7 @@
 
         en: {
             language: "العربية",
+            logo: "RakkeZ"
 
             blog: "Blog",
 
@@ -123,6 +124,7 @@
 
         ar: {
             language: "English",
+            logo: "ركز"
 
             blog: "المدونة",
 
