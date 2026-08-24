@@ -1432,6 +1432,7 @@
     </div>
 </div>
 
+
 <script>
 (function () {
 
@@ -1444,23 +1445,13 @@
         loader.classList.add("hidden");
 
         setTimeout(() => {
-            loader.remove();
+            if (loader) {
+                loader.remove();
+            }
         }, 500);
     }
 
-    if (document.readyState === "complete") {
-
-        setTimeout(hideLoader, 300);
-
-    } else {
-
-        window.addEventListener("load", () => {
-
-            setTimeout(hideLoader, 300);
-
-        }, { once: true });
-
-    }
+    setTimeout(hideLoader, 4000);
 
 })();
 </script>
