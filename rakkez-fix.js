@@ -1,136 +1,179 @@
 /* =========================================================
-   RAKKEZ - SAFE UI FIX
-   This file works independently from the main RAKKEZ V2 JS.
+   RAKKEZ LANGUAGE FIX
 ========================================================= */
 
 (function () {
 
     "use strict";
 
-    /* =====================================================
-       BLOG BUTTON
-    ===================================================== */
+    const translations = {
 
-    document.addEventListener("DOMContentLoaded", function () {
+        en: {
+            languageButton: "العربية",
+            dir: "ltr"
+        },
 
-        const blogButton =
-            document.getElementById("blogOpen");
+        ar: {
+            languageButton: "English",
+            dir: "rtl"
+        }
 
-        if (blogButton) {
+    };
 
-            blogButton.addEventListener("click", function () {
 
-                window.location.href =
-                    "rakkez-blog.html";
+    function getLanguage() {
 
-            });
+        return (
+            localStorage.getItem("rakkez_language")
+            || "en"
+        );
+
+    }
+
+
+    function applyLanguage(language) {
+
+        language =
+            language === "ar"
+                ? "ar"
+                : "en";
+
+
+        document.documentElement.lang =
+            language;
+
+        document.documentElement.dir =
+            translations[language].dir;
+
+
+        const label =
+            document.getElementById(
+                "languageLabel"
+            );
+
+
+        if (label) {
+
+            label.textContent =
+                translations[language]
+                    .languageButton;
 
         }
 
 
-        /* =================================================
-           LANGUAGE BUTTON
-        ================================================= */
+        /*
+         * Tell the main RAKKEZ system
+         * about the language if it exists.
+         */
 
-        const languageButton =
-            document.getElementById("languageToggle");
+        if (
+            typeof window.setLanguage ===
+            "function"
+        ) {
 
-        const languageLabel =
-            document.getElementById("languageLabel");
+            window.setLanguage(language);
+
+        }
 
 
-        if (languageButton) {
+        if (
+            typeof window.applyLanguage ===
+            "function"
+        ) {
 
-            languageButton.addEventListener(
+            window.applyLanguage(language);
+
+        }
+
+
+        localStorage.setItem(
+            "rakkez_language",
+            language
+        );
+
+    }
+
+
+    function toggleLanguage() {
+
+        const current =
+            getLanguage();
+
+
+        const next =
+            current === "en"
+                ? "ar"
+                : "en";
+
+
+        applyLanguage(next);
+
+    }
+
+
+    /*
+     * Make functions globally available
+     * in case your main JS uses them.
+     */
+
+    window.applyLanguage =
+        applyLanguage;
+
+    window.toggleLanguage =
+        toggleLanguage;
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const button =
+                document.getElementById(
+                    "languageToggle"
+                );
+
+
+            if (!button) return;
+
+
+            /*
+             * Remove old inline/event handlers
+             * by cloning the button.
+             */
+
+            const newButton =
+                button.cloneNode(true);
+
+
+            button.parentNode.replaceChild(
+                newButton,
+                button
+            );
+
+
+            newButton.addEventListener(
                 "click",
-                function () {
+                function (event) {
 
-                    /*
-                     * If your existing RAKKEZ language system
-                     * already has a language function, use it.
-                     */
+                    event.preventDefault();
 
-                    if (
-                        typeof window.toggleLanguage ===
-                        "function"
-                    ) {
+                    event.stopPropagation();
 
-                        window.toggleLanguage();
-
-                        return;
-
-                    }
-
-
-                    if (
-                        typeof window.changeLanguage ===
-                        "function"
-                    ) {
-
-                        window.changeLanguage();
-
-                        return;
-
-                    }
-
-
-                    /*
-                     * Fallback
-                     */
-
-                    const currentLanguage =
-                        localStorage.getItem(
-                            "rakkez_language"
-                        ) || "en";
-
-
-                    const newLanguage =
-                        currentLanguage === "en"
-                            ? "ar"
-                            : "en";
-
-
-                    localStorage.setItem(
-                        "rakkez_language",
-                        newLanguage
-                    );
-
-
-                    if (languageLabel) {
-
-                        languageLabel.textContent =
-                            newLanguage === "ar"
-                                ? "English"
-                                : "العربية";
-
-                    }
-
-
-                    document.documentElement.lang =
-                        newLanguage;
-
-
-                    /*
-                     * If there is an existing function
-                     * called applyLanguage, use it.
-                     */
-
-                    if (
-                        typeof window.applyLanguage ===
-                        "function"
-                    ) {
-
-                        window.applyLanguage(
-                            newLanguage
-                        );
-
-                    }
+                    toggleLanguage();
 
                 }
             );
 
-        }
 
-    });
+            /*
+             * Restore saved language.
+             */
+
+            applyLanguage(
+                getLanguage()
+            );
+
+        }
+    );
 
 })();
