@@ -214,6 +214,91 @@ rgba(0,0,0,.48) 100%
 
 
 /* =====================================================
+TOPBAR — LIQUID GLASS
+===================================================== */
+
+.topbar{
+
+position:absolute;
+
+top:22px;
+left:28px;
+right:28px;
+
+z-index:20;
+
+height:64px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 9px 0 18px;
+
+border-radius:22px;
+
+
+
+/* =====================================================
+HEADER GLASS SHINE
+===================================================== */
+
+.topbar::before{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+border-radius:inherit;
+
+pointer-events:none;
+
+background:
+
+linear-gradient(
+110deg,
+rgba(255,255,255,.10),
+transparent 25%,
+transparent 70%,
+rgba(255,255,255,.035)
+);
+
+opacity:.65;
+
+}
+
+
+.topbar::after{
+
+content:"";
+
+position:absolute;
+
+top:0;
+left:12%;
+
+width:76%;
+
+height:1px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.20),
+transparent
+);
+
+pointer-events:none;
+
+}
+
+
+/* =====================================================
 LOGO
 ===================================================== */
 
