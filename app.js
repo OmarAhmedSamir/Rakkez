@@ -184,22 +184,11 @@ function formatTime(seconds) {
 }
 
 
+/* =========================================================
+   TIMER UI
+========================================================= */
+
 function updateTimerUI() {
-
-    if ($("timer")) {
-
-        $("timer").textContent =
-            formatTime(
-                timerState.remaining
-            );
-
-    }
-
-
-    /* =====================================================
-       LANGUAGE-SAFE TIMER TEXT
-       The language system owns the actual translations.
-    ===================================================== */
 
     const lang =
         localStorage.getItem("language") ||
@@ -207,62 +196,58 @@ function updateTimerUI() {
         "en";
 
 
+    /* =====================================================
+       TIMER
+    ===================================================== */
+
+    if ($("timer")) {
+
+        const time =
+            formatTime(
+                timerState.remaining
+            );
+
+
+        $("timer").textContent =
+            lang === "ar"
+                ? arabicNumbers(time)
+                : time;
+
+    }
+
+
+    /* =====================================================
+       MODE
+    ===================================================== */
+
     if ($("modeText")) {
 
-        const modeKey =
-            timerState.mode === "focus"
-                ? "focus"
-                : timerState.mode === "short"
-                    ? "shortBreak"
-                    : "longBreak";
-
-
-        /*
-           If the language system exists,
-           let it translate the mode.
-        */
-
-        if (
-            window.rakkezTranslate &&
-            typeof window.rakkezTranslate === "function"
-        ) {
+        if (lang === "ar") {
 
             $("modeText").textContent =
-                window.rakkezTranslate(
-                    modeKey
-                );
+                timerState.mode === "focus"
+                    ? "التركيز"
+                    : timerState.mode === "short"
+                        ? "استراحة قصيرة"
+                        : "استراحة طويلة";
 
         } else {
 
-            /*
-               Fallback in case the language system
-               has not loaded yet.
-            */
-
-            if (lang === "ar") {
-
-                $("modeText").textContent =
-                    timerState.mode === "focus"
-                        ? "التركيز"
-                        : timerState.mode === "short"
-                            ? "استراحة قصيرة"
-                            : "استراحة طويلة";
-
-            } else {
-
-                $("modeText").textContent =
-                    timerState.mode === "focus"
-                        ? "FOCUS"
-                        : timerState.mode === "short"
-                            ? "SHORT BREAK"
-                            : "LONG BREAK";
-
-            }
+            $("modeText").textContent =
+                timerState.mode === "focus"
+                    ? "FOCUS"
+                    : timerState.mode === "short"
+                        ? "SHORT BREAK"
+                        : "LONG BREAK";
 
         }
 
     }
 
+
+    /* =====================================================
+       TIMER LABEL
+    ===================================================== */
 
     if ($("timerLabel")) {
 
@@ -285,6 +270,10 @@ function updateTimerUI() {
     }
 
 
+    /* =====================================================
+       PROGRESS
+    ===================================================== */
+
     const elapsed =
         timerState.total -
         timerState.remaining;
@@ -303,6 +292,10 @@ function updateTimerUI() {
 
     }
 
+
+    /* =====================================================
+       START / PAUSE BUTTON
+    ===================================================== */
 
     if ($("startBtn")) {
 
@@ -325,25 +318,18 @@ function updateTimerUI() {
     }
 
 
+    /* =====================================================
+       CURRENT TASK
+    ===================================================== */
+
     updateCurrentTask();
-
-
-    /*
-       Tell the language system that only the
-       timer numbers need to be refreshed.
-    */
-
-    if (
-        typeof window.updateLanguageNumbers ===
-        "function"
-    ) {
-
-        window.updateLanguageNumbers();
-
-    }
 
 }
 
+
+/* =========================================================
+   START TIMER
+========================================================= */
 
 function startTimer() {
 
@@ -384,6 +370,10 @@ function startTimer() {
 }
 
 
+/* =========================================================
+   PAUSE TIMER
+========================================================= */
+
 function pauseTimer() {
 
     timerState.running = false;
@@ -403,6 +393,10 @@ function pauseTimer() {
 
 }
 
+
+/* =========================================================
+   TICK
+========================================================= */
 
 function tick() {
 
@@ -457,8 +451,6 @@ function tick() {
     updateTimerUI();
 
 }
-
-
 /* =========================================================
    PHASE COMPLETE
 ========================================================= */
