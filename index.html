@@ -1981,59 +1981,19 @@
 
         <!--
         =====================================================
-        UPDATE #1
+        DYNAMIC UPDATES CONTAINER
+
+        لا تضف Update هنا يدويًا.
+
+        كل الـUpdates يتم إنشاؤها تلقائيًا
+        من UPDATE_DATA.items في JavaScript.
         =====================================================
         -->
 
-        <div class="update-item">
-
-            <h3 id="update1Title">
-                🌳 New Nature Themes
-            </h3>
-
-            <p id="update1Description">
-                Choose from new ambient backgrounds.
-            </p>
-
-        </div>
-
-
-        <!--
-        =====================================================
-        UPDATE #2
-        =====================================================
-        -->
-
-        <div class="update-item">
-
-            <h3 id="update2Title">
-                🌊 New Ocean Themes
-            </h3>
-
-            <p id="update2Description">
-                Choose from new ambient backgrounds.
-            </p>
-
-        </div>
-
-
-        <!--
-        =====================================================
-        UPDATE #3
-        =====================================================
-        -->
-
-        <div class="update-item">
-
-            <h3 id="update3Title">
-                🌆 New NewYork Themes
-            </h3>
-
-            <p id="update3Description">
-                Choose from new ambient backgrounds.
-            </p>
-
-        </div>
+        <div
+            class="updates-list"
+            id="updatesList"
+        ></div>
 
 
         <button
@@ -2452,7 +2412,7 @@
      *
      */
 
-    const UPDATE_VERSION = "1.0.0";
+    const UPDATE_VERSION = "1.0.2";
 
 
     /*
@@ -2470,7 +2430,18 @@
      * UPDATE CONTENT
      * =====================================================
      *
-     * عدّل المحتوى من هنا فقط.
+     * مستقبلاً:
+     *
+     * لا تحتاج لتعديل HTML.
+     *
+     * فقط أضف Update جديد داخل items.
+     *
+     * مثال:
+     *
+     * {
+     *     title: "🎵 New Music System",
+     *     description: "A better music experience."
+     * }
      *
      */
 
@@ -2553,39 +2524,9 @@
         );
 
 
-    const update1Title =
+    const updatesList =
         document.getElementById(
-            "update1Title"
-        );
-
-
-    const update1Description =
-        document.getElementById(
-            "update1Description"
-        );
-
-
-    const update2Title =
-        document.getElementById(
-            "update2Title"
-        );
-
-
-    const update2Description =
-        document.getElementById(
-            "update2Description"
-        );
-
-
-    const update3Title =
-        document.getElementById(
-            "update3Title"
-        );
-
-
-    const update3Description =
-        document.getElementById(
-            "update3Description"
+            "updatesList"
         );
 
 
@@ -2599,6 +2540,86 @@
         document.getElementById(
             "closeUpdates"
         );
+
+
+    /*
+     * =====================================================
+     * RENDER UPDATE ITEMS
+     * =====================================================
+     *
+     * هنا يتم إنشاء جميع الـUpdates تلقائيًا.
+     *
+     * عدد الـUpdates غير محدود.
+     *
+     */
+
+    function renderUpdateItems() {
+
+        if (!updatesList) return;
+
+
+        updatesList.innerHTML = "";
+
+
+        if (
+            !Array.isArray(
+                UPDATE_DATA.items
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        UPDATE_DATA.items.forEach(
+            function (item) {
+
+                if (!item) return;
+
+
+                const updateItem =
+                    document.createElement("div");
+
+
+                updateItem.className =
+                    "update-item";
+
+
+                const updateTitle =
+                    document.createElement("h3");
+
+
+                updateTitle.textContent =
+                    item.title || "";
+
+
+                const updateDescription =
+                    document.createElement("p");
+
+
+                updateDescription.textContent =
+                    item.description || "";
+
+
+                updateItem.appendChild(
+                    updateTitle
+                );
+
+
+                updateItem.appendChild(
+                    updateDescription
+                );
+
+
+                updatesList.appendChild(
+                    updateItem
+                );
+
+            }
+        );
+
+    }
 
 
     /*
@@ -2636,70 +2657,11 @@
         }
 
 
-        if (
-            UPDATE_DATA.items[0]
-        ) {
+        /*
+         * Create all updates dynamically.
+         */
 
-            if (update1Title) {
-
-                update1Title.textContent =
-                    UPDATE_DATA.items[0].title;
-
-            }
-
-
-            if (update1Description) {
-
-                update1Description.textContent =
-                    UPDATE_DATA.items[0].description;
-
-            }
-
-        }
-
-
-        if (
-            UPDATE_DATA.items[1]
-        ) {
-
-            if (update2Title) {
-
-                update2Title.textContent =
-                    UPDATE_DATA.items[1].title;
-
-            }
-
-
-            if (update2Description) {
-
-                update2Description.textContent =
-                    UPDATE_DATA.items[1].description;
-
-            }
-
-        }
-
-
-        if (
-            UPDATE_DATA.items[2]
-        ) {
-
-            if (update3Title) {
-
-                update3Title.textContent =
-                    UPDATE_DATA.items[2].title;
-
-            }
-
-
-            if (update3Description) {
-
-                update3Description.textContent =
-                    UPDATE_DATA.items[2].description;
-
-            }
-
-        }
+        renderUpdateItems();
 
 
         if (doneButton) {
