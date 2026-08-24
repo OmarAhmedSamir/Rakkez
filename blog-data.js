@@ -7,12 +7,4 @@
 ========================================================= */
 
 window.RAKKEZ_BLOG_POSTS = [
-    {
-        "id": "mt735q0cnxul2r",
-        "title": "Why You Can't Focus Anymore",
-        "excerpt": "Your attention isn't broken. Your environment is. Here's why focusing feels harder than ever — and what you can actually do about it.",
-        "image": "assets/blog/why-you-can-t-focus-anymore-20260824-8rsppp.jpg",
-        "content": "<br>",
-        "date": "2026-08-24T10:21:06.924Z"
-    }
 ];
