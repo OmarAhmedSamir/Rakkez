@@ -4,9 +4,16 @@
 
 (function () {
 
+    "use strict";
+
+    /* =========================================================
+       TRANSLATIONS
+    ========================================================= */
+
     const translations = {
 
         en: {
+
             language: "العربية",
             logo: "RakkeZ",
 
@@ -46,28 +53,38 @@
             longBreakTitle: "Long Break",
             longBreakDescription: "Longer break",
 
-            sessionsBeforeLong: "Sessions Before Long Break",
+            sessionsBeforeLong:
+                "Sessions Before Long Break",
 
             dailyGoalTitle: "Daily Goal",
             dailyFocusGoal: "Daily Focus Goal",
-            dailyGoalDescription: "Your target focus time",
+            dailyGoalDescription:
+                "Your target focus time",
+
             minutes: "minutes",
 
             smartTimer: "Smart Timer",
-            autoStart: "Auto Start",
-            autoStartDescription: "Automatically start next phase",
 
-            smartTimerDescription: "Restore timer after leaving",
+            autoStart: "Auto Start",
+            autoStartDescription:
+                "Automatically start next phase",
+
+            smartTimerDescription:
+                "Restore timer after leaving",
 
             alarm: "Alarm",
+
             completionSound: "Completion Sound",
-            completionSoundDescription: "Sound when a phase finishes",
+            completionSoundDescription:
+                "Sound when a phase finishes",
 
             alarmVolume: "Alarm Volume",
-            alarmVolumeDescription: "Notification volume",
+            alarmVolumeDescription:
+                "Notification volume",
 
             alarmSound: "Alarm Sound",
-            alarmSoundDescription: "Choose your completion sound",
+            alarmSoundDescription:
+                "Choose your completion sound",
 
             softBell: "Soft Bell",
             digital: "Digital",
@@ -78,7 +95,9 @@
             custom: "Custom",
 
             testSound: "Test Sound",
-            testSoundDescription: "Preview the selected alarm",
+            testSoundDescription:
+                "Preview the selected alarm",
+
             test: "Test",
 
             uploadCustom: "+ Upload Custom Alarm",
@@ -97,153 +116,324 @@
             tasksSubtitle: "What are you focusing on?",
             taskPlaceholder: "Add a task...",
             noTasks: "No tasks yet.",
-            addSomething: "Add something you want to accomplish.",
+            addSomething:
+                "Add something you want to accomplish.",
 
             mediaTitle: "Media",
             youtube: "YouTube",
             spotifyTab: "Spotify",
             local: "Local",
-            youtubePlaceholder: "Paste a YouTube URL...",
+
+            youtubePlaceholder:
+                "Paste a YouTube URL...",
+
             playYoutube: "Play YouTube",
-            spotifyPlaceholder: "Paste Spotify track / playlist / album...",
+
+            spotifyPlaceholder:
+                "Paste Spotify track / playlist / album...",
+
             openSpotify: "Open Spotify Player",
+
             chooseMusic: "Choose Music or Video",
-            mediaFormats: "MP3, WAV, M4A, MP4, WebM",
+
+            mediaFormats:
+                "MP3, WAV, M4A, MP4, WebM",
+
             nothingPlaying: "Nothing playing",
 
             ambientTitle: "Ambient",
-            ambientSubtitle: "Choose your atmosphere.",
-            uploadBackground: "+ Upload Image / Video Background",
 
-            resetEverything: "Reset everything?",
+            ambientSubtitle:
+                "Choose your atmosphere.",
+
+            uploadBackground:
+                "+ Upload Image / Video Background",
+
+            resetEverything:
+                "Reset everything?",
+
             resetDescription:
                 "This will remove your sessions, focus time, streak and tasks. This cannot be undone.",
+
             cancel: "Cancel",
+
             resetButton: "Reset"
+
         },
 
+
         ar: {
+
             language: "English",
             logo: "ركز",
 
             blog: "المدونة",
 
-            focus: "تركيز",
+            focus: "التركيز",
             shortBreak: "استراحة قصيرة",
             longBreak: "استراحة طويلة",
 
-            timerLabel: "ركز على شيء واحد فقط.",
+            timerLabel:
+                "ركز على شيء واحد فقط.",
 
-            noTask: "لم يتم اختيار مهمة",
+            noTask:
+                "لم يتم اختيار مهمة",
 
             start: "ابدأ",
-            focusOnly: "وضع التركيز",
-            theme: "المظهر",
-            settings: "الإعدادات",
-            media: "الوسائط",
-            tasks: "المهام",
 
-            focusStat: "التركيز",
-            dailyGoal: "الهدف اليومي",
-            sessions: "الجلسات",
-            streak: "أيام متتالية",
+            focusOnly:
+                "وضع التركيز",
 
-            ambient: "✦ الأجواء",
-            exitFocus: "الخروج من التركيز",
+            theme:
+                "المظهر",
 
-            settingsTitle: "الإعدادات",
-            timer: "المؤقت",
+            settings:
+                "الإعدادات",
 
-            focusDuration: "مدة التركيز",
-            focusDescription: "عدد دقائق كل جلسة تركيز",
+            media:
+                "الوسائط",
 
-            shortBreakTitle: "الاستراحة القصيرة",
-            shortBreakDescription: "استراحة بين الجلسات",
+            tasks:
+                "المهام",
 
-            longBreakTitle: "الاستراحة الطويلة",
-            longBreakDescription: "استراحة أطول",
+            focusStat:
+                "التركيز",
 
-            sessionsBeforeLong: "عدد الجلسات قبل الاستراحة الطويلة",
+            dailyGoal:
+                "الهدف اليومي",
 
-            dailyGoalTitle: "الهدف اليومي",
-            dailyFocusGoal: "هدف التركيز اليومي",
-            dailyGoalDescription: "الوقت المستهدف للتركيز",
-            minutes: "دقيقة",
+            sessions:
+                "الجلسات",
 
-            smartTimer: "المؤقت الذكي",
-            autoStart: "البدء التلقائي",
-            autoStartDescription: "ابدأ المرحلة التالية تلقائيًا",
+            streak:
+                "أيام متتالية",
 
-            smartTimerDescription: "استعادة المؤقت بعد مغادرة الصفحة",
+            ambient:
+                "✦ الأجواء",
 
-            alarm: "التنبيه",
-            completionSound: "صوت انتهاء الجلسة",
-            completionSoundDescription: "الصوت عند انتهاء المرحلة",
+            exitFocus:
+                "الخروج من التركيز",
 
-            alarmVolume: "مستوى صوت التنبيه",
-            alarmVolumeDescription: "مستوى صوت الإشعار",
+            settingsTitle:
+                "الإعدادات",
 
-            alarmSound: "صوت التنبيه",
-            alarmSoundDescription: "اختر صوت انتهاء الجلسة",
+            timer:
+                "المؤقت",
 
-            softBell: "جرس هادئ",
-            digital: "رقمي",
-            focusSound: "تركيز",
-            gentle: "لطيف",
-            deep: "عميق",
-            success: "نجاح",
-            custom: "مخصص",
+            focusDuration:
+                "مدة التركيز",
 
-            testSound: "تجربة الصوت",
-            testSoundDescription: "معاينة صوت التنبيه المحدد",
-            test: "تجربة",
+            focusDescription:
+                "عدد دقائق كل جلسة تركيز",
 
-            uploadCustom: "+ رفع تنبيه مخصص",
-            audioFormats: "MP3 / WAV / M4A",
+            shortBreakTitle:
+                "الاستراحة القصيرة",
 
-            accounts: "الحسابات",
-            spotify: "Spotify",
-            googleYoutube: "Google / YouTube",
-            notConnected: "غير متصل",
-            connect: "اتصال",
+            shortBreakDescription:
+                "استراحة بين الجلسات",
 
-            reset: "إعادة ضبط",
-            resetStats: "إعادة ضبط جميع الإحصائيات",
+            longBreakTitle:
+                "الاستراحة الطويلة",
 
-            tasksTitle: "المهام",
-            tasksSubtitle: "ما الذي تركز عليه؟",
-            taskPlaceholder: "أضف مهمة...",
-            noTasks: "لا توجد مهام بعد.",
-            addSomething: "أضف شيئًا تريد إنجازه.",
+            longBreakDescription:
+                "استراحة أطول",
 
-            mediaTitle: "الوسائط",
-            youtube: "YouTube",
-            spotifyTab: "Spotify",
-            local: "ملفات محلية",
-            youtubePlaceholder: "الصق رابط YouTube...",
-            playYoutube: "تشغيل YouTube",
-            spotifyPlaceholder: "الصق رابط أغنية أو قائمة Spotify...",
-            openSpotify: "فتح مشغل Spotify",
-            chooseMusic: "اختر موسيقى أو فيديو",
-            mediaFormats: "MP3, WAV, M4A, MP4, WebM",
-            nothingPlaying: "لا يوجد شيء قيد التشغيل",
+            sessionsBeforeLong:
+                "عدد الجلسات قبل الاستراحة الطويلة",
 
-            ambientTitle: "الأجواء",
-            ambientSubtitle: "اختر الأجواء المناسبة لك.",
-            uploadBackground: "+ رفع صورة / فيديو للخلفية",
+            dailyGoalTitle:
+                "الهدف اليومي",
 
-            resetEverything: "إعادة ضبط كل شيء؟",
+            dailyFocusGoal:
+                "هدف التركيز اليومي",
+
+            dailyGoalDescription:
+                "الوقت المستهدف للتركيز",
+
+            minutes:
+                "دقيقة",
+
+            smartTimer:
+                "المؤقت الذكي",
+
+            autoStart:
+                "البدء التلقائي",
+
+            autoStartDescription:
+                "ابدأ المرحلة التالية تلقائيًا",
+
+            smartTimerDescription:
+                "استعادة المؤقت بعد مغادرة الصفحة",
+
+            alarm:
+                "التنبيه",
+
+            completionSound:
+                "صوت انتهاء الجلسة",
+
+            completionSoundDescription:
+                "الصوت عند انتهاء المرحلة",
+
+            alarmVolume:
+                "مستوى صوت التنبيه",
+
+            alarmVolumeDescription:
+                "مستوى صوت الإشعار",
+
+            alarmSound:
+                "صوت التنبيه",
+
+            alarmSoundDescription:
+                "اختر صوت انتهاء الجلسة",
+
+            softBell:
+                "جرس هادئ",
+
+            digital:
+                "رقمي",
+
+            focusSound:
+                "تركيز",
+
+            gentle:
+                "لطيف",
+
+            deep:
+                "عميق",
+
+            success:
+                "نجاح",
+
+            custom:
+                "مخصص",
+
+            testSound:
+                "تجربة الصوت",
+
+            testSoundDescription:
+                "معاينة صوت التنبيه المحدد",
+
+            test:
+                "تجربة",
+
+            uploadCustom:
+                "+ رفع تنبيه مخصص",
+
+            audioFormats:
+                "MP3 / WAV / M4A",
+
+            accounts:
+                "الحسابات",
+
+            spotify:
+                "Spotify",
+
+            googleYoutube:
+                "Google / YouTube",
+
+            notConnected:
+                "غير متصل",
+
+            connect:
+                "اتصال",
+
+            reset:
+                "إعادة ضبط",
+
+            resetStats:
+                "إعادة ضبط جميع الإحصائيات",
+
+            tasksTitle:
+                "المهام",
+
+            tasksSubtitle:
+                "ما الذي تركز عليه؟",
+
+            taskPlaceholder:
+                "أضف مهمة...",
+
+            noTasks:
+                "لا توجد مهام بعد.",
+
+            addSomething:
+                "أضف شيئًا تريد إنجازه.",
+
+            mediaTitle:
+                "الوسائط",
+
+            youtube:
+                "YouTube",
+
+            spotifyTab:
+                "Spotify",
+
+            local:
+                "ملفات محلية",
+
+            youtubePlaceholder:
+                "الصق رابط YouTube...",
+
+            playYoutube:
+                "تشغيل YouTube",
+
+            spotifyPlaceholder:
+                "الصق رابط أغنية أو قائمة Spotify...",
+
+            openSpotify:
+                "فتح مشغل Spotify",
+
+            chooseMusic:
+                "اختر موسيقى أو فيديو",
+
+            mediaFormats:
+                "MP3, WAV, M4A, MP4, WebM",
+
+            nothingPlaying:
+                "لا يوجد شيء قيد التشغيل",
+
+            ambientTitle:
+                "الأجواء",
+
+            ambientSubtitle:
+                "اختر الأجواء المناسبة لك.",
+
+            uploadBackground:
+                "+ رفع صورة / فيديو للخلفية",
+
+            resetEverything:
+                "إعادة ضبط كل شيء؟",
+
             resetDescription:
                 "سيؤدي هذا إلى حذف جلساتك ووقت التركيز والأيام المتتالية والمهام. لا يمكن التراجع عن ذلك.",
-            cancel: "إلغاء",
-            resetButton: "إعادة ضبط"
+
+            cancel:
+                "إلغاء",
+
+            resetButton:
+                "إعادة ضبط"
+
         }
 
     };
 
 
+    /* =========================================================
+       CURRENT LANGUAGE
+    ========================================================= */
+
     let currentLanguage =
         localStorage.getItem("rakkez_language") || "en";
+
+
+    /* =========================================================
+       HELPERS
+    ========================================================= */
+
+    function get(id) {
+
+        return document.getElementById(id);
+
+    }
 
 
     function setText(element, text) {
@@ -264,6 +454,10 @@
     }
 
 
+    /* =========================================================
+       APPLY LANGUAGE
+    ========================================================= */
+
     function applyLanguage(lang) {
 
         const t = translations[lang];
@@ -271,9 +465,7 @@
         if (!t) return;
 
 
-        /* =====================================================
-           PAGE DIRECTION
-        ===================================================== */
+        /* LANGUAGE */
 
         document.documentElement.lang = lang;
 
@@ -285,11 +477,13 @@
             lang === "ar" ? "rtl" : "ltr";
 
 
-        /* =====================================================
-           HEADER
-        ===================================================== */
+        /* HEADER */
 
-        setText($("languageLabel"), t.language);
+        setText(
+            get("languageLabel"),
+            t.language
+        );
+
 
         setText(
             document.querySelector(".blog-btn"),
@@ -297,52 +491,120 @@
         );
 
 
-        /* =====================================================
-           TIMER
-        ===================================================== */
+        /* TIMER */
 
-        setText(
-            $("modeText"),
-            $("modeText")?.textContent === "SHORT BREAK"
-                ? t.shortBreak
-                : $("modeText")?.textContent === "LONG BREAK"
-                    ? t.longBreak
-                    : t.focus
-        );
+        const mode =
+            get("modeText");
 
-        setText($("timerLabel"), t.timerLabel);
-        setText(
-            $("currentTask")?.querySelector("span"),
-            t.noTask
-        );
+        if (mode) {
 
-        setText($("startBtn"), t.start);
+            const current =
+                mode.dataset.mode ||
+                "focus";
 
-        setText(
-            $("focusExit"),
-            t.exitFocus
-        );
+            if (current === "short") {
 
+                setText(
+                    mode,
+                    t.shortBreak
+                );
 
-        /* =====================================================
-           BOTTOM
-        ===================================================== */
+            } else if (current === "long") {
 
-        const statTitles =
-            document.querySelectorAll(".stat-title");
+                setText(
+                    mode,
+                    t.longBreak
+                );
 
-        if (statTitles.length >= 4) {
+            } else {
 
-            setText(statTitles[0], t.focusStat);
-            setText(statTitles[1], t.dailyGoal);
-            setText(statTitles[2], t.sessions);
-            setText(statTitles[3], t.streak);
+                setText(
+                    mode,
+                    t.focus
+                );
+
+            }
 
         }
 
 
         setText(
-            $("ambientOpen"),
+            get("timerLabel"),
+            t.timerLabel
+        );
+
+
+        const currentTask =
+            get("currentTask");
+
+        if (currentTask) {
+
+            const span =
+                currentTask.querySelector("span");
+
+            if (span) {
+
+                setText(
+                    span,
+                    t.noTask
+                );
+
+            }
+
+        }
+
+
+        setText(
+            get("startBtn"),
+            t.start
+        );
+
+
+        setText(
+            get("focusExit"),
+            t.exitFocus
+        );
+
+
+        /* =====================================================
+           BOTTOM STATS
+        ===================================================== */
+
+        const statTitles =
+            document.querySelectorAll(".stat-title");
+
+
+        if (statTitles.length >= 4) {
+
+            setText(
+                statTitles[0],
+                t.focusStat
+            );
+
+            setText(
+                statTitles[1],
+                t.dailyGoal
+            );
+
+            setText(
+                statTitles[2],
+                t.sessions
+            );
+
+            setText(
+                statTitles[3],
+                t.streak
+            );
+
+        }
+
+
+        /* =====================================================
+           MAIN BUTTONS
+        ===================================================== */
+
+        setText(
+            get("ambientOpen"),
             t.ambient
         );
 
@@ -351,57 +613,73 @@
            SETTINGS
         ===================================================== */
 
-        const panelTitles =
-            document.querySelectorAll(".panel-title");
+        const settingsOverlay =
+            get("settingsOverlay");
 
-        if ($("settingsOverlay")) {
+
+        if (settingsOverlay) {
 
             const title =
-                $("settingsOverlay")
-                    .querySelector(".panel-title");
+                settingsOverlay.querySelector(
+                    ".panel-title"
+                );
 
-            setText(title, t.settingsTitle);
-
-        }
-
-
-        const sectionTitles =
-            $("settingsOverlay")
-                ?.querySelectorAll(".section-title");
-
-        if (sectionTitles?.length >= 5) {
-
-            setText(sectionTitles[0], t.timer);
-            setText(sectionTitles[1], t.dailyGoalTitle);
-            setText(sectionTitles[2], t.smartTimer);
-            setText(sectionTitles[3], t.alarm);
-            setText(sectionTitles[4], t.accounts);
-
-        }
+            setText(
+                title,
+                t.settingsTitle
+            );
 
 
-        /* =====================================================
-           SETTINGS NAMES
-        ===================================================== */
+            const sections =
+                settingsOverlay.querySelectorAll(
+                    ".section-title"
+                );
 
-        const names =
-            $("settingsOverlay")
-                ?.querySelectorAll(".setting-name");
 
-        if (names) {
+            const sectionTexts = [
 
-            const values = [
+                t.timer,
+                t.dailyGoalTitle,
+                t.smartTimer,
+                t.alarm,
+                t.accounts
+
+            ];
+
+
+            sections.forEach(
+                (element, index) => {
+
+                    if (sectionTexts[index]) {
+
+                        setText(
+                            element,
+                            sectionTexts[index]
+                        );
+
+                    }
+
+                }
+            );
+
+
+            /* SETTING NAMES */
+
+            const names =
+                settingsOverlay.querySelectorAll(
+                    ".setting-name"
+                );
+
+
+            const nameTexts = [
 
                 t.focusDuration,
                 t.shortBreakTitle,
                 t.longBreakTitle,
                 t.sessionsBeforeLong,
-
                 t.dailyFocusGoal,
-
                 t.autoStart,
                 t.smartTimer,
-
                 t.completionSound,
                 t.alarmVolume,
                 t.alarmSound,
@@ -409,41 +687,40 @@
 
             ];
 
-            names.forEach((el, index) => {
 
-                if (values[index]) {
+            names.forEach(
+                (element, index) => {
 
-                    setText(el, values[index]);
+                    if (nameTexts[index]) {
+
+                        setText(
+                            element,
+                            nameTexts[index]
+                        );
+
+                    }
 
                 }
-
-            });
-
-        }
+            );
 
 
-        /* =====================================================
-           SETTINGS DESCRIPTIONS
-        ===================================================== */
+            /* DESCRIPTIONS */
 
-        const descriptions =
-            $("settingsOverlay")
-                ?.querySelectorAll(".setting-description");
+            const descriptions =
+                settingsOverlay.querySelectorAll(
+                    ".setting-description"
+                );
 
-        if (descriptions) {
 
-            const values = [
+            const descriptionTexts = [
 
                 t.focusDescription,
                 t.shortBreakDescription,
                 t.longBreakDescription,
                 "",
-
                 t.dailyGoalDescription,
-
                 t.autoStartDescription,
                 t.smartTimerDescription,
-
                 t.completionSoundDescription,
                 t.alarmVolumeDescription,
                 t.alarmSoundDescription,
@@ -451,15 +728,21 @@
 
             ];
 
-            descriptions.forEach((el, index) => {
 
-                if (values[index]) {
+            descriptions.forEach(
+                (element, index) => {
 
-                    setText(el, values[index]);
+                    if (descriptionTexts[index]) {
+
+                        setText(
+                            element,
+                            descriptionTexts[index]
+                        );
+
+                    }
 
                 }
-
-            });
+            );
 
         }
 
@@ -469,23 +752,27 @@
         ===================================================== */
 
         setText(
-            $("testAlarmText"),
+            get("testAlarmText"),
             t.test
         );
 
-        const upload =
-            $("alarmUploadLabel");
 
-        if (upload) {
+        const alarmUpload =
+            get("alarmUploadLabel");
 
-            const strong =
-                upload.querySelector("strong");
 
-            const span =
-                upload.querySelector("span");
+        if (alarmUpload) {
 
-            setText(strong, t.uploadCustom);
-            setText(span, t.audioFormats);
+            setText(
+                alarmUpload.querySelector("strong"),
+                t.uploadCustom
+            );
+
+
+            setText(
+                alarmUpload.querySelector("span"),
+                t.audioFormats
+            );
 
         }
 
@@ -495,21 +782,25 @@
         ===================================================== */
 
         setText(
-            $("spotifyStatus"),
+            get("spotifyStatus"),
             t.notConnected
         );
 
+
         setText(
-            $("googleStatus"),
+            get("googleStatus"),
             t.notConnected
         );
 
 
         document
             .querySelectorAll(".account-button")
-            .forEach(btn => {
+            .forEach(button => {
 
-                setText(btn, t.connect);
+                setText(
+                    button,
+                    t.connect
+                );
 
             });
 
@@ -519,7 +810,7 @@
         ===================================================== */
 
         setText(
-            $("resetStatsBtn"),
+            get("resetStatsBtn"),
             t.resetStats
         );
 
@@ -528,30 +819,38 @@
            TASKS
         ===================================================== */
 
-        if ($("tasksOverlay")) {
+        const tasksOverlay =
+            get("tasksOverlay");
 
-            const title =
-                $("tasksOverlay")
-                    .querySelector(".panel-title");
 
-            const subtitle =
-                $("tasksOverlay")
-                    .querySelector(".panel-subtitle");
+        if (tasksOverlay) {
 
-            setText(title, t.tasksTitle);
-            setText(subtitle, t.tasksSubtitle);
+            setText(
+                tasksOverlay.querySelector(
+                    ".panel-title"
+                ),
+                t.tasksTitle
+            );
+
+
+            setText(
+                tasksOverlay.querySelector(
+                    ".panel-subtitle"
+                ),
+                t.tasksSubtitle
+            );
 
         }
 
 
         setPlaceholder(
-            $("taskInput"),
+            get("taskInput"),
             t.taskPlaceholder
         );
 
 
         setText(
-            $("taskEmpty"),
+            get("taskEmpty"),
             t.noTasks
         );
 
@@ -560,13 +859,18 @@
            MEDIA
         ===================================================== */
 
-        if ($("mediaOverlay")) {
+        const mediaOverlay =
+            get("mediaOverlay");
 
-            const title =
-                $("mediaOverlay")
-                    .querySelector(".panel-title");
 
-            setText(title, t.mediaTitle);
+        if (mediaOverlay) {
+
+            setText(
+                mediaOverlay.querySelector(
+                    ".panel-title"
+                ),
+                t.mediaTitle
+            );
 
         }
 
@@ -575,58 +879,80 @@
             .querySelectorAll(".media-tab")
             .forEach((tab, index) => {
 
-                if (index === 0)
-                    setText(tab, t.youtube);
+                if (index === 0) {
 
-                if (index === 1)
-                    setText(tab, t.spotifyTab);
+                    setText(
+                        tab,
+                        t.youtube
+                    );
 
-                if (index === 2)
-                    setText(tab, t.local);
+                }
+
+                if (index === 1) {
+
+                    setText(
+                        tab,
+                        t.spotifyTab
+                    );
+
+                }
+
+                if (index === 2) {
+
+                    setText(
+                        tab,
+                        t.local
+                    );
+
+                }
 
             });
 
 
         setPlaceholder(
-            $("youtubeInput"),
+            get("youtubeInput"),
             t.youtubePlaceholder
         );
 
+
         setText(
-            $("youtubePlay"),
+            get("youtubePlay"),
             t.playYoutube
         );
 
 
         setPlaceholder(
-            $("spotifyInput"),
+            get("spotifyInput"),
             t.spotifyPlaceholder
         );
 
+
         setText(
-            $("spotifyPlay"),
+            get("spotifyPlay"),
             t.openSpotify
         );
 
 
-        /* =====================================================
-           LOCAL MEDIA
-        ===================================================== */
-
-        const fileLabel =
+        const mediaFileLabel =
             document.querySelector(
                 'label[for="mediaFile"]'
             );
 
-        if (fileLabel) {
+
+        if (mediaFileLabel) {
 
             setText(
-                fileLabel.querySelector("strong"),
+                mediaFileLabel.querySelector(
+                    "strong"
+                ),
                 t.chooseMusic
             );
 
+
             setText(
-                fileLabel.querySelector("span"),
+                mediaFileLabel.querySelector(
+                    "span"
+                ),
                 t.mediaFormats
             );
 
@@ -634,7 +960,7 @@
 
 
         setText(
-            $("mediaName"),
+            get("mediaName"),
             t.nothingPlaying
         );
 
@@ -643,18 +969,26 @@
            AMBIENT
         ===================================================== */
 
-        if ($("ambientOverlay")) {
+        const ambientOverlay =
+            get("ambientOverlay");
 
-            const title =
-                $("ambientOverlay")
-                    .querySelector(".panel-title");
 
-            const subtitle =
-                $("ambientOverlay")
-                    .querySelector(".panel-subtitle");
+        if (ambientOverlay) {
 
-            setText(title, t.ambientTitle);
-            setText(subtitle, t.ambientSubtitle);
+            setText(
+                ambientOverlay.querySelector(
+                    ".panel-title"
+                ),
+                t.ambientTitle
+            );
+
+
+            setText(
+                ambientOverlay.querySelector(
+                    ".panel-subtitle"
+                ),
+                t.ambientSubtitle
+            );
 
         }
 
@@ -671,27 +1005,32 @@
            RESET CONFIRM
         ===================================================== */
 
-        if ($("confirmOverlay")) {
+        const confirmOverlay =
+            get("confirmOverlay");
 
-            const title =
-                $("confirmOverlay")
-                    .querySelector(".panel-title");
 
-            const description =
-                $("confirmOverlay")
-                    .querySelector(".confirm-description");
+        if (confirmOverlay) {
 
-            setText(title, t.resetEverything);
-            setText(description, t.resetDescription);
+            setText(
+                confirmOverlay.querySelector(
+                    ".panel-title"
+                ),
+                t.resetEverything
+            );
+
+
+            setText(
+                confirmOverlay.querySelector(
+                    ".confirm-description"
+                ),
+                t.resetDescription
+            );
 
         }
 
 
-        const confirmReset =
-            $("confirmReset");
-
         setText(
-            confirmReset,
+            get("confirmReset"),
             t.resetButton
         );
 
@@ -700,15 +1039,18 @@
             .querySelectorAll(
                 '[data-close="confirmOverlay"]'
             )
-            .forEach(btn => {
+            .forEach(button => {
 
-                setText(btn, t.cancel);
+                setText(
+                    button,
+                    t.cancel
+                );
 
             });
 
 
         /* =====================================================
-           SAVE
+           SAVE LANGUAGE
         ===================================================== */
 
         localStorage.setItem(
@@ -721,11 +1063,12 @@
 
 
         /* =====================================================
-           CHANGE LANGUAGE BUTTON
+           LANGUAGE BUTTON
         ===================================================== */
 
         const languageButton =
-            $("languageToggle");
+            get("languageToggle");
+
 
         if (languageButton) {
 
@@ -747,12 +1090,12 @@
 
     function toggleLanguage() {
 
-        const nextLanguage =
+        const next =
             currentLanguage === "en"
                 ? "ar"
                 : "en";
 
-        applyLanguage(nextLanguage);
+        applyLanguage(next);
 
     }
 
@@ -764,17 +1107,32 @@
     function initLanguage() {
 
         const button =
-            $("languageToggle");
+            get("languageToggle");
+
 
         if (!button) {
 
-            console.warn(
-                "RakkeZ: languageToggle not found."
+            console.error(
+                "RakkeZ: languageToggle was not found."
             );
 
             return;
 
         }
+
+
+        /* Prevent duplicate listeners */
+
+        if (
+            button.dataset.languageReady === "true"
+        ) {
+
+            return;
+
+        }
+
+
+        button.dataset.languageReady = "true";
 
 
         button.addEventListener(
@@ -797,6 +1155,10 @@
 
     }
 
+
+    /* =========================================================
+       START
+    ========================================================= */
 
     if (
         document.readyState === "loading"
