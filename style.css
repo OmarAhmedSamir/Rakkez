@@ -280,9 +280,16 @@ gap:8px;
    Media / Tasks / Updates
 ===================================================== */
 
-.icon-btn{
+/* =====================================================
+   HEADER BUTTONS — DARK BLUE BRAND STYLE
+===================================================== */
 
-    width:46px;
+.icon-btn,
+.blog-btn,
+.language-btn{
+
+    position:relative;
+
     height:46px;
 
     display:flex;
@@ -290,144 +297,86 @@ gap:8px;
     align-items:center;
     justify-content:center;
 
-    position:relative;
-
     border-radius:15px;
 
     background:
-        rgba(255,255,255,.055);
+        rgba(8,13,22,.92);
 
     border:
         1px solid rgba(255,255,255,.10);
 
-    color:
-        rgba(255,255,255,.78);
+    color:#ffffff;
+
+    box-shadow:
+
+        inset 0 1px 0
+        rgba(255,255,255,.06),
+
+        0 8px 25px
+        rgba(0,0,0,.20);
 
     backdrop-filter:
-        blur(20px);
+        blur(18px);
 
     -webkit-backdrop-filter:
-        blur(20px);
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.07),
-        0 7px 22px rgba(0,0,0,.14);
+        blur(18px);
 
     transition:
-        transform .22s ease,
-        background .22s ease,
-        border-color .22s ease,
-        color .22s ease,
-        box-shadow .22s ease;
+        transform .25s cubic-bezier(.2,.8,.2,1),
+        background .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
 
 }
 
 
-/* subtle highlight */
+/* =====================================================
+   ICON BUTTON
+===================================================== */
 
-.icon-btn::before{
+.icon-btn{
 
-    content:"";
+    width:46px;
 
-    position:absolute;
-
-    inset:1px;
-
-    border-radius:14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.055),
-            transparent 50%
-        );
-
-    pointer-events:none;
+    padding:0;
 
 }
 
 
-/* hover */
+/* =====================================================
+   BLOG BUTTON
+===================================================== */
 
-.icon-btn:hover{
+.blog-btn{
 
-    transform:
-        translateY(-2px);
+    min-width:125px;
 
-    background:
-        rgba(255,255,255,.095);
+    padding:0 25px;
 
-    border-color:
-        rgba(255,255,255,.17);
+    font-family:
+        "Space Grotesk",
+        sans-serif;
 
-    color:#fff;
+    font-size:14px;
 
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.10),
-        0 12px 30px rgba(0,0,0,.22);
+    font-weight:700;
 
-}
+    letter-spacing:.2px;
 
-
-/* click */
-
-.icon-btn:active{
-
-    transform:
-        translateY(0)
-        scale(.96);
-
-    background:
-        rgba(255,255,255,.07);
-
-}
-
-
-/* focus */
-
-.icon-btn:focus-visible{
-
-    outline:none;
-
-    border-color:
-        rgba(65,150,255,.65);
-
-    box-shadow:
-        0 0 0 3px rgba(20,120,255,.12),
-        0 10px 28px rgba(0,0,0,.22);
+    white-space:nowrap;
 
 }
 
 
 /* =====================================================
    LANGUAGE BUTTON
-   BLUE
 ===================================================== */
 
 .language-btn{
 
-    height:46px;
-
     min-width:62px;
 
     padding:0 15px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    position:relative;
-
-    border-radius:15px;
-
-    background:
-        rgba(20,120,255,.16);
-
-    border:
-        1px solid rgba(45,140,255,.42);
-
-    color:#fff;
 
     font-family:
         "DM Sans",
@@ -437,29 +386,17 @@ gap:8px;
 
     font-weight:700;
 
-    letter-spacing:.2px;
-
     white-space:nowrap;
-
-    backdrop-filter:
-        blur(20px);
-
-    -webkit-backdrop-filter:
-        blur(20px);
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.08),
-        0 7px 22px rgba(0,70,180,.10);
-
-    transition:
-        transform .22s ease,
-        background .22s ease,
-        border-color .22s ease,
-        box-shadow .22s ease;
 
 }
 
 
+/* =====================================================
+   SUBTLE INNER HIGHLIGHT
+===================================================== */
+
+.icon-btn::before,
+.blog-btn::before,
 .language-btn::before{
 
     content:"";
@@ -473,8 +410,8 @@ gap:8px;
     background:
         linear-gradient(
             135deg,
-            rgba(255,255,255,.08),
-            transparent 50%
+            rgba(255,255,255,.055),
+            transparent 45%
         );
 
     pointer-events:none;
@@ -482,158 +419,156 @@ gap:8px;
 }
 
 
+/* =====================================================
+   HOVER
+===================================================== */
+
+.icon-btn:hover,
+.blog-btn:hover,
 .language-btn:hover{
 
     transform:
         translateY(-2px);
 
     background:
-        rgba(20,120,255,.25);
+        rgba(10,17,29,.98);
 
     border-color:
-        rgba(80,160,255,.65);
+        rgba(255,255,255,.18);
 
     box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.11),
-        0 12px 32px rgba(0,90,220,.20);
 
-}
+        inset 0 1px 0
+        rgba(255,255,255,.08),
 
+        0 12px 32px
+        rgba(0,0,0,.28),
 
-.language-btn:active{
-
-    transform:
-        translateY(0)
-        scale(.96);
+        0 0 20px
+        rgba(20,120,255,.06);
 
 }
 
 
 /* =====================================================
-   BLOG BUTTON
-   DARK / BLACK PREMIUM
+   ACTIVE
 ===================================================== */
 
-.blog-btn{
-
-    height:46px;
-
-    min-width:125px;
-
-    padding:0 26px;
-
-    display:inline-flex;
-
-    align-items:center;
-    justify-content:center;
-
-    position:relative;
-
-    border-radius:15px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(12,15,21,.94),
-            rgba(4,6,10,.96)
-        );
-
-    border:
-        1px solid rgba(255,255,255,.13);
-
-    color:#fff;
-
-    font-family:
-        "Space Grotesk",
-        sans-serif;
-
-    font-size:14px;
-
-    font-weight:700;
-
-    letter-spacing:.15px;
-
-    white-space:nowrap;
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.07),
-        inset 0 -1px 0 rgba(0,0,0,.4),
-        0 8px 25px rgba(0,0,0,.25);
-
-    backdrop-filter:
-        blur(20px);
-
-    -webkit-backdrop-filter:
-        blur(20px);
-
-    transition:
-        transform .22s ease,
-        background .22s ease,
-        border-color .22s ease,
-        box-shadow .22s ease;
-
-}
-
-
-/* subtle top highlight */
-
-.blog-btn::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:1px;
-
-    border-radius:14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.065),
-            transparent 48%
-        );
-
-    pointer-events:none;
-
-}
-
-
-/* blog hover */
-
-.blog-btn:hover{
-
-    transform:
-        translateY(-2px);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(24,28,38,.98),
-            rgba(7,9,14,.98)
-        );
-
-    border-color:
-        rgba(255,255,255,.22);
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.10),
-        0 14px 35px rgba(0,0,0,.32);
-
-}
-
-
-/* blog click */
-
-.blog-btn:active{
+.icon-btn:active,
+.blog-btn:active,
+.language-btn:active{
 
     transform:
         translateY(0)
         scale(.97);
 
+    background:
+        rgba(8,13,22,1);
+
+    box-shadow:
+
+        inset 0 2px 5px
+        rgba(0,0,0,.25),
+
+        0 4px 12px
+        rgba(0,0,0,.15);
+
 }
 
 
+/* =====================================================
+   LANGUAGE — SAME STYLE AS OTHER BUTTONS
+===================================================== */
+
+.language-btn{
+
+    background:
+        rgba(8,13,22,.92);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    color:#ffffff;
+
+}
+
+
+/* =====================================================
+   BLOG — SAME STYLE, ONLY DIFFERENT SIZE
+===================================================== */
+
+.blog-btn{
+
+    background:
+        rgba(8,13,22,.92);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    color:#ffffff;
+
+}
+
+
+/* =====================================================
+   BLOG HOVER
+===================================================== */
+
+.blog-btn:hover{
+
+    background:
+        rgba(10,17,29,.98);
+
+    border-color:
+        rgba(255,255,255,.18);
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+    .icon-btn{
+
+        width:42px;
+        height:42px;
+
+        border-radius:13px;
+
+    }
+
+    .language-btn{
+
+        height:42px;
+
+        min-width:58px;
+
+        padding:0 11px;
+
+        border-radius:13px;
+
+        font-size:11px;
+
+    }
+
+    .blog-btn{
+
+        height:42px;
+
+        min-width:115px;
+
+        padding:0 20px;
+
+        border-radius:13px;
+
+        font-size:13px;
+
+    }
+
+}
 /* =====================================================
    LIGHT MODE
 ===================================================== */
@@ -3446,263 +3381,4 @@ html[dir="ltr"] body{
 
 }
 
-/* =====================================================
-   RAKKEZ — DARK BLUE HEADER THEME
-   HEADER ONLY — NO BACKGROUND / TIMER CHANGES
-===================================================== */
 
-
-/* =====================================================
-   LOGO
-===================================================== */
-
-body:not(.light) .logo{
-
-    color:#f5f8ff;
-
-    text-shadow:
-        0 0 20px rgba(22,131,255,.08);
-
-}
-
-
-body:not(.light) .logo span{
-
-    color:#1683ff;
-
-}
-
-
-/* =====================================================
-   HEADER BUTTONS
-   Media / Tasks / Updates
-===================================================== */
-
-body:not(.light) .icon-btn{
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(10,25,48,.92),
-            rgba(4,13,28,.88)
-        );
-
-    border:
-        1px solid rgba(35,131,255,.22);
-
-    color:
-        rgba(225,238,255,.88);
-
-    box-shadow:
-
-        inset 0 1px 0
-        rgba(100,175,255,.07),
-
-        inset 0 -1px 0
-        rgba(0,0,0,.30),
-
-        0 8px 25px
-        rgba(0,35,90,.20);
-
-}
-
-
-body:not(.light) .icon-btn::before{
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(65,150,255,.08),
-            transparent 50%
-        );
-
-}
-
-
-body:not(.light) .icon-btn:hover{
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(15,38,70,.98),
-            rgba(5,17,35,.94)
-        );
-
-    border-color:
-        rgba(65,150,255,.42);
-
-    color:#fff;
-
-    box-shadow:
-
-        inset 0 1px 0
-        rgba(110,180,255,.10),
-
-        0 12px 32px
-        rgba(0,55,130,.28),
-
-        0 0 22px
-        rgba(20,120,255,.08);
-
-}
-
-
-/* =====================================================
-   LANGUAGE BUTTON
-   SAME BASE STYLE AS OTHER HEADER BUTTONS
-===================================================== */
-
-body:not(.light) .language-btn{
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(10,25,48,.92),
-            rgba(4,13,28,.88)
-        );
-
-    border:
-        1px solid rgba(35,131,255,.22);
-
-    color:
-        rgba(225,238,255,.92);
-
-    box-shadow:
-
-        inset 0 1px 0
-        rgba(100,175,255,.07),
-
-        inset 0 -1px 0
-        rgba(0,0,0,.30),
-
-        0 8px 25px
-        rgba(0,35,90,.20);
-
-}
-
-
-body:not(.light) .language-btn:hover{
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(15,38,70,.98),
-            rgba(5,17,35,.94)
-        );
-
-    border-color:
-        rgba(65,150,255,.42);
-
-    box-shadow:
-
-        inset 0 1px 0
-        rgba(110,180,255,.10),
-
-        0 12px 32px
-        rgba(0,55,130,.28),
-
-        0 0 22px
-        rgba(20,120,255,.08);
-
-}
-
-
-/* =====================================================
-   BLOG BUTTON
-   SAME DARK BLUE STYLE — BUT SPECIAL
-===================================================== */
-
-body:not(.light) .blog-btn{
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20,90,180,.38),
-            rgba(7,30,65,.88)
-        );
-
-    border:
-        1px solid rgba(65,150,255,.50);
-
-    color:#ffffff;
-
-    box-shadow:
-
-        inset 0 1px 0
-        rgba(120,190,255,.12),
-
-        inset 0 -1px 0
-        rgba(0,20,60,.30),
-
-        0 8px 28px
-        rgba(0,70,160,.20),
-
-        0 0 18px
-        rgba(20,120,255,.05);
-
-}
-
-
-body:not(.light) .blog-btn:hover{
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(28,110,215,.48),
-            rgba(8,38,80,.94)
-        );
-
-    border-color:
-        rgba(95,175,255,.72);
-
-    box-shadow:
-
-        inset 0 1px 0
-        rgba(140,205,255,.16),
-
-        0 14px 35px
-        rgba(0,75,175,.30),
-
-        0 0 28px
-        rgba(30,130,255,.12);
-
-}
-
-
-/* =====================================================
-   ACTIVE
-===================================================== */
-
-body:not(.light) .icon-btn:active,
-body:not(.light) .language-btn:active,
-body:not(.light) .blog-btn:active{
-
-    transform:
-        translateY(0)
-        scale(.96);
-
-}
-
-
-/* =====================================================
-   FOCUS
-===================================================== */
-
-body:not(.light) .icon-btn:focus-visible,
-body:not(.light) .language-btn:focus-visible,
-body:not(.light) .blog-btn:focus-visible{
-
-    outline:none;
-
-    border-color:
-        rgba(80,160,255,.65);
-
-    box-shadow:
-
-        0 0 0 3px
-        rgba(20,120,255,.10),
-
-        0 10px 30px
-        rgba(0,35,90,.25);
-
-}
