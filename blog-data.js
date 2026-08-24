@@ -6,13 +6,4 @@
    Do not edit manually unless you know what you are doing.
 ========================================================= */
 
-window.RAKKEZ_BLOG_POSTS = [
-    {
-        "id": "mt72n2q7jcz8dz",
-        "title": "test",
-        "excerpt": "test",
-        "image": "test",
-        "content": "test",
-        "date": "2026-08-24T10:06:36.943Z"
-    }
-];
+window.RAKKEZ_BLOG_POSTS = [];
