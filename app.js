@@ -196,28 +196,91 @@ function updateTimerUI() {
     }
 
 
+    /* =====================================================
+       LANGUAGE-SAFE TIMER TEXT
+       The language system owns the actual translations.
+    ===================================================== */
+
+    const lang =
+        localStorage.getItem("language") ||
+        localStorage.getItem("rakkez_language") ||
+        "en";
+
+
     if ($("modeText")) {
 
-        $("modeText").textContent =
-
+        const modeKey =
             timerState.mode === "focus"
-                ? "FOCUS"
+                ? "focus"
+                : timerState.mode === "short"
+                    ? "shortBreak"
+                    : "longBreak";
 
-            : timerState.mode === "short"
-                ? "SHORT BREAK"
 
-            : "LONG BREAK";
+        /*
+           If the language system exists,
+           let it translate the mode.
+        */
+
+        if (
+            window.rakkezTranslate &&
+            typeof window.rakkezTranslate === "function"
+        ) {
+
+            $("modeText").textContent =
+                window.rakkezTranslate(
+                    modeKey
+                );
+
+        } else {
+
+            /*
+               Fallback in case the language system
+               has not loaded yet.
+            */
+
+            if (lang === "ar") {
+
+                $("modeText").textContent =
+                    timerState.mode === "focus"
+                        ? "التركيز"
+                        : timerState.mode === "short"
+                            ? "استراحة قصيرة"
+                            : "استراحة طويلة";
+
+            } else {
+
+                $("modeText").textContent =
+                    timerState.mode === "focus"
+                        ? "FOCUS"
+                        : timerState.mode === "short"
+                            ? "SHORT BREAK"
+                            : "LONG BREAK";
+
+            }
+
+        }
 
     }
 
 
     if ($("timerLabel")) {
 
-        $("timerLabel").textContent =
+        if (lang === "ar") {
 
-            timerState.mode === "focus"
-                ? "Stay focused. One thing at a time."
-                : "Take a breath. You earned it.";
+            $("timerLabel").textContent =
+                timerState.mode === "focus"
+                    ? "ركز على شيء واحد فقط."
+                    : "خذ نفسًا. لقد استحققت الراحة.";
+
+        } else {
+
+            $("timerLabel").textContent =
+                timerState.mode === "focus"
+                    ? "Stay focused. One thing at a time."
+                    : "Take a breath. You earned it.";
+
+        }
 
     }
 
@@ -243,15 +306,41 @@ function updateTimerUI() {
 
     if ($("startBtn")) {
 
-        $("startBtn").textContent =
-            timerState.running
-                ? "PAUSE"
-                : "START";
+        if (lang === "ar") {
+
+            $("startBtn").textContent =
+                timerState.running
+                    ? "إيقاف مؤقت"
+                    : "ابدأ";
+
+        } else {
+
+            $("startBtn").textContent =
+                timerState.running
+                    ? "PAUSE"
+                    : "START";
+
+        }
 
     }
 
 
     updateCurrentTask();
+
+
+    /*
+       Tell the language system that only the
+       timer numbers need to be refreshed.
+    */
+
+    if (
+        typeof window.updateLanguageNumbers ===
+        "function"
+    ) {
+
+        window.updateLanguageNumbers();
+
+    }
 
 }
 
@@ -3578,8 +3667,6 @@ if ($("confirmReset")) {
                 totalFocusSeconds: 0,
 
                 sessions: 0,
-
-                streak: 0,
 
                 lastFocusDate: null,
 
