@@ -2994,50 +2994,45 @@ html[dir="ltr"] body{
 
 }
 
+
 /* =========================================================
-   RAKKEZ PAGE LOADER
+   MOBILE
+========================================================= */
+
+@media(max-width:600px){
+
+    .language-btn{
+
+        height:42px;
+
+        padding:0 11px;
+
+        font-size:11px;
+
+    }
+
+/* =========================================================
+   PAGE LOADER
 ========================================================= */
 
 #pageLoader {
     position: fixed;
-    top: 0;
-    left: 0;
-
-    width: 100vw;
-    height: 100vh;
-
-    width: 100dvw;
-    height: 100dvh;
-
-    z-index: 2147483647;
+    inset: 0;
+    z-index: 9999999;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    margin: 0;
-    padding: 0;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(22, 131, 255, 0.08) 0%,
-            rgba(3, 5, 10, 0.96) 35%,
-            #03050a 75%
-        );
-
-    overflow: hidden;
+    background: #03050a;
 
     opacity: 1;
     visibility: visible;
 
     transition:
-        opacity 0.45s ease,
-        visibility 0.45s ease;
+        opacity .45s ease,
+        visibility .45s ease;
 }
-
-
-/* Remove loader */
 
 #pageLoader.hidden {
     opacity: 0;
@@ -3045,129 +3040,42 @@ html[dir="ltr"] body{
     pointer-events: none;
 }
 
-
-/* =========================================================
-   CONTENT
-========================================================= */
-
 .loader-content {
-    position: relative;
-
     display: flex;
     flex-direction: column;
-
     align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    height: 100%;
-
-    gap: 24px;
+    gap: 22px;
 }
 
-
-/* =========================================================
-   LOGO
-========================================================= */
-
 .loader-logo {
-    margin: 0;
-    padding: 0;
+    color: #fff;
 
-    color: #ffffff;
-
-    font-size: 38px;
+    font-size: 36px;
     font-weight: 800;
 
-    line-height: 1;
-
-    letter-spacing: -1.8px;
-
-    text-align: center;
-
-    user-select: none;
-
-    animation: loaderLogoIn 0.6s ease both;
+    letter-spacing: -1.5px;
 }
 
 .loader-logo span {
     color: #1683ff;
 }
 
-
-/* =========================================================
-   SPINNER
-========================================================= */
-
 .loader-spinner {
-    width: 26px;
-    height: 26px;
-
-    margin: 0;
+    width: 25px;
+    height: 25px;
 
     border-radius: 50%;
 
-    border: 3px solid rgba(255, 255, 255, 0.10);
-
+    border: 3px solid rgba(255,255,255,.10);
     border-top-color: #1683ff;
 
-    animation:
-        rakkezLoaderSpin 0.75s linear infinite,
-        loaderSpinnerIn 0.5s ease both;
+    animation: rakkezLoaderSpin .8s linear infinite;
 }
 
-
-/* =========================================================
-   ANIMATIONS
-========================================================= */
-
 @keyframes rakkezLoaderSpin {
-    from {
-        transform: rotate(0deg);
-    }
-
     to {
         transform: rotate(360deg);
     }
 }
 
-@keyframes loaderLogoIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(8px) scale(0.96);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-@keyframes loaderSpinnerIn {
-
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .loader-logo {
-        font-size: 34px;
-    }
-
-    .loader-spinner {
-        width: 24px;
-        height: 24px;
-    }
 }
