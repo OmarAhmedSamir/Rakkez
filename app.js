@@ -3362,10 +3362,18 @@ function updateCurrentTask() {
     if (!container) return;
 
 
+    const lang =
+        localStorage.getItem("language") ||
+        localStorage.getItem("rakkez_language") ||
+        "en";
+
+
     if (!currentTaskId) {
 
         container.innerHTML =
-            "<span>NO TASK SELECTED</span>";
+            lang === "ar"
+                ? "<span>لم يتم اختيار مهمة</span>"
+                : "<span>NO TASK SELECTED</span>";
 
         return;
 
@@ -3385,7 +3393,9 @@ function updateCurrentTask() {
         currentTaskId = null;
 
         container.innerHTML =
-            "<span>NO TASK SELECTED</span>";
+            lang === "ar"
+                ? "<span>لم يتم اختيار مهمة</span>"
+                : "<span>NO TASK SELECTED</span>";
 
         return;
 
@@ -3395,7 +3405,12 @@ function updateCurrentTask() {
     container.innerHTML = `
 
         <span>
-            FOCUSING ON:
+            ${
+                lang === "ar"
+                    ? "التركيز على:"
+                    : "FOCUSING ON:"
+            }
+
             ${escapeHTML(task.title)}
         </span>
 
