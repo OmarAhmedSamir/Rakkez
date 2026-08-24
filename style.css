@@ -68,6 +68,10 @@ color:inherit;
 }
 
 
+/* =====================================================
+APP
+===================================================== */
+
 .app{
 
 position:relative;
@@ -242,6 +246,8 @@ font-weight:700;
 
 letter-spacing:-1.5px;
 
+direction:ltr;
+
 }
 
 
@@ -250,420 +256,220 @@ color:#3c94ff;
 }
 
 
+/* =====================================================
+HEADER ACTIONS
+===================================================== */
+
 .top-actions{
 
 display:flex;
 
-gap:8px;
+align-items:center;
+
+gap:9px;
 
 }
 
 
 /* =====================================================
-   HEADER ACTIONS
-   Minimal Premium Style
-===================================================== */
-
-.top-actions{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:9px;
-
-}
-
-
-/* =====================================================
-   STANDARD HEADER BUTTONS
-   Media / Tasks / Updates
-===================================================== */
-
-/* =====================================================
-   HEADER BUTTONS — DARK BLUE BRAND STYLE
+HEADER BUTTONS
+ALL SAME DARK BLUE BRAND STYLE
 ===================================================== */
 
 .icon-btn,
 .blog-btn,
 .language-btn{
 
-    position:relative;
+position:relative;
 
-    height:46px;
+height:46px;
 
-    display:flex;
+display:flex;
 
-    align-items:center;
-    justify-content:center;
+align-items:center;
 
-    border-radius:15px;
+justify-content:center;
 
-    background:
-        rgba(8,13,22,.92);
+border-radius:15px;
 
-    border:
-        1px solid rgba(255,255,255,.10);
+background:
+rgba(8,13,22,.92);
 
-    color:#ffffff;
+border:
+1px solid rgba(255,255,255,.10);
 
-    box-shadow:
+color:#ffffff;
 
-        inset 0 1px 0
-        rgba(255,255,255,.06),
+box-shadow:
 
-        0 8px 25px
-        rgba(0,0,0,.20);
+inset 0 1px 0
+rgba(255,255,255,.06),
 
-    backdrop-filter:
-        blur(18px);
+0 8px 25px
+rgba(0,0,0,.20);
 
-    -webkit-backdrop-filter:
-        blur(18px);
+backdrop-filter:
+blur(18px);
 
-    transition:
-        transform .25s cubic-bezier(.2,.8,.2,1),
-        background .25s ease,
-        border-color .25s ease,
-        box-shadow .25s ease;
+-webkit-backdrop-filter:
+blur(18px);
+
+transition:
+transform .25s cubic-bezier(.2,.8,.2,1),
+background .25s ease,
+border-color .25s ease,
+box-shadow .25s ease;
 
 }
 
 
 /* =====================================================
-   ICON BUTTON
+ICON BUTTONS
 ===================================================== */
 
 .icon-btn{
 
-    width:46px;
+width:46px;
 
-    padding:0;
+padding:0;
 
 }
 
 
 /* =====================================================
-   BLOG BUTTON
+BLOG BUTTON
+SAME STYLE — ONLY WIDER
 ===================================================== */
 
 .blog-btn{
 
-    min-width:125px;
+min-width:125px;
 
-    padding:0 25px;
+padding:0 25px;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+font-family:
+"Space Grotesk",
+sans-serif;
 
-    font-size:14px;
+font-size:14px;
 
-    font-weight:700;
+font-weight:700;
 
-    letter-spacing:.2px;
+letter-spacing:.2px;
 
-    white-space:nowrap;
+white-space:nowrap;
 
 }
 
 
 /* =====================================================
-   LANGUAGE BUTTON
+LANGUAGE BUTTON
+EXACT SAME STYLE
 ===================================================== */
 
 .language-btn{
 
-    min-width:62px;
+min-width:62px;
 
-    padding:0 15px;
+padding:0 15px;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+font-family:
+"DM Sans",
+sans-serif;
 
-    font-size:12px;
+font-size:12px;
 
-    font-weight:700;
+font-weight:700;
 
-    white-space:nowrap;
+white-space:nowrap;
 
 }
 
 
 /* =====================================================
-   SUBTLE INNER HIGHLIGHT
+INNER HIGHLIGHT
 ===================================================== */
 
 .icon-btn::before,
 .blog-btn::before,
 .language-btn::before{
 
-    content:"";
+content:"";
 
-    position:absolute;
+position:absolute;
 
-    inset:1px;
+inset:1px;
 
-    border-radius:14px;
+border-radius:14px;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.055),
-            transparent 45%
-        );
+background:
+linear-gradient(
+135deg,
+rgba(255,255,255,.055),
+transparent 45%
+);
 
-    pointer-events:none;
+pointer-events:none;
 
 }
 
 
 /* =====================================================
-   HOVER
+HEADER HOVER
 ===================================================== */
 
 .icon-btn:hover,
 .blog-btn:hover,
 .language-btn:hover{
 
-    transform:
-        translateY(-2px);
+transform:
+translateY(-2px);
 
-    background:
-        rgba(10,17,29,.98);
+background:
+rgba(10,17,29,.98);
 
-    border-color:
-        rgba(255,255,255,.18);
+border-color:
+rgba(255,255,255,.18);
 
-    box-shadow:
+box-shadow:
 
-        inset 0 1px 0
-        rgba(255,255,255,.08),
+inset 0 1px 0
+rgba(255,255,255,.08),
 
-        0 12px 32px
-        rgba(0,0,0,.28),
+0 12px 32px
+rgba(0,0,0,.28),
 
-        0 0 20px
-        rgba(20,120,255,.06);
+0 0 20px
+rgba(20,120,255,.06);
 
 }
 
 
 /* =====================================================
-   ACTIVE
+HEADER ACTIVE
 ===================================================== */
 
 .icon-btn:active,
 .blog-btn:active,
 .language-btn:active{
 
-    transform:
-        translateY(0)
-        scale(.97);
+transform:
+translateY(0)
+scale(.97);
 
-    background:
-        rgba(8,13,22,1);
+background:
+rgba(8,13,22,1);
 
-    box-shadow:
+box-shadow:
 
-        inset 0 2px 5px
-        rgba(0,0,0,.25),
+inset 0 2px 5px
+rgba(0,0,0,.25),
 
-        0 4px 12px
-        rgba(0,0,0,.15);
-
-}
-
-
-/* =====================================================
-   LANGUAGE — SAME STYLE AS OTHER BUTTONS
-===================================================== */
-
-.language-btn{
-
-    background:
-        rgba(8,13,22,.92);
-
-    border:
-        1px solid rgba(255,255,255,.10);
-
-    color:#ffffff;
+0 4px 12px
+rgba(0,0,0,.15);
 
 }
 
-
-/* =====================================================
-   BLOG — SAME STYLE, ONLY DIFFERENT SIZE
-===================================================== */
-
-.blog-btn{
-
-    background:
-        rgba(8,13,22,.92);
-
-    border:
-        1px solid rgba(255,255,255,.10);
-
-    color:#ffffff;
-
-}
-
-
-/* =====================================================
-   BLOG HOVER
-===================================================== */
-
-.blog-btn:hover{
-
-    background:
-        rgba(10,17,29,.98);
-
-    border-color:
-        rgba(255,255,255,.18);
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:600px){
-
-    .icon-btn{
-
-        width:42px;
-        height:42px;
-
-        border-radius:13px;
-
-    }
-
-    .language-btn{
-
-        height:42px;
-
-        min-width:58px;
-
-        padding:0 11px;
-
-        border-radius:13px;
-
-        font-size:11px;
-
-    }
-
-    .blog-btn{
-
-        height:42px;
-
-        min-width:115px;
-
-        padding:0 20px;
-
-        border-radius:13px;
-
-        font-size:13px;
-
-    }
-
-}
-/* =====================================================
-   LIGHT MODE
-===================================================== */
-
-body.light .icon-btn{
-
-    background:
-        rgba(255,255,255,.68);
-
-    border-color:
-        rgba(0,0,0,.10);
-
-    color:
-        rgba(17,24,39,.72);
-
-}
-
-
-body.light .icon-btn:hover{
-
-    background:
-        rgba(255,255,255,.90);
-
-    border-color:
-        rgba(0,0,0,.16);
-
-    color:#111827;
-
-}
-
-
-body.light .blog-btn{
-
-    background:
-        linear-gradient(
-            145deg,
-            #151922,
-            #080a0f
-        );
-
-    color:#fff;
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:600px){
-
-    .top-actions{
-
-        gap:6px;
-
-    }
-
-    .icon-btn{
-
-        width:42px;
-        height:42px;
-
-        border-radius:13px;
-
-    }
-
-    .language-btn{
-
-        height:42px;
-
-        min-width:58px;
-
-        padding:0 11px;
-
-        border-radius:13px;
-
-        font-size:11px;
-
-    }
-
-    .blog-btn{
-
-        height:42px;
-
-        min-width:115px;
-
-        padding:0 20px;
-
-        border-radius:13px;
-
-        font-size:13px;
-
-    }
-
-}
 
 /* =====================================================
 MAIN
@@ -700,6 +506,10 @@ flex-direction:column;
 
 align-items:center;
 
+justify-content:center;
+
+text-align:center;
+
 }
 
 
@@ -714,6 +524,8 @@ letter-spacing:3px;
 color:rgba(255,255,255,.55);
 
 margin-bottom:18px;
+
+direction:ltr;
 
 }
 
@@ -735,6 +547,8 @@ text-shadow:
 0 15px 70px rgba(0,0,0,.6);
 
 user-select:none;
+
+direction:ltr;
 
 }
 
@@ -827,11 +641,14 @@ border-radius:20px;
 transition:
 width .5s linear;
 
+direction:ltr;
+
 }
 
 
 /* =====================================================
 CONTROLS
+START + RESET CENTERED
 ===================================================== */
 
 .controls{
@@ -840,7 +657,13 @@ margin-top:32px;
 
 display:flex;
 
+align-items:center;
+
+justify-content:center;
+
 gap:12px;
+
+width:100%;
 
 }
 
@@ -1064,7 +887,7 @@ display:flex;
 
 
 /* =====================================================
-PANEL
+SETTINGS PANEL
 ===================================================== */
 
 .panel{
@@ -1182,6 +1005,10 @@ border:
 
 }
 
+
+/* =====================================================
+SECTIONS
+===================================================== */
 
 .section{
 
@@ -1368,28 +1195,33 @@ display:flex;
 
 align-items:center;
 
-gap:9px;
+gap:10px;
 
 }
 
 
-#alarmVolume{
+.volume-control input[type="range"]{
 
-width:110px;
+width:100px;
 
-accent-color:
-#1683ff;
+accent-color:#1478ff;
+
+cursor:pointer;
 
 }
 
 
 #alarmVolumeValue{
 
-font-size:11px;
+min-width:38px;
 
-color:var(--muted);
+text-align:right;
 
-min-width:35px;
+font-size:12px;
+
+color:rgba(255,255,255,.65);
+
+font-weight:600;
 
 }
 
@@ -1400,7 +1232,9 @@ SELECT
 
 .select-input{
 
-height:39px;
+height:40px;
+
+min-width:120px;
 
 padding:
 0 10px;
@@ -1411,11 +1245,38 @@ background:
 rgba(255,255,255,.06);
 
 border:
-1px solid var(--border);
+1px solid rgba(255,255,255,.10);
 
 border-radius:11px;
 
 outline:none;
+
+cursor:pointer;
+
+}
+
+
+.select-input:hover{
+
+border-color:
+rgba(255,255,255,.20);
+
+}
+
+
+.select-input:focus{
+
+border-color:
+#1478ff;
+
+}
+
+
+.select-input option{
+
+background:#0a0f18;
+
+color:white;
 
 }
 
@@ -1426,6 +1287,12 @@ ALARM UPLOAD
 
 .alarm-upload{
 
+margin-top:14px;
+
+width:100%;
+
+min-height:72px;
+
 display:flex;
 
 flex-direction:column;
@@ -1434,12 +1301,10 @@ align-items:center;
 
 justify-content:center;
 
-min-height:75px;
-
-margin-top:14px;
+gap:4px;
 
 border:
-1px dashed rgba(255,255,255,.18);
+1px dashed rgba(255,255,255,.16);
 
 border-radius:15px;
 
@@ -1447,10 +1312,6 @@ background:
 rgba(255,255,255,.025);
 
 cursor:pointer;
-
-color:var(--muted);
-
-font-size:11px;
 
 transition:.25s;
 
@@ -1460,141 +1321,51 @@ transition:.25s;
 .alarm-upload:hover{
 
 border-color:
-#2484ff;
+#1478ff;
 
 background:
-rgba(0,104,255,.06);
+rgba(20,120,255,.06);
 
 }
 
 
 .alarm-upload strong{
+
+font-size:12px;
 
 color:white;
 
-font-size:13px;
-
-margin-bottom:4px;
-
 }
 
-/* -----------------------------
-   ALARM
------------------------------ */
-
-.volume-control{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.volume-control input[type="range"]{
-    width:100px;
-    accent-color:#1478ff;
-    cursor:pointer;
-}
-
-#alarmVolumeValue{
-    min-width:38px;
-    text-align:right;
-    font-size:12px;
-    color:rgba(255,255,255,.65);
-    font-weight:600;
-}
-
-.select-input{
-    height:40px;
-    min-width:120px;
-    padding:0 10px;
-
-    color:white;
-
-    background:rgba(255,255,255,.06);
-
-    border:1px solid rgba(255,255,255,.10);
-
-    border-radius:11px;
-
-    outline:none;
-
-    cursor:pointer;
-}
-
-.select-input:hover{
-    border-color:rgba(255,255,255,.20);
-}
-
-.select-input:focus{
-    border-color:#1478ff;
-}
-
-.select-input option{
-    background:#0a0f18;
-    color:white;
-}
-
-.alarm-upload{
-    margin-top:14px;
-
-    width:100%;
-    min-height:72px;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-
-    gap:4px;
-
-    border:1px dashed rgba(255,255,255,.16);
-
-    border-radius:15px;
-
-    background:rgba(255,255,255,.025);
-
-    cursor:pointer;
-
-    transition:.25s;
-}
-
-.alarm-upload:hover{
-    border-color:#1478ff;
-
-    background:rgba(20,120,255,.06);
-}
-
-.alarm-upload strong{
-    font-size:12px;
-    color:white;
-}
 
 .alarm-upload span{
-    font-size:10px;
-    color:rgba(255,255,255,.45);
-}
 
-@media(max-width:600px){
+font-size:10px;
 
-    .volume-control input[type="range"]{
-        width:80px;
-    }
-
-    .select-input{
-        min-width:105px;
-    }
+color:rgba(255,255,255,.45);
 
 }
 
-.media-upload-status {
-    margin-top: 10px;
-    font-size: 13px;
-    color: rgba(255,255,255,.45);
-    transition: .2s ease;
+
+.media-upload-status{
+
+margin-top:10px;
+
+font-size:13px;
+
+color:rgba(255,255,255,.45);
+
+transition:.2s ease;
+
 }
 
-.media-upload-status.uploaded {
-    color: #6ee7b7;
-    font-weight: 600;
+
+.media-upload-status.uploaded{
+
+color:#6ee7b7;
+
+font-weight:600;
+
 }
 
 
@@ -1738,7 +1509,9 @@ gap:8px;
 
 
 .task-input-row .media-input{
+
 flex:1;
+
 }
 
 
@@ -2025,7 +1798,6 @@ border-radius:15px;
 overflow:hidden;
 
 display:none;
-
 
 }
 
@@ -2542,6 +2314,8 @@ rgba(0,0,0,.10);
 
 
 body.light .icon-btn,
+body.light .blog-btn,
+body.light .language-btn,
 body.light .secondary,
 body.light .stat,
 body.light .ambient-btn{
@@ -2560,6 +2334,58 @@ color:#111827;
 
 background:
 rgba(0,0,0,.04);
+
+}
+
+
+/* =====================================================
+RTL SUPPORT
+===================================================== */
+
+html[dir="rtl"]{
+
+direction:rtl;
+
+}
+
+
+html[dir="rtl"] body{
+
+direction:rtl;
+
+}
+
+
+html[dir="ltr"]{
+
+direction:ltr;
+
+}
+
+
+html[dir="ltr"] body{
+
+direction:ltr;
+
+}
+
+
+/* Keep RakkeZ logo normal */
+
+.logo{
+
+direction:ltr;
+
+}
+
+
+/* Keep technical UI LTR */
+
+.timer,
+.progress,
+.mode{
+
+direction:ltr;
 
 }
 
@@ -2590,6 +2416,34 @@ gap:5px;
 
 width:39px;
 height:39px;
+
+}
+
+
+.language-btn{
+
+height:39px;
+
+min-width:58px;
+
+padding:
+0 11px;
+
+font-size:11px;
+
+}
+
+
+.blog-btn{
+
+height:39px;
+
+min-width:115px;
+
+padding:
+0 20px;
+
+font-size:13px;
 
 }
 
@@ -2668,8 +2522,34 @@ height:145px;
 }
 
 
+.controls{
+
+width:100%;
+
+justify-content:center;
+
 }
 
+
+.primary{
+
+flex:0 1 150px;
+
+}
+
+
+.secondary{
+
+flex:0 0 auto;
+
+}
+
+}
+
+
+/* =====================================================
+VERY SMALL MOBILE
+===================================================== */
 
 @media(max-width:450px){
 
@@ -2684,12 +2564,16 @@ display:none;
 
 width:100%;
 
+justify-content:center;
+
 }
 
 
 .primary{
 
 flex:1;
+
+min-width:0;
 
 }
 
@@ -2713,13 +2597,8 @@ grid-template-columns:
 }
 
 
-
-
-
-
-
 /* =====================================================
-   UPDATES MODAL
+UPDATES MODAL
 ===================================================== */
 
 .updates-modal{
@@ -2739,8 +2618,11 @@ padding:20px;
 background:
 rgba(0,0,0,.55);
 
-backdrop-filter:blur(15px);
--webkit-backdrop-filter:blur(15px);
+backdrop-filter:
+blur(15px);
+
+-webkit-backdrop-filter:
+blur(15px);
 
 }
 
@@ -2753,7 +2635,7 @@ display:flex;
 
 
 /* =====================================================
-   UPDATES PANEL
+UPDATES PANEL
 ===================================================== */
 
 .updates-modal-content{
@@ -2803,7 +2685,7 @@ border-radius:10px;
 
 
 /* =====================================================
-   HEADER
+UPDATES HEADER
 ===================================================== */
 
 .updates-header{
@@ -2853,7 +2735,7 @@ color:var(--muted);
 
 
 /* =====================================================
-   NEW BADGE
+NEW BADGE
 ===================================================== */
 
 .updates-badge{
@@ -2888,7 +2770,7 @@ letter-spacing:1.2px;
 
 
 /* =====================================================
-   CLOSE
+UPDATES CLOSE
 ===================================================== */
 
 .updates-close{
@@ -2935,7 +2817,7 @@ translateY(-1px);
 
 
 /* =====================================================
-   DESCRIPTION
+DESCRIPTION
 ===================================================== */
 
 .updates-description{
@@ -2952,7 +2834,7 @@ color:var(--muted);
 
 
 /* =====================================================
-   UPDATE ITEMS
+UPDATE ITEMS
 ===================================================== */
 
 .update-list{
@@ -3001,7 +2883,7 @@ rgba(255,255,255,.05);
 
 
 /* =====================================================
-   UPDATE ICON
+UPDATE ICON
 ===================================================== */
 
 .update-icon{
@@ -3030,7 +2912,7 @@ font-size:16px;
 
 
 /* =====================================================
-   UPDATE TEXT
+UPDATE TEXT
 ===================================================== */
 
 .update-info{
@@ -3065,7 +2947,7 @@ color:var(--muted);
 
 
 /* =====================================================
-   ACTION
+UPDATE ACTION
 ===================================================== */
 
 #updatesDone{
@@ -3108,85 +2990,7 @@ rgba(20,120,255,.20);
 
 
 /* =====================================================
-   BLOG BUTTON
-===================================================== */
-
-.blog-btn{
-
-font-family:"Space Grotesk",sans-serif;
-
-font-size:14px;
-
-font-weight:700;
-
-letter-spacing:.2px;
-
-padding:
-0 28px;
-
-min-width:125px;
-
-height:44px;
-
-display:inline-flex;
-
-align-items:center;
-
-justify-content:center;
-
-white-space:nowrap;
-
-box-sizing:border-box;
-
-border-radius:14px;
-
-background:
-rgba(20,120,255,.14);
-
-border:
-1px solid rgba(35,131,255,.28);
-
-color:#ffffff;
-
-box-shadow:
-0 8px 25px rgba(0,95,255,.08);
-
-transition:
-transform .25s ease,
-background .25s ease,
-border-color .25s ease,
-box-shadow .25s ease;
-
-}
-
-
-.blog-btn:hover{
-
-transform:
-translateY(-2px);
-
-background:
-rgba(20,120,255,.24);
-
-border-color:
-rgba(70,155,255,.55);
-
-box-shadow:
-0 14px 35px rgba(0,95,255,.18);
-
-}
-
-
-.blog-btn:active{
-
-transform:
-translateY(0);
-
-}
-
-
-/* =====================================================
-   MOBILE
+MOBILE UPDATES
 ===================================================== */
 
 @media(max-width:600px){
@@ -3220,165 +3024,76 @@ padding:12px;
 
 }
 
-
-.blog-btn{
-
-font-size:13px;
-
-min-width:115px;
-
-height:42px;
-
-padding:
-0 22px;
-
-}
-
 }
 
 
-/* =========================================================
-   LANGUAGE SWITCHER
-========================================================= */
-
-.language-btn{
-
-    height:44px;
-
-    padding:0 14px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border-radius:14px;
-
-    background:
-        rgba(20,120,255,.18);
-
-    border:
-        1px solid rgba(35,131,255,.45);
-
-    color:#ffffff;
-
-    cursor:pointer;
-
-    font-family:"DM Sans",sans-serif;
-
-    font-size:12px;
-
-    font-weight:700;
-
-    transition:.25s;
-
-    white-space:nowrap;
-
-    box-shadow:
-        0 0 18px rgba(20,120,255,.08);
-
-}
-
-
-.language-btn:hover{
-
-    transform:
-        translateY(-2px);
-
-    border-color:
-        rgba(70,155,255,.75);
-
-    background:
-        rgba(20,120,255,.30);
-
-    box-shadow:
-        0 10px 30px rgba(20,120,255,.18);
-
-}
-
-
-.language-btn:active{
-
-    transform:
-        translateY(0);
-
-}
-
-
-/* =========================================================
-   RTL SUPPORT
-========================================================= */
-
-html[dir="rtl"]{
-
-    direction:rtl;
-
-}
-
-
-html[dir="rtl"] body{
-
-    direction:rtl;
-
-}
-
-
-html[dir="ltr"]{
-
-    direction:ltr;
-
-}
-
-
-html[dir="ltr"] body{
-
-    direction:ltr;
-
-}
-
-
-/*
-   Keep the RakkeZ logo visually normal.
-*/
-
-.logo{
-
-    direction:ltr;
-
-}
-
-
-/*
-   Keep timer numbers and technical UI
-   from becoming visually reversed.
-*/
-
-.timer,
-.progress,
-.mode{
-
-    direction:ltr;
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
+/* =====================================================
+FINAL HEADER MOBILE OVERRIDE
+===================================================== */
 
 @media(max-width:600px){
 
-    .language-btn{
+.icon-btn{
 
-        height:42px;
+width:42px;
+height:42px;
 
-        padding:0 11px;
-
-        font-size:11px;
-
-    }
+border-radius:13px;
 
 }
 
 
+.language-btn{
+
+height:42px;
+
+min-width:58px;
+
+padding:
+0 11px;
+
+border-radius:13px;
+
+font-size:11px;
+
+}
+
+
+.blog-btn{
+
+height:42px;
+
+min-width:115px;
+
+padding:
+0 20px;
+
+border-radius:13px;
+
+font-size:13px;
+
+}
+
+}
+
+
+/* =====================================================
+ALARM MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+.volume-control input[type="range"]{
+
+width:80px;
+
+}
+
+
+.select-input{
+
+min-width:105px;
+
+}
+
+}
