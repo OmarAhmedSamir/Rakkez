@@ -19,7 +19,7 @@
 
 <link
     rel="preconnect"
-    href="https://fonts.gstatic.com"
+    href="https://fonts.googleapis.com"
     crossorigin
 >
 
@@ -1040,13 +1040,11 @@ textarea.input{
 
 .image-preview{
 
-    display:none;
+    display:block;
 
     width:100%;
 
     max-height:230px;
-
-    margin-top:10px;
 
     object-fit:cover;
 
@@ -1069,15 +1067,6 @@ textarea.input{
 .image-preview-wrap.show{
 
     display:block;
-
-}
-
-
-.image-preview-wrap .image-preview{
-
-    display:block;
-
-    margin-top:0;
 
 }
 
@@ -1254,6 +1243,8 @@ textarea.input{
     font-weight:700;
 
     cursor:pointer;
+
+    border:0;
 
 }
 
@@ -1538,26 +1529,6 @@ textarea.input{
 
     background:
         rgba(255,82,101,.06);
-
-}
-
-
-/* =========================================================
-   ADMIN TOP
-========================================================= */
-
-.admin-top{
-
-    display:none;
-
-    gap:8px;
-
-}
-
-
-.admin-top.show{
-
-    display:flex;
 
 }
 
@@ -1954,12 +1925,11 @@ textarea.input{
         </div>
 
 
-        <div
-            class="status"
-            style="margin-top:12px;"
-        >
+        <div class="status">
+
             Your token is stored only in this browser's local storage.
             Do not use this admin page on a public/shared computer.
+
         </div>
 
 
@@ -2015,7 +1985,7 @@ textarea.input{
 
 
             <!-- =================================================
-                 NEW REAL IMAGE UPLOAD
+                 COVER IMAGE
             ================================================== -->
 
             <div class="form-group">
@@ -2024,6 +1994,8 @@ textarea.input{
                     Cover Image
                 </label>
 
+
+                <!-- UPLOAD -->
 
                 <label
                     id="imageUpload"
@@ -2058,6 +2030,53 @@ textarea.input{
                 >
 
 
+                <!-- OR -->
+
+                <div
+                    style="
+                        display:flex;
+                        align-items:center;
+                        gap:10px;
+                        margin:12px 0;
+                        color:var(--muted);
+                        font-size:10px;
+                    "
+                >
+
+                    <div
+                        style="
+                            height:1px;
+                            flex:1;
+                            background:rgba(255,255,255,.08);
+                        "
+                    ></div>
+
+                    OR
+
+                    <div
+                        style="
+                            height:1px;
+                            flex:1;
+                            background:rgba(255,255,255,.08);
+                        "
+                    ></div>
+
+                </div>
+
+
+                <!-- URL -->
+
+                <input
+                    id="postImageUrl"
+                    class="input"
+                    type="url"
+                    placeholder="Cover Image URL — https://example.com/image.jpg"
+                    autocomplete="off"
+                >
+
+
+                <!-- PREVIEW -->
+
                 <div
                     id="imagePreviewWrap"
                     class="image-preview-wrap"
@@ -2066,7 +2085,7 @@ textarea.input{
                     <img
                         id="imagePreview"
                         class="image-preview"
-                        alt="Selected image preview"
+                        alt="Cover image preview"
                     >
 
 
@@ -2090,6 +2109,8 @@ textarea.input{
             </div>
 
 
+            <!-- ARTICLE -->
+
             <div class="form-group">
 
                 <label class="form-label">
@@ -2106,12 +2127,14 @@ textarea.input{
                         <b>B</b>
                     </button>
 
+
                     <button
                         type="button"
                         onclick="format('italic')"
                     >
                         <i>I</i>
                     </button>
+
 
                     <button
                         type="button"
@@ -2120,12 +2143,14 @@ textarea.input{
                         <u>U</u>
                     </button>
 
+
                     <button
                         type="button"
                         onclick="format('formatBlock','H2')"
                     >
                         H2
                     </button>
+
 
                     <button
                         type="button"
@@ -2134,6 +2159,7 @@ textarea.input{
                         H3
                     </button>
 
+
                     <button
                         type="button"
                         onclick="format('insertUnorderedList')"
@@ -2141,12 +2167,14 @@ textarea.input{
                         • List
                     </button>
 
+
                     <button
                         type="button"
                         onclick="format('insertOrderedList')"
                     >
                         1. List
                     </button>
+
 
                     <button
                         type="button"
@@ -2176,6 +2204,7 @@ textarea.input{
                 >
                     Publish Post
                 </button>
+
 
                 <button
                     class="secondary"
@@ -2243,22 +2272,16 @@ textarea.input{
 ========================================================= */
 
 
-/*
-    IMPORTANT
-
-    Change this password.
-
-    This password is only a local UI lock.
-
-    It is NOT cryptographic security.
-*/
+/* =========================================================
+   ADMIN
+========================================================= */
 
 const ADMIN_PASSWORD = "RakkeZ@2026";
 
 
-/*
-    GitHub settings
-*/
+/* =========================================================
+   GITHUB
+========================================================= */
 
 const DEFAULT_CONFIG = {
 
@@ -2271,47 +2294,32 @@ const DEFAULT_CONFIG = {
 };
 
 
-/*
-    File that stores the published posts.
-*/
-
 const DATA_FILE = "blog-data.js";
 
 
-/*
-    Folder where uploaded blog images are stored.
-*/
-
-const BLOG_IMAGE_FOLDER = "assets/blog/";
+const BLOG_IMAGE_FOLDER =
+    "assets/blog/";
 
 
 /* =========================================================
    STATE
 ========================================================= */
 
-let posts = Array.isArray(window.RAKKEZ_BLOG_POSTS)
-    ? [...window.RAKKEZ_BLOG_POSTS]
-    : [];
+let posts =
+    Array.isArray(
+        window.RAKKEZ_BLOG_POSTS
+    )
+    ?
+    [...window.RAKKEZ_BLOG_POSTS]
+    :
+    [];
 
 
 let editingId = null;
 
 
 /*
-    New image state.
-
-    selectedImageFile:
-        The image selected from the user's device.
-
-    selectedImageData:
-        Base64 data URL used for preview/upload.
-
-    currentImageUrl:
-        Existing image URL when editing a post.
-
-    removeCurrentImage:
-        Whether the existing image should be removed
-        from the article.
+    Image state
 */
 
 let selectedImageFile = null;
@@ -2319,6 +2327,8 @@ let selectedImageFile = null;
 let selectedImageData = "";
 
 let currentImageUrl = "";
+
+let imageUrlInput = "";
 
 let removeCurrentImage = false;
 
@@ -2366,33 +2376,36 @@ function makeId(){
 function formatDate(date){
 
     return new Intl.DateTimeFormat(
+
         "en-US",
+
         {
+
             year:"numeric",
+
             month:"long",
+
             day:"numeric"
+
         }
-    ).format(new Date(date));
+
+    ).format(
+
+        new Date(date)
+
+    );
 
 }
 
 
 /* =========================================================
-   IMAGE HELPERS
+   IMAGE — FILE TO DATA URL
 ========================================================= */
-
-
-/*
-    Convert a File into a Data URL.
-
-    Example:
-
-    data:image/png;base64,AAAA...
-*/
 
 function fileToDataURL(file){
 
     return new Promise(
+
         (resolve,reject) => {
 
             const reader =
@@ -2400,30 +2413,33 @@ function fileToDataURL(file){
 
 
             reader.onload =
-                () => resolve(
-                    reader.result
-                );
+                () =>
+                    resolve(
+                        reader.result
+                    );
 
 
             reader.onerror =
-                () => reject(
-                    new Error(
-                        "Could not read the selected image."
-                    )
-                );
+                () =>
+                    reject(
+                        new Error(
+                            "Could not read the selected image."
+                        )
+                    );
 
 
             reader.readAsDataURL(file);
 
         }
+
     );
 
 }
 
 
-/*
-    Extract only the Base64 part from a Data URL.
-*/
+/* =========================================================
+   DATA URL → BASE64
+========================================================= */
 
 function dataURLToBase64(dataURL){
 
@@ -2447,9 +2463,9 @@ function dataURLToBase64(dataURL){
 }
 
 
-/*
-    Create a safe filename.
-*/
+/* =========================================================
+   SLUGIFY
+========================================================= */
 
 function slugify(value){
 
@@ -2459,33 +2475,51 @@ function slugify(value){
 
         .trim()
 
-        .replace(/[^a-z0-9]+/g,"-")
+        .replace(
+            /[^a-z0-9]+/g,
+            "-"
+        )
 
-        .replace(/^-+|-+$/g,"")
+        .replace(
+            /^-+|-+$/g,
+            ""
+        )
 
-        .slice(0,60) ||
+        .slice(0,60)
+
+        ||
 
         "image";
 
 }
 
 
-/*
-    Generate a unique image path.
+/* =========================================================
+   IMAGE PATH
+========================================================= */
 
-    Example:
+function makeImagePath(
 
-    assets/blog/my-article-20260824-k92jd3.png
-*/
+    title,
 
-function makeImagePath(title,file){
+    file
+
+){
 
     const extension =
+
         file.name
+
             .split(".")
+
             .pop()
+
             .toLowerCase()
-            .replace(/[^a-z0-9]/g,"");
+
+            .replace(
+                /[^a-z0-9]/g,
+                ""
+            );
 
 
     const safeExtension =
@@ -2493,16 +2527,26 @@ function makeImagePath(title,file){
 
 
     const random =
+
         Math.random()
+
             .toString(36)
+
             .slice(2,8);
 
 
     const date =
+
         new Date()
+
             .toISOString()
+
             .slice(0,10)
-            .replaceAll("-","");
+
+            .replaceAll(
+                "-",
+                ""
+            );
 
 
     return (
@@ -2528,9 +2572,9 @@ function makeImagePath(title,file){
 }
 
 
-/*
-    Reset image UI.
-*/
+/* =========================================================
+   RESET IMAGE
+========================================================= */
 
 function resetImageUI(){
 
@@ -2540,33 +2584,53 @@ function resetImageUI(){
 
     currentImageUrl = "";
 
+    imageUrlInput = "";
+
     removeCurrentImage = false;
 
 
     $("postImageFile").value = "";
 
+    $("postImageUrl").value = "";
+
+
     $("imagePreview").src = "";
 
+
     $("imagePreviewWrap")
+
         .classList
+
         .remove("show");
 
 
     $("currentImage")
+
         .textContent = "";
 
 }
 
 
-/*
-    Show an existing image when editing.
-*/
+/* =========================================================
+   SHOW CURRENT IMAGE
+========================================================= */
 
 function showCurrentImage(url){
 
-    currentImageUrl = url || "";
+    currentImageUrl =
+        url || "";
 
-    removeCurrentImage = false;
+
+    removeCurrentImage =
+        false;
+
+
+    $("postImageUrl").value =
+        url || "";
+
+
+    imageUrlInput =
+        url || "";
 
 
     if(!url){
@@ -2579,23 +2643,123 @@ function showCurrentImage(url){
     }
 
 
-    $("imagePreview").src = url;
+    $("imagePreview").src =
+        url;
+
 
     $("imagePreviewWrap")
+
         .classList
+
         .add("show");
 
 
     $("currentImage")
+
         .textContent =
-        "Current image: " + url;
+            "Current cover image: " +
+            url;
 
 }
 
 
-/*
-    Handle selecting a new image.
-*/
+/* =========================================================
+   URL IMAGE PREVIEW
+========================================================= */
+
+function handleImageUrl(){
+
+    const url =
+
+        $("postImageUrl")
+
+            .value
+
+            .trim();
+
+
+    imageUrlInput =
+        url;
+
+
+    /*
+        Empty URL
+    */
+
+    if(!url){
+
+        if(
+            !selectedImageFile &&
+            !currentImageUrl
+        ){
+
+            $("imagePreview").src = "";
+
+            $("imagePreviewWrap")
+
+                .classList
+
+                .remove("show");
+
+
+            $("currentImage")
+                .textContent = "";
+
+        }
+
+
+        return;
+
+    }
+
+
+    /*
+        URL selected
+    */
+
+    removeCurrentImage =
+        false;
+
+
+    /*
+        If upload exists,
+        upload still has priority.
+    */
+
+    if(selectedImageFile){
+
+        $("currentImage")
+
+            .textContent =
+                "Upload selected. The uploaded image will be used.";
+
+        return;
+
+    }
+
+
+    $("imagePreview").src =
+        url;
+
+
+    $("imagePreviewWrap")
+
+        .classList
+
+        .add("show");
+
+
+    $("currentImage")
+
+        .textContent =
+            "Cover Image URL selected.";
+
+}
+
+
+/* =========================================================
+   IMAGE FILE
+========================================================= */
 
 async function handleImageFile(file){
 
@@ -2615,11 +2779,16 @@ async function handleImageFile(file){
     ];
 
 
-    if(!allowedTypes.includes(file.type)){
+    if(
+        !allowedTypes.includes(
+            file.type
+        )
+    ){
 
         alert(
             "Please choose a JPG, PNG, WEBP or GIF image."
         );
+
 
         $("postImageFile").value = "";
 
@@ -2627,14 +2796,6 @@ async function handleImageFile(file){
 
     }
 
-
-    /*
-        Keep a reasonable browser-side limit.
-
-        GitHub's Contents API has practical file-size
-        constraints, so large images should be compressed
-        before uploading.
-    */
 
     const maxSize =
         10 * 1024 * 1024;
@@ -2646,6 +2807,7 @@ async function handleImageFile(file){
             "Image is too large. Please choose an image smaller than 10 MB."
         );
 
+
         $("postImageFile").value = "";
 
         return;
@@ -2655,13 +2817,19 @@ async function handleImageFile(file){
 
     try{
 
-        selectedImageFile = file;
+        selectedImageFile =
+            file;
+
 
         selectedImageData =
-            await fileToDataURL(file);
+
+            await fileToDataURL(
+                file
+            );
 
 
-        removeCurrentImage = false;
+        removeCurrentImage =
+            false;
 
 
         $("imagePreview").src =
@@ -2669,20 +2837,28 @@ async function handleImageFile(file){
 
 
         $("imagePreviewWrap")
+
             .classList
+
             .add("show");
 
 
         $("currentImage")
-            .textContent =
-            "New image: " +
-            file.name;
 
+            .textContent =
+
+            "New upload: " +
+
+            file.name +
+
+            " — Upload will be used instead of the URL.";
 
     }
+
     catch(error){
 
         console.error(error);
+
 
         alert(
             "Could not load this image."
@@ -2700,11 +2876,19 @@ async function handleImageFile(file){
 function loadConfig(){
 
     const saved =
+
         JSON.parse(
+
             localStorage.getItem(
+
                 "rakkez_blog_github"
-            ) || "null"
+
+            ) ||
+
+            "null"
+
         );
+
 
     const config =
         saved || DEFAULT_CONFIG;
@@ -2713,8 +2897,10 @@ function loadConfig(){
     $("githubRepo").value =
         config.repo || "";
 
+
     $("githubBranch").value =
         config.branch || "main";
+
 
     $("githubToken").value =
         config.token || "";
@@ -2730,11 +2916,21 @@ function saveConfig(){
 
         JSON.stringify({
 
-            repo:$("githubRepo").value.trim(),
+            repo:
+                $("githubRepo")
+                    .value
+                    .trim(),
 
-            branch:$("githubBranch").value.trim() || "main",
+            branch:
+                $("githubBranch")
+                    .value
+                    .trim() ||
+                "main",
 
-            token:$("githubToken").value.trim()
+            token:
+                $("githubToken")
+                    .value
+                    .trim()
 
         })
 
@@ -2749,36 +2945,47 @@ function saveConfig(){
 
 function renderBlog(){
 
-    const grid = $("blogGrid");
+    const grid =
+        $("blogGrid");
+
 
     const search =
+
         $("searchInput")
+
             .value
+
             .trim()
+
             .toLowerCase();
 
 
     const filtered =
-        posts.filter(post => {
 
-            const text = (
+        posts.filter(
+            post => {
 
-                post.title +
+                const text = (
 
-                " " +
+                    post.title +
 
-                post.excerpt +
+                    " " +
 
-                " " +
+                    post.excerpt +
 
-                post.content
+                    " " +
 
-            ).toLowerCase();
+                    post.content
+
+                ).toLowerCase();
 
 
-            return text.includes(search);
+                return text.includes(
+                    search
+                );
 
-        });
+            }
+        );
 
 
     if(!filtered.length){
@@ -2808,12 +3015,15 @@ function renderBlog(){
 
 
     grid.innerHTML =
+
         filtered
+
             .sort(
                 (a,b) =>
                     new Date(b.date) -
                     new Date(a.date)
             )
+
             .map(post => `
 
                 <article
@@ -2824,6 +3034,7 @@ function renderBlog(){
                     ${
                         post.image
                         ?
+
                         `
                         <img
                             class="card-image"
@@ -2831,7 +3042,9 @@ function renderBlog(){
                             alt=""
                         >
                         `
+
                         :
+
                         `
                         <div
                             class="card-image"
@@ -2847,18 +3060,27 @@ function renderBlog(){
                         `
                     }
 
+
                     <div class="card-body">
 
                         <div class="card-date">
+
                             ${formatDate(post.date)}
+
                         </div>
+
 
                         <div class="card-title">
+
                             ${escapeHtml(post.title)}
+
                         </div>
 
+
                         <div class="card-excerpt">
+
                             ${escapeHtml(post.excerpt)}
+
                         </div>
 
                     </div>
@@ -2866,6 +3088,7 @@ function renderBlog(){
                 </article>
 
             `)
+
             .join("");
 
 }
@@ -2879,7 +3102,8 @@ function openArticle(id){
 
     const post =
         posts.find(
-            p => p.id === id
+            p =>
+                p.id === id
         );
 
 
@@ -2891,34 +3115,48 @@ function openArticle(id){
         ${
             post.image
             ?
+
             `
             <img
                 class="article-image"
                 src="${escapeHtml(post.image)}"
-                alt=""
+                alt="${escapeHtml(post.title)}"
             >
             `
+
             :
+
             ""
         }
 
+
         <div class="article-date">
+
             ${formatDate(post.date)}
+
         </div>
 
+
         <h1>
+
             ${escapeHtml(post.title)}
+
         </h1>
 
+
         <div class="article-content">
+
             ${post.content}
+
         </div>
 
     `;
 
 
     $("articleOverlay")
+
         .classList
+
         .add("show");
 
 
@@ -2931,7 +3169,9 @@ function openArticle(id){
 function closeArticle(){
 
     $("articleOverlay")
+
         .classList
+
         .remove("show");
 
 
@@ -2942,14 +3182,17 @@ function closeArticle(){
 
 
 /* =========================================================
-   ADMIN LOGIN
+   LOGIN
 ========================================================= */
 
 function openAdmin(){
 
     $("loginOverlay")
+
         .classList
+
         .add("show");
+
 
     $("adminPassword").focus();
 
@@ -2959,7 +3202,9 @@ function openAdmin(){
 function closeLogin(){
 
     $("loginOverlay")
+
         .classList
+
         .remove("show");
 
 }
@@ -2971,7 +3216,10 @@ function loginAdmin(){
         $("adminPassword").value;
 
 
-    if(password !== ADMIN_PASSWORD){
+    if(
+        password !==
+        ADMIN_PASSWORD
+    ){
 
         $("loginError")
             .style
@@ -2997,7 +3245,9 @@ function loginAdmin(){
 
 
     $("adminOverlay")
+
         .classList
+
         .add("show");
 
 }
@@ -3006,7 +3256,9 @@ function loginAdmin(){
 function logoutAdmin(){
 
     $("adminOverlay")
+
         .classList
+
         .remove("show");
 
 
@@ -3018,7 +3270,9 @@ function logoutAdmin(){
 function closeAdminPanel(){
 
     $("adminOverlay")
+
         .classList
+
         .remove("show");
 
 }
@@ -3028,13 +3282,17 @@ function closeAdminPanel(){
    EDITOR
 ========================================================= */
 
-function format(command,value=null){
+function format(
+    command,
+    value = null
+){
 
     document.execCommand(
         command,
         false,
         value
     );
+
 
     $("editor").focus();
 
@@ -3072,9 +3330,12 @@ function clearEditor(){
 
     $("postId").value = "";
 
+
     $("postTitle").value = "";
 
+
     $("postExcerpt").value = "";
+
 
     $("editor").innerHTML = "";
 
@@ -3082,16 +3343,19 @@ function clearEditor(){
     resetImageUI();
 
 
-    $("publishStatus").textContent =
+    $("publishStatus")
+        .textContent =
         "Ready.";
 
 
     $("publishStatus")
-        .className = "status";
+        .className =
+        "status";
 
 
     $("publishButton")
-        .textContent = "Publish Post";
+        .textContent =
+        "Publish Post";
 
 }
 
@@ -3111,7 +3375,9 @@ function renderAdmin(){
         list.innerHTML = `
 
             <div class="empty">
+
                 No posts yet.
+
             </div>
 
         `;
@@ -3124,11 +3390,13 @@ function renderAdmin(){
     list.innerHTML =
 
         posts
+
             .sort(
                 (a,b) =>
                     new Date(b.date) -
                     new Date(a.date)
             )
+
             .map(post => `
 
                 <div
@@ -3138,6 +3406,7 @@ function renderAdmin(){
                     ${
                         post.image
                         ?
+
                         `
                         <img
                             class="admin-thumb"
@@ -3145,7 +3414,9 @@ function renderAdmin(){
                             alt=""
                         >
                         `
+
                         :
+
                         `
                         <div
                             class="admin-thumb"
@@ -3164,11 +3435,16 @@ function renderAdmin(){
                     <div class="admin-info">
 
                         <strong>
+
                             ${escapeHtml(post.title)}
+
                         </strong>
 
+
                         <span>
+
                             ${formatDate(post.date)}
+
                         </span>
 
                     </div>
@@ -3183,6 +3459,7 @@ function renderAdmin(){
                             Edit
                         </button>
 
+
                         <button
                             class="small-btn delete"
                             onclick="deletePost('${post.id}')"
@@ -3195,6 +3472,7 @@ function renderAdmin(){
                 </div>
 
             `)
+
             .join("");
 
 }
@@ -3208,21 +3486,25 @@ function editPost(id){
 
     const post =
         posts.find(
-            p => p.id === id
+            p =>
+                p.id === id
         );
 
 
     if(!post) return;
 
 
-    editingId = id;
+    editingId =
+        id;
 
 
     $("postId").value =
         post.id;
 
+
     $("postTitle").value =
         post.title;
+
 
     $("postExcerpt").value =
         post.excerpt;
@@ -3232,19 +3514,17 @@ function editPost(id){
         post.content;
 
 
-    /*
-        Reset new-image state first.
-    */
-
     selectedImageFile = null;
 
     selectedImageData = "";
 
-    $("postImageFile").value = "";
+
+    $("postImageFile").value =
+        "";
 
 
     /*
-        Show existing cover image.
+        Existing cover
     */
 
     if(post.image){
@@ -3254,6 +3534,7 @@ function editPost(id){
         );
 
     }
+
     else{
 
         resetImageUI();
@@ -3267,7 +3548,8 @@ function editPost(id){
 
 
     $("publishStatus")
-        .className = "status";
+        .className =
+        "status";
 
 
     $("publishButton")
@@ -3276,8 +3558,11 @@ function editPost(id){
 
 
     window.scrollTo({
+
         top:0,
+
         behavior:"smooth"
+
     });
 
 }
@@ -3291,7 +3576,8 @@ async function deletePost(id){
 
     const post =
         posts.find(
-            p => p.id === id
+            p =>
+                p.id === id
         );
 
 
@@ -3315,7 +3601,8 @@ async function deletePost(id){
 
     posts =
         posts.filter(
-            p => p.id !== id
+            p =>
+                p.id !== id
         );
 
 
@@ -3323,47 +3610,55 @@ async function deletePost(id){
 
 
     setStatus(
+
         "Deleting post from GitHub...",
+
         "status"
+
     );
 
 
     try{
 
         await publishDataToGitHub(
+
             "Delete blog post: " +
             post.title
+
         );
 
 
         setStatus(
+
             "Post deleted successfully.",
+
             "status success"
+
         );
 
 
         renderBlog();
 
     }
+
     catch(error){
 
         console.error(error);
 
 
-        /*
-            Restore post if GitHub deletion failed.
-        */
-
         posts.push(post);
+
 
         renderAdmin();
 
 
         setStatus(
+
             "Delete failed: " +
             error.message,
 
             "status error"
+
         );
 
     }
@@ -3372,26 +3667,36 @@ async function deletePost(id){
 
 
 /* =========================================================
-   CREATE / EDIT
+   CREATE / UPDATE POST
 ========================================================= */
 
 async function publishPost(){
 
     const title =
+
         $("postTitle")
             .value
             .trim();
 
 
     const excerpt =
+
         $("postExcerpt")
             .value
             .trim();
 
 
     const content =
+
         $("editor")
             .innerHTML
+            .trim();
+
+
+    const urlValue =
+
+        $("postImageUrl")
+            .value
             .trim();
 
 
@@ -3420,20 +3725,12 @@ async function publishPost(){
     saveConfig();
 
 
-    /*
-        Disable the button to prevent
-        duplicate GitHub commits.
-    */
-
     const publishButton =
         $("publishButton");
 
 
-    publishButton.disabled = true;
-
-
-    const oldButtonText =
-        publishButton.textContent;
+    publishButton.disabled =
+        true;
 
 
     try{
@@ -3443,8 +3740,7 @@ async function publishPost(){
 
 
         /*
-            If the user explicitly removed
-            the old image, clear it.
+            If image was removed
         */
 
         if(removeCurrentImage){
@@ -3455,45 +3751,76 @@ async function publishPost(){
 
 
         /*
-            If a new image was selected,
-            upload it first.
+            PRIORITY:
+
+            1. Uploaded image
+            2. URL
+            3. Existing image
+            4. Empty
         */
 
         if(selectedImageFile){
 
             setStatus(
+
                 "Uploading image to GitHub...",
+
                 "status"
+
             );
 
 
             const imagePath =
+
                 makeImagePath(
+
                     title,
+
                     selectedImageFile
+
                 );
 
 
             imageUrl =
+
                 await uploadImageToGitHub(
+
                     imagePath,
+
                     selectedImageData
+
                 );
+
+        }
+
+        else if(urlValue){
+
+            imageUrl =
+                urlValue;
 
         }
 
 
         const now =
+
             new Date()
                 .toISOString();
 
 
+        /*
+            UPDATE
+        */
+
         if(editingId){
 
             const index =
+
                 posts.findIndex(
+
                     p =>
-                        p.id === editingId
+                        p.id ===
+                        editingId
+
                 );
 
 
@@ -3516,21 +3843,29 @@ async function publishPost(){
             }
 
         }
+
+        /*
+            CREATE
+        */
+
         else{
 
             posts.unshift({
 
-                id:makeId(),
+                id:
+                    makeId(),
 
                 title,
 
                 excerpt,
 
-                image:imageUrl,
+                image:
+                    imageUrl,
 
                 content,
 
-                date:now
+                date:
+                    now
 
             });
 
@@ -3538,8 +3873,11 @@ async function publishPost(){
 
 
         setStatus(
+
             "Publishing blog-data.js to GitHub...",
+
             "status"
+
         );
 
 
@@ -3549,18 +3887,23 @@ async function publishPost(){
 
             ?
 
-            "Update blog post: " + title
+            "Update blog post: " +
+            title
 
             :
 
-            "Publish blog post: " + title
+            "Publish blog post: " +
+            title
 
         );
 
 
         setStatus(
+
             "Published successfully.",
+
             "status success"
+
         );
 
 
@@ -3573,6 +3916,7 @@ async function publishPost(){
         clearEditor();
 
     }
+
     catch(error){
 
         console.error(error);
@@ -3588,21 +3932,11 @@ async function publishPost(){
         );
 
     }
+
     finally{
 
-        publishButton.disabled = false;
-
-        /*
-            If clearEditor() was called,
-            it already reset the text.
-        */
-
-        if(editingId){
-
-            publishButton.textContent =
-                oldButtonText;
-
-        }
+        publishButton.disabled =
+            false;
 
     }
 
@@ -3613,7 +3947,13 @@ async function publishPost(){
    STATUS
 ========================================================= */
 
-function setStatus(text,className){
+function setStatus(
+
+    text,
+
+    className
+
+){
 
     const el =
         $("publishStatus");
@@ -3630,7 +3970,7 @@ function setStatus(text,className){
 
 
 /* =========================================================
-   GITHUB API
+   GITHUB REQUEST
 ========================================================= */
 
 async function githubRequest(
@@ -3642,6 +3982,7 @@ async function githubRequest(
 ){
 
     const token =
+
         $("githubToken")
             .value
             .trim();
@@ -3657,8 +3998,11 @@ async function githubRequest(
 
 
     const response =
+
         await fetch(
+
             url,
+
             {
 
                 ...options,
@@ -3682,6 +4026,7 @@ async function githubRequest(
                 }
 
             }
+
         );
 
 
@@ -3706,6 +4051,7 @@ async function githubRequest(
             }
 
         }
+
         catch(_){}
 
 
@@ -3722,7 +4068,7 @@ async function githubRequest(
 
 
 /* =========================================================
-   GITHUB PATH
+   GITHUB CONTENT URL
 ========================================================= */
 
 function githubContentsURL(
@@ -3742,7 +4088,9 @@ function githubContentsURL(
     if(parts.length !== 2){
 
         throw new Error(
+
             "Repository must look like username/repository"
+
         );
 
     }
@@ -3782,32 +4130,42 @@ async function getGithubFileByPath(
 ){
 
     const repo =
+
         $("githubRepo")
             .value
             .trim();
 
 
     const branch =
+
         $("githubBranch")
             .value
             .trim() ||
+
         "main";
 
 
     if(!repo){
 
         throw new Error(
+
             "GitHub repository is missing. Example: username/rakkez"
+
         );
 
     }
 
 
     const url =
+
         githubContentsURL(
+
             repo,
+
             path,
+
             branch
+
         );
 
 
@@ -3818,12 +4176,15 @@ async function getGithubFileByPath(
         );
 
     }
+
     catch(error){
 
         if(
+
             error.message.includes(
                 "404"
             )
+
         ){
 
             return null;
@@ -3848,7 +4209,7 @@ async function getGithubFile(){
 
 
 /* =========================================================
-   UPLOAD IMAGE TO GITHUB
+   UPLOAD IMAGE
 ========================================================= */
 
 async function uploadImageToGitHub(
@@ -3878,39 +4239,41 @@ async function uploadImageToGitHub(
 
 
     const repo =
+
         $("githubRepo")
             .value
             .trim();
 
 
     const branch =
+
         $("githubBranch")
             .value
             .trim() ||
+
         "main";
 
 
     if(!repo){
 
         throw new Error(
+
             "Enter your GitHub repository first."
+
         );
 
     }
 
 
     const base64 =
+
         dataURLToBase64(
             dataURL
         );
 
 
-    /*
-        Check if a file with the same name
-        somehow already exists.
-    */
-
     const existing =
+
         await getGithubFileByPath(
             imagePath
         );
@@ -3929,11 +4292,6 @@ async function uploadImageToGitHub(
 
     };
 
-
-    /*
-        GitHub requires SHA when replacing
-        an existing file.
-    */
 
     if(
         existing &&
@@ -3981,31 +4339,27 @@ async function uploadImageToGitHub(
     );
 
 
-    /*
-        Return a relative URL that works
-        with the current website.
-
-        Example:
-
-        assets/blog/photo.png
-    */
-
     return imagePath;
 
 }
 
 
 /* =========================================================
-   CREATE blog-data.js CONTENT
+   BUILD DATA FILE
 ========================================================= */
 
 function buildDataFile(){
 
     const json =
+
         JSON.stringify(
+
             posts,
+
             null,
+
             4
+
         );
 
 
@@ -4024,12 +4378,13 @@ window.RAKKEZ_BLOG_POSTS = ${json};
 
 
 /* =========================================================
-   BASE64
+   BASE64 UNICODE
 ========================================================= */
 
 function base64EncodeUnicode(str){
 
     const bytes =
+
         new TextEncoder()
             .encode(str);
 
@@ -4037,21 +4392,33 @@ function base64EncodeUnicode(str){
     let binary = "";
 
 
-    const chunkSize = 0x8000;
+    const chunkSize =
+        0x8000;
 
 
     for(
+
         let i=0;
+
         i<bytes.length;
+
         i+=chunkSize
+
     ){
 
-        binary += String.fromCharCode(
-            ...bytes.subarray(
-                i,
-                i + chunkSize
-            )
-        );
+        binary +=
+
+            String.fromCharCode(
+
+                ...bytes.subarray(
+
+                    i,
+
+                    i + chunkSize
+
+                )
+
+            );
 
     }
 
@@ -4062,7 +4429,7 @@ function base64EncodeUnicode(str){
 
 
 /* =========================================================
-   PUBLISH DATA TO GITHUB
+   PUBLISH BLOG DATA
 ========================================================= */
 
 async function publishDataToGitHub(
@@ -4075,22 +4442,27 @@ async function publishDataToGitHub(
 
 
     const repo =
+
         $("githubRepo")
             .value
             .trim();
 
 
     const branch =
+
         $("githubBranch")
             .value
             .trim() ||
+
         "main";
 
 
     if(!repo){
 
         throw new Error(
+
             "Enter your GitHub repository first."
+
         );
 
     }
@@ -4103,7 +4475,9 @@ async function publishDataToGitHub(
     if(parts.length !== 2){
 
         throw new Error(
+
             "Repository must look like username/repository"
+
         );
 
     }
@@ -4117,16 +4491,8 @@ async function publishDataToGitHub(
         parts[1];
 
 
-    /*
-        IMPORTANT:
-
-        Get the current SHA immediately before
-        updating blog-data.js.
-
-        This avoids overwriting a newer version.
-    */
-
     const existing =
+
         await getGithubFile();
 
 
@@ -4136,9 +4502,11 @@ async function publishDataToGitHub(
 
     const body = {
 
-        message:commitMessage,
+        message:
+            commitMessage,
 
         content:
+
             base64EncodeUnicode(
                 content
             ),
@@ -4148,7 +4516,10 @@ async function publishDataToGitHub(
     };
 
 
-    if(existing && existing.sha){
+    if(
+        existing &&
+        existing.sha
+    ){
 
         body.sha =
             existing.sha;
@@ -4190,35 +4561,56 @@ async function publishDataToGitHub(
 
 
 /* =========================================================
-   IMAGE INPUT EVENTS
+   IMAGE FILE EVENT
 ========================================================= */
 
 $("postImageFile")
+
     .addEventListener(
+
         "change",
+
         event => {
 
             const file =
-                event.target.files?.[0];
+
+                event.target
+                    .files
+                    ?. [0];
 
 
             handleImageFile(file);
 
         }
+
     );
 
 
-/*
-    Remove selected/new image.
+/* =========================================================
+   IMAGE URL EVENT
+========================================================= */
 
-    If editing an existing post,
-    this also marks the current image
-    as removed from the article.
-*/
+$("postImageUrl")
+
+    .addEventListener(
+
+        "input",
+
+        handleImageUrl
+
+    );
+
+
+/* =========================================================
+   REMOVE IMAGE
+========================================================= */
 
 $("removeImageBtn")
+
     .addEventListener(
+
         "click",
+
         event => {
 
             event.preventDefault();
@@ -4226,36 +4618,61 @@ $("removeImageBtn")
             event.stopPropagation();
 
 
-            if(
-                currentImageUrl &&
-                !selectedImageFile
-            ){
+            /*
+                If editing and an old
+                image exists, mark it removed.
+            */
 
-                removeCurrentImage = true;
+            if(currentImageUrl){
+
+                removeCurrentImage =
+                    true;
 
             }
 
 
-            selectedImageFile = null;
-
-            selectedImageData = "";
-
-
-            $("postImageFile").value = "";
+            selectedImageFile =
+                null;
 
 
-            $("imagePreview").src = "";
+            selectedImageData =
+                "";
+
+
+            currentImageUrl =
+                "";
+
+
+            imageUrlInput =
+                "";
+
+
+            $("postImageFile").value =
+                "";
+
+
+            $("postImageUrl").value =
+                "";
+
+
+            $("imagePreview").src =
+                "";
+
 
             $("imagePreviewWrap")
+
                 .classList
+
                 .remove("show");
 
 
             $("currentImage")
+
                 .textContent =
                 "No cover image selected.";
 
         }
+
     );
 
 
@@ -4264,55 +4681,75 @@ $("removeImageBtn")
 ========================================================= */
 
 $("imageUpload")
+
     .addEventListener(
+
         "dragover",
+
         event => {
 
             event.preventDefault();
 
+
             $("imageUpload")
+
                 .classList
+
                 .add("dragover");
 
         }
+
     );
 
 
 $("imageUpload")
+
     .addEventListener(
+
         "dragleave",
+
         () => {
 
             $("imageUpload")
+
                 .classList
+
                 .remove("dragover");
 
         }
+
     );
 
 
 $("imageUpload")
+
     .addEventListener(
+
         "drop",
+
         event => {
 
             event.preventDefault();
 
 
             $("imageUpload")
+
                 .classList
+
                 .remove("dragover");
 
 
             const file =
+
                 event.dataTransfer
                     ?.files
-                    ?.[0];
+                    ?. [0];
 
 
             handleImageFile(file);
 
         }
+
     );
 
 
@@ -4321,19 +4758,26 @@ $("imageUpload")
 ========================================================= */
 
 $("searchInput")
+
     .addEventListener(
+
         "input",
+
         renderBlog
+
     );
 
 
 /* =========================================================
-   ENTER LOGIN
+   LOGIN ENTER
 ========================================================= */
 
 $("adminPassword")
+
     .addEventListener(
+
         "keydown",
+
         event => {
 
             if(
@@ -4345,16 +4789,20 @@ $("adminPassword")
             }
 
         }
+
     );
 
 
 /* =========================================================
-   CLOSE ARTICLE MODAL
+   ARTICLE OVERLAY
 ========================================================= */
 
 $("articleOverlay")
+
     .addEventListener(
+
         "click",
+
         event => {
 
             if(
@@ -4367,16 +4815,20 @@ $("articleOverlay")
             }
 
         }
+
     );
 
 
 /* =========================================================
-   CLOSE LOGIN MODAL
+   LOGIN OVERLAY
 ========================================================= */
 
 $("loginOverlay")
+
     .addEventListener(
+
         "click",
+
         event => {
 
             if(
@@ -4389,7 +4841,49 @@ $("loginOverlay")
             }
 
         }
+
     );
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+
+    "keydown",
+
+    event => {
+
+        if(
+            event.key !== "Escape"
+        ) return;
+
+
+        if(
+            $("articleOverlay")
+                .classList
+                .contains("show")
+        ){
+
+            closeArticle();
+
+        }
+
+
+        if(
+            $("loginOverlay")
+                .classList
+                .contains("show")
+        ){
+
+            closeLogin();
+
+        }
+
+    }
+
+);
 
 
 /* =========================================================
