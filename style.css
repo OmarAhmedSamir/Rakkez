@@ -2778,8 +2778,8 @@ padding:12px;
     font-size: 15px;
     font-weight: 600;
 
-    padding: 9px 16px;
-    min-width: 62px;
+    padding: 9px 20px;
+    min-width: 82px;
     height: 40px;
 
     display: inline-flex;
@@ -2789,7 +2789,6 @@ padding:12px;
     white-space: nowrap;
     box-sizing: border-box;
 }
-
 
 }
 
