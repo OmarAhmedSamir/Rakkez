@@ -692,14 +692,31 @@ function updateStats() {
 
     if ($("streakStat")) {
 
-        $("streakStat").textContent =
-            stats.streak +
-            " day" +
-            (
-                stats.streak === 1
-                    ? ""
-                    : "s"
-            );
+        const lang =
+            localStorage.getItem("language") ||
+            localStorage.getItem("rakkez_language") ||
+            "en";
+
+
+        if (lang === "ar") {
+
+            $("streakStat").textContent =
+                stats.streak +
+                " " +
+                "يوم";
+
+        } else {
+
+            $("streakStat").textContent =
+                stats.streak +
+                " day" +
+                (
+                    stats.streak === 1
+                        ? ""
+                        : "s"
+                );
+
+        }
 
     }
 
@@ -713,6 +730,42 @@ function formatFocus(seconds) {
 
     const minutes =
         Math.floor(seconds / 60);
+
+
+    const lang =
+        localStorage.getItem("language") ||
+        localStorage.getItem("rakkez_language") ||
+        "en";
+
+
+    if (lang === "ar") {
+
+        if (minutes < 60) {
+
+            return (
+                arabicNumbers(minutes) +
+                "د"
+            );
+
+        }
+
+
+        const hours =
+            Math.floor(minutes / 60);
+
+
+        const remaining =
+            minutes % 60;
+
+
+        return (
+            arabicNumbers(hours) +
+            "س " +
+            arabicNumbers(remaining) +
+            "د"
+        );
+
+    }
 
 
     if (minutes < 60) {
@@ -738,7 +791,6 @@ function formatFocus(seconds) {
     );
 
 }
-
 
 /* =========================================================
    DAILY GOAL
@@ -773,33 +825,89 @@ function updateDailyGoal() {
         goal % 60;
 
 
+    const lang =
+        localStorage.getItem("language") ||
+        localStorage.getItem("rakkez_language") ||
+        "en";
+
+
+    let currentText;
     let goalText;
 
 
-    if (goalHours) {
+    /* =====================================================
+       ARABIC
+    ===================================================== */
 
-        goalText =
-            goalHours +
-            "h" +
-            (
-                goalMinutes
-                    ? " " +
-                      goalMinutes +
-                      "m"
-                    : ""
-            );
+    if (lang === "ar") {
 
-    } else {
+        currentText =
+            arabicNumbers(minutes) +
+            "د";
 
-        goalText =
-            goal + "m";
+
+        if (goalHours) {
+
+            goalText =
+                arabicNumbers(goalHours) +
+                "س" +
+                (
+                    goalMinutes
+                        ? " " +
+                          arabicNumbers(goalMinutes) +
+                          "د"
+                        : ""
+                );
+
+        } else {
+
+            goalText =
+                arabicNumbers(goal) +
+                "د";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ENGLISH
+    ===================================================== */
+
+    else {
+
+        currentText =
+            minutes +
+            "m";
+
+
+        if (goalHours) {
+
+            goalText =
+                goalHours +
+                "h" +
+                (
+                    goalMinutes
+                        ? " " +
+                          goalMinutes +
+                          "m"
+                        : ""
+                );
+
+        } else {
+
+            goalText =
+                goal +
+                "m";
+
+        }
 
     }
 
 
     $("goalStat").textContent =
-        minutes +
-        "m / " +
+        currentText +
+        " / " +
         goalText;
 
 }
