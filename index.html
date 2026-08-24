@@ -24,7 +24,7 @@
 
 <link
     rel="preconnect"
-    href="https://fonts.gstatic.com"
+    href="https://fonts.googleapis.com"
     crossorigin
 >
 
@@ -67,11 +67,7 @@
 
 
 <!-- =====================================================
-     EARLY LOADER CSS
-     
-     IMPORTANT:
-     This is inside HEAD so the loader is styled
-     before the page is rendered.
+     EARLY PAGE LOADER
 ===================================================== -->
 
 <style>
@@ -100,15 +96,13 @@
 
     visibility: visible;
 
+    pointer-events: all;
+
     transition:
-        opacity .55s ease,
-        visibility .55s ease;
+        opacity .5s ease,
+        visibility .5s ease;
 }
 
-
-/* =====================================================
-   LOADER EXIT
-===================================================== */
 
 #pageLoader.hide {
 
@@ -119,10 +113,6 @@
     pointer-events: none;
 }
 
-
-/* =====================================================
-   LOADER CONTENT
-===================================================== */
 
 .loader-inner {
 
@@ -136,13 +126,9 @@
     gap: 20px;
 
     animation:
-        loaderEnter .75s cubic-bezier(.16,1,.3,1) both;
+        loaderEnter .7s cubic-bezier(.16,1,.3,1) both;
 }
 
-
-/* =====================================================
-   LOGO
-===================================================== */
 
 .loader-logo {
 
@@ -164,15 +150,12 @@
         logoEnter .8s cubic-bezier(.16,1,.3,1) both;
 }
 
+
 .loader-logo span {
 
     color: #1683ff;
 }
 
-
-/* =====================================================
-   SPINNER
-===================================================== */
 
 .loader-spinner {
 
@@ -189,14 +172,10 @@
         #1683ff;
 
     animation:
-        spinnerAppear .5s ease .25s both,
+        spinnerAppear .5s ease .2s both,
         loaderSpin .8s linear infinite;
 }
 
-
-/* =====================================================
-   ANIMATIONS
-===================================================== */
 
 @keyframes loaderEnter {
 
@@ -206,7 +185,6 @@
 
         transform:
             scale(.88);
-
     }
 
     to {
@@ -215,9 +193,7 @@
 
         transform:
             scale(1);
-
     }
-
 }
 
 
@@ -232,7 +208,6 @@
 
         filter:
             blur(8px);
-
     }
 
     to {
@@ -244,9 +219,7 @@
 
         filter:
             blur(0);
-
     }
-
 }
 
 
@@ -258,7 +231,6 @@
 
         transform:
             scale(.5);
-
     }
 
     to {
@@ -267,9 +239,7 @@
 
         transform:
             scale(1);
-
     }
-
 }
 
 
@@ -279,20 +249,335 @@
 
         transform:
             rotate(0deg);
-
     }
 
     to {
 
         transform:
             rotate(360deg);
+    }
+}
 
+
+@media (prefers-reduced-motion: reduce) {
+
+    #pageLoader {
+
+        transition:
+            opacity .2s ease,
+            visibility .2s ease;
+    }
+
+    .loader-inner,
+    .loader-logo,
+    .loader-spinner {
+
+        animation: none;
+    }
+
+}
+
+
+/* =====================================================
+   RAKKEZ UPDATES SYSTEM
+===================================================== */
+
+.updates-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2147483000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0,0,0,.72);
+
+    backdrop-filter:
+        blur(14px);
+
+    -webkit-backdrop-filter:
+        blur(14px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .3s ease,
+        visibility .3s ease;
+}
+
+
+.updates-modal.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+.updates-modal-content {
+
+    position: relative;
+
+    width: min(520px, 100%);
+
+    max-height: 85vh;
+
+    overflow-y: auto;
+
+    padding: 34px;
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,22,34,.98),
+            rgba(5,9,16,.98)
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.11);
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.55);
+
+    transform:
+        translateY(20px)
+        scale(.96);
+
+    transition:
+        transform .4s cubic-bezier(.16,1,.3,1);
+}
+
+
+.updates-modal.show
+.updates-modal-content {
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+.updates-close {
+
+    position: absolute;
+
+    top: 16px;
+    right: 16px;
+
+    width: 36px;
+    height: 36px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    color: rgba(255,255,255,.7);
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition:
+        .2s ease;
+}
+
+
+.updates-close:hover {
+
+    background:
+        rgba(255,255,255,.12);
+
+    color: #fff;
+
+    transform:
+        rotate(90deg);
+}
+
+
+.updates-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(22,131,255,.12);
+
+    border:
+        1px solid
+        rgba(22,131,255,.25);
+
+    color: #1683ff;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: .8px;
+}
+
+
+.updates-modal-content h2 {
+
+    margin:
+        18px 0 8px;
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 30px;
+
+    line-height: 1.1;
+}
+
+
+.updates-modal-content > p {
+
+    margin:
+        0 0 22px;
+
+    color:
+        rgba(255,255,255,.55);
+
+    line-height: 1.6;
+
+    font-size: 14px;
+}
+
+
+.update-item {
+
+    padding: 17px 18px;
+
+    margin-top: 12px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+}
+
+
+.update-item h3 {
+
+    margin:
+        0 0 6px;
+
+    color: #fff;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+
+.update-item p {
+
+    margin: 0;
+
+    color:
+        rgba(255,255,255,.48);
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+
+#updatesDone {
+
+    width: 100%;
+
+    margin-top: 24px;
+
+    padding: 13px 18px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    background: #1683ff;
+
+    color: #fff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+#updatesDone:hover {
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 25px
+        rgba(22,131,255,.25);
+}
+
+
+@media (max-width: 600px) {
+
+    .updates-modal-content {
+
+        padding: 26px 20px;
+
+        border-radius: 22px;
+    }
+
+    .updates-modal-content h2 {
+
+        font-size: 26px;
     }
 
 }
 
 </style>
-
 
 </head>
 
@@ -360,22 +645,31 @@
 
     <header class="topbar">
 
-        <div class="logo">
+        <div
+            class="logo"
+            onclick="window.location.href='index.html'"
+            style="cursor:pointer"
+        >
             Rakke<span>Z</span>
         </div>
 
 
         <div class="top-actions">
 
+
+            <!-- BLOG -->
+
             <button
                 class="icon-btn blog-btn"
                 id="blogOpen"
                 title="Blog"
-                onclick="window.location.href='/blog'"
+                type="button"
             >
                 Blog
             </button>
 
+
+            <!-- LANGUAGE -->
 
             <button
                 class="language-btn"
@@ -383,52 +677,69 @@
                 type="button"
                 title="Change language"
             >
+
                 <span id="languageLabel">
                     العربية
                 </span>
+
             </button>
 
+
+            <!-- MEDIA -->
 
             <button
                 class="icon-btn"
                 id="mediaOpen"
                 title="Media"
+                type="button"
             >
                 ♫
             </button>
 
 
+            <!-- TASKS -->
+
             <button
                 class="icon-btn"
                 id="tasksOpen"
                 title="Tasks"
+                type="button"
             >
                 ✓
             </button>
 
 
+            <!-- FOCUS ONLY -->
+
             <button
                 class="icon-btn"
                 id="focusOnlyBtn"
                 title="Focus Only"
+                type="button"
             >
                 ◉
             </button>
 
 
+            <!-- THEME -->
+
             <button
                 class="icon-btn"
                 id="themeBtn"
                 title="Theme"
+                type="button"
             >
                 ☾
             </button>
 
 
+            <!-- SETTINGS -->
+
             <button
                 class="icon-btn"
                 id="settingsOpen"
                 title="Settings"
+                type="button"
             >
                 ⚙
             </button>
@@ -470,15 +781,15 @@
             </div>
 
 
-            <!-- CURRENT TASK -->
-
             <div
                 class="current-task"
                 id="currentTask"
             >
+
                 <span>
                     NO TASK SELECTED
                 </span>
+
             </div>
 
 
@@ -492,13 +803,12 @@
             </div>
 
 
-            <!-- TIMER CONTROLS -->
-
             <div class="controls">
 
                 <button
                     class="primary"
                     id="startBtn"
+                    type="button"
                 >
                     START
                 </button>
@@ -507,6 +817,7 @@
                 <button
                     class="secondary"
                     id="resetBtn"
+                    type="button"
                 >
                     ↻
                 </button>
@@ -596,6 +907,7 @@
         <button
             class="ambient-btn"
             id="ambientOpen"
+            type="button"
         >
             ✦ AMBIENT
         </button>
@@ -608,6 +920,7 @@
     <button
         class="focus-exit"
         id="focusExit"
+        type="button"
     >
         EXIT FOCUS
     </button>
@@ -635,14 +948,13 @@
             <button
                 class="close"
                 data-close="settingsOverlay"
+                type="button"
             >
                 ×
             </button>
 
         </div>
 
-
-        <!-- TIMER -->
 
         <div class="section">
 
@@ -749,8 +1061,6 @@
         </div>
 
 
-        <!-- DAILY GOAL -->
-
         <div class="section">
 
             <div class="section-title">
@@ -793,8 +1103,6 @@
 
         </div>
 
-
-        <!-- SMART TIMER -->
 
         <div class="section">
 
@@ -850,8 +1158,6 @@
 
         </div>
 
-
-        <!-- ALARM -->
 
         <div class="section">
 
@@ -970,8 +1276,6 @@
             </div>
 
 
-            <!-- TEST SOUND -->
-
             <div class="setting">
 
                 <div>
@@ -1006,8 +1310,6 @@
 
             </div>
 
-
-            <!-- CUSTOM ALARM -->
 
             <label
                 class="alarm-upload"
@@ -1123,8 +1425,6 @@
         </div>
 
 
-        <!-- ACCOUNTS -->
-
         <div class="section">
 
             <div class="section-title">
@@ -1197,8 +1497,6 @@
 
         </div>
 
-
-        <!-- RESET -->
 
         <div class="section">
 
@@ -1360,8 +1658,6 @@
         </div>
 
 
-        <!-- YOUTUBE -->
-
         <div
             class="media-content active"
             id="youtubeContent"
@@ -1399,8 +1695,6 @@
         </div>
 
 
-        <!-- SPOTIFY -->
-
         <div
             class="media-content"
             id="spotifyContent"
@@ -1437,8 +1731,6 @@
 
         </div>
 
-
-        <!-- LOCAL -->
 
         <div
             class="media-content"
@@ -1482,8 +1774,6 @@
 
         </div>
 
-
-        <!-- NOW PLAYING -->
 
         <div
             class="now-playing"
@@ -1645,6 +1935,120 @@
 
 
 <!-- =====================================================
+     RAKKEZ UPDATES SYSTEM
+===================================================== -->
+
+<div
+    id="updatesModal"
+    class="updates-modal"
+    aria-hidden="true"
+>
+
+    <div
+        class="updates-modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="updatesTitle"
+    >
+
+        <button
+            id="closeUpdates"
+            class="updates-close"
+            type="button"
+            aria-label="Close updates"
+        >
+            ×
+        </button>
+
+
+        <span
+            class="updates-badge"
+            id="updatesBadge"
+        >
+            NEW
+        </span>
+
+
+        <h2 id="updatesTitle">
+            What's New
+        </h2>
+
+
+        <p id="updatesDescription">
+            We've added some exciting new features.
+        </p>
+
+
+        <!--
+        =====================================================
+        UPDATE #1
+        =====================================================
+        -->
+
+        <div class="update-item">
+
+            <h3 id="update1Title">
+                🌳 New Nature Themes
+            </h3>
+
+            <p id="update1Description">
+                Choose from new ambient backgrounds.
+            </p>
+
+        </div>
+
+
+        <!--
+        =====================================================
+        UPDATE #2
+        =====================================================
+        -->
+
+        <div class="update-item">
+
+            <h3 id="update2Title">
+                🌊 New Ocean Themes
+            </h3>
+
+            <p id="update2Description">
+                Choose from new ambient backgrounds.
+            </p>
+
+        </div>
+
+
+        <!--
+        =====================================================
+        UPDATE #3
+        =====================================================
+        -->
+
+        <div class="update-item">
+
+            <h3 id="update3Title">
+                🌆 New NewYork Themes
+            </h3>
+
+            <p id="update3Description">
+                Choose from new ambient backgrounds.
+            </p>
+
+        </div>
+
+
+        <button
+            id="updatesDone"
+            type="button"
+        >
+            Got it
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
      SCRIPTS
 ===================================================== -->
 
@@ -1682,128 +2086,874 @@
 
 
 <!-- =====================================================
-     UPDATES MODAL
-===================================================== -->
-
-<div
-    id="updatesModal"
-    class="updates-modal"
->
-
-    <div class="updates-modal-content">
-
-        <button
-            id="closeUpdates"
-            class="updates-close"
-        >
-            ×
-        </button>
-
-
-        <span class="updates-badge">
-            NEW
-        </span>
-
-
-        <h2>
-            What's New
-        </h2>
-
-
-        <p>
-            We've added some exciting new features.
-        </p>
-
-
-        <div class="update-item">
-
-            <h3>
-                🌳 New Nature Themes
-            </h3>
-
-            <p>
-                Choose from new ambient backgrounds.
-            </p>
-
-        </div>
-
-
-        <div class="update-item">
-
-            <h3>
-                🌊 New Ocean Themes
-            </h3>
-
-            <p>
-                Choose from new ambient backgrounds.
-            </p>
-
-        </div>
-
-
-        <div class="update-item">
-
-            <h3>
-                🌆 New NewYork Themes
-            </h3>
-
-            <p>
-                Choose from new ambient backgrounds.
-            </p>
-
-        </div>
-
-
-        <button id="updatesDone">
-            Got it
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     LOADER
+     RAKKEZ PAGE LOADER SYSTEM
 ===================================================== -->
 
 <script>
 
-window.addEventListener("load", function () {
+(function () {
 
-    const loader =
+    "use strict";
+
+
+    let loader =
         document.getElementById("pageLoader");
 
 
-    if (!loader) return;
+    function hideLoader() {
 
+        loader =
+            document.getElementById("pageLoader");
 
-    /*
-     * Keep loader visible briefly
-     * so the entrance animation can be seen.
-     */
+        if (!loader) return;
 
-    setTimeout(function () {
 
         loader.classList.add("hide");
 
 
-        /*
-         * Completely remove it
-         * after the fade-out.
-         */
-
         setTimeout(function () {
 
-            if (loader) {
-                loader.remove();
+            const currentLoader =
+                document.getElementById("pageLoader");
+
+
+            if (
+                currentLoader &&
+                currentLoader.classList.contains("hide")
+            ) {
+
+                currentLoader.remove();
+
             }
 
-        }, 600);
+        }, 550);
 
-    }, 1000);
+    }
 
-});
+
+    function createLoader() {
+
+        let current =
+            document.getElementById("pageLoader");
+
+
+        if (current) {
+
+            current.classList.remove("hide");
+
+            return current;
+
+        }
+
+
+        current =
+            document.createElement("div");
+
+        current.id =
+            "pageLoader";
+
+
+        current.innerHTML = `
+
+            <div class="loader-inner">
+
+                <div class="loader-logo">
+                    Rakke<span>Z</span>
+                </div>
+
+                <div class="loader-spinner"></div>
+
+            </div>
+
+        `;
+
+
+        document.body.appendChild(current);
+
+
+        return current;
+
+    }
+
+
+    window.rakkezShowLoader =
+        function () {
+
+            return createLoader();
+
+        };
+
+
+    window.rakkezHideLoader =
+        function () {
+
+            hideLoader();
+
+        };
+
+
+    window.addEventListener(
+        "load",
+        function () {
+
+            setTimeout(
+                function () {
+
+                    hideLoader();
+
+                },
+                650
+            );
+
+        },
+        {
+            once: true
+        }
+    );
+
+
+    /*
+     * =====================================================
+     * BLOG
+     * =====================================================
+     */
+
+    const blogButton =
+        document.getElementById("blogOpen");
+
+
+    if (blogButton) {
+
+        blogButton.addEventListener(
+            "click",
+            function () {
+
+                createLoader();
+
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "/blog";
+
+                    },
+                    120
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+     * =====================================================
+     * LOGO → HOME
+     * =====================================================
+     */
+
+    const logo =
+        document.querySelector(".logo");
+
+
+    if (logo) {
+
+        logo.addEventListener(
+            "click",
+            function () {
+
+                const currentPage =
+                    window.location.pathname
+                    .split("/")
+                    .pop();
+
+
+                if (
+                    currentPage === "index.html" ||
+                    currentPage === ""
+                ) {
+
+                    return;
+
+                }
+
+
+                createLoader();
+
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "index.html";
+
+                    },
+                    120
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+     * =====================================================
+     * NORMAL LINKS
+     * =====================================================
+     */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const link =
+                event.target.closest("a");
+
+
+            if (!link) return;
+
+
+            const href =
+                link.getAttribute("href");
+
+
+            if (!href) return;
+
+
+            if (
+                href.startsWith("#") ||
+                href.startsWith("mailto:") ||
+                href.startsWith("tel:") ||
+                href.startsWith("javascript:")
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                link.target === "_blank" ||
+                event.ctrlKey ||
+                event.metaKey ||
+                event.shiftKey ||
+                event.altKey
+            ) {
+
+                return;
+
+            }
+
+
+            createLoader();
+
+        },
+        true
+    );
+
+
+    /*
+     * =====================================================
+     * LANGUAGE
+     * =====================================================
+     */
+
+    const languageButton =
+        document.getElementById(
+            "languageToggle"
+        );
+
+
+    if (languageButton) {
+
+        languageButton.addEventListener(
+            "click",
+            function () {
+
+                createLoader();
+
+
+                setTimeout(
+                    function () {
+
+                        hideLoader();
+
+                    },
+                    450
+                );
+
+            },
+            false
+        );
+
+    }
+
+
+    /*
+     * =====================================================
+     * BACK / FORWARD
+     * =====================================================
+     */
+
+    window.addEventListener(
+        "pageshow",
+        function () {
+
+            setTimeout(
+                function () {
+
+                    hideLoader();
+
+                },
+                350
+            );
+
+        }
+    );
+
+
+})();
+
+</script>
+
+
+<!-- =====================================================
+     RAKKEZ UPDATE MANAGER
+===================================================== -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    /*
+     * =====================================================
+     * UPDATE VERSION
+     * =====================================================
+     *
+     * كل مرة تعمل Update جديد:
+     *
+     * غيّر الرقم فقط.
+     *
+     * مثال:
+     *
+     * 1.0.0
+     * ↓
+     * 1.0.1
+     * ↓
+     * 1.0.2
+     *
+     * المستخدم الذي لم يشاهد النسخة الجديدة
+     * سيشاهد الـPopup تلقائياً.
+     *
+     */
+
+    const UPDATE_VERSION = "1.0.0";
+
+
+    /*
+     * =====================================================
+     * STORAGE KEY
+     * =====================================================
+     */
+
+    const UPDATE_STORAGE_KEY =
+        "rakkez_last_seen_update";
+
+
+    /*
+     * =====================================================
+     * UPDATE CONTENT
+     * =====================================================
+     *
+     * عدّل المحتوى من هنا فقط.
+     *
+     */
+
+    const UPDATE_DATA = {
+
+        badge: "NEW",
+
+        title: "What's New",
+
+        description:
+            "We've added some exciting new features.",
+
+        items: [
+
+            {
+
+                title:
+                    "🌳 New Nature Themes",
+
+                description:
+                    "Choose from new ambient backgrounds."
+
+            },
+
+            {
+
+                title:
+                    "🌊 New Ocean Themes",
+
+                description:
+                    "Choose from new ambient backgrounds."
+
+            },
+
+            {
+
+                title:
+                    "🌆 New NewYork Themes",
+
+                description:
+                    "Choose from new ambient backgrounds."
+
+            }
+
+        ],
+
+        button:
+            "Got it"
+
+    };
+
+
+    /*
+     * =====================================================
+     * ELEMENTS
+     * =====================================================
+     */
+
+    const modal =
+        document.getElementById(
+            "updatesModal"
+        );
+
+
+    const badge =
+        document.getElementById(
+            "updatesBadge"
+        );
+
+
+    const title =
+        document.getElementById(
+            "updatesTitle"
+        );
+
+
+    const description =
+        document.getElementById(
+            "updatesDescription"
+        );
+
+
+    const update1Title =
+        document.getElementById(
+            "update1Title"
+        );
+
+
+    const update1Description =
+        document.getElementById(
+            "update1Description"
+        );
+
+
+    const update2Title =
+        document.getElementById(
+            "update2Title"
+        );
+
+
+    const update2Description =
+        document.getElementById(
+            "update2Description"
+        );
+
+
+    const update3Title =
+        document.getElementById(
+            "update3Title"
+        );
+
+
+    const update3Description =
+        document.getElementById(
+            "update3Description"
+        );
+
+
+    const doneButton =
+        document.getElementById(
+            "updatesDone"
+        );
+
+
+    const closeButton =
+        document.getElementById(
+            "closeUpdates"
+        );
+
+
+    /*
+     * =====================================================
+     * APPLY UPDATE CONTENT
+     * =====================================================
+     */
+
+    function renderUpdate() {
+
+        if (!modal) return;
+
+
+        if (badge) {
+
+            badge.textContent =
+                UPDATE_DATA.badge;
+
+        }
+
+
+        if (title) {
+
+            title.textContent =
+                UPDATE_DATA.title;
+
+        }
+
+
+        if (description) {
+
+            description.textContent =
+                UPDATE_DATA.description;
+
+        }
+
+
+        if (
+            UPDATE_DATA.items[0]
+        ) {
+
+            if (update1Title) {
+
+                update1Title.textContent =
+                    UPDATE_DATA.items[0].title;
+
+            }
+
+
+            if (update1Description) {
+
+                update1Description.textContent =
+                    UPDATE_DATA.items[0].description;
+
+            }
+
+        }
+
+
+        if (
+            UPDATE_DATA.items[1]
+        ) {
+
+            if (update2Title) {
+
+                update2Title.textContent =
+                    UPDATE_DATA.items[1].title;
+
+            }
+
+
+            if (update2Description) {
+
+                update2Description.textContent =
+                    UPDATE_DATA.items[1].description;
+
+            }
+
+        }
+
+
+        if (
+            UPDATE_DATA.items[2]
+        ) {
+
+            if (update3Title) {
+
+                update3Title.textContent =
+                    UPDATE_DATA.items[2].title;
+
+            }
+
+
+            if (update3Description) {
+
+                update3Description.textContent =
+                    UPDATE_DATA.items[2].description;
+
+            }
+
+        }
+
+
+        if (doneButton) {
+
+            doneButton.textContent =
+                UPDATE_DATA.button;
+
+        }
+
+    }
+
+
+    /*
+     * =====================================================
+     * SHOW UPDATE
+     * =====================================================
+     */
+
+    function showUpdate() {
+
+        if (!modal) return;
+
+
+        renderUpdate();
+
+
+        modal.classList.add("show");
+
+
+        modal.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+
+        document.body.classList.add(
+            "updates-open"
+        );
+
+
+        /*
+         * Prevent background scroll.
+         */
+
+        document.body.style.overflow =
+            "hidden";
+
+    }
+
+
+    /*
+     * =====================================================
+     * CLOSE UPDATE
+     * =====================================================
+     */
+
+    function closeUpdate() {
+
+        if (!modal) return;
+
+
+        modal.classList.remove("show");
+
+
+        modal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+
+        document.body.classList.remove(
+            "updates-open"
+        );
+
+
+        document.body.style.overflow =
+            "";
+
+
+        /*
+         * IMPORTANT:
+         *
+         * Save the version only after
+         * the user closes the update.
+         */
+
+        localStorage.setItem(
+            UPDATE_STORAGE_KEY,
+            UPDATE_VERSION
+        );
+
+    }
+
+
+    /*
+     * =====================================================
+     * CHECK IF UPDATE IS NEW
+     * =====================================================
+     */
+
+    function checkForNewUpdate() {
+
+        if (!modal) return;
+
+
+        const lastSeenVersion =
+            localStorage.getItem(
+                UPDATE_STORAGE_KEY
+            );
+
+
+        /*
+         * If user has never seen an update
+         * OR current version is different,
+         * show the update.
+         */
+
+        if (
+            lastSeenVersion !==
+            UPDATE_VERSION
+        ) {
+
+            showUpdate();
+
+        }
+
+    }
+
+
+    /*
+     * =====================================================
+     * BUTTONS
+     * =====================================================
+     */
+
+    if (doneButton) {
+
+        doneButton.addEventListener(
+            "click",
+            closeUpdate
+        );
+
+    }
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            closeUpdate
+        );
+
+    }
+
+
+    /*
+     * =====================================================
+     * CLICK OUTSIDE
+     * =====================================================
+     */
+
+    if (modal) {
+
+        modal.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeUpdate();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+     * =====================================================
+     * ESC KEY
+     * =====================================================
+     */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                modal &&
+                modal.classList.contains("show")
+            ) {
+
+                closeUpdate();
+
+            }
+
+        }
+    );
+
+
+    /*
+     * =====================================================
+     * LANGUAGE SUPPORT
+     * =====================================================
+     *
+     * لو language.js بيغير النصوص في الصفحة،
+     * نعيد رسم الـUpdate بعد تغيير اللغة.
+     *
+     */
+
+    window.rakkezUpdateModal =
+        function () {
+
+            renderUpdate();
+
+        };
+
+
+    /*
+     * =====================================================
+     * START
+     * =====================================================
+     *
+     * ننتظر load حتى لا يظهر الـUpdate
+     * قبل تحميل الصفحة بالكامل.
+     *
+     */
+
+    window.addEventListener(
+        "load",
+        function () {
+
+            setTimeout(
+                function () {
+
+                    checkForNewUpdate();
+
+                },
+                900
+            );
+
+        },
+        {
+            once: true
+        }
+    );
+
+
+})();
 
 </script>
 
