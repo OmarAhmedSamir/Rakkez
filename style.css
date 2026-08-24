@@ -273,7 +273,7 @@ gap:9px;
 
 /* =====================================================
 RAKKEZ HEADER BUTTONS
-Clean Dark Blue Brand Style
+Clean + Slight Transparent Glass Style
 ===================================================== */
 
 .top-actions{
@@ -305,9 +305,9 @@ justify-content:center;
 
 border-radius:14px;
 
-/* Slight transparency */
+/* Slight elegant transparency */
 background:
-rgba(8,13,22,.68);
+rgba(8,13,22,.62);
 
 border:
 1px solid rgba(255,255,255,.09);
@@ -375,7 +375,6 @@ white-space:nowrap;
 
 /* =====================================================
 LANGUAGE
-SAME COLOR + SAME STYLE
 ===================================================== */
 
 .language-btn{
@@ -399,7 +398,7 @@ white-space:nowrap;
 
 
 /* =====================================================
-HOVER
+HEADER HOVER
 ===================================================== */
 
 .icon-btn:hover,
@@ -410,7 +409,7 @@ transform:
 translateY(-1px);
 
 background:
-rgba(12,20,32,.80);
+rgba(12,20,32,.76);
 
 border-color:
 rgba(255,255,255,.16);
@@ -422,7 +421,7 @@ box-shadow:
 
 
 /* =====================================================
-ACTIVE
+HEADER ACTIVE
 ===================================================== */
 
 .icon-btn:active,
@@ -433,13 +432,13 @@ transform:
 scale(.97);
 
 background:
-rgba(8,13,22,.85);
+rgba(8,13,22,.78);
 
 }
 
 
 /* =====================================================
-MOBILE
+HEADER MOBILE
 ===================================================== */
 
 @media(max-width:600px){
@@ -538,7 +537,7 @@ PERFECTLY CENTERED UNDER TIMER
 
 width:100%;
 
-margin-top:32px;
+margin-top:30px;
 
 display:flex;
 
@@ -546,7 +545,7 @@ align-items:center;
 
 justify-content:center;
 
-gap:12px;
+gap:11px;
 
 }
 
@@ -558,14 +557,14 @@ SMALLER
 
 .primary{
 
-min-width:135px;
+min-width:130px;
 
-height:48px;
+height:46px;
 
 padding:
-0 23px;
+0 21px;
 
-border-radius:15px;
+border-radius:14px;
 
 background:
 rgba(255,255,255,.96);
@@ -606,12 +605,12 @@ SMALLER
 
 .secondary{
 
-height:48px;
+height:46px;
 
 padding:
-0 17px;
+0 16px;
 
-border-radius:15px;
+border-radius:14px;
 
 background:
 rgba(8,13,22,.62);
@@ -668,15 +667,17 @@ justify-content:center;
 
 flex:1;
 
-max-width:200px;
+max-width:190px;
+
+height:44px;
 
 }
 
 .secondary{
 
-width:52px;
+width:50px;
 
-height:48px;
+height:44px;
 
 padding:0;
 
@@ -748,7 +749,7 @@ direction:ltr;
 
 /* =====================================================
 TIMER
-SMALLER + MORE SPACE BETWEEN NUMBERS
+SMALLER + CLEARER NUMBER SPACING
 ===================================================== */
 
 .timer{
@@ -760,8 +761,8 @@ clamp(92px,13vw,170px);
 
 line-height:.88;
 
-/* Increased spacing */
-letter-spacing:-3px;
+/* More visible space between timer numbers */
+letter-spacing:2px;
 
 font-weight:600;
 
@@ -777,7 +778,7 @@ direction:ltr;
 
 .timer-label{
 
-margin-top:25px;
+margin-top:23px;
 
 font-size:14px;
 
@@ -875,7 +876,7 @@ START + RESET CENTERED
 
 .controls{
 
-margin-top:32px;
+margin-top:30px;
 
 display:flex;
 
@@ -883,7 +884,7 @@ align-items:center;
 
 justify-content:center;
 
-gap:12px;
+gap:11px;
 
 width:100%;
 
@@ -892,14 +893,14 @@ width:100%;
 
 .primary{
 
-min-width:135px;
+min-width:130px;
 
-height:48px;
+height:46px;
 
 padding:
-0 23px;
+0 21px;
 
-border-radius:15px;
+border-radius:14px;
 
 background:
 rgba(255,255,255,.96);
@@ -927,12 +928,12 @@ rgba(0,95,255,.2);
 
 .secondary{
 
-height:48px;
+height:46px;
 
 padding:
-0 17px;
+0 16px;
 
-border-radius:15px;
+border-radius:14px;
 
 background:
 rgba(8,13,22,.62);
@@ -1036,6 +1037,10 @@ font-weight:700;
 
 }
 
+
+/* =====================================================
+AMBIENT BUTTON
+===================================================== */
 
 .ambient-btn{
 
@@ -2683,7 +2688,8 @@ padding:
 font-size:
 clamp(78px,21vw,118px);
 
-letter-spacing:-2px;
+/* Clear spacing on mobile too */
+letter-spacing:1px;
 
 }
 
@@ -2757,12 +2763,16 @@ justify-content:center;
 
 flex:0 1 135px;
 
+height:44px;
+
 }
 
 
 .secondary{
 
 flex:0 0 auto;
+
+height:44px;
 
 }
 
@@ -2797,16 +2807,16 @@ flex:1;
 
 min-width:0;
 
-height:46px;
+height:44px;
 
 }
 
 
 .secondary{
 
-width:52px;
+width:50px;
 
-height:46px;
+height:44px;
 
 padding:0;
 
