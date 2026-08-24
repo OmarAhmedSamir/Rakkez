@@ -289,7 +289,6 @@ body::after{
     margin:0 auto;
 
     padding:
-
         85px
         0
         45px;
@@ -932,6 +931,200 @@ textarea.input{
 
 
 /* =========================================================
+   IMAGE UPLOAD
+========================================================= */
+
+.image-upload{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-height:120px;
+
+    padding:15px;
+
+    border:
+        1px dashed rgba(255,255,255,.18);
+
+    border-radius:15px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    cursor:pointer;
+
+    color:var(--muted);
+
+    text-align:center;
+
+    transition:.25s;
+
+}
+
+
+.image-upload:hover{
+
+    border-color:#2383ff;
+
+    background:
+        rgba(20,120,255,.045);
+
+}
+
+
+.image-upload.dragover{
+
+    border-color:#2383ff;
+
+    background:
+        rgba(20,120,255,.08);
+
+}
+
+
+.image-upload-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:7px;
+
+}
+
+
+.image-upload-icon{
+
+    font-size:28px;
+
+    color:#5ba6ff;
+
+    line-height:1;
+
+}
+
+
+.image-upload-title{
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+
+.image-upload-subtitle{
+
+    color:var(--muted);
+
+    font-size:10px;
+
+}
+
+
+.image-file{
+
+    display:none;
+
+}
+
+
+.image-preview{
+
+    display:none;
+
+    width:100%;
+
+    max-height:230px;
+
+    margin-top:10px;
+
+    object-fit:cover;
+
+    border-radius:14px;
+
+}
+
+
+.image-preview-wrap{
+
+    display:none;
+
+    position:relative;
+
+    margin-top:10px;
+
+}
+
+
+.image-preview-wrap.show{
+
+    display:block;
+
+}
+
+
+.image-preview-wrap .image-preview{
+
+    display:block;
+
+    margin-top:0;
+
+}
+
+
+.remove-image{
+
+    position:absolute;
+
+    top:10px;
+
+    right:10px;
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:10px;
+
+    background:
+        rgba(0,0,0,.65);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    color:white;
+
+    cursor:pointer;
+
+    backdrop-filter:blur(10px);
+
+}
+
+
+.image-current{
+
+    margin-top:8px;
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    word-break:break-all;
+
+}
+
+
+/* =========================================================
    EDITOR
 ========================================================= */
 
@@ -1032,63 +1225,6 @@ textarea.input{
 
 
 /* =========================================================
-   IMAGE
-========================================================= */
-
-.image-upload{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    min-height:120px;
-
-    padding:15px;
-
-    border:
-        1px dashed rgba(255,255,255,.18);
-
-    border-radius:15px;
-
-    background:
-        rgba(255,255,255,.025);
-
-    cursor:pointer;
-
-    color:var(--muted);
-
-    text-align:center;
-
-}
-
-
-.image-upload:hover{
-
-    border-color:#2383ff;
-
-}
-
-
-.image-preview{
-
-    display:none;
-
-    width:100%;
-
-    max-height:230px;
-
-    margin-top:10px;
-
-    object-fit:cover;
-
-    border-radius:14px;
-
-}
-
-
-/* =========================================================
    BUTTONS
 ========================================================= */
 
@@ -1125,6 +1261,15 @@ textarea.input{
 .primary:hover{
 
     background:#2386ff;
+
+}
+
+
+.primary:disabled{
+
+    opacity:.55;
+
+    cursor:not-allowed;
 
 }
 
@@ -1869,17 +2014,78 @@ textarea.input{
             </div>
 
 
+            <!-- =================================================
+                 NEW REAL IMAGE UPLOAD
+            ================================================== -->
+
             <div class="form-group">
 
                 <label class="form-label">
-                    Cover Image URL
+                    Cover Image
                 </label>
 
-                <input
-                    id="postImage"
-                    class="input"
-                    placeholder="assets/blog/my-image.jpg"
+
+                <label
+                    id="imageUpload"
+                    class="image-upload"
+                    for="postImageFile"
                 >
+
+                    <div class="image-upload-content">
+
+                        <div class="image-upload-icon">
+                            ↑
+                        </div>
+
+                        <div class="image-upload-title">
+                            Click to upload image
+                        </div>
+
+                        <div class="image-upload-subtitle">
+                            JPG · PNG · WEBP · GIF
+                        </div>
+
+                    </div>
+
+                </label>
+
+
+                <input
+                    id="postImageFile"
+                    class="image-file"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                >
+
+
+                <div
+                    id="imagePreviewWrap"
+                    class="image-preview-wrap"
+                >
+
+                    <img
+                        id="imagePreview"
+                        class="image-preview"
+                        alt="Selected image preview"
+                    >
+
+
+                    <button
+                        id="removeImageBtn"
+                        class="remove-image"
+                        type="button"
+                        title="Remove image"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="currentImage"
+                    class="image-current"
+                ></div>
 
             </div>
 
@@ -1964,6 +2170,7 @@ textarea.input{
             <div class="actions">
 
                 <button
+                    id="publishButton"
                     class="primary"
                     onclick="publishPost()"
                 >
@@ -2072,14 +2279,7 @@ const DATA_FILE = "blog-data.js";
 
 
 /*
-    Image folder.
-
-    Images are expected to already exist in the repository.
-
-    Example:
-
-    assets/blog/my-photo.jpg
-
+    Folder where uploaded blog images are stored.
 */
 
 const BLOG_IMAGE_FOLDER = "assets/blog/";
@@ -2095,6 +2295,32 @@ let posts = Array.isArray(window.RAKKEZ_BLOG_POSTS)
 
 
 let editingId = null;
+
+
+/*
+    New image state.
+
+    selectedImageFile:
+        The image selected from the user's device.
+
+    selectedImageData:
+        Base64 data URL used for preview/upload.
+
+    currentImageUrl:
+        Existing image URL when editing a post.
+
+    removeCurrentImage:
+        Whether the existing image should be removed
+        from the article.
+*/
+
+let selectedImageFile = null;
+
+let selectedImageData = "";
+
+let currentImageUrl = "";
+
+let removeCurrentImage = false;
 
 
 /* =========================================================
@@ -2147,6 +2373,322 @@ function formatDate(date){
             day:"numeric"
         }
     ).format(new Date(date));
+
+}
+
+
+/* =========================================================
+   IMAGE HELPERS
+========================================================= */
+
+
+/*
+    Convert a File into a Data URL.
+
+    Example:
+
+    data:image/png;base64,AAAA...
+*/
+
+function fileToDataURL(file){
+
+    return new Promise(
+        (resolve,reject) => {
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                () => resolve(
+                    reader.result
+                );
+
+
+            reader.onerror =
+                () => reject(
+                    new Error(
+                        "Could not read the selected image."
+                    )
+                );
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+}
+
+
+/*
+    Extract only the Base64 part from a Data URL.
+*/
+
+function dataURLToBase64(dataURL){
+
+    const comma =
+        dataURL.indexOf(",");
+
+
+    if(comma === -1){
+
+        throw new Error(
+            "Invalid image data."
+        );
+
+    }
+
+
+    return dataURL.slice(
+        comma + 1
+    );
+
+}
+
+
+/*
+    Create a safe filename.
+*/
+
+function slugify(value){
+
+    return String(value || "image")
+
+        .toLowerCase()
+
+        .trim()
+
+        .replace(/[^a-z0-9]+/g,"-")
+
+        .replace(/^-+|-+$/g,"")
+
+        .slice(0,60) ||
+
+        "image";
+
+}
+
+
+/*
+    Generate a unique image path.
+
+    Example:
+
+    assets/blog/my-article-20260824-k92jd3.png
+*/
+
+function makeImagePath(title,file){
+
+    const extension =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g,"");
+
+
+    const safeExtension =
+        extension || "jpg";
+
+
+    const random =
+        Math.random()
+            .toString(36)
+            .slice(2,8);
+
+
+    const date =
+        new Date()
+            .toISOString()
+            .slice(0,10)
+            .replaceAll("-","");
+
+
+    return (
+
+        BLOG_IMAGE_FOLDER +
+
+        slugify(title) +
+
+        "-" +
+
+        date +
+
+        "-" +
+
+        random +
+
+        "." +
+
+        safeExtension
+
+    );
+
+}
+
+
+/*
+    Reset image UI.
+*/
+
+function resetImageUI(){
+
+    selectedImageFile = null;
+
+    selectedImageData = "";
+
+    currentImageUrl = "";
+
+    removeCurrentImage = false;
+
+
+    $("postImageFile").value = "";
+
+    $("imagePreview").src = "";
+
+    $("imagePreviewWrap")
+        .classList
+        .remove("show");
+
+
+    $("currentImage")
+        .textContent = "";
+
+}
+
+
+/*
+    Show an existing image when editing.
+*/
+
+function showCurrentImage(url){
+
+    currentImageUrl = url || "";
+
+    removeCurrentImage = false;
+
+
+    if(!url){
+
+        $("currentImage")
+            .textContent = "";
+
+        return;
+
+    }
+
+
+    $("imagePreview").src = url;
+
+    $("imagePreviewWrap")
+        .classList
+        .add("show");
+
+
+    $("currentImage")
+        .textContent =
+        "Current image: " + url;
+
+}
+
+
+/*
+    Handle selecting a new image.
+*/
+
+async function handleImageFile(file){
+
+    if(!file) return;
+
+
+    const allowedTypes = [
+
+        "image/jpeg",
+
+        "image/png",
+
+        "image/webp",
+
+        "image/gif"
+
+    ];
+
+
+    if(!allowedTypes.includes(file.type)){
+
+        alert(
+            "Please choose a JPG, PNG, WEBP or GIF image."
+        );
+
+        $("postImageFile").value = "";
+
+        return;
+
+    }
+
+
+    /*
+        Keep a reasonable browser-side limit.
+
+        GitHub's Contents API has practical file-size
+        constraints, so large images should be compressed
+        before uploading.
+    */
+
+    const maxSize =
+        10 * 1024 * 1024;
+
+
+    if(file.size > maxSize){
+
+        alert(
+            "Image is too large. Please choose an image smaller than 10 MB."
+        );
+
+        $("postImageFile").value = "";
+
+        return;
+
+    }
+
+
+    try{
+
+        selectedImageFile = file;
+
+        selectedImageData =
+            await fileToDataURL(file);
+
+
+        removeCurrentImage = false;
+
+
+        $("imagePreview").src =
+            selectedImageData;
+
+
+        $("imagePreviewWrap")
+            .classList
+            .add("show");
+
+
+        $("currentImage")
+            .textContent =
+            "New image: " +
+            file.name;
+
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Could not load this image."
+        );
+
+    }
 
 }
 
@@ -2527,21 +3069,29 @@ function clearEditor(){
 
     editingId = null;
 
+
     $("postId").value = "";
 
     $("postTitle").value = "";
 
     $("postExcerpt").value = "";
 
-    $("postImage").value = "";
-
     $("editor").innerHTML = "";
+
+
+    resetImageUI();
+
 
     $("publishStatus").textContent =
         "Ready.";
 
+
     $("publishStatus")
         .className = "status";
+
+
+    $("publishButton")
+        .textContent = "Publish Post";
 
 }
 
@@ -2677,19 +3227,52 @@ function editPost(id){
     $("postExcerpt").value =
         post.excerpt;
 
-    $("postImage").value =
-        post.image || "";
 
     $("editor").innerHTML =
         post.content;
+
+
+    /*
+        Reset new-image state first.
+    */
+
+    selectedImageFile = null;
+
+    selectedImageData = "";
+
+    $("postImageFile").value = "";
+
+
+    /*
+        Show existing cover image.
+    */
+
+    if(post.image){
+
+        showCurrentImage(
+            post.image
+        );
+
+    }
+    else{
+
+        resetImageUI();
+
+    }
 
 
     $("publishStatus")
         .textContent =
         "Editing post. Publish to save changes.";
 
+
     $("publishStatus")
         .className = "status";
+
+
+    $("publishButton")
+        .textContent =
+        "Update Post";
 
 
     window.scrollTo({
@@ -2767,6 +3350,15 @@ async function deletePost(id){
         console.error(error);
 
 
+        /*
+            Restore post if GitHub deletion failed.
+        */
+
+        posts.push(post);
+
+        renderAdmin();
+
+
         setStatus(
             "Delete failed: " +
             error.message,
@@ -2793,12 +3385,6 @@ async function publishPost(){
 
     const excerpt =
         $("postExcerpt")
-            .value
-            .trim();
-
-
-    const image =
-        $("postImage")
             .value
             .trim();
 
@@ -2834,67 +3420,128 @@ async function publishPost(){
     saveConfig();
 
 
-    const now =
-        new Date()
-            .toISOString();
+    /*
+        Disable the button to prevent
+        duplicate GitHub commits.
+    */
+
+    const publishButton =
+        $("publishButton");
 
 
-    if(editingId){
+    publishButton.disabled = true;
 
-        const index =
-            posts.findIndex(
-                p =>
-                    p.id === editingId
+
+    const oldButtonText =
+        publishButton.textContent;
+
+
+    try{
+
+        let imageUrl =
+            currentImageUrl;
+
+
+        /*
+            If the user explicitly removed
+            the old image, clear it.
+        */
+
+        if(removeCurrentImage){
+
+            imageUrl = "";
+
+        }
+
+
+        /*
+            If a new image was selected,
+            upload it first.
+        */
+
+        if(selectedImageFile){
+
+            setStatus(
+                "Uploading image to GitHub...",
+                "status"
             );
 
 
-        if(index !== -1){
+            const imagePath =
+                makeImagePath(
+                    title,
+                    selectedImageFile
+                );
 
-            posts[index] = {
 
-                ...posts[index],
+            imageUrl =
+                await uploadImageToGitHub(
+                    imagePath,
+                    selectedImageData
+                );
+
+        }
+
+
+        const now =
+            new Date()
+                .toISOString();
+
+
+        if(editingId){
+
+            const index =
+                posts.findIndex(
+                    p =>
+                        p.id === editingId
+                );
+
+
+            if(index !== -1){
+
+                posts[index] = {
+
+                    ...posts[index],
+
+                    title,
+
+                    excerpt,
+
+                    image:imageUrl,
+
+                    content
+
+                };
+
+            }
+
+        }
+        else{
+
+            posts.unshift({
+
+                id:makeId(),
 
                 title,
 
                 excerpt,
 
-                image,
+                image:imageUrl,
 
-                content
+                content,
 
-            };
+                date:now
+
+            });
 
         }
 
-    }
-    else{
 
-        posts.unshift({
+        setStatus(
+            "Publishing blog-data.js to GitHub...",
+            "status"
+        );
 
-            id:makeId(),
-
-            title,
-
-            excerpt,
-
-            image,
-
-            content,
-
-            date:now
-
-        });
-
-    }
-
-
-    setStatus(
-        "Publishing to GitHub...",
-        "status"
-    );
-
-
-    try{
 
         await publishDataToGitHub(
 
@@ -2939,6 +3586,23 @@ async function publishPost(){
             "status error"
 
         );
+
+    }
+    finally{
+
+        publishButton.disabled = false;
+
+        /*
+            If clearEditor() was called,
+            it already reset the text.
+        */
+
+        if(editingId){
+
+            publishButton.textContent =
+                oldButtonText;
+
+        }
 
     }
 
@@ -3010,6 +3674,9 @@ async function githubRequest(
                     "X-GitHub-Api-Version":
                         "2022-11-28",
 
+                    "Content-Type":
+                        "application/json",
+
                     ...(options.headers || {})
 
                 }
@@ -3055,10 +3722,64 @@ async function githubRequest(
 
 
 /* =========================================================
+   GITHUB PATH
+========================================================= */
+
+function githubContentsURL(
+
+    repo,
+
+    path,
+
+    branch
+
+){
+
+    const parts =
+        repo.split("/");
+
+
+    if(parts.length !== 2){
+
+        throw new Error(
+            "Repository must look like username/repository"
+        );
+
+    }
+
+
+    return (
+
+        "https://api.github.com/repos/" +
+
+        encodeURIComponent(parts[0]) +
+
+        "/" +
+
+        encodeURIComponent(parts[1]) +
+
+        "/contents/" +
+
+        path +
+
+        "?ref=" +
+
+        encodeURIComponent(branch)
+
+    );
+
+}
+
+
+/* =========================================================
    GET FILE
 ========================================================= */
 
-async function getGithubFile(){
+async function getGithubFileByPath(
+
+    path
+
+){
 
     const repo =
         $("githubRepo")
@@ -3083,26 +3804,11 @@ async function getGithubFile(){
 
 
     const url =
-
-        "https://api.github.com/repos/" +
-
-        encodeURIComponent(
-            repo.split("/")[0]
-        ) +
-
-        "/" +
-
-        encodeURIComponent(
-            repo.split("/")[1]
-        ) +
-
-        "/contents/" +
-
-        DATA_FILE +
-
-        "?ref=" +
-
-        encodeURIComponent(branch);
+        githubContentsURL(
+            repo,
+            path,
+            branch
+        );
 
 
     try{
@@ -3128,6 +3834,163 @@ async function getGithubFile(){
         throw error;
 
     }
+
+}
+
+
+async function getGithubFile(){
+
+    return getGithubFileByPath(
+        DATA_FILE
+    );
+
+}
+
+
+/* =========================================================
+   UPLOAD IMAGE TO GITHUB
+========================================================= */
+
+async function uploadImageToGitHub(
+
+    imagePath,
+
+    dataURL
+
+){
+
+    if(!imagePath){
+
+        throw new Error(
+            "Image path is missing."
+        );
+
+    }
+
+
+    if(!dataURL){
+
+        throw new Error(
+            "Image data is missing."
+        );
+
+    }
+
+
+    const repo =
+        $("githubRepo")
+            .value
+            .trim();
+
+
+    const branch =
+        $("githubBranch")
+            .value
+            .trim() ||
+        "main";
+
+
+    if(!repo){
+
+        throw new Error(
+            "Enter your GitHub repository first."
+        );
+
+    }
+
+
+    const base64 =
+        dataURLToBase64(
+            dataURL
+        );
+
+
+    /*
+        Check if a file with the same name
+        somehow already exists.
+    */
+
+    const existing =
+        await getGithubFileByPath(
+            imagePath
+        );
+
+
+    const body = {
+
+        message:
+            "Upload blog image: " +
+            imagePath.split("/").pop(),
+
+        content:
+            base64,
+
+        branch
+
+    };
+
+
+    /*
+        GitHub requires SHA when replacing
+        an existing file.
+    */
+
+    if(
+        existing &&
+        existing.sha
+    ){
+
+        body.sha =
+            existing.sha;
+
+    }
+
+
+    const parts =
+        repo.split("/");
+
+
+    const url =
+
+        "https://api.github.com/repos/" +
+
+        encodeURIComponent(parts[0]) +
+
+        "/" +
+
+        encodeURIComponent(parts[1]) +
+
+        "/contents/" +
+
+        imagePath;
+
+
+    await githubRequest(
+
+        url,
+
+        {
+
+            method:"PUT",
+
+            body:
+                JSON.stringify(body)
+
+        }
+
+    );
+
+
+    /*
+        Return a relative URL that works
+        with the current website.
+
+        Example:
+
+        assets/blog/photo.png
+    */
+
+    return imagePath;
 
 }
 
@@ -3254,6 +4117,15 @@ async function publishDataToGitHub(
         parts[1];
 
 
+    /*
+        IMPORTANT:
+
+        Get the current SHA immediately before
+        updating blog-data.js.
+
+        This avoids overwriting a newer version.
+    */
+
     const existing =
         await getGithubFile();
 
@@ -3318,6 +4190,133 @@ async function publishDataToGitHub(
 
 
 /* =========================================================
+   IMAGE INPUT EVENTS
+========================================================= */
+
+$("postImageFile")
+    .addEventListener(
+        "change",
+        event => {
+
+            const file =
+                event.target.files?.[0];
+
+
+            handleImageFile(file);
+
+        }
+    );
+
+
+/*
+    Remove selected/new image.
+
+    If editing an existing post,
+    this also marks the current image
+    as removed from the article.
+*/
+
+$("removeImageBtn")
+    .addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            if(
+                currentImageUrl &&
+                !selectedImageFile
+            ){
+
+                removeCurrentImage = true;
+
+            }
+
+
+            selectedImageFile = null;
+
+            selectedImageData = "";
+
+
+            $("postImageFile").value = "";
+
+
+            $("imagePreview").src = "";
+
+            $("imagePreviewWrap")
+                .classList
+                .remove("show");
+
+
+            $("currentImage")
+                .textContent =
+                "No cover image selected.";
+
+        }
+    );
+
+
+/* =========================================================
+   DRAG & DROP
+========================================================= */
+
+$("imageUpload")
+    .addEventListener(
+        "dragover",
+        event => {
+
+            event.preventDefault();
+
+            $("imageUpload")
+                .classList
+                .add("dragover");
+
+        }
+    );
+
+
+$("imageUpload")
+    .addEventListener(
+        "dragleave",
+        () => {
+
+            $("imageUpload")
+                .classList
+                .remove("dragover");
+
+        }
+    );
+
+
+$("imageUpload")
+    .addEventListener(
+        "drop",
+        event => {
+
+            event.preventDefault();
+
+
+            $("imageUpload")
+                .classList
+                .remove("dragover");
+
+
+            const file =
+                event.dataTransfer
+                    ?.files
+                    ?.[0];
+
+
+            handleImageFile(file);
+
+        }
+    );
+
+
+/* =========================================================
    SEARCH
 ========================================================= */
 
@@ -3350,7 +4349,7 @@ $("adminPassword")
 
 
 /* =========================================================
-   CLOSE MODAL BY CLICKING OUTSIDE
+   CLOSE ARTICLE MODAL
 ========================================================= */
 
 $("articleOverlay")
@@ -3370,6 +4369,10 @@ $("articleOverlay")
         }
     );
 
+
+/* =========================================================
+   CLOSE LOGIN MODAL
+========================================================= */
 
 $("loginOverlay")
     .addEventListener(
