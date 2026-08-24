@@ -1,6 +1,8 @@
 /* =========================================================
    RAKKEZ V2
-   ========================================================= */
+   TIMER + STATS + PERSISTENCE
+   LANGUAGE SAFE VERSION
+========================================================= */
 
 
 /* =========================================================
@@ -8,6 +10,11 @@
 ========================================================= */
 
 const $ = id => document.getElementById(id);
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
 
 const STORAGE = {
     settings: "rakkez_settings",
@@ -22,53 +29,93 @@ const STORAGE = {
 
 
 /* =========================================================
-   DEFAULTS
+   DEFAULT SETTINGS
 ========================================================= */
 
 const DEFAULT_SETTINGS = {
+
     focus: 25,
+
     shortBreak: 5,
+
     longBreak: 15,
+
     longBreakAfter: 4,
+
     dailyGoal: 240,
 
     autoStart: false,
+
     smartTimer: true,
 
     sound: true,
 
     alarmVolume: 0.70,
+
     alarmSound: "soft",
 
     theme: "dark"
+
 };
-
-
-let settings = {
-    ...DEFAULT_SETTINGS,
-    ...load(STORAGE.settings, {})
-};
-
-
-let stats = {
-    totalFocusSeconds: 0,
-    sessions: 0,
-    streak: 0,
-    lastFocusDate: null,
-    dailyFocus: {},
-
-    ...load(STORAGE.stats, {})
-};
-
-
-let tasks = load(STORAGE.tasks, []);
 
 
 /* =========================================================
-   TIMER
+   LOAD SETTINGS
+========================================================= */
+
+let settings = {
+
+    ...DEFAULT_SETTINGS,
+
+    ...load(
+        STORAGE.settings,
+        {}
+    )
+
+};
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+let stats = {
+
+    totalFocusSeconds: 0,
+
+    sessions: 0,
+
+    streak: 0,
+
+    lastFocusDate: null,
+
+    dailyFocus: {},
+
+    ...load(
+        STORAGE.stats,
+        {}
+    )
+
+};
+
+
+/* =========================================================
+   TASKS
+========================================================= */
+
+let tasks =
+    load(
+        STORAGE.tasks,
+        []
+    );
+
+
+/* =========================================================
+   TIMER STATE
 ========================================================= */
 
 let timerState = {
+
     mode: "focus",
 
     remaining:
@@ -80,10 +127,16 @@ let timerState = {
     running: false,
 
     interval: null
+
 };
 
 
+/* =========================================================
+   OTHER STATE
+========================================================= */
+
 let completedFocusInCycle = 0;
+
 let currentTaskId = null;
 
 
@@ -95,13 +148,19 @@ function load(key, fallback) {
 
     try {
 
-        const value = localStorage.getItem(key);
+        const value =
+            localStorage.getItem(key);
 
         return value
             ? JSON.parse(value)
             : fallback;
 
-    } catch {
+    } catch (error) {
+
+        console.error(
+            "Load error:",
+            error
+        );
 
         return fallback;
 
@@ -132,14 +191,66 @@ function save(key, value) {
 
 
 /* =========================================================
+   LANGUAGE
+========================================================= */
+
+function getCurrentLanguage() {
+
+    const language =
+        localStorage.getItem("language") ||
+        localStorage.getItem("rakkez_language") ||
+        "en";
+
+    return language === "ar"
+        ? "ar"
+        : "en";
+
+}
+
+
+/* =========================================================
+   ARABIC NUMBERS
+========================================================= */
+
+function arabicNumbers(value) {
+
+    return String(value).replace(
+        /\d/g,
+        digit =>
+            "٠١٢٣٤٥٦٧٨٩"[digit]
+    );
+
+}
+
+
+/* =========================================================
+   ENGLISH NUMBERS
+========================================================= */
+
+function englishNumbers(value) {
+
+    return String(value).replace(
+        /[٠-٩]/g,
+        digit =>
+            "٠١٢٣٤٥٦٧٨٩".indexOf(
+                digit
+            )
+    );
+
+}
+
+
+/* =========================================================
    DATE
 ========================================================= */
 
 function todayKey() {
 
-    const d = new Date();
+    const d =
+        new Date();
 
     return [
+
         d.getFullYear(),
 
         String(
@@ -156,7 +267,7 @@ function todayKey() {
 
 
 /* =========================================================
-   TIMER
+   FORMAT TIMER
 ========================================================= */
 
 function formatTime(seconds) {
@@ -167,19 +278,146 @@ function formatTime(seconds) {
             Math.floor(seconds)
         );
 
+
     const minutes =
-        Math.floor(seconds / 60);
+        Math.floor(
+            seconds / 60
+        );
+
 
     const secs =
         seconds % 60;
 
+
     return (
-        String(minutes).padStart(2, "0")
+
+        String(minutes)
+            .padStart(2, "0")
+
         +
+
         ":"
+
         +
-        String(secs).padStart(2, "0")
+
+        String(secs)
+            .padStart(2, "0")
+
     );
+
+}
+
+
+/* =========================================================
+   GET TRANSLATED TIMER TEXT
+========================================================= */
+
+function getTimerModeText() {
+
+    const lang =
+        getCurrentLanguage();
+
+
+    if (lang === "ar") {
+
+        if (
+            timerState.mode === "short"
+        ) {
+
+            return "استراحة قصيرة";
+
+        }
+
+
+        if (
+            timerState.mode === "long"
+        ) {
+
+            return "استراحة طويلة";
+
+        }
+
+
+        return "التركيز";
+
+    }
+
+
+    if (
+        timerState.mode === "short"
+    ) {
+
+        return "SHORT BREAK";
+
+    }
+
+
+    if (
+        timerState.mode === "long"
+    ) {
+
+        return "LONG BREAK";
+
+    }
+
+
+    return "FOCUS";
+
+}
+
+
+/* =========================================================
+   GET TRANSLATED TIMER LABEL
+========================================================= */
+
+function getTimerLabel() {
+
+    const lang =
+        getCurrentLanguage();
+
+
+    if (lang === "ar") {
+
+        return timerState.mode === "focus"
+
+            ? "ركز على شيء واحد فقط."
+
+            : "خذ نفسًا. لقد استحققت الراحة.";
+
+    }
+
+
+    return timerState.mode === "focus"
+
+        ? "Stay focused. One thing at a time."
+
+        : "Take a breath. You earned it.";
+
+}
+
+
+/* =========================================================
+   GET TRANSLATED START BUTTON
+========================================================= */
+
+function getStartButtonText() {
+
+    const lang =
+        getCurrentLanguage();
+
+
+    if (lang === "ar") {
+
+        return timerState.running
+            ? "إيقاف مؤقت"
+            : "ابدأ";
+
+    }
+
+
+    return timerState.running
+        ? "PAUSE"
+        : "START";
 
 }
 
@@ -190,17 +428,31 @@ function formatTime(seconds) {
 
 function updateTimerUI() {
 
+    /*
+       IMPORTANT:
+
+       This function controls the timer itself.
+
+       It does NOT call the full language system.
+
+       The language system can safely call this function
+       after changing language.
+    */
+
+
     const lang =
-        localStorage.getItem("language") ||
-        localStorage.getItem("rakkez_language") ||
-        "en";
+        getCurrentLanguage();
 
 
     /* =====================================================
-       TIMER
+       TIMER NUMBER
     ===================================================== */
 
-    if ($("timer")) {
+    const timer =
+        $("timer");
+
+
+    if (timer) {
 
         const time =
             formatTime(
@@ -208,7 +460,7 @@ function updateTimerUI() {
             );
 
 
-        $("timer").textContent =
+        timer.textContent =
             lang === "ar"
                 ? arabicNumbers(time)
                 : time;
@@ -220,27 +472,22 @@ function updateTimerUI() {
        MODE
     ===================================================== */
 
-    if ($("modeText")) {
+    const modeText =
+        $("modeText");
 
-        if (lang === "ar") {
 
-            $("modeText").textContent =
-                timerState.mode === "focus"
-                    ? "التركيز"
-                    : timerState.mode === "short"
-                        ? "استراحة قصيرة"
-                        : "استراحة طويلة";
+    if (modeText) {
 
-        } else {
+        modeText.textContent =
+            getTimerModeText();
 
-            $("modeText").textContent =
-                timerState.mode === "focus"
-                    ? "FOCUS"
-                    : timerState.mode === "short"
-                        ? "SHORT BREAK"
-                        : "LONG BREAK";
+        /*
+           Keep the real mode available to the
+           language system.
+        */
 
-        }
+        modeText.dataset.mode =
+            timerState.mode;
 
     }
 
@@ -249,23 +496,14 @@ function updateTimerUI() {
        TIMER LABEL
     ===================================================== */
 
-    if ($("timerLabel")) {
+    const timerLabel =
+        $("timerLabel");
 
-        if (lang === "ar") {
 
-            $("timerLabel").textContent =
-                timerState.mode === "focus"
-                    ? "ركز على شيء واحد فقط."
-                    : "خذ نفسًا. لقد استحققت الراحة.";
+    if (timerLabel) {
 
-        } else {
-
-            $("timerLabel").textContent =
-                timerState.mode === "focus"
-                    ? "Stay focused. One thing at a time."
-                    : "Take a breath. You earned it.";
-
-        }
+        timerLabel.textContent =
+            getTimerLabel();
 
     }
 
@@ -280,40 +518,46 @@ function updateTimerUI() {
 
 
     const percentage =
-        timerState.total
-            ? (elapsed / timerState.total) * 100
+        timerState.total > 0
+
+            ? (
+                elapsed /
+                timerState.total
+            ) * 100
+
             : 0;
 
 
-    if ($("progress")) {
+    const progress =
+        $("progress");
 
-        $("progress").style.width =
-            percentage + "%";
+
+    if (progress) {
+
+        progress.style.width =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    percentage
+                )
+            ) + "%";
 
     }
 
 
     /* =====================================================
-       START / PAUSE BUTTON
+       START BUTTON
     ===================================================== */
 
-    if ($("startBtn")) {
+    const startButton =
+        $("startBtn");
 
-        if (lang === "ar") {
 
-            $("startBtn").textContent =
-                timerState.running
-                    ? "إيقاف مؤقت"
-                    : "ابدأ";
+    if (startButton) {
 
-        } else {
-
-            $("startBtn").textContent =
-                timerState.running
-                    ? "PAUSE"
-                    : "START";
-
-        }
+        startButton.textContent =
+            getStartButtonText();
 
     }
 
@@ -322,7 +566,14 @@ function updateTimerUI() {
        CURRENT TASK
     ===================================================== */
 
-    updateCurrentTask();
+    if (
+        typeof updateCurrentTask ===
+        "function"
+    ) {
+
+        updateCurrentTask();
+
+    }
 
 }
 
@@ -333,7 +584,14 @@ function updateTimerUI() {
 
 function startTimer() {
 
-    if (timerState.running) {
+    /*
+       If already running,
+       pressing START acts as PAUSE.
+    */
+
+    if (
+        timerState.running
+    ) {
 
         pauseTimer();
 
@@ -343,17 +601,50 @@ function startTimer() {
 
 
     /*
-       Starting a new session intentionally
-       stops an alarm that may still be playing.
+       Stop alarm before starting.
     */
 
-    stopAlarm();
+    if (
+        typeof stopAlarm ===
+        "function"
+    ) {
+
+        stopAlarm();
+
+    }
 
 
-    unlockAudio();
+    /*
+       Unlock browser audio.
+    */
+
+    if (
+        typeof unlockAudio ===
+        "function"
+    ) {
+
+        unlockAudio();
+
+    }
 
 
-    timerState.running = true;
+    /*
+       Make sure there is only ONE interval.
+    */
+
+    if (
+        timerState.interval
+    ) {
+
+        clearInterval(
+            timerState.interval
+        );
+
+    }
+
+
+    timerState.running =
+        true;
 
 
     timerState.interval =
@@ -364,6 +655,7 @@ function startTimer() {
 
 
     saveTimer();
+
 
     updateTimerUI();
 
@@ -376,18 +668,27 @@ function startTimer() {
 
 function pauseTimer() {
 
-    timerState.running = false;
+    timerState.running =
+        false;
 
 
-    clearInterval(
+    if (
         timerState.interval
-    );
+    ) {
+
+        clearInterval(
+            timerState.interval
+        );
+
+    }
 
 
-    timerState.interval = null;
+    timerState.interval =
+        null;
 
 
     saveTimer();
+
 
     updateTimerUI();
 
@@ -400,6 +701,10 @@ function pauseTimer() {
 
 function tick() {
 
+    /*
+       Timer finished.
+    */
+
     if (
         timerState.remaining <= 0
     ) {
@@ -410,6 +715,10 @@ function tick() {
 
     }
 
+
+    /*
+       Count focus time.
+    */
 
     if (
         timerState.mode === "focus"
@@ -426,7 +735,8 @@ function tick() {
             !stats.dailyFocus[today]
         ) {
 
-            stats.dailyFocus[today] = 0;
+            stats.dailyFocus[today] =
+                0;
 
         }
 
@@ -445,12 +755,27 @@ function tick() {
     }
 
 
-    timerState.remaining--;
+    /*
+       IMPORTANT:
+
+       The timer ALWAYS decreases
+       using the internal numeric value.
+
+       Language has ZERO effect on this.
+    */
+
+    timerState.remaining =
+        Math.max(
+            0,
+            timerState.remaining - 1
+        );
 
 
     updateTimerUI();
 
 }
+
+
 /* =========================================================
    PHASE COMPLETE
 ========================================================= */
@@ -461,14 +786,22 @@ function completePhase() {
 
 
     /*
-       IMPORTANT:
-       Real alarm is infinite.
-       It will NOT stop by itself.
-       Only STOP ALARM / explicit user action stops it.
+       Play alarm if available.
     */
 
-    playAlarm();
+    if (
+        typeof playAlarm ===
+        "function"
+    ) {
 
+        playAlarm();
+
+    }
+
+
+    /* =====================================================
+       FOCUS COMPLETE
+    ===================================================== */
 
     if (
         timerState.mode === "focus"
@@ -488,8 +821,17 @@ function completePhase() {
             today;
 
 
+        /*
+           ONLY a completed focus session
+           can update the streak.
+        */
+
         updateStreakOnFocus();
 
+
+        /* =================================================
+           TASK FOCUS TIME
+        ================================================= */
 
         if (
             currentTaskId
@@ -497,8 +839,8 @@ function completePhase() {
 
             const task =
                 tasks.find(
-                    t =>
-                        t.id ===
+                    task =>
+                        task.id ===
                         currentTaskId
                 );
 
@@ -506,8 +848,13 @@ function completePhase() {
             if (task) {
 
                 task.focusMinutes =
-                    (task.focusMinutes || 0)
+                    (
+                        task.focusMinutes ||
+                        0
+                    )
+
                     +
+
                     Math.round(
                         timerState.total / 60
                     );
@@ -516,6 +863,10 @@ function completePhase() {
 
         }
 
+
+        /* =================================================
+           NEXT MODE
+        ================================================= */
 
         if (
             completedFocusInCycle >=
@@ -533,6 +884,10 @@ function completePhase() {
         }
 
     } else {
+
+        /*
+           Any break finishes → Focus.
+        */
 
         setMode("focus");
 
@@ -554,11 +909,9 @@ function completePhase() {
     updateStats();
 
 
-    /*
-       Auto start is intentionally delayed.
-       The alarm itself stays infinite.
-       We do NOT automatically stop the alarm here.
-    */
+    /* =====================================================
+       AUTO START
+    ===================================================== */
 
     if (
         settings.autoStart
@@ -567,15 +920,20 @@ function completePhase() {
         setTimeout(
             () => {
 
-                /*
-                   Do not start while the alarm is
-                   still actively playing.
-                   User must stop it first.
-                */
-
                 if (
-                    !isAlarmPlaying()
+                    typeof isAlarmPlaying ===
+                    "function"
                 ) {
+
+                    if (
+                        !isAlarmPlaying()
+                    ) {
+
+                        startTimer();
+
+                    }
+
+                } else {
 
                     startTimer();
 
@@ -591,47 +949,108 @@ function completePhase() {
 
 
 /* =========================================================
-   MODE
+   SET MODE
 ========================================================= */
 
 function setMode(mode) {
 
-    timerState.mode = mode;
+    /*
+       Validate mode.
+    */
 
+    if (
+        mode !== "focus" &&
+        mode !== "short" &&
+        mode !== "long"
+    ) {
 
-    let minutes;
-
-
-    if (mode === "focus") {
-
-        minutes = settings.focus;
-
-    }
-
-
-    if (mode === "short") {
-
-        minutes = settings.shortBreak;
+        mode = "focus";
 
     }
 
 
-    if (mode === "long") {
+    timerState.mode =
+        mode;
 
-        minutes = settings.longBreak;
+
+    let minutes =
+        settings.focus;
+
+
+    if (
+        mode === "short"
+    ) {
+
+        minutes =
+            settings.shortBreak;
+
+    }
+
+
+    if (
+        mode === "long"
+    ) {
+
+        minutes =
+            settings.longBreak;
+
+    }
+
+
+    /*
+       Protect against invalid settings.
+    */
+
+    minutes =
+        Number(minutes);
+
+
+    if (
+        !Number.isFinite(minutes) ||
+        minutes <= 0
+    ) {
+
+        minutes =
+            DEFAULT_SETTINGS.focus;
 
     }
 
 
     timerState.total =
-        minutes * 60;
+        Math.floor(
+            minutes * 60
+        );
 
 
     timerState.remaining =
-        minutes * 60;
+        timerState.total;
+
+
+    /*
+       New mode is paused.
+    */
+
+    timerState.running =
+        false;
+
+
+    if (
+        timerState.interval
+    ) {
+
+        clearInterval(
+            timerState.interval
+        );
+
+    }
+
+
+    timerState.interval =
+        null;
 
 
     saveTimer();
+
 
     updateTimerUI();
 
@@ -644,13 +1063,56 @@ function setMode(mode) {
 
 function resetTimer() {
 
+    /*
+       IMPORTANT:
+
+       Resetting the TIMER must NOT reset:
+       - streak
+       - sessions
+       - focus time
+       - daily goal
+
+       It ONLY resets the current timer.
+    */
+
+
     pauseTimer();
 
-    stopAlarm();
 
-    stopTestAlarm();
+    if (
+        typeof stopAlarm ===
+        "function"
+    ) {
+
+        stopAlarm();
+
+    }
+
+
+    if (
+        typeof stopTestAlarm ===
+        "function"
+    ) {
+
+        stopTestAlarm();
+
+    }
+
+
+    /*
+       Keep completedFocusInCycle.
+       Resetting timer should not destroy
+       the user's cycle progress.
+    */
 
     setMode("focus");
+
+
+    /*
+       Make sure statistics remain untouched.
+    */
+
+    updateStats();
 
 }
 
@@ -661,9 +1123,17 @@ function resetTimer() {
 
 function updateStats() {
 
-    if ($("focusStat")) {
+    /* =====================================================
+       FOCUS
+    ===================================================== */
 
-        $("focusStat").textContent =
+    const focusStat =
+        $("focusStat");
+
+
+    if (focusStat) {
+
+        focusStat.textContent =
             formatFocus(
                 stats.totalFocusSeconds
             );
@@ -671,39 +1141,64 @@ function updateStats() {
     }
 
 
-    if ($("sessionsStat")) {
+    /* =====================================================
+       SESSIONS
+    ===================================================== */
 
-        $("sessionsStat").textContent =
-            stats.sessions;
+    const sessionsStat =
+        $("sessionsStat");
+
+
+    if (sessionsStat) {
+
+        const value =
+            Number(
+                stats.sessions
+            ) || 0;
+
+
+        sessionsStat.textContent =
+            getCurrentLanguage() === "ar"
+                ? arabicNumbers(value)
+                : value;
 
     }
 
 
+    /* =====================================================
+       STREAK
+    ===================================================== */
+
     updateStreak();
 
 
-    if ($("streakStat")) {
-
-        const lang =
-            localStorage.getItem("language") ||
-            localStorage.getItem("rakkez_language") ||
-            "en";
+    const streakStat =
+        $("streakStat");
 
 
-        if (lang === "ar") {
+    if (streakStat) {
 
-            $("streakStat").textContent =
-                stats.streak +
-                " " +
-                "يوم";
+        const streak =
+            Number(
+                stats.streak
+            ) || 0;
+
+
+        if (
+            getCurrentLanguage() === "ar"
+        ) {
+
+            streakStat.textContent =
+                arabicNumbers(streak) +
+                " يوم";
 
         } else {
 
-            $("streakStat").textContent =
-                stats.streak +
+            streakStat.textContent =
+                streak +
                 " day" +
                 (
-                    stats.streak === 1
+                    streak === 1
                         ? ""
                         : "s"
                 );
@@ -713,26 +1208,40 @@ function updateStats() {
     }
 
 
+    /* =====================================================
+       DAILY GOAL
+    ===================================================== */
+
     updateDailyGoal();
 
 }
 
 
+/* =========================================================
+   FORMAT FOCUS
+========================================================= */
+
 function formatFocus(seconds) {
 
     const minutes =
-        Math.floor(seconds / 60);
+        Math.floor(
+            (
+                Number(seconds) || 0
+            ) / 60
+        );
 
 
     const lang =
-        localStorage.getItem("language") ||
-        localStorage.getItem("rakkez_language") ||
-        "en";
+        getCurrentLanguage();
 
 
-    if (lang === "ar") {
+    if (
+        lang === "ar"
+    ) {
 
-        if (minutes < 60) {
+        if (
+            minutes < 60
+        ) {
 
             return (
                 arabicNumbers(minutes) +
@@ -743,46 +1252,80 @@ function formatFocus(seconds) {
 
 
         const hours =
-            Math.floor(minutes / 60);
+            Math.floor(
+                minutes / 60
+            );
 
 
         const remaining =
             minutes % 60;
 
 
+        if (
+            remaining > 0
+        ) {
+
+            return (
+                arabicNumbers(hours) +
+                "س " +
+                arabicNumbers(remaining) +
+                "د"
+            );
+
+        }
+
+
         return (
             arabicNumbers(hours) +
-            "س " +
-            arabicNumbers(remaining) +
-            "د"
+            "س"
         );
 
     }
 
 
-    if (minutes < 60) {
+    if (
+        minutes < 60
+    ) {
 
-        return minutes + "m";
+        return (
+            minutes +
+            "m"
+        );
 
     }
 
 
     const hours =
-        Math.floor(minutes / 60);
+        Math.floor(
+            minutes / 60
+        );
 
 
     const remaining =
         minutes % 60;
 
 
+    if (
+        remaining > 0
+    ) {
+
+        return (
+            hours +
+            "h " +
+            remaining +
+            "m"
+        );
+
+    }
+
+
     return (
         hours +
-        "h " +
-        remaining +
-        "m"
+        "h"
     );
 
 }
+
 
 /* =========================================================
    DAILY GOAL
@@ -790,7 +1333,15 @@ function formatFocus(seconds) {
 
 function updateDailyGoal() {
 
-    if (!$("goalStat")) return;
+    const goalStat =
+        $("goalStat");
+
+
+    if (!goalStat) {
+
+        return;
+
+    }
 
 
     const today =
@@ -798,19 +1349,27 @@ function updateDailyGoal() {
 
 
     const seconds =
-        stats.dailyFocus[today] || 0;
+        Number(
+            stats.dailyFocus[today]
+        ) || 0;
 
 
     const minutes =
-        Math.floor(seconds / 60);
+        Math.floor(
+            seconds / 60
+        );
 
 
     const goal =
-        settings.dailyGoal;
+        Number(
+            settings.dailyGoal
+        ) || 0;
 
 
     const goalHours =
-        Math.floor(goal / 60);
+        Math.floor(
+            goal / 60
+        );
 
 
     const goalMinutes =
@@ -818,12 +1377,11 @@ function updateDailyGoal() {
 
 
     const lang =
-        localStorage.getItem("language") ||
-        localStorage.getItem("rakkez_language") ||
-        "en";
+        getCurrentLanguage();
 
 
     let currentText;
+
     let goalText;
 
 
@@ -831,25 +1389,36 @@ function updateDailyGoal() {
        ARABIC
     ===================================================== */
 
-    if (lang === "ar") {
+    if (
+        lang === "ar"
+    ) {
 
         currentText =
             arabicNumbers(minutes) +
             "د";
 
 
-        if (goalHours) {
+        if (
+            goalHours
+        ) {
 
             goalText =
                 arabicNumbers(goalHours) +
-                "س" +
-                (
-                    goalMinutes
-                        ? " " +
-                          arabicNumbers(goalMinutes) +
-                          "د"
-                        : ""
-                );
+                "س";
+
+
+            if (
+                goalMinutes
+            ) {
+
+                goalText +=
+                    " " +
+                    arabicNumbers(
+                        goalMinutes
+                    ) +
+                    "د";
+
+            }
 
         } else {
 
@@ -873,18 +1442,25 @@ function updateDailyGoal() {
             "m";
 
 
-        if (goalHours) {
+        if (
+            goalHours
+        ) {
 
             goalText =
                 goalHours +
-                "h" +
-                (
-                    goalMinutes
-                        ? " " +
-                          goalMinutes +
-                          "m"
-                        : ""
-                );
+                "h";
+
+
+            if (
+                goalMinutes
+            ) {
+
+                goalText +=
+                    " " +
+                    goalMinutes +
+                    "m";
+
+            }
 
         } else {
 
@@ -897,7 +1473,7 @@ function updateDailyGoal() {
     }
 
 
-    $("goalStat").textContent =
+    goalStat.textContent =
         currentText +
         " / " +
         goalText;
@@ -921,70 +1497,102 @@ function updateStreakOnFocus() {
         );
 
 
-    if (previous !== today) {
+    /*
+       Same day:
+       Do NOT increase streak again.
+    */
 
-        if (previous) {
+    if (
+        previous === today
+    ) {
 
-            const last =
-                new Date(
-                    previous +
-                    "T00:00:00"
-                );
+        return;
 
-
-            const current =
-                new Date(
-                    today +
-                    "T00:00:00"
-                );
+    }
 
 
-            const diff =
-                Math.round(
-                    (
-                        current - last
-                    ) /
-                    (
-                        1000 *
-                        60 *
-                        60 *
-                        24
-                    )
-                );
+    if (
+        previous
+    ) {
+
+        const last =
+            new Date(
+                previous +
+                "T00:00:00"
+            );
 
 
-            if (diff === 1) {
+        const current =
+            new Date(
+                today +
+                "T00:00:00"
+            );
 
-                stats.streak++;
 
-            } else {
+        const diff =
+            Math.round(
+                (
+                    current - last
+                ) /
+                (
+                    1000 *
+                    60 *
+                    60 *
+                    24
+                )
+            );
 
-                stats.streak = 1;
 
-            }
+        if (
+            diff === 1
+        ) {
+
+            stats.streak =
+                (
+                    Number(
+                        stats.streak
+                    ) || 0
+                ) + 1;
 
         } else {
 
-            stats.streak = 1;
+            stats.streak =
+                1;
 
         }
 
+    } else {
 
-        localStorage.setItem(
-            "rakkez_last_focus_day",
-            today
-        );
+        stats.streak =
+            1;
 
     }
+
+
+    localStorage.setItem(
+        "rakkez_last_focus_day",
+        today
+    );
 
 }
 
 
+/* =========================================================
+   CHECK STREAK
+========================================================= */
+
 function updateStreak() {
 
-    if (!stats.lastFocusDate) {
+    /*
+       No completed focus yet.
+    */
 
-        stats.streak = 0;
+    if (
+        !stats.lastFocusDate
+    ) {
+
+        stats.streak =
+            0;
 
         return;
 
@@ -1023,9 +1631,17 @@ function updateStreak() {
         );
 
 
-    if (difference > 1) {
+    /*
+       Only reset streak if more than
+       one complete day has passed.
+    */
 
-        stats.streak = 0;
+    if (
+        difference > 1
+    ) {
+
+        stats.streak =
+            0;
 
     }
 
@@ -1038,7 +1654,9 @@ function updateStreak() {
 
 function saveTimer() {
 
-    if (!settings.smartTimer) {
+    if (
+        !settings.smartTimer
+    ) {
 
         return;
 
@@ -1048,6 +1666,7 @@ function saveTimer() {
     save(
         STORAGE.timer,
         {
+
             mode:
                 timerState.mode,
 
@@ -1062,15 +1681,22 @@ function saveTimer() {
 
             running:
                 timerState.running
+
         }
     );
 
 }
 
 
+/* =========================================================
+   RESTORE TIMER
+========================================================= */
+
 function restoreTimer() {
 
-    if (!settings.smartTimer) {
+    if (
+        !settings.smartTimer
+    ) {
 
         return;
 
@@ -1091,21 +1717,41 @@ function restoreTimer() {
     }
 
 
+    if (
+        saved.mode !== "focus" &&
+        saved.mode !== "short" &&
+        saved.mode !== "long"
+    ) {
+
+        return;
+
+    }
+
+
     timerState.mode =
         saved.mode;
 
 
     timerState.total =
-        saved.total;
+        Number(
+            saved.total
+        ) || (
+            settings.focus *
+            60
+        );
 
 
-    if (saved.running) {
+    if (
+        saved.running
+    ) {
 
         const elapsed =
             Math.floor(
                 (
                     Date.now() -
-                    saved.timestamp
+                    Number(
+                        saved.timestamp
+                    )
                 ) / 1000
             );
 
@@ -1113,24 +1759,203 @@ function restoreTimer() {
         timerState.remaining =
             Math.max(
                 0,
-                saved.remaining -
+                (
+                    Number(
+                        saved.remaining
+                    ) || 0
+                ) -
                 elapsed
             );
-
-
-        timerState.running = false;
 
     } else {
 
         timerState.remaining =
-            saved.remaining;
+            Math.max(
+                0,
+                Number(
+                    saved.remaining
+                ) || 0
+            );
 
-        timerState.running = false;
+    }
+
+
+    /*
+       Never automatically restart the interval
+       after restoring.
+
+       The user presses START.
+    */
+
+    timerState.running =
+        false;
+
+
+    timerState.interval =
+        null;
+
+
+    updateTimerUI();
+
+}
+
+
+/* =========================================================
+   AUDIO UNLOCK
+========================================================= */
+
+let audioUnlocked = false;
+
+
+function unlockAudio() {
+
+    if (
+        audioUnlocked
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const AudioContextClass =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        if (
+            !AudioContextClass
+        ) {
+
+            return;
+
+        }
+
+
+        const context =
+            new AudioContextClass();
+
+
+        if (
+            context.state ===
+            "suspended"
+        ) {
+
+            context.resume();
+
+        }
+
+
+        const oscillator =
+            context.createOscillator();
+
+
+        const gain =
+            context.createGain();
+
+
+        gain.gain.value =
+            0.00001;
+
+
+        oscillator.connect(
+            gain
+        );
+
+
+        gain.connect(
+            context.destination
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+            context.currentTime +
+            0.01
+        );
+
+
+        oscillator.onended =
+            () => {
+
+                try {
+
+                    context.close();
+
+                } catch {}
+
+            };
+
+
+        audioUnlocked =
+            true;
+
+    } catch (error) {
+
+        console.warn(
+            "Audio unlock failed:",
+            error
+        );
 
     }
 
 }
 
+
+/* =========================================================
+   LANGUAGE REFRESH HOOK
+========================================================= */
+
+/*
+   Your language system can call this after
+   switching between Arabic and English.
+
+   It refreshes ONLY the timer UI.
+*/
+
+window.refreshTimerLanguage =
+    function () {
+
+        updateTimerUI();
+
+        updateStats();
+
+    };
+
+
+/* =========================================================
+   SAFE NUMBER UPDATE HOOK
+========================================================= */
+
+/*
+   IMPORTANT:
+
+   The language system previously called
+   updateLanguageNumbers() every second.
+
+   That can conflict with the timer.
+
+   Keep this function only for compatibility,
+   but let updateTimerUI own the timer.
+*/
+
+window.updateLanguageNumbers =
+    function () {
+
+        if (
+            typeof updateTimerUI ===
+            "function"
+        ) {
+
+            updateTimerUI();
+
+        }
+
+    };
 
 /* =========================================================
    AUDIO UNLOCK
