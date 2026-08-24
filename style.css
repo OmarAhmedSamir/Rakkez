@@ -3445,3 +3445,508 @@ html[dir="ltr"] body{
     }
 
 }
+
+/* =====================================================
+   DARK MODE — UNIFY TIMER AREA
+   Makes the timer area match the rest of the dark UI
+===================================================== */
+
+/* Main dark surface */
+body:not(.light) .app{
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(0,85,200,.12),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 80% 75%,
+            rgba(0,45,180,.08),
+            transparent 40%
+        ),
+
+        #02040a;
+
+}
+
+
+/* Darken the animated background */
+body:not(.light) .bg-gradient{
+
+    opacity:.55;
+
+    filter:
+        blur(45px)
+        brightness(.55)
+        saturate(.85);
+
+}
+
+
+/* Stronger dark overlay over the whole app */
+body:not(.light) .bg-overlay{
+
+    background:
+
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.48),
+            rgba(0,0,0,.78)
+        ),
+
+        radial-gradient(
+            circle at center,
+            rgba(0,0,0,.08) 0%,
+            rgba(0,0,0,.68) 100%
+        );
+
+}
+
+
+/* Timer area itself */
+body:not(.light) .main{
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(3,7,14,.18),
+            rgba(2,4,10,.30) 55%,
+            rgba(2,4,10,.42) 100%
+        );
+
+}
+
+
+/* Timer */
+body:not(.light) .timer{
+
+    color:#f5f7fb;
+
+    text-shadow:
+        0 10px 45px rgba(0,0,0,.75),
+        0 0 35px rgba(0,70,180,.08);
+
+}
+
+
+/* Mode text */
+body:not(.light) .mode{
+
+    color:rgba(255,255,255,.48);
+
+}
+
+
+/* Timer label */
+body:not(.light) .timer-label{
+
+    color:rgba(255,255,255,.45);
+
+}
+
+
+/* Current task */
+body:not(.light) .current-task{
+
+    color:rgba(255,255,255,.62);
+
+}
+
+
+body:not(.light) .current-task span{
+
+    background:
+        rgba(3,7,14,.72);
+
+    border-color:
+        rgba(255,255,255,.07);
+
+}
+
+
+/* Progress background */
+body:not(.light) .progress-wrap{
+
+    background:
+        rgba(255,255,255,.075);
+
+}
+
+
+/* Progress */
+body:not(.light) .progress{
+
+    background:
+        linear-gradient(
+            90deg,
+            #005eff,
+            #1683ff,
+            #48a4ff
+        );
+
+    box-shadow:
+        0 0 12px rgba(22,131,255,.18);
+
+}
+
+
+/* =====================================================
+   DARK BUTTONS
+===================================================== */
+
+body:not(.light) .primary{
+
+    background:
+        rgba(8,13,22,.92);
+
+    color:#fff;
+
+    border:
+        1px solid rgba(255,255,255,.11);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06),
+        0 10px 30px rgba(0,0,0,.25);
+
+}
+
+
+body:not(.light) .primary:hover{
+
+    background:
+        rgba(15,23,38,.96);
+
+    border-color:
+        rgba(255,255,255,.18);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.35),
+        0 0 20px rgba(0,95,255,.08);
+
+}
+
+
+body:not(.light) .secondary{
+
+    background:
+        rgba(5,9,16,.82);
+
+    border-color:
+        rgba(255,255,255,.09);
+
+}
+
+
+body:not(.light) .secondary:hover{
+
+    background:
+        rgba(12,19,31,.92);
+
+}
+
+
+/* =====================================================
+   DARK HEADER
+===================================================== */
+
+body:not(.light) .logo{
+
+    color:#f5f7fb;
+
+}
+
+
+body:not(.light) .icon-btn{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,16,27,.88),
+            rgba(4,8,15,.78)
+        );
+
+    border-color:
+        rgba(255,255,255,.10);
+
+    color:
+        rgba(255,255,255,.84);
+
+}
+
+
+body:not(.light) .icon-btn:hover{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,27,43,.94),
+            rgba(7,13,23,.88)
+        );
+
+}
+
+
+/* Blog */
+body:not(.light) .blog-btn{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,17,29,.90),
+            rgba(5,10,18,.82)
+        );
+
+    border-color:
+        rgba(255,255,255,.10);
+
+    color:#fff;
+
+}
+
+
+body:not(.light) .blog-btn:hover{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,28,45,.96),
+            rgba(7,13,23,.90)
+        );
+
+}
+
+
+/* Language */
+body:not(.light) .language-btn{
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(12,43,82,.78),
+            rgba(5,20,42,.82)
+        );
+
+    border-color:
+        rgba(40,130,255,.45);
+
+    color:#fff;
+
+}
+
+
+/* =====================================================
+   DARK BOTTOM BAR
+===================================================== */
+
+body:not(.light) .stat{
+
+    background:
+        rgba(4,8,15,.78);
+
+    border-color:
+        rgba(255,255,255,.08);
+
+}
+
+
+body:not(.light) .ambient-btn{
+
+    background:
+        rgba(4,8,15,.78);
+
+    border-color:
+        rgba(255,255,255,.08);
+
+}
+
+
+/* =====================================================
+   DARK PANELS
+===================================================== */
+
+body:not(.light) .panel,
+body:not(.light) .updates-modal-content{
+
+    background:
+        rgba(5,10,18,.96);
+
+    border-color:
+        rgba(255,255,255,.10);
+
+}
+
+
+/* =====================================================
+   DARK INPUTS / CONTROLS
+===================================================== */
+
+body:not(.light) .number-input,
+body:not(.light) .select-input,
+body:not(.light) .media-input{
+
+    background:
+        rgba(3,7,14,.78);
+
+    border-color:
+        rgba(255,255,255,.09);
+
+    color:#fff;
+
+}
+
+
+body:not(.light) .select-input option{
+
+    background:#080d16;
+
+    color:#fff;
+
+}
+
+
+/* =====================================================
+   DARK TASKS / MEDIA
+===================================================== */
+
+body:not(.light) .task,
+body:not(.light) .account-card,
+body:not(.light) .now-playing,
+body:not(.light) .update-item{
+
+    background:
+        rgba(5,10,18,.72);
+
+    border-color:
+        rgba(255,255,255,.07);
+
+}
+
+
+body:not(.light) .media-tab{
+
+    background:
+        rgba(5,10,18,.70);
+
+}
+
+
+body:not(.light) .file-label,
+body:not(.light) .alarm-upload{
+
+    background:
+        rgba(4,8,15,.65);
+
+}
+
+
+/* =====================================================
+   DARK CLOSE BUTTONS
+===================================================== */
+
+body:not(.light) .close,
+body:not(.light) .updates-close{
+
+    background:
+        rgba(8,13,22,.82);
+
+    border-color:
+        rgba(255,255,255,.09);
+
+    color:#fff;
+
+}
+
+
+/* =====================================================
+   DARK FOCUS EXIT
+===================================================== */
+
+body:not(.light) .focus-exit{
+
+    background:
+        rgba(5,10,18,.84);
+
+    border-color:
+        rgba(255,255,255,.09);
+
+}
+
+
+/* =====================================================
+   DARK UPDATE BUTTON
+===================================================== */
+
+body:not(.light) #updatesDone{
+
+    background:
+        #126fe8;
+
+}
+
+
+body:not(.light) #updatesDone:hover{
+
+    background:
+        #197df5;
+
+}
+
+
+/* =====================================================
+   DARK DANGER
+===================================================== */
+
+body:not(.light) .danger-button{
+
+    background:
+        rgba(255,70,70,.07);
+
+    border-color:
+        rgba(255,70,70,.16);
+
+}
+
+
+/* =====================================================
+   DARK AMBIENT CARDS
+===================================================== */
+
+body:not(.light) .ambient-card{
+
+    border-color:
+        rgba(255,255,255,.08);
+
+}
+
+
+body:not(.light) .ambient-card.selected{
+
+    border-color:
+        #2586ff;
+
+    box-shadow:
+        0 0 25px rgba(37,134,255,.12);
+
+}
+
+
+/* =====================================================
+   DARK MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    body:not(.light) .main{
+
+        background:
+            radial-gradient(
+                ellipse at center,
+                rgba(3,7,14,.12),
+                rgba(2,4,10,.38)
+            );
+
+    }
+
+}
