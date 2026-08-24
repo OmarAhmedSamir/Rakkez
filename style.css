@@ -3000,13 +3000,10 @@ html[dir="ltr"] body{
 
 #pageLoader {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
 
     width: 100vw;
     height: 100vh;
-
-    width: 100dvw;
     height: 100dvh;
 
     z-index: 2147483647;
@@ -3015,14 +3012,11 @@ html[dir="ltr"] body{
     align-items: center;
     justify-content: center;
 
-    margin: 0;
-    padding: 0;
-
     background:
         radial-gradient(
             circle at center,
-            rgba(22, 131, 255, 0.08) 0%,
-            rgba(3, 5, 10, 0.96) 35%,
+            rgba(22, 131, 255, .10) 0%,
+            rgba(3, 5, 10, .96) 35%,
             #03050a 75%
         );
 
@@ -3032,12 +3026,9 @@ html[dir="ltr"] body{
     visibility: visible;
 
     transition:
-        opacity 0.45s ease,
-        visibility 0.45s ease;
+        opacity .8s cubic-bezier(.4,0,.2,1),
+        visibility .8s;
 }
-
-
-/* Remove loader */
 
 #pageLoader.hidden {
     opacity: 0;
@@ -3045,113 +3036,95 @@ html[dir="ltr"] body{
     pointer-events: none;
 }
 
-
-/* =========================================================
-   CONTENT
-========================================================= */
-
 .loader-content {
-    position: relative;
-
     display: flex;
     flex-direction: column;
-
     align-items: center;
     justify-content: center;
 
-    width: 100%;
-    height: 100%;
+    gap: 22px;
 
-    gap: 24px;
+    animation: loaderEnter 1s cubic-bezier(.16,1,.3,1) both;
 }
 
-
-/* =========================================================
-   LOGO
-========================================================= */
-
 .loader-logo {
-    margin: 0;
-    padding: 0;
+    color: white;
 
-    color: #ffffff;
-
-    font-size: 38px;
+    font-size: 40px;
     font-weight: 800;
 
-    line-height: 1;
+    letter-spacing: -2px;
 
-    letter-spacing: -1.8px;
-
-    text-align: center;
-
-    user-select: none;
-
-    animation: loaderLogoIn 0.6s ease both;
+    animation: logoEnter 1s cubic-bezier(.16,1,.3,1) both;
 }
 
 .loader-logo span {
     color: #1683ff;
 }
 
-
-/* =========================================================
-   SPINNER
-========================================================= */
-
 .loader-spinner {
-    width: 26px;
-    height: 26px;
-
-    margin: 0;
+    width: 27px;
+    height: 27px;
 
     border-radius: 50%;
 
-    border: 3px solid rgba(255, 255, 255, 0.10);
-
+    border: 3px solid rgba(255,255,255,.10);
     border-top-color: #1683ff;
 
     animation:
-        rakkezLoaderSpin 0.75s linear infinite,
-        loaderSpinnerIn 0.5s ease both;
+        spinnerIn .7s ease .25s both,
+        rakkezLoaderSpin .8s linear infinite;
 }
 
+@keyframes loaderEnter {
 
-/* =========================================================
-   ANIMATIONS
-========================================================= */
+    0% {
+        opacity: 0;
+        transform: scale(.92);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes logoEnter {
+
+    0% {
+        opacity: 0;
+        transform: translateY(18px);
+        filter: blur(8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes spinnerIn {
+
+    0% {
+        opacity: 0;
+        transform: scale(.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
 @keyframes rakkezLoaderSpin {
+
     from {
         transform: rotate(0deg);
     }
 
     to {
         transform: rotate(360deg);
-    }
-}
-
-@keyframes loaderLogoIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(8px) scale(0.96);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-@keyframes loaderSpinnerIn {
-
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
     }
 }
 
