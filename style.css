@@ -20,17 +20,6 @@
 
 --danger:#ff5265;
 
-/* =====================================================
-   DYNAMIC BACKGROUND COLOR
-   JS WILL CHANGE THIS COLOR
-===================================================== */
-
---dynamic-button-color:#1683ff;
-
---dynamic-button-dark:#0b56c7;
-
---dynamic-button-text:#ffffff;
-
 --shadow:
 0 30px 100px rgba(0,0,0,.55);
 
@@ -277,20 +266,432 @@ display:flex;
 
 align-items:center;
 
-gap:8px;
+gap:9px;
 
 }
 
 
 /* =====================================================
-ALL HEADER BUTTONS
+   RAKKEZ HEADER BUTTONS
+   Clean Dark Blue Brand Style
+===================================================== */
+
+.top-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+
+/* =====================================================
+   ALL HEADER BUTTONS
 ===================================================== */
 
 .icon-btn,
 .blog-btn,
 .language-btn{
 
-height:46px;
+    height:46px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:14px;
+
+    background:
+        rgba(8,13,22,.92);
+
+    border:
+        1px solid rgba(255,255,255,.09);
+
+    color:#fff;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.18);
+
+    backdrop-filter:
+        blur(14px);
+
+    -webkit-backdrop-filter:
+        blur(14px);
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+/* =====================================================
+   ICON BUTTONS
+===================================================== */
+
+.icon-btn{
+
+    width:46px;
+
+    padding:0;
+
+    font-size:17px;
+
+}
+
+
+/* =====================================================
+   BLOG
+===================================================== */
+
+.blog-btn{
+
+    min-width:125px;
+
+    padding:
+        0 24px;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    letter-spacing:.1px;
+
+    white-space:nowrap;
+
+}
+
+
+/* =====================================================
+   LANGUAGE
+   SAME COLOR + SAME STYLE
+===================================================== */
+
+.language-btn{
+
+    min-width:62px;
+
+    padding:
+        0 15px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+}
+
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.icon-btn:hover,
+.blog-btn:hover,
+.language-btn:hover{
+
+    transform:
+        translateY(-1px);
+
+    background:
+        rgba(12,20,32,.98);
+
+    border-color:
+        rgba(255,255,255,.16);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.24);
+
+}
+
+
+/* =====================================================
+   ACTIVE
+===================================================== */
+
+.icon-btn:active,
+.blog-btn:active,
+.language-btn:active{
+
+    transform:
+        scale(.97);
+
+    background:
+        rgba(8,13,22,1);
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+    .top-actions{
+
+        gap:6px;
+
+    }
+
+    .icon-btn{
+
+        width:42px;
+
+        height:42px;
+
+        border-radius:13px;
+
+    }
+
+    .language-btn{
+
+        height:42px;
+
+        min-width:58px;
+
+        padding:
+            0 11px;
+
+        border-radius:13px;
+
+        font-size:11px;
+
+    }
+
+    .blog-btn{
+
+        height:42px;
+
+        min-width:115px;
+
+        padding:
+            0 20px;
+
+        border-radius:13px;
+
+        font-size:13px;
+
+    }
+
+}
+
+
+/* =====================================================
+   LIGHT MODE
+===================================================== */
+
+body.light .icon-btn,
+body.light .blog-btn,
+body.light .language-btn{
+
+    background:
+        rgba(255,255,255,.68);
+
+    border-color:
+        rgba(0,0,0,.10);
+
+    color:
+        rgba(17,24,39,.85);
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.06);
+
+}
+
+
+body.light .icon-btn:hover,
+body.light .blog-btn:hover,
+body.light .language-btn:hover{
+
+    background:
+        rgba(255,255,255,.92);
+
+    border-color:
+        rgba(0,0,0,.16);
+
+}
+
+
+/* =====================================================
+   CONTROLS
+   PERFECTLY CENTERED UNDER TIMER
+===================================================== */
+
+.controls{
+
+    width:100%;
+
+    margin-top:32px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+.primary{
+
+    min-width:150px;
+
+    height:54px;
+
+    padding:
+        0 28px;
+
+    border-radius:17px;
+
+    background:
+        rgba(255,255,255,.96);
+
+    color:#05070b;
+
+    font-weight:700;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+.primary:hover{
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0,95,255,.20);
+
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+.secondary{
+
+    height:54px;
+
+    padding:
+        0 19px;
+
+    border-radius:17px;
+
+    background:
+        rgba(8,13,22,.62);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(18px);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:
+        background .25s ease,
+        border-color .25s ease,
+        transform .25s ease;
+
+}
+
+
+.secondary:hover{
+
+    background:
+        rgba(20,29,45,.75);
+
+    border-color:
+        var(--border-hover);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =====================================================
+   MOBILE CONTROLS
+===================================================== */
+
+@media(max-width:450px){
+
+    .controls{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+    .primary{
+
+        flex:1;
+
+        max-width:220px;
+
+    }
+
+    .secondary{
+
+        width:55px;
+
+        padding:0;
+
+        flex-shrink:0;
+
+    }
+
+}
+/* =====================================================
+MAIN
+===================================================== */
+
+.main{
+
+position:relative;
+
+z-index:5;
+
+width:100%;
+height:100%;
 
 display:flex;
 
@@ -298,140 +699,45 @@ align-items:center;
 
 justify-content:center;
 
-border-radius:14px;
-
-/*
-   SOLID COLOR
-   JS changes --dynamic-button-color
-*/
-
-background:var(--dynamic-button-color);
-
-border:
-1px solid rgba(255,255,255,.18);
-
-color:var(--dynamic-button-text);
-
-box-shadow:
-0 8px 24px rgba(0,0,0,.22),
-inset 0 1px 0 rgba(255,255,255,.12);
-
-backdrop-filter:none;
--webkit-backdrop-filter:none;
-
-transition:
-background .25s ease,
-border-color .25s ease,
-transform .2s ease,
-box-shadow .25s ease,
-filter .25s ease;
-
-}
-
-
-/* =====================================================
-ICON BUTTONS
-===================================================== */
-
-.icon-btn{
-
-width:46px;
-
-padding:0;
-
-font-size:17px;
-
-}
-
-
-/* =====================================================
-BLOG
-===================================================== */
-
-.blog-btn{
-
-min-width:125px;
-
 padding:
-0 24px;
-
-font-family:
-"Space Grotesk",
-sans-serif;
-
-font-size:14px;
-
-font-weight:700;
-
-letter-spacing:.1px;
-
-white-space:nowrap;
+90px 25px 100px;
 
 }
 
 
-/* =====================================================
-LANGUAGE
-===================================================== */
+.timer-card{
 
-.language-btn{
+width:min(760px,94vw);
 
-min-width:62px;
+display:flex;
 
-padding:
-0 15px;
+flex-direction:column;
 
-font-family:
-"DM Sans",
-sans-serif;
+align-items:center;
+
+justify-content:center;
+
+text-align:center;
+
+}
+
+
+.mode{
 
 font-size:12px;
 
 font-weight:700;
 
-white-space:nowrap;
+letter-spacing:3px;
+
+color:rgba(255,255,255,.55);
+
+margin-bottom:18px;
+
+direction:ltr;
 
 }
 
-
-/* =====================================================
-HEADER HOVER
-===================================================== */
-
-.icon-btn:hover,
-.blog-btn:hover,
-.language-btn:hover{
-
-transform:
-translateY(-1px);
-
-filter:brightness(1.08);
-
-border-color:
-rgba(255,255,255,.30);
-
-box-shadow:
-0 12px 30px rgba(0,0,0,.28),
-inset 0 1px 0 rgba(255,255,255,.15);
-
-}
-
-
-.icon-btn:active,
-.blog-btn:active,
-.language-btn:active{
-
-transform:
-scale(.97);
-
-filter:brightness(.96);
-
-}
-
-
-/* =====================================================
-TIMER
-===================================================== */
 
 .timer{
 
@@ -442,20 +748,9 @@ clamp(105px,15vw,190px);
 
 line-height:.88;
 
-/*
-   IMPORTANT:
-   Prevent English timer numbers from touching.
-*/
-
-letter-spacing:-4px;
+letter-spacing:-9px;
 
 font-weight:600;
-
-font-variant-numeric:tabular-nums;
-
-font-feature-settings:"tnum";
-
-white-space:nowrap;
 
 text-shadow:
 0 15px 70px rgba(0,0,0,.6);
@@ -467,8 +762,102 @@ direction:ltr;
 }
 
 
+.timer-label{
+
+margin-top:25px;
+
+font-size:14px;
+
+color:var(--muted);
+
+}
+
+
 /* =====================================================
-MAIN CONTROLS
+CURRENT TASK
+===================================================== */
+
+.current-task{
+
+margin-top:14px;
+
+min-height:24px;
+
+font-size:12px;
+
+font-weight:600;
+
+color:rgba(255,255,255,.72);
+
+letter-spacing:.5px;
+
+}
+
+
+.current-task span{
+
+padding:
+6px 12px;
+
+border-radius:10px;
+
+background:
+rgba(255,255,255,.045);
+
+border:
+1px solid rgba(255,255,255,.07);
+
+}
+
+
+/* =====================================================
+PROGRESS
+===================================================== */
+
+.progress-wrap{
+
+width:min(450px,75vw);
+
+height:4px;
+
+background:
+rgba(255,255,255,.11);
+
+border-radius:20px;
+
+overflow:hidden;
+
+margin-top:20px;
+
+}
+
+
+.progress{
+
+height:100%;
+
+width:0%;
+
+background:
+linear-gradient(
+90deg,
+#006cff,
+#48a4ff
+);
+
+border-radius:20px;
+
+transition:
+width .5s linear;
+
+direction:ltr;
+
+}
+
+
+/* =====================================================
+CONTROLS
+START + RESET CENTERED
 ===================================================== */
 
 .controls{
@@ -488,10 +877,6 @@ width:100%;
 }
 
 
-/* =====================================================
-START BUTTON
-===================================================== */
-
 .primary{
 
 min-width:150px;
@@ -503,30 +888,14 @@ padding:
 
 border-radius:17px;
 
-/*
-   SOLID DYNAMIC COLOR
-*/
-
 background:
-var(--dynamic-button-color);
+rgba(255,255,255,.96);
 
-color:
-var(--dynamic-button-text);
+color:#05070b;
 
 font-weight:700;
 
-border:
-1px solid rgba(255,255,255,.20);
-
-box-shadow:
-0 12px 30px rgba(0,0,0,.22),
-inset 0 1px 0 rgba(255,255,255,.15);
-
-transition:
-background .25s ease,
-transform .25s ease,
-box-shadow .25s ease,
-filter .25s ease;
+transition:.25s;
 
 }
 
@@ -536,30 +905,12 @@ filter .25s ease;
 transform:
 translateY(-2px);
 
-filter:
-brightness(1.08);
-
 box-shadow:
-0 20px 50px rgba(0,0,0,.28),
-inset 0 1px 0 rgba(255,255,255,.18);
+0 20px 50px
+rgba(0,95,255,.2);
 
 }
 
-
-.primary:active{
-
-transform:
-scale(.97);
-
-filter:
-brightness(.96);
-
-}
-
-
-/* =====================================================
-RESET
-===================================================== */
 
 .secondary{
 
@@ -570,37 +921,16 @@ padding:
 
 border-radius:17px;
 
-/*
-   Reset also follows background color
-   but slightly darker
-*/
-
 background:
-var(--dynamic-button-dark);
+rgba(8,13,22,.62);
 
 border:
-1px solid rgba(255,255,255,.18);
+1px solid var(--border);
 
-color:
-var(--dynamic-button-text);
+backdrop-filter:
+blur(18px);
 
-backdrop-filter:none;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-box-shadow:
-0 10px 28px rgba(0,0,0,.20),
-inset 0 1px 0 rgba(255,255,255,.10);
-
-transition:
-background .25s ease,
-border-color .25s ease,
-transform .25s ease,
-filter .25s ease;
+transition:.25s;
 
 }
 
@@ -608,16 +938,10 @@ filter .25s ease;
 .secondary:hover{
 
 background:
-var(--dynamic-button-color);
+rgba(20,29,45,.75);
 
 border-color:
-rgba(255,255,255,.28);
-
-transform:
-translateY(-2px);
-
-filter:
-brightness(1.06);
+var(--border-hover);
 
 }
 
@@ -730,163 +1054,7 @@ transition:.25s;
 .ambient-btn:hover{
 
 border-color:
-var(--dynamic-button-color);
-
-}
-
-
-/* =====================================================
-CURRENT TASK
-===================================================== */
-
-.current-task{
-
-margin-top:14px;
-
-min-height:24px;
-
-font-size:12px;
-
-font-weight:600;
-
-color:rgba(255,255,255,.72);
-
-letter-spacing:.5px;
-
-}
-
-
-.current-task span{
-
-padding:
-6px 12px;
-
-border-radius:10px;
-
-background:
-rgba(255,255,255,.045);
-
-border:
-1px solid rgba(255,255,255,.07);
-
-}
-
-
-/* =====================================================
-MODE
-===================================================== */
-
-.mode{
-
-font-size:12px;
-
-font-weight:700;
-
-letter-spacing:3px;
-
-color:rgba(255,255,255,.55);
-
-margin-bottom:18px;
-
-direction:ltr;
-
-}
-
-
-/* =====================================================
-TIMER LABEL
-===================================================== */
-
-.timer-label{
-
-margin-top:25px;
-
-font-size:14px;
-
-color:var(--muted);
-
-}
-
-
-/* =====================================================
-PROGRESS
-===================================================== */
-
-.progress-wrap{
-
-width:min(450px,75vw);
-
-height:4px;
-
-background:
-rgba(255,255,255,.11);
-
-border-radius:20px;
-
-overflow:hidden;
-
-margin-top:20px;
-
-}
-
-
-.progress{
-
-height:100%;
-
-width:0%;
-
-background:
-var(--dynamic-button-color);
-
-border-radius:20px;
-
-transition:
-width .5s linear;
-
-direction:ltr;
-
-}
-
-
-/* =====================================================
-MAIN
-===================================================== */
-
-.main{
-
-position:relative;
-
-z-index:5;
-
-width:100%;
-height:100%;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-padding:
-90px 25px 100px;
-
-}
-
-
-.timer-card{
-
-width:min(760px,94vw);
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-justify-content:center;
-
-text-align:center;
+#287dff;
 
 }
 
@@ -995,10 +1163,6 @@ transform:none;
 
 }
 
-
-/* =====================================================
-PANEL HEADER
-===================================================== */
 
 .panel-head{
 
@@ -1149,14 +1313,10 @@ text-align:center;
 .number-input:focus{
 
 border-color:
-var(--dynamic-button-color);
+#2383ff;
 
 }
 
-
-/* =====================================================
-GOAL
-===================================================== */
 
 .goal-input-wrap{
 
@@ -1221,7 +1381,7 @@ transition:.25s;
 .toggle.active{
 
 background:
-var(--dynamic-button-color);
+#1478ff;
 
 }
 
@@ -1253,8 +1413,7 @@ gap:10px;
 
 width:100px;
 
-accent-color:
-var(--dynamic-button-color);
+accent-color:#1478ff;
 
 cursor:pointer;
 
@@ -1317,7 +1476,7 @@ rgba(255,255,255,.20);
 .select-input:focus{
 
 border-color:
-var(--dynamic-button-color);
+#1478ff;
 
 }
 
@@ -1371,7 +1530,7 @@ transition:.25s;
 .alarm-upload:hover{
 
 border-color:
-var(--dynamic-button-color);
+#1478ff;
 
 background:
 rgba(20,120,255,.06);
@@ -1572,7 +1731,7 @@ width:48px;
 border-radius:13px;
 
 background:
-var(--dynamic-button-color);
+#1478ff;
 
 font-size:22px;
 
@@ -1649,10 +1808,10 @@ font-size:12px;
 .task.completed .task-check{
 
 background:
-var(--dynamic-button-color);
+#1478ff;
 
 border-color:
-var(--dynamic-button-color);
+#1478ff;
 
 }
 
@@ -1763,14 +1922,10 @@ font-size:12px;
 color:white;
 
 border-color:
-var(--dynamic-button-color);
+#2383ff;
 
 background:
-color-mix(
-in srgb,
-var(--dynamic-button-color) 16%,
-transparent
-);
+rgba(15,103,255,.16);
 
 }
 
@@ -1832,7 +1987,7 @@ height:46px;
 border-radius:13px;
 
 background:
-var(--dynamic-button-color);
+#1478ff;
 
 font-weight:700;
 
@@ -1930,7 +2085,7 @@ transition:.25s;
 .file-label:hover{
 
 border-color:
-var(--dynamic-button-color);
+#2484ff;
 
 }
 
@@ -2077,7 +2232,7 @@ rgba(255,255,255,.3);
 .ambient-card.selected{
 
 border:
-2px solid var(--dynamic-button-color);
+2px solid #2586ff;
 
 }
 
@@ -2320,8 +2475,6 @@ body.light{
 
 --border-hover:rgba(0,0,0,.20);
 
---dynamic-button-text:#ffffff;
-
 }
 
 
@@ -2371,21 +2524,13 @@ rgba(0,0,0,.10);
 
 body.light .icon-btn,
 body.light .blog-btn,
-body.light .language-btn{
-
-color:white;
-
-}
-
-
+body.light .language-btn,
 body.light .secondary,
 body.light .stat,
 body.light .ambient-btn{
 
 background:
 rgba(255,255,255,.62);
-
-color:#111827;
 
 }
 
@@ -2525,7 +2670,7 @@ padding:
 font-size:
 clamp(82px,23vw,130px);
 
-letter-spacing:-3px;
+letter-spacing:-6px;
 
 }
 
@@ -2965,19 +3110,10 @@ justify-content:center;
 border-radius:11px;
 
 background:
-color-mix(
-in srgb,
-var(--dynamic-button-color) 12%,
-transparent
-);
+rgba(20,120,255,.10);
 
 border:
-1px solid
-color-mix(
-in srgb,
-var(--dynamic-button-color) 18%,
-transparent
-);
+1px solid rgba(20,120,255,.12);
 
 font-size:16px;
 
@@ -3034,34 +3170,30 @@ margin-top:18px;
 border-radius:13px;
 
 background:
-var(--dynamic-button-color);
+#1478ff;
 
-color:
-var(--dynamic-button-text);
+color:white;
 
 font-size:12px;
 
 font-weight:700;
 
-transition:
-background .25s ease,
-transform .25s ease,
-box-shadow .25s ease,
-filter .25s ease;
+transition:.25s;
 
 }
 
 
 #updatesDone:hover{
 
-filter:
-brightness(1.08);
+background:
+#2386ff;
 
 transform:
 translateY(-1px);
 
 box-shadow:
-0 15px 35px rgba(0,0,0,.25);
+0 15px 35px
+rgba(20,120,255,.20);
 
 }
 
