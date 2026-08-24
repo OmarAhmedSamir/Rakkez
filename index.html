@@ -1,7 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+    html {
+        background: #03050a;
+    }
 
+    body {
+        opacity: 0;
+    }
+
+    body.rakkez-ready {
+        opacity: 1;
+        transition: opacity .8s ease;
+    }
+</style>
 <meta charset="UTF-8">
 <div class="top-actions">
 
@@ -50,6 +63,16 @@
 
 
 <body>
+
+<div id="pageLoader">
+    <div class="loader-content">
+        <div class="loader-logo">
+            Rakke<span>Z</span>
+        </div>
+
+        <div class="loader-spinner"></div>
+    </div>
+</div>
 
 
 <div class="app">
@@ -1422,15 +1445,7 @@
 <script src="app.js"></script>
 <script src="language.js"></script>
 
-<div id="pageLoader">
-    <div class="loader-content">
-        <div class="loader-logo">
-            Rakke<span>Z</span>
-        </div>
 
-        <div class="loader-spinner"></div>
-    </div>
-</div>
 
 
 <script>
