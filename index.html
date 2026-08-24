@@ -65,7 +65,7 @@
 <body>
 
 <div id="pageLoader">
-    <div class="loader-content">
+    <div class="loader-inner">
         <div class="loader-logo">
             Rakke<span>Z</span>
         </div>
@@ -1449,51 +1449,23 @@
 
 
 <script>
-(function () {
+window.addEventListener("load", function () {
 
     const loader = document.getElementById("pageLoader");
 
     if (!loader) return;
 
-    /*
-     * Keep the actual website hidden
-     * until the loader is ready.
-     */
-
-    document.body.classList.remove("rakkez-ready");
-
-    /*
-     * Keep loader visible for 4 seconds.
-     */
-
     setTimeout(() => {
 
-        /*
-         * Reveal the actual website
-         * with a smooth fade.
-         */
-
-        document.body.classList.add("rakkez-ready");
-
-        /*
-         * Start loader exit animation.
-         */
-
-        loader.classList.add("hidden");
-
-        /*
-         * Remove loader after animation.
-         */
+        loader.classList.add("hide");
 
         setTimeout(() => {
-
             loader.remove();
+        }, 600);
 
-        }, 800);
+    }, 700);
 
-    }, 4000);
-
-})();
+});
 </script>
 
 </body>
