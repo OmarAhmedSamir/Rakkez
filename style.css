@@ -3011,19 +3011,27 @@ html[dir="ltr"] body{
 
     }
 
-   #pageLoader {
+/* =========================================================
+   PAGE LOADER
+========================================================= */
+
+#pageLoader {
     position: fixed;
     inset: 0;
-    z-index: 999999;
-    background: #03050a;
+    z-index: 9999999;
+
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 18px;
+
+    background: #03050a;
+
     opacity: 1;
     visibility: visible;
-    transition: opacity .5s ease, visibility .5s ease;
+
+    transition:
+        opacity .45s ease,
+        visibility .45s ease;
 }
 
 #pageLoader.hidden {
@@ -3032,11 +3040,20 @@ html[dir="ltr"] body{
     pointer-events: none;
 }
 
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+}
+
 .loader-logo {
-    font-size: 38px;
+    color: #fff;
+
+    font-size: 36px;
     font-weight: 800;
-    color: white;
-    letter-spacing: -1px;
+
+    letter-spacing: -1.5px;
 }
 
 .loader-logo span {
@@ -3044,15 +3061,18 @@ html[dir="ltr"] body{
 }
 
 .loader-spinner {
-    width: 26px;
-    height: 26px;
-    border: 3px solid rgba(255,255,255,.12);
-    border-top-color: #1683ff;
+    width: 25px;
+    height: 25px;
+
     border-radius: 50%;
-    animation: loaderSpin .8s linear infinite;
+
+    border: 3px solid rgba(255,255,255,.10);
+    border-top-color: #1683ff;
+
+    animation: rakkezLoaderSpin .8s linear infinite;
 }
 
-@keyframes loaderSpin {
+@keyframes rakkezLoaderSpin {
     to {
         transform: rotate(360deg);
     }
