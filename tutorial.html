@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>RakkeZ — Tutorial</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="tutorial.css"
+    >
+</head>
+
+<body>
+
+<div class="tutorial-app">
+
+    <!-- Background -->
+    <div class="background">
+        <div class="gradient"></div>
+        <div class="noise"></div>
+    </div>
+
+
+    <!-- Top -->
+    <header class="topbar">
+
+        <div class="logo">
+            Rakke<span>Z</span>
+        </div>
+
+        <div class="step-counter" id="stepCounter">
+            01 / 26
+        </div>
+
+    </header>
+
+
+    <!-- Progress -->
+    <div class="progress-track">
+        <div
+            class="progress-bar"
+            id="progressBar"
+        ></div>
+    </div>
+
+
+    <!-- Main -->
+    <main class="tutorial-main">
+
+        <section
+            class="tutorial-card"
+            id="tutorialCard"
+        >
+
+            <div
+                class="icon-container"
+                id="featureIcon"
+            >
+                ⏱
+            </div>
+
+            <div
+                class="eyebrow"
+                id="featureCategory"
+            >
+                GETTING STARTED
+            </div>
+
+            <h1 id="featureTitle">
+                Welcome to RakkeZ
+            </h1>
+
+            <p
+                class="description"
+                id="featureDescription"
+            >
+                A simple workspace designed to help you focus
+                on one thing at a time.
+            </p>
+
+
+            <!-- Feature Demo -->
+            <div
+                class="demo"
+                id="featureDemo"
+            ></div>
+
+
+            <!-- Navigation -->
+            <div class="navigation">
+
+                <button
+                    class="nav-button secondary"
+                    id="backBtn"
+                >
+                    Back
+                </button>
+
+                <button
+                    class="nav-button primary"
+                    id="nextBtn"
+                >
+                    Next
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Bottom -->
+    <footer class="footer">
+
+        <button
+            class="skip-button"
+            id="skipBtn"
+        >
+            Skip tutorial
+        </button>
+
+        <div class="dots" id="dots"></div>
+
+    </footer>
+
+
+    <!-- Final -->
+    <div
+        class="final-screen"
+        id="finalScreen"
+    >
+
+        <div class="final-content">
+
+            <div class="final-icon">
+                ✓
+            </div>
+
+            <div class="eyebrow">
+                YOU'RE READY
+            </div>
+
+            <h2>
+                Focus starts now.
+            </h2>
+
+            <p>
+                You've learned everything you need
+                to make the most out of RakkeZ.
+            </p>
+
+
+            <div class="final-question">
+                Did you understand everything?
+            </div>
+
+
+            <div class="final-actions">
+
+                <button
+                    class="final-button primary"
+                    id="readyBtn"
+                >
+                    YES, I'M READY
+                </button>
+
+                <button
+                    class="final-button secondary"
+                    id="replayBtn"
+                >
+                    REPLAY TUTORIAL
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="tutorial.js"></script>
+
+</body>
+</html>
