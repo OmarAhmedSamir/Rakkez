@@ -2775,14 +2775,19 @@ padding:12px;
 
 .blog-btn {
     font-family: "Space Grotesk", sans-serif;
-}   
+    font-size: 15px;
+    font-weight: 600;
 
+    padding: 9px 16px;
+    min-width: 62px;
+    height: 40px;
 
-.update-icon{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-width:35px;
-height:35px;
-
+    white-space: nowrap;
+    box-sizing: border-box;
 }
 
 
