@@ -1,9 +1,14 @@
 /* =========================================================
-   RAKKEZ V2
    FULL LANGUAGE SYSTEM
    ENGLISH <-> ARABIC
-   SAFE DYNAMIC NUMBER SYSTEM
-   NO FREEZE / NO OBSERVER LOOP
+
+   SAFE:
+   - No timer observer
+   - No translation loop
+   - No freeze
+   - Dynamic timer numbers stay synchronized
+   - Static text stays translated
+   - Arabic / English numbers supported
 ========================================================= */
 
 (function () {
@@ -25,9 +30,6 @@
 
             language: "العربية",
 
-            /* BRAND — NEVER TRANSLATE */
-            logo: "RakkeZ",
-
             blog: "Blog",
 
             focus: "FOCUS",
@@ -40,7 +42,8 @@
             noTask:
                 "NO TASK SELECTED",
 
-            start: "START",
+            start:
+                "START",
 
             focusOnly:
                 "Focus Only",
@@ -348,10 +351,6 @@
 
             language:
                 "English",
-
-            /* BRAND — NEVER TRANSLATE */
-            logo:
-                "RakkeZ",
 
             blog:
                 "المدونة",
@@ -675,11 +674,13 @@
 
 
     /* =========================================================
-       CURRENT LANGUAGE
+       LANGUAGE STATE
     ========================================================= */
 
     let currentLanguage =
-        localStorage.getItem("rakkez_language") || "en";
+        localStorage.getItem("language") ||
+        localStorage.getItem("rakkez_language") ||
+        "en";
 
 
     if (
@@ -692,13 +693,9 @@
     }
 
 
-    /* =========================================================
-       INTERNAL STATE
-    ========================================================= */
+    let isApplyingLanguage = false;
 
-    let applyingLanguage = false;
-    let observerStarted = false;
-    let observerTimer = null;
+    let languageInitialized = false;
 
 
     /* =========================================================
@@ -716,9 +713,15 @@
 
         if (!element) return;
 
-        if (element.textContent !== String(text)) {
+        const value =
+            String(text);
 
-            element.textContent = text;
+        if (
+            element.textContent !== value
+        ) {
+
+            element.textContent =
+                value;
 
         }
 
@@ -729,9 +732,15 @@
 
         if (!element) return;
 
-        if (element.placeholder !== String(text)) {
+        const value =
+            String(text);
 
-            element.placeholder = text;
+        if (
+            element.placeholder !== value
+        ) {
+
+            element.placeholder =
+                value;
 
         }
 
@@ -739,7 +748,7 @@
 
 
     /* =========================================================
-       NUMBER CONVERSION
+       NUMBER HELPERS
     ========================================================= */
 
     function arabicNumbers(value) {
@@ -762,7 +771,9 @@
             /[٠-٩]/g,
             function (digit) {
 
-                return "٠١٢٣٤٥٦٧٨٩".indexOf(digit);
+                return "٠١٢٣٤٥٦٧٨٩".indexOf(
+                    digit
+                );
 
             }
         );
@@ -771,16 +782,56 @@
 
 
     /* =========================================================
-       FORMAT ARABIC UNITS
+       TIMER NUMBERS ONLY
+       
+       IMPORTANT:
+       This function ONLY changes digits.
+       It NEVER touches language text.
+    ========================================================= */
+
+    function updateTimerNumbers() {
+
+        const timer =
+            get("timer");
+
+        if (!timer) return;
+
+
+        const raw =
+            englishNumbers(
+                timer.textContent
+            );
+
+
+        const output =
+            currentLanguage === "ar"
+                ? arabicNumbers(raw)
+                : raw;
+
+
+        if (
+            timer.textContent !== output
+        ) {
+
+            timer.textContent =
+                output;
+
+        }
+
+    }
+
+
+    /* =========================================================
+       FORMAT DYNAMIC UNITS
     ========================================================= */
 
     function formatArabicUnits(value) {
 
         let text =
-            englishNumbers(String(value));
+            englishNumbers(
+                String(value)
+            );
 
-
-        /* minutes abbreviation */
 
         text = text.replace(
             /(\d+)\s*m\b/gi,
@@ -788,15 +839,11 @@
         );
 
 
-        /* hours abbreviation */
-
         text = text.replace(
             /(\d+)\s*h\b/gi,
             "$1س"
         );
 
-
-        /* days */
 
         text = text.replace(
             /(\d+)\s*days?\b/gi,
@@ -804,15 +851,11 @@
         );
 
 
-        /* minute word */
-
         text = text.replace(
             /(\d+)\s*minutes?\b/gi,
             "$1 دقيقة"
         );
 
-
-        /* hour word */
 
         text = text.replace(
             /(\d+)\s*hours?\b/gi,
@@ -820,25 +863,17 @@
         );
 
 
-        /* English remaining numbers -> Arabic */
-
-        text =
-            arabicNumbers(text);
-
-
-        return text;
+        return arabicNumbers(text);
 
     }
 
 
-    /* =========================================================
-       FORMAT ENGLISH UNITS
-    ========================================================= */
-
     function formatEnglishUnits(value) {
 
         let text =
-            englishNumbers(String(value));
+            englishNumbers(
+                String(value)
+            );
 
 
         text = text.replace(
@@ -869,21 +904,6 @@
 
 
         text = text.replace(
-            /(\d+)\s*دقيقة/g,
-            function (match, number) {
-
-                const n =
-                    Number(number);
-
-                return n === 1
-                    ? `${n} minute`
-                    : `${n} minutes`;
-
-            }
-        );
-
-
-        text = text.replace(
             /(\d+)\s*دقائق/g,
             function (match, number) {
 
@@ -899,15 +919,15 @@
 
 
         text = text.replace(
-            /(\d+)\s*ساعة/g,
+            /(\d+)\s*دقيقة/g,
             function (match, number) {
 
                 const n =
                     Number(number);
 
                 return n === 1
-                    ? `${n} hour`
-                    : `${n} hours`;
+                    ? `${n} minute`
+                    : `${n} minutes`;
 
             }
         );
@@ -928,69 +948,265 @@
         );
 
 
+        text = text.replace(
+            /(\d+)\s*ساعة/g,
+            function (match, number) {
+
+                const n =
+                    Number(number);
+
+                return n === 1
+                    ? `${n} hour`
+                    : `${n} hours`;
+
+            }
+        );
+
+
         return text;
 
     }
 
 
     /* =========================================================
-       DYNAMIC NUMBER ELEMENT
+       DYNAMIC VALUE STORAGE
     ========================================================= */
 
-    function translateDynamicElement(element) {
+    function getStableDynamicValue(element) {
 
-        if (!element) return;
+        if (!element) return "";
 
 
         /*
-           IMPORTANT:
-           Store the REAL / ENGLISH value only once.
-           Never store the already-translated value.
+           The application may continuously update this element.
+
+           We keep one internal English/raw value so translation
+           never uses an already translated Arabic value.
         */
 
-        let original =
-            element.dataset.languageValue;
+        const current =
+            englishNumbers(
+                element.textContent
+            ).trim();
 
 
         if (
-            original === undefined
+            !element.dataset.languageRaw
         ) {
 
-            original =
-                englishNumbers(
-                    element.textContent.trim()
-                );
-
-            element.dataset.languageValue =
-                original;
+            element.dataset.languageRaw =
+                current;
 
         }
 
 
-        if (!original) return;
+        /*
+           If current value looks like a real new value,
+           update the stored raw value.
 
+           This is safe because numbers/units are expected here.
+        */
 
-        let output;
+        if (
+            current &&
+            current !==
+            element.dataset.languageLastRendered
+        ) {
 
-
-        if (currentLanguage === "ar") {
-
-            output =
-                formatArabicUnits(original);
-
-        } else {
-
-            output =
-                formatEnglishUnits(original);
+            element.dataset.languageRaw =
+                current;
 
         }
 
 
+        return (
+            element.dataset.languageRaw ||
+            current
+        );
+
+    }
+
+
+    /* =========================================================
+       UPDATE DYNAMIC STATS
+    ========================================================= */
+
+    function updateDynamicStats() {
+
+        const elements =
+            document.querySelectorAll(
+                ".stat-value"
+            );
+
+
+        elements.forEach(
+            function (element) {
+
+                if (!element) return;
+
+
+                const raw =
+                    getStableDynamicValue(
+                        element
+                    );
+
+
+                if (!raw) return;
+
+
+                const output =
+                    currentLanguage === "ar"
+                        ? formatArabicUnits(raw)
+                        : formatEnglishUnits(raw);
+
+
+                if (
+                    element.textContent !== output
+                ) {
+
+                    element.textContent =
+                        output;
+
+                }
+
+
+                element.dataset.languageLastRendered =
+                    output;
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       INPUT NUMBERS
+    ========================================================= */
+
+    function updateInputNumbers() {
+
+        const ids = [
+
+            "focusInput",
+            "shortBreakInput",
+            "longBreakInput",
+            "longBreakAfterInput",
+            "dailyGoalInput"
+
+        ];
+
+
+        ids.forEach(
+            function (id) {
+
+                const input =
+                    get(id);
+
+
+                if (!input) return;
+
+
+                /*
+                   Never modify an input while the user
+                   is actively typing.
+                */
+
+                if (
+                    document.activeElement === input
+                ) {
+
+                    return;
+
+                }
+
+
+                const raw =
+                    englishNumbers(
+                        input.value
+                    );
+
+
+                if (
+                    currentLanguage === "ar"
+                ) {
+
+                    const output =
+                        arabicNumbers(raw);
+
+
+                    if (
+                        input.value !== output
+                    ) {
+
+                        input.value =
+                            output;
+
+                    }
+
+                } else {
+
+                    if (
+                        input.value !== raw
+                    ) {
+
+                        input.value =
+                            raw;
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       ALARM VOLUME
+    ========================================================= */
+
+    function updateAlarmVolume() {
+
+        const volume =
+            get("alarmVolumeValue");
+
+
+        if (!volume) return;
+
+
+        const raw =
+            englishNumbers(
+                volume.textContent
+            )
+            .replace(
+                "%",
+                ""
+            )
+            .trim();
+
+
+        const number =
+            parseInt(
+                raw,
+                10
+            );
+
+
+        if (isNaN(number)) return;
+
+
+        const output =
+            currentLanguage === "ar"
+                ? arabicNumbers(number) + "%"
+                : number + "%";
+
+
         if (
-            element.textContent !== output
+            volume.textContent !== output
         ) {
 
-            element.textContent =
+            volume.textContent =
                 output;
 
         }
@@ -999,286 +1215,92 @@
 
 
     /* =========================================================
-       TIMER
-    ========================================================= */
-
-    function updateTimerLanguage() {
-
-        const timer =
-            get("timer");
-
-        if (!timer) return;
-
-
-        /*
-           Timer normally contains values such as:
-           25:00
-           05:00
-           00:30
-        */
-
-        const raw =
-            englishNumbers(
-                timer.textContent
-            );
-
-
-        if (currentLanguage === "ar") {
-
-            const output =
-                arabicNumbers(raw);
-
-            if (
-                timer.textContent !== output
-            ) {
-
-                timer.textContent =
-                    output;
-
-            }
-
-        } else {
-
-            if (
-                timer.textContent !== raw
-            ) {
-
-                timer.textContent =
-                    raw;
-
-            }
-
-        }
-
-    }
-
-
-    /* =========================================================
-       UPDATE DYNAMIC VALUES
+       ALL DYNAMIC VALUES
+       
+       Called ONLY when needed.
+       NOT every timer second.
     ========================================================= */
 
     function updateDynamicValues() {
 
-        if (applyingLanguage) return;
+        if (isApplyingLanguage) return;
 
 
-        /* TIMER */
+        updateTimerNumbers();
 
-        updateTimerLanguage();
+        updateDynamicStats();
 
+        updateInputNumbers();
 
-        /* STATS */
-
-        document
-            .querySelectorAll(".stat-value")
-            .forEach(function (element) {
-
-                translateDynamicElement(
-                    element
-                );
-
-            });
-
-
-        /* OTHER KNOWN DYNAMIC VALUES */
-
-        [
-            "focusStat",
-            "goalStat",
-            "sessionsStat",
-            "streakStat",
-            "alarmVolumeValue"
-        ].forEach(function (id) {
-
-            const element =
-                get(id);
-
-            if (!element) return;
-
-            translateDynamicElement(
-                element
-            );
-
-        });
-
-
-        /* =====================================================
-           INPUT NUMBERS
-        ===================================================== */
-
-        [
-            "focusInput",
-            "shortBreakInput",
-            "longBreakInput",
-            "longBreakAfterInput",
-            "dailyGoalInput"
-        ].forEach(function (id) {
-
-            const input =
-                get(id);
-
-            if (!input) return;
-
-
-            /*
-               Never change the input while the user
-               is typing inside it.
-            */
-
-            if (
-                document.activeElement === input
-            ) {
-
-                return;
-
-            }
-
-
-            const raw =
-                englishNumbers(
-                    input.value
-                );
-
-
-            if (
-                currentLanguage === "ar"
-            ) {
-
-                const output =
-                    arabicNumbers(raw);
-
-                if (
-                    input.value !== output
-                ) {
-
-                    input.value =
-                        output;
-
-                }
-
-            } else {
-
-                if (
-                    input.value !== raw
-                ) {
-
-                    input.value =
-                        raw;
-
-                }
-
-            }
-
-        });
-
-
-        /* =====================================================
-           ALARM VOLUME
-        ===================================================== */
-
-        const volume =
-            get("alarmVolumeValue");
-
-
-        if (volume) {
-
-            const raw =
-                englishNumbers(
-                    volume.textContent
-                ).replace(
-                    "%",
-                    ""
-                ).trim();
-
-
-            const number =
-                parseInt(raw, 10);
-
-
-            if (!isNaN(number)) {
-
-                const output =
-                    currentLanguage === "ar"
-                        ? arabicNumbers(number) + "%"
-                        : number + "%";
-
-
-                if (
-                    volume.textContent !== output
-                ) {
-
-                    volume.textContent =
-                        output;
-
-                }
-
-            }
-
-        }
+        updateAlarmVolume();
 
     }
 
 
     /* =========================================================
-       DATA-I18N SUPPORT
-       
-       Future-proof:
-       
-       <span data-i18n="theme"></span>
-       
-       will automatically translate.
+       DATA-I18N
     ========================================================= */
 
     function applyDataTranslations(t) {
 
         document
-            .querySelectorAll("[data-i18n]")
-            .forEach(function (element) {
+            .querySelectorAll(
+                "[data-i18n]"
+            )
+            .forEach(
+                function (element) {
 
-                const key =
-                    element.dataset.i18n;
+                    const key =
+                        element.dataset.i18n;
 
-                if (
-                    key &&
-                    Object.prototype.hasOwnProperty.call(
-                        t,
-                        key
-                    )
-                ) {
 
-                    setText(
-                        element,
-                        t[key]
-                    );
+                    if (
+                        key &&
+                        Object.prototype.hasOwnProperty.call(
+                            t,
+                            key
+                        )
+                    ) {
+
+                        setText(
+                            element,
+                            t[key]
+                        );
+
+                    }
 
                 }
-
-            });
+            );
 
 
         document
-            .querySelectorAll("[data-i18n-placeholder]")
-            .forEach(function (element) {
+            .querySelectorAll(
+                "[data-i18n-placeholder]"
+            )
+            .forEach(
+                function (element) {
 
-                const key =
-                    element.dataset.i18nPlaceholder;
+                    const key =
+                        element.dataset.i18nPlaceholder;
 
-                if (
-                    key &&
-                    Object.prototype.hasOwnProperty.call(
-                        t,
-                        key
-                    )
-                ) {
 
-                    setPlaceholder(
-                        element,
-                        t[key]
-                    );
+                    if (
+                        key &&
+                        Object.prototype.hasOwnProperty.call(
+                            t,
+                            key
+                        )
+                    ) {
+
+                        setPlaceholder(
+                            element,
+                            t[key]
+                        );
+
+                    }
 
                 }
-
-            });
+            );
 
     }
 
@@ -1365,30 +1387,105 @@
 
 
         Object.keys(selected)
-            .forEach(function (id) {
+            .forEach(
+                function (id) {
 
-                const element =
-                    get(id);
-
-                if (!element) return;
+                    const element =
+                        get(id);
 
 
-                element.title =
-                    selected[id];
+                    if (!element) return;
 
-            });
+
+                    element.title =
+                        selected[id];
+
+                }
+            );
 
     }
 
 
     /* =========================================================
-       APPLY LANGUAGE
+       TIMER MODE
     ========================================================= */
 
-    function applyLanguage(lang) {
+    function applyTimerMode(t) {
+
+        const mode =
+            get("modeText");
+
+
+        if (!mode) return;
+
+
+        const modeType =
+            mode.dataset.mode ||
+            "focus";
+
+
+        let text;
+
 
         if (
-            !translations[lang]
+            modeType === "short"
+        ) {
+
+            text =
+                t.shortBreak;
+
+        } else if (
+            modeType === "long"
+        ) {
+
+            text =
+                t.longBreak;
+
+        } else {
+
+            text =
+                t.focus;
+
+        }
+
+
+        setText(
+            mode,
+            text
+        );
+
+    }
+
+
+    /* =========================================================
+       CURRENT TASK
+    ========================================================= */
+
+    function applyCurrentTask(t) {
+
+        const currentTask =
+            get("currentTask");
+
+
+        if (!currentTask) return;
+
+
+        const span =
+            currentTask.querySelector(
+                "span"
+            );
+
+
+        if (!span) return;
+
+
+        /*
+           Do NOT overwrite a real selected task.
+        */
+
+        if (
+            currentTask.dataset.taskSelected ===
+            "true"
         ) {
 
             return;
@@ -1396,396 +1493,185 @@
         }
 
 
-        /*
-           Prevent observer / event conflicts
-        */
-
-        applyingLanguage = true;
-
-
-        const t =
-            translations[lang];
-
-
-        currentLanguage =
-            lang;
-
-
-        /* =====================================================
-           DOCUMENT LANGUAGE
-        ===================================================== */
-
-        document.documentElement.lang =
-            lang;
-
-        document.documentElement.dir =
-            lang === "ar"
-                ? "rtl"
-                : "ltr";
-
-
-        if (document.body) {
-
-            document.body.dir =
-                lang === "ar"
-                    ? "rtl"
-                    : "ltr";
-
-        }
-
-
-        /* =====================================================
-           LOGO
-           
-           IMPORTANT:
-           RakkeZ NEVER becomes "ركز".
-        ===================================================== */
-
         setText(
-            document.querySelector(".logo"),
-            "RakkeZ"
+            span,
+            t.noTask
         );
 
+    }
 
-        /* =====================================================
-           HEADER
-        ===================================================== */
 
-        setText(
-            get("languageLabel"),
-            t.language
-        );
+    /* =========================================================
+       SETTINGS
+    ========================================================= */
+
+    function applySettings(t) {
+
+        const overlay =
+            get("settingsOverlay");
+
+
+        if (!overlay) return;
 
 
         setText(
-            get("blogOpen"),
-            t.blog
+            overlay.querySelector(
+                ".panel-title"
+            ),
+            t.settingsTitle
         );
 
 
-        /* =====================================================
-           TIMER MODE
-        ===================================================== */
-
-        const mode =
-            get("modeText");
+        const sections =
+            overlay.querySelectorAll(
+                ".section-title"
+            );
 
 
-        if (mode) {
+        const sectionTexts = [
 
-            const modeType =
-                mode.dataset.mode ||
-                "focus";
+            t.timer,
 
+            t.dailyGoalTitle,
 
-            if (
-                modeType === "short"
-            ) {
+            t.smartTimer,
 
-                setText(
-                    mode,
-                    t.shortBreak
-                );
+            t.alarm,
 
-            } else if (
-                modeType === "long"
-            ) {
+            t.accounts,
 
-                setText(
-                    mode,
-                    t.longBreak
-                );
+            t.reset
 
-            } else {
-
-                setText(
-                    mode,
-                    t.focus
-                );
-
-            }
-
-        }
+        ];
 
 
-        setText(
-            get("timerLabel"),
-            t.timerLabel
-        );
-
-
-        /* =====================================================
-           CURRENT TASK
-        ===================================================== */
-
-        const currentTask =
-            get("currentTask");
-
-
-        if (currentTask) {
-
-            const span =
-                currentTask.querySelector(
-                    "span"
-                );
-
-
-            if (span) {
-
-                /*
-                   Only translate placeholder,
-                   not an actual selected task.
-                */
+        sections.forEach(
+            function (element, index) {
 
                 if (
-                    !currentTask.dataset.taskSelected
+                    sectionTexts[index]
                 ) {
 
                     setText(
-                        span,
-                        t.noTask
+                        element,
+                        sectionTexts[index]
                     );
 
                 }
 
             }
-
-        }
-
-
-        /* =====================================================
-           MAIN BUTTONS
-        ===================================================== */
-
-        setText(
-            get("startBtn"),
-            t.start
         );
 
 
-        setText(
-            get("focusExit"),
-            t.exitFocus
-        );
-
-
-        /* =====================================================
-           BOTTOM STATS
-        ===================================================== */
-
-        const statTitles =
-            document.querySelectorAll(
-                ".stat-title"
+        const names =
+            overlay.querySelectorAll(
+                ".setting-name"
             );
 
 
-        if (
-            statTitles.length >= 4
-        ) {
+        const nameTexts = [
 
-            setText(
-                statTitles[0],
-                t.focusStat
-            );
+            t.focusDuration,
 
-            setText(
-                statTitles[1],
-                t.dailyGoal
-            );
+            t.shortBreakTitle,
 
-            setText(
-                statTitles[2],
-                t.sessions
-            );
+            t.longBreakTitle,
 
-            setText(
-                statTitles[3],
-                t.streak
-            );
+            t.sessionsBeforeLong,
 
-        }
+            t.dailyFocusGoal,
 
+            t.autoStart,
 
-        /* =====================================================
-           AMBIENT
-        ===================================================== */
+            t.smartTimer,
 
-        setText(
-            get("ambientOpen"),
-            t.ambient
-        );
+            t.completionSound,
+
+            t.alarmVolume,
+
+            t.alarmSound,
+
+            t.testSound
+
+        ];
 
 
-        /* =====================================================
-           SETTINGS
-        ===================================================== */
+        names.forEach(
+            function (element, index) {
 
-        const settingsOverlay =
-            get("settingsOverlay");
+                if (
+                    nameTexts[index]
+                ) {
 
-
-        if (settingsOverlay) {
-
-            setText(
-                settingsOverlay.querySelector(
-                    ".panel-title"
-                ),
-                t.settingsTitle
-            );
-
-
-            const sections =
-                settingsOverlay.querySelectorAll(
-                    ".section-title"
-                );
-
-
-            const sectionTexts = [
-
-                t.timer,
-
-                t.dailyGoalTitle,
-
-                t.smartTimer,
-
-                t.alarm,
-
-                t.accounts,
-
-                t.reset
-
-            ];
-
-
-            sections.forEach(
-                function (element, index) {
-
-                    if (
-                        sectionTexts[index]
-                    ) {
-
-                        setText(
-                            element,
-                            sectionTexts[index]
-                        );
-
-                    }
-
-                }
-            );
-
-
-            /* SETTING NAMES */
-
-            const names =
-                settingsOverlay.querySelectorAll(
-                    ".setting-name"
-                );
-
-
-            const nameTexts = [
-
-                t.focusDuration,
-
-                t.shortBreakTitle,
-
-                t.longBreakTitle,
-
-                t.sessionsBeforeLong,
-
-                t.dailyFocusGoal,
-
-                t.autoStart,
-
-                t.smartTimer,
-
-                t.completionSound,
-
-                t.alarmVolume,
-
-                t.alarmSound,
-
-                t.testSound
-
-            ];
-
-
-            names.forEach(
-                function (element, index) {
-
-                    if (
+                    setText(
+                        element,
                         nameTexts[index]
-                    ) {
-
-                        setText(
-                            element,
-                            nameTexts[index]
-                        );
-
-                    }
+                    );
 
                 }
+
+            }
+        );
+
+
+        const descriptions =
+            overlay.querySelectorAll(
+                ".setting-description"
             );
 
 
-            /* DESCRIPTIONS */
+        const descriptionTexts = [
 
-            const descriptions =
-                settingsOverlay.querySelectorAll(
-                    ".setting-description"
-                );
+            t.focusDescription,
 
+            t.shortBreakDescription,
 
-            const descriptionTexts = [
+            t.longBreakDescription,
 
-                t.focusDescription,
+            "",
 
-                t.shortBreakDescription,
+            t.dailyGoalDescription,
 
-                t.longBreakDescription,
+            t.autoStartDescription,
 
-                "",
+            t.smartTimerDescription,
 
-                t.dailyGoalDescription,
+            t.completionSoundDescription,
 
-                t.autoStartDescription,
+            t.alarmVolumeDescription,
 
-                t.smartTimerDescription,
+            t.alarmSoundDescription,
 
-                t.completionSoundDescription,
+            t.testSoundDescription
 
-                t.alarmVolumeDescription,
-
-                t.alarmSoundDescription,
-
-                t.testSoundDescription
-
-            ];
+        ];
 
 
-            descriptions.forEach(
-                function (element, index) {
+        descriptions.forEach(
+            function (element, index) {
 
-                    if (
+                if (
+                    descriptionTexts[index]
+                ) {
+
+                    setText(
+                        element,
                         descriptionTexts[index]
-                    ) {
-
-                        setText(
-                            element,
-                            descriptionTexts[index]
-                        );
-
-                    }
+                    );
 
                 }
-            );
 
-        }
+            }
+        );
+
+    }
 
 
-        /* =====================================================
-           ALARM
-        ===================================================== */
+    /* =========================================================
+       ALARM
+    ========================================================= */
+
+    function applyAlarm(t) {
 
         setText(
             get("testAlarmText"),
@@ -1793,14 +1679,14 @@
         );
 
 
-        const alarmUpload =
+        const upload =
             get("alarmUploadLabel");
 
 
-        if (alarmUpload) {
+        if (upload) {
 
             setText(
-                alarmUpload.querySelector(
+                upload.querySelector(
                     "strong"
                 ),
                 t.uploadCustom
@@ -1808,7 +1694,7 @@
 
 
             setText(
-                alarmUpload.querySelector(
+                upload.querySelector(
                     "span"
                 ),
                 t.audioFormats
@@ -1817,69 +1703,66 @@
         }
 
 
-        /* =====================================================
-           ALARM SELECT
-        ===================================================== */
-
-        const alarmSelect =
+        const select =
             get("alarmSound");
 
 
-        if (alarmSelect) {
-
-            const optionMap = {
-
-                soft:
-                    t.softBell,
-
-                digital:
-                    t.digital,
-
-                focus:
-                    t.focusSound,
-
-                gentle:
-                    t.gentle,
-
-                deep:
-                    t.deep,
-
-                success:
-                    t.success,
-
-                custom:
-                    t.custom
-
-            };
+        if (!select) return;
 
 
-            Array.from(
-                alarmSelect.options
-            ).forEach(
-                function (option) {
+        const optionMap = {
 
-                    const text =
+            soft:
+                t.softBell,
+
+            digital:
+                t.digital,
+
+            focus:
+                t.focusSound,
+
+            gentle:
+                t.gentle,
+
+            deep:
+                t.deep,
+
+            success:
+                t.success,
+
+            custom:
+                t.custom
+
+        };
+
+
+        Array.from(
+            select.options
+        ).forEach(
+            function (option) {
+
+                if (
+                    optionMap[option.value]
+                ) {
+
+                    option.textContent =
                         optionMap[
                             option.value
                         ];
 
-
-                    if (text) {
-
-                        option.textContent =
-                            text;
-
-                    }
-
                 }
-            );
 
-        }
+            }
+        );
+
+    }
 
 
-        /* =====================================================
-           ACCOUNTS
-        ===================================================== */
+    /* =========================================================
+       ACCOUNTS
+    ========================================================= */
+
+    function applyAccounts(t) {
 
         setText(
             get("spotifyStatus"),
@@ -1908,29 +1791,23 @@
                 }
             );
 
-
-        /* =====================================================
-           RESET
-        ===================================================== */
-
-        setText(
-            get("resetStatsBtn"),
-            t.resetStats
-        );
+    }
 
 
-        /* =====================================================
-           TASKS
-        ===================================================== */
+    /* =========================================================
+       TASKS
+    ========================================================= */
 
-        const tasksOverlay =
+    function applyTasks(t) {
+
+        const overlay =
             get("tasksOverlay");
 
 
-        if (tasksOverlay) {
+        if (overlay) {
 
             setText(
-                tasksOverlay.querySelector(
+                overlay.querySelector(
                     ".panel-title"
                 ),
                 t.tasksTitle
@@ -1938,7 +1815,7 @@
 
 
             setText(
-                tasksOverlay.querySelector(
+                overlay.querySelector(
                     ".panel-subtitle"
                 ),
                 t.tasksSubtitle
@@ -1958,19 +1835,23 @@
             t.noTasks
         );
 
+    }
 
-        /* =====================================================
-           MEDIA
-        ===================================================== */
 
-        const mediaOverlay =
+    /* =========================================================
+       MEDIA
+    ========================================================= */
+
+    function applyMedia(t) {
+
+        const overlay =
             get("mediaOverlay");
 
 
-        if (mediaOverlay) {
+        if (overlay) {
 
             setText(
-                mediaOverlay.querySelector(
+                overlay.querySelector(
                     ".panel-title"
                 ),
                 t.mediaTitle
@@ -2043,16 +1924,16 @@
         );
 
 
-        const mediaFileLabel =
+        const fileLabel =
             document.querySelector(
                 'label[for="mediaFile"]'
             );
 
 
-        if (mediaFileLabel) {
+        if (fileLabel) {
 
             setText(
-                mediaFileLabel.querySelector(
+                fileLabel.querySelector(
                     "strong"
                 ),
                 t.chooseMusic
@@ -2060,7 +1941,7 @@
 
 
             setText(
-                mediaFileLabel.querySelector(
+                fileLabel.querySelector(
                     "span"
                 ),
                 t.mediaFormats
@@ -2074,19 +1955,23 @@
             t.nothingPlaying
         );
 
+    }
 
-        /* =====================================================
-           AMBIENT OVERLAY
-        ===================================================== */
 
-        const ambientOverlay =
+    /* =========================================================
+       AMBIENT
+    ========================================================= */
+
+    function applyAmbient(t) {
+
+        const overlay =
             get("ambientOverlay");
 
 
-        if (ambientOverlay) {
+        if (overlay) {
 
             setText(
-                ambientOverlay.querySelector(
+                overlay.querySelector(
                     ".panel-title"
                 ),
                 t.ambientTitle
@@ -2094,7 +1979,7 @@
 
 
             setText(
-                ambientOverlay.querySelector(
+                overlay.querySelector(
                     ".panel-subtitle"
                 ),
                 t.ambientSubtitle
@@ -2103,34 +1988,38 @@
         }
 
 
-        const backgroundLabel =
+        const label =
             document.querySelector(
                 'label[for="bgFile"]'
             );
 
 
-        if (backgroundLabel) {
+        if (label) {
 
             setText(
-                backgroundLabel,
+                label,
                 t.uploadBackground
             );
 
         }
 
+    }
 
-        /* =====================================================
-           RESET CONFIRM
-        ===================================================== */
 
-        const confirmOverlay =
+    /* =========================================================
+       RESET CONFIRM
+    ========================================================= */
+
+    function applyReset(t) {
+
+        const overlay =
             get("confirmOverlay");
 
 
-        if (confirmOverlay) {
+        if (overlay) {
 
             setText(
-                confirmOverlay.querySelector(
+                overlay.querySelector(
                     ".panel-title"
                 ),
                 t.resetEverything
@@ -2138,7 +2027,7 @@
 
 
             setText(
-                confirmOverlay.querySelector(
+                overlay.querySelector(
                     ".confirm-description"
                 ),
                 t.resetDescription
@@ -2167,6 +2056,218 @@
 
                 }
             );
+
+    }
+
+
+    /* =========================================================
+       APPLY LANGUAGE
+    ========================================================= */
+
+    function applyLanguage(lang) {
+
+        if (
+            !translations[lang]
+        ) {
+
+            return;
+
+        }
+
+
+        if (isApplyingLanguage) {
+
+            return;
+
+        }
+
+
+        isApplyingLanguage = true;
+
+
+        const t =
+            translations[lang];
+
+
+        currentLanguage =
+            lang;
+
+
+        /* =====================================================
+           HTML DIRECTION
+        ===================================================== */
+
+        document.documentElement.lang =
+            lang;
+
+
+        document.documentElement.dir =
+            lang === "ar"
+                ? "rtl"
+                : "ltr";
+
+
+        if (document.body) {
+
+            document.body.dir =
+                lang === "ar"
+                    ? "rtl"
+                    : "ltr";
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        setText(
+            get("languageLabel"),
+            t.language
+        );
+
+
+        setText(
+            get("blogOpen"),
+            t.blog
+        );
+
+
+        /* =====================================================
+           TIMER
+        ===================================================== */
+
+        applyTimerMode(t);
+
+
+        setText(
+            get("timerLabel"),
+            t.timerLabel
+        );
+
+
+        applyCurrentTask(t);
+
+
+        setText(
+            get("startBtn"),
+            t.start
+        );
+
+
+        setText(
+            get("focusExit"),
+            t.exitFocus
+        );
+
+
+        /* =====================================================
+           MAIN STATS
+        ===================================================== */
+
+        const statTitles =
+            document.querySelectorAll(
+                ".stat-title"
+            );
+
+
+        if (
+            statTitles.length >= 4
+        ) {
+
+            setText(
+                statTitles[0],
+                t.focusStat
+            );
+
+
+            setText(
+                statTitles[1],
+                t.dailyGoal
+            );
+
+
+            setText(
+                statTitles[2],
+                t.sessions
+            );
+
+
+            setText(
+                statTitles[3],
+                t.streak
+            );
+
+        }
+
+
+        /* =====================================================
+           AMBIENT BUTTON
+        ===================================================== */
+
+        setText(
+            get("ambientOpen"),
+            t.ambient
+        );
+
+
+        /* =====================================================
+           SETTINGS
+        ===================================================== */
+
+        applySettings(t);
+
+
+        /* =====================================================
+           ALARM
+        ===================================================== */
+
+        applyAlarm(t);
+
+
+        /* =====================================================
+           ACCOUNTS
+        ===================================================== */
+
+        applyAccounts(t);
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        setText(
+            get("resetStatsBtn"),
+            t.resetStats
+        );
+
+
+        /* =====================================================
+           TASKS
+        ===================================================== */
+
+        applyTasks(t);
+
+
+        /* =====================================================
+           MEDIA
+        ===================================================== */
+
+        applyMedia(t);
+
+
+        /* =====================================================
+           AMBIENT
+        ===================================================== */
+
+        applyAmbient(t);
+
+
+        /* =====================================================
+           RESET CONFIRM
+        ===================================================== */
+
+        applyReset(t);
 
 
         /* =====================================================
@@ -2208,22 +2309,29 @@
         ===================================================== */
 
         localStorage.setItem(
+            "language",
+            lang
+        );
+
+
+        localStorage.setItem(
             "rakkez_language",
             lang
         );
 
 
         /*
-           Release lock BEFORE dynamic update.
-           This prevents observer recursion.
+           IMPORTANT:
+
+           Do NOT run a MutationObserver here.
+           Do NOT watch the timer here.
+
+           We only update dynamic values once after
+           the language has completely changed.
         */
 
-        applyingLanguage = false;
+        isApplyingLanguage = false;
 
-
-        /* =====================================================
-           UPDATE NUMBERS
-        ===================================================== */
 
         updateDynamicValues();
 
@@ -2236,7 +2344,7 @@
 
     function toggleLanguage() {
 
-        if (applyingLanguage) {
+        if (isApplyingLanguage) {
 
             return;
 
@@ -2257,152 +2365,12 @@
 
 
     /* =========================================================
-       SAFE DYNAMIC OBSERVER
-       
-       IMPORTANT:
-       The old version created an infinite loop because
-       updateDynamicValues() changed the same elements that
-       MutationObserver was watching.
-
-       This version:
-       - uses a lock
-       - debounces updates
-       - ignores language application
-       - does not immediately recurse
-    ========================================================= */
-
-    function scheduleDynamicUpdate() {
-
-        if (applyingLanguage) {
-
-            return;
-
-        }
-
-
-        if (observerTimer) {
-
-            clearTimeout(
-                observerTimer
-            );
-
-        }
-
-
-        observerTimer =
-            setTimeout(
-                function () {
-
-                    observerTimer = null;
-
-
-                    if (
-                        !applyingLanguage
-                    ) {
-
-                        updateDynamicValues();
-
-                    }
-
-                },
-                50
-            );
-
-    }
-
-
-    function watchDynamicValues() {
-
-        if (observerStarted) {
-
-            return;
-
-        }
-
-
-        observerStarted = true;
-
-
-        const targets = [
-
-            get("timer"),
-
-            get("focusStat"),
-
-            get("goalStat"),
-
-            get("sessionsStat"),
-
-            get("streakStat"),
-
-            get("alarmVolumeValue")
-
-        ];
-
-
-        targets.forEach(
-            function (element) {
-
-                if (!element) return;
-
-
-                const observer =
-                    new MutationObserver(
-                        function () {
-
-                            if (
-                                applyingLanguage
-                            ) {
-
-                                return;
-
-                            }
-
-
-                            scheduleDynamicUpdate();
-
-                        }
-                    );
-
-
-                observer.observe(
-                    element,
-                    {
-
-                        childList: true,
-
-                        characterData: true,
-
-                        subtree: true
-
-                    }
-                );
-
-
-                /*
-                   Store observer so other scripts
-                   can access it if necessary.
-                */
-
-                element.__rakkezLanguageObserver =
-                    observer;
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
        INPUT NUMBER HANDLING
-       
-       Converts Arabic numbers back to English BEFORE
-       the actual application reads the values.
     ========================================================= */
 
     function setupInputNumberHandling() {
 
-        [
+        const ids = [
 
             "focusInput",
 
@@ -2414,7 +2382,10 @@
 
             "dailyGoalInput"
 
-        ].forEach(
+        ];
+
+
+        ids.forEach(
             function (id) {
 
                 const input =
@@ -2425,7 +2396,7 @@
 
 
                 if (
-                    input.dataset.numberLanguageReady ===
+                    input.dataset.languageInputReady ===
                     "true"
                 ) {
 
@@ -2434,9 +2405,13 @@
                 }
 
 
-                input.dataset.numberLanguageReady =
+                input.dataset.languageInputReady =
                     "true";
 
+
+                /* =================================================
+                   FOCUS
+                ================================================= */
 
                 input.addEventListener(
                     "focus",
@@ -2451,17 +2426,15 @@
                 );
 
 
+                /* =================================================
+                   INPUT
+                ================================================= */
+
                 input.addEventListener(
                     "input",
                     function () {
 
-                        /*
-                           Keep internal value English.
-                           Display language conversion happens
-                           when the input loses focus.
-                        */
-
-                        input.dataset.originalNumber =
+                        input.dataset.rawNumber =
                             englishNumbers(
                                 input.value
                             );
@@ -2469,6 +2442,10 @@
                     }
                 );
 
+
+                /* =================================================
+                   BLUR
+                ================================================= */
 
                 input.addEventListener(
                     "blur",
@@ -2480,7 +2457,7 @@
                             );
 
 
-                        input.dataset.originalNumber =
+                        input.dataset.rawNumber =
                             raw;
 
 
@@ -2510,6 +2487,37 @@
 
 
     /* =========================================================
+       DYNAMIC TIMER SUPPORT
+       
+       IMPORTANT:
+       
+       We do NOT use MutationObserver on the timer.
+       
+       The timer changes every second and should never trigger
+       a full language re-render.
+       
+       Instead, we expose a tiny safe function that the timer
+       can call after rendering its value if needed.
+    ========================================================= */
+
+    window.updateLanguageNumbers =
+        function () {
+
+            if (
+                isApplyingLanguage
+            ) {
+
+                return;
+
+            }
+
+
+            updateTimerNumbers();
+
+    };
+
+
+    /* =========================================================
        INIT
     ========================================================= */
 
@@ -2522,7 +2530,7 @@
         if (!button) {
 
             console.error(
-                "RakkeZ: languageToggle was not found."
+                "Language toggle was not found."
             );
 
             return;
@@ -2530,19 +2538,7 @@
         }
 
 
-        /* =====================================================
-           PREVENT DUPLICATE EVENT
-        ===================================================== */
-
-        if (
-            button.dataset.languageReady ===
-            "true"
-        ) {
-
-            /*
-               Still apply language in case the script
-               was loaded after another initialization.
-            */
+        if (languageInitialized) {
 
             applyLanguage(
                 currentLanguage
@@ -2553,12 +2549,11 @@
         }
 
 
-        button.dataset.languageReady =
-            "true";
+        languageInitialized = true;
 
 
         /* =====================================================
-           CLICK
+           BUTTON
         ===================================================== */
 
         button.addEventListener(
@@ -2568,7 +2563,6 @@
                 event.preventDefault();
 
                 event.stopPropagation();
-
 
                 toggleLanguage();
 
@@ -2584,19 +2578,12 @@
 
 
         /* =====================================================
-           APPLY INITIAL LANGUAGE
+           INITIAL LANGUAGE
         ===================================================== */
 
         applyLanguage(
             currentLanguage
         );
-
-
-        /* =====================================================
-           WATCH DYNAMIC VALUES
-        ===================================================== */
-
-        watchDynamicValues();
 
     }
 
