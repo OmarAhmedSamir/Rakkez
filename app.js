@@ -4546,7 +4546,11 @@ if ($("mediaOpen")) {
 }
 
 
-if ($("Open")) {
+/* =========================================================
+   AMBIENT PANEL
+========================================================= */
+
+if ($("ambientOpen")) {
 
     $("ambientOpen").onclick =
         () => {
@@ -4561,66 +4565,6 @@ if ($("Open")) {
         };
 
 }
-
-
-document
-    .querySelectorAll(
-        "[data-close]"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const target =
-                        $(button.dataset.close);
-
-
-                    if (target) {
-
-                        target.classList.remove(
-                            "show"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-document
-    .querySelectorAll(
-        ".overlay"
-    )
-    .forEach(
-        overlay => {
-
-            overlay.addEventListener(
-                "click",
-                e => {
-
-                    if (
-                        e.target ===
-                        overlay
-                    ) {
-
-                        overlay.classList.remove(
-                            "show"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
 
 /* =========================================================
    THEME
