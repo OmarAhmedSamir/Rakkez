@@ -1,5 +1,5 @@
 /* =========================================================
-   RAKKEZ - LANGUAGE SYSTEM
+   RAKKEZ V2 - LANGUAGE SYSTEM
 ========================================================= */
 
 (function () {
@@ -15,7 +15,6 @@
         en: {
 
             language: "العربية",
-            logo: "RakkeZ",
 
             blog: "Blog",
 
@@ -23,125 +22,223 @@
             shortBreak: "SHORT BREAK",
             longBreak: "LONG BREAK",
 
-            timerLabel: "Stay focused. One thing at a time.",
-            noTask: "NO TASK SELECTED",
+            timerLabel:
+                "Stay focused. One thing at a time.",
+
+            noTask:
+                "NO TASK SELECTED",
 
             start: "START",
-            focusOnly: "Focus Only",
-            theme: "Theme",
-            settings: "Settings",
-            media: "Media",
-            tasks: "Tasks",
 
-            focusStat: "Focus",
-            dailyGoal: "Daily Goal",
-            sessions: "Sessions",
-            streak: "Streak",
+            focusOnly:
+                "Focus Only",
 
-            ambient: "✦ AMBIENT",
-            exitFocus: "EXIT FOCUS",
+            theme:
+                "Theme",
 
-            settingsTitle: "Settings",
-            timer: "Timer",
+            settings:
+                "Settings",
 
-            focusDuration: "Focus Duration",
-            focusDescription: "Minutes for every focus session",
+            media:
+                "Media",
 
-            shortBreakTitle: "Short Break",
-            shortBreakDescription: "Break between sessions",
+            tasks:
+                "Tasks",
 
-            longBreakTitle: "Long Break",
-            longBreakDescription: "Longer break",
+            focusStat:
+                "Focus",
+
+            dailyGoal:
+                "Daily Goal",
+
+            sessions:
+                "Sessions",
+
+            streak:
+                "Streak",
+
+            ambient:
+                "✦ AMBIENT",
+
+            exitFocus:
+                "EXIT FOCUS",
+
+            settingsTitle:
+                "Settings",
+
+            timer:
+                "Timer",
+
+            focusDuration:
+                "Focus Duration",
+
+            focusDescription:
+                "Minutes for every focus session",
+
+            shortBreakTitle:
+                "Short Break",
+
+            shortBreakDescription:
+                "Break between sessions",
+
+            longBreakTitle:
+                "Long Break",
+
+            longBreakDescription:
+                "Longer break",
 
             sessionsBeforeLong:
                 "Sessions Before Long Break",
 
-            dailyGoalTitle: "Daily Goal",
-            dailyFocusGoal: "Daily Focus Goal",
+            dailyGoalTitle:
+                "Daily Goal",
+
+            dailyFocusGoal:
+                "Daily Focus Goal",
+
             dailyGoalDescription:
                 "Your target focus time",
 
-            minutes: "minutes",
+            minutes:
+                "minutes",
 
-            smartTimer: "Smart Timer",
+            smartTimer:
+                "Smart Timer",
 
-            autoStart: "Auto Start",
+            autoStart:
+                "Auto Start",
+
             autoStartDescription:
                 "Automatically start next phase",
 
             smartTimerDescription:
                 "Restore timer after leaving",
 
-            alarm: "Alarm",
+            alarm:
+                "Alarm",
 
-            completionSound: "Completion Sound",
+            completionSound:
+                "Completion Sound",
+
             completionSoundDescription:
                 "Sound when a phase finishes",
 
-            alarmVolume: "Alarm Volume",
+            alarmVolume:
+                "Alarm Volume",
+
             alarmVolumeDescription:
                 "Notification volume",
 
-            alarmSound: "Alarm Sound",
+            alarmSound:
+                "Alarm Sound",
+
             alarmSoundDescription:
                 "Choose your completion sound",
 
-            softBell: "Soft Bell",
-            digital: "Digital",
-            focusSound: "Focus",
-            gentle: "Gentle",
-            deep: "Deep",
-            success: "Success",
-            custom: "Custom",
+            softBell:
+                "Soft Bell",
 
-            testSound: "Test Sound",
+            digital:
+                "Digital",
+
+            focusSound:
+                "Focus",
+
+            gentle:
+                "Gentle",
+
+            deep:
+                "Deep",
+
+            success:
+                "Success",
+
+            custom:
+                "Custom",
+
+            testSound:
+                "Test Sound",
+
             testSoundDescription:
                 "Preview the selected alarm",
 
-            test: "Test",
+            test:
+                "Test",
 
-            uploadCustom: "+ Upload Custom Alarm",
-            audioFormats: "MP3 / WAV / M4A",
+            uploadCustom:
+                "+ Upload Custom Alarm",
 
-            accounts: "Accounts",
-            spotify: "Spotify",
-            googleYoutube: "Google / YouTube",
-            notConnected: "Not connected",
-            connect: "Connect",
+            audioFormats:
+                "MP3 / WAV / M4A",
 
-            reset: "Reset",
-            resetStats: "Reset All Statistics",
+            accounts:
+                "Accounts",
 
-            tasksTitle: "Tasks",
-            tasksSubtitle: "What are you focusing on?",
-            taskPlaceholder: "Add a task...",
-            noTasks: "No tasks yet.",
-            addSomething:
-                "Add something you want to accomplish.",
+            spotify:
+                "Spotify",
 
-            mediaTitle: "Media",
-            youtube: "YouTube",
-            spotifyTab: "Spotify",
-            local: "Local",
+            googleYoutube:
+                "Google / YouTube",
+
+            notConnected:
+                "Not connected",
+
+            connect:
+                "Connect",
+
+            reset:
+                "Reset",
+
+            resetStats:
+                "Reset All Statistics",
+
+            tasksTitle:
+                "Tasks",
+
+            tasksSubtitle:
+                "What are you focusing on?",
+
+            taskPlaceholder:
+                "Add a task...",
+
+            noTasks:
+                "No tasks yet.",
+
+            mediaTitle:
+                "Media",
+
+            youtube:
+                "YouTube",
+
+            spotifyTab:
+                "Spotify",
+
+            local:
+                "Local",
 
             youtubePlaceholder:
                 "Paste a YouTube URL...",
 
-            playYoutube: "Play YouTube",
+            playYoutube:
+                "Play YouTube",
 
             spotifyPlaceholder:
                 "Paste Spotify track / playlist / album...",
 
-            openSpotify: "Open Spotify Player",
+            openSpotify:
+                "Open Spotify Player",
 
-            chooseMusic: "Choose Music or Video",
+            chooseMusic:
+                "Choose Music or Video",
 
             mediaFormats:
                 "MP3, WAV, M4A, MP4, WebM",
 
-            nothingPlaying: "Nothing playing",
+            nothingPlaying:
+                "Nothing playing",
 
-            ambientTitle: "Ambient",
+            ambientTitle:
+                "Ambient",
 
             ambientSubtitle:
                 "Choose your atmosphere.",
@@ -155,9 +252,11 @@
             resetDescription:
                 "This will remove your sessions, focus time, streak and tasks. This cannot be undone.",
 
-            cancel: "Cancel",
+            cancel:
+                "Cancel",
 
-            resetButton: "Reset"
+            resetButton:
+                "Reset"
 
         },
 
@@ -165,13 +264,16 @@
         ar: {
 
             language: "English",
-            logo: "ركز",
 
-            blog: "المدونة",
+            blog: "Blog",
 
             focus: "التركيز",
-            shortBreak: "استراحة قصيرة",
-            longBreak: "استراحة طويلة",
+
+            shortBreak:
+                "استراحة قصيرة",
+
+            longBreak:
+                "استراحة طويلة",
 
             timerLabel:
                 "ركز على شيء واحد فقط.",
@@ -179,7 +281,8 @@
             noTask:
                 "لم يتم اختيار مهمة",
 
-            start: "ابدأ",
+            start:
+                "ابدأ",
 
             focusOnly:
                 "وضع التركيز",
@@ -355,9 +458,6 @@
             noTasks:
                 "لا توجد مهام بعد.",
 
-            addSomething:
-                "أضف شيئًا تريد إنجازه.",
-
             mediaTitle:
                 "الوسائط",
 
@@ -429,27 +529,29 @@
        HELPERS
     ========================================================= */
 
-    function get(id) {
-
+    function $(id) {
         return document.getElementById(id);
+    }
+
+
+    function text(id, value) {
+
+        const element = $(id);
+
+        if (element) {
+            element.textContent = value;
+        }
 
     }
 
 
-    function setText(element, text) {
+    function placeholder(id, value) {
 
-        if (!element) return;
+        const element = $(id);
 
-        element.textContent = text;
-
-    }
-
-
-    function setPlaceholder(element, text) {
-
-        if (!element) return;
-
-        element.placeholder = text;
+        if (element) {
+            element.placeholder = value;
+        }
 
     }
 
@@ -465,7 +567,9 @@
         if (!t) return;
 
 
-        /* LANGUAGE */
+        /* -----------------------------------------------------
+           HTML DIRECTION
+        ----------------------------------------------------- */
 
         document.documentElement.lang = lang;
 
@@ -477,65 +581,61 @@
             lang === "ar" ? "rtl" : "ltr";
 
 
-        /* HEADER */
+        /* -----------------------------------------------------
+           HEADER
+        ----------------------------------------------------- */
 
-        setText(
-            get("languageLabel"),
-            t.language
-        );
+        text("languageLabel", t.language);
+
+        const blog =
+            document.querySelector(".blog-btn");
+
+        if (blog) {
+            blog.textContent = t.blog;
+        }
 
 
-        setText(
-            document.querySelector(".blog-btn"),
-            t.blog
-        );
-
-
-        /* TIMER */
+        /* -----------------------------------------------------
+           TIMER
+        ----------------------------------------------------- */
 
         const mode =
-            get("modeText");
+            $("modeText");
 
         if (mode) {
 
-            const current =
-                mode.dataset.mode ||
-                "focus";
+            if (!mode.dataset.mode) {
+                mode.dataset.mode = "focus";
+            }
 
-            if (current === "short") {
+            if (mode.dataset.mode === "short") {
 
-                setText(
-                    mode,
-                    t.shortBreak
-                );
+                mode.textContent =
+                    t.shortBreak;
 
-            } else if (current === "long") {
+            } else if (mode.dataset.mode === "long") {
 
-                setText(
-                    mode,
-                    t.longBreak
-                );
+                mode.textContent =
+                    t.longBreak;
 
             } else {
 
-                setText(
-                    mode,
-                    t.focus
-                );
+                mode.textContent =
+                    t.focus;
 
             }
 
         }
 
 
-        setText(
-            get("timerLabel"),
+        text(
+            "timerLabel",
             t.timerLabel
         );
 
 
         const currentTask =
-            get("currentTask");
+            $("currentTask");
 
         if (currentTask) {
 
@@ -543,79 +643,60 @@
                 currentTask.querySelector("span");
 
             if (span) {
-
-                setText(
-                    span,
-                    t.noTask
-                );
-
+                span.textContent = t.noTask;
             }
 
         }
 
 
-        setText(
-            get("startBtn"),
+        text(
+            "startBtn",
             t.start
         );
 
 
-        setText(
-            get("focusExit"),
+        text(
+            "focusExit",
             t.exitFocus
         );
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            BOTTOM STATS
-        ===================================================== */
+        ----------------------------------------------------- */
 
         const statTitles =
             document.querySelectorAll(".stat-title");
 
-
         if (statTitles.length >= 4) {
 
-            setText(
-                statTitles[0],
-                t.focusStat
-            );
+            statTitles[0].textContent =
+                t.focusStat;
 
-            setText(
-                statTitles[1],
-                t.dailyGoal
-            );
+            statTitles[1].textContent =
+                t.dailyGoal;
 
-            setText(
-                statTitles[2],
-                t.sessions
-            );
+            statTitles[2].textContent =
+                t.sessions;
 
-            setText(
-                statTitles[3],
-                t.streak
-            );
+            statTitles[3].textContent =
+                t.streak;
 
         }
 
 
-        /* =====================================================
-           MAIN BUTTONS
-        ===================================================== */
-
-        setText(
-            get("ambientOpen"),
+        text(
+            "ambientOpen",
             t.ambient
         );
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            SETTINGS
-        ===================================================== */
+        ----------------------------------------------------- */
 
         const settingsOverlay =
-            get("settingsOverlay");
-
+            $("settingsOverlay");
 
         if (settingsOverlay) {
 
@@ -624,17 +705,16 @@
                     ".panel-title"
                 );
 
-            setText(
-                title,
-                t.settingsTitle
-            );
+            if (title) {
+                title.textContent =
+                    t.settingsTitle;
+            }
 
 
             const sections =
                 settingsOverlay.querySelectorAll(
                     ".section-title"
                 );
-
 
             const sectionTexts = [
 
@@ -646,16 +726,13 @@
 
             ];
 
-
             sections.forEach(
                 (element, index) => {
 
                     if (sectionTexts[index]) {
 
-                        setText(
-                            element,
-                            sectionTexts[index]
-                        );
+                        element.textContent =
+                            sectionTexts[index];
 
                     }
 
@@ -663,13 +740,10 @@
             );
 
 
-            /* SETTING NAMES */
-
             const names =
                 settingsOverlay.querySelectorAll(
                     ".setting-name"
                 );
-
 
             const nameTexts = [
 
@@ -687,16 +761,13 @@
 
             ];
 
-
             names.forEach(
                 (element, index) => {
 
                     if (nameTexts[index]) {
 
-                        setText(
-                            element,
-                            nameTexts[index]
-                        );
+                        element.textContent =
+                            nameTexts[index];
 
                     }
 
@@ -704,13 +775,10 @@
             );
 
 
-            /* DESCRIPTIONS */
-
             const descriptions =
                 settingsOverlay.querySelectorAll(
                     ".setting-description"
                 );
-
 
             const descriptionTexts = [
 
@@ -728,16 +796,13 @@
 
             ];
 
-
             descriptions.forEach(
                 (element, index) => {
 
                     if (descriptionTexts[index]) {
 
-                        setText(
-                            element,
-                            descriptionTexts[index]
-                        );
+                        element.textContent =
+                            descriptionTexts[index];
 
                     }
 
@@ -747,48 +812,51 @@
         }
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            ALARM
-        ===================================================== */
+        ----------------------------------------------------- */
 
-        setText(
-            get("testAlarmText"),
+        text(
+            "testAlarmText",
             t.test
         );
 
 
-        const alarmUpload =
-            get("alarmUploadLabel");
+        const upload =
+            $("alarmUploadLabel");
 
+        if (upload) {
 
-        if (alarmUpload) {
+            const strong =
+                upload.querySelector("strong");
 
-            setText(
-                alarmUpload.querySelector("strong"),
-                t.uploadCustom
-            );
+            const span =
+                upload.querySelector("span");
 
+            if (strong) {
+                strong.textContent =
+                    t.uploadCustom;
+            }
 
-            setText(
-                alarmUpload.querySelector("span"),
-                t.audioFormats
-            );
+            if (span) {
+                span.textContent =
+                    t.audioFormats;
+            }
 
         }
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            ACCOUNTS
-        ===================================================== */
+        ----------------------------------------------------- */
 
-        setText(
-            get("spotifyStatus"),
+        text(
+            "spotifyStatus",
             t.notConnected
         );
 
-
-        setText(
-            get("googleStatus"),
+        text(
+            "googleStatus",
             t.notConnected
         );
 
@@ -797,138 +865,129 @@
             .querySelectorAll(".account-button")
             .forEach(button => {
 
-                setText(
-                    button,
-                    t.connect
-                );
+                button.textContent =
+                    t.connect;
 
             });
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            RESET
-        ===================================================== */
+        ----------------------------------------------------- */
 
-        setText(
-            get("resetStatsBtn"),
+        text(
+            "resetStatsBtn",
             t.resetStats
         );
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            TASKS
-        ===================================================== */
+        ----------------------------------------------------- */
 
         const tasksOverlay =
-            get("tasksOverlay");
-
+            $("tasksOverlay");
 
         if (tasksOverlay) {
 
-            setText(
+            const title =
                 tasksOverlay.querySelector(
                     ".panel-title"
-                ),
-                t.tasksTitle
-            );
+                );
 
-
-            setText(
+            const subtitle =
                 tasksOverlay.querySelector(
                     ".panel-subtitle"
-                ),
-                t.tasksSubtitle
-            );
+                );
+
+            if (title) {
+                title.textContent =
+                    t.tasksTitle;
+            }
+
+            if (subtitle) {
+                subtitle.textContent =
+                    t.tasksSubtitle;
+            }
 
         }
 
 
-        setPlaceholder(
-            get("taskInput"),
+        placeholder(
+            "taskInput",
             t.taskPlaceholder
         );
 
 
-        setText(
-            get("taskEmpty"),
+        text(
+            "taskEmpty",
             t.noTasks
         );
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            MEDIA
-        ===================================================== */
+        ----------------------------------------------------- */
 
         const mediaOverlay =
-            get("mediaOverlay");
-
+            $("mediaOverlay");
 
         if (mediaOverlay) {
 
-            setText(
+            const title =
                 mediaOverlay.querySelector(
                     ".panel-title"
-                ),
-                t.mediaTitle
-            );
+                );
+
+            if (title) {
+                title.textContent =
+                    t.mediaTitle;
+            }
 
         }
 
 
-        document
-            .querySelectorAll(".media-tab")
-            .forEach((tab, index) => {
+        const mediaTabs =
+            document.querySelectorAll(
+                ".media-tab"
+            );
 
-                if (index === 0) {
+        if (mediaTabs[0]) {
+            mediaTabs[0].textContent =
+                t.youtube;
+        }
 
-                    setText(
-                        tab,
-                        t.youtube
-                    );
+        if (mediaTabs[1]) {
+            mediaTabs[1].textContent =
+                t.spotifyTab;
+        }
 
-                }
-
-                if (index === 1) {
-
-                    setText(
-                        tab,
-                        t.spotifyTab
-                    );
-
-                }
-
-                if (index === 2) {
-
-                    setText(
-                        tab,
-                        t.local
-                    );
-
-                }
-
-            });
+        if (mediaTabs[2]) {
+            mediaTabs[2].textContent =
+                t.local;
+        }
 
 
-        setPlaceholder(
-            get("youtubeInput"),
+        placeholder(
+            "youtubeInput",
             t.youtubePlaceholder
         );
 
 
-        setText(
-            get("youtubePlay"),
+        text(
+            "youtubePlay",
             t.playYoutube
         );
 
 
-        setPlaceholder(
-            get("spotifyInput"),
+        placeholder(
+            "spotifyInput",
             t.spotifyPlaceholder
         );
 
 
-        setText(
-            get("spotifyPlay"),
+        text(
+            "spotifyPlay",
             t.openSpotify
         );
 
@@ -938,99 +997,114 @@
                 'label[for="mediaFile"]'
             );
 
-
         if (mediaFileLabel) {
 
-            setText(
+            const strong =
                 mediaFileLabel.querySelector(
                     "strong"
-                ),
-                t.chooseMusic
-            );
+                );
 
-
-            setText(
+            const span =
                 mediaFileLabel.querySelector(
                     "span"
-                ),
-                t.mediaFormats
-            );
+                );
+
+            if (strong) {
+                strong.textContent =
+                    t.chooseMusic;
+            }
+
+            if (span) {
+                span.textContent =
+                    t.mediaFormats;
+            }
 
         }
 
 
-        setText(
-            get("mediaName"),
+        text(
+            "mediaName",
             t.nothingPlaying
         );
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            AMBIENT
-        ===================================================== */
+        ----------------------------------------------------- */
 
         const ambientOverlay =
-            get("ambientOverlay");
-
+            $("ambientOverlay");
 
         if (ambientOverlay) {
 
-            setText(
+            const title =
                 ambientOverlay.querySelector(
                     ".panel-title"
-                ),
-                t.ambientTitle
-            );
+                );
 
-
-            setText(
+            const subtitle =
                 ambientOverlay.querySelector(
                     ".panel-subtitle"
-                ),
-                t.ambientSubtitle
-            );
+                );
+
+            if (title) {
+                title.textContent =
+                    t.ambientTitle;
+            }
+
+            if (subtitle) {
+                subtitle.textContent =
+                    t.ambientSubtitle;
+            }
 
         }
 
 
-        setText(
+        const bgLabel =
             document.querySelector(
                 'label[for="bgFile"]'
-            ),
-            t.uploadBackground
-        );
+            );
+
+        if (bgLabel) {
+            bgLabel.textContent =
+                t.uploadBackground;
+        }
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            RESET CONFIRM
-        ===================================================== */
+        ----------------------------------------------------- */
 
         const confirmOverlay =
-            get("confirmOverlay");
-
+            $("confirmOverlay");
 
         if (confirmOverlay) {
 
-            setText(
+            const title =
                 confirmOverlay.querySelector(
                     ".panel-title"
-                ),
-                t.resetEverything
-            );
+                );
 
-
-            setText(
+            const description =
                 confirmOverlay.querySelector(
                     ".confirm-description"
-                ),
-                t.resetDescription
-            );
+                );
+
+            if (title) {
+                title.textContent =
+                    t.resetEverything;
+            }
+
+            if (description) {
+                description.textContent =
+                    t.resetDescription;
+            }
 
         }
 
 
-        setText(
-            get("confirmReset"),
+        text(
+            "confirmReset",
             t.resetButton
         );
 
@@ -1041,34 +1115,30 @@
             )
             .forEach(button => {
 
-                setText(
-                    button,
-                    t.cancel
-                );
+                button.textContent =
+                    t.cancel;
 
             });
 
 
-        /* =====================================================
-           SAVE LANGUAGE
-        ===================================================== */
+        /* -----------------------------------------------------
+           SAVE
+        ----------------------------------------------------- */
 
         localStorage.setItem(
             "rakkez_language",
             lang
         );
 
-
         currentLanguage = lang;
 
 
-        /* =====================================================
+        /* -----------------------------------------------------
            LANGUAGE BUTTON
-        ===================================================== */
+        ----------------------------------------------------- */
 
         const languageButton =
-            get("languageToggle");
-
+            $("languageToggle");
 
         if (languageButton) {
 
@@ -1090,12 +1160,12 @@
 
     function toggleLanguage() {
 
-        const next =
+        const nextLanguage =
             currentLanguage === "en"
                 ? "ar"
                 : "en";
 
-        applyLanguage(next);
+        applyLanguage(nextLanguage);
 
     }
 
@@ -1107,13 +1177,12 @@
     function initLanguage() {
 
         const button =
-            get("languageToggle");
-
+            $("languageToggle");
 
         if (!button) {
 
             console.error(
-                "RakkeZ: languageToggle was not found."
+                "RakkeZ: languageToggle NOT FOUND"
             );
 
             return;
@@ -1121,27 +1190,11 @@
         }
 
 
-        /* Prevent duplicate listeners */
-
-        if (
-            button.dataset.languageReady === "true"
-        ) {
-
-            return;
-
-        }
-
-
-        button.dataset.languageReady = "true";
-
-
         button.addEventListener(
             "click",
             function (event) {
 
                 event.preventDefault();
-
-                event.stopPropagation();
 
                 toggleLanguage();
 
