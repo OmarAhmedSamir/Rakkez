@@ -37,9 +37,12 @@ padding:0;
 
 html,
 body{
+
 width:100%;
 height:100%;
+
 overflow:hidden;
+
 }
 
 
@@ -57,16 +60,26 @@ color:var(--text);
 button,
 input,
 select{
+
 font:inherit;
+
 }
 
 
 button{
+
 border:0;
+
 cursor:pointer;
+
 color:inherit;
+
 }
 
+
+/* =====================================================
+APP
+===================================================== */
 
 .app{
 
@@ -103,7 +116,9 @@ BACKGROUND
 .background{
 
 position:absolute;
+
 inset:0;
+
 z-index:0;
 
 overflow:hidden;
@@ -114,6 +129,7 @@ overflow:hidden;
 .bg-gradient{
 
 position:absolute;
+
 inset:-30%;
 
 background:
@@ -151,21 +167,27 @@ transform:scale(1.15);
 @keyframes gradientMove{
 
 0%{
+
 transform:
 scale(1.15)
 translate(-2%,-2%);
+
 }
 
 50%{
+
 transform:
 scale(1.22)
 translate(3%,1%);
+
 }
 
 100%{
+
 transform:
 scale(1.18)
 translate(-1%,4%);
+
 }
 
 }
@@ -190,6 +212,7 @@ display:none;
 .bg-overlay{
 
 position:absolute;
+
 inset:0;
 
 background:
@@ -218,7 +241,9 @@ TOPBAR
 position:absolute;
 
 top:22px;
+
 left:28px;
+
 right:28px;
 
 z-index:20;
@@ -229,13 +254,16 @@ align-items:center;
 
 justify-content:space-between;
 
+width:auto;
+
+min-width:0;
+
 }
 
 
-/*
-   Original flat RakkeZ header style.
-   No 3D effect.
-*/
+/* =====================================================
+LOGO
+===================================================== */
 
 .logo{
 
@@ -247,21 +275,52 @@ font-weight:700;
 
 letter-spacing:-1.5px;
 
+white-space:nowrap;
+
+flex-shrink:0;
+
+cursor:pointer;
+
+direction:ltr;
+
 }
 
 
 .logo span{
+
 color:#3c94ff;
+
 }
 
+
+/* =====================================================
+TOP ACTIONS
+===================================================== */
+
+/*
+   IMPORTANT:
+   All header buttons stay on ONE horizontal row.
+*/
 
 .top-actions{
 
 display:flex;
 
+flex-direction:row;
+
 align-items:center;
 
+justify-content:flex-end;
+
 gap:8px;
+
+flex-wrap:nowrap;
+
+white-space:nowrap;
+
+min-width:max-content;
+
+flex-shrink:0;
 
 }
 
@@ -273,11 +332,15 @@ ICON BUTTONS
 .icon-btn{
 
 width:44px;
+
 height:44px;
 
-display:flex;
+display:inline-flex;
+
+flex:0 0 auto;
 
 align-items:center;
+
 justify-content:center;
 
 border-radius:14px;
@@ -289,6 +352,7 @@ border:
 1px solid var(--border);
 
 backdrop-filter:blur(18px);
+
 -webkit-backdrop-filter:blur(18px);
 
 transition:
@@ -310,6 +374,155 @@ rgba(20,30,48,.72);
 
 
 /* =====================================================
+BLOG BUTTON
+===================================================== */
+
+/*
+   BLOG = BLUE
+*/
+
+.blog-btn{
+
+font-family:"Space Grotesk",sans-serif;
+
+font-size:14px;
+
+font-weight:700;
+
+letter-spacing:.2px;
+
+padding:0 28px;
+
+min-width:125px;
+
+height:44px;
+
+display:inline-flex;
+
+flex:0 0 auto;
+
+align-items:center;
+
+justify-content:center;
+
+white-space:nowrap;
+
+box-sizing:border-box;
+
+border-radius:14px;
+
+background:#1478ff;
+
+border:1px solid #2386ff;
+
+color:#ffffff;
+
+box-shadow:none;
+
+transition:
+background .25s ease,
+border-color .25s ease,
+box-shadow .25s ease;
+
+}
+
+
+.blog-btn:hover{
+
+background:#2386ff;
+
+border-color:#4a9aff;
+
+color:#ffffff;
+
+box-shadow:
+0 10px 30px rgba(20,120,255,.20);
+
+}
+
+
+.blog-btn:active{
+
+background:#1069df;
+
+}
+
+
+/* =====================================================
+LANGUAGE BUTTON
+===================================================== */
+
+/*
+   LANGUAGE = GLASS
+*/
+
+.language-btn{
+
+height:44px;
+
+padding:0 15px;
+
+display:inline-flex;
+
+flex:0 0 auto;
+
+align-items:center;
+
+justify-content:center;
+
+border-radius:14px;
+
+background:
+rgba(7,11,18,.45);
+
+border:
+1px solid rgba(255,255,255,.12);
+
+color:#ffffff;
+
+cursor:pointer;
+
+font-family:"DM Sans",sans-serif;
+
+font-size:12px;
+
+font-weight:700;
+
+white-space:nowrap;
+
+box-shadow:none;
+
+backdrop-filter:blur(18px);
+
+-webkit-backdrop-filter:blur(18px);
+
+transition:
+background .25s ease,
+border-color .25s ease;
+
+}
+
+
+.language-btn:hover{
+
+background:
+rgba(20,30,48,.68);
+
+border-color:
+rgba(255,255,255,.24);
+
+}
+
+
+.language-btn:active{
+
+background:
+rgba(20,30,48,.55);
+
+}
+
+
+/* =====================================================
 MAIN
 ===================================================== */
 
@@ -320,6 +533,7 @@ position:relative;
 z-index:5;
 
 width:100%;
+
 height:100%;
 
 display:flex;
@@ -379,6 +593,8 @@ text-shadow:
 0 15px 70px rgba(0,0,0,.6);
 
 user-select:none;
+
+direction:ltr;
 
 }
 
@@ -470,6 +686,8 @@ border-radius:20px;
 
 transition:
 width .5s linear;
+
+direction:ltr;
 
 }
 
@@ -569,6 +787,7 @@ position:absolute;
 bottom:25px;
 
 left:28px;
+
 right:28px;
 
 z-index:20;
@@ -606,8 +825,7 @@ border-radius:15px;
 background:
 rgba(5,9,16,.5);
 
-backdrop-filter:
-blur(18px);
+backdrop-filter:blur(18px);
 
 }
 
@@ -651,8 +869,7 @@ border:
 background:
 rgba(5,9,16,.55);
 
-backdrop-filter:
-blur(18px);
+backdrop-filter:blur(18px);
 
 font-size:13px;
 
@@ -695,6 +912,7 @@ background:
 rgba(0,0,0,.55);
 
 backdrop-filter:blur(15px);
+
 -webkit-backdrop-filter:blur(15px);
 
 }
@@ -739,7 +957,9 @@ panelIn .3s ease;
 
 
 .panel::-webkit-scrollbar{
+
 width:4px;
+
 }
 
 
@@ -814,6 +1034,7 @@ color:var(--muted);
 .close{
 
 width:38px;
+
 height:38px;
 
 border-radius:12px;
@@ -872,7 +1093,9 @@ border-bottom:
 
 
 .setting:last-child{
+
 border-bottom:0;
+
 }
 
 
@@ -954,6 +1177,7 @@ TOGGLE
 position:relative;
 
 width:47px;
+
 height:27px;
 
 border-radius:30px;
@@ -976,9 +1200,11 @@ content:"";
 position:absolute;
 
 top:4px;
+
 left:4px;
 
 width:17px;
+
 height:17px;
 
 border-radius:50%;
@@ -1228,11 +1454,13 @@ rgba(255,255,255,.035);
 .account-icon{
 
 width:38px;
+
 height:38px;
 
 display:flex;
 
 align-items:center;
+
 justify-content:center;
 
 border-radius:11px;
@@ -1276,7 +1504,9 @@ flex:1;
 
 
 .account-info strong{
+
 font-size:13px;
+
 }
 
 
@@ -1338,7 +1568,9 @@ gap:8px;
 
 
 .task-input-row .media-input{
+
 flex:1;
+
 }
 
 
@@ -1403,6 +1635,7 @@ rgba(255,255,255,.18);
 .task-check{
 
 width:21px;
+
 height:21px;
 
 border-radius:7px;
@@ -1416,6 +1649,7 @@ transparent;
 display:flex;
 
 align-items:center;
+
 justify-content:center;
 
 font-size:12px;
@@ -1639,6 +1873,7 @@ display:block;
 .embed-container iframe{
 
 width:100%;
+
 height:100%;
 
 border:0;
@@ -1777,11 +2012,13 @@ display:flex;
 .album{
 
 width:48px;
+
 height:48px;
 
 display:flex;
 
 align-items:center;
+
 justify-content:center;
 
 border-radius:11px;
@@ -1858,6 +2095,7 @@ border:
 .ambient-card img{
 
 width:100%;
+
 height:100%;
 
 object-fit:cover;
@@ -1887,6 +2125,7 @@ rgba(0,0,0,.75)
 position:absolute;
 
 left:14px;
+
 bottom:13px;
 
 z-index:2;
@@ -2064,8 +2303,7 @@ display:block;
 
 body.focus-only .main{
 
-padding:
-0;
+padding:0;
 
 }
 
@@ -2150,6 +2388,19 @@ rgba(255,255,255,.62);
 }
 
 
+body.light .language-btn{
+
+background:
+rgba(255,255,255,.55);
+
+border-color:
+rgba(0,0,0,.10);
+
+color:#111827;
+
+}
+
+
 body.light .media-input,
 body.light .number-input,
 body.light .select-input{
@@ -2171,7 +2422,9 @@ MOBILE
 .topbar{
 
 left:15px;
+
 right:15px;
+
 top:15px;
 
 }
@@ -2181,12 +2434,15 @@ top:15px;
 
 gap:5px;
 
+flex-wrap:nowrap;
+
 }
 
 
 .icon-btn{
 
 width:39px;
+
 height:39px;
 
 }
@@ -2213,7 +2469,9 @@ letter-spacing:-6px;
 .bottom-bar{
 
 left:15px;
+
 right:15px;
+
 bottom:15px;
 
 flex-direction:column;
@@ -2265,8 +2523,40 @@ height:145px;
 
 }
 
+
+/*
+   Keep Blog + Language beside each other.
+*/
+
+.blog-btn{
+
+min-width:0;
+
+height:40px;
+
+padding:0 17px;
+
+font-size:12px;
+
 }
 
+
+.language-btn{
+
+height:40px;
+
+padding:0 12px;
+
+font-size:11px;
+
+}
+
+}
+
+
+/* =====================================================
+VERY SMALL MOBILE
+===================================================== */
 
 @media(max-width:450px){
 
@@ -2307,6 +2597,28 @@ grid-template-columns:
 
 }
 
+
+.blog-btn{
+
+height:39px;
+
+padding:0 14px;
+
+font-size:11px;
+
+}
+
+
+.language-btn{
+
+height:39px;
+
+padding:0 10px;
+
+font-size:10px;
+
+}
+
 }
 
 
@@ -2334,6 +2646,7 @@ background:
 rgba(0,0,0,.55);
 
 backdrop-filter:blur(15px);
+
 -webkit-backdrop-filter:blur(15px);
 
 }
@@ -2488,6 +2801,7 @@ UPDATES CLOSE
 .updates-close{
 
 width:38px;
+
 height:38px;
 
 flex-shrink:0;
@@ -2507,6 +2821,7 @@ font-size:20px;
 display:flex;
 
 align-items:center;
+
 justify-content:center;
 
 transition:.25s;
@@ -2601,6 +2916,7 @@ UPDATE ICON
 .update-icon{
 
 width:38px;
+
 height:38px;
 
 flex-shrink:0;
@@ -2608,6 +2924,7 @@ flex-shrink:0;
 display:flex;
 
 align-items:center;
+
 justify-content:center;
 
 border-radius:11px;
@@ -2699,160 +3016,7 @@ rgba(20,120,255,.20);
 
 
 /* =====================================================
-BLOG BUTTON
-===================================================== */
-
-/*
-   Blog = BLUE
-   Flat, clean and premium.
-   No 3D effect.
-   No translate animation.
-*/
-
-.blog-btn{
-
-font-family:"Space Grotesk",sans-serif;
-
-font-size:14px;
-
-font-weight:700;
-
-letter-spacing:.2px;
-
-padding:
-0 28px;
-
-min-width:125px;
-
-height:44px;
-
-display:inline-flex;
-
-align-items:center;
-
-justify-content:center;
-
-white-space:nowrap;
-
-box-sizing:border-box;
-
-border-radius:14px;
-
-background:
-#1478ff;
-
-border:
-1px solid #2386ff;
-
-color:#ffffff;
-
-box-shadow:none;
-
-transition:
-background .25s ease,
-border-color .25s ease;
-
-}
-
-
-.blog-btn:hover{
-
-background:
-#2386ff;
-
-border-color:
-#4a9aff;
-
-color:#ffffff;
-
-}
-
-
-.blog-btn:active{
-
-background:
-#1069df;
-
-}
-
-
-/* =====================================================
-LANGUAGE BUTTON
-===================================================== */
-
-/*
-   Language = GLASS
-   Different from Blog.
-   No 3D effect.
-*/
-
-.language-btn{
-
-height:44px;
-
-padding:
-0 15px;
-
-display:inline-flex;
-
-align-items:center;
-
-justify-content:center;
-
-border-radius:14px;
-
-background:
-rgba(7,11,18,.45);
-
-border:
-1px solid rgba(255,255,255,.12);
-
-color:#ffffff;
-
-cursor:pointer;
-
-font-family:"DM Sans",sans-serif;
-
-font-size:12px;
-
-font-weight:700;
-
-white-space:nowrap;
-
-box-shadow:none;
-
-backdrop-filter:blur(18px);
-
--webkit-backdrop-filter:blur(18px);
-
-transition:
-background .25s ease,
-border-color .25s ease;
-
-}
-
-
-.language-btn:hover{
-
-background:
-rgba(20,30,48,.68);
-
-border-color:
-rgba(255,255,255,.24);
-
-}
-
-
-.language-btn:active{
-
-background:
-rgba(20,30,48,.55);
-
-}
-
-
-/* =====================================================
-BLOG + LANGUAGE MOBILE
+BLOG + LANGUAGE MOBILE MODAL
 ===================================================== */
 
 @media(max-width:600px){
@@ -2886,38 +3050,12 @@ padding:12px;
 
 }
 
-
-.blog-btn{
-
-font-size:13px;
-
-min-width:115px;
-
-height:42px;
-
-padding:
-0 22px;
-
 }
 
 
-.language-btn{
-
-font-size:12px;
-
-height:42px;
-
-padding:
-0 13px;
-
-}
-
-}
-
-
-/* =========================================================
+/* =====================================================
 RTL SUPPORT
-========================================================= */
+===================================================== */
 
 html[dir="rtl"]{
 
@@ -2948,7 +3086,7 @@ direction:ltr;
 
 
 /*
-   Keep the RakkeZ logo visually normal.
+   Keep RakkeZ logo normal.
 */
 
 .logo{
@@ -2959,8 +3097,7 @@ direction:ltr;
 
 
 /*
-   Keep timer numbers and technical UI
-   from becoming visually reversed.
+   Keep technical UI normal.
 */
 
 .timer,
@@ -2972,9 +3109,9 @@ direction:ltr;
 }
 
 
-/* =========================================================
+/* =====================================================
 RAKKEZ PAGE LOADER
-========================================================= */
+===================================================== */
 
 #pageLoader{
 
@@ -3052,6 +3189,7 @@ color:#1683ff;
 .loader-spinner{
 
 width:25px;
+
 height:25px;
 
 border-radius:50%;
@@ -3130,9 +3268,9 @@ rotate(360deg);
 }
 
 
-/* =========================================================
+/* =====================================================
 LOADER MOBILE
-========================================================= */
+===================================================== */
 
 @media(max-width:600px){
 
@@ -3146,6 +3284,7 @@ font-size:34px;
 .loader-spinner{
 
 width:24px;
+
 height:24px;
 
 }
