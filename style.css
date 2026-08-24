@@ -266,14 +266,29 @@ display:flex;
 
 align-items:center;
 
-gap:8px;
+gap:9px;
 
 }
 
 
 /* =====================================================
 RAKKEZ HEADER BUTTONS
-SUBTLE GLASS / TRANSPARENT
+Clean Dark Blue Brand Style
+===================================================== */
+
+.top-actions{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+}
+
+
+/* =====================================================
+ALL HEADER BUTTONS
 ===================================================== */
 
 .icon-btn,
@@ -290,11 +305,9 @@ justify-content:center;
 
 border-radius:14px;
 
-
-/* خفيفة وشفافة بدل الأسود الصريح */
-
+/* Slight transparency */
 background:
-rgba(8,13,22,.58);
+rgba(8,13,22,.68);
 
 border:
 1px solid rgba(255,255,255,.09);
@@ -302,7 +315,7 @@ border:
 color:#fff;
 
 box-shadow:
-0 8px 24px rgba(0,0,0,.16);
+0 8px 24px rgba(0,0,0,.18);
 
 backdrop-filter:
 blur(16px);
@@ -362,6 +375,7 @@ white-space:nowrap;
 
 /* =====================================================
 LANGUAGE
+SAME COLOR + SAME STYLE
 ===================================================== */
 
 .language-btn{
@@ -385,7 +399,7 @@ white-space:nowrap;
 
 
 /* =====================================================
-HEADER HOVER
+HOVER
 ===================================================== */
 
 .icon-btn:hover,
@@ -396,19 +410,19 @@ transform:
 translateY(-1px);
 
 background:
-rgba(12,20,32,.72);
+rgba(12,20,32,.80);
 
 border-color:
 rgba(255,255,255,.16);
 
 box-shadow:
-0 12px 30px rgba(0,0,0,.22);
+0 12px 30px rgba(0,0,0,.24);
 
 }
 
 
 /* =====================================================
-HEADER ACTIVE
+ACTIVE
 ===================================================== */
 
 .icon-btn:active,
@@ -419,13 +433,13 @@ transform:
 scale(.97);
 
 background:
-rgba(8,13,22,.68);
+rgba(8,13,22,.85);
 
 }
 
 
 /* =====================================================
-MOBILE HEADER
+MOBILE
 ===================================================== */
 
 @media(max-width:600px){
@@ -480,7 +494,7 @@ font-size:13px;
 
 
 /* =====================================================
-LIGHT MODE HEADER
+LIGHT MODE
 ===================================================== */
 
 body.light .icon-btn,
@@ -488,7 +502,7 @@ body.light .blog-btn,
 body.light .language-btn{
 
 background:
-rgba(255,255,255,.62);
+rgba(255,255,255,.68);
 
 border-color:
 rgba(0,0,0,.10);
@@ -507,7 +521,7 @@ body.light .blog-btn:hover,
 body.light .language-btn:hover{
 
 background:
-rgba(255,255,255,.82);
+rgba(255,255,255,.92);
 
 border-color:
 rgba(0,0,0,.16);
@@ -517,13 +531,14 @@ rgba(0,0,0,.16);
 
 /* =====================================================
 CONTROLS
+PERFECTLY CENTERED UNDER TIMER
 ===================================================== */
 
 .controls{
 
 width:100%;
 
-margin-top:28px;
+margin-top:32px;
 
 display:flex;
 
@@ -531,24 +546,24 @@ align-items:center;
 
 justify-content:center;
 
-gap:10px;
+gap:12px;
 
 }
 
 
 /* =====================================================
 START
-أصغر قليلًا
+SMALLER
 ===================================================== */
 
 .primary{
 
-min-width:136px;
+min-width:135px;
 
-height:49px;
+height:48px;
 
 padding:
-0 24px;
+0 23px;
 
 border-radius:15px;
 
@@ -586,12 +601,12 @@ rgba(0,95,255,.20);
 
 /* =====================================================
 RESET
-أصغر قليلًا
+SMALLER
 ===================================================== */
 
 .secondary{
 
-height:49px;
+height:48px;
 
 padding:
 0 17px;
@@ -631,6 +646,43 @@ var(--border-hover);
 
 transform:
 translateY(-2px);
+
+}
+
+
+/* =====================================================
+MOBILE CONTROLS
+===================================================== */
+
+@media(max-width:450px){
+
+.controls{
+
+width:100%;
+
+justify-content:center;
+
+}
+
+.primary{
+
+flex:1;
+
+max-width:200px;
+
+}
+
+.secondary{
+
+width:52px;
+
+height:48px;
+
+padding:0;
+
+flex-shrink:0;
+
+}
 
 }
 
@@ -677,10 +729,6 @@ text-align:center;
 }
 
 
-/* =====================================================
-MODE
-===================================================== */
-
 .mode{
 
 font-size:12px;
@@ -700,7 +748,7 @@ direction:ltr;
 
 /* =====================================================
 TIMER
-أصغر + مسافة أوضح بين الأرقام
+SMALLER + MORE SPACE BETWEEN NUMBERS
 ===================================================== */
 
 .timer{
@@ -708,14 +756,12 @@ TIMER
 font-family:"Space Grotesk";
 
 font-size:
-clamp(96px,13.5vw,174px);
+clamp(92px,13vw,170px);
 
-line-height:.9;
+line-height:.88;
 
-
-/* زيادة بسيطة في المسافة بين الأرقام */
-
-letter-spacing:-5px;
+/* Increased spacing */
+letter-spacing:-3px;
 
 font-weight:600;
 
@@ -729,13 +775,9 @@ direction:ltr;
 }
 
 
-/* =====================================================
-TIMER LABEL
-===================================================== */
-
 .timer-label{
 
-margin-top:23px;
+margin-top:25px;
 
 font-size:14px;
 
@@ -827,6 +869,97 @@ direction:ltr;
 
 
 /* =====================================================
+CONTROLS
+START + RESET CENTERED
+===================================================== */
+
+.controls{
+
+margin-top:32px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:12px;
+
+width:100%;
+
+}
+
+
+.primary{
+
+min-width:135px;
+
+height:48px;
+
+padding:
+0 23px;
+
+border-radius:15px;
+
+background:
+rgba(255,255,255,.96);
+
+color:#05070b;
+
+font-weight:700;
+
+transition:.25s;
+
+}
+
+
+.primary:hover{
+
+transform:
+translateY(-2px);
+
+box-shadow:
+0 20px 50px
+rgba(0,95,255,.2);
+
+}
+
+
+.secondary{
+
+height:48px;
+
+padding:
+0 17px;
+
+border-radius:15px;
+
+background:
+rgba(8,13,22,.62);
+
+border:
+1px solid var(--border);
+
+backdrop-filter:
+blur(18px);
+
+transition:.25s;
+
+}
+
+
+.secondary:hover{
+
+background:
+rgba(20,29,45,.75);
+
+border-color:
+var(--border-hover);
+
+}
+
+
+/* =====================================================
 BOTTOM
 ===================================================== */
 
@@ -900,20 +1033,6 @@ margin-top:4px;
 font-size:15px;
 
 font-weight:700;
-
-}
-
-
-/* =====================================================
-STREAK 🔥
-الـ Streak هو العنصر الثالث في الإحصائيات
-===================================================== */
-
-.stats .stat:nth-child(3) .stat-title::after{
-
-content:" 🔥";
-
-font-size:11px;
 
 }
 
@@ -2562,9 +2681,9 @@ padding:
 .timer{
 
 font-size:
-clamp(78px,21vw,122px);
+clamp(78px,21vw,118px);
 
-letter-spacing:-4px;
+letter-spacing:-2px;
 
 }
 
@@ -2636,16 +2755,12 @@ justify-content:center;
 
 .primary{
 
-flex:0 1 140px;
-
-height:47px;
+flex:0 1 135px;
 
 }
 
 
 .secondary{
-
-height:47px;
 
 flex:0 0 auto;
 
@@ -2682,7 +2797,7 @@ flex:1;
 
 min-width:0;
 
-height:47px;
+height:46px;
 
 }
 
@@ -2691,7 +2806,7 @@ height:47px;
 
 width:52px;
 
-height:47px;
+height:46px;
 
 padding:0;
 
