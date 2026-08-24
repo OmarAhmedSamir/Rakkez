@@ -232,20 +232,17 @@ justify-content:space-between;
 }
 
 
-/*
-   Original flat RakkeZ header style.
-   No 3D effect.
-*/
-
 .logo{
 
-font-family:"Space Grotesk",sans-serif;
+font-family:"Space Grotesk";
 
 font-size:25px;
 
 font-weight:700;
 
 letter-spacing:-1.5px;
+
+direction:ltr;
 
 }
 
@@ -285,20 +282,24 @@ border-radius:14px;
 background:
 rgba(7,11,18,.55);
 
-border:
-1px solid var(--border);
+border:1px solid var(--border);
 
 backdrop-filter:blur(18px);
+
 -webkit-backdrop-filter:blur(18px);
 
 transition:
 background .25s ease,
-border-color .25s ease;
+border-color .25s ease,
+transform .25s ease;
 
 }
 
 
 .icon-btn:hover{
+
+transform:
+translateY(-2px);
 
 border-color:
 var(--border-hover);
@@ -359,6 +360,8 @@ color:rgba(255,255,255,.55);
 
 margin-bottom:18px;
 
+direction:ltr;
+
 }
 
 
@@ -379,6 +382,8 @@ text-shadow:
 0 15px 70px rgba(0,0,0,.6);
 
 user-select:none;
+
+direction:ltr;
 
 }
 
@@ -471,6 +476,8 @@ border-radius:20px;
 transition:
 width .5s linear;
 
+direction:ltr;
+
 }
 
 
@@ -542,6 +549,9 @@ border:
 backdrop-filter:
 blur(18px);
 
+-webkit-backdrop-filter:
+blur(18px);
+
 transition:.25s;
 
 }
@@ -608,6 +618,8 @@ rgba(5,9,16,.5);
 
 backdrop-filter:blur(18px);
 
+-webkit-backdrop-filter:blur(18px);
+
 }
 
 
@@ -652,6 +664,8 @@ rgba(5,9,16,.55);
 
 backdrop-filter:blur(18px);
 
+-webkit-backdrop-filter:blur(18px);
+
 font-size:13px;
 
 font-weight:600;
@@ -692,8 +706,11 @@ padding:20px;
 background:
 rgba(0,0,0,.55);
 
-backdrop-filter:blur(15px);
--webkit-backdrop-filter:blur(15px);
+backdrop-filter:
+blur(15px);
+
+-webkit-backdrop-filter:
+blur(15px);
 
 }
 
@@ -824,10 +841,6 @@ border:
 
 }
 
-
-/* =====================================================
-SETTINGS
-===================================================== */
 
 .section{
 
@@ -1336,7 +1349,9 @@ gap:8px;
 
 
 .task-input-row .media-input{
+
 flex:1;
+
 }
 
 
@@ -2038,7 +2053,8 @@ rgba(8,13,22,.62);
 border:
 1px solid var(--border);
 
-backdrop-filter:blur(18px);
+backdrop-filter:
+blur(18px);
 
 font-size:11px;
 
@@ -2266,48 +2282,6 @@ height:145px;
 }
 
 
-@media(max-width:450px){
-
-.top-actions .icon-btn:nth-child(4){
-
-display:none;
-
-}
-
-
-.controls{
-
-width:100%;
-
-}
-
-
-.primary{
-
-flex:1;
-
-}
-
-
-.secondary{
-
-width:55px;
-
-padding:0;
-
-}
-
-
-.ambient-grid{
-
-grid-template-columns:
-1fr;
-
-}
-
-}
-
-
 /* =====================================================
 UPDATES MODAL
 ===================================================== */
@@ -2331,8 +2305,11 @@ padding:20px;
 background:
 rgba(0,0,0,.55);
 
-backdrop-filter:blur(15px);
--webkit-backdrop-filter:blur(15px);
+backdrop-filter:
+blur(15px);
+
+-webkit-backdrop-filter:
+blur(15px);
 
 }
 
@@ -2689,6 +2666,9 @@ transition:.25s;
 background:
 #2386ff;
 
+transform:
+translateY(-1px);
+
 box-shadow:
 0 15px 35px
 rgba(20,120,255,.20);
@@ -2697,13 +2677,8 @@ rgba(20,120,255,.20);
 
 
 /* =====================================================
-BLOG BUTTON
+BLOG BUTTON — BLUE
 ===================================================== */
-
-/*
-   Blog is intentionally different from Language.
-   Flat design, no 3D effect and no translate animation.
-*/
 
 .blog-btn{
 
@@ -2734,20 +2709,25 @@ box-sizing:border-box;
 
 border-radius:14px;
 
+/* BLUE */
+
 background:
-rgba(255,255,255,.055);
+#1478ff;
 
 border:
-1px solid rgba(255,255,255,.12);
+1px solid #2386ff;
 
 color:#ffffff;
 
-box-shadow:none;
+box-shadow:
+0 8px 25px rgba(0,95,255,.16);
+
+/* SIMPLE / CLEAN */
 
 transition:
-background .25s ease,
-border-color .25s ease,
-color .25s ease;
+background .2s ease,
+border-color .2s ease,
+box-shadow .2s ease;
 
 }
 
@@ -2755,12 +2735,13 @@ color .25s ease;
 .blog-btn:hover{
 
 background:
-rgba(255,255,255,.10);
+#2386ff;
 
 border-color:
-rgba(255,255,255,.24);
+#3b98ff;
 
-color:#ffffff;
+box-shadow:
+0 10px 28px rgba(0,95,255,.20);
 
 }
 
@@ -2768,28 +2749,23 @@ color:#ffffff;
 .blog-btn:active{
 
 background:
-rgba(255,255,255,.08);
+#0d6fe8;
 
 }
 
 
 /* =====================================================
-LANGUAGE BUTTON
+LANGUAGE BUTTON — TRANSPARENT
 ===================================================== */
-
-/*
-   Language button is intentionally blue
-   so it is clearly different from Blog.
-*/
 
 .language-btn{
 
 height:44px;
 
 padding:
-0 15px;
+0 14px;
 
-display:inline-flex;
+display:flex;
 
 align-items:center;
 
@@ -2797,11 +2773,13 @@ justify-content:center;
 
 border-radius:14px;
 
+/* TRANSPARENT */
+
 background:
-#1478ff;
+rgba(255,255,255,.045);
 
 border:
-1px solid #2386ff;
+1px solid rgba(255,255,255,.12);
 
 color:#ffffff;
 
@@ -2813,13 +2791,13 @@ font-size:12px;
 
 font-weight:700;
 
+transition:
+background .2s ease,
+border-color .2s ease;
+
 white-space:nowrap;
 
 box-shadow:none;
-
-transition:
-background .25s ease,
-border-color .25s ease;
 
 }
 
@@ -2827,10 +2805,10 @@ border-color .25s ease;
 .language-btn:hover{
 
 background:
-#2386ff;
+rgba(255,255,255,.09);
 
 border-color:
-#4a9aff;
+rgba(255,255,255,.22);
 
 }
 
@@ -2838,78 +2816,14 @@ border-color:
 .language-btn:active{
 
 background:
-#1069df;
+rgba(255,255,255,.07);
 
 }
 
 
 /* =====================================================
-BLOG + LANGUAGE MOBILE
-===================================================== */
-
-@media(max-width:600px){
-
-.updates-modal{
-
-padding:15px;
-
-}
-
-
-.updates-modal-content{
-
-padding:20px;
-
-border-radius:23px;
-
-}
-
-
-.updates-title{
-
-font-size:21px;
-
-}
-
-
-.update-item{
-
-padding:12px;
-
-}
-
-
-.blog-btn{
-
-font-size:13px;
-
-min-width:115px;
-
-height:42px;
-
-padding:
-0 22px;
-
-}
-
-
-.language-btn{
-
-font-size:12px;
-
-height:42px;
-
-padding:
-0 13px;
-
-}
-
-}
-
-
-/* =========================================================
 RTL SUPPORT
-========================================================= */
+===================================================== */
 
 html[dir="rtl"]{
 
@@ -2939,21 +2853,12 @@ direction:ltr;
 }
 
 
-/*
-   Keep the RakkeZ logo visually normal.
-*/
-
 .logo{
 
 direction:ltr;
 
 }
 
-
-/*
-   Keep timer numbers and technical UI
-   from becoming visually reversed.
-*/
 
 .timer,
 .progress,
@@ -2964,9 +2869,9 @@ direction:ltr;
 }
 
 
-/* =========================================================
+/* =====================================================
 RAKKEZ PAGE LOADER
-========================================================= */
+===================================================== */
 
 #pageLoader{
 
@@ -3044,6 +2949,7 @@ color:#1683ff;
 .loader-spinner{
 
 width:25px;
+
 height:25px;
 
 border-radius:50%;
@@ -3051,8 +2957,7 @@ border-radius:50%;
 border:
 3px solid rgba(255,255,255,.1);
 
-border-top-color:
-#1683ff;
+border-top-color:#1683ff;
 
 animation:
 spin .8s linear infinite;
@@ -3122,11 +3027,81 @@ rotate(360deg);
 }
 
 
-/* =========================================================
-LOADER MOBILE
-========================================================= */
+/* =====================================================
+MOBILE — SMALL
+===================================================== */
 
 @media(max-width:600px){
+
+.updates-modal{
+
+padding:15px;
+
+}
+
+
+.updates-modal-content{
+
+padding:20px;
+
+border-radius:23px;
+
+}
+
+
+.updates-title{
+
+font-size:21px;
+
+}
+
+
+.update-item{
+
+padding:12px;
+
+}
+
+
+.blog-btn{
+
+font-size:13px;
+
+min-width:115px;
+
+height:42px;
+
+padding:
+0 22px;
+
+}
+
+
+.language-btn{
+
+font-size:11px;
+
+height:42px;
+
+padding:
+0 12px;
+
+}
+
+
+.volume-control input[type="range"]{
+
+width:80px;
+
+}
+
+
+.select-input{
+
+min-width:105px;
+
+}
+
 
 .loader-logo{
 
@@ -3138,7 +3113,72 @@ font-size:34px;
 .loader-spinner{
 
 width:24px;
+
 height:24px;
+
+}
+
+}
+
+
+/* =====================================================
+VERY SMALL MOBILE
+===================================================== */
+
+@media(max-width:450px){
+
+.top-actions .icon-btn:nth-child(4){
+
+display:none;
+
+}
+
+
+.controls{
+
+width:100%;
+
+}
+
+
+.primary{
+
+flex:1;
+
+}
+
+
+.secondary{
+
+width:55px;
+
+padding:0;
+
+}
+
+
+.ambient-grid{
+
+grid-template-columns:
+1fr;
+
+}
+
+
+.blog-btn{
+
+min-width:105px;
+
+padding:
+0 18px;
+
+}
+
+
+.language-btn{
+
+padding:
+0 10px;
 
 }
 
