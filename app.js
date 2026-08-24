@@ -5541,28 +5541,14 @@ let selectedAmbient =
 
 
 /* =========================================================
-   DEFAULT GRADIENT
-========================================================= */
-
-const defaultGradient = `
-    radial-gradient(
-        circle at 25% 25%,
-        #006cff,
-        transparent 35%
-    ),
-    radial-gradient(
-        circle at 75% 70%,
-        #001e79,
-        transparent 40%
-    ),
-    #02040b
-`;
-
-/* =========================================================
-   EXTRA GRADIENTS
+   AMBIENT GRADIENTS
 ========================================================= */
 
 const ambientGradients = [
+
+    /* =====================================================
+       BLUE
+    ====================================================== */
 
     {
         id: "gradient",
@@ -5582,17 +5568,22 @@ const ambientGradients = [
         `
     },
 
+
+    /* =====================================================
+       YELLOW
+    ====================================================== */
+
     {
         id: "yellow",
         name: "Solar Yellow",
         background: `
             radial-gradient(
-                circle at 25% 25%,
+                circle at 20% 25%,
                 #ffd000,
                 transparent 35%
             ),
             radial-gradient(
-                circle at 75% 70%,
+                circle at 80% 70%,
                 #ff7a00,
                 transparent 45%
             ),
@@ -5600,17 +5591,22 @@ const ambientGradients = [
         `
     },
 
+
+    /* =====================================================
+       PINK
+    ====================================================== */
+
     {
         id: "pink",
         name: "Neon Pink",
         background: `
             radial-gradient(
-                circle at 25% 25%,
+                circle at 20% 25%,
                 #ff2d95,
                 transparent 35%
             ),
             radial-gradient(
-                circle at 75% 70%,
+                circle at 80% 70%,
                 #8b1eff,
                 transparent 45%
             ),
@@ -5618,17 +5614,22 @@ const ambientGradients = [
         `
     },
 
+
+    /* =====================================================
+       GREEN
+    ====================================================== */
+
     {
         id: "green",
-        name: "Emerald",
+        name: "Emerald Green",
         background: `
             radial-gradient(
-                circle at 25% 25%,
+                circle at 20% 25%,
                 #00ff88,
                 transparent 35%
             ),
             radial-gradient(
-                circle at 75% 70%,
+                circle at 80% 70%,
                 #008f5a,
                 transparent 45%
             ),
@@ -5656,64 +5657,75 @@ function renderAmbient() {
 
 
     /* =====================================================
-       GRADIENT CARD
+       GRADIENT CARDS
     ====================================================== */
 
-    const gradient =
-        document.createElement("div");
+    ambientGradients.forEach(
+        gradientItem => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
 
 
-    gradient.className =
-        "ambient-card" +
-        (
-            selectedAmbient === "gradient"
-                ? " selected"
-                : ""
-        );
+            card.className =
+                "ambient-card" +
+                (
+                    selectedAmbient ===
+                    gradientItem.id
+                        ? " selected"
+                        : ""
+                );
 
 
-    gradient.innerHTML = `
+            card.innerHTML = `
 
-        <div
-            style="
-                width:100%;
-                height:100%;
-                background:${defaultGradient};
-            "
-        ></div>
+                <div
+                    style="
+                        width:100%;
+                        height:100%;
+                        background:${gradientItem.background};
+                    "
+                ></div>
 
-        <div class="ambient-name">
-            RakkeZ Gradient
-        </div>
+                <div class="ambient-name">
+                    ${gradientItem.name}
+                </div>
 
-    `;
-
-
-    gradient.onclick = () => {
-
-        selectedAmbient =
-            "gradient";
+            `;
 
 
-        localStorage.setItem(
-            STORAGE.ambient,
-            selectedAmbient
-        );
+            card.onclick = () => {
+
+                selectedAmbient =
+                    gradientItem.id;
 
 
-        resetBackground();
+                localStorage.setItem(
+                    STORAGE.ambient,
+                    selectedAmbient
+                );
 
 
-        applyGradient();
+                resetBackground();
 
 
-        renderAmbient();
+                applyGradient(
+                    gradientItem.background
+                );
 
-    };
+
+                renderAmbient();
+
+            };
 
 
-    grid.appendChild(
-        gradient
+            grid.appendChild(
+                card
+            );
+
+        }
     );
 
 
@@ -5733,7 +5745,8 @@ function renderAmbient() {
             card.className =
                 "ambient-card" +
                 (
-                    selectedAmbient === item.id
+                    selectedAmbient ===
+                    item.id
                         ? " selected"
                         : ""
                 );
@@ -5788,7 +5801,9 @@ function renderAmbient() {
    APPLY GRADIENT
 ========================================================= */
 
-function applyGradient() {
+function applyGradient(
+    gradientValue
+) {
 
     const gradient =
         document.querySelector(
@@ -5804,7 +5819,7 @@ function applyGradient() {
 
 
     gradient.style.background =
-        defaultGradient;
+        gradientValue;
 
 
     if ($("customImage")) {
@@ -5821,6 +5836,110 @@ function applyGradient() {
         $("customVideo")
             .style.display =
             "none";
+
+
+        $("customVideo")
+            .pause();
+
+    }
+
+}
+
+
+/* =========================================================
+   APPLY IMAGE AMBIENT
+========================================================= */
+
+function applyAmbient(item) {
+
+    const gradient =
+        document.querySelector(
+            ".bg-gradient"
+        );
+
+
+    if (gradient) {
+
+        gradient.style.display =
+            "none";
+
+    }
+
+
+    if ($("customVideo")) {
+
+        $("customVideo")
+            .style.display =
+            "none";
+
+
+        $("customVideo")
+            .pause();
+
+    }
+
+
+    if ($("customImage")) {
+
+        $("customImage")
+            .style.display =
+            "block";
+
+
+        $("customImage").src =
+            item.url;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESET BACKGROUND
+========================================================= */
+
+function resetBackground() {
+
+    const gradient =
+        document.querySelector(
+            ".bg-gradient"
+        );
+
+
+    if (gradient) {
+
+        gradient.style.display =
+            "none";
+
+    }
+
+
+    if ($("customImage")) {
+
+        $("customImage")
+            .style.display =
+            "none";
+
+
+        $("customImage")
+            .removeAttribute(
+                "src"
+            );
+
+    }
+
+
+    if ($("customVideo")) {
+
+        $("customVideo")
+            .style.display =
+            "none";
+
+
+        $("customVideo")
+            .removeAttribute(
+                "src"
+            );
 
 
         $("customVideo")
