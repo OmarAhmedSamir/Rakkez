@@ -4546,7 +4546,7 @@ if ($("mediaOpen")) {
 }
 
 
-if ($("ambientOpen")) {
+if ($("Open")) {
 
     $("ambientOpen").onclick =
         () => {
@@ -5494,23 +5494,30 @@ if ($("mediaFile")) {
 
 const ambientPresets = [
 
+   {
+        id: "Anime girl",
+        name: "✨NEW✨Anime girl",
+        url:
+            "https://image.cdn2.seaart.ai/2024-03-02/cnhb3jde878c73a9lp80/0c7c4c2054c4dd5d4dce8769ef3e4fdc02c9f2d6_high.webp"
+    },
+
     {
         id: "Newyork",
-        name: "✨NEW✨Newyork",
+        name: "Newyork",
         url:
             "https://wallpapercave.com/wp/wp3544754.jpg"
     },
 
         {
         id: "Ocean",
-        name: "✨NEW✨Ocean",
+        name: "Ocean",
         url:
             "https://wallpapercave.com/wp/wp8963442.jpg"
     },
 
         {
         id: "Nature",
-        name: "✨NEW✨Nature",
+        name: "Nature",
         url:
             "https://wallpapercave.com/wp/wp2506793.jpg"
     },
@@ -5530,8 +5537,8 @@ const ambientPresets = [
     },
 
     {
-        id: "street",
-        name: "Lofi Street",
+        id: "Room",
+        name: "Lofi Room",
         url:
             "https://wallpapercave.com/wp/wp12446857.jpg"
     },
