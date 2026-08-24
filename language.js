@@ -1,10 +1,13 @@
 /* =========================================================
-   RAKKEZ V2 - LANGUAGE SYSTEM
+   RAKKEZ V2
+   FULL LANGUAGE SYSTEM
+   ENGLISH <-> ARABIC
 ========================================================= */
 
 (function () {
 
     "use strict";
+
 
     /* =========================================================
        TRANSLATIONS
@@ -15,6 +18,7 @@
         en: {
 
             language: "العربية",
+            logo: "RakkeZ",
 
             blog: "Blog",
 
@@ -62,6 +66,9 @@
 
             exitFocus:
                 "EXIT FOCUS",
+
+
+            /* SETTINGS */
 
             settingsTitle:
                 "Settings",
@@ -171,6 +178,9 @@
             audioFormats:
                 "MP3 / WAV / M4A",
 
+
+            /* ACCOUNTS */
+
             accounts:
                 "Accounts",
 
@@ -186,11 +196,17 @@
             connect:
                 "Connect",
 
+
+            /* RESET */
+
             reset:
                 "Reset",
 
             resetStats:
                 "Reset All Statistics",
+
+
+            /* TASKS */
 
             tasksTitle:
                 "Tasks",
@@ -203,6 +219,12 @@
 
             noTasks:
                 "No tasks yet.",
+
+            addSomething:
+                "Add something you want to accomplish.",
+
+
+            /* MEDIA */
 
             mediaTitle:
                 "Media",
@@ -237,6 +259,9 @@
             nothingPlaying:
                 "Nothing playing",
 
+
+            /* AMBIENT */
+
             ambientTitle:
                 "Ambient",
 
@@ -245,6 +270,9 @@
 
             uploadBackground:
                 "+ Upload Image / Video Background",
+
+
+            /* RESET CONFIRM */
 
             resetEverything:
                 "Reset everything?",
@@ -256,18 +284,55 @@
                 "Cancel",
 
             resetButton:
-                "Reset"
+                "Reset",
+
+
+            /* UNITS */
+
+            minuteShort:
+                "m",
+
+            hourShort:
+                "h",
+
+            day:
+                "day",
+
+            days:
+                "days",
+
+            minuteWord:
+                "minute",
+
+            minutesWord:
+                "minutes",
+
+            hourWord:
+                "hour",
+
+            hoursWord:
+                "hours"
 
         },
 
 
+        /* =====================================================
+           ARABIC
+        ===================================================== */
+
         ar: {
 
-            language: "English",
+            language:
+                "English",
 
-            blog: "Blog",
+            logo:
+                "ركز",
 
-            focus: "التركيز",
+            blog:
+                "المدونة",
+
+            focus:
+                "التركيز",
 
             shortBreak:
                 "استراحة قصيرة",
@@ -316,6 +381,9 @@
 
             exitFocus:
                 "الخروج من التركيز",
+
+
+            /* SETTINGS */
 
             settingsTitle:
                 "الإعدادات",
@@ -425,6 +493,9 @@
             audioFormats:
                 "MP3 / WAV / M4A",
 
+
+            /* ACCOUNTS */
+
             accounts:
                 "الحسابات",
 
@@ -440,11 +511,17 @@
             connect:
                 "اتصال",
 
+
+            /* RESET */
+
             reset:
                 "إعادة ضبط",
 
             resetStats:
                 "إعادة ضبط جميع الإحصائيات",
+
+
+            /* TASKS */
 
             tasksTitle:
                 "المهام",
@@ -457,6 +534,12 @@
 
             noTasks:
                 "لا توجد مهام بعد.",
+
+            addSomething:
+                "أضف شيئًا تريد إنجازه.",
+
+
+            /* MEDIA */
 
             mediaTitle:
                 "الوسائط",
@@ -491,6 +574,9 @@
             nothingPlaying:
                 "لا يوجد شيء قيد التشغيل",
 
+
+            /* AMBIENT */
+
             ambientTitle:
                 "الأجواء",
 
@@ -499,6 +585,9 @@
 
             uploadBackground:
                 "+ رفع صورة / فيديو للخلفية",
+
+
+            /* RESET CONFIRM */
 
             resetEverything:
                 "إعادة ضبط كل شيء؟",
@@ -510,7 +599,34 @@
                 "إلغاء",
 
             resetButton:
-                "إعادة ضبط"
+                "إعادة ضبط",
+
+
+            /* UNITS */
+
+            minuteShort:
+                "د",
+
+            hourShort:
+                "س",
+
+            day:
+                "يوم",
+
+            days:
+                "يوم",
+
+            minuteWord:
+                "دقيقة",
+
+            minutesWord:
+                "دقائق",
+
+            hourWord:
+                "ساعة",
+
+            hoursWord:
+                "ساعات"
 
         }
 
@@ -529,29 +645,305 @@
        HELPERS
     ========================================================= */
 
-    function $(id) {
+    function get(id) {
+
         return document.getElementById(id);
+
     }
 
 
-    function text(id, value) {
+    function setText(element, text) {
 
-        const element = $(id);
+        if (!element) return;
 
-        if (element) {
-            element.textContent = value;
+        element.textContent = text;
+
+    }
+
+
+    function setPlaceholder(element, text) {
+
+        if (!element) return;
+
+        element.placeholder = text;
+
+    }
+
+
+    /* =========================================================
+       ARABIC NUMBERS
+    ========================================================= */
+
+    function arabicNumbers(value) {
+
+        return String(value).replace(
+            /\d/g,
+            digit => "٠١٢٣٤٥٦٧٨٩"[digit]
+        );
+
+    }
+
+
+    function englishNumbers(value) {
+
+        return String(value).replace(
+            /[٠-٩]/g,
+            digit =>
+                "٠١٢٣٤٥٦٧٨٩".indexOf(digit)
+        );
+
+    }
+
+
+    /* =========================================================
+       FORMAT DYNAMIC VALUES
+    ========================================================= */
+
+    function translateNumberUnits(element) {
+
+        if (!element) return;
+
+        const raw =
+            element.dataset.originalValue ||
+            element.textContent.trim();
+
+        if (!raw) return;
+
+
+        element.dataset.originalValue = raw;
+
+
+        if (currentLanguage === "en") {
+
+            element.textContent =
+                raw
+                    .replace(/د/g, "m")
+                    .replace(/س/g, "h")
+                    .replace(/يوم/g, "day")
+                    .replace(/أيام/g, "days");
+
+            return;
+
+        }
+
+
+        let value = raw;
+
+
+        /* Arabic digits */
+
+        value =
+            englishNumbers(value);
+
+
+        /* minutes */
+
+        value =
+            value.replace(
+                /(\d+)\s*m\b/gi,
+                "$1د"
+            );
+
+
+        /* hours */
+
+        value =
+            value.replace(
+                /(\d+)\s*h\b/gi,
+                "$1س"
+            );
+
+
+        /* days */
+
+        value =
+            value.replace(
+                /(\d+)\s*days?\b/gi,
+                "$1 يوم"
+            );
+
+
+        /* minutes word */
+
+        value =
+            value.replace(
+                /(\d+)\s*minutes?\b/gi,
+                "$1 دقيقة"
+            );
+
+
+        /* hours word */
+
+        value =
+            value.replace(
+                /(\d+)\s*hours?\b/gi,
+                "$1 ساعة"
+            );
+
+
+        /* Arabic numerals */
+
+        value =
+            arabicNumbers(value);
+
+
+        element.textContent = value;
+
+    }
+
+
+    function updateDynamicValues() {
+
+        /* TIMER */
+
+        const timer =
+            get("timer");
+
+        if (timer) {
+
+            if (currentLanguage === "ar") {
+
+                timer.textContent =
+                    arabicNumbers(
+                        englishNumbers(
+                            timer.textContent
+                        )
+                    );
+
+            } else {
+
+                timer.textContent =
+                    englishNumbers(
+                        timer.textContent
+                    );
+
+            }
+
+        }
+
+
+        /* STATS */
+
+        document
+            .querySelectorAll(".stat-value")
+            .forEach(element => {
+
+                translateNumberUnits(element);
+
+            });
+
+
+        /* INPUT VALUES */
+
+        [
+            "focusInput",
+            "shortBreakInput",
+            "longBreakInput",
+            "longBreakAfterInput",
+            "dailyGoalInput"
+        ].forEach(id => {
+
+            const input = get(id);
+
+            if (!input) return;
+
+            if (
+                currentLanguage === "ar"
+                &&
+                document.activeElement !== input
+            ) {
+
+                input.value =
+                    arabicNumbers(
+                        englishNumbers(
+                            input.value
+                        )
+                    );
+
+            }
+
+        });
+
+
+        /* VOLUME */
+
+        const volume =
+            get("alarmVolumeValue");
+
+        if (volume) {
+
+            const number =
+                parseInt(
+                    englishNumbers(
+                        volume.textContent
+                    )
+                );
+
+            if (!isNaN(number)) {
+
+                volume.textContent =
+                    currentLanguage === "ar"
+                        ? arabicNumbers(number) + "%"
+                        : number + "%";
+
+            }
+
         }
 
     }
 
 
-    function placeholder(id, value) {
+    /* =========================================================
+       TITLES
+    ========================================================= */
 
-        const element = $(id);
+    function applyButtonTitles(lang) {
 
-        if (element) {
-            element.placeholder = value;
-        }
+        const titles = {
+
+            en: {
+                blogOpen: "Blog",
+                languageToggle: "Change language",
+                mediaOpen: "Media",
+                tasksOpen: "Tasks",
+                focusOnlyBtn: "Focus Only",
+                themeBtn: "Theme",
+                settingsOpen: "Settings",
+                ambientOpen: "Ambient",
+                focusExit: "Exit Focus"
+            },
+
+            ar: {
+                blogOpen: "المدونة",
+                languageToggle: "تغيير اللغة",
+                mediaOpen: "الوسائط",
+                tasksOpen: "المهام",
+                focusOnlyBtn: "وضع التركيز",
+                themeBtn: "المظهر",
+                settingsOpen: "الإعدادات",
+                ambientOpen: "الأجواء",
+                focusExit: "الخروج من التركيز"
+            }
+
+        };
+
+
+        const selected =
+            titles[lang];
+
+
+        Object.keys(selected).forEach(id => {
+
+            const element = get(id);
+
+            if (element) {
+
+                element.title =
+                    selected[id];
+
+            }
+
+        });
 
     }
 
@@ -562,153 +954,197 @@
 
     function applyLanguage(lang) {
 
-        const t = translations[lang];
+        const t =
+            translations[lang];
 
         if (!t) return;
 
 
-        /* -----------------------------------------------------
-           HTML DIRECTION
-        ----------------------------------------------------- */
+        currentLanguage = lang;
 
-        document.documentElement.lang = lang;
+
+        document.documentElement.lang =
+            lang;
 
         document.documentElement.dir =
-            lang === "ar" ? "rtl" : "ltr";
-
+            lang === "ar"
+                ? "rtl"
+                : "ltr";
 
         document.body.dir =
-            lang === "ar" ? "rtl" : "ltr";
+            lang === "ar"
+                ? "rtl"
+                : "ltr";
 
 
-        /* -----------------------------------------------------
+        /* =====================================================
+           LOGO
+        ===================================================== */
+
+        setText(
+            document.querySelector(".logo"),
+            t.logo
+        );
+
+
+        /* =====================================================
            HEADER
-        ----------------------------------------------------- */
+        ===================================================== */
 
-        text("languageLabel", t.language);
-
-        const blog =
-            document.querySelector(".blog-btn");
-
-        if (blog) {
-            blog.textContent = t.blog;
-        }
+        setText(
+            get("languageLabel"),
+            t.language
+        );
 
 
-        /* -----------------------------------------------------
+        setText(
+            get("blogOpen"),
+            t.blog
+        );
+
+
+        /* =====================================================
            TIMER
-        ----------------------------------------------------- */
+        ===================================================== */
 
         const mode =
-            $("modeText");
+            get("modeText");
 
         if (mode) {
 
-            if (!mode.dataset.mode) {
-                mode.dataset.mode = "focus";
-            }
+            const modeType =
+                mode.dataset.mode ||
+                "focus";
 
-            if (mode.dataset.mode === "short") {
 
-                mode.textContent =
-                    t.shortBreak;
+            if (modeType === "short") {
 
-            } else if (mode.dataset.mode === "long") {
+                setText(
+                    mode,
+                    t.shortBreak
+                );
 
-                mode.textContent =
-                    t.longBreak;
+            } else if (modeType === "long") {
+
+                setText(
+                    mode,
+                    t.longBreak
+                );
 
             } else {
 
-                mode.textContent =
-                    t.focus;
+                setText(
+                    mode,
+                    t.focus
+                );
 
             }
 
         }
 
 
-        text(
-            "timerLabel",
+        setText(
+            get("timerLabel"),
             t.timerLabel
         );
 
 
         const currentTask =
-            $("currentTask");
+            get("currentTask");
+
 
         if (currentTask) {
 
             const span =
-                currentTask.querySelector("span");
+                currentTask.querySelector(
+                    "span"
+                );
 
             if (span) {
-                span.textContent = t.noTask;
+
+                setText(
+                    span,
+                    t.noTask
+                );
+
             }
 
         }
 
 
-        text(
-            "startBtn",
+        setText(
+            get("startBtn"),
             t.start
         );
 
 
-        text(
-            "focusExit",
+        setText(
+            get("focusExit"),
             t.exitFocus
         );
 
 
-        /* -----------------------------------------------------
+        /* =====================================================
            BOTTOM STATS
-        ----------------------------------------------------- */
+        ===================================================== */
 
         const statTitles =
-            document.querySelectorAll(".stat-title");
+            document.querySelectorAll(
+                ".stat-title"
+            );
+
 
         if (statTitles.length >= 4) {
 
-            statTitles[0].textContent =
-                t.focusStat;
+            setText(
+                statTitles[0],
+                t.focusStat
+            );
 
-            statTitles[1].textContent =
-                t.dailyGoal;
+            setText(
+                statTitles[1],
+                t.dailyGoal
+            );
 
-            statTitles[2].textContent =
-                t.sessions;
+            setText(
+                statTitles[2],
+                t.sessions
+            );
 
-            statTitles[3].textContent =
-                t.streak;
+            setText(
+                statTitles[3],
+                t.streak
+            );
 
         }
 
 
-        text(
-            "ambientOpen",
+        /* =====================================================
+           AMBIENT
+        ===================================================== */
+
+        setText(
+            get("ambientOpen"),
             t.ambient
         );
 
 
-        /* -----------------------------------------------------
+        /* =====================================================
            SETTINGS
-        ----------------------------------------------------- */
+        ===================================================== */
 
         const settingsOverlay =
-            $("settingsOverlay");
+            get("settingsOverlay");
+
 
         if (settingsOverlay) {
 
-            const title =
+            setText(
                 settingsOverlay.querySelector(
                     ".panel-title"
-                );
-
-            if (title) {
-                title.textContent =
-                    t.settingsTitle;
-            }
+                ),
+                t.settingsTitle
+            );
 
 
             const sections =
@@ -716,23 +1152,28 @@
                     ".section-title"
                 );
 
+
             const sectionTexts = [
 
                 t.timer,
                 t.dailyGoalTitle,
                 t.smartTimer,
                 t.alarm,
-                t.accounts
+                t.accounts,
+                t.reset
 
             ];
+
 
             sections.forEach(
                 (element, index) => {
 
                     if (sectionTexts[index]) {
 
-                        element.textContent =
-                            sectionTexts[index];
+                        setText(
+                            element,
+                            sectionTexts[index]
+                        );
 
                     }
 
@@ -740,10 +1181,13 @@
             );
 
 
+            /* SETTING NAMES */
+
             const names =
                 settingsOverlay.querySelectorAll(
                     ".setting-name"
                 );
+
 
             const nameTexts = [
 
@@ -761,13 +1205,16 @@
 
             ];
 
+
             names.forEach(
                 (element, index) => {
 
                     if (nameTexts[index]) {
 
-                        element.textContent =
-                            nameTexts[index];
+                        setText(
+                            element,
+                            nameTexts[index]
+                        );
 
                     }
 
@@ -775,10 +1222,13 @@
             );
 
 
+            /* DESCRIPTIONS */
+
             const descriptions =
                 settingsOverlay.querySelectorAll(
                     ".setting-description"
                 );
+
 
             const descriptionTexts = [
 
@@ -796,13 +1246,16 @@
 
             ];
 
+
             descriptions.forEach(
                 (element, index) => {
 
                     if (descriptionTexts[index]) {
 
-                        element.textContent =
-                            descriptionTexts[index];
+                        setText(
+                            element,
+                            descriptionTexts[index]
+                        );
 
                     }
 
@@ -812,182 +1265,234 @@
         }
 
 
-        /* -----------------------------------------------------
+        /* =====================================================
            ALARM
-        ----------------------------------------------------- */
+        ===================================================== */
 
-        text(
-            "testAlarmText",
+        setText(
+            get("testAlarmText"),
             t.test
         );
 
 
-        const upload =
-            $("alarmUploadLabel");
+        const alarmUpload =
+            get("alarmUploadLabel");
 
-        if (upload) {
 
-            const strong =
-                upload.querySelector("strong");
+        if (alarmUpload) {
 
-            const span =
-                upload.querySelector("span");
+            setText(
+                alarmUpload.querySelector(
+                    "strong"
+                ),
+                t.uploadCustom
+            );
 
-            if (strong) {
-                strong.textContent =
-                    t.uploadCustom;
-            }
 
-            if (span) {
-                span.textContent =
-                    t.audioFormats;
-            }
+            setText(
+                alarmUpload.querySelector(
+                    "span"
+                ),
+                t.audioFormats
+            );
 
         }
 
 
-        /* -----------------------------------------------------
-           ACCOUNTS
-        ----------------------------------------------------- */
+        /* =====================================================
+           ALARM SELECT OPTIONS
+        ===================================================== */
 
-        text(
-            "spotifyStatus",
+        const alarmSelect =
+            get("alarmSound");
+
+
+        if (alarmSelect) {
+
+            const optionMap = {
+
+                soft: t.softBell,
+                digital: t.digital,
+                focus: t.focusSound,
+                gentle: t.gentle,
+                deep: t.deep,
+                success: t.success,
+                custom: t.custom
+
+            };
+
+
+            Array.from(
+                alarmSelect.options
+            ).forEach(option => {
+
+                if (
+                    optionMap[
+                        option.value
+                    ]
+                ) {
+
+                    option.textContent =
+                        optionMap[
+                            option.value
+                        ];
+
+                }
+
+            });
+
+        }
+
+
+        /* =====================================================
+           ACCOUNTS
+        ===================================================== */
+
+        setText(
+            get("spotifyStatus"),
             t.notConnected
         );
 
-        text(
-            "googleStatus",
+
+        setText(
+            get("googleStatus"),
             t.notConnected
         );
 
 
         document
-            .querySelectorAll(".account-button")
+            .querySelectorAll(
+                ".account-button"
+            )
             .forEach(button => {
 
-                button.textContent =
-                    t.connect;
+                setText(
+                    button,
+                    t.connect
+                );
 
             });
 
 
-        /* -----------------------------------------------------
+        /* =====================================================
            RESET
-        ----------------------------------------------------- */
+        ===================================================== */
 
-        text(
-            "resetStatsBtn",
+        setText(
+            get("resetStatsBtn"),
             t.resetStats
         );
 
 
-        /* -----------------------------------------------------
+        /* =====================================================
            TASKS
-        ----------------------------------------------------- */
+        ===================================================== */
 
         const tasksOverlay =
-            $("tasksOverlay");
+            get("tasksOverlay");
+
 
         if (tasksOverlay) {
 
-            const title =
+            setText(
                 tasksOverlay.querySelector(
                     ".panel-title"
-                );
+                ),
+                t.tasksTitle
+            );
 
-            const subtitle =
+
+            setText(
                 tasksOverlay.querySelector(
                     ".panel-subtitle"
-                );
-
-            if (title) {
-                title.textContent =
-                    t.tasksTitle;
-            }
-
-            if (subtitle) {
-                subtitle.textContent =
-                    t.tasksSubtitle;
-            }
+                ),
+                t.tasksSubtitle
+            );
 
         }
 
 
-        placeholder(
-            "taskInput",
+        setPlaceholder(
+            get("taskInput"),
             t.taskPlaceholder
         );
 
 
-        text(
-            "taskEmpty",
+        setText(
+            get("taskEmpty"),
             t.noTasks
         );
 
 
-        /* -----------------------------------------------------
+        /* =====================================================
            MEDIA
-        ----------------------------------------------------- */
+        ===================================================== */
 
         const mediaOverlay =
-            $("mediaOverlay");
+            get("mediaOverlay");
+
 
         if (mediaOverlay) {
 
-            const title =
+            setText(
                 mediaOverlay.querySelector(
                     ".panel-title"
-                );
-
-            if (title) {
-                title.textContent =
-                    t.mediaTitle;
-            }
-
-        }
-
-
-        const mediaTabs =
-            document.querySelectorAll(
-                ".media-tab"
+                ),
+                t.mediaTitle
             );
 
-        if (mediaTabs[0]) {
-            mediaTabs[0].textContent =
-                t.youtube;
-        }
-
-        if (mediaTabs[1]) {
-            mediaTabs[1].textContent =
-                t.spotifyTab;
-        }
-
-        if (mediaTabs[2]) {
-            mediaTabs[2].textContent =
-                t.local;
         }
 
 
-        placeholder(
-            "youtubeInput",
+        document
+            .querySelectorAll(
+                ".media-tab"
+            )
+            .forEach(
+                (tab, index) => {
+
+                    if (index === 0)
+                        setText(
+                            tab,
+                            t.youtube
+                        );
+
+                    if (index === 1)
+                        setText(
+                            tab,
+                            t.spotifyTab
+                        );
+
+                    if (index === 2)
+                        setText(
+                            tab,
+                            t.local
+                        );
+
+                }
+            );
+
+
+        setPlaceholder(
+            get("youtubeInput"),
             t.youtubePlaceholder
         );
 
 
-        text(
-            "youtubePlay",
+        setText(
+            get("youtubePlay"),
             t.playYoutube
         );
 
 
-        placeholder(
-            "spotifyInput",
+        setPlaceholder(
+            get("spotifyInput"),
             t.spotifyPlaceholder
         );
 
 
-        text(
-            "spotifyPlay",
+        setText(
+            get("spotifyPlay"),
             t.openSpotify
         );
 
@@ -997,114 +1502,99 @@
                 'label[for="mediaFile"]'
             );
 
+
         if (mediaFileLabel) {
 
-            const strong =
+            setText(
                 mediaFileLabel.querySelector(
                     "strong"
-                );
+                ),
+                t.chooseMusic
+            );
 
-            const span =
+
+            setText(
                 mediaFileLabel.querySelector(
                     "span"
-                );
-
-            if (strong) {
-                strong.textContent =
-                    t.chooseMusic;
-            }
-
-            if (span) {
-                span.textContent =
-                    t.mediaFormats;
-            }
+                ),
+                t.mediaFormats
+            );
 
         }
 
 
-        text(
-            "mediaName",
+        setText(
+            get("mediaName"),
             t.nothingPlaying
         );
 
 
-        /* -----------------------------------------------------
+        /* =====================================================
            AMBIENT
-        ----------------------------------------------------- */
+        ===================================================== */
 
         const ambientOverlay =
-            $("ambientOverlay");
+            get("ambientOverlay");
+
 
         if (ambientOverlay) {
 
-            const title =
+            setText(
                 ambientOverlay.querySelector(
                     ".panel-title"
-                );
-
-            const subtitle =
-                ambientOverlay.querySelector(
-                    ".panel-subtitle"
-                );
-
-            if (title) {
-                title.textContent =
-                    t.ambientTitle;
-            }
-
-            if (subtitle) {
-                subtitle.textContent =
-                    t.ambientSubtitle;
-            }
-
-        }
-
-
-        const bgLabel =
-            document.querySelector(
-                'label[for="bgFile"]'
+                ),
+                t.ambientTitle
             );
 
-        if (bgLabel) {
-            bgLabel.textContent =
-                t.uploadBackground;
+
+            setText(
+                ambientOverlay.querySelector(
+                    ".panel-subtitle"
+                ),
+                t.ambientSubtitle
+            );
+
         }
 
 
-        /* -----------------------------------------------------
+        setText(
+            document.querySelector(
+                'label[for="bgFile"]'
+            ),
+            t.uploadBackground
+        );
+
+
+        /* =====================================================
            RESET CONFIRM
-        ----------------------------------------------------- */
+        ===================================================== */
 
         const confirmOverlay =
-            $("confirmOverlay");
+            get("confirmOverlay");
+
 
         if (confirmOverlay) {
 
-            const title =
+            setText(
                 confirmOverlay.querySelector(
                     ".panel-title"
-                );
+                ),
+                t.resetEverything
+            );
 
-            const description =
+
+            setText(
                 confirmOverlay.querySelector(
                     ".confirm-description"
-                );
-
-            if (title) {
-                title.textContent =
-                    t.resetEverything;
-            }
-
-            if (description) {
-                description.textContent =
-                    t.resetDescription;
-            }
+                ),
+                t.resetDescription
+            );
 
         }
 
 
-        text(
-            "confirmReset",
+        setText(
+            get("confirmReset"),
             t.resetButton
         );
 
@@ -1115,30 +1605,38 @@
             )
             .forEach(button => {
 
-                button.textContent =
-                    t.cancel;
+                setText(
+                    button,
+                    t.cancel
+                );
 
             });
 
 
-        /* -----------------------------------------------------
+        /* =====================================================
+           BUTTON TITLES
+        ===================================================== */
+
+        applyButtonTitles(lang);
+
+
+        /* =====================================================
            SAVE
-        ----------------------------------------------------- */
+        ===================================================== */
 
         localStorage.setItem(
             "rakkez_language",
             lang
         );
 
-        currentLanguage = lang;
 
-
-        /* -----------------------------------------------------
-           LANGUAGE BUTTON
-        ----------------------------------------------------- */
+        /* =====================================================
+           LANGUAGE BUTTON ACCESSIBILITY
+        ===================================================== */
 
         const languageButton =
-            $("languageToggle");
+            get("languageToggle");
+
 
         if (languageButton) {
 
@@ -1151,11 +1649,18 @@
 
         }
 
+
+        /* =====================================================
+           UPDATE NUMBERS
+        ===================================================== */
+
+        updateDynamicValues();
+
     }
 
 
     /* =========================================================
-       TOGGLE
+       TOGGLE LANGUAGE
     ========================================================= */
 
     function toggleLanguage() {
@@ -1165,7 +1670,65 @@
                 ? "ar"
                 : "en";
 
-        applyLanguage(nextLanguage);
+
+        applyLanguage(
+            nextLanguage
+        );
+
+    }
+
+
+    /* =========================================================
+       KEEP DYNAMIC STATS TRANSLATED
+    ========================================================= */
+
+    function watchDynamicValues() {
+
+        const targets = [
+
+            get("timer"),
+
+            get("focusStat"),
+
+            get("goalStat"),
+
+            get("sessionsStat"),
+
+            get("streakStat"),
+
+            get("alarmVolumeValue")
+
+        ];
+
+
+        targets.forEach(element => {
+
+            if (!element) return;
+
+
+            new MutationObserver(
+                function () {
+
+                    if (
+                        document.activeElement !==
+                        element
+                    ) {
+
+                        updateDynamicValues();
+
+                    }
+
+                }
+            ).observe(
+                element,
+                {
+                    childList: true,
+                    characterData: true,
+                    subtree: true
+                }
+            );
+
+        });
 
     }
 
@@ -1177,12 +1740,13 @@
     function initLanguage() {
 
         const button =
-            $("languageToggle");
+            get("languageToggle");
+
 
         if (!button) {
 
             console.error(
-                "RakkeZ: languageToggle NOT FOUND"
+                "RakkeZ: languageToggle was not found."
             );
 
             return;
@@ -1190,11 +1754,27 @@
         }
 
 
+        if (
+            button.dataset.languageReady ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        button.dataset.languageReady =
+            "true";
+
+
         button.addEventListener(
             "click",
             function (event) {
 
                 event.preventDefault();
+
+                event.stopPropagation();
 
                 toggleLanguage();
 
@@ -1206,6 +1786,9 @@
             currentLanguage
         );
 
+
+        watchDynamicValues();
+
     }
 
 
@@ -1214,7 +1797,8 @@
     ========================================================= */
 
     if (
-        document.readyState === "loading"
+        document.readyState ===
+        "loading"
     ) {
 
         document.addEventListener(
@@ -1227,5 +1811,6 @@
         initLanguage();
 
     }
+
 
 })();
