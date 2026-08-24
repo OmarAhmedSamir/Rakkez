@@ -10,18 +10,30 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>RakkeZ — Blog</title>
+<title>RakkeZ Blog</title>
 
-<meta
-    name="description"
-    content="RakkeZ Blog — ideas, updates, guides and productivity."
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
 >
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+>
+
+<script src="blog-data.js"></script>
 
 <style>
 
 /* =========================================================
-   RAKKEZ BLOG
-   SINGLE FILE
+   ROOT
 ========================================================= */
 
 :root{
@@ -46,39 +58,44 @@
 
     --danger:#ff5265;
 
-    --success:#54df86;
+    --success:#50e39a;
 
     --shadow:
-    0 30px 100px rgba(0,0,0,.55);
+        0 30px 100px rgba(0,0,0,.55);
 
     --radius:24px;
 
 }
 
 
+/* =========================================================
+   RESET
+========================================================= */
+
 *{
+
     box-sizing:border-box;
+
     margin:0;
+
     padding:0;
+
 }
 
 
-html{
-    scroll-behavior:smooth;
+html,
+body{
+
+    width:100%;
+
+    min-height:100%;
+
 }
 
 
 body{
 
-    min-height:100vh;
-
-    font-family:
-    "DM Sans",
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+    font-family:"DM Sans",sans-serif;
 
     background:#02040a;
 
@@ -87,155 +104,68 @@ body{
 }
 
 
-button,
-input,
-textarea,
-select{
-    font:inherit;
-}
-
-
-button{
-    border:0;
-    cursor:pointer;
-    color:inherit;
-}
-
-
-a{
-    color:inherit;
-    text-decoration:none;
-}
-
-
 /* =========================================================
    BACKGROUND
 ========================================================= */
 
-.app{
+body::before{
 
-    position:relative;
+    content:"";
 
-    min-height:100vh;
+    position:fixed;
 
-    overflow:hidden;
+    inset:-30%;
+
+    z-index:-2;
 
     background:
 
-    radial-gradient(
-        circle at 20% 20%,
-        rgba(0,105,255,.22),
-        transparent 35%
-    ),
+        radial-gradient(
+            circle at 20% 30%,
+            #005eff 0%,
+            transparent 28%
+        ),
 
-    radial-gradient(
-        circle at 80% 75%,
-        rgba(0,55,255,.16),
-        transparent 40%
-    ),
+        radial-gradient(
+            circle at 75% 20%,
+            #0b2d91 0%,
+            transparent 30%
+        ),
 
-    #03050a;
+        radial-gradient(
+            circle at 60% 80%,
+            #001f6f 0%,
+            transparent 32%
+        ),
+
+        #02040b;
+
+    filter:blur(35px);
+
+    opacity:.75;
 
 }
 
 
-.background{
+body::after{
+
+    content:"";
 
     position:fixed;
 
     inset:0;
 
-    z-index:0;
+    z-index:-1;
 
-    overflow:hidden;
+    background:
+
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.25),
+            rgba(0,0,0,.65)
+        );
 
     pointer-events:none;
-
-}
-
-
-.bg-gradient{
-
-    position:absolute;
-
-    inset:-30%;
-
-    background:
-
-    radial-gradient(
-        circle at 20% 30%,
-        #005eff 0%,
-        transparent 28%
-    ),
-
-    radial-gradient(
-        circle at 75% 20%,
-        #0b2d91 0%,
-        transparent 30%
-    ),
-
-    radial-gradient(
-        circle at 60% 80%,
-        #001f6f 0%,
-        transparent 32%
-    ),
-
-    #02040b;
-
-    filter:blur(35px);
-
-    animation:
-    gradientMove 18s ease-in-out infinite alternate;
-
-    transform:scale(1.15);
-
-    opacity:.7;
-
-}
-
-
-@keyframes gradientMove{
-
-    0%{
-        transform:
-        scale(1.15)
-        translate(-2%,-2%);
-    }
-
-    50%{
-        transform:
-        scale(1.22)
-        translate(3%,1%);
-    }
-
-    100%{
-        transform:
-        scale(1.18)
-        translate(-1%,4%);
-    }
-
-}
-
-
-.bg-overlay{
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-
-    linear-gradient(
-        180deg,
-        rgba(0,0,0,.28),
-        rgba(0,0,0,.72)
-    ),
-
-    radial-gradient(
-        circle at center,
-        transparent 10%,
-        rgba(0,0,0,.55) 100%
-    );
 
 }
 
@@ -246,14 +176,13 @@ a{
 
 .topbar{
 
-    position:relative;
+    position:sticky;
 
-    z-index:20;
+    top:0;
 
-    width:100%;
+    z-index:50;
 
-    padding:
-    22px 28px;
+    height:86px;
 
     display:flex;
 
@@ -261,15 +190,24 @@ a{
 
     justify-content:space-between;
 
+    padding:0 28px;
+
+    background:
+        rgba(3,5,10,.62);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.07);
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
 }
 
 
 .logo{
 
-    font-family:
-    "Space Grotesk",
-    "DM Sans",
-    sans-serif;
+    font-family:"Space Grotesk";
 
     font-size:25px;
 
@@ -281,7 +219,9 @@ a{
 
 
 .logo span{
+
     color:#3c94ff;
+
 }
 
 
@@ -311,63 +251,29 @@ a{
     border-radius:14px;
 
     background:
-    rgba(7,11,18,.55);
+        rgba(7,11,18,.55);
 
     border:
-    1px solid var(--border);
+        1px solid var(--border);
 
-    backdrop-filter:blur(18px);
+    color:white;
 
-    -webkit-backdrop-filter:blur(18px);
+    cursor:pointer;
 
     transition:.25s;
-
-    font-size:17px;
 
 }
 
 
 .icon-btn:hover{
 
-    transform:
-    translateY(-2px);
+    transform:translateY(-2px);
 
     border-color:
-    var(--border-hover);
+        var(--border-hover);
 
     background:
-    rgba(20,30,48,.72);
-
-}
-
-
-.icon-btn.active{
-
-    background:
-    rgba(20,120,255,.14);
-
-    border-color:
-    rgba(35,131,255,.35);
-
-}
-
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-.page{
-
-    position:relative;
-
-    z-index:5;
-
-    width:min(1180px,92vw);
-
-    margin:0 auto;
-
-    padding:
-    55px 0 100px;
+        rgba(20,30,48,.72);
 
 }
 
@@ -378,11 +284,15 @@ a{
 
 .hero{
 
-    text-align:center;
+    width:min(1100px,92vw);
 
-    max-width:760px;
+    margin:0 auto;
 
-    margin:0 auto 55px;
+    padding:
+
+        85px
+        0
+        45px;
 
 }
 
@@ -393,67 +303,41 @@ a{
 
     align-items:center;
 
-    gap:7px;
-
-    margin-bottom:18px;
-
-    padding:
-    7px 11px;
+    padding:6px 10px;
 
     border-radius:9px;
 
     background:
-    rgba(20,120,255,.10);
+        rgba(20,120,255,.12);
 
     border:
-    1px solid rgba(35,131,255,.20);
+        1px solid rgba(35,131,255,.22);
 
-    color:#5ba6ff;
+    color:#66adff;
 
     font-size:10px;
 
     font-weight:700;
 
-    letter-spacing:1.5px;
+    letter-spacing:1.4px;
 
     text-transform:uppercase;
 
 }
 
 
-.hero-badge::before{
-
-    content:"";
-
-    width:6px;
-
-    height:6px;
-
-    border-radius:50%;
-
-    background:#1683ff;
-
-    box-shadow:
-    0 0 12px #1683ff;
-
-}
-
-
 .hero h1{
 
-    font-family:
-    "Space Grotesk",
-    "DM Sans",
-    sans-serif;
+    margin-top:17px;
+
+    font-family:"Space Grotesk";
 
     font-size:
-    clamp(45px,7vw,78px);
+        clamp(42px,7vw,78px);
 
-    line-height:.95;
+    line-height:.98;
 
     letter-spacing:-4px;
-
-    font-weight:650;
 
 }
 
@@ -467,13 +351,13 @@ a{
 
 .hero p{
 
-    margin:20px auto 0;
+    max-width:650px;
 
-    max-width:600px;
+    margin-top:20px;
 
     color:var(--muted);
 
-    font-size:14px;
+    font-size:15px;
 
     line-height:1.7;
 
@@ -481,10 +365,21 @@ a{
 
 
 /* =========================================================
-   SEARCH / CONTROLS
+   BLOG
 ========================================================= */
 
-.blog-controls{
+.blog-wrap{
+
+    width:min(1100px,92vw);
+
+    margin:0 auto;
+
+    padding-bottom:80px;
+
+}
+
+
+.blog-toolbar{
 
     display:flex;
 
@@ -494,201 +389,70 @@ a{
 
     gap:15px;
 
-    margin-bottom:28px;
+    margin-bottom:20px;
 
 }
 
 
-.search-wrap{
+.search{
 
-    position:relative;
+    width:280px;
 
-    flex:1;
+    max-width:100%;
 
-    max-width:390px;
+    height:44px;
 
-}
-
-
-.search-icon{
-
-    position:absolute;
-
-    left:15px;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    color:rgba(255,255,255,.38);
-
-    font-size:14px;
-
-    pointer-events:none;
-
-}
-
-
-.search-input{
-
-    width:100%;
-
-    height:46px;
-
-    padding:
-    0 15px 0 40px;
+    padding:0 14px;
 
     color:white;
 
     background:
-    rgba(8,13,22,.62);
+        rgba(255,255,255,.05);
 
     border:
-    1px solid var(--border);
+        1px solid var(--border);
 
-    border-radius:14px;
+    border-radius:13px;
 
     outline:none;
 
-    backdrop-filter:blur(18px);
-
-    transition:.25s;
-
 }
 
 
-.search-input::placeholder{
+.search:focus{
 
-    color:
-    rgba(255,255,255,.35);
-
-}
-
-
-.search-input:focus{
-
-    border-color:
-    rgba(35,131,255,.55);
-
-    box-shadow:
-    0 0 0 3px rgba(20,120,255,.08);
+    border-color:#2383ff;
 
 }
 
-
-.control-buttons{
-
-    display:flex;
-
-    gap:8px;
-
-}
-
-
-.small-button{
-
-    height:46px;
-
-    padding:
-    0 16px;
-
-    border-radius:14px;
-
-    background:
-    rgba(8,13,22,.62);
-
-    border:
-    1px solid var(--border);
-
-    backdrop-filter:blur(18px);
-
-    font-size:12px;
-
-    font-weight:600;
-
-    transition:.25s;
-
-}
-
-
-.small-button:hover{
-
-    border-color:
-    var(--border-hover);
-
-    background:
-    rgba(20,30,48,.72);
-
-}
-
-
-.small-button.primary{
-
-    background:
-    #1478ff;
-
-    border-color:
-    #1478ff;
-
-}
-
-
-.small-button.primary:hover{
-
-    background:
-    #2386ff;
-
-    box-shadow:
-    0 15px 35px
-    rgba(20,120,255,.20);
-
-}
-
-
-/* =========================================================
-   BLOG GRID
-========================================================= */
 
 .blog-grid{
 
     display:grid;
 
     grid-template-columns:
-    repeat(3,1fr);
+        repeat(3,1fr);
 
-    gap:18px;
+    gap:16px;
 
 }
 
 
 .blog-card{
 
-    position:relative;
-
     overflow:hidden;
 
-    min-height:390px;
-
-    display:flex;
-
-    flex-direction:column;
-
     border:
-    1px solid rgba(255,255,255,.10);
+        1px solid rgba(255,255,255,.09);
 
-    border-radius:22px;
+    border-radius:20px;
 
     background:
-    rgba(8,13,22,.68);
+        rgba(8,13,22,.68);
 
     backdrop-filter:blur(18px);
 
-    -webkit-backdrop-filter:blur(18px);
-
-    transition:
-    transform .3s ease,
-    border-color .3s ease,
-    box-shadow .3s ease;
+    transition:.3s;
 
     cursor:pointer;
 
@@ -697,373 +461,41 @@ a{
 
 .blog-card:hover{
 
-    transform:
-    translateY(-5px);
+    transform:translateY(-5px);
 
     border-color:
-    rgba(255,255,255,.20);
-
-    box-shadow:
-    0 25px 70px rgba(0,0,0,.35);
+        rgba(255,255,255,.18);
 
 }
 
 
 .card-image{
 
-    position:relative;
-
     width:100%;
 
-    height:205px;
-
-    overflow:hidden;
-
-    background:
-    linear-gradient(
-        135deg,
-        #08111f,
-        #061b40
-    );
-
-}
-
-
-.card-image img{
-
-    width:100%;
-
-    height:100%;
+    height:210px;
 
     object-fit:cover;
 
     display:block;
 
-    transition:
-    transform .5s ease;
+    background:#0b111c;
 
 }
 
 
-.blog-card:hover .card-image img{
-
-    transform:
-    scale(1.05);
-
-}
-
-
-.card-image::after{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-    linear-gradient(
-        180deg,
-        transparent 45%,
-        rgba(0,0,0,.42)
-    );
-
-    pointer-events:none;
-
-}
-
-
-.card-content{
-
-    display:flex;
-
-    flex-direction:column;
-
-    flex:1;
+.card-body{
 
     padding:18px;
 
 }
 
 
-.card-meta{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:9px;
-
-    margin-bottom:10px;
-
-    color:var(--muted);
+.card-date{
 
     font-size:10px;
 
-}
-
-
-.card-dot{
-
-    width:3px;
-
-    height:3px;
-
-    border-radius:50%;
-
-    background:
-    rgba(255,255,255,.3);
-
-}
-
-
-.card-title{
-
-    font-family:
-    "Space Grotesk",
-    "DM Sans",
-    sans-serif;
-
-    font-size:20px;
-
-    line-height:1.15;
-
-    letter-spacing:-.5px;
-
-    font-weight:600;
-
-}
-
-
-.card-description{
-
-    margin-top:9px;
-
-    color:var(--muted);
-
-    font-size:12px;
-
-    line-height:1.65;
-
-    display:-webkit-box;
-
-    -webkit-line-clamp:3;
-
-    -webkit-box-orient:vertical;
-
-    overflow:hidden;
-
-}
-
-
-.card-footer{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    margin-top:auto;
-
-    padding-top:18px;
-
-}
-
-
-.read-more{
-
     color:#5ba6ff;
-
-    font-size:11px;
-
-    font-weight:700;
-
-}
-
-
-.read-arrow{
-
-    font-size:16px;
-
-    transition:.25s;
-
-}
-
-
-.blog-card:hover .read-arrow{
-
-    transform:
-    translateX(4px);
-
-}
-
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
-.empty-state{
-
-    grid-column:
-    1 / -1;
-
-    padding:70px 20px;
-
-    text-align:center;
-
-    border:
-    1px solid rgba(255,255,255,.08);
-
-    border-radius:22px;
-
-    background:
-    rgba(8,13,22,.55);
-
-}
-
-
-.empty-icon{
-
-    width:55px;
-
-    height:55px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    margin:0 auto 15px;
-
-    border-radius:17px;
-
-    background:
-    rgba(20,120,255,.10);
-
-    border:
-    1px solid rgba(20,120,255,.14);
-
-    font-size:22px;
-
-}
-
-
-.empty-state h3{
-
-    font-family:"Space Grotesk";
-
-    font-size:18px;
-
-}
-
-
-.empty-state p{
-
-    margin-top:7px;
-
-    color:var(--muted);
-
-    font-size:12px;
-
-}
-
-
-/* =========================================================
-   ARTICLE VIEW
-========================================================= */
-
-.article-view{
-
-    display:none;
-
-}
-
-
-.article-view.show{
-
-    display:block;
-
-}
-
-
-.article-back{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    height:42px;
-
-    padding:
-    0 14px;
-
-    margin-bottom:30px;
-
-    border-radius:13px;
-
-    background:
-    rgba(8,13,22,.62);
-
-    border:
-    1px solid var(--border);
-
-    color:var(--muted);
-
-    font-size:11px;
-
-    font-weight:600;
-
-    transition:.25s;
-
-}
-
-
-.article-back:hover{
-
-    color:white;
-
-    border-color:
-    var(--border-hover);
-
-    transform:
-    translateX(-2px);
-
-}
-
-
-.article-header{
-
-    max-width:900px;
-
-    margin:0 auto;
-
-}
-
-
-.article-category{
-
-    display:inline-flex;
-
-    margin-bottom:14px;
-
-    padding:
-    6px 9px;
-
-    border-radius:8px;
-
-    background:
-    rgba(20,120,255,.10);
-
-    border:
-    1px solid rgba(35,131,255,.18);
-
-    color:#5ba6ff;
-
-    font-size:9px;
 
     font-weight:700;
 
@@ -1074,115 +506,211 @@ a{
 }
 
 
-.article-title{
+.card-title{
 
-    font-family:
-    "Space Grotesk",
-    "DM Sans",
-    sans-serif;
+    margin-top:8px;
 
-    font-size:
-    clamp(38px,6vw,68px);
+    font-family:"Space Grotesk";
 
-    line-height:.98;
+    font-size:19px;
 
-    letter-spacing:-3px;
+    line-height:1.15;
 
 }
 
 
-.article-meta{
+.card-excerpt{
 
-    display:flex;
-
-    gap:9px;
-
-    align-items:center;
-
-    margin-top:18px;
+    margin-top:9px;
 
     color:var(--muted);
 
-    font-size:11px;
+    font-size:12px;
+
+    line-height:1.6;
+
+    display:-webkit-box;
+
+    -webkit-box-orient:vertical;
+
+    -webkit-line-clamp:3;
+
+    line-clamp:3;
+
+    overflow:hidden;
 
 }
 
 
-.article-cover{
+.empty{
+
+    grid-column:1/-1;
+
+    padding:70px 20px;
+
+    text-align:center;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    color:var(--muted);
+
+}
+
+
+/* =========================================================
+   ARTICLE
+========================================================= */
+
+.article-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:100;
+
+    display:none;
+
+    padding:20px;
+
+    overflow:auto;
+
+    background:
+        rgba(0,0,0,.65);
+
+    backdrop-filter:blur(18px);
+
+}
+
+
+.article-overlay.show{
+
+    display:block;
+
+}
+
+
+.article{
+
+    width:min(850px,96vw);
+
+    margin:40px auto;
+
+    padding:30px;
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    border-radius:28px;
+
+    background:
+        rgba(8,13,22,.95);
+
+    box-shadow:var(--shadow);
+
+}
+
+
+.article-image{
 
     width:100%;
 
-    max-height:560px;
-
-    margin-top:35px;
+    max-height:430px;
 
     object-fit:cover;
 
-    border-radius:24px;
+    border-radius:18px;
 
-    border:
-    1px solid rgba(255,255,255,.10);
+}
 
-    box-shadow:
-    0 30px 100px rgba(0,0,0,.35);
+
+.article-date{
+
+    margin-top:22px;
+
+    color:#5ba6ff;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+}
+
+
+.article h1{
+
+    margin-top:10px;
+
+    font-family:"Space Grotesk";
+
+    font-size:
+        clamp(32px,5vw,55px);
+
+    line-height:1.05;
+
+    letter-spacing:-2px;
 
 }
 
 
 .article-content{
 
-    max-width:800px;
-
-    margin:45px auto 0;
+    margin-top:28px;
 
     color:
-    rgba(255,255,255,.82);
+        rgba(255,255,255,.80);
 
-    font-size:16px;
+    font-size:15px;
 
-    line-height:1.85;
+    line-height:1.9;
 
-}
-
-
-.article-content h1,
-.article-content h2,
-.article-content h3{
-
-    font-family:
-    "Space Grotesk",
-    "DM Sans",
-    sans-serif;
-
-    color:white;
-
-    line-height:1.2;
-
-    margin:
-    35px 0 14px;
-
-}
-
-
-.article-content h1{
-    font-size:32px;
 }
 
 
 .article-content h2{
-    font-size:27px;
+
+    margin:
+        30px 0 10px;
+
+    font-family:"Space Grotesk";
+
+    color:white;
+
 }
 
 
 .article-content h3{
-    font-size:22px;
+
+    margin:
+        24px 0 8px;
+
+    color:white;
+
 }
 
 
 .article-content p{
 
-    margin:
-    0 0 20px;
+    margin-bottom:16px;
+
+}
+
+
+.article-content img{
+
+    max-width:100%;
+
+    border-radius:14px;
 
 }
 
@@ -1191,111 +719,25 @@ a{
 .article-content ol{
 
     margin:
-    0 0 22px 25px;
-
-}
-
-
-.article-content li{
-
-    margin-bottom:8px;
+        15px 0 20px 25px;
 
 }
 
 
 .article-content blockquote{
 
-    margin:
-    25px 0;
+    margin:20px 0;
 
     padding:
-    16px 20px;
+        15px 18px;
 
     border-left:
-    3px solid #1683ff;
+        3px solid #1683ff;
 
     background:
-    rgba(20,120,255,.06);
+        rgba(20,120,255,.06);
 
-    border-radius:
-    0 13px 13px 0;
-
-    color:
-    rgba(255,255,255,.65);
-
-}
-
-
-.article-content a{
-
-    color:#5ba6ff;
-
-    text-decoration:underline;
-
-}
-
-
-.article-content img{
-
-    width:100%;
-
-    max-height:650px;
-
-    object-fit:cover;
-
-    border-radius:18px;
-
-    margin:
-    20px 0;
-
-    border:
-    1px solid rgba(255,255,255,.10);
-
-}
-
-
-.article-content pre{
-
-    overflow:auto;
-
-    margin:
-    22px 0;
-
-    padding:
-    17px;
-
-    border-radius:14px;
-
-    background:
-    rgba(0,0,0,.45);
-
-    border:
-    1px solid rgba(255,255,255,.08);
-
-    font-family:
-    Consolas,
-    monospace;
-
-    font-size:13px;
-
-}
-
-
-.article-content code{
-
-    padding:
-    2px 5px;
-
-    border-radius:5px;
-
-    background:
-    rgba(255,255,255,.08);
-
-    font-family:
-    Consolas,
-    monospace;
-
-    font-size:.9em;
+    color:var(--muted);
 
 }
 
@@ -1304,13 +746,13 @@ a{
    ADMIN OVERLAY
 ========================================================= */
 
-.admin-overlay{
+.overlay{
 
     position:fixed;
 
     inset:0;
 
-    z-index:1000;
+    z-index:200;
 
     display:none;
 
@@ -1321,92 +763,61 @@ a{
     padding:20px;
 
     background:
-    rgba(0,0,0,.68);
+        rgba(0,0,0,.58);
 
-    backdrop-filter:
-    blur(18px);
-
-    -webkit-backdrop-filter:
-    blur(18px);
+    backdrop-filter:blur(15px);
 
 }
 
 
-.admin-overlay.show{
+.overlay.show{
 
     display:flex;
 
 }
 
 
-.admin-panel{
+.panel{
 
-    width:min(1050px,96vw);
+    width:min(800px,96vw);
 
-    max-height:94vh;
+    max-height:92vh;
 
     overflow:auto;
 
     padding:25px;
 
     border:
-    1px solid rgba(255,255,255,.12);
+        1px solid rgba(255,255,255,.12);
 
     border-radius:28px;
 
     background:
-    rgba(8,13,22,.95);
+        rgba(8,13,22,.95);
 
-    box-shadow:
-    var(--shadow);
-
-    animation:
-    panelIn .3s ease;
+    box-shadow:var(--shadow);
 
 }
 
 
-.admin-panel::-webkit-scrollbar{
+.panel::-webkit-scrollbar{
 
-    width:5px;
+    width:4px;
 
 }
 
 
-.admin-panel::-webkit-scrollbar-thumb{
+.panel::-webkit-scrollbar-thumb{
 
     background:
-    rgba(255,255,255,.15);
+        rgba(255,255,255,.15);
 
     border-radius:10px;
 
 }
 
 
-@keyframes panelIn{
-
-    from{
-
-        opacity:0;
-
-        transform:
-        translateY(15px)
-        scale(.98);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:none;
-
-    }
-
-}
-
-
-.admin-head{
+.panel-head{
 
     display:flex;
 
@@ -1414,36 +825,23 @@ a{
 
     justify-content:space-between;
 
-    gap:20px;
+    gap:15px;
 
-    margin-bottom:23px;
+    margin-bottom:22px;
 
 }
 
 
-.admin-title{
+.panel-title{
 
     font-family:"Space Grotesk";
 
-    font-size:24px;
-
-    font-weight:600;
+    font-size:23px;
 
 }
 
 
-.admin-subtitle{
-
-    margin-top:4px;
-
-    color:var(--muted);
-
-    font-size:11px;
-
-}
-
-
-.close-btn{
+.close{
 
     width:38px;
 
@@ -1452,200 +850,14 @@ a{
     border-radius:12px;
 
     background:
-    rgba(255,255,255,.07);
+        rgba(255,255,255,.07);
 
     border:
-    1px solid var(--border);
+        1px solid var(--border);
 
-    font-size:18px;
+    color:white;
 
-    transition:.25s;
-
-}
-
-
-.close-btn:hover{
-
-    background:
-    rgba(255,255,255,.12);
-
-    border-color:
-    var(--border-hover);
-
-}
-
-
-/* =========================================================
-   ADMIN LAYOUT
-========================================================= */
-
-.admin-layout{
-
-    display:grid;
-
-    grid-template-columns:
-    270px 1fr;
-
-    gap:20px;
-
-}
-
-
-.admin-sidebar{
-
-    padding:15px;
-
-    border:
-    1px solid rgba(255,255,255,.08);
-
-    border-radius:18px;
-
-    background:
-    rgba(255,255,255,.025);
-
-}
-
-
-.sidebar-title{
-
-    color:var(--muted);
-
-    font-size:9px;
-
-    font-weight:700;
-
-    letter-spacing:1.5px;
-
-    text-transform:uppercase;
-
-    margin-bottom:10px;
-
-}
-
-
-.post-list{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:7px;
-
-    max-height:570px;
-
-    overflow:auto;
-
-}
-
-
-.post-list::-webkit-scrollbar{
-
-    width:3px;
-
-}
-
-
-.post-list-item{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:9px;
-
-    width:100%;
-
-    padding:10px;
-
-    border-radius:12px;
-
-    background:
-    transparent;
-
-    border:
-    1px solid transparent;
-
-    text-align:left;
-
-    transition:.2s;
-
-}
-
-
-.post-list-item:hover{
-
-    background:
-    rgba(255,255,255,.045);
-
-}
-
-
-.post-list-item.active{
-
-    background:
-    rgba(20,120,255,.10);
-
-    border-color:
-    rgba(35,131,255,.18);
-
-}
-
-
-.post-list-thumb{
-
-    width:42px;
-
-    height:42px;
-
-    flex-shrink:0;
-
-    object-fit:cover;
-
-    border-radius:9px;
-
-    background:#101725;
-
-}
-
-
-.post-list-info{
-
-    min-width:0;
-
-    flex:1;
-
-}
-
-
-.post-list-title{
-
-    font-size:11px;
-
-    font-weight:600;
-
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
-}
-
-
-.post-list-status{
-
-    margin-top:3px;
-
-    font-size:9px;
-
-    color:var(--muted);
-
-}
-
-
-.admin-editor{
-
-    min-width:0;
+    cursor:pointer;
 
 }
 
@@ -1656,7 +868,7 @@ a{
 
 .form-group{
 
-    margin-bottom:15px;
+    margin-top:16px;
 
 }
 
@@ -1665,202 +877,56 @@ a{
 
     display:block;
 
-    margin-bottom:7px;
+    margin-bottom:8px;
 
     color:var(--muted);
 
-    font-size:10px;
-
-    font-weight:700;
-
-    letter-spacing:.8px;
+    font-size:11px;
 
     text-transform:uppercase;
+
+    letter-spacing:1px;
 
 }
 
 
-.form-input{
+.input{
 
     width:100%;
 
-    height:45px;
+    height:46px;
 
-    padding:
-    0 13px;
+    padding:0 13px;
 
     color:white;
 
     background:
-    rgba(255,255,255,.045);
+        rgba(255,255,255,.05);
 
     border:
-    1px solid var(--border);
+        1px solid var(--border);
 
-    border-radius:12px;
+    border-radius:13px;
 
     outline:none;
 
-    transition:.25s;
-
 }
 
 
-.form-input:focus{
+textarea.input{
 
-    border-color:
-    #2383ff;
+    min-height:100px;
 
-    box-shadow:
-    0 0 0 3px rgba(20,120,255,.07);
-
-}
-
-
-.form-textarea{
-
-    min-height:80px;
-
-    height:auto;
-
-    padding:
-    12px 13px;
+    padding:13px;
 
     resize:vertical;
 
 }
 
 
-.form-row{
+.input:focus{
 
-    display:grid;
-
-    grid-template-columns:
-    1fr 1fr;
-
-    gap:12px;
-
-}
-
-
-/* =========================================================
-   COVER UPLOAD
-========================================================= */
-
-.cover-upload{
-
-    position:relative;
-
-    min-height:170px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    overflow:hidden;
-
-    border:
-    1px dashed rgba(255,255,255,.18);
-
-    border-radius:17px;
-
-    background:
-    rgba(255,255,255,.025);
-
-    cursor:pointer;
-
-    transition:.25s;
-
-}
-
-
-.cover-upload:hover{
-
-    border-color:
-    #2484ff;
-
-    background:
-    rgba(20,120,255,.05);
-
-}
-
-
-.cover-upload.has-image{
-
-    border-style:solid;
-
-}
-
-
-.cover-upload img{
-
-    position:absolute;
-
-    inset:0;
-
-    width:100%;
-
-    height:100%;
-
-    object-fit:cover;
-
-}
-
-
-.cover-upload::after{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-    rgba(0,0,0,.35);
-
-    display:none;
-
-}
-
-
-.cover-upload.has-image::after{
-
-    display:block;
-
-}
-
-
-.cover-placeholder{
-
-    position:relative;
-
-    z-index:3;
-
-    text-align:center;
-
-    color:var(--muted);
-
-}
-
-
-.cover-placeholder strong{
-
-    display:block;
-
-    margin-bottom:5px;
-
-    color:white;
-
-    font-size:12px;
-
-}
-
-
-.cover-placeholder span{
-
-    font-size:10px;
+    border-color:#2383ff;
 
 }
 
@@ -1869,363 +935,305 @@ a{
    EDITOR
 ========================================================= */
 
-.editor-wrap{
-
-    overflow:hidden;
-
-    border:
-    1px solid var(--border);
-
-    border-radius:16px;
-
-    background:
-    rgba(255,255,255,.025);
-
-}
-
-
 .editor-toolbar{
 
     display:flex;
 
     flex-wrap:wrap;
 
-    gap:4px;
+    gap:5px;
 
     padding:8px;
 
-    border-bottom:
-    1px solid rgba(255,255,255,.08);
-
     background:
-    rgba(255,255,255,.025);
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--border);
+
+    border-bottom:0;
+
+    border-radius:
+        13px 13px 0 0;
 
 }
 
 
-.editor-tool{
+.editor-toolbar button{
 
     min-width:34px;
 
     height:32px;
 
-    padding:
-    0 8px;
+    padding:0 8px;
 
     border-radius:8px;
 
     background:
-    rgba(255,255,255,.05);
+        rgba(255,255,255,.06);
 
     border:
-    1px solid transparent;
-
-    color:
-    rgba(255,255,255,.75);
-
-    font-size:11px;
-
-    font-weight:600;
-
-    transition:.2s;
-
-}
-
-
-.editor-tool:hover{
-
-    background:
-    rgba(255,255,255,.10);
-
-    border-color:
-    var(--border);
+        1px solid rgba(255,255,255,.06);
 
     color:white;
 
+    cursor:pointer;
+
 }
 
 
-.editor-tool strong{
-    font-weight:800;
+.editor-toolbar button:hover{
+
+    background:
+        rgba(20,120,255,.15);
+
 }
 
 
-.editor-content{
+.editor{
 
-    min-height:330px;
+    min-height:280px;
 
-    max-height:500px;
+    padding:15px;
 
-    overflow:auto;
+    color:white;
 
-    padding:17px;
+    background:
+        rgba(255,255,255,.025);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        0 0 13px 13px;
 
     outline:none;
-
-    color:
-    rgba(255,255,255,.86);
-
-    font-size:14px;
 
     line-height:1.8;
 
 }
 
 
-.editor-content:empty::before{
+.editor:focus{
 
-    content:
-    "Write your article here...";
+    border-color:#2383ff;
+
+}
+
+
+.editor:empty::before{
+
+    content:"Write your article here...";
 
     color:
-    rgba(255,255,255,.25);
+        rgba(255,255,255,.28);
 
 }
 
 
-.editor-content h1,
-.editor-content h2,
-.editor-content h3{
+/* =========================================================
+   IMAGE
+========================================================= */
 
-    font-family:"Space Grotesk";
+.image-upload{
 
-    line-height:1.2;
+    display:flex;
 
-    margin:
-    20px 0 10px;
+    align-items:center;
+
+    justify-content:center;
+
+    min-height:120px;
+
+    padding:15px;
+
+    border:
+        1px dashed rgba(255,255,255,.18);
+
+    border-radius:15px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    cursor:pointer;
+
+    color:var(--muted);
+
+    text-align:center;
 
 }
 
 
-.editor-content p{
+.image-upload:hover{
 
-    margin-bottom:14px;
+    border-color:#2383ff;
 
 }
 
 
-.editor-content img{
+.image-preview{
 
-    max-width:100%;
+    display:none;
+
+    width:100%;
+
+    max-height:230px;
+
+    margin-top:10px;
+
+    object-fit:cover;
 
     border-radius:14px;
 
-    margin:12px 0;
-
-}
-
-
-.editor-content blockquote{
-
-    padding:
-    12px 15px;
-
-    margin:
-    15px 0;
-
-    border-left:
-    3px solid #1683ff;
-
-    background:
-    rgba(20,120,255,.06);
-
-}
-
-
-.editor-content pre{
-
-    padding:14px;
-
-    overflow:auto;
-
-    background:
-    rgba(0,0,0,.45);
-
-    border-radius:10px;
-
 }
 
 
 /* =========================================================
-   IMAGE INPUT
+   BUTTONS
 ========================================================= */
 
-.hidden-file{
-    display:none;
-}
-
-
-.image-status{
-
-    margin-top:7px;
-
-    color:
-    rgba(255,255,255,.4);
-
-    font-size:10px;
-
-}
-
-
-.image-status.success{
-
-    color:
-    var(--success);
-
-}
-
-
-/* =========================================================
-   ADMIN ACTIONS
-========================================================= */
-
-.admin-actions{
+.actions{
 
     display:flex;
 
-    flex-wrap:wrap;
+    gap:9px;
 
-    gap:8px;
-
-    margin-top:18px;
+    margin-top:20px;
 
 }
 
 
-.admin-actions button{
-
-    height:45px;
-
-    padding:
-    0 16px;
-
-    border-radius:12px;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    transition:.25s;
-
-}
-
-
-.btn-publish{
-
-    background:#1478ff;
-
-}
-
-
-.btn-publish:hover{
-
-    background:#2386ff;
-
-    transform:
-    translateY(-1px);
-
-    box-shadow:
-    0 15px 35px
-    rgba(20,120,255,.20);
-
-}
-
-
-.btn-secondary{
-
-    background:
-    rgba(255,255,255,.06);
-
-    border:
-    1px solid var(--border);
-
-}
-
-
-.btn-secondary:hover{
-
-    background:
-    rgba(255,255,255,.10);
-
-    border-color:
-    var(--border-hover);
-
-}
-
-
-.btn-danger{
-
-    background:
-    rgba(255,70,70,.09);
-
-    border:
-    1px solid rgba(255,70,70,.18);
-
-    color:#ff7777;
-
-}
-
-
-.btn-danger:hover{
-
-    background:
-    rgba(255,70,70,.15);
-
-}
-
-
-.admin-note{
-
-    margin-top:15px;
-
-    padding:11px 13px;
-
-    border-radius:11px;
-
-    background:
-    rgba(20,120,255,.05);
-
-    border:
-    1px solid rgba(20,120,255,.10);
-
-    color:
-    rgba(255,255,255,.45);
-
-    font-size:10px;
-
-    line-height:1.6;
-
-}
-
-
-/* =========================================================
-   IMPORT / EXPORT
-========================================================= */
-
-.data-tools{
-
-    display:flex;
-
-    gap:7px;
-
-    margin-top:15px;
-
-}
-
-
-.data-tools button{
+.primary{
 
     flex:1;
 
-    height:39px;
+    height:48px;
+
+    border-radius:13px;
+
+    background:#1478ff;
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+
+.primary:hover{
+
+    background:#2386ff;
+
+}
+
+
+.secondary{
+
+    height:48px;
+
+    padding:0 18px;
+
+    border-radius:13px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid var(--border);
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+
+/* =========================================================
+   ADMIN LIST
+========================================================= */
+
+.admin-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    margin-top:25px;
+
+}
+
+
+.admin-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:12px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius:14px;
+
+    background:
+        rgba(255,255,255,.035);
+
+}
+
+
+.admin-thumb{
+
+    width:70px;
+
+    height:55px;
+
+    object-fit:cover;
 
     border-radius:10px;
 
-    background:
-    rgba(255,255,255,.04);
+    background:#0b111c;
 
-    border:
-    1px solid rgba(255,255,255,.08);
+}
+
+
+.admin-info{
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+
+.admin-info strong{
+
+    display:-webkit-box;
+
+    -webkit-box-orient:vertical;
+
+    -webkit-line-clamp:1;
+
+    line-clamp:1;
+
+    overflow:hidden;
+
+    font-size:13px;
+
+}
+
+
+.admin-info span{
+
+    display:block;
+
+    margin-top:3px;
 
     color:var(--muted);
 
@@ -2234,246 +1242,177 @@ a{
 }
 
 
-.data-tools button:hover{
+.admin-buttons{
 
-    color:white;
+    display:flex;
 
-    border-color:
-    rgba(255,255,255,.18);
+    gap:5px;
 
 }
 
 
-/* =========================================================
-   TOAST
-========================================================= */
+.small-btn{
 
-.toast{
+    height:34px;
 
-    position:fixed;
+    padding:0 10px;
 
-    left:50%;
-
-    bottom:25px;
-
-    z-index:3000;
-
-    transform:
-    translate(-50%,20px);
-
-    opacity:0;
-
-    pointer-events:none;
-
-    padding:
-    11px 16px;
-
-    border-radius:12px;
+    border-radius:9px;
 
     background:
-    rgba(8,13,22,.95);
+        rgba(255,255,255,.07);
 
     border:
-    1px solid rgba(255,255,255,.12);
-
-    box-shadow:
-    0 15px 45px rgba(0,0,0,.35);
+        1px solid var(--border);
 
     color:white;
 
-    font-size:11px;
-
-    transition:.3s;
-
-}
-
-
-.toast.show{
-
-    opacity:1;
-
-    transform:
-    translate(-50%,0);
-
-}
-
-
-.toast.success{
-
-    border-color:
-    rgba(84,223,134,.25);
-
-}
-
-
-.toast.error{
-
-    border-color:
-    rgba(255,82,101,.25);
-
-}
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-.footer{
-
-    position:relative;
-
-    z-index:5;
-
-    padding:
-    20px 28px 35px;
-
-    text-align:center;
-
-    color:
-    rgba(255,255,255,.28);
+    cursor:pointer;
 
     font-size:10px;
 
 }
 
 
-.footer span{
+.small-btn.delete{
+
+    color:#ff7887;
+
+}
+
+
+.small-btn:hover{
+
+    border-color:
+        var(--border-hover);
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-panel{
+
+    width:min(390px,95vw);
+
+}
+
+
+.login-logo{
+
+    text-align:center;
+
+    font-family:"Space Grotesk";
+
+    font-size:30px;
+
+    font-weight:700;
+
+}
+
+
+.login-logo span{
 
     color:#3c94ff;
 
 }
 
 
+.login-description{
+
+    margin-top:7px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+}
+
+
+.login-error{
+
+    display:none;
+
+    margin-top:10px;
+
+    color:#ff6978;
+
+    font-size:11px;
+
+}
+
+
 /* =========================================================
-   LIGHT MODE
+   STATUS
 ========================================================= */
 
-body.light{
+.status{
 
-    --text:#111827;
+    margin-top:15px;
 
-    --muted:rgba(17,24,39,.55);
+    padding:11px 13px;
 
-    --border:rgba(0,0,0,.10);
-
-    --border-hover:rgba(0,0,0,.20);
-
-    background:#f5f7fb;
-
-}
-
-
-body.light .app{
+    border-radius:11px;
 
     background:
-    radial-gradient(
-        circle at 20% 20%,
-        rgba(75,150,255,.35),
-        transparent 35%
-    ),
+        rgba(255,255,255,.04);
 
-    #f5f7fb;
+    border:
+        1px solid rgba(255,255,255,.07);
 
-}
+    color:var(--muted);
 
-
-body.light .bg-gradient{
-
-    opacity:.22;
+    font-size:11px;
 
 }
 
 
-body.light .bg-overlay{
+.status.success{
+
+    color:#6ee7b7;
+
+    border-color:
+        rgba(80,227,154,.20);
 
     background:
-    linear-gradient(
-        180deg,
-        rgba(255,255,255,.05),
-        rgba(255,255,255,.65)
-    );
+        rgba(80,227,154,.06);
 
 }
 
 
-body.light .icon-btn,
-body.light .small-button,
-body.light .search-input,
-body.light .blog-card,
-body.light .empty-state{
+.status.error{
+
+    color:#ff7786;
+
+    border-color:
+        rgba(255,82,101,.20);
 
     background:
-    rgba(255,255,255,.68);
-
-    color:#111827;
+        rgba(255,82,101,.06);
 
 }
 
 
-body.light .search-input{
+/* =========================================================
+   ADMIN TOP
+========================================================= */
 
-    color:#111827;
+.admin-top{
 
-}
+    display:none;
 
-
-body.light .search-input::placeholder{
-
-    color:
-    rgba(17,24,39,.4);
+    gap:8px;
 
 }
 
 
-body.light .article-content{
+.admin-top.show{
 
-    color:
-    rgba(17,24,39,.78);
-
-}
-
-
-body.light .article-content h1,
-body.light .article-content h2,
-body.light .article-content h3{
-
-    color:#111827;
-
-}
-
-
-body.light .admin-panel{
-
-    background:
-    rgba(248,250,255,.96);
-
-}
-
-
-body.light .admin-sidebar,
-body.light .editor-wrap{
-
-    background:
-    rgba(0,0,0,.025);
-
-}
-
-
-body.light .form-input,
-body.light .editor-content{
-
-    color:#111827;
-
-    background:
-    rgba(0,0,0,.035);
-
-}
-
-
-body.light .editor-content:empty::before{
-
-    color:
-    rgba(17,24,39,.3);
+    display:flex;
 
 }
 
@@ -2482,244 +1421,83 @@ body.light .editor-content:empty::before{
    MOBILE
 ========================================================= */
 
-@media(max-width:900px){
+@media(max-width:800px){
 
     .blog-grid{
 
         grid-template-columns:
-        repeat(2,1fr);
-
-    }
-
-
-    .admin-layout{
-
-        grid-template-columns:
-        1fr;
-
-    }
-
-
-    .admin-sidebar{
-
-        order:2;
+            repeat(2,1fr);
 
     }
 
 }
 
 
-@media(max-width:700px){
+@media(max-width:600px){
 
     .topbar{
 
-        padding:
-        15px;
+        height:72px;
 
-    }
-
-
-    .top-actions{
-
-        gap:5px;
-
-    }
-
-
-    .icon-btn{
-
-        width:39px;
-
-        height:39px;
-
-    }
-
-
-    .page{
-
-        width:calc(100% - 30px);
-
-        padding:
-        35px 0 70px;
+        padding:0 15px;
 
     }
 
 
     .hero{
 
-        margin-bottom:35px;
+        padding-top:60px;
 
     }
 
 
     .hero h1{
-
-        letter-spacing:-2.5px;
-
-    }
-
-
-    .blog-controls{
-
-        flex-direction:column;
-
-        align-items:stretch;
-
-    }
-
-
-    .search-wrap{
-
-        max-width:none;
-
-    }
-
-
-    .control-buttons{
-
-        display:grid;
-
-        grid-template-columns:
-        repeat(3,1fr);
-
-    }
-
-
-    .small-button{
-
-        padding:0 8px;
-
-    }
-
-
-    .blog-grid{
-
-        grid-template-columns:
-        1fr;
-
-    }
-
-
-    .blog-card{
-
-        min-height:360px;
-
-    }
-
-
-    .admin-panel{
-
-        padding:18px;
-
-        border-radius:22px;
-
-    }
-
-
-    .admin-head{
-
-        align-items:flex-start;
-
-    }
-
-
-    .form-row{
-
-        grid-template-columns:
-        1fr;
-
-    }
-
-
-    .admin-actions{
-
-        display:grid;
-
-        grid-template-columns:
-        1fr 1fr;
-
-    }
-
-
-    .admin-actions .btn-publish{
-
-        grid-column:
-        1 / -1;
-
-    }
-
-
-    .article-title{
 
         letter-spacing:-2px;
 
     }
 
 
-    .article-content{
+    .blog-grid{
 
-        font-size:14px;
-
-    }
-
-}
-
-
-@media(max-width:450px){
-
-    .logo{
-
-        font-size:22px;
+        grid-template-columns:1fr;
 
     }
 
 
-    .top-actions .icon-btn:nth-child(4){
+    .blog-toolbar{
 
-        display:none;
+        align-items:stretch;
 
-    }
-
-
-    .hero h1{
-
-        font-size:43px;
+        flex-direction:column;
 
     }
 
 
-    .control-buttons{
+    .search{
 
-        grid-template-columns:
-        1fr 1fr;
-
-    }
-
-
-    .control-buttons button:last-child{
-
-        grid-column:
-        1 / -1;
+        width:100%;
 
     }
 
 
-    .admin-actions{
+    .article{
 
-        grid-template-columns:
-        1fr;
+        padding:20px;
 
-    }
-
-
-    .admin-actions .btn-publish{
-
-        grid-column:auto;
+        margin:15px auto;
 
     }
 
 
-    .data-tools{
+    .admin-item{
+
+        align-items:flex-start;
+
+    }
+
+
+    .admin-buttons{
 
         flex-direction:column;
 
@@ -2734,641 +1512,519 @@ body.light .editor-content:empty::before{
 
 <body>
 
-<div class="app">
 
-    <div class="background">
+<!-- =====================================================
+     HEADER
+====================================================== -->
 
-        <div class="bg-gradient"></div>
+<header class="topbar">
 
-        <div class="bg-overlay"></div>
+    <div
+        class="logo"
+        onclick="location.href='index.html'"
+        style="cursor:pointer"
+    >
+        Rakke<span>Z</span>
+    </div>
+
+
+    <div class="top-actions">
+
+        <button
+            class="icon-btn"
+            title="Home"
+            onclick="location.href='index.html'"
+        >
+            ⌂
+        </button>
+
+
+        <button
+            class="icon-btn"
+            title="Admin"
+            onclick="openAdmin()"
+        >
+            ⚙
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="hero">
+
+    <div class="hero-badge">
+        RAKKEZ JOURNAL
+    </div>
+
+    <h1>
+        Ideas that help you
+        <span>focus.</span>
+    </h1>
+
+    <p>
+        Productivity, focus, studying, technology and everything
+        behind the RakkeZ experience.
+    </p>
+
+</section>
+
+
+<!-- =====================================================
+     BLOG
+====================================================== -->
+
+<main class="blog-wrap">
+
+    <div class="blog-toolbar">
+
+        <div
+            style="
+                color:var(--muted);
+                font-size:12px;
+            "
+        >
+            Latest articles
+        </div>
+
+
+        <input
+            id="searchInput"
+            class="search"
+            type="search"
+            placeholder="Search articles..."
+        >
 
     </div>
 
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+    <div
+        id="blogGrid"
+        class="blog-grid"
+    ></div>
 
-    <header class="topbar">
+</main>
 
-        <a
-            href="index.html"
-            class="logo"
-            title="Back to RakkeZ"
+
+<!-- =====================================================
+     ARTICLE MODAL
+====================================================== -->
+
+<div
+    id="articleOverlay"
+    class="article-overlay"
+>
+
+    <article
+        id="article"
+        class="article"
+    >
+
+        <button
+            class="close"
+            onclick="closeArticle()"
+            style="
+                float:right;
+                margin-bottom:15px;
+            "
         >
-            Rakke<span>Z</span>
-        </a>
+            ×
+        </button>
+
+        <div id="articleContent"></div>
+
+    </article>
+
+</div>
 
 
-        <div class="top-actions">
+<!-- =====================================================
+     LOGIN
+====================================================== -->
+
+<div
+    id="loginOverlay"
+    class="overlay"
+>
+
+    <div class="panel login-panel">
+
+        <div class="panel-head">
+
+            <div></div>
 
             <button
-                class="icon-btn"
-                id="homeBtn"
-                title="RakkeZ"
+                class="close"
+                onclick="closeLogin()"
             >
-                ⌂
-            </button>
-
-            <button
-                class="icon-btn"
-                id="adminOpen"
-                title="Admin"
-            >
-                ✎
-            </button>
-
-            <button
-                class="icon-btn"
-                id="themeBtn"
-                title="Theme"
-            >
-                ☾
+                ×
             </button>
 
         </div>
 
-    </header>
+
+        <div class="login-logo">
+            Rakke<span>Z</span>
+        </div>
+
+        <div class="login-description">
+            Private administrator access
+        </div>
 
 
-    <!-- =====================================================
-         MAIN PAGE
-    ====================================================== -->
+        <div class="form-group">
 
-    <main class="page">
+            <label class="form-label">
+                Admin Password
+            </label>
 
+            <input
+                id="adminPassword"
+                class="input"
+                type="password"
+                placeholder="Enter password"
+                autocomplete="off"
+            >
 
-        <!-- =================================================
-             BLOG HOME
-        ================================================== -->
-
-        <section id="blogHome">
-
-            <div class="hero">
-
-                <div class="hero-badge">
-                    RAKKEZ BLOG
-                </div>
-
-                <h1>
-                    Think.
-                    <span>Focus.</span>
-                    Grow.
-                </h1>
-
-                <p>
-                    Ideas, guides, updates and useful things
-                    for better focus, productivity and life.
-                </p>
-
-            </div>
+        </div>
 
 
-            <div class="blog-controls">
-
-                <div class="search-wrap">
-
-                    <span class="search-icon">
-                        ⌕
-                    </span>
-
-                    <input
-                        type="search"
-                        class="search-input"
-                        id="searchInput"
-                        placeholder="Search articles..."
-                        autocomplete="off"
-                    >
-
-                </div>
-
-
-                <div class="control-buttons">
-
-                    <button
-                        class="small-button"
-                        id="allPostsBtn"
-                    >
-                        All Posts
-                    </button>
-
-                    <button
-                        class="small-button"
-                        id="latestBtn"
-                    >
-                        Latest
-                    </button>
-
-                    <button
-                        class="small-button primary"
-                        id="adminFromBlog"
-                    >
-                        Admin
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="blog-grid"
-                id="blogGrid"
-            ></div>
-
-        </section>
-
-
-        <!-- =================================================
-             ARTICLE VIEW
-        ================================================== -->
-
-        <section
-            class="article-view"
-            id="articleView"
+        <div
+            id="loginError"
+            class="login-error"
         >
+            Incorrect password.
+        </div>
+
+
+        <div class="actions">
 
             <button
-                class="article-back"
-                id="articleBack"
+                class="primary"
+                onclick="loginAdmin()"
             >
-                ← Back to Blog
+                Enter Admin
             </button>
 
+        </div>
 
-            <div class="article-header">
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ADMIN PANEL
+====================================================== -->
+
+<div
+    id="adminOverlay"
+    class="overlay"
+>
+
+    <div class="panel">
+
+        <div class="panel-head">
+
+            <div>
+
+                <div class="panel-title">
+                    RakkeZ Blog Admin
+                </div>
 
                 <div
-                    class="article-category"
-                    id="articleCategory"
+                    style="
+                        margin-top:4px;
+                        color:var(--muted);
+                        font-size:11px;
+                    "
                 >
-                    ARTICLE
+                    Publish directly to your GitHub repository.
                 </div>
 
-                <h1
-                    class="article-title"
-                    id="articleTitle"
-                ></h1>
+            </div>
 
-                <div class="article-meta">
 
-                    <span id="articleDate"></span>
+            <button
+                class="close"
+                onclick="closeAdminPanel()"
+            >
+                ×
+            </button>
 
-                    <span>•</span>
+        </div>
 
-                    <span id="articleReadTime"></span>
 
-                </div>
+        <!-- CONFIG -->
 
-                <img
-                    class="article-cover"
-                    id="articleCover"
-                    alt=""
+        <div class="form-group">
+
+            <label class="form-label">
+                GitHub Repository
+            </label>
+
+            <input
+                id="githubRepo"
+                class="input"
+                placeholder="username/rakkez"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label class="form-label">
+                GitHub Branch
+            </label>
+
+            <input
+                id="githubBranch"
+                class="input"
+                value="main"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label class="form-label">
+                GitHub Token
+            </label>
+
+            <input
+                id="githubToken"
+                class="input"
+                type="password"
+                placeholder="github_pat_..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <div
+            class="status"
+            style="margin-top:12px;"
+        >
+            Your token is stored only in this browser's local storage.
+            Do not use this admin page on a public/shared computer.
+        </div>
+
+
+        <!-- POST FORM -->
+
+        <div
+            style="
+                margin-top:30px;
+                padding-top:25px;
+                border-top:1px solid rgba(255,255,255,.08);
+            "
+        >
+
+            <div class="panel-title">
+                Create / Edit Post
+            </div>
+
+
+            <input
+                id="postId"
+                type="hidden"
+            >
+
+
+            <div class="form-group">
+
+                <label class="form-label">
+                    Title
+                </label>
+
+                <input
+                    id="postTitle"
+                    class="input"
+                    placeholder="Your article title"
                 >
 
             </div>
 
 
-            <article
-                class="article-content"
-                id="articleContent"
-            ></article>
+            <div class="form-group">
 
-        </section>
+                <label class="form-label">
+                    Excerpt
+                </label>
 
+                <textarea
+                    id="postExcerpt"
+                    class="input"
+                    placeholder="Short description..."
+                ></textarea>
 
-    </main>
-
-
-    <footer class="footer">
-
-        Built for
-        <span>RakkeZ</span>
-
-    </footer>
+            </div>
 
 
-    <!-- =====================================================
-         ADMIN PANEL
-    ====================================================== -->
+            <div class="form-group">
 
-    <div
-        class="admin-overlay"
-        id="adminOverlay"
-    >
+                <label class="form-label">
+                    Cover Image URL
+                </label>
 
-        <div class="admin-panel">
+                <input
+                    id="postImage"
+                    class="input"
+                    placeholder="assets/blog/my-image.jpg"
+                >
 
-            <div class="admin-head">
+            </div>
 
-                <div>
 
-                    <div class="admin-title">
-                        Blog Admin
-                    </div>
+            <div class="form-group">
 
-                    <div class="admin-subtitle">
-                        Create and manage your RakkeZ articles locally.
-                    </div>
+                <label class="form-label">
+                    Article
+                </label>
+
+
+                <div class="editor-toolbar">
+
+                    <button
+                        type="button"
+                        onclick="format('bold')"
+                    >
+                        <b>B</b>
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="format('italic')"
+                    >
+                        <i>I</i>
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="format('underline')"
+                    >
+                        <u>U</u>
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="format('formatBlock','H2')"
+                    >
+                        H2
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="format('formatBlock','H3')"
+                    >
+                        H3
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="format('insertUnorderedList')"
+                    >
+                        • List
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="format('insertOrderedList')"
+                    >
+                        1. List
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="insertLink()"
+                    >
+                        Link
+                    </button>
 
                 </div>
 
 
+                <div
+                    id="editor"
+                    class="editor"
+                    contenteditable="true"
+                ></div>
+
+            </div>
+
+
+            <div class="actions">
+
                 <button
-                    class="close-btn"
-                    id="adminClose"
+                    class="primary"
+                    onclick="publishPost()"
                 >
-                    ×
+                    Publish Post
+                </button>
+
+                <button
+                    class="secondary"
+                    onclick="clearEditor()"
+                >
+                    Clear
                 </button>
 
             </div>
 
 
-            <div class="admin-layout">
-
-
-                <!-- =========================================
-                     SIDEBAR
-                ========================================== -->
-
-                <aside class="admin-sidebar">
-
-                    <div class="sidebar-title">
-                        Your Articles
-                    </div>
-
-                    <button
-                        class="small-button primary"
-                        id="newPostBtn"
-                        style="width:100%;margin-bottom:12px;"
-                    >
-                        + New Article
-                    </button>
-
-                    <div
-                        class="post-list"
-                        id="postList"
-                    ></div>
-
-
-                    <div class="data-tools">
-
-                        <button id="exportJsonBtn">
-                            Export Backup
-                        </button>
-
-                        <button id="importJsonBtn">
-                            Import Backup
-                        </button>
-
-                        <input
-                            type="file"
-                            id="importJsonInput"
-                            class="hidden-file"
-                            accept=".json,application/json"
-                        >
-
-                    </div>
-
-
-                    <div class="data-tools">
-
-                        <button id="exportWebsiteBtn">
-                            Export Website
-                        </button>
-
-                    </div>
-
-                </aside>
-
-
-                <!-- =========================================
-                     EDITOR
-                ========================================== -->
-
-                <section class="admin-editor">
-
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Title
-                        </label>
-
-                        <input
-                            class="form-input"
-                            id="postTitle"
-                            type="text"
-                            maxlength="150"
-                            placeholder="Enter article title..."
-                        >
-
-                    </div>
-
-
-                    <div class="form-row">
-
-
-                        <div class="form-group">
-
-                            <label class="form-label">
-                                Category
-                            </label>
-
-                            <input
-                                class="form-input"
-                                id="postCategory"
-                                type="text"
-                                maxlength="40"
-                                placeholder="Productivity"
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label class="form-label">
-                                Description
-                            </label>
-
-                            <input
-                                class="form-input"
-                                id="postDescription"
-                                type="text"
-                                maxlength="220"
-                                placeholder="Short article description..."
-                            >
-
-                        </div>
-
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Cover Image
-                        </label>
-
-
-                        <label
-                            class="cover-upload"
-                            id="coverUpload"
-                            for="coverInput"
-                        >
-
-                            <img
-                                id="coverPreview"
-                                alt=""
-                                style="display:none;"
-                            >
-
-                            <div class="cover-placeholder">
-
-                                <strong>
-                                    Upload Cover Image
-                                </strong>
-
-                                <span>
-                                    JPG, PNG or WebP
-                                </span>
-
-                            </div>
-
-                        </label>
-
-
-                        <input
-                            type="file"
-                            id="coverInput"
-                            class="hidden-file"
-                            accept="image/*"
-                        >
-
-
-                        <div
-                            class="image-status"
-                            id="coverStatus"
-                        >
-                            No image selected
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label class="form-label">
-                            Article
-                        </label>
-
-
-                        <div class="editor-wrap">
-
-
-                            <div class="editor-toolbar">
-
-
-                                <button
-                                    class="editor-tool"
-                                    data-command="bold"
-                                    title="Bold"
-                                >
-                                    <strong>B</strong>
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    data-command="italic"
-                                    title="Italic"
-                                >
-                                    <em>I</em>
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    data-command="underline"
-                                    title="Underline"
-                                >
-                                    <u>U</u>
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    data-block="h1"
-                                >
-                                    H1
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    data-block="h2"
-                                >
-                                    H2
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    data-block="h3"
-                                >
-                                    H3
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    data-command="insertUnorderedList"
-                                >
-                                    • List
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    data-command="insertOrderedList"
-                                >
-                                    1. List
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    id="quoteTool"
-                                >
-                                    “ Quote
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    id="linkTool"
-                                >
-                                    🔗
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    id="imageTool"
-                                >
-                                    🖼
-                                </button>
-
-
-                                <button
-                                    class="editor-tool"
-                                    data-command="removeFormat"
-                                >
-                                    Clear
-                                </button>
-
-
-                            </div>
-
-
-                            <div
-                                class="editor-content"
-                                id="editorContent"
-                                contenteditable="true"
-                                spellcheck="true"
-                            ></div>
-
-
-                        </div>
-
-
-                        <input
-                            type="file"
-                            id="articleImageInput"
-                            class="hidden-file"
-                            accept="image/*"
-                        >
-
-                    </div>
-
-
-                    <div class="admin-actions">
-
-                        <button
-                            class="btn-publish"
-                            id="publishBtn"
-                        >
-                            Publish Article
-                        </button>
-
-
-                        <button
-                            class="btn-secondary"
-                            id="previewBtn"
-                        >
-                            Preview
-                        </button>
-
-
-                        <button
-                            class="btn-secondary"
-                            id="saveDraftBtn"
-                        >
-                            Save Draft
-                        </button>
-
-
-                        <button
-                            class="btn-secondary"
-                            id="clearEditorBtn"
-                        >
-                            Clear
-                        </button>
-
-
-                        <button
-                            class="btn-danger"
-                            id="deletePostBtn"
-                            style="display:none;"
-                        >
-                            Delete
-                        </button>
-
-                    </div>
-
-
-                    <div class="admin-note">
-
-                        <strong>Local mode:</strong>
-                        Articles are stored in this browser.
-                        Use <strong>Export Website</strong> after publishing
-                        to generate a standalone HTML file containing your
-                        articles. Upload that generated file to your website
-                        when you want visitors to see the latest posts.
-
-                    </div>
-
-
-                </section>
-
-
+            <div
+                id="publishStatus"
+                class="status"
+            >
+                Ready.
             </div>
 
         </div>
 
+
+        <!-- POSTS -->
+
+        <div
+            style="
+                margin-top:30px;
+                padding-top:25px;
+                border-top:1px solid rgba(255,255,255,.08);
+            "
+        >
+
+            <div class="panel-title">
+                Published Posts
+            </div>
+
+
+            <div
+                id="adminList"
+                class="admin-list"
+            ></div>
+
+        </div>
+
+
+        <div class="actions">
+
+            <button
+                class="secondary"
+                onclick="logoutAdmin()"
+            >
+                Lock Admin
+            </button>
+
+        </div>
+
     </div>
-
-
-    <!-- =====================================================
-         TOAST
-    ====================================================== -->
-
-    <div
-        class="toast"
-        id="toast"
-    ></div>
 
 </div>
 
@@ -3376,33 +2032,69 @@ body.light .editor-content:empty::before{
 <script>
 
 /* =========================================================
-   RAKKEZ BLOG ENGINE
+   RAKKEZ BLOG SYSTEM
 ========================================================= */
 
 
 /*
-    IMPORTANT:
+    IMPORTANT
 
-    This array is intentionally present in the HTML.
+    Change this password.
 
-    When you click "Export Website", the application takes
-    your current posts and embeds them into a new copy of
-    this HTML file.
+    This password is only a local UI lock.
 
-    That means the exported file can be uploaded to your
-    website WITHOUT a backend.
+    It is NOT cryptographic security.
 */
 
-window.RAKKEZ_EMBEDDED_POSTS = [];
+const ADMIN_PASSWORD = "RakkeZ@2026";
+
+
+/*
+    GitHub settings
+*/
+
+const DEFAULT_CONFIG = {
+
+    repo:"",
+
+    branch:"main",
+
+    token:""
+
+};
+
+
+/*
+    File that stores the published posts.
+*/
+
+const DATA_FILE = "blog-data.js";
+
+
+/*
+    Image folder.
+
+    Images are expected to already exist in the repository.
+
+    Example:
+
+    assets/blog/my-photo.jpg
+
+*/
+
+const BLOG_IMAGE_FOLDER = "assets/blog/";
 
 
 /* =========================================================
-   STORAGE
+   STATE
 ========================================================= */
 
-const STORAGE_KEY = "rakkez_blog_posts_v1";
+let posts = Array.isArray(window.RAKKEZ_BLOG_POSTS)
+    ? [...window.RAKKEZ_BLOG_POSTS]
+    : [];
 
-const THEME_KEY = "rakkez_blog_theme_v1";
+
+let editingId = null;
 
 
 /* =========================================================
@@ -3413,26 +2105,34 @@ const $ = id =>
     document.getElementById(id);
 
 
-function uid(){
+function escapeHtml(value){
 
-    return "post_" +
-        Date.now().toString(36) +
-        "_" +
-        Math.random()
-            .toString(36)
-            .slice(2,8);
+    return String(value ?? "")
+
+        .replaceAll("&","&amp;")
+
+        .replaceAll("<","&lt;")
+
+        .replaceAll(">","&gt;")
+
+        .replaceAll('"',"&quot;")
+
+        .replaceAll("'","&#039;");
 
 }
 
 
-function escapeHtml(value){
+function makeId(){
 
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    return (
+
+        Date.now().toString(36) +
+
+        Math.random()
+            .toString(36)
+            .slice(2,8)
+
+    );
 
 }
 
@@ -3442,202 +2142,61 @@ function formatDate(date){
     return new Intl.DateTimeFormat(
         "en-US",
         {
-            month:"short",
-            day:"numeric",
-            year:"numeric"
+            year:"numeric",
+            month:"long",
+            day:"numeric"
         }
-    ).format(
-        new Date(date)
-    );
-
-}
-
-
-function estimateReadTime(html){
-
-    const temp =
-        document.createElement("div");
-
-    temp.innerHTML = html || "";
-
-    const text =
-        temp.textContent || "";
-
-    const words =
-        text.trim()
-            .split(/\s+/)
-            .filter(Boolean)
-            .length;
-
-    return Math.max(
-        1,
-        Math.ceil(words / 200)
-    ) + " min read";
-
-}
-
-
-function showToast(message,type=""){
-
-    const toast =
-        $("toast");
-
-    toast.textContent =
-        message;
-
-    toast.className =
-        "toast show " + type;
-
-    clearTimeout(
-        showToast.timer
-    );
-
-    showToast.timer =
-        setTimeout(
-            ()=>{
-                toast.className =
-                    "toast";
-            },
-            2600
-        );
+    ).format(new Date(date));
 
 }
 
 
 /* =========================================================
-   POSTS
+   CONFIG
 ========================================================= */
 
-let posts = [];
+function loadConfig(){
 
-let currentPostId = null;
-
-let coverImageData = "";
-
-
-/* =========================================================
-   LOAD POSTS
-========================================================= */
-
-function loadPosts(){
-
-    try{
-
-        const local =
+    const saved =
+        JSON.parse(
             localStorage.getItem(
-                STORAGE_KEY
-            );
+                "rakkez_blog_github"
+            ) || "null"
+        );
 
-        if(local){
+    const config =
+        saved || DEFAULT_CONFIG;
 
-            posts =
-                JSON.parse(local);
 
-        }
-        else{
+    $("githubRepo").value =
+        config.repo || "";
 
-            posts =
-                Array.isArray(
-                    window.RAKKEZ_EMBEDDED_POSTS
-                )
-                ?
-                [...window.RAKKEZ_EMBEDDED_POSTS]
-                :
-                [];
+    $("githubBranch").value =
+        config.branch || "main";
 
-        }
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        posts =
-            Array.isArray(
-                window.RAKKEZ_EMBEDDED_POSTS
-            )
-            ?
-            [...window.RAKKEZ_EMBEDDED_POSTS]
-            :
-            [];
-
-    }
-
-    normalizePosts();
+    $("githubToken").value =
+        config.token || "";
 
 }
 
 
-function normalizePosts(){
+function saveConfig(){
 
-    posts =
-        posts.map(post => {
+    localStorage.setItem(
 
-            return {
+        "rakkez_blog_github",
 
-                id:
-                    post.id ||
-                    uid(),
+        JSON.stringify({
 
-                title:
-                    post.title ||
-                    "Untitled Article",
+            repo:$("githubRepo").value.trim(),
 
-                category:
-                    post.category ||
-                    "Article",
+            branch:$("githubBranch").value.trim() || "main",
 
-                description:
-                    post.description ||
-                    "",
+            token:$("githubToken").value.trim()
 
-                cover:
-                    post.cover ||
-                    "",
+        })
 
-                content:
-                    post.content ||
-                    "",
-
-                date:
-                    post.date ||
-                    new Date().toISOString(),
-
-                updated:
-                    post.updated ||
-                    post.date ||
-                    new Date().toISOString(),
-
-                published:
-                    post.published !== false
-
-            };
-
-        });
-
-}
-
-
-function savePosts(){
-
-    try{
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(posts)
-        );
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        showToast(
-            "Storage is full. Export a backup and remove large images.",
-            "error"
-        );
-
-    }
+    );
 
 }
 
@@ -3648,8 +2207,7 @@ function savePosts(){
 
 function renderBlog(){
 
-    const grid =
-        $("blogGrid");
+    const grid = $("blogGrid");
 
     const search =
         $("searchInput")
@@ -3658,67 +2216,45 @@ function renderBlog(){
             .toLowerCase();
 
 
-    let visible =
-        posts
-            .filter(post =>
-                post.published !== false
-            );
+    const filtered =
+        posts.filter(post => {
+
+            const text = (
+
+                post.title +
+
+                " " +
+
+                post.excerpt +
+
+                " " +
+
+                post.content
+
+            ).toLowerCase();
 
 
-    if(search){
+            return text.includes(search);
 
-        visible =
-            visible.filter(post => {
-
-                return (
-
-                    post.title
-                        .toLowerCase()
-                        .includes(search)
-
-                    ||
-
-                    post.description
-                        .toLowerCase()
-                        .includes(search)
-
-                    ||
-
-                    post.category
-                        .toLowerCase()
-                        .includes(search)
-
-                );
-
-            });
-
-    }
+        });
 
 
-    visible.sort(
-        (a,b) =>
-            new Date(b.date) -
-            new Date(a.date)
-    );
-
-
-    if(!visible.length){
+    if(!filtered.length){
 
         grid.innerHTML = `
 
-            <div class="empty-state">
+            <div class="empty">
 
-                <div class="empty-icon">
+                <div
+                    style="
+                        font-size:30px;
+                        margin-bottom:10px;
+                    "
+                >
                     ✦
                 </div>
 
-                <h3>
-                    No articles yet
-                </h3>
-
-                <p>
-                    Your published articles will appear here.
-                </p>
+                No articles found.
 
             </div>
 
@@ -3730,208 +2266,65 @@ function renderBlog(){
 
 
     grid.innerHTML =
-        visible.map(post => {
-
-            const cover =
-                post.cover
-                ||
-                createPlaceholderImage(
-                    post.title
-                );
-
-
-            return `
+        filtered
+            .sort(
+                (a,b) =>
+                    new Date(b.date) -
+                    new Date(a.date)
+            )
+            .map(post => `
 
                 <article
                     class="blog-card"
-                    data-post-id="${escapeHtml(post.id)}"
+                    onclick="openArticle('${post.id}')"
                 >
 
-                    <div class="card-image">
-
+                    ${
+                        post.image
+                        ?
+                        `
                         <img
-                            src="${escapeHtml(cover)}"
-                            alt="${escapeHtml(post.title)}"
-                            loading="lazy"
+                            class="card-image"
+                            src="${escapeHtml(post.image)}"
+                            alt=""
                         >
+                        `
+                        :
+                        `
+                        <div
+                            class="card-image"
+                            style="
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                font-size:35px;
+                            "
+                        >
+                            R
+                        </div>
+                        `
+                    }
 
-                    </div>
+                    <div class="card-body">
 
-
-                    <div class="card-content">
-
-                        <div class="card-meta">
-
-                            <span>
-                                ${escapeHtml(post.category)}
-                            </span>
-
-                            <span class="card-dot"></span>
-
-                            <span>
-                                ${formatDate(post.date)}
-                            </span>
-
+                        <div class="card-date">
+                            ${formatDate(post.date)}
                         </div>
 
-
-                        <h2 class="card-title">
+                        <div class="card-title">
                             ${escapeHtml(post.title)}
-                        </h2>
+                        </div>
 
-
-                        <p class="card-description">
-                            ${escapeHtml(post.description)}
-                        </p>
-
-
-                        <div class="card-footer">
-
-                            <span class="read-more">
-                                Read article
-                            </span>
-
-                            <span class="read-arrow">
-                                →
-                            </span>
-
+                        <div class="card-excerpt">
+                            ${escapeHtml(post.excerpt)}
                         </div>
 
                     </div>
 
                 </article>
 
-            `;
-
-        }).join("");
-
-
-    grid
-        .querySelectorAll(".blog-card")
-        .forEach(card => {
-
-            card.addEventListener(
-                "click",
-                ()=>{
-                    openArticle(
-                        card.dataset.postId
-                    );
-                }
-            );
-
-        });
-
-}
-
-
-function createPlaceholderImage(title){
-
-    const safe =
-        String(title || "RAKKEZ")
-            .slice(0,26);
-
-    const svg = `
-
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1200"
-            height="700"
-            viewBox="0 0 1200 700"
-        >
-
-            <defs>
-
-                <linearGradient
-                    id="g"
-                    x1="0"
-                    y1="0"
-                    x2="1"
-                    y2="1"
-                >
-
-                    <stop
-                        offset="0%"
-                        stop-color="#07101e"
-                    />
-
-                    <stop
-                        offset="50%"
-                        stop-color="#003b9e"
-                    />
-
-                    <stop
-                        offset="100%"
-                        stop-color="#03050a"
-                    />
-
-                </linearGradient>
-
-            </defs>
-
-            <rect
-                width="1200"
-                height="700"
-                fill="url(#g)"
-            />
-
-            <circle
-                cx="950"
-                cy="110"
-                r="230"
-                fill="#1683ff"
-                opacity=".12"
-            />
-
-            <circle
-                cx="150"
-                cy="650"
-                r="300"
-                fill="#005eff"
-                opacity=".10"
-            />
-
-            <text
-                x="80"
-                y="600"
-                fill="white"
-                opacity=".85"
-                font-family="Arial, sans-serif"
-                font-size="54"
-                font-weight="700"
-            >
-                ${escapeXml(safe)}
-            </text>
-
-            <text
-                x="80"
-                y="650"
-                fill="#5ba6ff"
-                font-family="Arial, sans-serif"
-                font-size="22"
-                font-weight="700"
-                letter-spacing="5"
-            >
-                RAKKEZ
-            </text>
-
-        </svg>
-
-    `;
-
-    return "data:image/svg+xml;charset=UTF-8," +
-        encodeURIComponent(svg);
-
-}
-
-
-function escapeXml(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&apos;");
+            `)
+            .join("");
 
 }
 
@@ -3947,142 +2340,228 @@ function openArticle(id){
             p => p.id === id
         );
 
-    if(!post){
-        return;
-    }
+
+    if(!post) return;
 
 
-    $("blogHome")
-        .style.display = "none";
+    $("articleContent").innerHTML = `
+
+        ${
+            post.image
+            ?
+            `
+            <img
+                class="article-image"
+                src="${escapeHtml(post.image)}"
+                alt=""
+            >
+            `
+            :
+            ""
+        }
+
+        <div class="article-date">
+            ${formatDate(post.date)}
+        </div>
+
+        <h1>
+            ${escapeHtml(post.title)}
+        </h1>
+
+        <div class="article-content">
+            ${post.content}
+        </div>
+
+    `;
 
 
-    $("articleView")
-        .classList.add("show");
+    $("articleOverlay")
+        .classList
+        .add("show");
 
 
-    $("articleCategory")
-        .textContent =
-        post.category || "ARTICLE";
-
-
-    $("articleTitle")
-        .textContent =
-        post.title;
-
-
-    $("articleDate")
-        .textContent =
-        formatDate(post.date);
-
-
-    $("articleReadTime")
-        .textContent =
-        estimateReadTime(
-            post.content
-        );
-
-
-    const cover =
-        post.cover
-        ||
-        createPlaceholderImage(
-            post.title
-        );
-
-
-    $("articleCover")
-        .src = cover;
-
-
-    $("articleCover")
-        .alt =
-        post.title;
-
-
-    $("articleContent")
-        .innerHTML =
-        post.content || "<p>No content.</p>";
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+    document.body.style.overflow =
+        "hidden";
 
 }
 
 
 function closeArticle(){
 
-    $("articleView")
-        .classList.remove("show");
+    $("articleOverlay")
+        .classList
+        .remove("show");
 
-    $("blogHome")
-        .style.display = "";
 
-    renderBlog();
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+    document.body.style.overflow =
+        "";
 
 }
 
 
 /* =========================================================
-   ADMIN
+   ADMIN LOGIN
 ========================================================= */
 
 function openAdmin(){
 
-    renderAdminList();
+    $("loginOverlay")
+        .classList
+        .add("show");
 
-    $("adminOverlay")
-        .classList.add("show");
-
-}
-
-
-function closeAdmin(){
-
-    $("adminOverlay")
-        .classList.remove("show");
+    $("adminPassword").focus();
 
 }
 
 
-function renderAdminList(){
+function closeLogin(){
+
+    $("loginOverlay")
+        .classList
+        .remove("show");
+
+}
+
+
+function loginAdmin(){
+
+    const password =
+        $("adminPassword").value;
+
+
+    if(password !== ADMIN_PASSWORD){
+
+        $("loginError")
+            .style
+            .display = "block";
+
+        return;
+
+    }
+
+
+    $("loginError")
+        .style
+        .display = "none";
+
+
+    closeLogin();
+
+
+    loadConfig();
+
+
+    renderAdmin();
+
+
+    $("adminOverlay")
+        .classList
+        .add("show");
+
+}
+
+
+function logoutAdmin(){
+
+    $("adminOverlay")
+        .classList
+        .remove("show");
+
+
+    clearEditor();
+
+}
+
+
+function closeAdminPanel(){
+
+    $("adminOverlay")
+        .classList
+        .remove("show");
+
+}
+
+
+/* =========================================================
+   EDITOR
+========================================================= */
+
+function format(command,value=null){
+
+    document.execCommand(
+        command,
+        false,
+        value
+    );
+
+    $("editor").focus();
+
+}
+
+
+function insertLink(){
+
+    const url =
+        prompt(
+            "Enter URL:"
+        );
+
+
+    if(!url) return;
+
+
+    document.execCommand(
+        "createLink",
+        false,
+        url
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR
+========================================================= */
+
+function clearEditor(){
+
+    editingId = null;
+
+    $("postId").value = "";
+
+    $("postTitle").value = "";
+
+    $("postExcerpt").value = "";
+
+    $("postImage").value = "";
+
+    $("editor").innerHTML = "";
+
+    $("publishStatus").textContent =
+        "Ready.";
+
+    $("publishStatus")
+        .className = "status";
+
+}
+
+
+/* =========================================================
+   ADMIN LIST
+========================================================= */
+
+function renderAdmin(){
 
     const list =
-        $("postList");
+        $("adminList");
 
 
-    const sorted =
-        [...posts]
-            .sort(
-                (a,b) =>
-                    new Date(b.date) -
-                    new Date(a.date)
-            );
-
-
-    if(!sorted.length){
+    if(!posts.length){
 
         list.innerHTML = `
 
-            <div
-                style="
-                    padding:20px 8px;
-                    text-align:center;
-                    color:rgba(255,255,255,.35);
-                    font-size:10px;
-                    line-height:1.7;
-                "
-            >
-                No articles yet.
-                <br>
-                Create your first one.
+            <div class="empty">
+                No posts yet.
             </div>
 
         `;
@@ -4093,131 +2572,87 @@ function renderAdminList(){
 
 
     list.innerHTML =
-        sorted.map(post => {
 
-            const thumb =
-                post.cover
-                ||
-                createPlaceholderImage(
-                    post.title
-                );
+        posts
+            .sort(
+                (a,b) =>
+                    new Date(b.date) -
+                    new Date(a.date)
+            )
+            .map(post => `
 
-
-            return `
-
-                <button
-                    class="
-                        post-list-item
-                        ${currentPostId === post.id ? "active" : ""}
-                    "
-                    data-id="${escapeHtml(post.id)}"
+                <div
+                    class="admin-item"
                 >
 
-                    <img
-                        class="post-list-thumb"
-                        src="${escapeHtml(thumb)}"
-                        alt=""
-                    >
+                    ${
+                        post.image
+                        ?
+                        `
+                        <img
+                            class="admin-thumb"
+                            src="${escapeHtml(post.image)}"
+                            alt=""
+                        >
+                        `
+                        :
+                        `
+                        <div
+                            class="admin-thumb"
+                            style="
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                            "
+                        >
+                            R
+                        </div>
+                        `
+                    }
 
 
-                    <div class="post-list-info">
+                    <div class="admin-info">
 
-                        <div class="post-list-title">
+                        <strong>
                             ${escapeHtml(post.title)}
-                        </div>
+                        </strong>
 
-                        <div class="post-list-status">
-
-                            ${
-                                post.published
-                                ?
-                                "Published"
-                                :
-                                "Draft"
-                            }
-
-                            ·
-
+                        <span>
                             ${formatDate(post.date)}
-
-                        </div>
+                        </span>
 
                     </div>
 
-                </button>
 
-            `;
+                    <div class="admin-buttons">
 
-        }).join("");
+                        <button
+                            class="small-btn"
+                            onclick="editPost('${post.id}')"
+                        >
+                            Edit
+                        </button>
 
+                        <button
+                            class="small-btn delete"
+                            onclick="deletePost('${post.id}')"
+                        >
+                            Delete
+                        </button>
 
-    list
-        .querySelectorAll(".post-list-item")
-        .forEach(button => {
+                    </div>
 
-            button.addEventListener(
-                "click",
-                ()=>{
-                    editPost(
-                        button.dataset.id
-                    );
-                }
-            );
+                </div>
 
-        });
-
-}
-
-
-function clearEditor(){
-
-    currentPostId = null;
-
-    coverImageData = "";
-
-
-    $("postTitle").value = "";
-
-    $("postCategory").value = "";
-
-    $("postDescription").value = "";
-
-    $("editorContent").innerHTML = "";
-
-
-    $("coverPreview").src = "";
-
-    $("coverPreview").style.display =
-        "none";
-
-
-    $("coverUpload")
-        .classList.remove("has-image");
-
-
-    $("coverStatus")
-        .textContent =
-        "No image selected";
-
-
-    $("coverStatus")
-        .classList.remove("success");
-
-
-    $("publishBtn")
-        .textContent =
-        "Publish Article";
-
-
-    $("deletePostBtn")
-        .style.display =
-        "none";
-
-
-    renderAdminList();
+            `)
+            .join("");
 
 }
 
+
+/* =========================================================
+   EDIT POST
+========================================================= */
 
 function editPost(id){
 
@@ -4226,94 +2661,129 @@ function editPost(id){
             p => p.id === id
         );
 
-    if(!post){
-        return;
-    }
+
+    if(!post) return;
 
 
-    currentPostId =
+    editingId = id;
+
+
+    $("postId").value =
         post.id;
-
 
     $("postTitle").value =
         post.title;
 
+    $("postExcerpt").value =
+        post.excerpt;
 
-    $("postCategory").value =
-        post.category;
+    $("postImage").value =
+        post.image || "";
 
-
-    $("postDescription").value =
-        post.description;
-
-
-    $("editorContent").innerHTML =
+    $("editor").innerHTML =
         post.content;
 
 
-    coverImageData =
-        post.cover || "";
-
-
-    if(coverImageData){
-
-        $("coverPreview").src =
-            coverImageData;
-
-        $("coverPreview").style.display =
-            "block";
-
-        $("coverUpload")
-            .classList.add("has-image");
-
-        $("coverStatus")
-            .textContent =
-            "Cover image loaded";
-
-        $("coverStatus")
-            .classList.add("success");
-
-    }
-    else{
-
-        $("coverPreview").src = "";
-
-        $("coverPreview").style.display =
-            "none";
-
-        $("coverUpload")
-            .classList.remove("has-image");
-
-        $("coverStatus")
-            .textContent =
-            "No image selected";
-
-        $("coverStatus")
-            .classList.remove("success");
-
-    }
-
-
-    $("publishBtn")
+    $("publishStatus")
         .textContent =
-        post.published
-        ?
-        "Update Article"
-        :
-        "Publish Article";
+        "Editing post. Publish to save changes.";
+
+    $("publishStatus")
+        .className = "status";
 
 
-    $("deletePostBtn")
-        .style.display =
-        "block";
-
-
-    renderAdminList();
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
 }
 
 
-function getEditorData(){
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deletePost(id){
+
+    const post =
+        posts.find(
+            p => p.id === id
+        );
+
+
+    if(!post) return;
+
+
+    const confirmed =
+        confirm(
+
+            `Delete "${post.title}"?\n\n` +
+
+            `This will remove it from the next ` +
+
+            `published blog-data.js file.`
+
+        );
+
+
+    if(!confirmed) return;
+
+
+    posts =
+        posts.filter(
+            p => p.id !== id
+        );
+
+
+    renderAdmin();
+
+
+    setStatus(
+        "Deleting post from GitHub...",
+        "status"
+    );
+
+
+    try{
+
+        await publishDataToGitHub(
+            "Delete blog post: " +
+            post.title
+        );
+
+
+        setStatus(
+            "Post deleted successfully.",
+            "status success"
+        );
+
+
+        renderBlog();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+
+        setStatus(
+            "Delete failed: " +
+            error.message,
+
+            "status error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE / EDIT
+========================================================= */
+
+async function publishPost(){
 
     const title =
         $("postTitle")
@@ -4321,92 +2791,60 @@ function getEditorData(){
             .trim();
 
 
-    const category =
-        $("postCategory")
+    const excerpt =
+        $("postExcerpt")
             .value
-            .trim()
-            ||
-            "Article";
+            .trim();
 
 
-    const description =
-        $("postDescription")
+    const image =
+        $("postImage")
             .value
             .trim();
 
 
     const content =
-        $("editorContent")
+        $("editor")
             .innerHTML
             .trim();
 
 
     if(!title){
 
-        showToast(
-            "Please enter an article title.",
-            "error"
+        alert(
+            "Please enter a title."
         );
 
-        $("postTitle").focus();
-
-        return null;
+        return;
 
     }
 
 
     if(!content){
 
-        showToast(
-            "Please write something in the article.",
-            "error"
+        alert(
+            "Please write the article."
         );
 
-        $("editorContent").focus();
-
-        return null;
-
-    }
-
-
-    return {
-
-        title,
-
-        category,
-
-        description,
-
-        content,
-
-        cover:
-            coverImageData || "",
-
-    };
-
-}
-
-
-function publishPost(){
-
-    const data =
-        getEditorData();
-
-
-    if(!data){
         return;
+
     }
+
+
+    saveConfig();
 
 
     const now =
-        new Date().toISOString();
+        new Date()
+            .toISOString();
 
 
-    if(currentPostId){
+    if(editingId){
 
         const index =
             posts.findIndex(
-                p => p.id === currentPostId
+                p =>
+                    p.id === editingId
             );
 
 
@@ -4416,1054 +2854,472 @@ function publishPost(){
 
                 ...posts[index],
 
-                ...data,
+                title,
 
-                updated:now,
+                excerpt,
 
-                published:true
+                image,
+
+                content
 
             };
 
         }
 
-        showToast(
-            "Article updated successfully.",
-            "success"
-        );
-
     }
     else{
 
-        posts.push({
+        posts.unshift({
 
-            id:uid(),
+            id:makeId(),
 
-            ...data,
+            title,
 
-            date:now,
+            excerpt,
 
-            updated:now,
+            image,
 
-            published:true
+            content,
+
+            date:now
 
         });
 
-
-        showToast(
-            "Article published.",
-            "success"
-        );
-
     }
 
 
-    savePosts();
-
-    renderBlog();
-
-    renderAdminList();
-
-
-    const created =
-        posts[
-            posts.length - 1
-        ];
+    setStatus(
+        "Publishing to GitHub...",
+        "status"
+    );
 
 
-    if(!currentPostId && created){
+    try{
 
-        currentPostId =
-            created.id;
+        await publishDataToGitHub(
 
-    }
+            editingId
 
-
-    const current =
-        posts.find(
-            p => p.id === currentPostId
-        );
-
-
-    if(current){
-
-        $("publishBtn")
-            .textContent =
-            current.published
             ?
-            "Update Article"
+
+            "Update blog post: " + title
+
             :
-            "Publish Article";
 
-        $("deletePostBtn")
-            .style.display =
-            "block";
+            "Publish blog post: " + title
 
-    }
-
-}
-
-
-function saveDraft(){
-
-    const data =
-        getEditorData();
-
-
-    if(!data){
-        return;
-    }
-
-
-    const now =
-        new Date().toISOString();
-
-
-    if(currentPostId){
-
-        const index =
-            posts.findIndex(
-                p => p.id === currentPostId
-            );
-
-
-        if(index !== -1){
-
-            posts[index] = {
-
-                ...posts[index],
-
-                ...data,
-
-                updated:now,
-
-                published:false
-
-            };
-
-        }
-
-    }
-    else{
-
-        const newPost = {
-
-            id:uid(),
-
-            ...data,
-
-            date:now,
-
-            updated:now,
-
-            published:false
-
-        };
-
-
-        posts.push(
-            newPost
         );
 
 
-        currentPostId =
-            newPost.id;
-
-    }
-
-
-    savePosts();
-
-    renderAdminList();
-
-    renderBlog();
-
-    $("publishBtn")
-        .textContent =
-        "Publish Article";
-
-
-    $("deletePostBtn")
-        .style.display =
-        "block";
-
-
-    showToast(
-        "Draft saved.",
-        "success"
-    );
-
-}
-
-
-function deleteCurrentPost(){
-
-    if(!currentPostId){
-
-        showToast(
-            "No article selected.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const post =
-        posts.find(
-            p => p.id === currentPostId
+        setStatus(
+            "Published successfully.",
+            "status success"
         );
 
 
-    if(!post){
-        return;
+        renderBlog();
+
+
+        renderAdmin();
+
+
+        clearEditor();
+
     }
+    catch(error){
+
+        console.error(error);
 
 
-    const confirmed =
-        confirm(
-            `Delete "${post.title}"?\n\nThis cannot be undone unless you have a backup.`
+        setStatus(
+
+            "Publish failed: " +
+            error.message,
+
+            "status error"
+
         );
 
-
-    if(!confirmed){
-        return;
     }
-
-
-    posts =
-        posts.filter(
-            p => p.id !== currentPostId
-        );
-
-
-    savePosts();
-
-    clearEditor();
-
-    renderBlog();
-
-    showToast(
-        "Article deleted.",
-        "success"
-    );
 
 }
 
 
 /* =========================================================
-   COVER IMAGE
+   STATUS
 ========================================================= */
 
-$("coverInput")
-    .addEventListener(
-        "change",
-        event => {
+function setStatus(text,className){
 
-            const file =
-                event.target.files[0];
+    const el =
+        $("publishStatus");
 
 
-            if(!file){
-                return;
-            }
+    el.textContent =
+        text;
 
 
-            readImageAsDataUrl(
-                file,
-                data => {
+    el.className =
+        className;
 
-                    coverImageData =
-                        data;
+}
 
 
-                    $("coverPreview")
-                        .src =
-                        data;
+/* =========================================================
+   GITHUB API
+========================================================= */
 
+async function githubRequest(
 
-                    $("coverPreview")
-                        .style.display =
-                        "block";
+    url,
 
+    options = {}
 
-                    $("coverUpload")
-                        .classList.add(
-                            "has-image"
-                        );
-
-
-                    $("coverStatus")
-                        .textContent =
-                        file.name;
-
-
-                    $("coverStatus")
-                        .classList.add(
-                            "success"
-                        );
-
-                }
-            );
-
-        }
-    );
-
-
-function readImageAsDataUrl(
-    file,
-    callback
 ){
 
-    if(!file.type.startsWith("image/")){
-
-        showToast(
-            "Please select an image file.",
-            "error"
-        );
-
-        return;
-
-    }
+    const token =
+        $("githubToken")
+            .value
+            .trim();
 
 
-    const reader =
-        new FileReader();
+    if(!token){
 
-
-    reader.onload =
-        event => {
-
-            callback(
-                event.target.result
-            );
-
-        };
-
-
-    reader.onerror =
-        ()=>{
-            showToast(
-                "Could not read the image.",
-                "error"
-            );
-        };
-
-
-    reader.readAsDataURL(
-        file
-    );
-
-}
-
-
-/* =========================================================
-   ARTICLE IMAGE
-========================================================= */
-
-$("imageTool")
-    .addEventListener(
-        "click",
-        ()=>{
-            $("articleImageInput").click();
-        }
-    );
-
-
-$("articleImageInput")
-    .addEventListener(
-        "change",
-        event => {
-
-            const file =
-                event.target.files[0];
-
-
-            if(!file){
-                return;
-            }
-
-
-            readImageAsDataUrl(
-                file,
-                data => {
-
-                    insertHtmlAtCursor(
-                        `<img src="${escapeHtml(data)}" alt="Article image">`
-                    );
-
-                    showToast(
-                        "Image inserted.",
-                        "success"
-                    );
-
-                }
-            );
-
-
-            event.target.value = "";
-
-        }
-    );
-
-
-function insertHtmlAtCursor(html){
-
-    $("editorContent")
-        .focus();
-
-
-    const selection =
-        window.getSelection();
-
-
-    if(!selection.rangeCount){
-
-        $("editorContent")
-            .insertAdjacentHTML(
-                "beforeend",
-                html
-            );
-
-        return;
-
-    }
-
-
-    const range =
-        selection.getRangeAt(0);
-
-
-    range.deleteContents();
-
-
-    const temp =
-        document.createElement("div");
-
-
-    temp.innerHTML =
-        html;
-
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    while(temp.firstChild){
-
-        fragment.appendChild(
-            temp.firstChild
+        throw new Error(
+            "GitHub token is missing."
         );
 
     }
 
 
-    range.insertNode(
-        fragment
-    );
-
-
-    range.collapse(false);
-
-
-    selection.removeAllRanges();
-
-    selection.addRange(
-        range
-    );
-
-}
-
-
-/* =========================================================
-   EDITOR TOOLS
-========================================================= */
-
-document
-    .querySelectorAll(
-        ".editor-tool[data-command]"
-    )
-    .forEach(button => {
-
-        button.addEventListener(
-            "click",
-            event => {
-
-                event.preventDefault();
-
-
-                $("editorContent")
-                    .focus();
-
-
-                document.execCommand(
-                    button.dataset.command,
-                    false,
-                    null
-                );
-
-            }
-        );
-
-    });
-
-
-document
-    .querySelectorAll(
-        ".editor-tool[data-block]"
-    )
-    .forEach(button => {
-
-        button.addEventListener(
-            "click",
-            event => {
-
-                event.preventDefault();
-
-
-                $("editorContent")
-                    .focus();
-
-
-                document.execCommand(
-                    "formatBlock",
-                    false,
-                    `<${button.dataset.block}>`
-                );
-
-            }
-        );
-
-    });
-
-
-$("quoteTool")
-    .addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            $("editorContent").focus();
-
-            document.execCommand(
-                "formatBlock",
-                false,
-                "<blockquote>"
-            );
-
-        }
-    );
-
-
-$("linkTool")
-    .addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-
-
-            const url =
-                prompt(
-                    "Enter URL:"
-                );
-
-
-            if(!url){
-                return;
-            }
-
-
-            $("editorContent")
-                .focus();
-
-
-            document.execCommand(
-                "createLink",
-                false,
-                url
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   PREVIEW
-========================================================= */
-
-$("previewBtn")
-    .addEventListener(
-        "click",
-        ()=>{
-            const data =
-                getEditorData();
-
-
-            if(!data){
-                return;
-            }
-
-
-            const previewPost = {
-
-                id:"preview",
-
-                ...data,
-
-                date:
-                    new Date().toISOString(),
-
-                published:true
-
-            };
-
-
-            posts.push(
-                previewPost
-            );
-
-
-            openArticle(
-                "preview"
-            );
-
-
-            posts =
-                posts.filter(
-                    p => p.id !== "preview"
-                );
-
-        }
-    );
-
-
-/* =========================================================
-   EXPORT JSON
-========================================================= */
-
-$("exportJsonBtn")
-    .addEventListener(
-        "click",
-        ()=>{
-
-            const data =
-                JSON.stringify(
-                    posts,
-                    null,
-                    2
-                );
-
-
-            downloadFile(
-                "rakkez-blog-backup.json",
-                data,
-                "application/json"
-            );
-
-
-            showToast(
-                "Backup exported.",
-                "success"
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   IMPORT JSON
-========================================================= */
-
-$("importJsonBtn")
-    .addEventListener(
-        "click",
-        ()=>{
-            $("importJsonInput").click();
-        }
-    );
-
-
-$("importJsonInput")
-    .addEventListener(
-        "change",
-        event => {
-
-            const file =
-                event.target.files[0];
-
-
-            if(!file){
-                return;
-            }
-
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload =
-                event => {
-
-                    try{
-
-                        const imported =
-                            JSON.parse(
-                                event.target.result
-                            );
-
-
-                        if(!Array.isArray(imported)){
-
-                            throw new Error(
-                                "Invalid format"
-                            );
-
-                        }
-
-
-                        const valid =
-                            imported.filter(
-                                post =>
-                                    post &&
-                                    typeof post === "object"
-                            );
-
-
-                        posts =
-                            valid.map(post => ({
-
-                                id:
-                                    post.id ||
-                                    uid(),
-
-                                title:
-                                    post.title ||
-                                    "Untitled Article",
-
-                                category:
-                                    post.category ||
-                                    "Article",
-
-                                description:
-                                    post.description ||
-                                    "",
-
-                                cover:
-                                    post.cover ||
-                                    "",
-
-                                content:
-                                    post.content ||
-                                    "",
-
-                                date:
-                                    post.date ||
-                                    new Date().toISOString(),
-
-                                updated:
-                                    post.updated ||
-                                    new Date().toISOString(),
-
-                                published:
-                                    post.published !== false
-
-                            }));
-
-
-                        savePosts();
-
-                        renderBlog();
-
-                        renderAdminList();
-
-                        clearEditor();
-
-
-                        showToast(
-                            `${posts.length} articles imported.`,
-                            "success"
-                        );
-
-                    }
-                    catch(error){
-
-                        console.error(error);
-
-                        showToast(
-                            "Invalid backup file.",
-                            "error"
-                        );
-
-                    }
-
-                };
-
-
-            reader.readAsText(
-                file
-            );
-
-
-            event.target.value = "";
-
-        }
-    );
-
-
-/* =========================================================
-   DOWNLOAD
-========================================================= */
-
-function downloadFile(
-    filename,
-    content,
-    mime
-){
-
-    const blob =
-        new Blob(
-            [content],
+    const response =
+        await fetch(
+            url,
             {
-                type:mime
+
+                ...options,
+
+                headers:{
+
+                    "Accept":
+                        "application/vnd.github+json",
+
+                    "Authorization":
+                        `Bearer ${token}`,
+
+                    "X-GitHub-Api-Version":
+                        "2022-11-28",
+
+                    ...(options.headers || {})
+
+                }
+
             }
         );
+
+
+    if(!response.ok){
+
+        let message =
+            `GitHub error ${response.status}`;
+
+
+        try{
+
+            const data =
+                await response.json();
+
+
+            if(data.message){
+
+                message +=
+                    ": " +
+                    data.message;
+
+            }
+
+        }
+        catch(_){}
+
+
+        throw new Error(
+            message
+        );
+
+    }
+
+
+    return response.json();
+
+}
+
+
+/* =========================================================
+   GET FILE
+========================================================= */
+
+async function getGithubFile(){
+
+    const repo =
+        $("githubRepo")
+            .value
+            .trim();
+
+
+    const branch =
+        $("githubBranch")
+            .value
+            .trim() ||
+        "main";
+
+
+    if(!repo){
+
+        throw new Error(
+            "GitHub repository is missing. Example: username/rakkez"
+        );
+
+    }
 
 
     const url =
-        URL.createObjectURL(
-            blob
+
+        "https://api.github.com/repos/" +
+
+        encodeURIComponent(
+            repo.split("/")[0]
+        ) +
+
+        "/" +
+
+        encodeURIComponent(
+            repo.split("/")[1]
+        ) +
+
+        "/contents/" +
+
+        DATA_FILE +
+
+        "?ref=" +
+
+        encodeURIComponent(branch);
+
+
+    try{
+
+        return await githubRequest(
+            url
         );
-
-
-    const a =
-        document.createElement("a");
-
-
-    a.href =
-        url;
-
-
-    a.download =
-        filename;
-
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove();
-
-
-    setTimeout(
-        ()=>{
-            URL.revokeObjectURL(
-                url
-            );
-        },
-        1000
-    );
-
-}
-
-
-/* =========================================================
-   EXPORT COMPLETE WEBSITE
-========================================================= */
-
-$("exportWebsiteBtn")
-    .addEventListener(
-        "click",
-        exportWebsite
-    );
-
-
-function exportWebsite(){
-
-    if(!posts.length){
-
-        showToast(
-            "There are no articles to export.",
-            "error"
-        );
-
-        return;
 
     }
+    catch(error){
 
+        if(
+            error.message.includes(
+                "404"
+            )
+        ){
 
-    const published =
-        posts.filter(
-            post =>
-                post.published !== false
-        );
+            return null;
 
-
-    if(!published.length){
-
-        showToast(
-            "Publish at least one article first.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    /*
-        We clone the current document.
-
-        Then we find the placeholder:
-
-        window.RAKKEZ_EMBEDDED_POSTS = [];
-
-        and replace it with the actual article data.
-
-        The generated HTML therefore contains the posts
-        inside itself.
-    */
-
-    const html =
-        "<!DOCTYPE html>\n" +
-        document.documentElement
-            .outerHTML;
-
-
-    const serialized =
-        JSON.stringify(
-            published
-        )
-        .replace(
-            /</g,
-            "\\u003c"
-        )
-        .replace(
-            />/g,
-            "\\u003e"
-        )
-        .replace(
-            /&/g,
-            "\\u0026"
-        );
-
-
-    const marker =
-        "window.RAKKEZ_EMBEDDED_POSTS = []";
-
-
-    if(!html.includes(marker)){
-
-        showToast(
-            "Could not prepare the website export.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const exported =
-        html.replace(
-            marker,
-            "window.RAKKEZ_EMBEDDED_POSTS = " +
-            serialized
-        );
-
-
-    downloadFile(
-        "rakkez-blog.html",
-        exported,
-        "text/html;charset=utf-8"
-    );
-
-
-    showToast(
-        "Blog website exported successfully.",
-        "success"
-    );
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-$("homeBtn")
-    .addEventListener(
-        "click",
-        ()=>{
-            window.location.href =
-                "index.html";
         }
+
+
+        throw error;
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE blog-data.js CONTENT
+========================================================= */
+
+function buildDataFile(){
+
+    const json =
+        JSON.stringify(
+            posts,
+            null,
+            4
+        );
+
+
+    return `/* =========================================================
+   RAKKEZ BLOG DATA
+
+   This file is automatically generated.
+
+   Do not edit manually unless you know what you are doing.
+========================================================= */
+
+window.RAKKEZ_BLOG_POSTS = ${json};
+`;
+
+}
+
+
+/* =========================================================
+   BASE64
+========================================================= */
+
+function base64EncodeUnicode(str){
+
+    const bytes =
+        new TextEncoder()
+            .encode(str);
+
+
+    let binary = "";
+
+
+    const chunkSize = 0x8000;
+
+
+    for(
+        let i=0;
+        i<bytes.length;
+        i+=chunkSize
+    ){
+
+        binary += String.fromCharCode(
+            ...bytes.subarray(
+                i,
+                i + chunkSize
+            )
+        );
+
+    }
+
+
+    return btoa(binary);
+
+}
+
+
+/* =========================================================
+   PUBLISH DATA TO GITHUB
+========================================================= */
+
+async function publishDataToGitHub(
+
+    commitMessage
+
+){
+
+    saveConfig();
+
+
+    const repo =
+        $("githubRepo")
+            .value
+            .trim();
+
+
+    const branch =
+        $("githubBranch")
+            .value
+            .trim() ||
+        "main";
+
+
+    if(!repo){
+
+        throw new Error(
+            "Enter your GitHub repository first."
+        );
+
+    }
+
+
+    const parts =
+        repo.split("/");
+
+
+    if(parts.length !== 2){
+
+        throw new Error(
+            "Repository must look like username/repository"
+        );
+
+    }
+
+
+    const owner =
+        parts[0];
+
+
+    const repository =
+        parts[1];
+
+
+    const existing =
+        await getGithubFile();
+
+
+    const content =
+        buildDataFile();
+
+
+    const body = {
+
+        message:commitMessage,
+
+        content:
+            base64EncodeUnicode(
+                content
+            ),
+
+        branch
+
+    };
+
+
+    if(existing && existing.sha){
+
+        body.sha =
+            existing.sha;
+
+    }
+
+
+    const url =
+
+        "https://api.github.com/repos/" +
+
+        encodeURIComponent(owner) +
+
+        "/" +
+
+        encodeURIComponent(repository) +
+
+        "/contents/" +
+
+        DATA_FILE;
+
+
+    await githubRequest(
+
+        url,
+
+        {
+
+            method:"PUT",
+
+            body:
+                JSON.stringify(body)
+
+        }
+
     );
 
-
-$("adminOpen")
-    .addEventListener(
-        "click",
-        openAdmin
-    );
+}
 
 
-$("adminFromBlog")
-    .addEventListener(
-        "click",
-        openAdmin
-    );
-
-
-$("adminClose")
-    .addEventListener(
-        "click",
-        closeAdmin
-    );
-
-
-$("articleBack")
-    .addEventListener(
-        "click",
-        closeArticle
-    );
-
-
-$("newPostBtn")
-    .addEventListener(
-        "click",
-        clearEditor
-    );
-
-
-$("clearEditorBtn")
-    .addEventListener(
-        "click",
-        clearEditor
-    );
-
-
-$("publishBtn")
-    .addEventListener(
-        "click",
-        publishPost
-    );
-
-
-$("saveDraftBtn")
-    .addEventListener(
-        "click",
-        saveDraft
-    );
-
-
-$("deletePostBtn")
-    .addEventListener(
-        "click",
-        deleteCurrentPost
-    );
-
+/* =========================================================
+   SEARCH
+========================================================= */
 
 $("searchInput")
     .addEventListener(
@@ -5472,74 +3328,39 @@ $("searchInput")
     );
 
 
-$("allPostsBtn")
-    .addEventListener(
-        "click",
-        ()=>{
-            $("searchInput").value = "";
-            renderBlog();
-        }
-    );
+/* =========================================================
+   ENTER LOGIN
+========================================================= */
 
-
-$("latestBtn")
+$("adminPassword")
     .addEventListener(
-        "click",
-        ()=>{
-            $("searchInput").value = "";
-            renderBlog();
-            window.scrollTo({
-                top:0,
-                behavior:"smooth"
-            });
+        "keydown",
+        event => {
+
+            if(
+                event.key === "Enter"
+            ){
+
+                loginAdmin();
+
+            }
+
         }
     );
 
 
 /* =========================================================
-   OVERLAY CLICK
+   CLOSE MODAL BY CLICKING OUTSIDE
 ========================================================= */
 
-$("adminOverlay")
+$("articleOverlay")
     .addEventListener(
         "click",
         event => {
 
             if(
                 event.target ===
-                $("adminOverlay")
-            ){
-
-                closeAdmin();
-
-            }
-
-        }
-    );
-
-
-/* =========================================================
-   ESCAPE
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if(event.key === "Escape"){
-
-            if(
-                $("adminOverlay")
-                    .classList.contains("show")
-            ){
-
-                closeAdmin();
-
-            }
-
-            else if(
-                $("articleView")
-                    .classList.contains("show")
+                $("articleOverlay")
             ){
 
                 closeArticle();
@@ -5547,76 +3368,22 @@ document.addEventListener(
             }
 
         }
-
-    }
-);
+    );
 
 
-/* =========================================================
-   THEME
-========================================================= */
-
-function loadTheme(){
-
-    const theme =
-        localStorage.getItem(
-            THEME_KEY
-        );
-
-
-    if(theme === "light"){
-
-        document.body
-            .classList.add("light");
-
-        $("themeBtn")
-            .textContent =
-            "☀";
-
-    }
-    else{
-
-        $("themeBtn")
-            .textContent =
-            "☾";
-
-    }
-
-}
-
-
-$("themeBtn")
+$("loginOverlay")
     .addEventListener(
         "click",
-        ()=>{
+        event => {
 
-            document.body
-                .classList.toggle("light");
+            if(
+                event.target ===
+                $("loginOverlay")
+            ){
 
+                closeLogin();
 
-            const light =
-                document.body
-                    .classList
-                    .contains("light");
-
-
-            localStorage.setItem(
-                THEME_KEY,
-                light
-                ?
-                "light"
-                :
-                "dark"
-            );
-
-
-            $("themeBtn")
-                .textContent =
-                light
-                ?
-                "☀"
-                :
-                "☾";
+            }
 
         }
     );
@@ -5626,16 +3393,7 @@ $("themeBtn")
    INITIALIZE
 ========================================================= */
 
-loadPosts();
-
-loadTheme();
-
 renderBlog();
-
-renderAdminList();
-
-clearEditor();
-
 
 </script>
 
