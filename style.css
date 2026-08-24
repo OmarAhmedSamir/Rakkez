@@ -28,6 +28,10 @@
 }
 
 
+/* =====================================================
+GLOBAL
+===================================================== */
+
 *{
 box-sizing:border-box;
 margin:0;
@@ -248,13 +252,21 @@ right:28px;
 
 z-index:20;
 
+width:calc(100% - 56px);
+
+height:44px;
+
 display:flex;
+
+flex-direction:row;
 
 align-items:center;
 
 justify-content:space-between;
 
-width:auto;
+flex-wrap:nowrap;
+
+direction:ltr;
 
 min-width:0;
 
@@ -267,21 +279,29 @@ LOGO
 
 .logo{
 
+display:flex;
+
+align-items:center;
+
+flex:0 0 auto;
+
+height:44px;
+
 font-family:"Space Grotesk",sans-serif;
 
 font-size:25px;
 
 font-weight:700;
 
+line-height:1;
+
 letter-spacing:-1.5px;
 
 white-space:nowrap;
 
-flex-shrink:0;
+direction:ltr;
 
 cursor:pointer;
-
-direction:ltr;
 
 }
 
@@ -296,11 +316,6 @@ color:#3c94ff;
 /* =====================================================
 TOP ACTIONS
 ===================================================== */
-
-/*
-   IMPORTANT:
-   All header buttons stay on ONE horizontal row.
-*/
 
 .top-actions{
 
@@ -318,9 +333,34 @@ flex-wrap:nowrap;
 
 white-space:nowrap;
 
-min-width:max-content;
+direction:ltr;
 
-flex-shrink:0;
+width:auto;
+
+height:44px;
+
+min-width:0;
+
+flex:0 0 auto;
+
+}
+
+
+/* Force every header button to stay in one row */
+
+.top-actions > button{
+
+flex:0 0 auto;
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+vertical-align:middle;
+
+white-space:nowrap;
 
 }
 
@@ -335,9 +375,13 @@ width:44px;
 
 height:44px;
 
-display:inline-flex;
+min-width:44px;
 
-flex:0 0 auto;
+max-width:44px;
+
+flex:0 0 44px;
+
+display:inline-flex;
 
 align-items:center;
 
@@ -377,10 +421,6 @@ rgba(20,30,48,.72);
 BLOG BUTTON
 ===================================================== */
 
-/*
-   BLOG = BLUE
-*/
-
 .blog-btn{
 
 font-family:"Space Grotesk",sans-serif;
@@ -419,6 +459,8 @@ color:#ffffff;
 
 box-shadow:none;
 
+direction:ltr;
+
 transition:
 background .25s ease,
 border-color .25s ease,
@@ -452,13 +494,13 @@ background:#1069df;
 LANGUAGE BUTTON
 ===================================================== */
 
-/*
-   LANGUAGE = GLASS
-*/
-
 .language-btn{
 
 height:44px;
+
+min-width:0;
+
+width:auto;
 
 padding:0 15px;
 
@@ -469,6 +511,8 @@ flex:0 0 auto;
 align-items:center;
 
 justify-content:center;
+
+white-space:nowrap;
 
 border-radius:14px;
 
@@ -488,7 +532,7 @@ font-size:12px;
 
 font-weight:700;
 
-white-space:nowrap;
+direction:ltr;
 
 box-shadow:none;
 
@@ -572,6 +616,8 @@ letter-spacing:3px;
 color:rgba(255,255,255,.55);
 
 margin-bottom:18px;
+
+direction:ltr;
 
 }
 
@@ -825,7 +871,8 @@ border-radius:15px;
 background:
 rgba(5,9,16,.5);
 
-backdrop-filter:blur(18px);
+backdrop-filter:
+blur(18px);
 
 }
 
@@ -869,7 +916,8 @@ border:
 background:
 rgba(5,9,16,.55);
 
-backdrop-filter:blur(18px);
+backdrop-filter:
+blur(18px);
 
 font-size:13px;
 
@@ -2421,16 +2469,49 @@ MOBILE
 
 .topbar{
 
+top:15px;
+
 left:15px;
 
 right:15px;
 
-top:15px;
+width:calc(100% - 30px);
+
+height:40px;
+
+display:flex;
+
+flex-direction:row;
+
+align-items:center;
+
+justify-content:space-between;
+
+flex-wrap:nowrap;
+
+}
+
+
+.logo{
+
+height:40px;
+
+font-size:22px;
 
 }
 
 
 .top-actions{
+
+height:40px;
+
+display:flex;
+
+flex-direction:row;
+
+align-items:center;
+
+justify-content:flex-end;
 
 gap:5px;
 
@@ -2444,6 +2525,14 @@ flex-wrap:nowrap;
 width:39px;
 
 height:39px;
+
+min-width:39px;
+
+max-width:39px;
+
+flex:0 0 39px;
+
+border-radius:12px;
 
 }
 
@@ -2524,10 +2613,6 @@ height:145px;
 }
 
 
-/*
-   Keep Blog + Language beside each other.
-*/
-
 .blog-btn{
 
 min-width:0;
@@ -2560,9 +2645,36 @@ VERY SMALL MOBILE
 
 @media(max-width:450px){
 
+.topbar{
+
+top:12px;
+
+left:12px;
+
+right:12px;
+
+width:calc(100% - 24px);
+
+}
+
+
+.top-actions{
+
+gap:4px;
+
+}
+
+
 .top-actions .icon-btn:nth-child(4){
 
 display:none;
+
+}
+
+
+.logo{
+
+font-size:20px;
 
 }
 
@@ -2600,9 +2712,9 @@ grid-template-columns:
 
 .blog-btn{
 
-height:39px;
+height:38px;
 
-padding:0 14px;
+padding:0 13px;
 
 font-size:11px;
 
@@ -2611,9 +2723,9 @@ font-size:11px;
 
 .language-btn{
 
-height:39px;
+height:38px;
 
-padding:0 10px;
+padding:0 9px;
 
 font-size:10px;
 
@@ -3016,7 +3128,7 @@ rgba(20,120,255,.20);
 
 
 /* =====================================================
-BLOG + LANGUAGE MOBILE MODAL
+UPDATES MOBILE
 ===================================================== */
 
 @media(max-width:600px){
@@ -3071,6 +3183,27 @@ direction:rtl;
 }
 
 
+/*
+   IMPORTANT:
+   The main page can be RTL,
+   but the header stays LTR so
+   the logo + buttons never stack/reverse.
+*/
+
+html[dir="rtl"] .topbar{
+
+direction:ltr;
+
+}
+
+
+html[dir="rtl"] .top-actions{
+
+direction:ltr;
+
+}
+
+
 html[dir="ltr"]{
 
 direction:ltr;
@@ -3085,9 +3218,9 @@ direction:ltr;
 }
 
 
-/*
-   Keep RakkeZ logo normal.
-*/
+/* =====================================================
+TECHNICAL UI DIRECTION
+===================================================== */
 
 .logo{
 
@@ -3095,10 +3228,6 @@ direction:ltr;
 
 }
 
-
-/*
-   Keep technical UI normal.
-*/
 
 .timer,
 .progress,
