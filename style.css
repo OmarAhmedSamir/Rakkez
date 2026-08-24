@@ -2793,3 +2793,137 @@ padding:12px;
 
 }
 
+/* =========================================================
+   LANGUAGE SWITCHER
+========================================================= */
+
+.language-btn{
+
+    height:44px;
+
+    padding:0 14px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:14px;
+
+    background:
+        rgba(7,11,18,.55);
+
+    border:
+        1px solid var(--border);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-family:"DM Sans",sans-serif;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+    white-space:nowrap;
+
+}
+
+
+.language-btn:hover{
+
+    transform:translateY(-2px);
+
+    border-color:
+        var(--border-hover);
+
+    background:
+        rgba(20,30,48,.72);
+
+}
+
+
+.language-btn:active{
+
+    transform:translateY(0);
+
+}
+
+
+/* =========================================================
+   RTL SUPPORT
+========================================================= */
+
+html[dir="rtl"]{
+
+    direction:rtl;
+
+}
+
+
+html[dir="rtl"] body{
+
+    direction:rtl;
+
+}
+
+
+html[dir="ltr"]{
+
+    direction:ltr;
+
+}
+
+
+html[dir="ltr"] body{
+
+    direction:ltr;
+
+}
+
+
+/*
+   Keep the RakkeZ logo visually normal.
+*/
+
+.logo{
+
+    direction:ltr;
+
+}
+
+
+/*
+   Keep timer numbers and technical UI
+   from becoming visually reversed.
+*/
+
+.timer,
+.progress,
+.mode{
+
+    direction:ltr;
+
+}
+
+
+/* Mobile */
+
+@media(max-width:600px){
+
+    .language-btn{
+
+        height:42px;
+
+        padding:0 11px;
+
+        font-size:11px;
+
+    }
+
+}
+
