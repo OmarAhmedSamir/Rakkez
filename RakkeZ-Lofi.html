@@ -1,0 +1,2450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RakkeZ Lofi</title>
+
+<style>
+/* =========================================================
+   RAKKEZ LOFI
+   Single-file music player
+   ========================================================= */
+
+:root{
+    --bg:#03050a;
+    --panel:rgba(8,13,22,.86);
+    --panel-strong:rgba(8,13,22,.94);
+
+    --border:rgba(255,255,255,.10);
+    --border-hover:rgba(255,255,255,.20);
+
+    --text:#fff;
+    --muted:rgba(255,255,255,.56);
+
+    --blue:#1683ff;
+    --blue2:#005eff;
+
+    --shadow:0 20px 60px rgba(0,0,0,.45);
+    --radius:22px;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(22,131,255,.16),
+            transparent 38%
+        ),
+        var(--bg);
+
+    color:var(--text);
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    overflow-x:hidden;
+}
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            circle at 15% 25%,
+            rgba(0,94,255,.05),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 70%,
+            rgba(22,131,255,.04),
+            transparent 30%
+        );
+
+    z-index:-1;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header{
+    width:min(1180px, calc(100% - 32px));
+    margin:20px auto 0;
+
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 20px;
+
+    border:1px solid var(--border);
+
+    background:rgba(5,9,16,.72);
+
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+
+    border-radius:20px;
+
+    box-shadow:var(--shadow);
+
+    position:sticky;
+    top:16px;
+
+    z-index:50;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:-.8px;
+}
+
+.logo span{
+    color:var(--blue);
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#38d66b;
+
+    box-shadow:
+        0 0 10px rgba(56,214,107,.6);
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.container{
+    width:min(1180px, calc(100% - 32px));
+    margin:60px auto 140px;
+}
+
+.hero{
+    margin-bottom:32px;
+}
+
+.eyebrow{
+    color:var(--blue);
+    font-size:13px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1.8px;
+    margin-bottom:10px;
+}
+
+.hero h1{
+    font-size:clamp(38px, 7vw, 72px);
+    line-height:.98;
+    letter-spacing:-3px;
+    font-weight:850;
+}
+
+.hero h1 span{
+    color:var(--blue);
+}
+
+.hero p{
+    margin-top:18px;
+    max-width:600px;
+
+    color:var(--muted);
+
+    line-height:1.7;
+    font-size:15px;
+}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.layout{
+    display:grid;
+    grid-template-columns:minmax(0, 1.35fr) minmax(320px, .65fr);
+    gap:20px;
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.panel{
+    border:1px solid var(--border);
+
+    background:var(--panel);
+
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+}
+
+.panel-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:22px 22px 16px;
+}
+
+.panel-title{
+    font-size:17px;
+    font-weight:750;
+}
+
+.panel-subtitle{
+    margin-top:4px;
+    font-size:12px;
+    color:var(--muted);
+}
+
+/* =========================================================
+   NOW PLAYING
+   ========================================================= */
+
+.now-playing{
+    padding:22px;
+}
+
+.cover{
+    width:100%;
+    aspect-ratio:1.55;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(22,131,255,.28),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            #0b1422,
+            #03050a
+        );
+
+    border:1px solid var(--border);
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.cover::before{
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    background:rgba(22,131,255,.08);
+
+    filter:blur(8px);
+}
+
+.cover-playing{
+    animation:coverPulse 4s ease-in-out infinite;
+}
+
+@keyframes coverPulse{
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.008);
+    }
+}
+
+.cover-image{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    display:none;
+}
+
+.cover.has-image .cover-image{
+    display:block;
+}
+
+.cover-logo{
+    position:relative;
+
+    font-size:42px;
+    font-weight:850;
+    letter-spacing:-2px;
+}
+
+.cover-logo span{
+    color:var(--blue);
+}
+
+.cover-icon{
+    position:absolute;
+
+    bottom:18px;
+    left:18px;
+
+    width:42px;
+    height:42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:13px;
+
+    background:rgba(0,0,0,.45);
+
+    border:1px solid rgba(255,255,255,.10);
+
+    font-size:18px;
+}
+
+.track-info{
+    margin-top:22px;
+}
+
+.track-title{
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:-.7px;
+}
+
+.track-artist{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.progress-area{
+    margin-top:24px;
+}
+
+.progress{
+    width:100%;
+    height:5px;
+
+    appearance:none;
+    -webkit-appearance:none;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.10);
+
+    cursor:pointer;
+}
+
+.progress::-webkit-slider-thumb{
+    appearance:none;
+    -webkit-appearance:none;
+
+    width:13px;
+    height:13px;
+
+    border-radius:50%;
+
+    background:var(--blue);
+
+    box-shadow:0 0 15px rgba(22,131,255,.5);
+}
+
+.progress::-moz-range-thumb{
+    width:13px;
+    height:13px;
+
+    border:none;
+    border-radius:50%;
+
+    background:var(--blue);
+}
+
+.time-row{
+    display:flex;
+    justify-content:space-between;
+
+    margin-top:8px;
+
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* =========================================================
+   CONTROLS
+   ========================================================= */
+
+.controls{
+    margin-top:20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:12px;
+}
+
+.control{
+    width:46px;
+    height:46px;
+
+    border-radius:14px;
+
+    border:1px solid var(--border);
+
+    background:rgba(255,255,255,.035);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+}
+
+.control:hover{
+    transform:translateY(-2px);
+
+    background:rgba(255,255,255,.07);
+
+    border-color:var(--border-hover);
+}
+
+.control:active{
+    transform:scale(.95);
+}
+
+.control.primary{
+    width:58px;
+    height:58px;
+
+    border:none;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--blue2)
+        );
+
+    box-shadow:
+        0 10px 30px rgba(0,94,255,.30);
+}
+
+.control.primary:hover{
+    background:
+        linear-gradient(
+            135deg,
+            #2c91ff,
+            #0069ff
+        );
+}
+
+.control.active{
+    color:var(--blue);
+    border-color:rgba(22,131,255,.45);
+    background:rgba(22,131,255,.08);
+}
+
+/* =========================================================
+   VOLUME
+   ========================================================= */
+
+.volume-row{
+    margin-top:20px;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.volume-icon{
+    width:28px;
+    color:var(--muted);
+}
+
+.volume{
+    flex:1;
+
+    height:4px;
+
+    appearance:none;
+    -webkit-appearance:none;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.10);
+}
+
+.volume::-webkit-slider-thumb{
+    appearance:none;
+    -webkit-appearance:none;
+
+    width:12px;
+    height:12px;
+
+    border-radius:50%;
+
+    background:var(--blue);
+}
+
+.volume::-moz-range-thumb{
+    width:12px;
+    height:12px;
+
+    border:none;
+    border-radius:50%;
+
+    background:var(--blue);
+}
+
+/* =========================================================
+   LIBRARY
+   ========================================================= */
+
+.library{
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+.search-box{
+    margin:0 22px 14px;
+
+    height:44px;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 14px;
+
+    border:1px solid var(--border);
+
+    border-radius:13px;
+
+    background:rgba(255,255,255,.025);
+}
+
+.search-box span{
+    color:var(--muted);
+    margin-right:9px;
+}
+
+.search-box input{
+    width:100%;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+
+    color:var(--text);
+
+    font-size:13px;
+}
+
+.search-box input::placeholder{
+    color:rgba(255,255,255,.35);
+}
+
+.track-list{
+    padding:0 12px 14px;
+
+    overflow-y:auto;
+
+    max-height:610px;
+}
+
+.track{
+    display:flex;
+    align-items:center;
+    gap:13px;
+
+    padding:11px;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    transition:
+        background .18s ease,
+        transform .18s ease;
+}
+
+.track:hover{
+    background:rgba(255,255,255,.045);
+}
+
+.track.active{
+    background:
+        linear-gradient(
+            90deg,
+            rgba(22,131,255,.13),
+            rgba(22,131,255,.03)
+        );
+}
+
+.track-cover{
+    width:50px;
+    height:50px;
+
+    border-radius:12px;
+
+    flex-shrink:0;
+
+    object-fit:cover;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0c1728,
+            #05080d
+        );
+
+    border:1px solid var(--border);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:var(--blue);
+
+    font-weight:800;
+}
+
+.track-details{
+    min-width:0;
+    flex:1;
+}
+
+.track-name{
+    font-size:14px;
+    font-weight:700;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.track-meta{
+    margin-top:4px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.track-play{
+    width:34px;
+    height:34px;
+
+    border-radius:10px;
+
+    border:1px solid var(--border);
+
+    background:rgba(255,255,255,.025);
+
+    color:var(--text);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty{
+    padding:35px 20px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+/* =========================================================
+   MINI PLAYER
+   ========================================================= */
+
+.mini-player{
+    position:fixed;
+
+    left:50%;
+    bottom:18px;
+
+    transform:translateX(-50%);
+
+    width:min(760px, calc(100% - 28px));
+
+    min-height:72px;
+
+    padding:10px 12px;
+
+    border:1px solid var(--border);
+
+    border-radius:19px;
+
+    background:rgba(5,9,16,.90);
+
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+
+    box-shadow:
+        0 20px 70px rgba(0,0,0,.55);
+
+    z-index:100;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.mini-cover{
+    width:48px;
+    height:48px;
+
+    border-radius:12px;
+
+    object-fit:cover;
+
+    background:#0a111d;
+
+    border:1px solid var(--border);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:var(--blue);
+
+    font-weight:800;
+
+    flex-shrink:0;
+}
+
+.mini-info{
+    min-width:0;
+    flex:1;
+}
+
+.mini-title{
+    font-size:13px;
+    font-weight:750;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.mini-artist{
+    margin-top:3px;
+
+    color:var(--muted);
+
+    font-size:10px;
+}
+
+.mini-progress{
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:2px;
+
+    overflow:hidden;
+
+    border-radius:0 0 19px 19px;
+
+    background:rgba(255,255,255,.05);
+}
+
+.mini-progress-bar{
+    height:100%;
+    width:0%;
+
+    background:var(--blue);
+
+    box-shadow:0 0 12px rgba(22,131,255,.5);
+}
+
+.mini-play{
+    width:42px;
+    height:42px;
+
+    border-radius:13px;
+
+    border:none;
+
+    background:var(--blue);
+
+    color:white;
+
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast{
+    position:fixed;
+
+    top:105px;
+    left:50%;
+
+    transform:
+        translate(-50%, -15px);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    padding:11px 16px;
+
+    border-radius:12px;
+
+    border:1px solid var(--border);
+
+    background:rgba(8,13,22,.94);
+
+    color:var(--text);
+
+    font-size:12px;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+
+    z-index:200;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:850px){
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .library{
+        min-height:400px;
+    }
+
+    .track-list{
+        max-height:430px;
+    }
+}
+
+@media(max-width:600px){
+
+    .header{
+        margin-top:12px;
+        top:10px;
+
+        height:62px;
+
+        border-radius:17px;
+    }
+
+    .status{
+        display:none;
+    }
+
+    .container{
+        width:calc(100% - 22px);
+
+        margin-top:40px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .panel-header{
+        padding:18px 17px 14px;
+    }
+
+    .now-playing{
+        padding:17px;
+    }
+
+    .track-title{
+        font-size:21px;
+    }
+
+    .control{
+        width:43px;
+        height:43px;
+    }
+
+    .control.primary{
+        width:55px;
+        height:55px;
+    }
+
+    .mini-player{
+        bottom:10px;
+
+        width:calc(100% - 18px);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header class="header">
+
+    <div class="logo">
+        Rakke<span>Z</span>
+    </div>
+
+    <div class="header-right">
+
+        <div class="status">
+            <span class="status-dot"></span>
+            Offline Lofi
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main class="container">
+
+    <section class="hero">
+
+        <div class="eyebrow">
+            RakkeZ Music
+        </div>
+
+        <h1>
+            Focus with<br>
+            <span>Lofi.</span>
+        </h1>
+
+        <p>
+            A simple offline Lofi player built for RakkeZ.
+            Choose a track, press play, and focus.
+        </p>
+
+    </section>
+
+
+    <section class="layout">
+
+
+        <!-- =================================================
+             NOW PLAYING
+             ================================================= -->
+
+        <div class="panel">
+
+            <div class="now-playing">
+
+                <div
+                    class="cover"
+                    id="cover"
+                >
+
+                    <img
+                        id="coverImage"
+                        class="cover-image"
+                        alt=""
+                    >
+
+                    <div class="cover-logo">
+                        Rakke<span>Z</span>
+                    </div>
+
+                    <div class="cover-icon">
+                        ♪
+                    </div>
+
+                </div>
+
+
+                <div class="track-info">
+
+                    <div
+                        class="track-title"
+                        id="trackTitle"
+                    >
+                        Choose a track
+                    </div>
+
+                    <div
+                        class="track-artist"
+                        id="trackArtist"
+                    >
+                        RakkeZ Lofi
+                    </div>
+
+                </div>
+
+
+                <!-- AUDIO -->
+
+                <audio
+                    id="audio"
+                    preload="metadata"
+                ></audio>
+
+
+                <!-- PROGRESS -->
+
+                <div class="progress-area">
+
+                    <input
+                        type="range"
+                        id="progress"
+                        class="progress"
+                        min="0"
+                        max="100"
+                        value="0"
+                    >
+
+                    <div class="time-row">
+
+                        <span id="currentTime">
+                            0:00
+                        </span>
+
+                        <span id="duration">
+                            0:00
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONTROLS -->
+
+                <div class="controls">
+
+                    <button
+                        class="control"
+                        id="shuffleBtn"
+                        title="Shuffle"
+                    >
+                        ⤨
+                    </button>
+
+                    <button
+                        class="control"
+                        id="previousBtn"
+                        title="Previous"
+                    >
+                        ‹
+                    </button>
+
+                    <button
+                        class="control primary"
+                        id="playBtn"
+                        title="Play"
+                    >
+                        ▶
+                    </button>
+
+                    <button
+                        class="control"
+                        id="nextBtn"
+                        title="Next"
+                    >
+                        ›
+                    </button>
+
+                    <button
+                        class="control"
+                        id="repeatBtn"
+                        title="Repeat"
+                    >
+                        ↻
+                    </button>
+
+                </div>
+
+
+                <!-- VOLUME -->
+
+                <div class="volume-row">
+
+                    <div class="volume-icon">
+                        🔊
+                    </div>
+
+                    <input
+                        type="range"
+                        id="volume"
+                        class="volume"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value="0.8"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LIBRARY
+             ================================================= -->
+
+        <div class="panel library">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <div class="panel-title">
+                        Lofi Library
+                    </div>
+
+                    <div class="panel-subtitle">
+                        Offline music
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="search-box">
+
+                <span>
+                    ⌕
+                </span>
+
+                <input
+                    id="search"
+                    type="text"
+                    placeholder="Search tracks..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div
+                class="track-list"
+                id="trackList"
+            ></div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     MINI PLAYER
+     ========================================================= -->
+
+<div class="mini-player">
+
+    <div
+        class="mini-cover"
+        id="miniCover"
+    >
+        RZ
+    </div>
+
+    <div class="mini-info">
+
+        <div
+            class="mini-title"
+            id="miniTitle"
+        >
+            Choose a track
+        </div>
+
+        <div
+            class="mini-artist"
+            id="miniArtist"
+        >
+            RakkeZ Lofi
+        </div>
+
+    </div>
+
+    <button
+        class="mini-play"
+        id="miniPlay"
+        title="Play"
+    >
+        ▶
+    </button>
+
+    <div class="mini-progress">
+
+        <div
+            class="mini-progress-bar"
+            id="miniProgress"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   RAKKEZ LOFI
+   MUSIC DATABASE
+
+   Add your own tracks here.
+
+   Example:
+
+   {
+       id: "lofi-01",
+       title: "Night Study",
+       artist: "Artist Name",
+       file: "music/lofi-01.mp3",
+       cover: "music/covers/lofi-01.jpg"
+   }
+
+   The music files should be next to this HTML file
+   inside the "music" folder.
+   ========================================================= */
+
+const TRACKS = [
+
+    {
+        id: "lofi-01",
+        title: "Night Study",
+        artist: "RakkeZ Lofi",
+        file: "music/lofi-01.mp3",
+        cover: "music/covers/lofi-01.jpg"
+    },
+
+    {
+        id: "lofi-02",
+        title: "Deep Focus",
+        artist: "RakkeZ Lofi",
+        file: "music/lofi-02.mp3",
+        cover: "music/covers/lofi-02.jpg"
+    },
+
+    {
+        id: "lofi-03",
+        title: "Late Night",
+        artist: "RakkeZ Lofi",
+        file: "music/lofi-03.mp3",
+        cover: "music/covers/lofi-03.jpg"
+    }
+
+];
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const audio =
+    document.getElementById("audio");
+
+const playBtn =
+    document.getElementById("playBtn");
+
+const miniPlay =
+    document.getElementById("miniPlay");
+
+const previousBtn =
+    document.getElementById("previousBtn");
+
+const nextBtn =
+    document.getElementById("nextBtn");
+
+const shuffleBtn =
+    document.getElementById("shuffleBtn");
+
+const repeatBtn =
+    document.getElementById("repeatBtn");
+
+const progress =
+    document.getElementById("progress");
+
+const volume =
+    document.getElementById("volume");
+
+const currentTime =
+    document.getElementById("currentTime");
+
+const duration =
+    document.getElementById("duration");
+
+const trackTitle =
+    document.getElementById("trackTitle");
+
+const trackArtist =
+    document.getElementById("trackArtist");
+
+const trackList =
+    document.getElementById("trackList");
+
+const search =
+    document.getElementById("search");
+
+const cover =
+    document.getElementById("cover");
+
+const coverImage =
+    document.getElementById("coverImage");
+
+const miniCover =
+    document.getElementById("miniCover");
+
+const miniTitle =
+    document.getElementById("miniTitle");
+
+const miniArtist =
+    document.getElementById("miniArtist");
+
+const miniProgress =
+    document.getElementById("miniProgress");
+
+const toast =
+    document.getElementById("toast");
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let currentIndex = 0;
+
+let isShuffle = false;
+
+let isRepeat = false;
+
+let isSeeking = false;
+
+let toastTimer = null;
+
+
+/* =========================================================
+   LOCAL STORAGE
+   ========================================================= */
+
+const STORAGE_KEY =
+    "rakkez-lofi-state";
+
+
+function saveState(){
+
+    const state = {
+
+        track:
+            TRACKS[currentIndex]
+                ? TRACKS[currentIndex].id
+                : null,
+
+        volume:
+            audio.volume,
+
+        shuffle:
+            isShuffle,
+
+        repeat:
+            isRepeat
+
+    };
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(state)
+    );
+}
+
+
+function loadState(){
+
+    try{
+
+        const raw =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        if(!raw) return;
+
+        const state =
+            JSON.parse(raw);
+
+
+        if(
+            typeof state.volume === "number"
+        ){
+
+            audio.volume =
+                state.volume;
+
+            volume.value =
+                state.volume;
+
+        }
+
+
+        if(
+            typeof state.shuffle === "boolean"
+        ){
+
+            isShuffle =
+                state.shuffle;
+
+        }
+
+
+        if(
+            typeof state.repeat === "boolean"
+        ){
+
+            isRepeat =
+                state.repeat;
+
+        }
+
+
+        if(state.track){
+
+            const found =
+                TRACKS.findIndex(
+                    track =>
+                        track.id === state.track
+                );
+
+            if(found !== -1){
+
+                currentIndex =
+                    found;
+
+            }
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "RakkeZ state could not be loaded.",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FORMAT TIME
+   ========================================================= */
+
+function formatTime(seconds){
+
+    if(
+        !Number.isFinite(seconds) ||
+        seconds < 0
+    ){
+
+        return "0:00";
+
+    }
+
+    const minutes =
+        Math.floor(seconds / 60);
+
+    const remaining =
+        Math.floor(seconds % 60);
+
+    return (
+        minutes +
+        ":" +
+        String(remaining).padStart(2,"0")
+    );
+
+}
+
+
+/* =========================================================
+   LOAD TRACK
+   ========================================================= */
+
+function loadTrack(
+    index,
+    autoplay = false
+){
+
+    if(!TRACKS.length){
+
+        showToast(
+            "No music tracks available."
+        );
+
+        return;
+
+    }
+
+
+    if(index < 0){
+
+        index =
+            TRACKS.length - 1;
+
+    }
+
+
+    if(index >= TRACKS.length){
+
+        index = 0;
+
+    }
+
+
+    currentIndex = index;
+
+
+    const track =
+        TRACKS[currentIndex];
+
+
+    audio.pause();
+
+    audio.src =
+        track.file;
+
+    audio.load();
+
+
+    trackTitle.textContent =
+        track.title;
+
+    trackArtist.textContent =
+        track.artist;
+
+
+    miniTitle.textContent =
+        track.title;
+
+    miniArtist.textContent =
+        track.artist;
+
+
+    /* COVER */
+
+    cover.classList.remove(
+        "has-image"
+    );
+
+    coverImage.removeAttribute(
+        "src"
+    );
+
+
+    if(track.cover){
+
+        coverImage.src =
+            track.cover;
+
+        coverImage.onload = () => {
+
+            cover.classList.add(
+                "has-image"
+            );
+
+        };
+
+        coverImage.onerror = () => {
+
+            cover.classList.remove(
+                "has-image"
+            );
+
+        };
+
+
+        miniCover.style.backgroundImage =
+            `url("${track.cover}")`;
+
+        miniCover.style.backgroundSize =
+            "cover";
+
+        miniCover.style.backgroundPosition =
+            "center";
+
+        miniCover.textContent =
+            "";
+
+    }else{
+
+        miniCover.style.backgroundImage =
+            "";
+
+        miniCover.textContent =
+            "RZ";
+
+    }
+
+
+    progress.value = 0;
+
+    currentTime.textContent =
+        "0:00";
+
+    duration.textContent =
+        "0:00";
+
+
+    renderTracks(
+        search.value
+    );
+
+    updateButtons();
+
+    saveState();
+
+
+    if(autoplay){
+
+        playAudio();
+
+    }
+
+}
+
+
+/* =========================================================
+   PLAY
+   ========================================================= */
+
+function playAudio(){
+
+    const promise =
+        audio.play();
+
+    if(promise){
+
+        promise.catch(() => {
+
+            showToast(
+                "Add a valid music file first."
+            );
+
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   PAUSE
+   ========================================================= */
+
+function pauseAudio(){
+
+    audio.pause();
+
+}
+
+
+/* =========================================================
+   TOGGLE
+   ========================================================= */
+
+function togglePlay(){
+
+    if(!audio.src){
+
+        loadTrack(
+            currentIndex,
+            true
+        );
+
+        return;
+
+    }
+
+
+    if(audio.paused){
+
+        playAudio();
+
+    }else{
+
+        pauseAudio();
+
+    }
+
+}
+
+
+/* =========================================================
+   NEXT
+   ========================================================= */
+
+function nextTrack(){
+
+    if(!TRACKS.length) return;
+
+
+    if(isShuffle){
+
+        let next =
+            Math.floor(
+                Math.random() *
+                TRACKS.length
+            );
+
+
+        if(
+            TRACKS.length > 1 &&
+            next === currentIndex
+        ){
+
+            next =
+                (next + 1) %
+                TRACKS.length;
+
+        }
+
+
+        loadTrack(
+            next,
+            true
+        );
+
+        return;
+
+    }
+
+
+    loadTrack(
+        currentIndex + 1,
+        true
+    );
+
+}
+
+
+/* =========================================================
+   PREVIOUS
+   ========================================================= */
+
+function previousTrack(){
+
+    if(
+        audio.currentTime > 3
+    ){
+
+        audio.currentTime = 0;
+
+        return;
+
+    }
+
+
+    loadTrack(
+        currentIndex - 1,
+        true
+    );
+
+}
+
+
+/* =========================================================
+   AUDIO EVENTS
+   ========================================================= */
+
+audio.addEventListener(
+    "loadedmetadata",
+    () => {
+
+        duration.textContent =
+            formatTime(
+                audio.duration
+            );
+
+    }
+);
+
+
+audio.addEventListener(
+    "timeupdate",
+    () => {
+
+        if(!isSeeking){
+
+            const percent =
+                audio.duration
+                    ? (
+                        audio.currentTime /
+                        audio.duration
+                    ) * 100
+                    : 0;
+
+            progress.value =
+                percent;
+
+            miniProgress.style.width =
+                percent + "%";
+
+        }
+
+
+        currentTime.textContent =
+            formatTime(
+                audio.currentTime
+            );
+
+    }
+);
+
+
+audio.addEventListener(
+    "play",
+    () => {
+
+        updatePlayButtons();
+
+        cover.classList.add(
+            "cover-playing"
+        );
+
+    }
+);
+
+
+audio.addEventListener(
+    "pause",
+    () => {
+
+        updatePlayButtons();
+
+        cover.classList.remove(
+            "cover-playing"
+        );
+
+    }
+);
+
+
+audio.addEventListener(
+    "ended",
+    () => {
+
+        if(isRepeat){
+
+            audio.currentTime = 0;
+
+            playAudio();
+
+        }else{
+
+            nextTrack();
+
+        }
+
+    }
+);
+
+
+audio.addEventListener(
+    "error",
+    () => {
+
+        showToast(
+            "Music file could not be loaded."
+        );
+
+    }
+);
+
+
+/* =========================================================
+   PROGRESS CONTROL
+   ========================================================= */
+
+progress.addEventListener(
+    "input",
+    () => {
+
+        isSeeking = true;
+
+        if(audio.duration){
+
+            const newTime =
+                (
+                    progress.value / 100
+                ) *
+                audio.duration;
+
+            currentTime.textContent =
+                formatTime(newTime);
+
+        }
+
+    }
+);
+
+
+progress.addEventListener(
+    "change",
+    () => {
+
+        if(audio.duration){
+
+            audio.currentTime =
+                (
+                    progress.value / 100
+                ) *
+                audio.duration;
+
+        }
+
+        isSeeking = false;
+
+    }
+);
+
+
+/* =========================================================
+   VOLUME
+   ========================================================= */
+
+volume.addEventListener(
+    "input",
+    () => {
+
+        audio.volume =
+            Number(volume.value);
+
+        saveState();
+
+    }
+);
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+playBtn.addEventListener(
+    "click",
+    togglePlay
+);
+
+miniPlay.addEventListener(
+    "click",
+    togglePlay
+);
+
+nextBtn.addEventListener(
+    "click",
+    nextTrack
+);
+
+previousBtn.addEventListener(
+    "click",
+    previousTrack
+);
+
+
+shuffleBtn.addEventListener(
+    "click",
+    () => {
+
+        isShuffle =
+            !isShuffle;
+
+        updateButtons();
+
+        saveState();
+
+        showToast(
+            isShuffle
+                ? "Shuffle enabled"
+                : "Shuffle disabled"
+        );
+
+    }
+);
+
+
+repeatBtn.addEventListener(
+    "click",
+    () => {
+
+        isRepeat =
+            !isRepeat;
+
+        updateButtons();
+
+        saveState();
+
+        showToast(
+            isRepeat
+                ? "Repeat enabled"
+                : "Repeat disabled"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   PLAY BUTTON UI
+   ========================================================= */
+
+function updatePlayButtons(){
+
+    const playing =
+        !audio.paused;
+
+    playBtn.textContent =
+        playing ? "Ⅱ" : "▶";
+
+    miniPlay.textContent =
+        playing ? "Ⅱ" : "▶";
+
+}
+
+
+/* =========================================================
+   CONTROL STATE
+   ========================================================= */
+
+function updateButtons(){
+
+    shuffleBtn.classList.toggle(
+        "active",
+        isShuffle
+    );
+
+    repeatBtn.classList.toggle(
+        "active",
+        isRepeat
+    );
+
+    updatePlayButtons();
+
+}
+
+
+/* =========================================================
+   RENDER LIBRARY
+   ========================================================= */
+
+function renderTracks(
+    filter = ""
+){
+
+    trackList.innerHTML = "";
+
+
+    const normalized =
+        filter
+            .trim()
+            .toLowerCase();
+
+
+    const filtered =
+        TRACKS.filter(track => {
+
+            return (
+                track.title
+                    .toLowerCase()
+                    .includes(normalized)
+                ||
+                track.artist
+                    .toLowerCase()
+                    .includes(normalized)
+            );
+
+        });
+
+
+    if(!filtered.length){
+
+        trackList.innerHTML = `
+
+            <div class="empty">
+                No tracks found.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(track => {
+
+        const realIndex =
+            TRACKS.findIndex(
+                item =>
+                    item.id === track.id
+            );
+
+
+        const item =
+            document.createElement(
+                "div"
+            );
+
+        item.className =
+            "track" +
+            (
+                realIndex === currentIndex
+                    ? " active"
+                    : ""
+            );
+
+
+        item.innerHTML = `
+
+            <div
+                class="track-cover"
+                style="
+                    ${
+                        track.cover
+                            ? `background-image:url("${track.cover}");
+                               background-size:cover;
+                               background-position:center;`
+                            : ""
+                    }
+                "
+            >
+                ${
+                    track.cover
+                        ? ""
+                        : "RZ"
+                }
+            </div>
+
+            <div class="track-details">
+
+                <div class="track-name">
+                    ${escapeHTML(track.title)}
+                </div>
+
+                <div class="track-meta">
+                    ${escapeHTML(track.artist)}
+                </div>
+
+            </div>
+
+            <div class="track-play">
+
+                ${
+                    realIndex === currentIndex &&
+                    !audio.paused
+                        ? "Ⅱ"
+                        : "▶"
+                }
+
+            </div>
+
+        `;
+
+
+        item.addEventListener(
+            "click",
+            () => {
+
+                if(
+                    realIndex === currentIndex
+                ){
+
+                    togglePlay();
+
+                }else{
+
+                    loadTrack(
+                        realIndex,
+                        true
+                    );
+
+                }
+
+            }
+        );
+
+
+        trackList.appendChild(
+            item
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+search.addEventListener(
+    "input",
+    () => {
+
+        renderTracks(
+            search.value
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(
+            /[&<>"']/g,
+            character => {
+
+                const map = {
+
+                    "&":"&amp;",
+                    "<":"&lt;",
+                    ">":"&gt;",
+                    '"':"&quot;",
+                    "'":"&#039;"
+
+                };
+
+                return map[character];
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+function showToast(message){
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            1800
+        );
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.target.tagName ===
+            "INPUT"
+        ){
+
+            return;
+
+        }
+
+
+        if(
+            event.code ===
+            "Space"
+        ){
+
+            event.preventDefault();
+
+            togglePlay();
+
+        }
+
+
+        if(
+            event.code ===
+            "ArrowRight"
+        ){
+
+            nextTrack();
+
+        }
+
+
+        if(
+            event.code ===
+            "ArrowLeft"
+        ){
+
+            previousTrack();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+loadState();
+
+renderTracks();
+
+loadTrack(
+    currentIndex,
+    false
+);
+
+updateButtons();
+
+</script>
+
+</body>
+</html>
