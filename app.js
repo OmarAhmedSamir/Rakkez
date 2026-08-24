@@ -4566,6 +4566,32 @@ if ($("ambientOpen")) {
 
 }
 
+document
+    .querySelectorAll("[data-close]")
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const target =
+                        $(button.dataset.close);
+
+                    if (target) {
+
+                        target.classList.remove(
+                            "show"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
 /* =========================================================
    THEME
 ========================================================= */
