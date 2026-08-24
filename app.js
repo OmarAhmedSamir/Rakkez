@@ -5494,9 +5494,9 @@ if ($("mediaFile")) {
 
 const ambientPresets = [
 
-   {
+    {
         id: "Anime girl",
-        name: "✨NEW✨Anime girl",
+        name: "✨NEW✨ Anime girl",
         url:
             "https://image.cdn2.seaart.ai/2024-03-02/cnhb3jde878c73a9lp80/0c7c4c2054c4dd5d4dce8769ef3e4fdc02c9f2d6_high.webp"
     },
@@ -5508,14 +5508,14 @@ const ambientPresets = [
             "https://wallpapercave.com/wp/wp3544754.jpg"
     },
 
-        {
+    {
         id: "Ocean",
         name: "Ocean",
         url:
             "https://wallpapercave.com/wp/wp8963442.jpg"
     },
 
-        {
+    {
         id: "Nature",
         name: "Nature",
         url:
@@ -5531,7 +5531,7 @@ const ambientPresets = [
 
     {
         id: "coffee2",
-        name: "Lofi Coffee",
+        name: "Lofi Coffee 2",
         url:
             "https://i.ytimg.com/vi/8-BsxrE1bY8/maxresdefault.jpg"
     },
@@ -5560,13 +5560,38 @@ const ambientPresets = [
 ];
 
 
+/* =========================================================
+   SELECTED AMBIENT
+========================================================= */
+
 let selectedAmbient =
     localStorage.getItem(
         STORAGE.ambient
-    )
-    ||
-    "gradient";
+    ) || "gradient";
 
+
+/* =========================================================
+   DEFAULT GRADIENT
+========================================================= */
+
+const defaultGradient = `
+    radial-gradient(
+        circle at 25% 25%,
+        #006cff,
+        transparent 35%
+    ),
+    radial-gradient(
+        circle at 75% 70%,
+        #001e79,
+        transparent 40%
+    ),
+    #02040b
+`;
+
+
+/* =========================================================
+   RENDER AMBIENT
+========================================================= */
 
 function renderAmbient() {
 
@@ -5580,10 +5605,12 @@ function renderAmbient() {
     grid.innerHTML = "";
 
 
+    /* =====================================================
+       GRADIENT CARD
+    ====================================================== */
+
     const gradient =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     gradient.className =
@@ -5597,22 +5624,13 @@ function renderAmbient() {
 
     gradient.innerHTML = `
 
-        <div style="
-            width:100%;
-            height:100%;
-            background:
-            radial-gradient(
-                circle at 25% 25%,
-                #006cff,
-                transparent 35%
-            ),
-            radial-gradient(
-                circle at 75% 70%,
-                #001e79,
-                transparent 40%
-            ),
-            #02040b;
-        "></div>
+        <div
+            style="
+                width:100%;
+                height:100%;
+                background:${defaultGradient};
+            "
+        ></div>
 
         <div class="ambient-name">
             RakkeZ Gradient
@@ -5621,30 +5639,37 @@ function renderAmbient() {
     `;
 
 
-    gradient.onclick =
-        () => {
+    gradient.onclick = () => {
 
-            selectedAmbient =
-                "gradient";
-
-
-            localStorage.setItem(
-                STORAGE.ambient,
-                selectedAmbient
-            );
+        selectedAmbient =
+            "gradient";
 
 
-            resetBackground();
+        localStorage.setItem(
+            STORAGE.ambient,
+            selectedAmbient
+        );
 
-            renderAmbient();
 
-        };
+        resetBackground();
+
+
+        applyGradient();
+
+
+        renderAmbient();
+
+    };
 
 
     grid.appendChild(
         gradient
     );
 
+
+    /* =====================================================
+       IMAGE PRESETS
+    ====================================================== */
 
     ambientPresets.forEach(
         item => {
@@ -5658,8 +5683,7 @@ function renderAmbient() {
             card.className =
                 "ambient-card" +
                 (
-                    selectedAmbient ===
-                    item.id
+                    selectedAmbient === item.id
                         ? " selected"
                         : ""
                 );
@@ -5669,7 +5693,7 @@ function renderAmbient() {
 
                 <img
                     src="${item.url}"
-                    alt=""
+                    alt="${item.name}"
                     loading="lazy"
                 >
 
@@ -5680,24 +5704,24 @@ function renderAmbient() {
             `;
 
 
-            card.onclick =
-                () => {
+            card.onclick = () => {
 
-                    selectedAmbient =
-                        item.id;
-
-
-                    localStorage.setItem(
-                        STORAGE.ambient,
-                        selectedAmbient
-                    );
+                selectedAmbient =
+                    item.id;
 
 
-                    applyAmbient(item);
+                localStorage.setItem(
+                    STORAGE.ambient,
+                    selectedAmbient
+                );
 
-                    renderAmbient();
 
-                };
+                applyAmbient(item);
+
+
+                renderAmbient();
+
+            };
 
 
             grid.appendChild(
@@ -5710,13 +5734,88 @@ function renderAmbient() {
 }
 
 
-function applyAmbient(item) {
+/* =========================================================
+   APPLY GRADIENT
+========================================================= */
+
+function applyGradient() {
+
+    const gradient =
+        document.querySelector(
+            ".bg-gradient"
+        );
+
+
+    if (!gradient) return;
+
+
+    gradient.style.display =
+        "block";
+
+
+    gradient.style.background =
+        defaultGradient;
+
+
+    if ($("customImage")) {
+
+        $("customImage")
+            .style.display =
+            "none";
+
+    }
+
 
     if ($("customVideo")) {
 
         $("customVideo")
             .style.display =
             "none";
+
+
+        $("customVideo")
+            .pause();
+
+    }
+
+}
+
+
+/* =========================================================
+   APPLY IMAGE AMBIENT
+========================================================= */
+
+function applyAmbient(item) {
+
+    const gradient =
+        document.querySelector(
+            ".bg-gradient"
+        );
+
+
+    if (gradient) {
+
+        gradient.style.display =
+            "none";
+
+    }
+
+
+    if ($("customVideo")) {
+
+        $("customVideo")
+            .pause();
+
+
+        $("customVideo")
+            .style.display =
+            "none";
+
+
+        $("customVideo")
+            .removeAttribute(
+                "src"
+            );
 
     }
 
@@ -5735,6 +5834,10 @@ function applyAmbient(item) {
 
 }
 
+
+/* =========================================================
+   RESET BACKGROUND
+========================================================= */
 
 function resetBackground() {
 
@@ -5756,6 +5859,10 @@ function resetBackground() {
     if ($("customVideo")) {
 
         $("customVideo")
+            .pause();
+
+
+        $("customVideo")
             .style.display =
             "none";
 
@@ -5767,7 +5874,79 @@ function resetBackground() {
 
     }
 
+
+    const gradient =
+        document.querySelector(
+            ".bg-gradient"
+        );
+
+
+    if (gradient) {
+
+        gradient.style.display =
+            "none";
+
+    }
+
 }
+
+
+/* =========================================================
+   RESTORE SAVED AMBIENT
+========================================================= */
+
+function restoreAmbient() {
+
+    if (
+        selectedAmbient ===
+        "gradient"
+    ) {
+
+        applyGradient();
+
+        return;
+
+    }
+
+
+    const saved =
+        ambientPresets.find(
+            item =>
+                item.id ===
+                selectedAmbient
+        );
+
+
+    if (saved) {
+
+        applyAmbient(saved);
+
+    } else {
+
+        selectedAmbient =
+            "gradient";
+
+
+        localStorage.setItem(
+            STORAGE.ambient,
+            "gradient"
+        );
+
+
+        applyGradient();
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIALIZE AMBIENT
+========================================================= */
+
+renderAmbient();
+
+restoreAmbient();
 
 
 /* =========================================================
