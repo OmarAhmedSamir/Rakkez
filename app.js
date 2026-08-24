@@ -60,7 +60,57 @@ const DEFAULT_SETTINGS = {
 
 
 /* =========================================================
-   LOAD SETTINGS
+   LOCAL STORAGE
+========================================================= */
+
+function load(key, fallback) {
+
+    try {
+
+        const value =
+            localStorage.getItem(key);
+
+        return value
+            ? JSON.parse(value)
+            : fallback;
+
+    } catch (error) {
+
+        console.error(
+            "Load error:",
+            error
+        );
+
+        return fallback;
+
+    }
+
+}
+
+
+function save(key, value) {
+
+    try {
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Storage error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SETTINGS
 ========================================================= */
 
 let settings = {
@@ -119,10 +169,10 @@ let timerState = {
     mode: "focus",
 
     remaining:
-        settings.focus * 60,
+        Number(settings.focus) * 60,
 
     total:
-        settings.focus * 60,
+        Number(settings.focus) * 60,
 
     running: false,
 
@@ -138,56 +188,6 @@ let timerState = {
 let completedFocusInCycle = 0;
 
 let currentTaskId = null;
-
-
-/* =========================================================
-   LOCAL STORAGE
-========================================================= */
-
-function load(key, fallback) {
-
-    try {
-
-        const value =
-            localStorage.getItem(key);
-
-        return value
-            ? JSON.parse(value)
-            : fallback;
-
-    } catch (error) {
-
-        console.error(
-            "Load error:",
-            error
-        );
-
-        return fallback;
-
-    }
-
-}
-
-
-function save(key, value) {
-
-    try {
-
-        localStorage.setItem(
-            key,
-            JSON.stringify(value)
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Storage error:",
-            error
-        );
-
-    }
-
-}
 
 
 /* =========================================================
@@ -275,7 +275,9 @@ function formatTime(seconds) {
     seconds =
         Math.max(
             0,
-            Math.floor(seconds)
+            Math.floor(
+                Number(seconds) || 0
+            )
         );
 
 
@@ -309,7 +311,7 @@ function formatTime(seconds) {
 
 
 /* =========================================================
-   GET TRANSLATED TIMER TEXT
+   TIMER MODE TEXT
 ========================================================= */
 
 function getTimerModeText() {
@@ -367,7 +369,7 @@ function getTimerModeText() {
 
 
 /* =========================================================
-   GET TRANSLATED TIMER LABEL
+   TIMER LABEL
 ========================================================= */
 
 function getTimerLabel() {
@@ -397,7 +399,7 @@ function getTimerLabel() {
 
 
 /* =========================================================
-   GET TRANSLATED START BUTTON
+   START BUTTON TEXT
 ========================================================= */
 
 function getStartButtonText() {
@@ -431,12 +433,11 @@ function updateTimerUI() {
     /*
        IMPORTANT:
 
-       This function controls the timer itself.
+       The timer uses ONLY timerState.remaining
+       for counting.
 
-       It does NOT call the full language system.
-
-       The language system can safely call this function
-       after changing language.
+       Language only changes how the value is displayed.
+       It NEVER changes the numeric timer state.
     */
 
 
@@ -478,16 +479,12 @@ function updateTimerUI() {
 
     if (modeText) {
 
-        modeText.textContent =
-            getTimerModeText();
-
-        /*
-           Keep the real mode available to the
-           language system.
-        */
-
         modeText.dataset.mode =
             timerState.mode;
+
+
+        modeText.textContent =
+            getTimerModeText();
 
     }
 
@@ -547,7 +544,7 @@ function updateTimerUI() {
 
 
     /* =====================================================
-       START BUTTON
+       START / PAUSE BUTTON
     ===================================================== */
 
     const startButton =
@@ -585,8 +582,7 @@ function updateTimerUI() {
 function startTimer() {
 
     /*
-       If already running,
-       pressing START acts as PAUSE.
+       START = PAUSE if already running.
     */
 
     if (
@@ -601,7 +597,7 @@ function startTimer() {
 
 
     /*
-       Stop alarm before starting.
+       Stop any alarm.
     */
 
     if (
@@ -615,7 +611,7 @@ function startTimer() {
 
 
     /*
-       Unlock browser audio.
+       Unlock audio.
     */
 
     if (
@@ -629,15 +625,37 @@ function startTimer() {
 
 
     /*
-       Make sure there is only ONE interval.
+       Prevent duplicate intervals.
     */
 
     if (
-        timerState.interval
+        timerState.interval !== null
     ) {
 
         clearInterval(
             timerState.interval
+        );
+
+        timerState.interval =
+            null;
+
+    }
+
+
+    /*
+       Make sure the timer has a valid value.
+    */
+
+    if (
+        !Number.isFinite(
+            Number(
+                timerState.remaining
+            )
+        )
+    ) {
+
+        setMode(
+            timerState.mode
         );
 
     }
@@ -673,7 +691,7 @@ function pauseTimer() {
 
 
     if (
-        timerState.interval
+        timerState.interval !== null
     ) {
 
         clearInterval(
@@ -702,8 +720,22 @@ function pauseTimer() {
 function tick() {
 
     /*
-       Timer finished.
+       IMPORTANT:
+
+       NEVER read textContent from #timer here.
+
+       The timer is purely numeric.
     */
+
+
+    if (
+        !timerState.running
+    ) {
+
+        return;
+
+    }
+
 
     if (
         timerState.remaining <= 0
@@ -716,9 +748,9 @@ function tick() {
     }
 
 
-    /*
-       Count focus time.
-    */
+    /* =====================================================
+       FOCUS STATISTICS
+    ===================================================== */
 
     if (
         timerState.mode === "focus"
@@ -755,20 +787,35 @@ function tick() {
     }
 
 
-    /*
-       IMPORTANT:
-
-       The timer ALWAYS decreases
-       using the internal numeric value.
-
-       Language has ZERO effect on this.
-    */
+    /* =====================================================
+       DECREASE TIMER
+    ===================================================== */
 
     timerState.remaining =
         Math.max(
             0,
-            timerState.remaining - 1
+            Number(
+                timerState.remaining
+            ) - 1
         );
+
+
+    /*
+       If this second reached zero,
+       finish immediately.
+    */
+
+    if (
+        timerState.remaining <= 0
+    ) {
+
+        updateTimerUI();
+
+        completePhase();
+
+        return;
+
+    }
 
 
     updateTimerUI();
@@ -785,9 +832,9 @@ function completePhase() {
     pauseTimer();
 
 
-    /*
-       Play alarm if available.
-    */
+    /* =====================================================
+       ALARM
+    ===================================================== */
 
     if (
         typeof playAlarm ===
@@ -823,7 +870,7 @@ function completePhase() {
 
         /*
            ONLY a completed focus session
-           can update the streak.
+           changes streak.
         */
 
         updateStreakOnFocus();
@@ -870,7 +917,9 @@ function completePhase() {
 
         if (
             completedFocusInCycle >=
-            settings.longBreakAfter
+            Number(
+                settings.longBreakAfter
+            )
         ) {
 
             completedFocusInCycle = 0;
@@ -886,7 +935,7 @@ function completePhase() {
     } else {
 
         /*
-           Any break finishes → Focus.
+           Break complete → Focus.
         */
 
         setMode("focus");
@@ -919,6 +968,10 @@ function completePhase() {
 
         setTimeout(
             () => {
+
+                /*
+                   Never start while alarm is playing.
+                */
 
                 if (
                     typeof isAlarmPlaying ===
@@ -973,37 +1026,46 @@ function setMode(mode) {
         mode;
 
 
-    let minutes =
-        settings.focus;
+    let minutes;
 
 
     if (
-        mode === "short"
+        mode === "focus"
     ) {
 
         minutes =
-            settings.shortBreak;
+            Number(
+                settings.focus
+            );
 
     }
 
 
-    if (
-        mode === "long"
+    else if (
+        mode === "short"
     ) {
 
         minutes =
-            settings.longBreak;
+            Number(
+                settings.shortBreak
+            );
+
+    }
+
+
+    else {
+
+        minutes =
+            Number(
+                settings.longBreak
+            );
 
     }
 
 
     /*
-       Protect against invalid settings.
+       Protect against invalid values.
     */
-
-    minutes =
-        Number(minutes);
-
 
     if (
         !Number.isFinite(minutes) ||
@@ -1035,7 +1097,7 @@ function setMode(mode) {
 
 
     if (
-        timerState.interval
+        timerState.interval !== null
     ) {
 
         clearInterval(
@@ -1066,18 +1128,46 @@ function resetTimer() {
     /*
        IMPORTANT:
 
-       Resetting the TIMER must NOT reset:
+       THIS FUNCTION DOES NOT RESET:
+
        - streak
        - sessions
        - focus time
        - daily goal
+       - dailyFocus
+       - lastFocusDate
+       - completedFocusInCycle
 
        It ONLY resets the current timer.
     */
 
 
-    pauseTimer();
+    /*
+       Stop timer.
+    */
 
+    timerState.running =
+        false;
+
+
+    if (
+        timerState.interval !== null
+    ) {
+
+        clearInterval(
+            timerState.interval
+        );
+
+    }
+
+
+    timerState.interval =
+        null;
+
+
+    /*
+       Stop alarms.
+    */
 
     if (
         typeof stopAlarm ===
@@ -1100,17 +1190,56 @@ function resetTimer() {
 
 
     /*
-       Keep completedFocusInCycle.
-       Resetting timer should not destroy
-       the user's cycle progress.
+       Reset ONLY the timer.
     */
 
-    setMode("focus");
+    timerState.mode =
+        "focus";
+
+
+    const focusMinutes =
+        Number(
+            settings.focus
+        );
+
+
+    const safeFocus =
+        Number.isFinite(
+            focusMinutes
+        ) && focusMinutes > 0
+
+            ? focusMinutes
+
+            : DEFAULT_SETTINGS.focus;
+
+
+    timerState.total =
+        Math.floor(
+            safeFocus * 60
+        );
+
+
+    timerState.remaining =
+        timerState.total;
+
+
+    timerState.running =
+        false;
+
+
+    timerState.interval =
+        null;
+
+
+    saveTimer();
 
 
     /*
-       Make sure statistics remain untouched.
+       Refresh UI without touching statistics.
     */
+
+    updateTimerUI();
+
 
     updateStats();
 
@@ -1159,7 +1288,9 @@ function updateStats() {
 
         sessionsStat.textContent =
             getCurrentLanguage() === "ar"
+
                 ? arabicNumbers(value)
+
                 : value;
 
     }
@@ -1189,7 +1320,9 @@ function updateStats() {
         ) {
 
             streakStat.textContent =
-                arabicNumbers(streak) +
+                arabicNumbers(
+                    streak
+                ) +
                 " يوم";
 
         } else {
@@ -1244,7 +1377,9 @@ function formatFocus(seconds) {
         ) {
 
             return (
-                arabicNumbers(minutes) +
+                arabicNumbers(
+                    minutes
+                ) +
                 "د"
             );
 
@@ -1266,9 +1401,13 @@ function formatFocus(seconds) {
         ) {
 
             return (
-                arabicNumbers(hours) +
+                arabicNumbers(
+                    hours
+                ) +
                 "س " +
-                arabicNumbers(remaining) +
+                arabicNumbers(
+                    remaining
+                ) +
                 "د"
             );
 
@@ -1276,7 +1415,9 @@ function formatFocus(seconds) {
 
 
         return (
-            arabicNumbers(hours) +
+            arabicNumbers(
+                hours
+            ) +
             "س"
         );
 
@@ -1394,7 +1535,9 @@ function updateDailyGoal() {
     ) {
 
         currentText =
-            arabicNumbers(minutes) +
+            arabicNumbers(
+                minutes
+            ) +
             "د";
 
 
@@ -1403,7 +1546,9 @@ function updateDailyGoal() {
         ) {
 
             goalText =
-                arabicNumbers(goalHours) +
+                arabicNumbers(
+                    goalHours
+                ) +
                 "س";
 
 
@@ -1423,7 +1568,9 @@ function updateDailyGoal() {
         } else {
 
             goalText =
-                arabicNumbers(goal) +
+                arabicNumbers(
+                    goal
+                ) +
                 "د";
 
         }
@@ -1499,7 +1646,7 @@ function updateStreakOnFocus() {
 
     /*
        Same day:
-       Do NOT increase streak again.
+       Do NOT increase streak.
     */
 
     if (
@@ -1584,15 +1731,19 @@ function updateStreakOnFocus() {
 function updateStreak() {
 
     /*
-       No completed focus yet.
+       IMPORTANT:
+
+       Do NOT reset streak simply because
+       resetTimer() was pressed.
+
+       Streak only expires naturally when
+       more than one full day has passed.
     */
+
 
     if (
         !stats.lastFocusDate
     ) {
-
-        stats.streak =
-            0;
 
         return;
 
@@ -1631,11 +1782,6 @@ function updateStreak() {
         );
 
 
-    /*
-       Only reset streak if more than
-       one complete day has passed.
-    */
-
     if (
         difference > 1
     ) {
@@ -1671,16 +1817,22 @@ function saveTimer() {
                 timerState.mode,
 
             remaining:
-                timerState.remaining,
+                Number(
+                    timerState.remaining
+                ),
 
             total:
-                timerState.total,
+                Number(
+                    timerState.total
+                ),
 
             timestamp:
                 Date.now(),
 
             running:
-                timerState.running
+                Boolean(
+                    timerState.running
+                )
 
         }
     );
@@ -1736,55 +1888,78 @@ function restoreTimer() {
         Number(
             saved.total
         ) || (
-            settings.focus *
-            60
+            Number(
+                settings.focus
+            ) * 60
+        );
+
+
+    const savedRemaining =
+        Number(
+            saved.remaining
         );
 
 
     if (
-        saved.running
+        saved.running &&
+        Number.isFinite(
+            savedRemaining
+        )
     ) {
 
-        const elapsed =
-            Math.floor(
-                (
-                    Date.now() -
-                    Number(
-                        saved.timestamp
-                    )
-                ) / 1000
+        const savedTimestamp =
+            Number(
+                saved.timestamp
             );
+
+
+        const elapsed =
+            Number.isFinite(
+                savedTimestamp
+            )
+
+                ? Math.floor(
+                    (
+                        Date.now() -
+                        savedTimestamp
+                    ) / 1000
+                )
+
+                : 0;
 
 
         timerState.remaining =
             Math.max(
                 0,
-                (
-                    Number(
-                        saved.remaining
-                    ) || 0
-                ) -
-                elapsed
+                savedRemaining -
+                Math.max(
+                    0,
+                    elapsed
+                )
             );
 
     } else {
 
         timerState.remaining =
-            Math.max(
-                0,
-                Number(
-                    saved.remaining
-                ) || 0
-            );
+            Number.isFinite(
+                savedRemaining
+            )
+
+                ? Math.max(
+                    0,
+                    savedRemaining
+                )
+
+                : timerState.total;
 
     }
 
 
     /*
-       Never automatically restart the interval
-       after restoring.
+       IMPORTANT:
 
-       The user presses START.
+       Restore NEVER starts the interval automatically.
+       User presses START.
     */
 
     timerState.running =
@@ -1802,6 +1977,7 @@ function restoreTimer() {
 
 /* =========================================================
    AUDIO UNLOCK
+   ONLY ONE VERSION — DUPLICATE REMOVED
 ========================================================= */
 
 let audioUnlocked = false;
@@ -1910,15 +2086,14 @@ function unlockAudio() {
    LANGUAGE REFRESH HOOK
 ========================================================= */
 
-/*
-   Your language system can call this after
-   switching between Arabic and English.
-
-   It refreshes ONLY the timer UI.
-*/
-
 window.refreshTimerLanguage =
     function () {
+
+        /*
+           Refresh display only.
+
+           Timer state is untouched.
+        */
 
         updateTimerUI();
 
@@ -1931,115 +2106,41 @@ window.refreshTimerLanguage =
    SAFE NUMBER UPDATE HOOK
 ========================================================= */
 
-/*
-   IMPORTANT:
-
-   The language system previously called
-   updateLanguageNumbers() every second.
-
-   That can conflict with the timer.
-
-   Keep this function only for compatibility,
-   but let updateTimerUI own the timer.
-*/
-
 window.updateLanguageNumbers =
     function () {
 
-        if (
-            typeof updateTimerUI ===
-            "function"
-        ) {
+        /*
+           Compatibility function.
 
-            updateTimerUI();
+           It does NOT modify timerState.
+           It only redraws the timer.
+        */
 
-        }
+        updateTimerUI();
 
     };
 
+
 /* =========================================================
-   AUDIO UNLOCK
+   GLOBAL TIMER FUNCTIONS
+   Makes buttons safe even if another script
+   needs to call them.
 ========================================================= */
 
-let audioUnlocked = false;
+window.startTimer =
+    startTimer;
 
 
-function unlockAudio() {
-
-    if (audioUnlocked) {
-
-        return;
-
-    }
+window.pauseTimer =
+    pauseTimer;
 
 
-    try {
-
-        const AudioContextClass =
-            window.AudioContext ||
-            window.webkitAudioContext;
+window.resetTimer =
+    resetTimer;
 
 
-        if (!AudioContextClass) {
-
-            return;
-
-        }
-
-
-        const context =
-            new AudioContextClass();
-
-
-        if (context.state === "suspended") {
-
-            context.resume();
-
-        }
-
-
-        const oscillator =
-            context.createOscillator();
-
-
-        const gain =
-            context.createGain();
-
-
-        gain.gain.value = 0.00001;
-
-
-        oscillator.connect(gain);
-
-        gain.connect(
-            context.destination
-        );
-
-
-        oscillator.start();
-
-        oscillator.stop(
-            context.currentTime + 0.01
-        );
-
-
-        oscillator.onended =
-            () => {
-
-                try {
-
-                    context.close();
-
-                } catch {}
-
-            };
-
-
-        audioUnlocked = true;
-
-    } catch {}
-
-}
+window.setMode =
+    setMode;
 
 
 /* =========================================================
@@ -2240,8 +2341,16 @@ function createAlarmPopup() {
     );
 
 
-    $("rakkezStopAlarm").onclick =
-        stopAlarm;
+    const stopButton =
+        $("rakkezStopAlarm");
+
+
+    if (stopButton) {
+
+        stopButton.onclick =
+            stopAlarm;
+
+    }
 
 }
 
@@ -2264,14 +2373,14 @@ function isAlarmPlaying() {
 function stopAlarm() {
 
     /*
-       Invalidate every existing real-alarm sequence.
-       Any old timeout becomes useless.
+       Invalidate every existing alarm sequence.
     */
 
     alarmSequenceId++;
 
 
-    alarmPlaying = false;
+    alarmPlaying =
+        false;
 
 
     clearTimeout(
@@ -2279,10 +2388,13 @@ function stopAlarm() {
     );
 
 
-    alarmLoopTimeout = null;
+    alarmLoopTimeout =
+        null;
 
 
-    /* CUSTOM AUDIO */
+    /* =====================================================
+       CUSTOM AUDIO
+    ===================================================== */
 
     if (alarmAudio) {
 
@@ -2295,14 +2407,16 @@ function stopAlarm() {
 
         try {
 
-            alarmAudio.currentTime = 0;
+            alarmAudio.currentTime =
+                0;
 
         } catch {}
 
 
         try {
 
-            alarmAudio.loop = false;
+            alarmAudio.loop =
+                false;
 
         } catch {}
 
@@ -2318,12 +2432,15 @@ function stopAlarm() {
         } catch {}
 
 
-        alarmAudio = null;
+        alarmAudio =
+            null;
 
     }
 
 
-    /* GENERATED OSCILLATORS */
+    /* =====================================================
+       GENERATED OSCILLATORS
+    ===================================================== */
 
     alarmOscillators.forEach(
         oscillator => {
@@ -2345,12 +2462,17 @@ function stopAlarm() {
     );
 
 
-    alarmOscillators = [];
+    alarmOscillators =
+        [];
 
 
-    /* AUDIO CONTEXT */
+    /* =====================================================
+       AUDIO CONTEXT
+    ===================================================== */
 
-    if (alarmAudioContext) {
+    if (
+        alarmAudioContext
+    ) {
 
         try {
 
@@ -2359,12 +2481,15 @@ function stopAlarm() {
         } catch {}
 
 
-        alarmAudioContext = null;
+        alarmAudioContext =
+            null;
 
     }
 
 
-    /* POPUP */
+    /* =====================================================
+       POPUP
+    ===================================================== */
 
     const popup =
         $("rakkezAlarmPopup");
@@ -2387,7 +2512,9 @@ function stopAlarm() {
 
 function playAlarm() {
 
-    if (!settings.sound) {
+    if (
+        !settings.sound
+    ) {
 
         return;
 
@@ -2396,16 +2523,23 @@ function playAlarm() {
 
     /*
        Kill BOTH test and real alarm first.
-       This guarantees there can never be
-       multiple alarm sources playing together.
     */
 
-    stopTestAlarm();
+    if (
+        typeof stopTestAlarm ===
+        "function"
+    ) {
+
+        stopTestAlarm();
+
+    }
+
 
     stopAlarm();
 
 
-    alarmPlaying = true;
+    alarmPlaying =
+        true;
 
 
     createAlarmPopup();
@@ -2424,27 +2558,42 @@ function playAlarm() {
     }
 
 
-    /*
-       CUSTOM UPLOADED ALARM
-    */
+    /* =====================================================
+       CUSTOM ALARM
+    ===================================================== */
 
     if (
         customAlarmURL &&
-        settings.alarmSound === "custom"
+        settings.alarmSound ===
+        "custom"
     ) {
 
-        playCustomAlarm();
+        if (
+            typeof playCustomAlarm ===
+            "function"
+        ) {
+
+            playCustomAlarm();
+
+        }
 
         return;
 
     }
 
 
-    /*
-       BUILT-IN GENERATED ALARM
-    */
+    /* =====================================================
+       BUILT-IN ALARM
+    ===================================================== */
 
-    playGeneratedAlarmLoop();
+    if (
+        typeof playGeneratedAlarmLoop ===
+        "function"
+    ) {
+
+        playGeneratedAlarmLoop();
+
+    }
 
 }
 
