@@ -5558,6 +5558,86 @@ const defaultGradient = `
     #02040b
 `;
 
+/* =========================================================
+   EXTRA GRADIENTS
+========================================================= */
+
+const ambientGradients = [
+
+    {
+        id: "gradient",
+        name: "RakkeZ Gradient",
+        background: `
+            radial-gradient(
+                circle at 25% 25%,
+                #006cff,
+                transparent 35%
+            ),
+            radial-gradient(
+                circle at 75% 70%,
+                #001e79,
+                transparent 40%
+            ),
+            #02040b
+        `
+    },
+
+    {
+        id: "yellow",
+        name: "Solar Yellow",
+        background: `
+            radial-gradient(
+                circle at 25% 25%,
+                #ffd000,
+                transparent 35%
+            ),
+            radial-gradient(
+                circle at 75% 70%,
+                #ff7a00,
+                transparent 45%
+            ),
+            #120900
+        `
+    },
+
+    {
+        id: "pink",
+        name: "Neon Pink",
+        background: `
+            radial-gradient(
+                circle at 25% 25%,
+                #ff2d95,
+                transparent 35%
+            ),
+            radial-gradient(
+                circle at 75% 70%,
+                #8b1eff,
+                transparent 45%
+            ),
+            #10020b
+        `
+    },
+
+    {
+        id: "green",
+        name: "Emerald",
+        background: `
+            radial-gradient(
+                circle at 25% 25%,
+                #00ff88,
+                transparent 35%
+            ),
+            radial-gradient(
+                circle at 75% 70%,
+                #008f5a,
+                transparent 45%
+            ),
+            #00100a
+        `
+    }
+
+];
+
 
 /* =========================================================
    RENDER AMBIENT
