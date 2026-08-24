@@ -20,6 +20,17 @@
 
 --danger:#ff5265;
 
+/* =====================================================
+   DYNAMIC BACKGROUND COLOR
+   JS WILL CHANGE THIS COLOR
+===================================================== */
+
+--dynamic-button-color:#1683ff;
+
+--dynamic-button-dark:#0b56c7;
+
+--dynamic-button-text:#ffffff;
+
 --shadow:
 0 30px 100px rgba(0,0,0,.55);
 
@@ -266,478 +277,161 @@ display:flex;
 
 align-items:center;
 
-gap:9px;
+gap:8px;
 
 }
 
 
 /* =====================================================
-   RAKKEZ HEADER BUTTONS
-   Clean Dark Blue Brand Style
-===================================================== */
-
-.top-actions{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-}
-
-
-/* =====================================================
-   ALL HEADER BUTTONS
+ALL HEADER BUTTONS
 ===================================================== */
 
 .icon-btn,
 .blog-btn,
 .language-btn{
 
-    height:46px;
+height:46px;
 
-    display:flex;
+display:flex;
 
-    align-items:center;
+align-items:center;
 
-    justify-content:center;
+justify-content:center;
 
-    border-radius:14px;
+border-radius:14px;
 
-    background:
-        rgba(8,13,22,.92);
+/*
+   SOLID COLOR
+   JS changes --dynamic-button-color
+*/
 
-    border:
-        1px solid rgba(255,255,255,.09);
+background:var(--dynamic-button-color);
 
-    color:#fff;
+border:
+1px solid rgba(255,255,255,.18);
 
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.18);
+color:var(--dynamic-button-text);
 
-    backdrop-filter:
-        blur(14px);
+box-shadow:
+0 8px 24px rgba(0,0,0,.22),
+inset 0 1px 0 rgba(255,255,255,.12);
 
-    -webkit-backdrop-filter:
-        blur(14px);
+backdrop-filter:none;
+-webkit-backdrop-filter:none;
 
-    transition:
-        background .2s ease,
-        border-color .2s ease,
-        transform .2s ease,
-        box-shadow .2s ease;
+transition:
+background .25s ease,
+border-color .25s ease,
+transform .2s ease,
+box-shadow .25s ease,
+filter .25s ease;
 
 }
 
 
 /* =====================================================
-   ICON BUTTONS
+ICON BUTTONS
 ===================================================== */
 
 .icon-btn{
 
-    width:46px;
+width:46px;
 
-    padding:0;
+padding:0;
 
-    font-size:17px;
+font-size:17px;
 
 }
 
 
 /* =====================================================
-   BLOG
+BLOG
 ===================================================== */
 
 .blog-btn{
 
-    min-width:125px;
+min-width:125px;
 
-    padding:
-        0 24px;
+padding:
+0 24px;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+font-family:
+"Space Grotesk",
+sans-serif;
 
-    font-size:14px;
+font-size:14px;
 
-    font-weight:700;
+font-weight:700;
 
-    letter-spacing:.1px;
+letter-spacing:.1px;
 
-    white-space:nowrap;
+white-space:nowrap;
 
 }
 
 
 /* =====================================================
-   LANGUAGE
-   SAME COLOR + SAME STYLE
+LANGUAGE
 ===================================================== */
 
 .language-btn{
 
-    min-width:62px;
+min-width:62px;
 
-    padding:
-        0 15px;
+padding:
+0 15px;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+font-family:
+"DM Sans",
+sans-serif;
 
-    font-size:12px;
+font-size:12px;
 
-    font-weight:700;
+font-weight:700;
 
-    white-space:nowrap;
+white-space:nowrap;
 
 }
 
 
 /* =====================================================
-   HOVER
+HEADER HOVER
 ===================================================== */
 
 .icon-btn:hover,
 .blog-btn:hover,
 .language-btn:hover{
 
-    transform:
-        translateY(-1px);
+transform:
+translateY(-1px);
 
-    background:
-        rgba(12,20,32,.98);
+filter:brightness(1.08);
 
-    border-color:
-        rgba(255,255,255,.16);
+border-color:
+rgba(255,255,255,.30);
 
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.24);
+box-shadow:
+0 12px 30px rgba(0,0,0,.28),
+inset 0 1px 0 rgba(255,255,255,.15);
 
 }
 
-
-/* =====================================================
-   ACTIVE
-===================================================== */
 
 .icon-btn:active,
 .blog-btn:active,
 .language-btn:active{
 
-    transform:
-        scale(.97);
+transform:
+scale(.97);
 
-    background:
-        rgba(8,13,22,1);
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:600px){
-
-    .top-actions{
-
-        gap:6px;
-
-    }
-
-    .icon-btn{
-
-        width:42px;
-
-        height:42px;
-
-        border-radius:13px;
-
-    }
-
-    .language-btn{
-
-        height:42px;
-
-        min-width:58px;
-
-        padding:
-            0 11px;
-
-        border-radius:13px;
-
-        font-size:11px;
-
-    }
-
-    .blog-btn{
-
-        height:42px;
-
-        min-width:115px;
-
-        padding:
-            0 20px;
-
-        border-radius:13px;
-
-        font-size:13px;
-
-    }
+filter:brightness(.96);
 
 }
 
 
 /* =====================================================
-   LIGHT MODE
+TIMER
 ===================================================== */
-
-body.light .icon-btn,
-body.light .blog-btn,
-body.light .language-btn{
-
-    background:
-        rgba(255,255,255,.68);
-
-    border-color:
-        rgba(0,0,0,.10);
-
-    color:
-        rgba(17,24,39,.85);
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.06);
-
-}
-
-
-body.light .icon-btn:hover,
-body.light .blog-btn:hover,
-body.light .language-btn:hover{
-
-    background:
-        rgba(255,255,255,.92);
-
-    border-color:
-        rgba(0,0,0,.16);
-
-}
-
-
-/* =====================================================
-   CONTROLS
-   PERFECTLY CENTERED UNDER TIMER
-===================================================== */
-
-.controls{
-
-    width:100%;
-
-    margin-top:32px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:12px;
-
-}
-
-
-/* =====================================================
-   START
-===================================================== */
-
-.primary{
-
-    min-width:150px;
-
-    height:54px;
-
-    padding:
-        0 28px;
-
-    border-radius:17px;
-
-    background:
-        rgba(255,255,255,.96);
-
-    color:#05070b;
-
-    font-weight:700;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease;
-
-}
-
-
-.primary:hover{
-
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 20px 50px
-        rgba(0,95,255,.20);
-
-}
-
-
-/* =====================================================
-   RESET
-===================================================== */
-
-.secondary{
-
-    height:54px;
-
-    padding:
-        0 19px;
-
-    border-radius:17px;
-
-    background:
-        rgba(8,13,22,.62);
-
-    border:
-        1px solid var(--border);
-
-    backdrop-filter:
-        blur(18px);
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    transition:
-        background .25s ease,
-        border-color .25s ease,
-        transform .25s ease;
-
-}
-
-
-.secondary:hover{
-
-    background:
-        rgba(20,29,45,.75);
-
-    border-color:
-        var(--border-hover);
-
-    transform:
-        translateY(-2px);
-
-}
-
-
-/* =====================================================
-   MOBILE CONTROLS
-===================================================== */
-
-@media(max-width:450px){
-
-    .controls{
-
-        width:100%;
-
-        justify-content:center;
-
-    }
-
-    .primary{
-
-        flex:1;
-
-        max-width:220px;
-
-    }
-
-    .secondary{
-
-        width:55px;
-
-        padding:0;
-
-        flex-shrink:0;
-
-    }
-
-}
-/* =====================================================
-MAIN
-===================================================== */
-
-.main{
-
-position:relative;
-
-z-index:5;
-
-width:100%;
-height:100%;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-padding:
-90px 25px 100px;
-
-}
-
-
-.timer-card{
-
-width:min(760px,94vw);
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-justify-content:center;
-
-text-align:center;
-
-}
-
-
-.mode{
-
-font-size:12px;
-
-font-weight:700;
-
-letter-spacing:3px;
-
-color:rgba(255,255,255,.55);
-
-margin-bottom:18px;
-
-direction:ltr;
-
-}
-
 
 .timer{
 
@@ -748,9 +442,20 @@ clamp(105px,15vw,190px);
 
 line-height:.88;
 
-letter-spacing:-9px;
+/*
+   IMPORTANT:
+   Prevent English timer numbers from touching.
+*/
+
+letter-spacing:-4px;
 
 font-weight:600;
+
+font-variant-numeric:tabular-nums;
+
+font-feature-settings:"tnum";
+
+white-space:nowrap;
 
 text-shadow:
 0 15px 70px rgba(0,0,0,.6);
@@ -762,102 +467,8 @@ direction:ltr;
 }
 
 
-.timer-label{
-
-margin-top:25px;
-
-font-size:14px;
-
-color:var(--muted);
-
-}
-
-
 /* =====================================================
-CURRENT TASK
-===================================================== */
-
-.current-task{
-
-margin-top:14px;
-
-min-height:24px;
-
-font-size:12px;
-
-font-weight:600;
-
-color:rgba(255,255,255,.72);
-
-letter-spacing:.5px;
-
-}
-
-
-.current-task span{
-
-padding:
-6px 12px;
-
-border-radius:10px;
-
-background:
-rgba(255,255,255,.045);
-
-border:
-1px solid rgba(255,255,255,.07);
-
-}
-
-
-/* =====================================================
-PROGRESS
-===================================================== */
-
-.progress-wrap{
-
-width:min(450px,75vw);
-
-height:4px;
-
-background:
-rgba(255,255,255,.11);
-
-border-radius:20px;
-
-overflow:hidden;
-
-margin-top:20px;
-
-}
-
-
-.progress{
-
-height:100%;
-
-width:0%;
-
-background:
-linear-gradient(
-90deg,
-#006cff,
-#48a4ff
-);
-
-border-radius:20px;
-
-transition:
-width .5s linear;
-
-direction:ltr;
-
-}
-
-
-/* =====================================================
-CONTROLS
-START + RESET CENTERED
+MAIN CONTROLS
 ===================================================== */
 
 .controls{
@@ -877,6 +488,10 @@ width:100%;
 }
 
 
+/* =====================================================
+START BUTTON
+===================================================== */
+
 .primary{
 
 min-width:150px;
@@ -888,14 +503,30 @@ padding:
 
 border-radius:17px;
 
-background:
-rgba(255,255,255,.96);
+/*
+   SOLID DYNAMIC COLOR
+*/
 
-color:#05070b;
+background:
+var(--dynamic-button-color);
+
+color:
+var(--dynamic-button-text);
 
 font-weight:700;
 
-transition:.25s;
+border:
+1px solid rgba(255,255,255,.20);
+
+box-shadow:
+0 12px 30px rgba(0,0,0,.22),
+inset 0 1px 0 rgba(255,255,255,.15);
+
+transition:
+background .25s ease,
+transform .25s ease,
+box-shadow .25s ease,
+filter .25s ease;
 
 }
 
@@ -905,12 +536,30 @@ transition:.25s;
 transform:
 translateY(-2px);
 
+filter:
+brightness(1.08);
+
 box-shadow:
-0 20px 50px
-rgba(0,95,255,.2);
+0 20px 50px rgba(0,0,0,.28),
+inset 0 1px 0 rgba(255,255,255,.18);
 
 }
 
+
+.primary:active{
+
+transform:
+scale(.97);
+
+filter:
+brightness(.96);
+
+}
+
+
+/* =====================================================
+RESET
+===================================================== */
 
 .secondary{
 
@@ -921,16 +570,37 @@ padding:
 
 border-radius:17px;
 
+/*
+   Reset also follows background color
+   but slightly darker
+*/
+
 background:
-rgba(8,13,22,.62);
+var(--dynamic-button-dark);
 
 border:
-1px solid var(--border);
+1px solid rgba(255,255,255,.18);
 
-backdrop-filter:
-blur(18px);
+color:
+var(--dynamic-button-text);
 
-transition:.25s;
+backdrop-filter:none;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+box-shadow:
+0 10px 28px rgba(0,0,0,.20),
+inset 0 1px 0 rgba(255,255,255,.10);
+
+transition:
+background .25s ease,
+border-color .25s ease,
+transform .25s ease,
+filter .25s ease;
 
 }
 
@@ -938,10 +608,16 @@ transition:.25s;
 .secondary:hover{
 
 background:
-rgba(20,29,45,.75);
+var(--dynamic-button-color);
 
 border-color:
-var(--border-hover);
+rgba(255,255,255,.28);
+
+transform:
+translateY(-2px);
+
+filter:
+brightness(1.06);
 
 }
 
@@ -1054,7 +730,163 @@ transition:.25s;
 .ambient-btn:hover{
 
 border-color:
-#287dff;
+var(--dynamic-button-color);
+
+}
+
+
+/* =====================================================
+CURRENT TASK
+===================================================== */
+
+.current-task{
+
+margin-top:14px;
+
+min-height:24px;
+
+font-size:12px;
+
+font-weight:600;
+
+color:rgba(255,255,255,.72);
+
+letter-spacing:.5px;
+
+}
+
+
+.current-task span{
+
+padding:
+6px 12px;
+
+border-radius:10px;
+
+background:
+rgba(255,255,255,.045);
+
+border:
+1px solid rgba(255,255,255,.07);
+
+}
+
+
+/* =====================================================
+MODE
+===================================================== */
+
+.mode{
+
+font-size:12px;
+
+font-weight:700;
+
+letter-spacing:3px;
+
+color:rgba(255,255,255,.55);
+
+margin-bottom:18px;
+
+direction:ltr;
+
+}
+
+
+/* =====================================================
+TIMER LABEL
+===================================================== */
+
+.timer-label{
+
+margin-top:25px;
+
+font-size:14px;
+
+color:var(--muted);
+
+}
+
+
+/* =====================================================
+PROGRESS
+===================================================== */
+
+.progress-wrap{
+
+width:min(450px,75vw);
+
+height:4px;
+
+background:
+rgba(255,255,255,.11);
+
+border-radius:20px;
+
+overflow:hidden;
+
+margin-top:20px;
+
+}
+
+
+.progress{
+
+height:100%;
+
+width:0%;
+
+background:
+var(--dynamic-button-color);
+
+border-radius:20px;
+
+transition:
+width .5s linear;
+
+direction:ltr;
+
+}
+
+
+/* =====================================================
+MAIN
+===================================================== */
+
+.main{
+
+position:relative;
+
+z-index:5;
+
+width:100%;
+height:100%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+padding:
+90px 25px 100px;
+
+}
+
+
+.timer-card{
+
+width:min(760px,94vw);
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+
+text-align:center;
 
 }
 
@@ -1163,6 +995,10 @@ transform:none;
 
 }
 
+
+/* =====================================================
+PANEL HEADER
+===================================================== */
 
 .panel-head{
 
@@ -1313,10 +1149,14 @@ text-align:center;
 .number-input:focus{
 
 border-color:
-#2383ff;
+var(--dynamic-button-color);
 
 }
 
+
+/* =====================================================
+GOAL
+===================================================== */
 
 .goal-input-wrap{
 
@@ -1381,7 +1221,7 @@ transition:.25s;
 .toggle.active{
 
 background:
-#1478ff;
+var(--dynamic-button-color);
 
 }
 
@@ -1413,7 +1253,8 @@ gap:10px;
 
 width:100px;
 
-accent-color:#1478ff;
+accent-color:
+var(--dynamic-button-color);
 
 cursor:pointer;
 
@@ -1476,7 +1317,7 @@ rgba(255,255,255,.20);
 .select-input:focus{
 
 border-color:
-#1478ff;
+var(--dynamic-button-color);
 
 }
 
@@ -1530,7 +1371,7 @@ transition:.25s;
 .alarm-upload:hover{
 
 border-color:
-#1478ff;
+var(--dynamic-button-color);
 
 background:
 rgba(20,120,255,.06);
@@ -1731,7 +1572,7 @@ width:48px;
 border-radius:13px;
 
 background:
-#1478ff;
+var(--dynamic-button-color);
 
 font-size:22px;
 
@@ -1808,10 +1649,10 @@ font-size:12px;
 .task.completed .task-check{
 
 background:
-#1478ff;
+var(--dynamic-button-color);
 
 border-color:
-#1478ff;
+var(--dynamic-button-color);
 
 }
 
@@ -1922,10 +1763,14 @@ font-size:12px;
 color:white;
 
 border-color:
-#2383ff;
+var(--dynamic-button-color);
 
 background:
-rgba(15,103,255,.16);
+color-mix(
+in srgb,
+var(--dynamic-button-color) 16%,
+transparent
+);
 
 }
 
@@ -1987,7 +1832,7 @@ height:46px;
 border-radius:13px;
 
 background:
-#1478ff;
+var(--dynamic-button-color);
 
 font-weight:700;
 
@@ -2085,7 +1930,7 @@ transition:.25s;
 .file-label:hover{
 
 border-color:
-#2484ff;
+var(--dynamic-button-color);
 
 }
 
@@ -2232,7 +2077,7 @@ rgba(255,255,255,.3);
 .ambient-card.selected{
 
 border:
-2px solid #2586ff;
+2px solid var(--dynamic-button-color);
 
 }
 
@@ -2475,6 +2320,8 @@ body.light{
 
 --border-hover:rgba(0,0,0,.20);
 
+--dynamic-button-text:#ffffff;
+
 }
 
 
@@ -2524,13 +2371,21 @@ rgba(0,0,0,.10);
 
 body.light .icon-btn,
 body.light .blog-btn,
-body.light .language-btn,
+body.light .language-btn{
+
+color:white;
+
+}
+
+
 body.light .secondary,
 body.light .stat,
 body.light .ambient-btn{
 
 background:
 rgba(255,255,255,.62);
+
+color:#111827;
 
 }
 
@@ -2670,7 +2525,7 @@ padding:
 font-size:
 clamp(82px,23vw,130px);
 
-letter-spacing:-6px;
+letter-spacing:-3px;
 
 }
 
@@ -3110,10 +2965,19 @@ justify-content:center;
 border-radius:11px;
 
 background:
-rgba(20,120,255,.10);
+color-mix(
+in srgb,
+var(--dynamic-button-color) 12%,
+transparent
+);
 
 border:
-1px solid rgba(20,120,255,.12);
+1px solid
+color-mix(
+in srgb,
+var(--dynamic-button-color) 18%,
+transparent
+);
 
 font-size:16px;
 
@@ -3170,30 +3034,34 @@ margin-top:18px;
 border-radius:13px;
 
 background:
-#1478ff;
+var(--dynamic-button-color);
 
-color:white;
+color:
+var(--dynamic-button-text);
 
 font-size:12px;
 
 font-weight:700;
 
-transition:.25s;
+transition:
+background .25s ease,
+transform .25s ease,
+box-shadow .25s ease,
+filter .25s ease;
 
 }
 
 
 #updatesDone:hover{
 
-background:
-#2386ff;
+filter:
+brightness(1.08);
 
 transform:
 translateY(-1px);
 
 box-shadow:
-0 15px 35px
-rgba(20,120,255,.20);
+0 15px 35px rgba(0,0,0,.25);
 
 }
 
