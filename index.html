@@ -1455,18 +1455,43 @@
 
     if (!loader) return;
 
-    function hideLoader() {
+    /*
+     * Keep the actual website hidden
+     * until the loader is ready.
+     */
+
+    document.body.classList.remove("rakkez-ready");
+
+    /*
+     * Keep loader visible for 4 seconds.
+     */
+
+    setTimeout(() => {
+
+        /*
+         * Reveal the actual website
+         * with a smooth fade.
+         */
+
+        document.body.classList.add("rakkez-ready");
+
+        /*
+         * Start loader exit animation.
+         */
 
         loader.classList.add("hidden");
 
-        setTimeout(() => {
-            if (loader) {
-                loader.remove();
-            }
-        }, 500);
-    }
+        /*
+         * Remove loader after animation.
+         */
 
-    setTimeout(hideLoader, 4000);
+        setTimeout(() => {
+
+            loader.remove();
+
+        }, 800);
+
+    }, 4000);
 
 })();
 </script>
