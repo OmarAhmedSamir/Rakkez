@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0"
+>
+
+<title>RakkeZ — Focus Better</title>
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="style.css"
+>
+
+<script
+    src="https://accounts.google.com/gsi/client"
+    async
+    defer
+></script>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =====================================================
+         BACKGROUND
+    ====================================================== -->
+
+    <div class="background">
+
+        <div class="bg-gradient"></div>
+
+        <img
+            id="customImage"
+            class="custom-bg"
+            alt=""
+        >
+
+        <video
+            id="customVideo"
+            class="custom-bg"
+            autoplay
+            muted
+            loop
+            playsinline
+        ></video>
+
+        <div class="bg-overlay"></div>
+
+    </div>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="topbar">
+
+        <div class="logo">
+            Rakke<span>Z</span>
+        </div>
+
+        <div class="top-actions">
+
+            <button
+                class="icon-btn"
+                id="mediaOpen"
+                title="Media"
+            >
+                ♫
+            </button>
+
+            <button
+                class="icon-btn"
+                id="tasksOpen"
+                title="Tasks"
+            >
+                ✓
+            </button>
+
+            <button
+                class="icon-btn"
+                id="focusOnlyBtn"
+                title="Focus Only"
+            >
+                ◉
+            </button>
+
+            <button
+                class="icon-btn"
+                id="themeBtn"
+                title="Theme"
+            >
+                ☾
+            </button>
+
+            <button
+                class="icon-btn"
+                id="settingsOpen"
+                title="Settings"
+            >
+                ⚙
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN TIMER
+    ====================================================== -->
+
+    <main class="main">
+
+        <section class="timer-card">
+
+            <div
+                class="mode"
+                id="modeText"
+            >
+                FOCUS
+            </div>
+
+            <div
+                class="timer"
+                id="timer"
+            >
+                25:00
+            </div>
+
+            <div
+                class="timer-label"
+                id="timerLabel"
+            >
+                Stay focused. One thing at a time.
+            </div>
+
+
+            <!-- CURRENT TASK -->
+
+            <div
+                class="current-task"
+                id="currentTask"
+            >
+                <span>NO TASK SELECTED</span>
+            </div>
+
+
+            <div class="progress-wrap">
+
+                <div
+                    class="progress"
+                    id="progress"
+                ></div>
+
+            </div>
+
+
+            <!-- TIMER CONTROLS -->
+
+            <div class="controls">
+
+                <button
+                    class="primary"
+                    id="startBtn"
+                >
+                    START
+                </button>
+
+                <button
+                    class="secondary"
+                    id="resetBtn"
+                >
+                    ↻
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         BOTTOM
+    ====================================================== -->
+
+    <div class="bottom-bar">
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Focus
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="focusStat"
+                >
+                    0m
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Daily Goal
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="goalStat"
+                >
+                    0m / 4h
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Sessions
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="sessionsStat"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Streak
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="streakStat"
+                >
+                    0 days
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="ambient-btn"
+            id="ambientOpen"
+        >
+            ✦ AMBIENT
+        </button>
+
+    </div>
+
+
+    <!-- FOCUS ONLY EXIT -->
+
+    <button
+        class="focus-exit"
+        id="focusExit"
+    >
+        EXIT FOCUS
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     SETTINGS
+===================================================== -->
+
+<div
+    class="overlay"
+    id="settingsOverlay"
+>
+
+    <div class="panel">
+
+        <div class="panel-head">
+
+            <div class="panel-title">
+                Settings
+            </div>
+
+            <button
+                class="close"
+                data-close="settingsOverlay"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             TIMER
+        ================================================== -->
+
+        <div class="section">
+
+            <div class="section-title">
+                Timer
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Focus Duration
+                    </div>
+
+                    <div class="setting-description">
+                        Minutes for every focus session
+                    </div>
+
+                </div>
+
+                <input
+                    class="number-input"
+                    id="focusInput"
+                    type="number"
+                    min="1"
+                    max="180"
+                >
+
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Short Break
+                    </div>
+
+                    <div class="setting-description">
+                        Break between sessions
+                    </div>
+
+                </div>
+
+                <input
+                    class="number-input"
+                    id="shortBreakInput"
+                    type="number"
+                    min="1"
+                    max="60"
+                >
+
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Long Break
+                    </div>
+
+                    <div class="setting-description">
+                        Longer break
+                    </div>
+
+                </div>
+
+                <input
+                    class="number-input"
+                    id="longBreakInput"
+                    type="number"
+                    min="1"
+                    max="120"
+                >
+
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Sessions Before Long Break
+                    </div>
+
+                </div>
+
+                <input
+                    class="number-input"
+                    id="longBreakAfterInput"
+                    type="number"
+                    min="1"
+                    max="10"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DAILY GOAL
+        ================================================== -->
+
+        <div class="section">
+
+            <div class="section-title">
+                Daily Goal
+            </div>
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Daily Focus Goal
+                    </div>
+
+                    <div class="setting-description">
+                        Your target focus time
+                    </div>
+
+                </div>
+
+                <div class="goal-input-wrap">
+
+                    <input
+                        class="number-input"
+                        id="dailyGoalInput"
+                        type="number"
+                        min="1"
+                        max="1440"
+                    >
+
+                    <span>
+                        minutes
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SMART TIMER
+        ================================================== -->
+
+        <div class="section">
+
+            <div class="section-title">
+                Smart Timer
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Auto Start
+                    </div>
+
+                    <div class="setting-description">
+                        Automatically start next phase
+                    </div>
+
+                </div>
+
+                <button
+                    class="toggle"
+                    id="autoStartToggle"
+                    type="button"
+                ></button>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Smart Timer
+                    </div>
+
+                    <div class="setting-description">
+                        Restore timer after leaving
+                    </div>
+
+                </div>
+
+                <button
+                    class="toggle active"
+                    id="smartTimerToggle"
+                    type="button"
+                ></button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ALARM
+        ================================================== -->
+
+        <div class="section">
+
+            <div class="section-title">
+                Alarm
+            </div>
+
+
+            <!-- COMPLETION SOUND -->
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Completion Sound
+                    </div>
+
+                    <div class="setting-description">
+                        Sound when a phase finishes
+                    </div>
+
+                </div>
+
+                <button
+                    class="toggle active"
+                    id="soundToggle"
+                    type="button"
+                ></button>
+
+            </div>
+
+
+            <!-- ALARM VOLUME -->
+
+            <div class="setting alarm-setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Alarm Volume
+                    </div>
+
+                    <div class="setting-description">
+                        Notification volume
+                    </div>
+
+                </div>
+
+                <div class="volume-control">
+
+                    <input
+                        type="range"
+                        id="alarmVolume"
+                        min="0"
+                        max="100"
+                        value="70"
+                    >
+
+                    <span id="alarmVolumeValue">
+                        70%
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ALARM SOUND -->
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Alarm Sound
+                    </div>
+
+                    <div class="setting-description">
+                        Choose your completion sound
+                    </div>
+
+                </div>
+
+                <select
+                    id="alarmSound"
+                    class="select-input"
+                >
+
+                    <option value="soft">
+                        Soft Bell
+                    </option>
+
+                    <option value="digital">
+                        Digital
+                    </option>
+
+                    <option value="focus">
+                        Focus
+                    </option>
+
+                    <option value="gentle">
+                        Gentle
+                    </option>
+
+                    <option value="deep">
+                        Deep
+                    </option>
+
+                    <option value="success">
+                        Success
+                    </option>
+
+                    <option value="custom">
+                        Custom
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =================================================
+                 TEST SOUND
+            ================================================== -->
+
+            <div class="setting">
+
+                <div>
+
+                    <div class="setting-name">
+                        Test Sound
+                    </div>
+
+                    <div class="setting-description">
+                        Preview the selected alarm
+                    </div>
+
+                </div>
+
+                <button
+                    id="testAlarmBtn"
+                    class="secondary"
+                    type="button"
+                    data-testing="false"
+                >
+                    <span id="testAlarmIcon">▶</span>
+                    <span id="testAlarmText">Test</span>
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 CUSTOM ALARM UPLOAD
+            ================================================== -->
+
+            <label
+                class="alarm-upload"
+                for="alarmFile"
+                id="alarmUploadLabel"
+            >
+
+                <strong>
+                    + Upload Custom Alarm
+                </strong>
+
+                <span>
+                    MP3 / WAV / M4A
+                </span>
+
+            </label>
+
+
+            <input
+                id="alarmFile"
+                type="file"
+                accept="audio/*"
+                hidden
+            >
+
+
+            <!-- =================================================
+                 CUSTOM ALARM STATUS
+            ================================================== -->
+
+            <div
+                id="customAlarmInfo"
+                style="
+                    display:none;
+                    margin-top:10px;
+                    padding:12px 14px;
+                    border-radius:14px;
+                    background:rgba(255,255,255,.045);
+                    border:1px solid rgba(255,255,255,.09);
+                    font-size:12px;
+                    color:rgba(255,255,255,.68);
+                "
+            >
+
+                <div
+                    style="
+                        display:flex;
+                        align-items:center;
+                        gap:10px;
+                    "
+                >
+
+                    <span
+                        id="alarmUploadIcon"
+                        style="
+                            width:28px;
+                            height:28px;
+                            border-radius:9px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            background:rgba(255,255,255,.08);
+                            color:white;
+                            font-size:14px;
+                            flex-shrink:0;
+                        "
+                    >
+                        ✓
+                    </span>
+
+
+                    <div
+                        style="
+                            min-width:0;
+                            flex:1;
+                        "
+                    >
+
+                        <div
+                            id="alarmUploadStatus"
+                            style="
+                                color:rgba(255,255,255,.82);
+                                font-weight:600;
+                                margin-bottom:3px;
+                            "
+                        >
+                            Custom alarm ready
+                        </div>
+
+                        <div
+                            id="customAlarmName"
+                            style="
+                                color:rgba(255,255,255,.45);
+                                white-space:nowrap;
+                                overflow:hidden;
+                                text-overflow:ellipsis;
+                            "
+                        >
+                            Custom alarm
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MEDIA STATUS -->
+
+            <div
+                id="mediaUploadStatus"
+                class="media-upload-status"
+            >
+                No file uploaded
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACCOUNTS
+        ================================================== -->
+
+        <div class="section">
+
+            <div class="section-title">
+                Accounts
+            </div>
+
+
+            <div
+                class="account-card"
+                id="spotifyAccount"
+            >
+
+                <div class="account-icon spotify-icon">
+                    S
+                </div>
+
+                <div class="account-info">
+
+                    <strong>
+                        Spotify
+                    </strong>
+
+                    <span id="spotifyStatus">
+                        Not connected
+                    </span>
+
+                </div>
+
+                <button
+                    class="account-button"
+                    id="spotifyLogin"
+                    type="button"
+                >
+                    Connect
+                </button>
+
+            </div>
+
+
+            <div
+                class="account-card"
+                id="googleAccount"
+            >
+
+                <div class="account-icon google-icon">
+                    G
+                </div>
+
+                <div class="account-info">
+
+                    <strong>
+                        Google / YouTube
+                    </strong>
+
+                    <span id="googleStatus">
+                        Not connected
+                    </span>
+
+                </div>
+
+                <button
+                    class="account-button"
+                    id="googleLogin"
+                    type="button"
+                >
+                    Connect
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RESET
+        ================================================== -->
+
+        <div class="section">
+
+            <div class="section-title">
+                Reset
+            </div>
+
+            <button
+                id="resetStatsBtn"
+                class="danger-button"
+                type="button"
+            >
+                Reset All Statistics
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TASKS
+===================================================== -->
+
+<div
+    class="overlay"
+    id="tasksOverlay"
+>
+
+    <div class="panel task-panel">
+
+        <div class="panel-head">
+
+            <div>
+
+                <div class="panel-title">
+                    Tasks
+                </div>
+
+                <div class="panel-subtitle">
+                    What are you focusing on?
+                </div>
+
+            </div>
+
+            <button
+                class="close"
+                data-close="tasksOverlay"
+                type="button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="task-input-row">
+
+            <input
+                id="taskInput"
+                class="media-input"
+                placeholder="Add a task..."
+                maxlength="100"
+            >
+
+            <button
+                id="addTaskBtn"
+                class="task-add"
+                type="button"
+            >
+                +
+            </button>
+
+        </div>
+
+
+        <div
+            class="task-list"
+            id="taskList"
+        ></div>
+
+
+        <div
+            class="task-empty"
+            id="taskEmpty"
+        >
+
+            No tasks yet.
+
+            <br>
+
+            Add something you want to accomplish.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MEDIA
+===================================================== -->
+
+<div
+    class="overlay"
+    id="mediaOverlay"
+>
+
+    <div class="panel">
+
+        <div class="panel-head">
+
+            <div class="panel-title">
+                Media
+            </div>
+
+            <button
+                class="close"
+                data-close="mediaOverlay"
+                type="button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="media-tabs">
+
+            <button
+                class="media-tab active"
+                data-media="youtube"
+                type="button"
+            >
+                YouTube
+            </button>
+
+            <button
+                class="media-tab"
+                data-media="spotify"
+                type="button"
+            >
+                Spotify
+            </button>
+
+            <button
+                class="media-tab"
+                data-media="local"
+                type="button"
+            >
+                Local
+            </button>
+
+        </div>
+
+
+        <!-- YOUTUBE -->
+
+        <div
+            class="media-content active"
+            id="youtubeContent"
+        >
+
+            <div
+                class="oauth-user"
+                id="youtubeUser"
+            >
+                Not connected
+            </div>
+
+            <input
+                class="media-input"
+                id="youtubeInput"
+                placeholder="Paste a YouTube URL..."
+            >
+
+            <button
+                class="media-button"
+                id="youtubePlay"
+                type="button"
+            >
+                Play YouTube
+            </button>
+
+            <div
+                class="embed-container"
+                id="youtubeEmbed"
+            ></div>
+
+        </div>
+
+
+        <!-- SPOTIFY -->
+
+        <div
+            class="media-content"
+            id="spotifyContent"
+        >
+
+            <div
+                class="oauth-user"
+                id="spotifyUser"
+            >
+                Not connected
+            </div>
+
+            <input
+                class="media-input"
+                id="spotifyInput"
+                placeholder="Paste Spotify track / playlist / album..."
+            >
+
+            <button
+                class="media-button"
+                id="spotifyPlay"
+                type="button"
+            >
+                Open Spotify Player
+            </button>
+
+            <div
+                class="embed-container"
+                id="spotifyEmbed"
+            ></div>
+
+        </div>
+
+
+        <!-- LOCAL -->
+
+        <div
+            class="media-content"
+            id="localContent"
+        >
+
+            <label
+                class="file-label"
+                for="mediaFile"
+            >
+
+                <strong>
+                    Choose Music or Video
+                </strong>
+
+                <span>
+                    MP3, WAV, M4A, MP4, WebM
+                </span>
+
+            </label>
+
+
+            <input
+                id="mediaFile"
+                type="file"
+                accept="audio/*,video/*"
+            >
+
+
+            <audio
+                id="audioPlayer"
+                controls
+            ></audio>
+
+
+            <video
+                id="videoPlayer"
+                controls
+                playsinline
+            ></video>
+
+        </div>
+
+
+        <!-- NOW PLAYING -->
+
+        <div
+            class="now-playing"
+            id="nowPlaying"
+        >
+
+            <div
+                class="album"
+                id="mediaArtwork"
+            >
+                ♪
+            </div>
+
+            <div>
+
+                <div
+                    class="media-name"
+                    id="mediaName"
+                >
+                    Nothing playing
+                </div>
+
+                <div
+                    class="media-source"
+                    id="mediaSource"
+                >
+                    RakkeZ
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     AMBIENT
+===================================================== -->
+
+<div
+    class="overlay"
+    id="ambientOverlay"
+>
+
+    <div class="panel ambient-panel">
+
+        <div class="panel-head">
+
+            <div>
+
+                <div class="panel-title">
+                    Ambient
+                </div>
+
+                <div class="panel-subtitle">
+                    Choose your atmosphere.
+                </div>
+
+            </div>
+
+            <button
+                class="close"
+                data-close="ambientOverlay"
+                type="button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            class="ambient-grid"
+            id="ambientGrid"
+        ></div>
+
+
+        <label
+            class="upload-ambient"
+            for="bgFile"
+        >
+            + Upload Image / Video Background
+        </label>
+
+
+        <input
+            id="bgFile"
+            type="file"
+            accept="image/*,video/*"
+            hidden
+        >
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RESET
+===================================================== -->
+
+<div
+    class="overlay"
+    id="confirmOverlay"
+>
+
+    <div class="panel confirm-panel">
+
+        <div class="confirm-icon">
+            ↻
+        </div>
+
+        <div class="panel-title">
+            Reset everything?
+        </div>
+
+        <div class="confirm-description">
+
+            This will remove your sessions,
+            focus time, streak and tasks.
+
+            This cannot be undone.
+
+        </div>
+
+
+        <div class="confirm-actions">
+
+            <button
+                class="secondary"
+                data-close="confirmOverlay"
+                type="button"
+            >
+                Cancel
+            </button>
+
+            <button
+                id="confirmReset"
+                class="danger-confirm"
+                type="button"
+            >
+                Reset
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SCRIPTS
+===================================================== -->
+
+<script src="config.js"></script>
+
+<script src="app.js"></script>
+
+
+<script>
+
+(function () {
+
+    const tutorialCompleted =
+        localStorage.getItem(
+            "rakkez_tutorial_completed"
+        );
+
+
+    if (!tutorialCompleted) {
+
+        window.location.href =
+            "tutorial/tutorial.html";
+
+    }
+
+})();
+
+</script>
+
+<div id="updatesModal" class="updates-modal">
+    <div class="updates-modal-content">
+        <button id="closeUpdates" class="updates-close">×</button>
+
+        <span class="updates-badge">NEW</span>
+
+        <h2>What's New</h2>
+        <p>We've added some exciting new features.</p>
+
+        <div class="update-item">
+            <h3>🎵 Spotify Integration</h3>
+            <p>Listen to your favorite music directly inside the app.</p>
+        </div>
+
+        <div class="update-item">
+            <h3>🌆 New Lofi Themes</h3>
+            <p>Choose from new ambient backgrounds.</p>
+        </div>
+
+        <button id="updatesDone">Got it</button>
+    </div>
+</div>
+
+
+</body>
+</html>
