@@ -13,6 +13,7 @@
 <title>RakkeZ Blog</title>
 
 <link rel="icon" type="image/png" href="R.png">
+
 <link
     rel="preconnect"
     href="https://fonts.googleapis.com"
@@ -1636,25 +1637,24 @@ textarea.input{
 
 <header class="topbar">
 
-<div
-    class="logo"
-    onclick="location.href='/'"
-    style="cursor:pointer"
->
-    Rakke<span>Z</span>
-</div>
-
-<div class="top-actions">
-
-    <button
-        class="icon-btn"
-        title="Home"
-        onclick="location.href='/'"
+    <div
+        class="logo"
+        onclick="location.href='./'"
+        style="cursor:pointer"
     >
-        ⌂
-    </button>
+        Rakke<span>Z</span>
+    </div>
 
-</div>
+
+    <div class="top-actions">
+
+        <button
+            class="icon-btn"
+            title="Home"
+            onclick="location.href='./'"
+        >
+            ⌂
+        </button>
 
 
         <button
@@ -1680,14 +1680,21 @@ textarea.input{
         RAKKEZ JOURNAL
     </div>
 
+
     <h1>
+
         Ideas that help you
+
         <span>focus.</span>
+
     </h1>
 
+
     <p>
+
         Productivity, focus, studying, technology and everything
         behind the RakkeZ experience.
+
     </p>
 
 </section>
@@ -1754,6 +1761,7 @@ textarea.input{
             ×
         </button>
 
+
         <div id="articleContent"></div>
 
     </article>
@@ -1776,6 +1784,7 @@ textarea.input{
 
             <div></div>
 
+
             <button
                 class="close"
                 onclick="closeLogin()"
@@ -1787,19 +1796,27 @@ textarea.input{
 
 
         <div class="login-logo">
+
             Rakke<span>Z</span>
+
         </div>
 
+
         <div class="login-description">
+
             Private administrator access
+
         </div>
 
 
         <div class="form-group">
 
             <label class="form-label">
+
                 Admin Password
+
             </label>
+
 
             <input
                 id="adminPassword"
@@ -1816,7 +1833,9 @@ textarea.input{
             id="loginError"
             class="login-error"
         >
+
             Incorrect password.
+
         </div>
 
 
@@ -1826,7 +1845,9 @@ textarea.input{
                 class="primary"
                 onclick="loginAdmin()"
             >
+
                 Enter Admin
+
             </button>
 
         </div>
@@ -1852,8 +1873,11 @@ textarea.input{
             <div>
 
                 <div class="panel-title">
+
                     RakkeZ Blog Admin
+
                 </div>
+
 
                 <div
                     style="
@@ -1862,7 +1886,9 @@ textarea.input{
                         font-size:11px;
                     "
                 >
+
                     Publish directly to your GitHub repository.
+
                 </div>
 
             </div>
@@ -1872,7 +1898,9 @@ textarea.input{
                 class="close"
                 onclick="closeAdminPanel()"
             >
+
                 ×
+
             </button>
 
         </div>
@@ -1883,8 +1911,11 @@ textarea.input{
         <div class="form-group">
 
             <label class="form-label">
+
                 GitHub Repository
+
             </label>
+
 
             <input
                 id="githubRepo"
@@ -1898,8 +1929,11 @@ textarea.input{
         <div class="form-group">
 
             <label class="form-label">
+
                 GitHub Branch
+
             </label>
+
 
             <input
                 id="githubBranch"
@@ -1913,8 +1947,11 @@ textarea.input{
         <div class="form-group">
 
             <label class="form-label">
+
                 GitHub Token
+
             </label>
+
 
             <input
                 id="githubToken"
@@ -1946,7 +1983,9 @@ textarea.input{
         >
 
             <div class="panel-title">
+
                 Create / Edit Post
+
             </div>
 
 
@@ -1959,8 +1998,11 @@ textarea.input{
             <div class="form-group">
 
                 <label class="form-label">
+
                     Title
+
                 </label>
+
 
                 <input
                     id="postTitle"
@@ -1974,8 +2016,11 @@ textarea.input{
             <div class="form-group">
 
                 <label class="form-label">
+
                     Excerpt
+
                 </label>
+
 
                 <textarea
                     id="postExcerpt"
@@ -1986,18 +2031,16 @@ textarea.input{
             </div>
 
 
-            <!-- =================================================
-                 COVER IMAGE
-            ================================================== -->
+            <!-- COVER IMAGE -->
 
             <div class="form-group">
 
                 <label class="form-label">
+
                     Cover Image
+
                 </label>
 
-
-                <!-- UPLOAD -->
 
                 <label
                     id="imageUpload"
@@ -2008,15 +2051,23 @@ textarea.input{
                     <div class="image-upload-content">
 
                         <div class="image-upload-icon">
+
                             ↑
+
                         </div>
+
 
                         <div class="image-upload-title">
+
                             Click to upload image
+
                         </div>
 
+
                         <div class="image-upload-subtitle">
+
                             JPG · PNG · WEBP · GIF
+
                         </div>
 
                     </div>
@@ -2031,8 +2082,6 @@ textarea.input{
                     accept="image/jpeg,image/png,image/webp,image/gif"
                 >
 
-
-                <!-- OR -->
 
                 <div
                     style="
@@ -2053,7 +2102,9 @@ textarea.input{
                         "
                     ></div>
 
+
                     OR
+
 
                     <div
                         style="
@@ -2066,8 +2117,6 @@ textarea.input{
                 </div>
 
 
-                <!-- URL -->
-
                 <input
                     id="postImageUrl"
                     class="input"
@@ -2076,8 +2125,6 @@ textarea.input{
                     autocomplete="off"
                 >
 
-
-                <!-- PREVIEW -->
 
                 <div
                     id="imagePreviewWrap"
@@ -2097,7 +2144,9 @@ textarea.input{
                         type="button"
                         title="Remove image"
                     >
+
                         ×
+
                     </button>
 
                 </div>
@@ -2116,7 +2165,9 @@ textarea.input{
             <div class="form-group">
 
                 <label class="form-label">
+
                     Article
+
                 </label>
 
 
@@ -2126,7 +2177,9 @@ textarea.input{
                         type="button"
                         onclick="format('bold')"
                     >
+
                         <b>B</b>
+
                     </button>
 
 
@@ -2134,7 +2187,9 @@ textarea.input{
                         type="button"
                         onclick="format('italic')"
                     >
+
                         <i>I</i>
+
                     </button>
 
 
@@ -2142,7 +2197,9 @@ textarea.input{
                         type="button"
                         onclick="format('underline')"
                     >
+
                         <u>U</u>
+
                     </button>
 
 
@@ -2150,7 +2207,9 @@ textarea.input{
                         type="button"
                         onclick="format('formatBlock','H2')"
                     >
+
                         H2
+
                     </button>
 
 
@@ -2158,7 +2217,9 @@ textarea.input{
                         type="button"
                         onclick="format('formatBlock','H3')"
                     >
+
                         H3
+
                     </button>
 
 
@@ -2166,7 +2227,9 @@ textarea.input{
                         type="button"
                         onclick="format('insertUnorderedList')"
                     >
+
                         • List
+
                     </button>
 
 
@@ -2174,7 +2237,9 @@ textarea.input{
                         type="button"
                         onclick="format('insertOrderedList')"
                     >
+
                         1. List
+
                     </button>
 
 
@@ -2182,7 +2247,9 @@ textarea.input{
                         type="button"
                         onclick="insertLink()"
                     >
+
                         Link
+
                     </button>
 
                 </div>
@@ -2204,7 +2271,9 @@ textarea.input{
                     class="primary"
                     onclick="publishPost()"
                 >
+
                     Publish Post
+
                 </button>
 
 
@@ -2212,7 +2281,9 @@ textarea.input{
                     class="secondary"
                     onclick="clearEditor()"
                 >
+
                     Clear
+
                 </button>
 
             </div>
@@ -2222,7 +2293,9 @@ textarea.input{
                 id="publishStatus"
                 class="status"
             >
+
                 Ready.
+
             </div>
 
         </div>
@@ -2239,7 +2312,9 @@ textarea.input{
         >
 
             <div class="panel-title">
+
                 Published Posts
+
             </div>
 
 
@@ -2257,7 +2332,9 @@ textarea.input{
                 class="secondary"
                 onclick="logoutAdmin()"
             >
+
                 Lock Admin
+
             </button>
 
         </div>
@@ -2319,10 +2396,6 @@ let posts =
 
 let editingId = null;
 
-
-/*
-    Image state
-*/
 
 let selectedImageFile = null;
 
@@ -2684,10 +2757,6 @@ function handleImageUrl(){
         url;
 
 
-    /*
-        Empty URL
-    */
-
     if(!url){
 
         if(
@@ -2715,18 +2784,9 @@ function handleImageUrl(){
     }
 
 
-    /*
-        URL selected
-    */
-
     removeCurrentImage =
         false;
 
-
-    /*
-        If upload exists,
-        upload still has priority.
-    */
 
     if(selectedImageFile){
 
@@ -3458,7 +3518,9 @@ function renderAdmin(){
                             class="small-btn"
                             onclick="editPost('${post.id}')"
                         >
+
                             Edit
+
                         </button>
 
 
@@ -3466,7 +3528,9 @@ function renderAdmin(){
                             class="small-btn delete"
                             onclick="deletePost('${post.id}')"
                         >
+
                             Delete
+
                         </button>
 
                     </div>
@@ -3524,10 +3588,6 @@ function editPost(id){
     $("postImageFile").value =
         "";
 
-
-    /*
-        Existing cover
-    */
 
     if(post.image){
 
@@ -3741,25 +3801,12 @@ async function publishPost(){
             currentImageUrl;
 
 
-        /*
-            If image was removed
-        */
-
         if(removeCurrentImage){
 
             imageUrl = "";
 
         }
 
-
-        /*
-            PRIORITY:
-
-            1. Uploaded image
-            2. URL
-            3. Existing image
-            4. Empty
-        */
 
         if(selectedImageFile){
 
@@ -3809,10 +3856,6 @@ async function publishPost(){
                 .toISOString();
 
 
-        /*
-            UPDATE
-        */
-
         if(editingId){
 
             const index =
@@ -3845,10 +3888,6 @@ async function publishPost(){
             }
 
         }
-
-        /*
-            CREATE
-        */
 
         else{
 
@@ -4619,11 +4658,6 @@ $("removeImageBtn")
 
             event.stopPropagation();
 
-
-            /*
-                If editing and an old
-                image exists, mark it removed.
-            */
 
             if(currentImageUrl){
 
