@@ -3,6 +3,24 @@
 
 <head>
 
+<script>
+(function () {
+    const TUTORIAL_KEY = "rakkez_tutorial_completed";
+
+    const currentPage = window.location.pathname.split("/").pop().toLowerCase();
+
+    // لا تعمل Redirect إذا كان المستخدم بالفعل داخل الـ Tutorial
+    if (currentPage === "tutorial.html") {
+        return;
+    }
+
+    // إذا لم يكمل المستخدم الـ Tutorial من قبل
+    if (localStorage.getItem(TUTORIAL_KEY) !== "true") {
+        window.location.replace("tutorial.html");
+    }
+})();
+</script>
+
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
