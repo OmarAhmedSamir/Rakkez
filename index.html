@@ -3007,6 +3007,21 @@
     >
         Effects
     </button>
+<!-- =====================================================
+     EFFECTS
+===================================================== -->
+
+<div
+    id="rakkezEffectsSource"
+    class="rakkez-media-source"
+    data-rakkez-source="effects"
+>
+
+    <div id="rakkezEffectsContainer"></div>
+
+</div>
+
+            
 
             <button
                 class="rakkez-media-tab"
@@ -4831,6 +4846,11 @@ body.light .rakkez-mini-close,
 
     const effectPlayers = {};
 
+    const effectsContainer =
+    document.getElementById(
+        "rakkezEffectsContainer"
+    );
+
 
     /* =====================================================
        CREATE AUDIO PLAYERS
@@ -4907,6 +4927,101 @@ body.light .rakkez-mini-close,
 
         }
     );
+
+    /* =====================================================
+   RENDER EFFECTS
+===================================================== */
+
+function renderEffects() {
+
+    if (!effectsContainer) {
+        return;
+    }
+
+    effectsContainer.innerHTML = "";
+
+    AMBIENT_EFFECTS.forEach(
+        function (effect) {
+
+            const player =
+                effectPlayers[effect.id];
+
+            if (!player) {
+                return;
+            }
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "rakkez-effect-card";
+
+            card.innerHTML = `
+
+                <div class="rakkez-effect-info">
+
+                    <div class="rakkez-effect-icon">
+                        ${effect.icon}
+                    </div>
+
+                    <div>
+
+                        <div class="rakkez-effect-title">
+                            ${effect.name}
+                        </div>
+
+                        <div class="rakkez-effect-subtitle">
+                            Ambient sound
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    id="rakkez${capitalize(effect.id)}Toggle"
+                    class="rakkez-effect-toggle"
+                    type="button"
+                >
+                    Play ${effect.name}
+                </button>
+
+
+                <div class="rakkez-effect-volume">
+
+                    <span>
+                        Volume
+                    </span>
+
+                    <input
+                        id="rakkez${capitalize(effect.id)}Volume"
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value="${player.audio.volume}"
+                    >
+
+                    <span
+                        id="rakkez${capitalize(effect.id)}VolumeValue"
+                    >
+                        ${Math.round(
+                            player.audio.volume * 100
+                        )}%
+                    </span>
+
+                </div>
+            `;
+
+            effectsContainer.appendChild(card);
+
+        }
+    );
+
+}
+
+renderEffects();
 
 
     /* =====================================================
