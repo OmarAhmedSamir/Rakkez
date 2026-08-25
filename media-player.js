@@ -32,6 +32,10 @@
 
     /* =====================================================
        BUILT-IN LOFI PLAYLIST
+
+       IMPORTANT:
+       Music files are NOT inside a Music folder.
+       They are in the same location as this JS/site root.
     ===================================================== */
 
     const PLAYLIST = [
@@ -44,10 +48,10 @@
                 "Ahmed S",
 
             src:
-                "Music/Guitar.mp3",
+                "Guitar.mp3",
 
             artwork:
-                "Music/artwork/SAM_2012.JPG",
+                "SAM_2012.JPG",
 
             type:
                 "lofi"
@@ -61,10 +65,10 @@
                 "RakkeZ Lofi",
 
             src:
-                "music/late-night-study.mp3",
+                "late-night-study.mp3",
 
             artwork:
-                "music/artwork/late-night-study.jpg",
+                "late-night-study.jpg",
 
             type:
                 "lofi"
@@ -78,10 +82,10 @@
                 "RakkeZ Lofi",
 
             src:
-                "music/coffee-shop.mp3",
+                "coffee-shop.mp3",
 
             artwork:
-                "music/artwork/coffee-shop.jpg",
+                "coffee-shop.jpg",
 
             type:
                 "lofi"
@@ -95,10 +99,10 @@
                 "RakkeZ Lofi",
 
             src:
-                "music/deep-focus.mp3",
+                "deep-focus.mp3",
 
             artwork:
-                "music/artwork/deep-focus.jpg",
+                "deep-focus.jpg",
 
             type:
                 "lofi"
@@ -112,10 +116,10 @@
                 "RakkeZ Lofi",
 
             src:
-                "music/midnight.mp3",
+                "midnight.mp3",
 
             artwork:
-                "music/artwork/midnight.jpg",
+                "midnight.jpg",
 
             type:
                 "lofi"
@@ -443,33 +447,47 @@
 
         /* =================================================
            EFFECTS
+
+           IMPORTANT:
+           Effects are also NOT inside a Music folder.
+
            Add new effects here only.
         ================================================= */
 
         const AMBIENT_EFFECTS = [
 
             {
-                id: "rain",
+                id:
+                    "rain",
 
-                name: "Rain",
+                name:
+                    "Rain",
 
-                icon: "🌧️",
+                icon:
+                    "🌧️",
 
-                src: "Music/rain.mp3",
+                src:
+                    "rain.mp3",
 
-                defaultVolume: 0.5
+                defaultVolume:
+                    0.5
             },
 
             {
-                id: "airplane",
+                id:
+                    "airplane",
 
-                name: "Airplane",
+                name:
+                    "Airplane",
 
-                icon: "✈️",
+                icon:
+                    "✈️",
 
-                src: "Music/Airplane.mp3",
+                src:
+                    "Airplane.mp3",
 
-                defaultVolume: 0.5
+                defaultVolume:
+                    0.5
             }
 
             // Add future effects here:
@@ -478,7 +496,7 @@
             //     id: "coffee",
             //     name: "Coffee Shop",
             //     icon: "☕",
-            //     src: "Music/coffee.mp3",
+            //     src: "coffee.mp3",
             //     defaultVolume: 0.5
             // }
 
@@ -1122,6 +1140,7 @@
             miniPlayerClosed =
                 false;
 
+
             showMiniPlayer();
 
         }
@@ -1304,6 +1323,7 @@
 
                 miniPlayerClosed =
                     true;
+
 
                 hideMiniPlayer();
 
@@ -2645,7 +2665,6 @@
 
         normalizeIndex();
 
-
         renderPlaylist();
 
         renderLocalList();
@@ -3128,8 +3147,6 @@
 
     /* =====================================================
        LANGUAGE SYSTEM
-       
-       Works alongside language.js.
     ===================================================== */
 
     const MEDIA_TRANSLATIONS = {
@@ -3215,6 +3232,7 @@
                 "Paste Spotify URL..."
 
         },
+
 
         ar: {
 
