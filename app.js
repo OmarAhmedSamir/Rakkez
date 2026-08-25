@@ -6739,6 +6739,369 @@ function safeAsync(fn) {
 
 }
 
+/* =========================================================
+   THEME SYSTEM
+   =========================================================
+   
+   DARK MODE = NIGHT
+   LIGHT MODE = SUN
+   
+   This system:
+   - Saves the selected theme
+   - Restores it after refresh
+   - Supports existing theme buttons
+   - Does NOT affect timer/statistics
+   - Uses the existing settings.theme value
+   
+   IMPORTANT:
+   If your HTML uses different IDs for the theme buttons,
+   change the IDs inside THEME_SELECTORS below.
+   ========================================================= */
+
+const THEME_SELECTORS = {
+
+    /* Main theme buttons */
+
+    dark:
+        [
+            "darkMode",
+            "nightMode",
+            "nightBtn",
+            "darkBtn",
+            "themeDark"
+        ],
+
+    light:
+        [
+            "lightMode",
+            "sunMode",
+            "sunBtn",
+            "lightBtn",
+            "themeLight"
+        ],
+
+    /* Optional single toggle button */
+
+    toggle:
+        [
+            "themeToggle",
+            "themeBtn",
+            "themeSwitch"
+        ]
+
+};
+
+
+/* =========================================================
+   GET FIRST EXISTING ELEMENT
+   ========================================================= */
+
+function getFirstExistingElement(ids) {
+
+    for (const id of ids) {
+
+        const element = $(id);
+
+        if (element) {
+            return element;
+        }
+
+    }
+
+    return null;
+
+}
+
+
+/* =========================================================
+   APPLY THEME
+   ========================================================= */
+
+function applyTheme() {
+
+    let theme =
+        settings.theme === "light"
+            ? "light"
+            : "dark";
+
+
+    /* -----------------------------------------------------
+       HTML ATTRIBUTE
+       ----------------------------------------------------- */
+
+    document.documentElement.setAttribute(
+        "data-theme",
+        theme
+    );
+
+
+    /* -----------------------------------------------------
+       BODY CLASS
+       ----------------------------------------------------- */
+
+    document.body.classList.toggle(
+        "light-mode",
+        theme === "light"
+    );
+
+    document.body.classList.toggle(
+        "dark-mode",
+        theme === "dark"
+    );
+
+
+    /* -----------------------------------------------------
+       OPTIONAL BODY DATA ATTRIBUTE
+       ----------------------------------------------------- */
+
+    document.body.setAttribute(
+        "data-theme",
+        theme
+    );
+
+
+    /* -----------------------------------------------------
+       UPDATE THEME BUTTONS
+       ----------------------------------------------------- */
+
+    const darkButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.dark
+        );
+
+    const lightButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.light
+        );
+
+
+    if (darkButton) {
+
+        darkButton.classList.toggle(
+            "active",
+            theme === "dark"
+        );
+
+        darkButton.setAttribute(
+            "aria-pressed",
+            theme === "dark"
+                ? "true"
+                : "false"
+        );
+
+    }
+
+
+    if (lightButton) {
+
+        lightButton.classList.toggle(
+            "active",
+            theme === "light"
+        );
+
+        lightButton.setAttribute(
+            "aria-pressed",
+            theme === "light"
+                ? "true"
+                : "false"
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       UPDATE TOGGLE BUTTON
+       ----------------------------------------------------- */
+
+    const toggleButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.toggle
+        );
+
+
+    if (toggleButton) {
+
+        toggleButton.classList.toggle(
+            "active",
+            theme === "light"
+        );
+
+        toggleButton.setAttribute(
+            "aria-pressed",
+            theme === "light"
+                ? "true"
+                : "false"
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       SAVE
+       ----------------------------------------------------- */
+
+    settings.theme = theme;
+
+    save(
+        STORAGE.settings,
+        settings
+    );
+
+}
+
+
+/* =========================================================
+   SET THEME
+   ========================================================= */
+
+function setTheme(theme) {
+
+    if (
+        theme !== "dark" &&
+        theme !== "light"
+    ) {
+
+        theme = "dark";
+
+    }
+
+
+    settings.theme = theme;
+
+    save(
+        STORAGE.settings,
+        settings
+    );
+
+
+    applyTheme();
+
+}
+
+
+/* =========================================================
+   TOGGLE THEME
+   ========================================================= */
+
+function toggleTheme() {
+
+    const currentTheme =
+        settings.theme === "light"
+            ? "light"
+            : "dark";
+
+
+    setTheme(
+        currentTheme === "dark"
+            ? "light"
+            : "dark"
+    );
+
+}
+
+
+/* =========================================================
+   THEME EVENTS
+   ========================================================= */
+
+function initializeThemeEvents() {
+
+    /* -----------------------------------------------------
+       NIGHT / DARK
+       ----------------------------------------------------- */
+
+    const darkButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.dark
+        );
+
+
+    if (darkButton) {
+
+        darkButton.addEventListener(
+            "click",
+            function () {
+
+                setTheme("dark");
+
+            }
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       SUN / LIGHT
+       ----------------------------------------------------- */
+
+    const lightButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.light
+        );
+
+
+    if (lightButton) {
+
+        lightButton.addEventListener(
+            "click",
+            function () {
+
+                setTheme("light");
+
+            }
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       SINGLE TOGGLE
+       ----------------------------------------------------- */
+
+    const toggleButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.toggle
+        );
+
+
+    if (
+        toggleButton &&
+        !darkButton &&
+        !lightButton
+    ) {
+
+        toggleButton.addEventListener(
+            "click",
+            toggleTheme
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GLOBAL THEME API
+   ========================================================= */
+
+window.RakkeZTheme = {
+
+    set: setTheme,
+
+    toggle: toggleTheme,
+
+    apply: applyTheme,
+
+    get: function () {
+
+        return settings.theme === "light"
+            ? "light"
+            : "dark";
+
+    }
+
+};
+
 
 /* =========================================================
    STARTUP
