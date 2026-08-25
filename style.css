@@ -2834,514 +2834,14 @@ grid-template-columns:
 
 
 /* =====================================================
-UPDATES MODAL
-===================================================== */
-
-.updates-modal{
-
-position:fixed;
-inset:0;
-
-z-index:999999;
-
-display:none;
-
-align-items:center;
-justify-content:center;
-
-padding:20px;
-
-background:
-rgba(0,0,0,.55);
-
-backdrop-filter:
-blur(15px);
-
--webkit-backdrop-filter:
-blur(15px);
-
-}
-
-
-.updates-modal.show{
-
-display:flex;
-
-}
-
-
-/* =====================================================
-UPDATES PANEL
-===================================================== */
-
-.updates-modal-content{
-
-position:relative;
-
-width:min(560px,96vw);
-
-max-height:90vh;
-
-overflow:auto;
-
-padding:24px;
-
-background:
-rgba(8,13,22,.92);
-
-border:
-1px solid rgba(255,255,255,.12);
-
-border-radius:28px;
-
-box-shadow:
-var(--shadow);
-
-animation:
-panelIn .3s ease;
-
-}
-
-
-.updates-modal-content::-webkit-scrollbar{
-
-width:4px;
-
-}
-
-
-.updates-modal-content::-webkit-scrollbar-thumb{
-
-background:
-rgba(255,255,255,.15);
-
-border-radius:10px;
-
-}
-
-
-/* =====================================================
-UPDATES HEADER
-===================================================== */
-
-.updates-header{
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-margin-bottom:22px;
-
-}
-
-
-.updates-title-wrap{
-
-display:flex;
-
-flex-direction:column;
-
-gap:4px;
-
-}
-
-
-.updates-title{
-
-font-family:"Space Grotesk";
-
-font-size:23px;
-
-font-weight:600;
-
-letter-spacing:-.5px;
-
-}
-
-
-.updates-subtitle{
-
-font-size:11px;
-
-color:var(--muted);
-
-}
-
-
-/* =====================================================
-NEW BADGE
-===================================================== */
-
-.updates-badge{
-
-display:inline-flex;
-
-align-items:center;
-
-width:max-content;
-
-margin-bottom:12px;
-
-padding:5px 9px;
-
-border-radius:8px;
-
-background:
-rgba(20,120,255,.12);
-
-border:
-1px solid rgba(35,131,255,.22);
-
-color:#5ba6ff;
-
-font-size:9px;
-
-font-weight:700;
-
-letter-spacing:1.2px;
-
-}
-
-
-/* =====================================================
-UPDATES CLOSE
-===================================================== */
-
-.updates-close{
-
-width:38px;
-height:38px;
-
-flex-shrink:0;
-
-border-radius:12px;
-
-background:
-rgba(255,255,255,.07);
-
-border:
-1px solid var(--border);
-
-color:white;
-
-font-size:20px;
-
-display:flex;
-
-align-items:center;
-justify-content:center;
-
-transition:.25s;
-
-}
-
-
-.updates-close:hover{
-
-background:
-rgba(255,255,255,.12);
-
-border-color:
-var(--border-hover);
-
-transform:
-translateY(-1px);
-
-}
-
-
-/* =====================================================
-DESCRIPTION
-===================================================== */
-
-.updates-description{
-
-margin-bottom:18px;
-
-font-size:13px;
-
-line-height:1.6;
-
-color:var(--muted);
-
-}
-
-
-/* =====================================================
-UPDATE ITEMS
-===================================================== */
-
-.update-list{
-
-display:flex;
-
-flex-direction:column;
-
-gap:9px;
-
-}
-
-
-.update-item{
-
-display:flex;
-
-align-items:flex-start;
-
-gap:13px;
-
-padding:14px;
-
-border:
-1px solid rgba(255,255,255,.08);
-
-border-radius:15px;
-
-background:
-rgba(255,255,255,.035);
-
-transition:.25s;
-
-}
-
-
-.update-item:hover{
-
-border-color:
-rgba(255,255,255,.16);
-
-background:
-rgba(255,255,255,.05);
-
-}
-
-
-/* =====================================================
-UPDATE ICON
-===================================================== */
-
-.update-icon{
-
-width:38px;
-height:38px;
-
-flex-shrink:0;
-
-display:flex;
-
-align-items:center;
-justify-content:center;
-
-border-radius:11px;
-
-background:
-rgba(20,120,255,.10);
-
-border:
-1px solid rgba(20,120,255,.12);
-
-font-size:16px;
-
-}
-
-
-/* =====================================================
-UPDATE TEXT
-===================================================== */
-
-.update-info{
-
-flex:1;
-
-}
-
-
-.update-item h3{
-
-margin:0;
-
-font-size:13px;
-
-font-weight:600;
-
-}
-
-
-.update-item p{
-
-margin-top:4px;
-
-font-size:11px;
-
-line-height:1.55;
-
-color:var(--muted);
-
-}
-
-
-/* =====================================================
-UPDATE ACTION
-===================================================== */
-
-#updatesDone{
-
-width:100%;
-
-height:46px;
-
-margin-top:18px;
-
-border-radius:13px;
-
-background:
-#1478ff;
-
-color:white;
-
-font-size:12px;
-
-font-weight:700;
-
-transition:.25s;
-
-}
-
-
-#updatesDone:hover{
-
-background:
-#2386ff;
-
-transform:
-translateY(-1px);
-
-box-shadow:
-0 15px 35px
-rgba(20,120,255,.20);
-
-}
-
-
-/* =====================================================
-MOBILE UPDATES
-===================================================== */
-
-@media(max-width:600px){
-
-.updates-modal{
-
-padding:15px;
-
-}
-
-
-.updates-modal-content{
-
-padding:20px;
-
-border-radius:23px;
-
-}
-
-
-.updates-title{
-
-font-size:21px;
-
-}
-
-
-.update-item{
-
-padding:12px;
-
-}
-
-}
-
-
-/* =====================================================
-FINAL HEADER MOBILE OVERRIDE
-===================================================== */
-
-@media(max-width:600px){
-
-.icon-btn{
-
-width:42px;
-height:42px;
-
-border-radius:13px;
-
-}
-
-
-.language-btn{
-
-height:42px;
-
-min-width:58px;
-
-padding:
-0 11px;
-
-border-radius:13px;
-
-font-size:11px;
-
-}
-
-
-.blog-btn{
-
-height:42px;
-
-min-width:115px;
-
-padding:
-0 20px;
-
-border-radius:13px;
-
-font-size:13px;
-
-}
-
-}
-
-
-/* =====================================================
-ALARM MOBILE
-===================================================== */
-
-@media(max-width:600px){
-
-.volume-control input[type="range"]{
-
-width:80px;
-
-}
-
-
-.select-input{
-
-min-width:105px;
-
-}
-
-}
-
-/* =====================================================
-   RAKKEZ UPDATES MODAL
+   RAKKEZ — APPLE GLASS UPDATES MODAL
 ===================================================== */
 
 .updates-modal {
 
     position: fixed;
     inset: 0;
+
     z-index: 999999;
 
     display: none;
@@ -3351,10 +2851,18 @@ min-width:105px;
 
     padding: 20px;
 
-    background: rgba(0, 0, 0, .72);
+    background:
+        rgba(0, 0, 0, .42);
 
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter:
+        blur(24px)
+        saturate(140%);
+
+    -webkit-backdrop-filter:
+        blur(24px)
+        saturate(140%);
+
+    box-sizing: border-box;
 
 }
 
@@ -3366,31 +2874,223 @@ min-width:105px;
 
 
 /* =====================================================
-   UPDATES BOX
+   GLASS PANEL
 ===================================================== */
 
-.updates-box {
+.updates-box,
+.updates-modal-content {
 
     position: relative;
 
-    width: min(520px, 100%);
-    max-height: 85vh;
+    width: min(540px, 100%);
+
+    max-height: min(720px, 88vh);
 
     overflow-y: auto;
 
-    padding: 32px;
+    padding: 30px;
 
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 24px;
+    box-sizing: border-box;
 
-    background: rgba(10, 15, 24, .96);
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.105),
+            rgba(255,255,255,.045)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.16);
 
     box-shadow:
-        0 30px 80px rgba(0,0,0,.55);
+        0 35px 100px rgba(0,0,0,.48),
+        inset 0 1px 0 rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(32px)
+        saturate(150%);
+
+    -webkit-backdrop-filter:
+        blur(32px)
+        saturate(150%);
 
     color: #fff;
 
-    box-sizing: border-box;
+    animation:
+        updatesPanelIn .32s cubic-bezier(.22,1,.36,1);
+
+}
+
+
+/* =====================================================
+   PANEL SCROLLBAR
+===================================================== */
+
+.updates-box::-webkit-scrollbar,
+.updates-modal-content::-webkit-scrollbar {
+
+    width: 5px;
+
+}
+
+.updates-box::-webkit-scrollbar-track,
+.updates-modal-content::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+.updates-box::-webkit-scrollbar-thumb,
+.updates-modal-content::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255,255,255,.16);
+
+    border-radius: 20px;
+
+}
+
+
+/* =====================================================
+   PANEL ANIMATION
+===================================================== */
+
+@keyframes updatesPanelIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(12px)
+            scale(.97);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.updates-header {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    margin-bottom: 24px;
+
+    padding-right: 50px;
+
+}
+
+
+/* =====================================================
+   NEW BADGE
+===================================================== */
+
+.updates-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: fit-content;
+
+    margin-bottom: 13px;
+
+    padding: 6px 10px;
+
+    border-radius: 9px;
+
+    background:
+        rgba(20,120,255,.14);
+
+    border:
+        1px solid rgba(80,160,255,.22);
+
+    color:
+        #72b4ff;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.updates-title,
+.updates-header h2 {
+
+    margin: 0;
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+    font-size: 26px;
+
+    font-weight: 650;
+
+    line-height: 1.2;
+
+    letter-spacing: -.6px;
+
+}
+
+
+/* =====================================================
+   DESCRIPTION
+===================================================== */
+
+.updates-description,
+.updates-header p {
+
+    margin: 9px 0 0;
+
+    max-width: 440px;
+
+    color:
+        rgba(255,255,255,.58);
+
+    font-family:
+        "DM Sans",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+    font-size: 13px;
+
+    line-height: 1.6;
 
 }
 
@@ -3403,124 +3103,170 @@ min-width:105px;
 
     position: absolute;
 
-    top: 16px;
-    right: 16px;
+    top: 0;
+    right: 0;
 
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    border: 0;
+    padding: 0;
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
     border-radius: 50%;
 
-    background: rgba(255,255,255,.08);
+    background:
+        rgba(255,255,255,.075);
 
-    color: #fff;
+    color:
+        rgba(255,255,255,.82);
 
-    font-size: 22px;
+    font-size: 20px;
+
     line-height: 1;
 
     cursor: pointer;
 
     transition:
         background .2s ease,
+        border-color .2s ease,
         transform .2s ease;
 
 }
 
 .updates-close:hover {
 
-    background: rgba(255,255,255,.14);
+    background:
+        rgba(255,255,255,.13);
 
-    transform: scale(1.05);
+    border-color:
+        rgba(255,255,255,.18);
+
+    transform:
+        scale(1.04);
+
+}
+
+.updates-close:active {
+
+    transform:
+        scale(.94);
 
 }
 
 
 /* =====================================================
-   HEADER
+   UPDATE LIST
 ===================================================== */
 
-.updates-header {
+.update-list {
 
-    padding-right: 48px;
+    display: flex;
 
-    margin-bottom: 22px;
+    flex-direction: column;
 
-}
-
-.updates-badge {
-
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 6px 10px;
-
-    margin-bottom: 12px;
-
-    border-radius: 8px;
-
-    background: #2563eb;
-
-    color: #fff;
-
-    font-size: 11px;
-    font-weight: 800;
-
-    letter-spacing: .08em;
-
-}
-
-.updates-header h2 {
-
-    margin: 0 0 10px;
-
-    font-size: 28px;
-    line-height: 1.2;
-
-}
-
-.updates-header p {
-
-    margin: 0;
-
-    color: rgba(255,255,255,.65);
-
-    font-size: 14px;
-
-    line-height: 1.6;
+    gap: 10px;
 
 }
 
 
 /* =====================================================
-   UPDATE ITEMS
+   UPDATE ITEM — APPLE GLASS
 ===================================================== */
 
 .update-item {
 
-    display: block;
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
 
     width: 100%;
 
     box-sizing: border-box;
 
-    padding: 16px;
+    padding: 15px;
 
-    margin-top: 12px;
+    border:
+        1px solid rgba(255,255,255,.085);
 
-    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
 
-    border-radius: 14px;
+    background:
+        rgba(255,255,255,.045);
 
-    background: rgba(255,255,255,.035);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.035);
 
-    overflow: hidden;
+    transition:
+        background .22s ease,
+        border-color .22s ease,
+        transform .22s ease;
+
+}
+
+.update-item:hover {
+
+    background:
+        rgba(255,255,255,.065);
+
+    border-color:
+        rgba(255,255,255,.14);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =====================================================
+   UPDATE ICON
+===================================================== */
+
+.update-icon {
+
+    width: 40px;
+    height: 40px;
+
+    flex: 0 0 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background:
+        rgba(20,120,255,.12);
+
+    border:
+        1px solid rgba(80,160,255,.14);
+
+    color:
+        #72b4ff;
+
+    font-size: 16px;
+
+}
+
+
+/* =====================================================
+   UPDATE INFO
+===================================================== */
+
+.update-info {
+
+    min-width: 0;
+
+    flex: 1;
 
 }
 
@@ -3531,52 +3277,46 @@ min-width:105px;
 
 .update-item h3 {
 
-    display: block;
+    margin: 1px 0 5px;
 
-    width: 100%;
+    color:
+        rgba(255,255,255,.94);
 
-    margin: 0 0 8px;
+    font-family:
+        "DM Sans",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
 
-    padding: 0;
+    font-size: 14px;
 
-    color: #fff;
-
-    font-size: 16px;
-
-    font-weight: 700;
+    font-weight: 650;
 
     line-height: 1.4;
-
-    word-break: normal;
-
-    overflow-wrap: break-word;
 
 }
 
 
 /* =====================================================
-   UPDATE TEXT
+   UPDATE DESCRIPTION
 ===================================================== */
 
 .update-item p {
 
-    display: block;
-
-    width: 100%;
-
     margin: 0;
 
-    padding: 0;
+    color:
+        rgba(255,255,255,.52);
 
-    color: rgba(255,255,255,.62);
+    font-family:
+        "DM Sans",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
 
-    font-size: 13px;
+    font-size: 12px;
 
-    line-height: 1.65;
-
-    word-break: normal;
-
-    overflow-wrap: break-word;
+    line-height: 1.6;
 
 }
 
@@ -3585,45 +3325,74 @@ min-width:105px;
    DONE BUTTON
 ===================================================== */
 
+#updatesDone,
 .updates-done {
-
-    display: block;
 
     width: 100%;
 
-    box-sizing: border-box;
+    height: 48px;
 
-    margin-top: 20px;
+    margin-top: 18px;
 
-    padding: 13px 18px;
+    border:
+        1px solid rgba(255,255,255,.12);
 
-    border: 0;
+    border-radius: 15px;
 
-    border-radius: 12px;
-
-    background: #2563eb;
+    background:
+        linear-gradient(
+            180deg,
+            #2386ff,
+            #1478ff
+        );
 
     color: #fff;
 
-    font-size: 15px;
+    font-family:
+        "DM Sans",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+    font-size: 13px;
 
     font-weight: 700;
 
-    line-height: 1.3;
+    letter-spacing: .1px;
 
     cursor: pointer;
 
+    box-shadow:
+        0 8px 25px rgba(20,120,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.18);
+
     transition:
-        background .2s ease,
-        transform .2s ease;
+        transform .2s ease,
+        filter .2s ease,
+        box-shadow .2s ease;
 
 }
 
+#updatesDone:hover,
 .updates-done:hover {
 
-    background: #1d4ed8;
+    filter:
+        brightness(1.08);
 
-    transform: translateY(-1px);
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 12px 30px rgba(20,120,255,.25),
+        inset 0 1px 0 rgba(255,255,255,.20);
+
+}
+
+#updatesDone:active,
+.updates-done:active {
+
+    transform:
+        scale(.98);
 
 }
 
@@ -3640,7 +3409,8 @@ min-width:105px;
 
     }
 
-    .updates-box {
+    .updates-box,
+    .updates-modal-content {
 
         width: 100%;
 
@@ -3648,25 +3418,86 @@ min-width:105px;
 
         padding: 22px;
 
-        border-radius: 20px;
+        border-radius: 24px;
 
     }
 
     .updates-header {
 
-        padding-right: 42px;
+        margin-bottom: 20px;
+
+        padding-right: 46px;
 
     }
 
+    .updates-title,
     .updates-header h2 {
 
-        font-size: 24px;
+        font-size: 22px;
+
+        letter-spacing: -.4px;
+
+    }
+
+    .updates-description,
+    .updates-header p {
+
+        font-size: 12px;
+
+    }
+
+    .updates-close {
+
+        width: 36px;
+        height: 36px;
+
+    }
+
+    .update-list {
+
+        gap: 8px;
 
     }
 
     .update-item {
 
-        padding: 14px;
+        gap: 11px;
+
+        padding: 13px;
+
+        border-radius: 16px;
+
+    }
+
+    .update-icon {
+
+        width: 36px;
+        height: 36px;
+
+        flex-basis: 36px;
+
+        border-radius: 11px;
+
+    }
+
+    .update-item h3 {
+
+        font-size: 13px;
+
+    }
+
+    .update-item p {
+
+        font-size: 11px;
+
+    }
+
+    #updatesDone,
+    .updates-done {
+
+        height: 46px;
+
+        border-radius: 14px;
 
     }
 
