@@ -2999,6 +2999,15 @@
                 Lofi
             </button>
 
+             <button
+        class="rakkez-media-tab"
+        data-rakkez-source="effects"
+        type="button"
+        data-media-i18n="effects"
+    >
+        Effects
+    </button>
+
             <button
                 class="rakkez-media-tab"
                 data-rakkez-source="youtube"
@@ -3674,6 +3683,131 @@
 ===================================================== -->
 
 <style>
+
+/* =====================================================
+   EFFECTS
+===================================================== */
+
+.rakkez-effect-card {
+    width: 100%;
+
+    margin-top: 22px;
+
+    padding: 16px;
+
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 16px;
+
+    background: rgba(255,255,255,.035);
+
+    box-sizing: border-box;
+}
+
+.rakkez-effect-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rakkez-effect-icon {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(22,131,255,.22),
+            rgba(255,255,255,.05)
+        );
+
+    font-size: 21px;
+}
+
+.rakkez-effect-title {
+    color: var(--text, #fff);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.rakkez-effect-subtitle {
+    margin-top: 4px;
+
+    color: var(--muted, rgba(255,255,255,.56));
+
+    font-size: 11px;
+}
+
+.rakkez-effect-toggle {
+    width: 100%;
+
+    margin-top: 16px;
+
+    height: 42px;
+
+    border: 1px solid rgba(22,131,255,.28);
+    border-radius: 12px;
+
+    background: rgba(22,131,255,.10);
+
+    color: #fff;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        transform .18s ease;
+}
+
+.rakkez-effect-toggle:hover {
+    transform: translateY(-1px);
+
+    background: rgba(22,131,255,.16);
+
+    border-color: rgba(22,131,255,.45);
+}
+
+.rakkez-effect-toggle.active {
+    background: rgba(22,131,255,.22);
+
+    border-color: rgba(22,131,255,.55);
+}
+
+.rakkez-effect-volume {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 14px;
+
+    color: var(--muted, rgba(255,255,255,.56));
+
+    font-size: 12px;
+}
+
+.rakkez-effect-volume input {
+    flex: 1;
+}
+
+#rakkezRainVolumeValue {
+    width: 36px;
+
+    text-align: right;
+
+    color: var(--muted, rgba(255,255,255,.56));
+
+    font-size: 11px;
+}
 
 .rakkez-mini-player {
     position: fixed;
@@ -4487,6 +4621,207 @@ body.light .rakkez-mini-close,
 
     let currentIsLocal =
         false;
+
+    /* =====================================================
+   AMBIENT EFFECTS ENGINE
+===================================================== */
+
+const rainAudio =
+    new Audio(
+        "Music/rain.mp3"
+    );
+
+rainAudio.loop =
+    true;
+
+rainAudio.preload =
+    "auto";
+
+
+const rainToggle =
+    document.getElementById(
+        "rakkezRainToggle"
+    );
+
+
+const rainVolume =
+    document.getElementById(
+        "rakkezRainVolume"
+    );
+
+
+const rainVolumeValue =
+    document.getElementById(
+        "rakkezRainVolumeValue"
+    );
+
+
+let rainSavedVolume =
+    parseFloat(
+        localStorage.getItem(
+            "rakkez_rain_volume"
+        )
+    );
+
+
+if (
+    !Number.isFinite(
+        rainSavedVolume
+    )
+) {
+
+    rainSavedVolume =
+        0.5;
+
+}
+
+
+rainSavedVolume =
+    Math.max(
+        0,
+        Math.min(
+            1,
+            rainSavedVolume
+        )
+    );
+
+
+rainAudio.volume =
+    rainSavedVolume;
+
+
+if (rainVolume) {
+
+    rainVolume.value =
+        rainSavedVolume;
+
+}
+
+
+function updateRainVolumeUI() {
+
+    if (!rainVolumeValue) {
+        return;
+    }
+
+
+    rainVolumeValue.textContent =
+        Math.round(
+            rainAudio.volume * 100
+        ) + "%";
+
+}
+
+
+updateRainVolumeUI();
+
+
+function updateRainButton() {
+
+    if (!rainToggle) {
+        return;
+    }
+
+
+    const playing =
+        !rainAudio.paused;
+
+
+    rainToggle.classList.toggle(
+        "active",
+        playing
+    );
+
+
+    rainToggle.textContent =
+        playing
+            ? "Ⅱ  Rain"
+            : "Play Rain";
+
+}
+
+
+if (rainToggle) {
+
+    rainToggle.addEventListener(
+        "click",
+        function () {
+
+            if (
+                rainAudio.paused
+            ) {
+
+                const promise =
+                    rainAudio.play();
+
+
+                if (
+                    promise &&
+                    typeof promise.catch ===
+                        "function"
+                ) {
+
+                    promise.catch(
+                        function () {}
+                    );
+
+                }
+
+            } else {
+
+                rainAudio.pause();
+
+            }
+
+
+            updateRainButton();
+
+        }
+    );
+
+}
+
+
+if (rainVolume) {
+
+    rainVolume.addEventListener(
+        "input",
+        function () {
+
+            const value =
+                parseFloat(
+                    rainVolume.value
+                );
+
+
+            rainAudio.volume =
+                value;
+
+
+            localStorage.setItem(
+                "rakkez_rain_volume",
+                String(value)
+            );
+
+
+            updateRainVolumeUI();
+
+        }
+    );
+
+}
+
+
+rainAudio.addEventListener(
+    "play",
+    updateRainButton
+);
+
+
+rainAudio.addEventListener(
+    "pause",
+    updateRainButton
+);
 
 
     /* =====================================================
@@ -6589,6 +6924,18 @@ body.light .rakkez-mini-close,
 
         en: {
 
+            effects:
+    "Effects",
+
+effectsDescription:
+    "Add ambient sounds while you focus.",
+
+rain:
+    "Rain",
+
+rainDescription:
+    "Soft rain for deeper focus.",
+
             eyebrow:
                 "RAKKEZ MEDIA",
 
@@ -6661,6 +7008,18 @@ body.light .rakkez-mini-close,
 
             eyebrow:
                 "وسائط ركز",
+
+            effects:
+    "المؤثرات",
+
+effectsDescription:
+    "أضف أصواتًا هادئة أثناء التركيز.",
+
+rain:
+    "المطر",
+
+rainDescription:
+    "صوت مطر هادئ لتركيز أعمق.",
 
             focusMusic:
                 "موسيقى التركيز",
