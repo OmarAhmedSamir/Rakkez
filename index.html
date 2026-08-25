@@ -46,7 +46,7 @@
 
 
 <!-- =====================================================
-     CSS
+     MAIN CSS
 ===================================================== -->
 
 <link
@@ -180,13 +180,19 @@
 @keyframes loaderEnter {
 
     from {
+
         opacity: 0;
-        transform: scale(.88);
+
+        transform:
+            scale(.88);
     }
 
     to {
+
         opacity: 1;
-        transform: scale(1);
+
+        transform:
+            scale(1);
     }
 }
 
@@ -194,15 +200,25 @@
 @keyframes logoEnter {
 
     from {
+
         opacity: 0;
-        transform: translateY(18px);
-        filter: blur(8px);
+
+        transform:
+            translateY(18px);
+
+        filter:
+            blur(8px);
     }
 
     to {
+
         opacity: 1;
-        transform: translateY(0);
-        filter: blur(0);
+
+        transform:
+            translateY(0);
+
+        filter:
+            blur(0);
     }
 }
 
@@ -210,13 +226,19 @@
 @keyframes spinnerAppear {
 
     from {
+
         opacity: 0;
-        transform: scale(.5);
+
+        transform:
+            scale(.5);
     }
 
     to {
+
         opacity: 1;
-        transform: scale(1);
+
+        transform:
+            scale(1);
     }
 }
 
@@ -224,11 +246,15 @@
 @keyframes loaderSpin {
 
     from {
-        transform: rotate(0deg);
+
+        transform:
+            rotate(0deg);
     }
 
     to {
-        transform: rotate(360deg);
+
+        transform:
+            rotate(360deg);
     }
 }
 
@@ -236,6 +262,7 @@
 @media (prefers-reduced-motion: reduce) {
 
     #pageLoader {
+
         transition:
             opacity .2s ease,
             visibility .2s ease;
@@ -244,6 +271,7 @@
     .loader-inner,
     .loader-logo,
     .loader-spinner {
+
         animation: none;
     }
 
@@ -533,999 +561,34 @@
 }
 
 
-@media (max-width: 600px) {
-
-    .updates-modal-content {
-
-        padding: 26px 20px;
-
-        border-radius: 22px;
-    }
-
-    .updates-modal-content h2 {
-
-        font-size: 26px;
-    }
-
-}
-
-
 /* =====================================================
-   RAKKEZ MEDIA PLAYER
-   EVERYTHING BELOW IS INSIDE INDEX.HTML
+   RAKKEZ PROFESSIONAL MEDIA PLAYER
 ===================================================== */
 
-.rk-media-panel {
-
-    width:
-        min(620px, calc(100vw - 30px));
-
-    max-height:
-        min(88vh, 820px);
-
-    overflow-y: auto;
-
-    scrollbar-width: thin;
-}
-
-
-.rk-media-tabs {
-
-    display: flex;
-
-    gap: 7px;
-
-    padding: 5px;
-
-    margin-bottom: 18px;
-
-    border-radius: 15px;
-
-    background:
-        rgba(255,255,255,.045);
-
-    border:
-        1px solid
-        rgba(255,255,255,.07);
-}
-
-
-.rk-media-tab {
-
-    flex: 1;
-
-    min-height: 40px;
-
-    border: 0;
-
-    border-radius: 11px;
-
-    background: transparent;
-
-    color:
-        rgba(255,255,255,.48);
-
-    font:
-        600 13px
-        "DM Sans",
-        sans-serif;
-
-    cursor: pointer;
-
-    transition:
-        .2s ease;
-}
-
-
-.rk-media-tab:hover {
-
-    color: #fff;
-
-    background:
-        rgba(255,255,255,.055);
-}
-
-
-.rk-media-tab.active {
-
-    color: #fff;
-
-    background:
-        rgba(255,255,255,.10);
-
-    box-shadow:
-        inset 0 0 0 1px
-        rgba(255,255,255,.07);
-}
-
-
-.rk-media-view {
-
-    display: none;
-}
-
-
-.rk-media-view.active {
-
-    display: block;
-
-    animation:
-        rkFade .25s ease both;
-}
-
-
-@keyframes rkFade {
-
-    from {
-        opacity: 0;
-        transform: translateY(5px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* =====================================================
-   LOFI HERO PLAYER
-===================================================== */
-
-.rk-player {
-
-    position: relative;
-
-    overflow: hidden;
-
-    padding: 20px;
-
-    border-radius: 22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.075),
-            rgba(255,255,255,.025)
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.09);
-
-    box-shadow:
-        0 20px 60px
-        rgba(0,0,0,.18);
-}
-
-
-.rk-player::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 180px;
-    height: 180px;
-
-    right: -70px;
-    top: -80px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(22,131,255,.12);
-
-    filter: blur(30px);
-
-    pointer-events: none;
-}
-
-
-.rk-player-top {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 16px;
-
-    position: relative;
-
-    z-index: 1;
-}
-
-
-.rk-artwork {
-
-    width: 78px;
-    height: 78px;
-
-    flex: 0 0 78px;
-
-    border-radius: 17px;
-
-    overflow: hidden;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    background:
-        linear-gradient(
-            145deg,
-            #1b2638,
-            #0b111b
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.09);
-
-    box-shadow:
-        0 10px 30px
-        rgba(0,0,0,.28);
-}
-
-
-.rk-artwork img {
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    display: block;
-}
-
-
-.rk-artwork-symbol {
-
-    color:
-        rgba(255,255,255,.8);
-
-    font-size: 25px;
-}
-
-
-.rk-track-info {
-
-    min-width: 0;
-
-    flex: 1;
-}
-
-
-.rk-now-label {
-
-    margin-bottom: 5px;
-
-    color:
-        rgba(255,255,255,.40);
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    letter-spacing: 1.1px;
-
-    text-transform: uppercase;
-}
-
-
-.rk-track-title {
-
-    overflow: hidden;
-
-    color: #fff;
-
-    font:
-        700 17px
-        "Space Grotesk",
-        sans-serif;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
-}
-
-
-.rk-track-artist {
-
-    margin-top: 4px;
-
-    overflow: hidden;
-
-    color:
-        rgba(255,255,255,.48);
-
-    font-size: 12px;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
-}
-
-
-/* =====================================================
-   PROGRESS
-===================================================== */
-
-.rk-progress-row {
-
-    margin-top: 19px;
-
-    position: relative;
-
-    z-index: 1;
-}
-
-
-.rk-progress {
-
-    width: 100%;
-    height: 5px;
-
-    appearance: none;
-
-    -webkit-appearance: none;
-
-    border-radius: 99px;
-
-    background:
-        rgba(255,255,255,.10);
-
-    cursor: pointer;
-
-    outline: none;
-}
-
-
-.rk-progress::-webkit-slider-thumb {
-
-    appearance: none;
-
-    -webkit-appearance: none;
-
-    width: 13px;
-    height: 13px;
-
-    border-radius: 50%;
-
-    background: #fff;
-
-    border:
-        3px solid
-        #1683ff;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(22,131,255,.12);
-
-    cursor: pointer;
-}
-
-
-.rk-progress::-moz-range-thumb {
-
-    width: 13px;
-    height: 13px;
-
-    border-radius: 50%;
-
-    background: #fff;
-
-    border:
-        3px solid
-        #1683ff;
-
-    cursor: pointer;
-}
-
-
-.rk-time-row {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    margin-top: 7px;
-
-    color:
-        rgba(255,255,255,.38);
-
-    font-size: 10px;
-}
-
-
-/* =====================================================
-   PLAYER CONTROLS
-===================================================== */
-
-.rk-controls {
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 10px;
-
-    margin-top: 16px;
-
-    position: relative;
-
-    z-index: 1;
-}
-
-
-.rk-control {
-
-    width: 38px;
-    height: 38px;
-
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border: 0;
-
-    border-radius: 12px;
-
-    background:
-        rgba(255,255,255,.055);
-
-    color:
-        rgba(255,255,255,.70);
-
-    font-size: 14px;
-
-    cursor: pointer;
-
-    transition:
-        transform .18s ease,
-        background .18s ease,
-        color .18s ease;
-}
-
-
-.rk-control:hover {
-
-    transform:
-        translateY(-1px);
-
-    background:
-        rgba(255,255,255,.10);
-
-    color: #fff;
-}
-
-
-.rk-control.active {
-
-    color: #1683ff;
-
-    background:
-        rgba(22,131,255,.12);
-}
-
-
-.rk-play {
-
-    width: 52px;
-    height: 52px;
-
-    border-radius: 16px;
-
-    border: 0;
-
-    background: #fff;
-
-    color: #080d16;
-
-    font-size: 18px;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 8px 25px
-        rgba(0,0,0,.25);
-
-    transition:
-        transform .18s ease;
-}
-
-
-.rk-play:hover {
-
-    transform:
-        translateY(-2px)
-        scale(1.02);
-}
-
-
-/* =====================================================
-   VOLUME
-===================================================== */
-
-.rk-volume {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    margin-top: 15px;
-
-    position: relative;
-
-    z-index: 1;
-}
-
-
-.rk-volume-icon {
-
-    width: 22px;
-
-    color:
-        rgba(255,255,255,.52);
-
-    font-size: 14px;
-
-    text-align: center;
-}
-
-
-.rk-volume-range {
-
-    flex: 1;
-
-    height: 4px;
-
-    appearance: none;
-
-    -webkit-appearance: none;
-
-    border-radius: 99px;
-
-    background:
-        rgba(255,255,255,.10);
-
-    cursor: pointer;
-}
-
-
-.rk-volume-range::-webkit-slider-thumb {
-
-    appearance: none;
-
-    -webkit-appearance: none;
-
-    width: 11px;
-    height: 11px;
-
-    border-radius: 50%;
-
-    background: #fff;
-
-    cursor: pointer;
-}
-
-
-.rk-volume-range::-moz-range-thumb {
-
-    width: 11px;
-    height: 11px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background: #fff;
-
-    cursor: pointer;
-}
-
-
-/* =====================================================
-   PLAYLIST
-===================================================== */
-
-.rk-playlist {
-
-    margin-top: 16px;
-
-    border-radius: 18px;
-
-    overflow: hidden;
-
-    background:
-        rgba(255,255,255,.035);
-
-    border:
-        1px solid
-        rgba(255,255,255,.07);
-}
-
-
-.rk-playlist-head {
-
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 14px 15px;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.06);
-}
-
-
-.rk-playlist-title {
-
-    color: #fff;
-
-    font-size: 13px;
-
-    font-weight: 700;
-}
-
-
-.rk-track-count {
-
-    color:
-        rgba(255,255,255,.38);
-
-    font-size: 11px;
-}
-
-
-.rk-playlist-list {
-
-    max-height: 220px;
-
-    overflow-y: auto;
-
-    scrollbar-width: thin;
-}
-
-
-.rk-playlist-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-    width: 100%;
-
-    padding: 11px 13px;
-
-    border: 0;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.045);
-
-    background: transparent;
-
-    color: #fff;
-
-    text-align: left;
-
-    cursor: pointer;
-
-    transition:
-        background .18s ease;
-}
-
-
-.rk-playlist-item:last-child {
-
-    border-bottom: 0;
-}
-
-
-.rk-playlist-item:hover {
-
-    background:
-        rgba(255,255,255,.05);
-}
-
-
-.rk-playlist-item.active {
-
-    background:
-        rgba(22,131,255,.10);
-}
-
-
-.rk-list-art {
-
-    width: 37px;
-    height: 37px;
-
-    flex: 0 0 37px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
-
-    border-radius: 9px;
-
-    background:
-        rgba(255,255,255,.07);
-}
-
-
-.rk-list-art img {
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-}
-
-
-.rk-list-info {
-
-    min-width: 0;
-
-    flex: 1;
-}
-
-
-.rk-list-name {
-
-    overflow: hidden;
-
-    color:
-        rgba(255,255,255,.86);
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
-}
-
-
-.rk-list-artist {
-
-    margin-top: 2px;
-
-    overflow: hidden;
-
-    color:
-        rgba(255,255,255,.35);
-
-    font-size: 10px;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
-}
-
-
-.rk-list-playing {
-
-    width: 28px;
-
-    color: #1683ff;
-
-    font-size: 13px;
-
-    text-align: center;
-}
-
-
-/* =====================================================
-   UPLOAD
-===================================================== */
-
-.rk-upload-row {
-
-    display: flex;
-
-    gap: 9px;
-
-    margin-top: 13px;
-}
-
-
-.rk-upload-btn {
-
-    flex: 1;
-
-    min-height: 42px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 0 14px;
-
-    border-radius: 12px;
-
-    border:
-        1px dashed
-        rgba(255,255,255,.16);
-
-    background:
-        rgba(255,255,255,.035);
-
-    color:
-        rgba(255,255,255,.65);
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        .2s ease;
-}
-
-
-.rk-upload-btn:hover {
-
-    color: #fff;
-
-    border-color:
-        rgba(22,131,255,.55);
-
-    background:
-        rgba(22,131,255,.07);
-}
-
-
-.rk-clear-btn {
-
-    width: 44px;
-
-    border: 0;
-
-    border-radius: 12px;
-
-    background:
-        rgba(255,255,255,.035);
-
-    color:
-        rgba(255,255,255,.42);
-
-    cursor: pointer;
-}
-
-
-.rk-clear-btn:hover {
-
-    color: #fff;
-
-    background:
-        rgba(255,255,255,.08);
-}
-
-
-.rk-upload-note {
-
-    margin-top: 8px;
-
-    color:
-        rgba(255,255,255,.32);
-
-    font-size: 10px;
-
-    line-height: 1.5;
-
-    text-align: center;
-}
-
-
-/* =====================================================
-   SPOTIFY
-===================================================== */
-
-#spotifyContent {
-
-    min-height: 0 !important;
-
-    height: auto !important;
-
-    padding-bottom: 0 !important;
-}
-
-
-#spotifyEmbed {
-
-    min-height: 0 !important;
-
-    height: auto !important;
-
-    margin-top: 13px;
-
-    padding: 0 !important;
-
-    overflow: hidden;
-
-    border-radius: 14px;
-}
-
-
-#spotifyEmbed iframe {
-
-    display: block;
-
-    width: 100% !important;
-
-    min-height: 152px !important;
-
-    height: 152px !important;
-
-    border: 0 !important;
-
-    border-radius: 14px !important;
-}
-
-
-#spotifyContent .oauth-user {
-
-    margin-bottom: 12px;
-}
-
-
-/* =====================================================
-   MINI PLAYER
-===================================================== */
-
-#rkMiniPlayer {
+.rakkez-media-overlay {
 
     position: fixed;
 
-    right: 22px;
-    bottom: 22px;
+    inset: 0;
 
-    z-index: 2147482000;
+    z-index: 2147482500;
 
-    width:
-        min(370px, calc(100vw - 28px));
+    display: flex;
 
-    padding: 10px;
+    align-items: center;
 
-    border-radius: 17px;
+    justify-content: center;
+
+    padding: 20px;
 
     background:
-        rgba(10,15,24,.92);
-
-    border:
-        1px solid
-        rgba(255,255,255,.12);
-
-    box-shadow:
-        0 20px 60px
-        rgba(0,0,0,.45);
+        rgba(0,0,0,.70);
 
     backdrop-filter:
         blur(22px);
 
     -webkit-backdrop-filter:
         blur(22px);
-
-    transform:
-        translateY(25px)
-        scale(.96);
 
     opacity: 0;
 
@@ -1534,19 +597,67 @@
     pointer-events: none;
 
     transition:
-        opacity .28s ease,
-        transform .35s cubic-bezier(.16,1,.3,1),
-        visibility .28s ease;
+        opacity .3s ease,
+        visibility .3s ease;
 }
 
 
-#rkMiniPlayer.show {
+.rakkez-media-overlay.show {
 
     opacity: 1;
 
     visibility: visible;
 
     pointer-events: auto;
+}
+
+
+.rakkez-media-panel {
+
+    position: relative;
+
+    width: min(780px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 26px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,22,34,.98),
+            rgba(4,8,15,.98)
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        0 35px 120px
+        rgba(0,0,0,.65);
+
+    transform:
+        translateY(20px)
+        scale(.97);
+
+    transition:
+        transform .4s cubic-bezier(.16,1,.3,1);
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255,255,255,.15)
+        transparent;
+}
+
+
+.rakkez-media-overlay.show
+.rakkez-media-panel {
 
     transform:
         translateY(0)
@@ -1554,596 +665,532 @@
 }
 
 
-.rk-mini-main {
+.rakkez-media-panel::-webkit-scrollbar {
 
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
+    width: 5px;
 }
 
 
-.rk-mini-art {
+.rakkez-media-panel::-webkit-scrollbar-track {
 
-    width: 45px;
-    height: 45px;
+    background: transparent;
+}
 
-    flex: 0 0 45px;
 
-    overflow: hidden;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 11px;
+.rakkez-media-panel::-webkit-scrollbar-thumb {
 
     background:
-        linear-gradient(
-            145deg,
-            #1a2537,
-            #0b111a
-        );
+        rgba(255,255,255,.14);
+
+    border-radius: 20px;
 }
 
 
-.rk-mini-art img {
+/* HEADER */
 
-    width: 100%;
-    height: 100%;
+.rakkez-media-header {
 
-    object-fit: cover;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 22px;
 }
 
 
-.rk-mini-info {
+.rakkez-media-eyebrow {
 
-    min-width: 0;
-
-    flex: 1;
-
-    cursor: pointer;
-}
-
-
-.rk-mini-title {
-
-    overflow: hidden;
-
-    color: #fff;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
-}
-
-
-.rk-mini-artist {
-
-    margin-top: 2px;
-
-    overflow: hidden;
+    margin-bottom: 5px;
 
     color:
-        rgba(255,255,255,.42);
+        rgba(255,255,255,.35);
 
     font-size: 10px;
 
-    white-space: nowrap;
+    font-weight: 700;
 
-    text-overflow: ellipsis;
+    letter-spacing: 1.5px;
 }
 
 
-.rk-mini-actions {
+.rakkez-media-title {
 
-    display: flex;
+    color: #fff;
 
-    align-items: center;
+    font-family:
+        "Space Grotesk",
+        sans-serif;
 
-    gap: 4px;
+    font-size: 25px;
+
+    font-weight: 600;
+
+    letter-spacing: -.5px;
 }
 
 
-.rk-mini-btn {
+.rakkez-media-close {
 
-    width: 31px;
-    height: 31px;
+    width: 38px;
+    height: 38px;
 
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
+    flex-shrink: 0;
 
     border: 0;
 
-    border-radius: 9px;
+    border-radius: 12px;
 
     background:
-        rgba(255,255,255,.06);
+        rgba(255,255,255,.055);
 
     color:
-        rgba(255,255,255,.75);
+        rgba(255,255,255,.65);
+
+    font-size: 22px;
 
     cursor: pointer;
+
+    transition: .2s ease;
 }
 
 
-.rk-mini-btn:hover {
+.rakkez-media-close:hover {
 
     background:
         rgba(255,255,255,.11);
 
     color: #fff;
+
+    transform:
+        rotate(90deg);
 }
 
 
-.rk-mini-play {
+/* TABS */
 
-    background: #fff;
+.rakkez-media-tabs {
 
-    color: #070b11;
+    display: flex;
+
+    gap: 5px;
+
+    padding: 5px;
+
+    margin-bottom: 22px;
+
+    border-radius: 15px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
 }
 
 
-.rk-mini-progress {
+.rakkez-media-tab {
+
+    flex: 1;
+
+    min-width: 0;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    padding: 10px 12px;
+
+    background: transparent;
+
+    color:
+        rgba(255,255,255,.43);
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.rakkez-media-tab:hover {
+
+    color: #fff;
+
+    background:
+        rgba(255,255,255,.045);
+}
+
+
+.rakkez-media-tab.active {
+
+    color: #fff;
+
+    background:
+        rgba(255,255,255,.09);
+
+    box-shadow:
+        0 4px 18px
+        rgba(0,0,0,.18);
+}
+
+
+/* SOURCE */
+
+.rakkez-media-source {
+
+    display: none;
+}
+
+
+.rakkez-media-source.active {
+
+    display: block;
+
+    animation:
+        rakkezMediaFade .25s ease;
+}
+
+
+@keyframes rakkezMediaFade {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(6px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* MAIN PLAYER */
+
+.rakkez-player-main {
+
+    padding: 24px;
+
+    border-radius: 24px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.07);
+
+    text-align: center;
+}
+
+
+/* ARTWORK */
+
+.rakkez-artwork-wrap {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin-bottom: 18px;
+}
+
+
+.rakkez-artwork {
+
+    position: relative;
+
+    width: 190px;
+    height: 190px;
+
+    overflow: hidden;
+
+    border-radius: 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #18263a,
+            #080c13
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        0 25px 55px
+        rgba(0,0,0,.35);
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease;
+}
+
+
+.rakkez-artwork.playing {
+
+    transform:
+        scale(1.015);
+
+    box-shadow:
+        0 25px 65px
+        rgba(22,131,255,.15);
+}
+
+
+.rakkez-artwork-glow {
+
+    position: absolute;
+
+    width: 120px;
+    height: 120px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(22,131,255,.20);
+
+    filter:
+        blur(45px);
+}
+
+
+.rakkez-artwork-icon {
+
+    position: relative;
+
+    z-index: 2;
+
+    color: rgba(255,255,255,.85);
+
+    font-size: 54px;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+}
+
+
+/* TRACK INFO */
+
+.rakkez-track-info {
+
+    margin-bottom: 18px;
+}
+
+
+.rakkez-track-name {
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    line-height: 1.3;
+}
+
+
+.rakkez-track-artist {
+
+    margin-top: 5px;
+
+    color:
+        rgba(255,255,255,.42);
+
+    font-size: 12px;
+}
+
+
+/* PROGRESS */
+
+.rakkez-progress-area {
 
     width: 100%;
 
-    height: 3px;
+    margin-top: 10px;
+}
 
-    margin-top: 9px;
+
+#rakkezProgress {
 
     appearance: none;
 
     -webkit-appearance: none;
 
-    border: 0;
+    width: 100%;
 
-    border-radius: 99px;
+    height: 4px;
+
+    border-radius: 20px;
+
+    outline: none;
+
+    cursor: pointer;
 
     background:
-        rgba(255,255,255,.09);
+        rgba(255,255,255,.10);
+}
+
+
+#rakkezProgress::-webkit-slider-thumb {
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+
+    background: #fff;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,.3);
+}
+
+
+#rakkezProgress::-moz-range-thumb {
+
+    width: 12px;
+    height: 12px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: #fff;
 
     cursor: pointer;
 }
 
 
-.rk-mini-progress::-webkit-slider-thumb {
-
-    appearance: none;
-
-    -webkit-appearance: none;
-
-    width: 8px;
-    height: 8px;
-
-    border-radius: 50%;
-
-    background: #1683ff;
-}
-
-
-.rk-mini-progress::-moz-range-thumb {
-
-    width: 8px;
-    height: 8px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background: #1683ff;
-}
-
-
-.rk-mini-time {
+.rakkez-time-row {
 
     display: flex;
 
     justify-content: space-between;
 
-    margin-top: 3px;
+    margin-top: 7px;
 
     color:
-        rgba(255,255,255,.30);
+        rgba(255,255,255,.35);
 
-    font-size: 9px;
+    font-size: 10px;
+
+    font-variant-numeric:
+        tabular-nums;
 }
 
 
-/* =====================================================
-   LIGHT MODE
-===================================================== */
+/* CONTROLS */
 
-body.rakkez-light,
-body.light-mode,
-body.light-theme {
+.rakkez-player-controls {
 
-    --rk-light-bg: #f5f7fa;
+    display: flex;
 
-    --rk-light-panel: rgba(255,255,255,.90);
+    align-items: center;
 
-    --rk-light-text: #111827;
+    justify-content: center;
 
-    --rk-light-muted: rgba(17,24,39,.52);
+    gap: 12px;
+
+    margin-top: 20px;
 }
 
 
-body.rakkez-light .app,
-body.light-mode .app,
-body.light-theme .app {
+.rakkez-control,
+.rakkez-play {
 
-    color: #111827;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 0;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        color .2s ease;
 }
 
 
-body.rakkez-light .background .bg-gradient,
-body.light-mode .background .bg-gradient,
-body.light-theme .background .bg-gradient {
+.rakkez-control {
 
-    opacity: .16;
+    width: 38px;
+    height: 38px;
 
-    filter:
-        brightness(1.8)
-        saturate(.65);
-}
-
-
-body.rakkez-light .background .bg-overlay,
-body.light-mode .background .bg-overlay,
-body.light-theme .background .bg-overlay {
+    border-radius: 12px;
 
     background:
-        rgba(248,250,252,.72) !important;
-}
-
-
-body.rakkez-light .topbar,
-body.light-mode .topbar,
-body.light-theme .topbar {
-
-    color: #111827;
-}
-
-
-body.rakkez-light .logo,
-body.light-mode .logo,
-body.light-theme .logo {
-
-    color: #111827 !important;
-}
-
-
-body.rakkez-light .icon-btn,
-body.rakkez-light .language-btn,
-body.light-mode .icon-btn,
-body.light-mode .language-btn,
-body.light-theme .icon-btn,
-body.light-theme .language-btn {
+        rgba(255,255,255,.045);
 
     color:
-        rgba(17,24,39,.72) !important;
+        rgba(255,255,255,.65);
+
+    font-size: 15px;
+}
+
+
+.rakkez-control:hover {
 
     background:
-        rgba(255,255,255,.62) !important;
+        rgba(255,255,255,.09);
 
-    border-color:
-        rgba(17,24,39,.09) !important;
+    color: #fff;
+
+    transform:
+        translateY(-1px);
 }
 
 
-body.rakkez-light .icon-btn:hover,
-body.rakkez-light .language-btn:hover,
-body.light-mode .icon-btn:hover,
-body.light-mode .language-btn:hover,
-body.light-theme .icon-btn:hover,
-body.light-theme .language-btn:hover {
+.rakkez-control.small {
 
-    color: #111827 !important;
-
-    background:
-        rgba(255,255,255,.90) !important;
-}
-
-
-body.rakkez-light .timer-card,
-body.light-mode .timer-card,
-body.light-theme .timer-card {
-
-    color: #111827;
-}
-
-
-body.rakkez-light .timer,
-body.light-mode .timer,
-body.light-theme .timer {
-
-    color: #111827 !important;
-}
-
-
-body.rakkez-light .mode,
-body.light-mode .mode,
-body.light-theme .mode {
+    font-size: 17px;
 
     color:
-        rgba(17,24,39,.48) !important;
+        rgba(255,255,255,.42);
 }
 
 
-body.rakkez-light .timer-label,
-body.light-mode .timer-label,
-body.light-theme .timer-label {
-
-    color:
-        rgba(17,24,39,.52) !important;
-}
-
-
-body.rakkez-light .current-task,
-body.light-mode .current-task,
-body.light-theme .current-task {
-
-    color:
-        rgba(17,24,39,.50) !important;
-
-    background:
-        rgba(255,255,255,.65) !important;
-
-    border-color:
-        rgba(17,24,39,.09) !important;
-}
-
-
-body.rakkez-light .stat,
-body.light-mode .stat,
-body.light-theme .stat {
-
-    color: #111827;
-}
-
-
-body.rakkez-light .stat-title,
-body.light-mode .stat-title,
-body.light-theme .stat-title {
-
-    color:
-        rgba(17,24,39,.45) !important;
-}
-
-
-body.rakkez-light .stat-value,
-body.light-mode .stat-value,
-body.light-theme .stat-value {
-
-    color: #111827 !important;
-}
-
-
-body.rakkez-light .ambient-btn,
-body.light-mode .ambient-btn,
-body.light-theme .ambient-btn {
-
-    color:
-        rgba(17,24,39,.72) !important;
-
-    background:
-        rgba(255,255,255,.72) !important;
-
-    border-color:
-        rgba(17,24,39,.09) !important;
-}
-
-
-body.rakkez-light .panel,
-body.light-mode .panel,
-body.light-theme .panel {
-
-    background:
-        rgba(250,252,255,.96) !important;
-
-    border-color:
-        rgba(17,24,39,.10) !important;
-
-    color: #111827;
-}
-
-
-body.rakkez-light .panel-title,
-body.light-mode .panel-title,
-body.light-theme .panel-title {
-
-    color: #111827 !important;
-}
-
-
-body.rakkez-light .panel-subtitle,
-body.light-mode .panel-subtitle,
-body.light-theme .panel-subtitle {
-
-    color:
-        rgba(17,24,39,.50) !important;
-}
-
-
-body.rakkez-light .section-title,
-body.light-mode .section-title,
-body.light-theme .section-title {
-
-    color:
-        rgba(17,24,39,.48) !important;
-}
-
-
-body.rakkez-light .setting-name,
-body.light-mode .setting-name,
-body.light-theme .setting-name {
-
-    color: #111827 !important;
-}
-
-
-body.rakkez-light .setting-description,
-body.light-mode .setting-description,
-body.light-theme .setting-description {
-
-    color:
-        rgba(17,24,39,.48) !important;
-}
-
-
-body.rakkez-light .setting,
-body.light-mode .setting,
-body.light-theme .setting {
-
-    border-color:
-        rgba(17,24,39,.07) !important;
-}
-
-
-body.rakkez-light .close,
-body.light-mode .close,
-body.light-theme .close {
-
-    color:
-        rgba(17,24,39,.55) !important;
-
-    background:
-        rgba(17,24,39,.05) !important;
-}
-
-
-body.rakkez-light .media-tab,
-body.light-mode .media-tab,
-body.light-theme .media-tab {
-
-    color:
-        rgba(17,24,39,.50) !important;
-}
-
-
-body.rakkez-light .media-tab.active,
-body.light-mode .media-tab.active,
-body.light-theme .media-tab.active {
-
-    color: #111827 !important;
-
-    background:
-        rgba(17,24,39,.07) !important;
-}
-
-
-body.rakkez-light .media-input,
-body.light-mode .media-input,
-body.light-theme .media-input {
-
-    color: #111827 !important;
-
-    background:
-        rgba(255,255,255,.90) !important;
-
-    border-color:
-        rgba(17,24,39,.10) !important;
-}
-
-
-body.rakkez-light .oauth-user,
-body.light-mode .oauth-user,
-body.light-theme .oauth-user {
-
-    color:
-        rgba(17,24,39,.48) !important;
-}
-
-
-body.rakkez-light .rk-player,
-body.light-mode .rk-player,
-body.light-theme .rk-player {
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.96),
-            rgba(245,247,250,.96)
-        );
-
-    border-color:
-        rgba(17,24,39,.09);
-
-    box-shadow:
-        0 20px 50px
-        rgba(17,24,39,.10);
-}
-
-
-body.rakkez-light .rk-now-label,
-body.light-mode .rk-now-label,
-body.light-theme .rk-now-label {
-
-    color:
-        rgba(17,24,39,.40);
-}
-
-
-body.rakkez-light .rk-track-title,
-body.light-mode .rk-track-title,
-body.light-theme .rk-track-title {
-
-    color: #111827;
-}
-
-
-body.rakkez-light .rk-track-artist,
-body.light-mode .rk-track-artist,
-body.light-theme .rk-track-artist {
-
-    color:
-        rgba(17,24,39,.48);
-}
-
-
-body.rakkez-light .rk-time-row,
-body.light-mode .rk-time-row,
-body.light-theme .rk-time-row {
-
-    color:
-        rgba(17,24,39,.38);
-}
-
-
-body.rakkez-light .rk-control,
-body.light-mode .rk-control,
-body.light-theme .rk-control {
-
-    color:
-        rgba(17,24,39,.65);
-
-    background:
-        rgba(17,24,39,.055);
-}
-
-
-body.rakkez-light .rk-control:hover,
-body.light-mode .rk-control:hover,
-body.light-theme .rk-control:hover {
-
-    color: #111827;
-
-    background:
-        rgba(17,24,39,.10);
-}
-
-
-body.rakkez-light .rk-control.active,
-body.light-mode .rk-control.active,
-body.light-theme .rk-control.active {
+.rakkez-control.small.active {
 
     color: #1683ff;
 
@@ -2152,242 +1199,732 @@ body.light-theme .rk-control.active {
 }
 
 
-body.rakkez-light .rk-play,
-body.light-mode .rk-play,
-body.light-theme .rk-play {
+.rakkez-play {
 
-    background: #111827;
+    width: 52px;
+    height: 52px;
 
-    color: #fff;
+    border-radius: 50%;
+
+    background: #fff;
+
+    color: #05070b;
+
+    font-size: 17px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.30);
 }
 
 
-body.rakkez-light .rk-playlist,
-body.light-mode .rk-playlist,
-body.light-theme .rk-playlist {
+.rakkez-play:hover {
 
-    background:
-        rgba(17,24,39,.035);
-
-    border-color:
-        rgba(17,24,39,.08);
+    transform:
+        scale(1.05);
 }
 
 
-body.rakkez-light .rk-playlist-head,
-body.light-mode .rk-playlist-head,
-body.light-theme .rk-playlist-head {
+/* VOLUME */
 
-    border-color:
-        rgba(17,24,39,.07);
-}
+.rakkez-volume {
 
+    display: flex;
 
-body.rakkez-light .rk-playlist-title,
-body.light-mode .rk-playlist-title,
-body.light-theme .rk-playlist-title {
+    align-items: center;
 
-    color: #111827;
-}
+    justify-content: center;
 
+    gap: 10px;
 
-body.rakkez-light .rk-track-count,
-body.light-mode .rk-track-count,
-body.light-theme .rk-track-count {
+    margin-top: 20px;
 
     color:
-        rgba(17,24,39,.38);
+        rgba(255,255,255,.42);
+
+    font-size: 12px;
 }
 
 
-body.rakkez-light .rk-playlist-item,
-body.light-mode .rk-playlist-item,
-body.light-theme .rk-playlist-item {
+#rakkezVolume {
 
-    border-color:
-        rgba(17,24,39,.055);
-}
+    appearance: none;
 
+    -webkit-appearance: none;
 
-body.rakkez-light .rk-playlist-item:hover,
-body.light-mode .rk-playlist-item:hover,
-body.light-theme .rk-playlist-item:hover {
+    width: 150px;
+
+    height: 4px;
+
+    border-radius: 20px;
+
+    outline: none;
+
+    cursor: pointer;
 
     background:
-        rgba(17,24,39,.045);
+        rgba(255,255,255,.10);
 }
 
 
-body.rakkez-light .rk-playlist-item.active,
-body.light-mode .rk-playlist-item.active,
-body.light-theme .rk-playlist-item.active {
+#rakkezVolume::-webkit-slider-thumb {
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    width: 11px;
+    height: 11px;
+
+    border-radius: 50%;
+
+    background: #fff;
+
+    cursor: pointer;
+}
+
+
+#rakkezVolume::-moz-range-thumb {
+
+    width: 11px;
+    height: 11px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: #fff;
+
+    cursor: pointer;
+}
+
+
+#rakkezVolumeValue {
+
+    width: 35px;
+
+    text-align: right;
+
+    font-size: 10px;
+}
+
+
+/* PLAYLIST */
+
+.rakkez-playlist-section {
+
+    margin-top: 18px;
+}
+
+
+.rakkez-playlist-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 10px;
+}
+
+
+.rakkez-playlist-title {
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.rakkez-playlist-count {
+
+    margin-top: 2px;
+
+    color:
+        rgba(255,255,255,.35);
+
+    font-size: 10px;
+}
+
+
+.rakkez-auto-next {
+
+    border: 1px solid
+        rgba(255,255,255,.08);
+
+    border-radius: 9px;
+
+    padding: 7px 9px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:
+        rgba(255,255,255,.42);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: .7px;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.rakkez-auto-next.active {
+
+    color: #fff;
+
+    border-color:
+        rgba(22,131,255,.25);
+
+    background:
+        rgba(22,131,255,.10);
+}
+
+
+.rakkez-playlist {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    max-height: 220px;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(255,255,255,.12)
+        transparent;
+}
+
+
+.rakkez-playlist::-webkit-scrollbar {
+
+    width: 4px;
+}
+
+
+.rakkez-playlist::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255,255,255,.12);
+
+    border-radius: 20px;
+}
+
+
+.rakkez-track {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 10px;
+
+    border: 1px solid
+        transparent;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    color: #fff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.rakkez-track:hover {
+
+    background:
+        rgba(255,255,255,.055);
+
+    border-color:
+        rgba(255,255,255,.06);
+}
+
+
+.rakkez-track.active {
 
     background:
         rgba(22,131,255,.08);
-}
-
-
-body.rakkez-light .rk-list-name,
-body.light-mode .rk-list-name,
-body.light-theme .rk-list-name {
-
-    color:
-        rgba(17,24,39,.84);
-}
-
-
-body.rakkez-light .rk-list-artist,
-body.light-mode .rk-list-artist,
-body.light-theme .rk-list-artist {
-
-    color:
-        rgba(17,24,39,.38);
-}
-
-
-body.rakkez-light .rk-upload-btn,
-body.light-mode .rk-upload-btn,
-body.light-theme .rk-upload-btn {
-
-    color:
-        rgba(17,24,39,.60);
 
     border-color:
-        rgba(17,24,39,.15);
+        rgba(22,131,255,.16);
+}
+
+
+.rakkez-track-art {
+
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
 
     background:
-        rgba(17,24,39,.025);
-}
-
-
-body.rakkez-light .rk-upload-note,
-body.light-mode .rk-upload-note,
-body.light-theme .rk-upload-note {
+        linear-gradient(
+            145deg,
+            #172437,
+            #090d14
+        );
 
     color:
-        rgba(17,24,39,.34);
+        rgba(255,255,255,.65);
+
+    font-size: 15px;
 }
 
 
-body.rakkez-light #rkMiniPlayer,
-body.light-mode #rkMiniPlayer,
-body.light-theme #rkMiniPlayer {
+.rakkez-track-details {
+
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.rakkez-track-title {
+
+    overflow: hidden;
+
+    color:
+        rgba(255,255,255,.82);
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+.rakkez-track-source {
+
+    margin-top: 3px;
+
+    color:
+        rgba(255,255,255,.32);
+
+    font-size: 9px;
+}
+
+
+.rakkez-track-duration {
+
+    color:
+        rgba(255,255,255,.30);
+
+    font-size: 9px;
+
+    font-variant-numeric:
+        tabular-nums;
+}
+
+
+/* EXTERNAL SOURCES */
+
+.rakkez-external-box {
+
+    padding: 28px;
+
+    border-radius: 22px;
 
     background:
-        rgba(255,255,255,.94);
+        rgba(255,255,255,.035);
 
-    border-color:
-        rgba(17,24,39,.10);
+    border:
+        1px solid
+        rgba(255,255,255,.07);
 
-    box-shadow:
-        0 20px 60px
-        rgba(17,24,39,.18);
+    text-align: center;
 }
 
 
-body.rakkez-light .rk-mini-title,
-body.light-mode .rk-mini-title,
-body.light-theme .rk-mini-title {
+.rakkez-external-icon {
 
-    color: #111827;
-}
+    width: 55px;
+    height: 55px;
 
+    margin:
+        0 auto 15px;
 
-body.rakkez-light .rk-mini-artist,
-body.light-mode .rk-mini-artist,
-body.light-theme .rk-mini-artist {
+    display: flex;
 
-    color:
-        rgba(17,24,39,.42);
-}
+    align-items: center;
+    justify-content: center;
 
-
-body.rakkez-light .rk-mini-btn,
-body.light-mode .rk-mini-btn,
-body.light-theme .rk-mini-btn {
-
-    color:
-        rgba(17,24,39,.68);
+    border-radius: 16px;
 
     background:
-        rgba(17,24,39,.055);
+        rgba(255,255,255,.06);
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 21px;
+
+    font-weight: 700;
 }
 
 
-body.rakkez-light .rk-mini-play,
-body.light-mode .rk-mini-play,
-body.light-theme .rk-mini-play {
-
-    background: #111827;
+.rakkez-external-icon.spotify {
 
     color: #fff;
 }
 
 
-/* =====================================================
-   MOBILE
-===================================================== */
+.rakkez-external-title {
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 18px;
+
+    font-weight: 600;
+}
+
+
+.rakkez-external-description {
+
+    max-width: 420px;
+
+    margin:
+        7px auto 20px;
+
+    color:
+        rgba(255,255,255,.40);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.rakkez-input-row {
+
+    display: flex;
+
+    gap: 8px;
+
+    max-width: 570px;
+
+    margin: 0 auto;
+}
+
+
+.rakkez-media-input {
+
+    min-width: 0;
+
+    flex: 1;
+
+    height: 43px;
+
+    padding:
+        0 14px;
+
+    border: 1px solid
+        rgba(255,255,255,.08);
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background:
+        rgba(255,255,255,.045);
+
+    color: #fff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 12px;
+
+    transition: .2s ease;
+}
+
+
+.rakkez-media-input::placeholder {
+
+    color:
+        rgba(255,255,255,.28);
+}
+
+
+.rakkez-media-input:focus {
+
+    border-color:
+        rgba(22,131,255,.35);
+
+    background:
+        rgba(255,255,255,.06);
+}
+
+
+.rakkez-media-action {
+
+    height: 43px;
+
+    padding:
+        0 18px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background: #1683ff;
+
+    color: #fff;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.rakkez-media-action:hover {
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 25px
+        rgba(22,131,255,.22);
+}
+
+
+.rakkez-external-embed {
+
+    margin-top: 20px;
+
+    overflow: hidden;
+
+    border-radius: 16px;
+
+    background:
+        rgba(0,0,0,.25);
+}
+
+
+.rakkez-external-embed iframe {
+
+    display: block;
+
+    width: 100%;
+
+    min-height: 300px;
+
+    border: 0;
+}
+
+
+/* LOCAL */
+
+.rakkez-file-button {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 43px;
+
+    padding:
+        0 18px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.07);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    color: #fff;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.rakkez-file-button:hover {
+
+    background:
+        rgba(255,255,255,.11);
+}
+
+
+#rakkezLocalAudio {
+
+    display: none;
+}
+
+
+/* MOBILE */
 
 @media (max-width: 600px) {
 
-    .rk-media-panel {
+    .rakkez-media-overlay {
 
-        width:
-            calc(100vw - 22px);
+        padding: 10px;
 
-        max-height:
-            90vh;
+        align-items: flex-end;
     }
 
 
-    .rk-player {
+    .rakkez-media-panel {
 
-        padding: 15px;
+        width: 100%;
+
+        max-height: 92vh;
+
+        padding: 18px;
+
+        border-radius: 24px;
     }
 
 
-    .rk-artwork {
+    .rakkez-media-title {
 
-        width: 65px;
-        height: 65px;
-
-        flex-basis: 65px;
+        font-size: 21px;
     }
 
 
-    .rk-track-title {
+    .rakkez-media-tabs {
 
-        font-size: 15px;
+        overflow-x: auto;
     }
 
 
-    .rk-controls {
+    .rakkez-media-tab {
+
+        min-width: 70px;
+
+        padding:
+            9px 8px;
+
+        font-size: 11px;
+    }
+
+
+    .rakkez-player-main {
+
+        padding: 18px;
+    }
+
+
+    .rakkez-artwork {
+
+        width: 150px;
+        height: 150px;
+
+        border-radius: 20px;
+    }
+
+
+    .rakkez-artwork-icon {
+
+        font-size: 44px;
+    }
+
+
+    .rakkez-input-row {
+
+        flex-direction: column;
+    }
+
+
+    .rakkez-media-action {
+
+        width: 100%;
+    }
+
+
+    .rakkez-volume {
 
         gap: 7px;
     }
 
 
-    .rk-control {
+    #rakkezVolume {
 
-        width: 35px;
-        height: 35px;
+        width: 120px;
+    }
+
+}
+
+
+@media (max-width: 380px) {
+
+    .rakkez-player-controls {
+
+        gap: 7px;
     }
 
 
-    .rk-play {
+    .rakkez-control {
+
+        width: 34px;
+        height: 34px;
+    }
+
+
+    .rakkez-play {
 
         width: 48px;
         height: 48px;
-    }
-
-
-    #rkMiniPlayer {
-
-        right: 10px;
-        bottom: 10px;
-
-        width:
-            calc(100vw - 20px);
     }
 
 }
@@ -2468,7 +2005,9 @@ body.light-theme .rk-mini-play {
             Rakke<span>Z</span>
         </div>
 
+
         <div class="top-actions">
+
 
             <button
                 class="icon-btn blog-btn"
@@ -2478,6 +2017,7 @@ body.light-theme .rk-mini-play {
             >
                 Blog
             </button>
+
 
             <button
                 class="language-btn"
@@ -2490,6 +2030,7 @@ body.light-theme .rk-mini-play {
                 </span>
             </button>
 
+
             <button
                 class="icon-btn"
                 id="mediaOpen"
@@ -2498,6 +2039,7 @@ body.light-theme .rk-mini-play {
             >
                 ♫
             </button>
+
 
             <button
                 class="icon-btn"
@@ -2508,6 +2050,7 @@ body.light-theme .rk-mini-play {
                 ✓
             </button>
 
+
             <button
                 class="icon-btn"
                 id="focusOnlyBtn"
@@ -2517,6 +2060,7 @@ body.light-theme .rk-mini-play {
                 ◉
             </button>
 
+
             <button
                 class="icon-btn"
                 id="themeBtn"
@@ -2525,6 +2069,7 @@ body.light-theme .rk-mini-play {
             >
                 ☾
             </button>
+
 
             <button
                 class="icon-btn"
@@ -2548,12 +2093,14 @@ body.light-theme .rk-mini-play {
 
         <section class="timer-card">
 
+
             <div
                 class="mode"
                 id="modeText"
             >
                 FOCUS
             </div>
+
 
             <div
                 class="timer"
@@ -2562,6 +2109,7 @@ body.light-theme .rk-mini-play {
                 25:00
             </div>
 
+
             <div
                 class="timer-label"
                 id="timerLabel"
@@ -2569,14 +2117,18 @@ body.light-theme .rk-mini-play {
                 Stay focused. One thing at a time.
             </div>
 
+
             <div
                 class="current-task"
                 id="currentTask"
             >
+
                 <span>
                     NO TASK SELECTED
                 </span>
+
             </div>
+
 
             <div class="progress-wrap">
 
@@ -2587,6 +2139,7 @@ body.light-theme .rk-mini-play {
 
             </div>
 
+
             <div class="controls">
 
                 <button
@@ -2596,6 +2149,7 @@ body.light-theme .rk-mini-play {
                 >
                     START
                 </button>
+
 
                 <button
                     class="secondary"
@@ -2618,7 +2172,9 @@ body.light-theme .rk-mini-play {
 
     <div class="bottom-bar">
 
+
         <div class="stats">
+
 
             <div class="stat">
 
@@ -2635,6 +2191,7 @@ body.light-theme .rk-mini-play {
 
             </div>
 
+
             <div class="stat">
 
                 <div class="stat-title">
@@ -2650,6 +2207,7 @@ body.light-theme .rk-mini-play {
 
             </div>
 
+
             <div class="stat">
 
                 <div class="stat-title">
@@ -2664,6 +2222,7 @@ body.light-theme .rk-mini-play {
                 </div>
 
             </div>
+
 
             <div class="stat">
 
@@ -2682,6 +2241,7 @@ body.light-theme .rk-mini-play {
 
         </div>
 
+
         <button
             class="ambient-btn"
             id="ambientOpen"
@@ -2693,7 +2253,9 @@ body.light-theme .rk-mini-play {
     </div>
 
 
-    <!-- FOCUS ONLY EXIT -->
+    <!-- =====================================================
+         FOCUS ONLY EXIT
+    ====================================================== -->
 
     <button
         class="focus-exit"
@@ -2739,6 +2301,7 @@ body.light-theme .rk-mini-play {
             <div class="section-title">
                 Timer
             </div>
+
 
             <div class="setting">
 
@@ -2844,6 +2407,7 @@ body.light-theme .rk-mini-play {
                 Daily Goal
             </div>
 
+
             <div class="setting">
 
                 <div>
@@ -2857,6 +2421,7 @@ body.light-theme .rk-mini-play {
                     </div>
 
                 </div>
+
 
                 <div class="goal-input-wrap">
 
@@ -2884,6 +2449,7 @@ body.light-theme .rk-mini-play {
             <div class="section-title">
                 Smart Timer
             </div>
+
 
             <div class="setting">
 
@@ -2939,6 +2505,7 @@ body.light-theme .rk-mini-play {
                 Alarm
             </div>
 
+
             <div class="setting">
 
                 <div>
@@ -2976,6 +2543,7 @@ body.light-theme .rk-mini-play {
 
                 </div>
 
+
                 <div class="volume-control">
 
                     <input
@@ -3008,6 +2576,7 @@ body.light-theme .rk-mini-play {
                     </div>
 
                 </div>
+
 
                 <select
                     id="alarmSound"
@@ -3060,6 +2629,7 @@ body.light-theme .rk-mini-play {
                     </div>
 
                 </div>
+
 
                 <button
                     id="testAlarmBtn"
@@ -3370,41 +2940,45 @@ body.light-theme .rk-mini-play {
 
 
 <!-- =====================================================
-     MEDIA
+     PROFESSIONAL MEDIA PLAYER
 ===================================================== -->
 
 <div
-    class="overlay"
-    id="mediaOverlay"
+    class="rakkez-media-overlay"
+    id="rakkezMediaOverlay"
+    aria-hidden="true"
 >
 
-    <div class="panel rk-media-panel">
+    <div class="rakkez-media-panel">
 
-        <div class="panel-head">
+        <!-- HEADER -->
+
+        <div class="rakkez-media-header">
 
             <div>
 
                 <div
-                    class="panel-title"
-                    data-rk="mediaTitle"
+                    class="rakkez-media-eyebrow"
+                    data-media-i18n="eyebrow"
                 >
-                    Media
+                    RAKKEZ MEDIA
                 </div>
 
                 <div
-                    class="panel-subtitle"
-                    data-rk="mediaSubtitle"
+                    class="rakkez-media-title"
+                    data-media-i18n="focusMusic"
                 >
-                    Focus music & sounds
+                    Focus Music
                 </div>
 
             </div>
 
             <button
-                class="close"
-                data-close="mediaOverlay"
-                id="mediaClose"
+                class="rakkez-media-close"
+                id="rakkezMediaClose"
                 type="button"
+                aria-label="Close"
+                data-media-i18n-title="close"
             >
                 ×
             </button>
@@ -3412,40 +2986,42 @@ body.light-theme .rk-mini-play {
         </div>
 
 
-        <!-- =================================================
-             MEDIA TABS
-        ================================================== -->
+        <!-- TABS -->
 
-        <div class="rk-media-tabs">
+        <div class="rakkez-media-tabs">
 
             <button
-                class="rk-media-tab active"
-                data-rk-media="lofi"
+                class="rakkez-media-tab active"
+                data-rakkez-source="lofi"
                 type="button"
+                data-media-i18n="lofi"
             >
                 Lofi
             </button>
 
             <button
-                class="rk-media-tab"
-                data-rk-media="youtube"
+                class="rakkez-media-tab"
+                data-rakkez-source="youtube"
                 type="button"
+                data-media-i18n="youtube"
             >
                 YouTube
             </button>
 
             <button
-                class="rk-media-tab"
-                data-rk-media="spotify"
+                class="rakkez-media-tab"
+                data-rakkez-source="spotify"
                 type="button"
+                data-media-i18n="spotify"
             >
                 Spotify
             </button>
 
             <button
-                class="rk-media-tab"
-                data-rk-media="local"
+                class="rakkez-media-tab"
+                data-rakkez-source="local"
                 type="button"
+                data-media-i18n="local"
             >
                 Local
             </button>
@@ -3454,76 +3030,81 @@ body.light-theme .rk-mini-play {
 
 
         <!-- =================================================
-             LOFI
+             LOFI / MAIN PLAYER
         ================================================== -->
 
         <div
-            class="rk-media-view active"
-            id="rkLofiView"
+            class="rakkez-media-source active"
+            id="rakkezLofiSource"
         >
 
-            <div class="rk-player">
+            <div class="rakkez-player-main">
 
-                <div class="rk-player-top">
+                <!-- ARTWORK -->
+
+                <div class="rakkez-artwork-wrap">
 
                     <div
-                        class="rk-artwork"
-                        id="rkArtwork"
+                        class="rakkez-artwork"
+                        id="rakkezArtwork"
                     >
 
-                        <div class="rk-artwork-symbol">
+                        <div
+                            class="rakkez-artwork-glow"
+                        ></div>
+
+                        <div
+                            class="rakkez-artwork-icon"
+                        >
                             ♪
                         </div>
 
                     </div>
 
+                </div>
 
-                    <div class="rk-track-info">
 
-                        <div
-                            class="rk-now-label"
-                            data-rk="nowPlayingLabel"
-                        >
-                            NOW PLAYING
-                        </div>
+                <!-- TRACK INFO -->
 
-                        <div
-                            class="rk-track-title"
-                            id="rkTrackTitle"
-                        >
-                            Nothing playing
-                        </div>
+                <div class="rakkez-track-info">
 
-                        <div
-                            class="rk-track-artist"
-                            id="rkTrackArtist"
-                        >
-                            RakkeZ Lofi
-                        </div>
+                    <div
+                        class="rakkez-track-name"
+                        id="rakkezTrackName"
+                    >
+                        Rainy Night
+                    </div>
 
+                    <div
+                        class="rakkez-track-artist"
+                        id="rakkezTrackArtist"
+                    >
+                        RakkeZ Lofi
                     </div>
 
                 </div>
 
 
-                <div class="rk-progress-row">
+                <!-- PROGRESS -->
+
+                <div class="rakkez-progress-area">
 
                     <input
                         type="range"
-                        id="rkProgress"
-                        class="rk-progress"
+                        id="rakkezProgress"
                         min="0"
                         max="100"
                         value="0"
+                        step="0.1"
                     >
 
-                    <div class="rk-time-row">
+                    <div class="rakkez-time-row">
 
-                        <span id="rkCurrentTime">
+                        <span id="rakkezCurrentTime">
                             0:00
                         </span>
 
-                        <span id="rkDuration">
+                        <span id="rakkezDuration">
                             0:00
                         </span>
 
@@ -3532,49 +3113,56 @@ body.light-theme .rk-mini-play {
                 </div>
 
 
-                <div class="rk-controls">
+                <!-- CONTROLS -->
+
+                <div class="rakkez-player-controls">
 
                     <button
-                        class="rk-control"
-                        id="rkShuffle"
+                        class="rakkez-control small"
+                        id="rakkezShuffle"
                         type="button"
                         title="Shuffle"
+                        data-media-i18n-title="shuffle"
                     >
-                        ⇄
+                        ⤨
                     </button>
 
                     <button
-                        class="rk-control"
-                        id="rkPrevious"
+                        class="rakkez-control"
+                        id="rakkezPrevious"
                         type="button"
                         title="Previous"
+                        data-media-i18n-title="previous"
                     >
                         ⏮
                     </button>
 
                     <button
-                        class="rk-play"
-                        id="rkPlay"
+                        class="rakkez-play"
+                        id="rakkezPlay"
                         type="button"
                         title="Play"
+                        data-media-i18n-title="play"
                     >
                         ▶
                     </button>
 
                     <button
-                        class="rk-control"
-                        id="rkNext"
+                        class="rakkez-control"
+                        id="rakkezNext"
                         type="button"
                         title="Next"
+                        data-media-i18n-title="next"
                     >
                         ⏭
                     </button>
 
                     <button
-                        class="rk-control"
-                        id="rkLoop"
+                        class="rakkez-control small"
+                        id="rakkezLoop"
                         type="button"
                         title="Loop"
+                        data-media-i18n-title="loop"
                     >
                         ↻
                     </button>
@@ -3582,23 +3170,26 @@ body.light-theme .rk-mini-play {
                 </div>
 
 
-                <div class="rk-volume">
+                <!-- VOLUME -->
 
-                    <div
-                        class="rk-volume-icon"
-                        id="rkVolumeIcon"
-                    >
+                <div class="rakkez-volume">
+
+                    <span>
                         🔊
-                    </div>
+                    </span>
 
                     <input
                         type="range"
-                        id="rkVolume"
-                        class="rk-volume-range"
+                        id="rakkezVolume"
                         min="0"
-                        max="100"
-                        value="70"
+                        max="1"
+                        value=".7"
+                        step=".01"
                     >
+
+                    <span id="rakkezVolumeValue">
+                        70%
+                    </span>
 
                 </div>
 
@@ -3607,73 +3198,44 @@ body.light-theme .rk-mini-play {
 
             <!-- PLAYLIST -->
 
-            <div class="rk-playlist">
+            <div class="rakkez-playlist-section">
 
-                <div class="rk-playlist-head">
+                <div class="rakkez-playlist-header">
 
-                    <div
-                        class="rk-playlist-title"
-                        data-rk="playlistTitle"
-                    >
-                        Playlist
+                    <div>
+
+                        <div
+                            class="rakkez-playlist-title"
+                            data-media-i18n="playlist"
+                        >
+                            Playlist
+                        </div>
+
+                        <div
+                            class="rakkez-playlist-count"
+                            id="rakkezPlaylistCount"
+                        >
+                            0 tracks
+                        </div>
+
                     </div>
 
-                    <div
-                        class="rk-track-count"
-                        id="rkTrackCount"
+                    <button
+                        class="rakkez-auto-next active"
+                        id="rakkezAutoNext"
+                        type="button"
+                        data-media-i18n="autoNext"
                     >
-                        0 tracks
-                    </div>
+                        AUTO-NEXT
+                    </button>
 
                 </div>
 
-
                 <div
-                    class="rk-playlist-list"
-                    id="rkPlaylist"
+                    class="rakkez-playlist"
+                    id="rakkezPlaylist"
                 ></div>
 
-            </div>
-
-
-            <!-- UPLOAD -->
-
-            <div class="rk-upload-row">
-
-                <label
-                    class="rk-upload-btn"
-                    for="rkMusicUpload"
-                >
-                    <span data-rk="uploadMusic">
-                        + Upload Music
-                    </span>
-                </label>
-
-                <input
-                    id="rkMusicUpload"
-                    type="file"
-                    accept="audio/*"
-                    multiple
-                    hidden
-                >
-
-                <button
-                    class="rk-clear-btn"
-                    id="rkClearUploads"
-                    type="button"
-                    title="Clear uploaded music"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-            <div
-                class="rk-upload-note"
-                data-rk="uploadNote"
-            >
-                You can select multiple MP3 / WAV / M4A files. Uploaded files stay available in this browser session.
             </div>
 
         </div>
@@ -3684,38 +3246,57 @@ body.light-theme .rk-mini-play {
         ================================================== -->
 
         <div
-            class="rk-media-view"
-            id="rkYoutubeView"
+            class="rakkez-media-source"
+            id="rakkezYoutubeSource"
         >
 
-            <div
-                class="oauth-user"
-                id="youtubeUser"
-            >
-                Not connected
+            <div class="rakkez-external-box">
+
+                <div class="rakkez-external-icon">
+                    ▶
+                </div>
+
+                <div
+                    class="rakkez-external-title"
+                    data-media-i18n="youtube"
+                >
+                    YouTube
+                </div>
+
+                <div
+                    class="rakkez-external-description"
+                    data-media-i18n="youtubeDescription"
+                >
+                    Paste a YouTube video URL and play it inside RakkeZ.
+                </div>
+
+                <div class="rakkez-input-row">
+
+                    <input
+                        id="rakkezYoutubeInput"
+                        class="rakkez-media-input"
+                        type="text"
+                        placeholder="Paste YouTube URL..."
+                        data-media-i18n-placeholder="youtubePlaceholder"
+                    >
+
+                    <button
+                        id="rakkezYoutubePlay"
+                        class="rakkez-media-action"
+                        type="button"
+                        data-media-i18n="play"
+                    >
+                        Play
+                    </button>
+
+                </div>
+
+                <div
+                    id="rakkezYoutubeEmbed"
+                    class="rakkez-external-embed"
+                ></div>
+
             </div>
-
-
-            <input
-                class="media-input"
-                id="youtubeInput"
-                placeholder="Paste a YouTube URL..."
-            >
-
-
-            <button
-                class="media-button"
-                id="youtubePlay"
-                type="button"
-            >
-                Play YouTube
-            </button>
-
-
-            <div
-                class="embed-container"
-                id="youtubeEmbed"
-            ></div>
 
         </div>
 
@@ -3725,124 +3306,191 @@ body.light-theme .rk-mini-play {
         ================================================== -->
 
         <div
-            class="rk-media-view"
-            id="rkSpotifyView"
+            class="rakkez-media-source"
+            id="rakkezSpotifySource"
         >
 
-            <div
-                class="oauth-user"
-                id="spotifyUser"
-            >
-                Not connected
+            <div class="rakkez-external-box">
+
+                <div class="rakkez-external-icon spotify">
+                    S
+                </div>
+
+                <div
+                    class="rakkez-external-title"
+                    data-media-i18n="spotify"
+                >
+                    Spotify
+                </div>
+
+                <div
+                    class="rakkez-external-description"
+                    data-media-i18n="spotifyDescription"
+                >
+                    Paste a Spotify track, album or playlist URL.
+                </div>
+
+                <div class="rakkez-input-row">
+
+                    <input
+                        id="rakkezSpotifyInput"
+                        class="rakkez-media-input"
+                        type="text"
+                        placeholder="Paste Spotify URL..."
+                        data-media-i18n-placeholder="spotifyPlaceholder"
+                    >
+
+                    <button
+                        id="rakkezSpotifyPlay"
+                        class="rakkez-media-action"
+                        type="button"
+                        data-media-i18n="open"
+                    >
+                        Open
+                    </button>
+
+                </div>
+
+                <div
+                    id="rakkezSpotifyEmbed"
+                    class="rakkez-external-embed"
+                ></div>
+
             </div>
-
-
-            <input
-                class="media-input"
-                id="spotifyInput"
-                placeholder="Paste Spotify track / playlist / album..."
-            >
-
-
-            <button
-                class="media-button"
-                id="spotifyPlay"
-                type="button"
-            >
-                Open Spotify Player
-            </button>
-
-
-            <div
-                class="embed-container"
-                id="spotifyEmbed"
-            ></div>
 
         </div>
 
 
         <!-- =================================================
-             LOCAL VIDEO / OLD LOCAL PLAYER
+             LOCAL
         ================================================== -->
 
         <div
-            class="rk-media-view"
-            id="rkLocalView"
+            class="rakkez-media-source"
+            id="rakkezLocalSource"
         >
 
-            <label
-                class="file-label"
-                for="mediaFile"
-            >
+            <div class="rakkez-external-box">
 
-                <strong>
-                    Choose Music or Video
-                </strong>
+                <div class="rakkez-external-icon">
+                    ♪
+                </div>
 
-                <span>
-                    MP3, WAV, M4A, MP4, WebM
-                </span>
+                <div
+                    class="rakkez-external-title"
+                    data-media-i18n="localMusic"
+                >
+                    Local Music
+                </div>
 
-            </label>
+                <div
+                    class="rakkez-external-description"
+                    data-media-i18n="localDescription"
+                >
+                    Choose multiple music files from your device.
+                </div>
 
+                <label
+                    class="rakkez-file-button"
+                    for="rakkezLocalFile"
+                    data-media-i18n="chooseMusic"
+                >
+                    Choose Music
+                </label>
 
-            <input
-                id="mediaFile"
-                type="file"
-                accept="audio/*,video/*"
-            >
+                <!-- MULTIPLE FILES -->
 
+                <input
+                    id="rakkezLocalFile"
+                    type="file"
+                    accept="audio/*"
+                    multiple
+                    hidden
+                >
 
-            <audio
-                id="audioPlayer"
-                controls
-            ></audio>
+                <div
+                    id="rakkezLocalList"
+                    class="rakkez-local-list"
+                ></div>
 
+                <audio
+                    id="rakkezLocalAudio"
+                    preload="metadata"
+                ></audio>
 
-            <video
-                id="videoPlayer"
-                controls
-                playsinline
-            ></video>
+            </div>
 
         </div>
 
+    </div>
 
-        <!-- Compatibility element for existing app.js -->
+</div>
+
+
+<!-- =====================================================
+     MINI PLAYER
+===================================================== -->
+
+<div
+    id="rakkezMiniPlayer"
+    class="rakkez-mini-player"
+    aria-hidden="true"
+>
+
+    <div class="rakkez-mini-artwork" id="rakkezMiniArtwork">
+        ♪
+    </div>
+
+    <div class="rakkez-mini-info">
 
         <div
-            class="now-playing"
-            id="nowPlaying"
-            style="display:none"
+            class="rakkez-mini-title"
+            id="rakkezMiniTitle"
         >
-
-            <div
-                class="album"
-                id="mediaArtwork"
-            >
-                ♪
-            </div>
-
-            <div>
-
-                <div
-                    class="media-name"
-                    id="mediaName"
-                >
-                    Nothing playing
-                </div>
-
-                <div
-                    class="media-source"
-                    id="mediaSource"
-                >
-                    RakkeZ
-                </div>
-
-            </div>
-
+            Rainy Night
         </div>
 
+        <div
+            class="rakkez-mini-artist"
+            id="rakkezMiniArtist"
+        >
+            RakkeZ Lofi
+        </div>
+
+    </div>
+
+    <button
+        class="rakkez-mini-control"
+        id="rakkezMiniPlay"
+        type="button"
+        title="Play"
+        data-media-i18n-title="play"
+    >
+        ▶
+    </button>
+
+    <button
+        class="rakkez-mini-control"
+        id="rakkezMiniNext"
+        type="button"
+        title="Next"
+        data-media-i18n-title="next"
+    >
+        ⏭
+    </button>
+
+    <button
+        class="rakkez-mini-close"
+        id="rakkezMiniClose"
+        type="button"
+        title="Close"
+        data-media-i18n-title="close"
+    >
+        ×
+    </button>
+
+    <div class="rakkez-mini-progress">
+        <span id="rakkezMiniProgress"></span>
     </div>
 
 </div>
@@ -3873,7 +3521,6 @@ body.light-theme .rk-mini-play {
 
             </div>
 
-
             <button
                 class="close"
                 data-close="ambientOverlay"
@@ -3884,12 +3531,10 @@ body.light-theme .rk-mini-play {
 
         </div>
 
-
         <div
             class="ambient-grid"
             id="ambientGrid"
         ></div>
-
 
         <label
             class="upload-ambient"
@@ -3897,7 +3542,6 @@ body.light-theme .rk-mini-play {
         >
             + Upload Image / Video Background
         </label>
-
 
         <input
             id="bgFile"
@@ -3926,11 +3570,9 @@ body.light-theme .rk-mini-play {
             ↻
         </div>
 
-
         <div class="panel-title">
             Reset everything?
         </div>
-
 
         <div class="confirm-description">
 
@@ -3940,7 +3582,6 @@ body.light-theme .rk-mini-play {
             This cannot be undone.
 
         </div>
-
 
         <div class="confirm-actions">
 
@@ -3952,7 +3593,6 @@ body.light-theme .rk-mini-play {
                 Cancel
             </button>
 
-
             <button
                 id="confirmReset"
                 class="danger-confirm"
@@ -3962,97 +3602,6 @@ body.light-theme .rk-mini-play {
             </button>
 
         </div>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     MINI PLAYER
-===================================================== -->
-
-<div
-    id="rkMiniPlayer"
-    aria-label="Mini music player"
->
-
-    <div class="rk-mini-main">
-
-        <div
-            class="rk-mini-art"
-            id="rkMiniArtwork"
-        >
-            ♪
-        </div>
-
-
-        <div
-            class="rk-mini-info"
-            id="rkMiniOpen"
-        >
-
-            <div
-                class="rk-mini-title"
-                id="rkMiniTitle"
-            >
-                Nothing playing
-            </div>
-
-            <div
-                class="rk-mini-artist"
-                id="rkMiniArtist"
-            >
-                RakkeZ
-            </div>
-
-        </div>
-
-
-        <div class="rk-mini-actions">
-
-            <button
-                class="rk-mini-btn rk-mini-play"
-                id="rkMiniPlay"
-                type="button"
-                title="Play"
-            >
-                ▶
-            </button>
-
-            <button
-                class="rk-mini-btn"
-                id="rkMiniClose"
-                type="button"
-                title="Close"
-            >
-                ×
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <input
-        type="range"
-        id="rkMiniProgress"
-        class="rk-mini-progress"
-        min="0"
-        max="100"
-        value="0"
-    >
-
-
-    <div class="rk-mini-time">
-
-        <span id="rkMiniCurrent">
-            0:00
-        </span>
-
-        <span id="rkMiniDuration">
-            0:00
-        </span>
 
     </div>
 
@@ -4085,7 +3634,6 @@ body.light-theme .rk-mini-play {
             ×
         </button>
 
-
         <span
             class="updates-badge"
             id="updatesBadge"
@@ -4093,22 +3641,18 @@ body.light-theme .rk-mini-play {
             NEW
         </span>
 
-
         <h2 id="updatesTitle">
             What's New
         </h2>
-
 
         <p id="updatesDescription">
             We've added some exciting new features.
         </p>
 
-
         <div
             class="updates-list"
             id="updatesList"
         ></div>
-
 
         <button
             id="updatesDone"
@@ -4123,18 +3667,390 @@ body.light-theme .rk-mini-play {
 
 
 <!-- =====================================================
+     MEDIA SUPPORT CSS
+     
+     هذا الـCSS خاص بالإضافات الجديدة فقط.
+     لا يغير التصميم الأساسي.
+===================================================== -->
+
+<style>
+
+.rakkez-mini-player {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    width: min(380px, calc(100vw - 32px));
+    min-height: 76px;
+    z-index: 99998;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 10px 12px;
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 18px;
+
+    background: rgba(8,13,22,.94);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,.35);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(18px) scale(.96);
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease,
+        visibility .25s ease;
+}
+
+.rakkez-mini-player.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.rakkez-mini-artwork {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(22,131,255,.30),
+            rgba(255,255,255,.06)
+        );
+
+    background-size: cover;
+    background-position: center;
+
+    color: #fff;
+    font-size: 21px;
+
+    overflow: hidden;
+}
+
+.rakkez-mini-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.rakkez-mini-title {
+    color: var(--text, #fff);
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rakkez-mini-artist {
+    margin-top: 4px;
+
+    color: var(--muted, rgba(255,255,255,.56));
+    font-size: 11px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rakkez-mini-control,
+.rakkez-mini-close {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.055);
+    color: var(--text, #fff);
+
+    cursor: pointer;
+
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        border-color .18s ease;
+}
+
+.rakkez-mini-control:hover,
+.rakkez-mini-close:hover {
+    transform: translateY(-1px);
+    background: rgba(255,255,255,.10);
+    border-color: rgba(255,255,255,.18);
+}
+
+.rakkez-mini-close {
+    font-size: 18px;
+}
+
+.rakkez-mini-progress {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 4px;
+
+    height: 2px;
+
+    overflow: hidden;
+    border-radius: 99px;
+
+    background: rgba(255,255,255,.08);
+}
+
+.rakkez-mini-progress span {
+    display: block;
+
+    width: 0%;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: var(--blue, #1683ff);
+
+    transition: width .12s linear;
+}
+
+
+/* LOCAL LIST */
+
+.rakkez-local-list {
+    width: 100%;
+    margin-top: 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.rakkez-local-list:empty {
+    display: none;
+}
+
+.rakkez-local-track {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.035);
+
+    color: var(--text, #fff);
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease;
+}
+
+.rakkez-local-track:hover {
+    background: rgba(255,255,255,.065);
+    border-color: rgba(255,255,255,.15);
+}
+
+.rakkez-local-track.active {
+    border-color: rgba(22,131,255,.45);
+    background: rgba(22,131,255,.10);
+}
+
+.rakkez-local-track-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.07);
+
+    font-size: 14px;
+}
+
+.rakkez-local-track-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.rakkez-local-track-name {
+    font-size: 12px;
+    font-weight: 650;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rakkez-local-track-meta {
+    margin-top: 3px;
+
+    font-size: 10px;
+
+    color: var(--muted, rgba(255,255,255,.5));
+}
+
+
+/* SPOTIFY */
+
+#rakkezSpotifyEmbed {
+    width: 100%;
+    margin-top: 18px;
+
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+#rakkezSpotifyEmbed iframe {
+    display: block;
+
+    width: 100% !important;
+
+    /*
+     * Prevent the huge empty area.
+     */
+    height: 152px !important;
+
+    min-height: 152px !important;
+
+    border: 0;
+    border-radius: 14px;
+}
+
+#rakkezSpotifyEmbed iframe[src*="/playlist/"],
+#rakkezSpotifyEmbed iframe[src*="/album/"],
+#rakkezSpotifyEmbed iframe[src*="/artist/"],
+#rakkezSpotifyEmbed iframe[src*="/show/"] {
+    height: 352px !important;
+    min-height: 352px !important;
+}
+
+
+/* YOUTUBE */
+
+#rakkezYoutubeEmbed {
+    width: 100%;
+    margin-top: 18px;
+
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+#rakkezYoutubeEmbed iframe {
+    display: block;
+
+    width: 100%;
+    aspect-ratio: 16 / 9;
+
+    min-height: 220px;
+
+    border: 0;
+    border-radius: 14px;
+}
+
+
+/* LIGHT MODE */
+
+html.light .rakkez-mini-player,
+body.light .rakkez-mini-player,
+[data-theme="light"] .rakkez-mini-player {
+    background: rgba(255,255,255,.94);
+
+    border-color: rgba(0,0,0,.10);
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,.14);
+}
+
+html.light .rakkez-mini-control,
+body.light .rakkez-mini-control,
+[data-theme="light"] .rakkez-mini-control,
+html.light .rakkez-mini-close,
+body.light .rakkez-mini-close,
+[data-theme="light"] .rakkez-mini-close {
+    color: #111;
+
+    background: rgba(0,0,0,.045);
+    border-color: rgba(0,0,0,.09);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .rakkez-mini-player {
+        right: 12px;
+        bottom: 12px;
+
+        width: calc(100vw - 24px);
+
+        min-height: 70px;
+
+        padding: 8px 10px;
+    }
+
+    .rakkez-mini-artwork {
+        width: 46px;
+        height: 46px;
+        flex-basis: 46px;
+    }
+
+    .rakkez-mini-control,
+    .rakkez-mini-close {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
+    }
+
+}
+
+</style>
+
+
+<!-- =====================================================
      SCRIPTS
 ===================================================== -->
 
 <script src="config.js"></script>
-
 <script src="app.js"></script>
-
 <script src="language.js"></script>
 
 
 <!-- =====================================================
-     RAKKEZ NEW MEDIA PLAYER
+     RAKKEZ PROFESSIONAL MEDIA ENGINE
 ===================================================== -->
 
 <script>
@@ -4145,23 +4061,35 @@ body.light-theme .rk-mini-play {
 
 
     /* =====================================================
-       PLAYLIST
-    =====================================================
-
-       Put permanent files inside:
-
-       Music/
-       Music/artwork/
-
-       Example:
-
-       Music/lofi-01.mp3
-       Music/lofi-02.mp3
-
-       Music/artwork/lofi-01.jpg
-
+       STORAGE
     ===================================================== */
 
+    const STORAGE = {
+
+        track:
+            "rakkez_media_track",
+
+        volume:
+            "rakkez_media_volume",
+
+        shuffle:
+            "rakkez_media_shuffle",
+
+        loop:
+            "rakkez_media_loop",
+
+        autoNext:
+            "rakkez_media_auto_next",
+
+        localTracks:
+            "rakkez_local_music_names"
+
+    };
+
+
+    /* =====================================================
+       BUILT-IN LOFI PLAYLIST
+    ===================================================== */
 
     const PLAYLIST = [
 
@@ -4173,91 +4101,104 @@ body.light-theme .rk-mini-play {
                 "Ahmed S",
 
             src:
-                "Music/hab-allah.mp3",
+                "Music/Guitar.mp3",
 
             artwork:
-                "Music/artwork/sam-2012.jpg"
+                "Music/artwork/SAM_2012.JPG",
+
+            type:
+                "lofi"
+        },
+
+        {
+            title:
+                "Late Night Study",
+
+            artist:
+                "RakkeZ Lofi",
+
+            src:
+                "music/late-night-study.mp3",
+
+            artwork:
+                "music/artwork/late-night-study.jpg",
+
+            type:
+                "lofi"
+        },
+
+        {
+            title:
+                "Coffee Shop",
+
+            artist:
+                "RakkeZ Lofi",
+
+            src:
+                "music/coffee-shop.mp3",
+
+            artwork:
+                "music/artwork/coffee-shop.jpg",
+
+            type:
+                "lofi"
+        },
+
+        {
+            title:
+                "Deep Focus",
+
+            artist:
+                "RakkeZ Lofi",
+
+            src:
+                "music/deep-focus.mp3",
+
+            artwork:
+                "music/artwork/deep-focus.jpg",
+
+            type:
+                "lofi"
+        },
+
+        {
+            title:
+                "Midnight",
+
+            artist:
+                "RakkeZ Lofi",
+
+            src:
+                "music/midnight.mp3",
+
+            artwork:
+                "music/artwork/midnight.jpg",
+
+            type:
+                "lofi"
         }
 
     ];
 
 
     /* =====================================================
-       STORAGE
+       LOCAL TRACKS
     ===================================================== */
 
-    const STORAGE = {
+    let LOCAL_TRACKS = [];
 
-        index:
-            "rakkez_music_index",
-
-        volume:
-            "rakkez_music_volume",
-
-        shuffle:
-            "rakkez_music_shuffle",
-
-        loop:
-            "rakkez_music_loop",
-
-        time:
-            "rakkez_music_time",
-
-        playing:
-            "rakkez_music_playing",
-
-        uploads:
-            "rakkez_uploaded_music"
-
-    };
+    let localObjectUrls = [];
 
 
     /* =====================================================
-       STATE
+       COMBINED PLAYLIST
     ===================================================== */
 
-    let tracks = PLAYLIST.map(function (track) {
+    function getAllTracks() {
 
-        return {
-            ...track,
-            permanent: true
-        };
-
-    });
-
-
-    let uploadedTracks = [];
-
-    let currentIndex = 0;
-
-    let shuffle = false;
-
-    let loop = false;
-
-    let isPlaying = false;
-
-    let objectUrls = [];
-
-    let audio =
-        new Audio();
-
-
-    audio.preload = "metadata";
-
-    audio.volume =
-        Number(
-            localStorage.getItem(
-                STORAGE.volume
-            )
+        return PLAYLIST.concat(
+            LOCAL_TRACKS
         );
-
-    if (
-        !Number.isFinite(audio.volume) ||
-        audio.volume < 0 ||
-        audio.volume > 1
-    ) {
-
-        audio.volume = .70;
 
     }
 
@@ -4266,387 +4207,593 @@ body.light-theme .rk-mini-play {
        ELEMENTS
     ===================================================== */
 
-    const player =
+    const overlay =
         document.getElementById(
-            "rkLofiView"
+            "rakkezMediaOverlay"
+        );
+
+
+    const closeButton =
+        document.getElementById(
+            "rakkezMediaClose"
+        );
+
+
+    const mediaButton =
+        document.getElementById(
+            "mediaOpen"
+        );
+
+
+    const tabs =
+        document.querySelectorAll(
+            ".rakkez-media-tab"
+        );
+
+
+    const sources =
+        document.querySelectorAll(
+            ".rakkez-media-source"
         );
 
 
     const artwork =
         document.getElementById(
-            "rkArtwork"
+            "rakkezArtwork"
         );
 
 
-    const title =
+    const trackName =
         document.getElementById(
-            "rkTrackTitle"
+            "rakkezTrackName"
         );
 
 
-    const artist =
+    const trackArtist =
         document.getElementById(
-            "rkTrackArtist"
+            "rakkezTrackArtist"
         );
 
 
-    const progress =
+    const playlistElement =
         document.getElementById(
-            "rkProgress"
+            "rakkezPlaylist"
         );
 
 
-    const currentTime =
+    const playlistCount =
         document.getElementById(
-            "rkCurrentTime"
-        );
-
-
-    const duration =
-        document.getElementById(
-            "rkDuration"
+            "rakkezPlaylistCount"
         );
 
 
     const playButton =
         document.getElementById(
-            "rkPlay"
+            "rakkezPlay"
         );
 
 
-    const volume =
+    const previousButton =
         document.getElementById(
-            "rkVolume"
+            "rakkezPrevious"
         );
 
 
-    const playlist =
+    const nextButton =
         document.getElementById(
-            "rkPlaylist"
-        );
-
-
-    const trackCount =
-        document.getElementById(
-            "rkTrackCount"
+            "rakkezNext"
         );
 
 
     const shuffleButton =
         document.getElementById(
-            "rkShuffle"
+            "rakkezShuffle"
         );
 
 
     const loopButton =
         document.getElementById(
-            "rkLoop"
+            "rakkezLoop"
         );
 
 
-    const mini =
+    const autoNextButton =
         document.getElementById(
-            "rkMiniPlayer"
+            "rakkezAutoNext"
         );
 
 
-    const miniTitle =
+    const progress =
         document.getElementById(
-            "rkMiniTitle"
+            "rakkezProgress"
         );
 
 
-    const miniArtist =
+    const currentTimeElement =
         document.getElementById(
-            "rkMiniArtist"
+            "rakkezCurrentTime"
+        );
+
+
+    const durationElement =
+        document.getElementById(
+            "rakkezDuration"
+        );
+
+
+    const volume =
+        document.getElementById(
+            "rakkezVolume"
+        );
+
+
+    const volumeValue =
+        document.getElementById(
+            "rakkezVolumeValue"
+        );
+
+
+    const youtubeInput =
+        document.getElementById(
+            "rakkezYoutubeInput"
+        );
+
+
+    const youtubePlay =
+        document.getElementById(
+            "rakkezYoutubePlay"
+        );
+
+
+    const youtubeEmbed =
+        document.getElementById(
+            "rakkezYoutubeEmbed"
+        );
+
+
+    const spotifyInput =
+        document.getElementById(
+            "rakkezSpotifyInput"
+        );
+
+
+    const spotifyPlay =
+        document.getElementById(
+            "rakkezSpotifyPlay"
+        );
+
+
+    const spotifyEmbed =
+        document.getElementById(
+            "rakkezSpotifyEmbed"
+        );
+
+
+    const localFile =
+        document.getElementById(
+            "rakkezLocalFile"
+        );
+
+
+    const localAudio =
+        document.getElementById(
+            "rakkezLocalAudio"
+        );
+
+
+    const localList =
+        document.getElementById(
+            "rakkezLocalList"
+        );
+
+
+    /* =====================================================
+       MINI PLAYER
+    ===================================================== */
+
+    const miniPlayer =
+        document.getElementById(
+            "rakkezMiniPlayer"
         );
 
 
     const miniArtwork =
         document.getElementById(
-            "rkMiniArtwork"
+            "rakkezMiniArtwork"
+        );
+
+
+    const miniTitle =
+        document.getElementById(
+            "rakkezMiniTitle"
+        );
+
+
+    const miniArtist =
+        document.getElementById(
+            "rakkezMiniArtist"
         );
 
 
     const miniPlay =
         document.getElementById(
-            "rkMiniPlay"
+            "rakkezMiniPlay"
+        );
+
+
+    const miniNext =
+        document.getElementById(
+            "rakkezMiniNext"
+        );
+
+
+    const miniClose =
+        document.getElementById(
+            "rakkezMiniClose"
         );
 
 
     const miniProgress =
         document.getElementById(
-            "rkMiniProgress"
-        );
-
-
-    const miniCurrent =
-        document.getElementById(
-            "rkMiniCurrent"
-        );
-
-
-    const miniDuration =
-        document.getElementById(
-            "rkMiniDuration"
-        );
-
-
-    const mediaOverlay =
-        document.getElementById(
-            "mediaOverlay"
+            "rakkezMiniProgress"
         );
 
 
     /* =====================================================
-       SAFE STORAGE
+       AUDIO ENGINE
     ===================================================== */
 
-    try {
+    const audio =
+        new Audio();
 
-        const savedIndex =
-            parseInt(
-                localStorage.getItem(
-                    STORAGE.index
-                ),
-                10
-            );
-
-        if (
-            Number.isInteger(savedIndex) &&
-            savedIndex >= 0
-        ) {
-
-            currentIndex =
-                savedIndex;
-
-        }
-
-    } catch (error) {}
+    audio.preload =
+        "metadata";
 
 
-    shuffle =
+    let currentIndex =
+        parseInt(
+            localStorage.getItem(
+                STORAGE.track
+            ),
+            10
+        );
+
+
+    let shuffle =
         localStorage.getItem(
             STORAGE.shuffle
         ) === "true";
 
 
-    loop =
+    let loop =
         localStorage.getItem(
             STORAGE.loop
         ) === "true";
 
 
+    let autoNext =
+        localStorage.getItem(
+            STORAGE.autoNext
+        ) !== "false";
+
+
+    let isDraggingProgress =
+        false;
+
+
+    let miniPlayerClosed =
+        true;
+
+
+    let currentIsLocal =
+        false;
+
+
     /* =====================================================
-       UPLOADS
+       VALIDATE TRACK INDEX
     ===================================================== */
 
-    const musicUpload =
-        document.getElementById(
-            "rkMusicUpload"
+    function normalizeIndex() {
+
+        const allTracks =
+            getAllTracks();
+
+
+        if (
+            !Number.isInteger(
+                currentIndex
+            ) ||
+            currentIndex < 0 ||
+            currentIndex >= allTracks.length
+        ) {
+
+            currentIndex = 0;
+
+        }
+
+    }
+
+
+    normalizeIndex();
+
+
+    /* =====================================================
+       VOLUME
+    ===================================================== */
+
+    let savedVolume =
+        parseFloat(
+            localStorage.getItem(
+                STORAGE.volume
+            )
         );
 
 
-    if (musicUpload) {
+    if (
+        !Number.isFinite(
+            savedVolume
+        )
+    ) {
 
-        musicUpload.addEventListener(
-            "change",
-            function (event) {
+        savedVolume = .7;
 
-                const files =
-                    Array.from(
-                        event.target.files || []
-                    );
-
-
-                if (!files.length) {
-                    return;
-                }
+    }
 
 
-                files.forEach(
-                    function (file) {
-
-                        if (
-                            !file.type.startsWith(
-                                "audio/"
-                            )
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        const objectUrl =
-                            URL.createObjectURL(
-                                file
-                            );
-
-
-                        objectUrls.push(
-                            objectUrl
-                        );
-
-
-                        uploadedTracks.push({
-
-                            title:
-                                file.name
-                                    .replace(
-                                        /\.[^/.]+$/,
-                                        ""
-                                    ),
-
-                            artist:
-                                "Uploaded Music",
-
-                            src:
-                                objectUrl,
-
-                            artwork:
-                                "",
-
-                            uploaded:
-                                true
-
-                        });
-
-                    }
-                );
-
-
-                tracks =
-                    PLAYLIST
-                        .map(function (track) {
-
-                            return {
-                                ...track,
-                                permanent: true
-                            };
-
-                        })
-                        .concat(
-                            uploadedTracks
-                        );
-
-
-                renderPlaylist();
-
-
-                if (
-                    tracks.length &&
-                    !isPlaying
-                ) {
-
-                    const firstUploaded =
-                        tracks.length -
-                        uploadedTracks.length;
-
-                    loadTrack(
-                        firstUploaded,
-                        false
-                    );
-
-                }
-
-
-                musicUpload.value = "";
-
-            }
+    savedVolume =
+        Math.max(
+            0,
+            Math.min(
+                1,
+                savedVolume
+            )
         );
+
+
+    audio.volume =
+        savedVolume;
+
+
+    if (volume) {
+
+        volume.value =
+            savedVolume;
+
+    }
+
+
+    function updateVolumeUI() {
+
+        if (!volumeValue) return;
+
+
+        volumeValue.textContent =
+            Math.round(
+                audio.volume * 100
+            ) + "%";
+
+    }
+
+
+    updateVolumeUI();
+
+
+    /* =====================================================
+       OPEN MEDIA
+    ===================================================== */
+
+    function openMedia() {
+
+        if (!overlay) return;
+
+
+        overlay.classList.add(
+            "show"
+        );
+
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+
+        miniPlayerClosed =
+            false;
+
+
+        hideMiniPlayer();
+
+
+        document.body.style.overflow =
+            "hidden";
 
     }
 
 
     /* =====================================================
-       CLEAR UPLOADS
+       CLOSE MEDIA
     ===================================================== */
 
-    const clearUploads =
-        document.getElementById(
-            "rkClearUploads"
+    function closeMedia() {
+
+        if (!overlay) return;
+
+
+        overlay.classList.remove(
+            "show"
         );
 
 
-    if (clearUploads) {
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
 
-        clearUploads.addEventListener(
+
+        document.body.style.overflow =
+            "";
+
+
+        /*
+         * Only show mini player if
+         * something is actually playing.
+         */
+
+        if (
+            !audio.paused &&
+            !audio.ended
+        ) {
+
+            miniPlayerClosed =
+                false;
+
+            showMiniPlayer();
+
+        }
+
+    }
+
+
+    /* =====================================================
+       MINI PLAYER
+    ===================================================== */
+
+    function showMiniPlayer() {
+
+        if (!miniPlayer) return;
+
+
+        if (
+            !audio.src ||
+            audio.paused
+        ) {
+
+            return;
+
+        }
+
+
+        miniPlayer.classList.add(
+            "show"
+        );
+
+
+        miniPlayer.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+
+        updateMiniPlayer();
+
+    }
+
+
+    function hideMiniPlayer() {
+
+        if (!miniPlayer) return;
+
+
+        miniPlayer.classList.remove(
+            "show"
+        );
+
+
+        miniPlayer.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    function updateMiniPlayer() {
+
+        if (!miniPlayer) return;
+
+
+        miniTitle.textContent =
+            trackName
+                ? trackName.textContent
+                : "";
+
+
+        miniArtist.textContent =
+            trackArtist
+                ? trackArtist.textContent
+                : "";
+
+
+        if (
+            artwork &&
+            artwork.style.backgroundImage &&
+            artwork.style.backgroundImage !== "none"
+        ) {
+
+            miniArtwork.style.backgroundImage =
+                artwork.style.backgroundImage;
+
+            miniArtwork.style.backgroundSize =
+                "cover";
+
+            miniArtwork.style.backgroundPosition =
+                "center";
+
+            miniArtwork.textContent =
+                "";
+
+        } else {
+
+            miniArtwork.style.backgroundImage =
+                "";
+
+            miniArtwork.textContent =
+                "♪";
+
+        }
+
+
+        miniPlay.textContent =
+            audio.paused
+                ? "▶"
+                : "Ⅱ";
+
+    }
+
+
+    if (miniPlay) {
+
+        miniPlay.addEventListener(
             "click",
             function () {
 
-                uploadedTracks
-                    .forEach(function (track) {
-
-                        if (
-                            track.src &&
-                            track.src.startsWith(
-                                "blob:"
-                            )
-                        ) {
-
-                            try {
-
-                                URL.revokeObjectURL(
-                                    track.src
-                                );
-
-                            } catch (error) {}
-
-                        }
-
-                    });
-
-
-                uploadedTracks = [];
-
-
-                objectUrls.forEach(
-                    function (url) {
-
-                        try {
-
-                            URL.revokeObjectURL(
-                                url
-                            );
-
-                        } catch (error) {}
-
-                    }
-                );
-
-
-                objectUrls = [];
-
-
-                tracks =
-                    PLAYLIST.map(
-                        function (track) {
-
-                            return {
-                                ...track,
-                                permanent: true
-                            };
-
-                        }
-                    );
-
-
                 if (
-                    currentIndex >=
-                    tracks.length
+                    audio.paused
                 ) {
 
-                    currentIndex = 0;
+                    playAudio();
+
+                } else {
+
+                    pauseAudio();
 
                 }
 
+            }
+        );
 
-                renderPlaylist();
+    }
 
-                loadTrack(
-                    currentIndex,
-                    false
+
+    if (miniNext) {
+
+        miniNext.addEventListener(
+            "click",
+            function () {
+
+                nextTrack(
+                    true
                 );
 
             }
@@ -4655,14 +4802,169 @@ body.light-theme .rk-mini-play {
     }
 
 
+    if (miniClose) {
+
+        miniClose.addEventListener(
+            "click",
+            function () {
+
+                miniPlayerClosed =
+                    true;
+
+                hideMiniPlayer();
+
+            }
+        );
+
+    }
+
+
+    if (mediaButton) {
+
+        mediaButton.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                openMedia();
+
+            },
+            true
+        );
+
+    }
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            closeMedia
+        );
+
+    }
+
+
+    if (overlay) {
+
+        overlay.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === overlay
+                ) {
+
+                    closeMedia();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                overlay &&
+                overlay.classList.contains(
+                    "show"
+                )
+            ) {
+
+                closeMedia();
+
+            }
+
+        }
+    );
+
+
     /* =====================================================
-       TIME FORMAT
+       TABS
     ===================================================== */
 
-    function formatTime(seconds) {
+    tabs.forEach(
+        function (tab) {
+
+            tab.addEventListener(
+                "click",
+                function () {
+
+                    const source =
+                        tab.dataset.rakkezSource;
+
+
+                    tabs.forEach(
+                        function (item) {
+
+                            item.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                    sources.forEach(
+                        function (item) {
+
+                            item.classList.remove(
+                                "active"
+                            );
+
+                        }
+                    );
+
+
+                    tab.classList.add(
+                        "active"
+                    );
+
+
+                    const target =
+                        document.getElementById(
+                            "rakkez" +
+                            source.charAt(0).toUpperCase() +
+                            source.slice(1) +
+                            "Source"
+                        );
+
+
+                    if (target) {
+
+                        target.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       FORMAT TIME
+    ===================================================== */
+
+    function formatTime(
+        seconds
+    ) {
 
         if (
-            !Number.isFinite(seconds) ||
+            !Number.isFinite(
+                seconds
+            ) ||
             seconds < 0
         ) {
 
@@ -4671,118 +4973,28 @@ body.light-theme .rk-mini-play {
         }
 
 
-        const mins =
+        const minutes =
             Math.floor(
                 seconds / 60
             );
 
 
-        const secs =
+        const remaining =
             Math.floor(
                 seconds % 60
             );
 
 
         return (
-            mins +
+            minutes +
             ":" +
-            String(secs).padStart(
+            String(
+                remaining
+            ).padStart(
                 2,
                 "0"
             )
         );
-
-    }
-
-
-    /* =====================================================
-       ARTWORK
-    ===================================================== */
-
-    function renderArtwork(src) {
-
-        if (!artwork) return;
-
-
-        artwork.innerHTML = "";
-
-
-        if (src) {
-
-            const image =
-                document.createElement(
-                    "img"
-                );
-
-
-            image.src = src;
-
-            image.alt = "";
-
-
-            image.onerror =
-                function () {
-
-                    artwork.innerHTML =
-                        '<div class="rk-artwork-symbol">♪</div>';
-
-                };
-
-
-            artwork.appendChild(
-                image
-            );
-
-        } else {
-
-            artwork.innerHTML =
-                '<div class="rk-artwork-symbol">♪</div>';
-
-        }
-
-    }
-
-
-    function renderMiniArtwork(src) {
-
-        if (!miniArtwork) return;
-
-
-        miniArtwork.innerHTML = "";
-
-
-        if (src) {
-
-            const image =
-                document.createElement(
-                    "img"
-                );
-
-
-            image.src = src;
-
-            image.alt = "";
-
-
-            image.onerror =
-                function () {
-
-                    miniArtwork.textContent =
-                        "♪";
-
-                };
-
-
-            miniArtwork.appendChild(
-                image
-            );
-
-        } else {
-
-            miniArtwork.textContent =
-                "♪";
-
-        }
 
     }
 
@@ -4793,27 +5005,30 @@ body.light-theme .rk-mini-play {
 
     function loadTrack(
         index,
-        autoplay
+        shouldPlay
     ) {
 
-        if (!tracks.length) {
+        const allTracks =
+            getAllTracks();
 
-            title.textContent =
-                "Nothing playing";
 
-            artist.textContent =
-                "RakkeZ Lofi";
-
-            renderArtwork("");
-
+        if (!allTracks.length) {
             return;
+        }
+
+
+        if (
+            index < 0
+        ) {
+
+            index =
+                allTracks.length - 1;
 
         }
 
 
         if (
-            index < 0 ||
-            index >= tracks.length
+            index >= allTracks.length
         ) {
 
             index = 0;
@@ -4826,61 +5041,117 @@ body.light-theme .rk-mini-play {
 
 
         const track =
-            tracks[currentIndex];
+            allTracks[
+                currentIndex
+            ];
+
+
+        if (!track) {
+            return;
+        }
+
+
+        currentIsLocal =
+            track.type === "local";
+
+
+        audio.pause();
 
 
         audio.src =
             track.src;
 
 
-        audio.currentTime = 0;
+        audio.load();
 
 
-        title.textContent =
+        trackName.textContent =
             track.title;
 
 
-        artist.textContent =
+        trackArtist.textContent =
             track.artist;
 
 
-        renderArtwork(
-            track.artwork
-        );
-
-
-        miniTitle.textContent =
-            track.title;
-
-
-        miniArtist.textContent =
-            track.artist;
-
-
-        renderMiniArtwork(
-            track.artwork
-        );
-
-
         localStorage.setItem(
-            STORAGE.index,
-            String(currentIndex)
+            STORAGE.track,
+            String(
+                currentIndex
+            )
         );
 
 
-        localStorage.setItem(
-            STORAGE.time,
-            "0"
-        );
+        if (
+            track.artwork
+        ) {
+
+            artwork.style.backgroundImage =
+                "url('" +
+                track.artwork +
+                "')";
+
+
+            artwork.style.backgroundSize =
+                "cover";
+
+
+            artwork.style.backgroundPosition =
+                "center";
+
+
+            const icon =
+                artwork.querySelector(
+                    ".rakkez-artwork-icon"
+                );
+
+
+            if (icon) {
+
+                icon.style.opacity =
+                    "0";
+
+            }
+
+        } else {
+
+            artwork.style.backgroundImage =
+                "";
+
+
+            const icon =
+                artwork.querySelector(
+                    ".rakkez-artwork-icon"
+                );
+
+
+            if (icon) {
+
+                icon.style.opacity =
+                    "1";
+
+            }
+
+        }
+
+
+        progress.value =
+            0;
+
+
+        currentTimeElement.textContent =
+            "0:00";
+
+
+        durationElement.textContent =
+            "0:00";
 
 
         renderPlaylist();
+        renderLocalList();
+        updateMiniPlayer();
 
 
-        updateProgress();
-
-
-        if (autoplay) {
+        if (shouldPlay) {
 
             playAudio();
 
@@ -4895,28 +5166,41 @@ body.light-theme .rk-mini-play {
 
     function playAudio() {
 
-        if (!tracks.length) {
-            return;
+        /*
+         * If Local Audio is not being used,
+         * always use the main audio engine.
+         */
+
+        if (
+            localAudio &&
+            localAudio.src
+        ) {
+
+            localAudio.pause();
+
         }
 
 
-        audio.play()
-            .then(function () {
+        const promise =
+            audio.play();
 
-                isPlaying = true;
 
-                updatePlayButtons();
+        if (
+            promise &&
+            typeof promise.catch === "function"
+        ) {
 
-                showMini();
+            promise.catch(
+                function () {
 
-            })
-            .catch(function () {
+                    /*
+                     * Browser autoplay protection.
+                     */
 
-                isPlaying = false;
+                }
+            );
 
-                updatePlayButtons();
-
-            });
+        }
 
     }
 
@@ -4929,15 +5213,11 @@ body.light-theme .rk-mini-play {
 
         audio.pause();
 
-        isPlaying = false;
-
-        updatePlayButtons();
-
     }
 
 
     /* =====================================================
-       PLAY / PAUSE
+       PLAY BUTTON
     ===================================================== */
 
     if (playButton) {
@@ -4946,29 +5226,9 @@ body.light-theme .rk-mini-play {
             "click",
             function () {
 
-                if (audio.paused) {
-
-                    playAudio();
-
-                } else {
-
-                    pauseAudio();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    if (miniPlay) {
-
-        miniPlay.addEventListener(
-            "click",
-            function () {
-
-                if (audio.paused) {
+                if (
+                    audio.paused
+                ) {
 
                     playAudio();
 
@@ -4985,29 +5245,283 @@ body.light-theme .rk-mini-play {
 
 
     /* =====================================================
-       BUTTON STATE
+       AUDIO PLAY
     ===================================================== */
 
-    function updatePlayButtons() {
-
-        if (playButton) {
+    audio.addEventListener(
+        "play",
+        function () {
 
             playButton.textContent =
-                audio.paused
-                    ? "▶"
-                    : "Ⅱ";
+                "Ⅱ";
+
+
+            playButton.title =
+                "Pause";
+
+
+            artwork.classList.add(
+                "playing"
+            );
+
+
+            updateMiniPlayer();
+
+
+            if (
+                overlay &&
+                !overlay.classList.contains(
+                    "show"
+                ) &&
+                !miniPlayerClosed
+            ) {
+
+                showMiniPlayer();
+
+            }
 
         }
+    );
 
 
-        if (miniPlay) {
+    /* =====================================================
+       AUDIO PAUSE
+    ===================================================== */
 
-            miniPlay.textContent =
-                audio.paused
-                    ? "▶"
-                    : "Ⅱ";
+    audio.addEventListener(
+        "pause",
+        function () {
+
+            playButton.textContent =
+                "▶";
+
+
+            playButton.title =
+                "Play";
+
+
+            artwork.classList.remove(
+                "playing"
+            );
+
+
+            updateMiniPlayer();
 
         }
+    );
+
+
+    /* =====================================================
+       METADATA
+    ===================================================== */
+
+    audio.addEventListener(
+        "loadedmetadata",
+        function () {
+
+            if (
+                Number.isFinite(
+                    audio.duration
+                )
+            ) {
+
+                durationElement.textContent =
+                    formatTime(
+                        audio.duration
+                    );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       TIME UPDATE
+    ===================================================== */
+
+    audio.addEventListener(
+        "timeupdate",
+        function () {
+
+            if (
+                !isDraggingProgress &&
+                Number.isFinite(
+                    audio.duration
+                ) &&
+                audio.duration > 0
+            ) {
+
+                progress.value =
+                    (
+                        audio.currentTime /
+                        audio.duration
+                    ) *
+                    100;
+
+            }
+
+
+            currentTimeElement.textContent =
+                formatTime(
+                    audio.currentTime
+                );
+
+
+            if (
+                miniProgress &&
+                Number.isFinite(
+                    audio.duration
+                ) &&
+                audio.duration > 0
+            ) {
+
+                miniProgress.style.width =
+                    (
+                        audio.currentTime /
+                        audio.duration
+                    ) *
+                    100 +
+                    "%";
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       ENDED
+    ===================================================== */
+
+    audio.addEventListener(
+        "ended",
+        function () {
+
+            if (loop) {
+
+                audio.currentTime =
+                    0;
+
+                playAudio();
+
+                return;
+
+            }
+
+
+            if (autoNext) {
+
+                nextTrack(
+                    true
+                );
+
+            } else {
+
+                updateMiniPlayer();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       ERROR
+    ===================================================== */
+
+    audio.addEventListener(
+        "error",
+        function () {
+
+            console.warn(
+                "RakkeZ Media: Unable to load track:",
+                audio.src
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       PROGRESS
+    ===================================================== */
+
+    if (progress) {
+
+        progress.addEventListener(
+            "input",
+            function () {
+
+                isDraggingProgress =
+                    true;
+
+
+                if (
+                    Number.isFinite(
+                        audio.duration
+                    )
+                ) {
+
+                    const newTime =
+                        (
+                            parseFloat(
+                                progress.value
+                            ) /
+                            100
+                        ) *
+                        audio.duration;
+
+
+                    currentTimeElement.textContent =
+                        formatTime(
+                            newTime
+                        );
+
+                }
+
+            }
+        );
+
+
+        progress.addEventListener(
+            "change",
+            function () {
+
+                if (
+                    Number.isFinite(
+                        audio.duration
+                    )
+                ) {
+
+                    audio.currentTime =
+                        (
+                            parseFloat(
+                                progress.value
+                            ) /
+                            100
+                        ) *
+                        audio.duration;
+
+                }
+
+
+                isDraggingProgress =
+                    false;
+
+            }
+        );
+
+
+        progress.addEventListener(
+            "pointerup",
+            function () {
+
+                isDraggingProgress =
+                    false;
+
+            }
+        );
 
     }
 
@@ -5017,10 +5531,14 @@ body.light-theme .rk-mini-play {
     ===================================================== */
 
     function nextTrack(
-        autoplay
+        shouldPlay
     ) {
 
-        if (!tracks.length) {
+        const allTracks =
+            getAllTracks();
+
+
+        if (!allTracks.length) {
             return;
         }
 
@@ -5028,20 +5546,31 @@ body.light-theme .rk-mini-play {
         let nextIndex;
 
 
-        if (shuffle && tracks.length > 1) {
+        if (shuffle) {
 
-            do {
+            if (
+                allTracks.length <= 1
+            ) {
 
                 nextIndex =
-                    Math.floor(
-                        Math.random() *
-                        tracks.length
-                    );
+                    currentIndex;
 
-            } while (
-                nextIndex ===
-                currentIndex
-            );
+            } else {
+
+                do {
+
+                    nextIndex =
+                        Math.floor(
+                            Math.random() *
+                            allTracks.length
+                        );
+
+                } while (
+                    nextIndex ===
+                    currentIndex
+                );
+
+            }
 
         } else {
 
@@ -5051,7 +5580,7 @@ body.light-theme .rk-mini-play {
 
             if (
                 nextIndex >=
-                tracks.length
+                allTracks.length
             ) {
 
                 nextIndex = 0;
@@ -5063,7 +5592,7 @@ body.light-theme .rk-mini-play {
 
         loadTrack(
             nextIndex,
-            autoplay
+            shouldPlay
         );
 
     }
@@ -5075,53 +5604,47 @@ body.light-theme .rk-mini-play {
 
     function previousTrack() {
 
-        if (!tracks.length) {
-            return;
-        }
-
-
         if (
-            audio.currentTime >
-            3
+            audio.currentTime > 3
         ) {
 
-            audio.currentTime = 0;
+            audio.currentTime =
+                0;
 
             return;
 
         }
 
 
-        let previous =
+        const allTracks =
+            getAllTracks();
+
+
+        if (!allTracks.length) {
+            return;
+        }
+
+
+        let previousIndex =
             currentIndex - 1;
 
 
-        if (previous < 0) {
+        if (
+            previousIndex < 0
+        ) {
 
-            previous =
-                tracks.length - 1;
+            previousIndex =
+                allTracks.length - 1;
 
         }
 
 
         loadTrack(
-            previous,
-            !audio.paused
+            previousIndex,
+            true
         );
 
     }
-
-
-    const nextButton =
-        document.getElementById(
-            "rkNext"
-        );
-
-
-    const previousButton =
-        document.getElementById(
-            "rkPrevious"
-        );
 
 
     if (nextButton) {
@@ -5151,303 +5674,10 @@ body.light-theme .rk-mini-play {
 
 
     /* =====================================================
-       AUTO NEXT
-    ===================================================== */
-
-    audio.addEventListener(
-        "ended",
-        function () {
-
-            if (loop) {
-
-                audio.currentTime = 0;
-
-                playAudio();
-
-                return;
-
-            }
-
-
-            nextTrack(
-                true
-            );
-
-        }
-    );
-
-
-    /* =====================================================
-       PROGRESS
-    ===================================================== */
-
-    function updateProgress() {
-
-        if (
-            !Number.isFinite(
-                audio.duration
-            ) ||
-            audio.duration <= 0
-        ) {
-
-            if (progress) {
-                progress.value = 0;
-            }
-
-            if (miniProgress) {
-                miniProgress.value = 0;
-            }
-
-            return;
-
-        }
-
-
-        const percentage =
-            (
-                audio.currentTime /
-                audio.duration
-            ) *
-            100;
-
-
-        if (progress) {
-
-            progress.value =
-                percentage;
-
-        }
-
-
-        if (miniProgress) {
-
-            miniProgress.value =
-                percentage;
-
-        }
-
-
-        if (currentTime) {
-
-            currentTime.textContent =
-                formatTime(
-                    audio.currentTime
-                );
-
-        }
-
-
-        if (duration) {
-
-            duration.textContent =
-                formatTime(
-                    audio.duration
-                );
-
-        }
-
-
-        if (miniCurrent) {
-
-            miniCurrent.textContent =
-                formatTime(
-                    audio.currentTime
-                );
-
-        }
-
-
-        if (miniDuration) {
-
-            miniDuration.textContent =
-                formatTime(
-                    audio.duration
-                );
-
-        }
-
-    }
-
-
-    audio.addEventListener(
-        "timeupdate",
-        function () {
-
-            updateProgress();
-
-
-            try {
-
-                localStorage.setItem(
-                    STORAGE.time,
-                    String(
-                        audio.currentTime
-                    )
-                );
-
-            } catch (error) {}
-
-        }
-    );
-
-
-    audio.addEventListener(
-        "loadedmetadata",
-        function () {
-
-            updateProgress();
-
-        }
-    );
-
-
-    if (progress) {
-
-        progress.addEventListener(
-            "input",
-            function () {
-
-                if (
-                    Number.isFinite(
-                        audio.duration
-                    )
-                ) {
-
-                    audio.currentTime =
-                        (
-                            Number(
-                                progress.value
-                            ) /
-                            100
-                        ) *
-                        audio.duration;
-
-                }
-
-            }
-        );
-
-    }
-
-
-    if (miniProgress) {
-
-        miniProgress.addEventListener(
-            "input",
-            function () {
-
-                if (
-                    Number.isFinite(
-                        audio.duration
-                    )
-                ) {
-
-                    audio.currentTime =
-                        (
-                            Number(
-                                miniProgress.value
-                            ) /
-                            100
-                        ) *
-                        audio.duration;
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       VOLUME
-    ===================================================== */
-
-    if (volume) {
-
-        volume.value =
-            Math.round(
-                audio.volume * 100
-            );
-
-
-        volume.addEventListener(
-            "input",
-            function () {
-
-                const value =
-                    Number(
-                        volume.value
-                    ) / 100;
-
-
-                audio.volume =
-                    value;
-
-
-                localStorage.setItem(
-                    STORAGE.volume,
-                    String(value)
-                );
-
-
-                updateVolumeIcon();
-
-            }
-        );
-
-    }
-
-
-    function updateVolumeIcon() {
-
-        const icon =
-            document.getElementById(
-                "rkVolumeIcon"
-            );
-
-
-        if (!icon) return;
-
-
-        if (
-            audio.volume === 0
-        ) {
-
-            icon.textContent =
-                "🔇";
-
-        } else if (
-            audio.volume < .5
-        ) {
-
-            icon.textContent =
-                "🔉";
-
-        } else {
-
-            icon.textContent =
-                "🔊";
-
-        }
-
-    }
-
-
-    updateVolumeIcon();
-
-
-    /* =====================================================
        SHUFFLE
     ===================================================== */
 
     if (shuffleButton) {
-
-        shuffleButton.classList.toggle(
-            "active",
-            shuffle
-        );
-
 
         shuffleButton.addEventListener(
             "click",
@@ -5457,18 +5687,26 @@ body.light-theme .rk-mini-play {
                     !shuffle;
 
 
+                localStorage.setItem(
+                    STORAGE.shuffle,
+                    String(
+                        shuffle
+                    )
+                );
+
+
                 shuffleButton.classList.toggle(
                     "active",
                     shuffle
                 );
 
-
-                localStorage.setItem(
-                    STORAGE.shuffle,
-                    String(shuffle)
-                );
-
             }
+        );
+
+
+        shuffleButton.classList.toggle(
+            "active",
+            shuffle
         );
 
     }
@@ -5480,12 +5718,6 @@ body.light-theme .rk-mini-play {
 
     if (loopButton) {
 
-        loopButton.classList.toggle(
-            "active",
-            loop
-        );
-
-
         loopButton.addEventListener(
             "click",
             function () {
@@ -5494,16 +5726,99 @@ body.light-theme .rk-mini-play {
                     !loop;
 
 
+                localStorage.setItem(
+                    STORAGE.loop,
+                    String(
+                        loop
+                    )
+                );
+
+
                 loopButton.classList.toggle(
                     "active",
                     loop
                 );
 
+            }
+        );
+
+
+        loopButton.classList.toggle(
+            "active",
+            loop
+        );
+
+    }
+
+
+    /* =====================================================
+       AUTO NEXT
+    ===================================================== */
+
+    if (autoNextButton) {
+
+        autoNextButton.addEventListener(
+            "click",
+            function () {
+
+                autoNext =
+                    !autoNext;
+
 
                 localStorage.setItem(
-                    STORAGE.loop,
-                    String(loop)
+                    STORAGE.autoNext,
+                    String(
+                        autoNext
+                    )
                 );
+
+
+                autoNextButton.classList.toggle(
+                    "active",
+                    autoNext
+                );
+
+            }
+        );
+
+
+        autoNextButton.classList.toggle(
+            "active",
+            autoNext
+        );
+
+    }
+
+
+    /* =====================================================
+       VOLUME
+    ===================================================== */
+
+    if (volume) {
+
+        volume.addEventListener(
+            "input",
+            function () {
+
+                const value =
+                    parseFloat(
+                        volume.value
+                    );
+
+
+                audio.volume =
+                    value;
+
+
+                localStorage.setItem(
+                    STORAGE.volume,
+                    String(
+                        value
+                    )
+                );
+
+
+                updateVolumeUI();
 
             }
         );
@@ -5517,13 +5832,33 @@ body.light-theme .rk-mini-play {
 
     function renderPlaylist() {
 
-        if (!playlist) return;
+        if (!playlistElement) {
+            return;
+        }
 
 
-        playlist.innerHTML = "";
+        const allTracks =
+            getAllTracks();
 
 
-        tracks.forEach(
+        playlistElement.innerHTML =
+            "";
+
+
+        if (playlistCount) {
+
+            playlistCount.textContent =
+                allTracks.length +
+                (
+                    allTracks.length === 1
+                        ? " track"
+                        : " tracks"
+                );
+
+        }
+
+
+        allTracks.forEach(
             function (
                 track,
                 index
@@ -5540,7 +5875,7 @@ body.light-theme .rk-mini-play {
 
 
                 item.className =
-                    "rk-playlist-item";
+                    "rakkez-track";
 
 
                 if (
@@ -5562,37 +5897,29 @@ body.light-theme .rk-mini-play {
 
 
                 art.className =
-                    "rk-list-art";
+                    "rakkez-track-art";
 
 
-                if (track.artwork) {
+                if (
+                    track.artwork
+                ) {
 
-                    const img =
-                        document.createElement(
-                            "img"
-                        );
-
-
-                    img.src =
-                        track.artwork;
+                    art.style.backgroundImage =
+                        "url('" +
+                        track.artwork +
+                        "')";
 
 
-                    img.alt =
+                    art.style.backgroundSize =
+                        "cover";
+
+
+                    art.style.backgroundPosition =
+                        "center";
+
+
+                    art.textContent =
                         "";
-
-
-                    img.onerror =
-                        function () {
-
-                            art.innerHTML =
-                                "♪";
-
-                        };
-
-
-                    art.appendChild(
-                        img
-                    );
 
                 } else {
 
@@ -5602,74 +5929,68 @@ body.light-theme .rk-mini-play {
                 }
 
 
-                const info =
+                const details =
                     document.createElement(
                         "div"
                     );
 
 
-                info.className =
-                    "rk-list-info";
+                details.className =
+                    "rakkez-track-details";
 
 
-                const name =
+                const title =
                     document.createElement(
                         "div"
                     );
 
 
-                name.className =
-                    "rk-list-name";
+                title.className =
+                    "rakkez-track-title";
 
 
-                name.textContent =
+                title.textContent =
                     track.title;
 
 
-                const trackArtist =
+                const source =
                     document.createElement(
                         "div"
                     );
 
 
-                trackArtist.className =
-                    "rk-list-artist";
+                source.className =
+                    "rakkez-track-source";
 
 
-                trackArtist.textContent =
+                source.textContent =
                     track.artist;
 
 
-                info.appendChild(
-                    name
+                details.appendChild(
+                    title
                 );
 
 
-                info.appendChild(
-                    trackArtist
+                details.appendChild(
+                    source
                 );
 
 
-                const playing =
+                const type =
                     document.createElement(
                         "div"
                     );
 
 
-                playing.className =
-                    "rk-list-playing";
+                type.className =
+                    "rakkez-track-duration";
 
 
-                if (
-                    index ===
-                    currentIndex &&
-                    !audio.paused
-                ) {
-
-                    playing.textContent =
-                        "♫";
-
-                }
+                type.textContent =
+                    track.type === "local"
+                        ? "Local"
+                        : "Lofi";
 
 
                 item.appendChild(
@@ -5678,12 +5999,12 @@ body.light-theme .rk-mini-play {
 
 
                 item.appendChild(
-                    info
+                    details
                 );
 
 
                 item.appendChild(
-                    playing
+                    type
                 );
 
 
@@ -5700,438 +6021,716 @@ body.light-theme .rk-mini-play {
                 );
 
 
-                playlist.appendChild(
+                playlistElement.appendChild(
                     item
                 );
 
             }
         );
 
+    }
 
-        if (trackCount) {
 
-            trackCount.textContent =
-                tracks.length +
-                " " +
-                (
-                    tracks.length === 1
-                        ? "track"
-                        : "tracks"
-                );
+    /* =====================================================
+       LOCAL MULTIPLE FILE UPLOAD
+    ===================================================== */
 
+    function addLocalFiles(
+        files
+    ) {
+
+        if (!files || !files.length) {
+            return;
         }
 
-    }
 
+        Array.from(files).forEach(
+            function (file) {
 
-    /* =====================================================
-       MINI PLAYER
-    ===================================================== */
+                if (
+                    !file.type ||
+                    !file.type.startsWith(
+                        "audio/"
+                    )
+                ) {
 
-    function showMini() {
-
-        if (!mini) return;
-
-
-        mini.classList.add(
-            "show"
-        );
-
-    }
-
-
-    function hideMini() {
-
-        if (!mini) return;
-
-
-        mini.classList.remove(
-            "show"
-        );
-
-    }
-
-
-    const miniClose =
-        document.getElementById(
-            "rkMiniClose"
-        );
-
-
-    if (miniClose) {
-
-        miniClose.addEventListener(
-            "click",
-            function () {
-
-                pauseAudio();
-
-                hideMini();
-
-            }
-        );
-
-    }
-
-
-    const miniOpen =
-        document.getElementById(
-            "rkMiniOpen"
-        );
-
-
-    if (miniOpen) {
-
-        miniOpen.addEventListener(
-            "click",
-            function () {
-
-                const overlay =
-                    document.getElementById(
-                        "mediaOverlay"
-                    );
-
-
-                if (overlay) {
-
-                    overlay.classList.add(
-                        "active"
-                    );
-
-                    overlay.classList.add(
-                        "show"
-                    );
+                    return;
 
                 }
 
 
-                const lofiTab =
-                    document.querySelector(
-                        '[data-rk-media="lofi"]'
+                const url =
+                    URL.createObjectURL(
+                        file
                     );
 
 
-                if (lofiTab) {
-
-                    lofiTab.click();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       CLOSE MEDIA => MINI PLAYER
-    ===================================================== */
-
-    document.addEventListener(
-        "click",
-        function (event) {
-
-            const close =
-                event.target.closest(
-                    '[data-close="mediaOverlay"], #mediaClose'
+                localObjectUrls.push(
+                    url
                 );
 
 
-            if (!close) {
-                return;
+                LOCAL_TRACKS.push({
+
+                    title:
+                        file.name.replace(
+                            /\.[^/.]+$/,
+                            ""
+                        ),
+
+                    artist:
+                        "Local Music",
+
+                    src:
+                        url,
+
+                    artwork:
+                        "",
+
+                    type:
+                        "local",
+
+                    file:
+                        file
+
+                });
+
             }
-
-
-            setTimeout(
-                function () {
-
-                    if (
-                        !audio.paused
-                    ) {
-
-                        showMini();
-
-                    }
-
-                },
-                80
-            );
-
-        },
-        true
-    );
-
-
-    /* =====================================================
-       MEDIA OPEN => HIDE MINI
-    ===================================================== */
-
-    const mediaOpen =
-        document.getElementById(
-            "mediaOpen"
         );
 
 
-    if (mediaOpen) {
-
-        mediaOpen.addEventListener(
-            "click",
-            function () {
-
-                hideMini();
-
-            },
-            true
-        );
-
-    }
+        normalizeIndex();
 
 
-    /* =====================================================
-       SAVE LAST PLAYING STATE
-    ===================================================== */
-
-    audio.addEventListener(
-        "play",
-        function () {
-
-            isPlaying =
-                true;
+        renderPlaylist();
+        renderLocalList();
 
 
-            localStorage.setItem(
-                STORAGE.playing,
-                "true"
-            );
+        /*
+         * Automatically switch to Local tab.
+         */
 
-
-            updatePlayButtons();
-
-            renderPlaylist();
-
-        }
-    );
-
-
-    audio.addEventListener(
-        "pause",
-        function () {
-
-            isPlaying =
-                false;
-
-
-            localStorage.setItem(
-                STORAGE.playing,
-                "false"
-            );
-
-
-            updatePlayButtons();
-
-            renderPlaylist();
-
-        }
-    );
-
-
-    /* =====================================================
-       MEDIA TABS
-    ===================================================== */
-
-    const mediaTabs =
-        document.querySelectorAll(
-            "[data-rk-media]"
+        activateSource(
+            "local"
         );
 
 
-    mediaTabs.forEach(
-        function (tab) {
+        /*
+         * If this is the first local track,
+         * immediately load and play it.
+         */
 
-            tab.addEventListener(
-                "click",
-                function () {
-
-                    const target =
-                        tab.getAttribute(
-                            "data-rk-media"
-                        );
-
-
-                    mediaTabs.forEach(
-                        function (button) {
-
-                            button.classList.toggle(
-                                "active",
-                                button === tab
-                            );
-
-                        }
-                    );
-
-
-                    document
-                        .querySelectorAll(
-                            ".rk-media-view"
-                        )
-                        .forEach(
-                            function (view) {
-
-                                view.classList.remove(
-                                    "active"
-                                );
-
-                            }
-                        );
-
-
-                    const targetView =
-                        document.getElementById(
-                            "rk" +
-                            target.charAt(0).toUpperCase() +
-                            target.slice(1) +
-                            "View"
-                        );
-
-
-                    if (targetView) {
-
-                        targetView.classList.add(
-                            "active"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-    /* =====================================================
-       RESTORE LAST TRACK
-    ===================================================== */
-
-    loadTrack(
-        currentIndex,
-        false
-    );
-
-
-    renderPlaylist();
-
-
-    /* =====================================================
-       RESTORE LAST TIME
-    ===================================================== */
-
-    try {
-
-        const savedTime =
-            Number(
-                localStorage.getItem(
-                    STORAGE.time
-                )
+        const firstNewIndex =
+            PLAYLIST.length +
+            (
+                LOCAL_TRACKS.length -
+                files.length
             );
 
 
         if (
-            Number.isFinite(savedTime) &&
-            savedTime > 0
+            LOCAL_TRACKS.length ===
+            files.length
         ) {
 
-            audio.addEventListener(
-                "loadedmetadata",
-                function restoreTime() {
-
-                    try {
-
-                        if (
-                            savedTime <
-                            audio.duration
-                        ) {
-
-                            audio.currentTime =
-                                savedTime;
-
-                        }
-
-                    } catch (error) {}
-
-                    audio.removeEventListener(
-                        "loadedmetadata",
-                        restoreTime
-                    );
-
-                }
+            loadTrack(
+                firstNewIndex,
+                true
             );
 
         }
 
-    } catch (error) {}
+    }
+
+
+    if (localFile) {
+
+        localFile.addEventListener(
+            "change",
+            function () {
+
+                addLocalFiles(
+                    localFile.files
+                );
+
+
+                /*
+                 * Reset input so the same
+                 * files can be selected again.
+                 */
+
+                localFile.value =
+                    "";
+
+            }
+        );
+
+    }
 
 
     /* =====================================================
-       LANGUAGE
+       LOCAL LIST
     ===================================================== */
 
-    const TRANSLATIONS = {
+    function renderLocalList() {
+
+        if (!localList) {
+            return;
+        }
+
+
+        localList.innerHTML =
+            "";
+
+
+        LOCAL_TRACKS.forEach(
+            function (
+                track,
+                localIndex
+            ) {
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                button.type =
+                    "button";
+
+
+                button.className =
+                    "rakkez-local-track";
+
+
+                const globalIndex =
+                    PLAYLIST.length +
+                    localIndex;
+
+
+                if (
+                    globalIndex ===
+                    currentIndex
+                ) {
+
+                    button.classList.add(
+                        "active"
+                    );
+
+                }
+
+
+                const icon =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                icon.className =
+                    "rakkez-local-track-icon";
+
+
+                icon.textContent =
+                    "♪";
+
+
+                const info =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                info.className =
+                    "rakkez-local-track-info";
+
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                name.className =
+                    "rakkez-local-track-name";
+
+
+                name.textContent =
+                    track.title;
+
+
+                const meta =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                meta.className =
+                    "rakkez-local-track-meta";
+
+
+                meta.textContent =
+                    "Local Music";
+
+
+                info.appendChild(
+                    name
+                );
+
+
+                info.appendChild(
+                    meta
+                );
+
+
+                button.appendChild(
+                    icon
+                );
+
+
+                button.appendChild(
+                    info
+                );
+
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        loadTrack(
+                            globalIndex,
+                            true
+                        );
+
+                    }
+                );
+
+
+                localList.appendChild(
+                    button
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       ACTIVATE SOURCE
+    ===================================================== */
+
+    function activateSource(
+        sourceName
+    ) {
+
+        tabs.forEach(
+            function (tab) {
+
+                tab.classList.toggle(
+                    "active",
+                    tab.dataset.rakkezSource ===
+                    sourceName
+                );
+
+            }
+        );
+
+
+        sources.forEach(
+            function (source) {
+
+                source.classList.remove(
+                    "active"
+                );
+
+            }
+        );
+
+
+        const target =
+            document.getElementById(
+                "rakkez" +
+                sourceName.charAt(0).toUpperCase() +
+                sourceName.slice(1) +
+                "Source"
+            );
+
+
+        if (target) {
+
+            target.classList.add(
+                "active"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       YOUTUBE
+    ===================================================== */
+
+    function getYouTubeId(
+        value
+    ) {
+
+        if (!value) {
+            return null;
+        }
+
+
+        const text =
+            value.trim();
+
+
+        const patterns = [
+
+            /youtube\.com\/watch\?v=([^&]+)/i,
+
+            /youtu\.be\/([^?&]+)/i,
+
+            /youtube\.com\/embed\/([^?&]+)/i,
+
+            /youtube\.com\/shorts\/([^?&]+)/i
+
+        ];
+
+
+        for (
+            let i = 0;
+            i < patterns.length;
+            i++
+        ) {
+
+            const match =
+                text.match(
+                    patterns[i]
+                );
+
+
+            if (
+                match &&
+                match[1]
+            ) {
+
+                return match[1];
+
+            }
+
+        }
+
+
+        return null;
+
+    }
+
+
+    if (youtubePlay) {
+
+        youtubePlay.addEventListener(
+            "click",
+            function () {
+
+                const id =
+                    getYouTubeId(
+                        youtubeInput.value
+                    );
+
+
+                if (!id) {
+
+                    youtubeEmbed.innerHTML = `
+
+                        <div
+                            style="
+                                padding:20px;
+                                color:rgba(255,255,255,.55);
+                                font-size:12px;
+                            "
+                        >
+                            Please enter a valid YouTube URL.
+                        </div>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                youtubeEmbed.innerHTML = `
+
+                    <iframe
+                        src="https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1"
+                        title="YouTube Player"
+                        allow="
+                            autoplay;
+                            encrypted-media;
+                            picture-in-picture
+                        "
+                        allowfullscreen
+                    ></iframe>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       SPOTIFY
+    ===================================================== */
+
+    function getSpotifyEmbedUrl(
+        value
+    ) {
+
+        if (!value) {
+            return null;
+        }
+
+
+        const text =
+            value.trim();
+
+
+        const match =
+            text.match(
+                /spotify\.com\/(track|album|playlist|artist|episode|show)\/([A-Za-z0-9]+)/
+            );
+
+
+        if (!match) {
+            return null;
+        }
+
+
+        return (
+            "https://open.spotify.com/embed/" +
+            match[1] +
+            "/" +
+            match[2] +
+            "?utm_source=generator"
+        );
+
+    }
+
+
+    if (spotifyPlay) {
+
+        spotifyPlay.addEventListener(
+            "click",
+            function () {
+
+                const embedUrl =
+                    getSpotifyEmbedUrl(
+                        spotifyInput.value
+                    );
+
+
+                if (!embedUrl) {
+
+                    spotifyEmbed.innerHTML = `
+
+                        <div
+                            style="
+                                padding:20px;
+                                color:rgba(255,255,255,.55);
+                                font-size:12px;
+                            "
+                        >
+                            Please enter a valid Spotify URL.
+                        </div>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                spotifyEmbed.innerHTML = `
+
+                    <iframe
+                        src="${embedUrl}"
+                        title="Spotify Player"
+                        allow="
+                            autoplay;
+                            clipboard-write;
+                            encrypted-media;
+                            fullscreen;
+                            picture-in-picture
+                        "
+                        loading="lazy"
+                    ></iframe>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       LANGUAGE SYSTEM
+       
+       Works alongside language.js.
+       It detects:
+       - document.lang
+       - localStorage language values
+       - common language storage keys
+    ===================================================== */
+
+    const MEDIA_TRANSLATIONS = {
 
         en: {
 
-            media:
-                "Media",
+            eyebrow:
+                "RAKKEZ MEDIA",
 
-            mediaSubtitle:
-                "Focus music & sounds",
+            focusMusic:
+                "Focus Music",
 
-            nowPlaying:
-                "NOW PLAYING",
+            lofi:
+                "Lofi",
+
+            youtube:
+                "YouTube",
+
+            spotify:
+                "Spotify",
+
+            local:
+                "Local",
 
             playlist:
                 "Playlist",
 
-            upload:
-                "+ Upload Music",
+            autoNext:
+                "AUTO-NEXT",
 
-            uploadNote:
-                "You can select multiple MP3 / WAV / M4A files. Uploaded files stay available in this browser session.",
+            youtubeDescription:
+                "Paste a YouTube video URL and play it inside RakkeZ.",
 
-            nothing:
-                "Nothing playing"
+            spotifyDescription:
+                "Paste a Spotify track, album or playlist URL.",
+
+            localMusic:
+                "Local Music",
+
+            localDescription:
+                "Choose multiple music files from your device.",
+
+            chooseMusic:
+                "Choose Music",
+
+            play:
+                "Play",
+
+            previous:
+                "Previous",
+
+            next:
+                "Next",
+
+            shuffle:
+                "Shuffle",
+
+            loop:
+                "Loop",
+
+            close:
+                "Close",
+
+            open:
+                "Open",
+
+            youtubePlaceholder:
+                "Paste YouTube URL...",
+
+            spotifyPlaceholder:
+                "Paste Spotify URL..."
 
         },
 
         ar: {
 
-            media:
-                "الموسيقى",
+            eyebrow:
+                "وسائط ركز",
 
-            mediaSubtitle:
-                "موسيقى وأصوات للتركيز",
+            focusMusic:
+                "موسيقى التركيز",
 
-            nowPlaying:
-                "يعمل الآن",
+            lofi:
+                "لوفاي",
+
+            youtube:
+                "يوتيوب",
+
+            spotify:
+                "سبوتيفاي",
+
+            local:
+                "محلي",
 
             playlist:
                 "قائمة التشغيل",
 
-            upload:
-                "+ رفع موسيقى",
+            autoNext:
+                "التالي تلقائيًا",
 
-            uploadNote:
-                "يمكنك اختيار أكثر من ملف MP3 أو WAV أو M4A. الملفات المرفوعة تظل متاحة في جلسة المتصفح الحالية.",
+            youtubeDescription:
+                "الصق رابط فيديو من يوتيوب وشغّله داخل ركز.",
 
-            nothing:
-                "لا توجد موسيقى تعمل"
+            spotifyDescription:
+                "الصق رابط أغنية أو ألبوم أو قائمة تشغيل من سبوتيفاي.",
+
+            localMusic:
+                "الموسيقى المحلية",
+
+            localDescription:
+                "اختر أكثر من ملف موسيقى من جهازك.",
+
+            chooseMusic:
+                "اختيار الموسيقى",
+
+            play:
+                "تشغيل",
+
+            previous:
+                "السابق",
+
+            next:
+                "التالي",
+
+            shuffle:
+                "تشغيل عشوائي",
+
+            loop:
+                "تكرار",
+
+            close:
+                "إغلاق",
+
+            open:
+                "فتح",
+
+            youtubePlaceholder:
+                "الصق رابط يوتيوب...",
+
+            spotifyPlaceholder:
+                "الصق رابط سبوتيفاي..."
 
         }
 
     };
 
 
-    function getLanguage() {
+    function detectLanguage() {
 
         const htmlLang =
             document.documentElement
@@ -6142,8 +6741,7 @@ body.light-theme .rk-mini-play {
 
         if (
             htmlLang &&
-            htmlLang
-                .toLowerCase()
+            htmlLang.toLowerCase()
                 .startsWith("ar")
         ) {
 
@@ -6152,20 +6750,71 @@ body.light-theme .rk-mini-play {
         }
 
 
-        const saved =
-            localStorage.getItem(
-                "rakkez_language"
-            );
-
-
         if (
-            saved &&
-            saved
-                .toLowerCase()
-                .startsWith("ar")
+            htmlLang &&
+            htmlLang.toLowerCase()
+                .startsWith("en")
         ) {
 
-            return "ar";
+            return "en";
+
+        }
+
+
+        const possibleKeys = [
+
+            "language",
+
+            "lang",
+
+            "rakkez_language",
+
+            "rakkez_lang",
+
+            "selectedLanguage",
+
+            "siteLanguage"
+
+        ];
+
+
+        for (
+            let i = 0;
+            i < possibleKeys.length;
+            i++
+        ) {
+
+            const value =
+                localStorage.getItem(
+                    possibleKeys[i]
+                );
+
+
+            if (!value) {
+                continue;
+            }
+
+
+            if (
+                value.toLowerCase()
+                    .startsWith("ar") ||
+                value === "Arabic"
+            ) {
+
+                return "ar";
+
+            }
+
+
+            if (
+                value.toLowerCase()
+                    .startsWith("en") ||
+                value === "English"
+            ) {
+
+                return "en";
+
+            }
 
         }
 
@@ -6175,112 +6824,133 @@ body.light-theme .rk-mini-play {
     }
 
 
-    function updateMusicLanguage() {
+    function applyMediaLanguage() {
 
         const language =
-            getLanguage();
+            detectLanguage();
 
 
-        const t =
-            TRANSLATIONS[
+        const dictionary =
+            MEDIA_TRANSLATIONS[
                 language
             ] ||
-            TRANSLATIONS.en;
+            MEDIA_TRANSLATIONS.en;
 
 
-        const mediaTitle =
-            document.querySelector(
-                '[data-rk="mediaTitle"]'
+        document
+            .querySelectorAll(
+                "[data-media-i18n]"
+            )
+            .forEach(
+                function (element) {
+
+                    const key =
+                        element.dataset
+                            .mediaI18n;
+
+
+                    if (
+                        dictionary[key] !==
+                        undefined
+                    ) {
+
+                        element.textContent =
+                            dictionary[key];
+
+                    }
+
+                }
             );
 
 
-        const mediaSubtitle =
-            document.querySelector(
-                '[data-rk="mediaSubtitle"]'
+        document
+            .querySelectorAll(
+                "[data-media-i18n-title]"
+            )
+            .forEach(
+                function (element) {
+
+                    const key =
+                        element.dataset
+                            .mediaI18nTitle;
+
+
+                    if (
+                        dictionary[key] !==
+                        undefined
+                    ) {
+
+                        element.setAttribute(
+                            "title",
+                            dictionary[key]
+                        );
+
+                    }
+
+                }
             );
 
 
-        const nowPlaying =
-            document.querySelector(
-                '[data-rk="nowPlayingLabel"]'
+        document
+            .querySelectorAll(
+                "[data-media-i18n-placeholder]"
+            )
+            .forEach(
+                function (element) {
+
+                    const key =
+                        element.dataset
+                            .mediaI18nPlaceholder;
+
+
+                    if (
+                        dictionary[key] !==
+                        undefined
+                    ) {
+
+                        element.setAttribute(
+                            "placeholder",
+                            dictionary[key]
+                        );
+
+                    }
+
+                }
             );
 
 
-        const playlistTitle =
-            document.querySelector(
-                '[data-rk="playlistTitle"]'
-            );
+        /*
+         * Update dynamic playlist count.
+         */
+
+        const allTracks =
+            getAllTracks();
 
 
-        const upload =
-            document.querySelector(
-                '[data-rk="uploadMusic"]'
-            );
+        if (playlistCount) {
 
+            if (
+                language === "ar"
+            ) {
 
-        const uploadNote =
-            document.querySelector(
-                '[data-rk="uploadNote"]'
-            );
+                playlistCount.textContent =
+                    allTracks.length +
+                    " " +
+                    (
+                        allTracks.length === 1
+                            ? "مقطع"
+                            : "مقاطع"
+                    );
 
+            } else {
 
-        if (mediaTitle) {
-
-            mediaTitle.textContent =
-                t.media;
-
-        }
-
-
-        if (mediaSubtitle) {
-
-            mediaSubtitle.textContent =
-                t.mediaSubtitle;
-
-        }
-
-
-        if (nowPlaying) {
-
-            nowPlaying.textContent =
-                t.nowPlaying;
-
-        }
-
-
-        if (playlistTitle) {
-
-            playlistTitle.textContent =
-                t.playlist;
-
-        }
-
-
-        if (upload) {
-
-            upload.textContent =
-                t.upload;
-
-        }
-
-
-        if (uploadNote) {
-
-            uploadNote.textContent =
-                t.uploadNote;
-
-        }
-
-
-        if (
-            !audio.src ||
-            !tracks.length
-        ) {
-
-            if (title) {
-
-                title.textContent =
-                    t.nothing;
+                playlistCount.textContent =
+                    allTracks.length +
+                    (
+                        allTracks.length === 1
+                            ? " track"
+                            : " tracks"
+                    );
 
             }
 
@@ -6289,52 +6959,15 @@ body.light-theme .rk-mini-play {
     }
 
 
-    updateMusicLanguage();
-
-
-    const languageButton =
-        document.getElementById(
-            "languageToggle"
-        );
-
-
-    if (languageButton) {
-
-        languageButton.addEventListener(
-            "click",
-            function () {
-
-                setTimeout(
-                    updateMusicLanguage,
-                    150
-                );
-
-
-                setTimeout(
-                    updateMusicLanguage,
-                    500
-                );
-
-
-                setTimeout(
-                    updateMusicLanguage,
-                    1000
-                );
-
-            },
-            true
-        );
-
-    }
-
-
-    /* Observe HTML language changes */
+    /*
+     * Watch for changes made by language.js.
+     */
 
     const languageObserver =
         new MutationObserver(
             function () {
 
-                updateMusicLanguage();
+                applyMediaLanguage();
 
             }
         );
@@ -6346,108 +6979,202 @@ body.light-theme .rk-mini-play {
             attributes: true,
             attributeFilter: [
                 "lang",
-                "dir"
+                "dir",
+                "class"
             ]
         }
     );
 
 
+    /*
+     * Also listen to storage changes.
+     */
+
+    window.addEventListener(
+        "storage",
+        function () {
+
+            applyMediaLanguage();
+
+        }
+    );
+
+
+    /*
+     * Some language systems change localStorage
+     * without firing storage in the same tab.
+     * Check periodically without touching UI.
+     */
+
+    let lastDetectedLanguage =
+        detectLanguage();
+
+
+    setInterval(
+        function () {
+
+            const currentLanguage =
+                detectLanguage();
+
+
+            if (
+                currentLanguage !==
+                lastDetectedLanguage
+            ) {
+
+                lastDetectedLanguage =
+                    currentLanguage;
+
+
+                applyMediaLanguage();
+
+            }
+
+        },
+        500
+    );
+
+
     /* =====================================================
-       LIGHT MODE
-    =====================================================
-
-       We maintain our own class so the new Media Player
-       always follows Light/Dark mode even if app.js uses
-       a different theme implementation.
-
+       KEYBOARD SHORTCUTS
     ===================================================== */
 
-    const themeButton =
-        document.getElementById(
-            "themeBtn"
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                !overlay ||
+                !overlay.classList.contains(
+                    "show"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const target =
+                event.target;
+
+
+            if (
+                target &&
+                (
+                    target.tagName === "INPUT" ||
+                    target.tagName === "TEXTAREA"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                event.code === "Space"
+            ) {
+
+                event.preventDefault();
+
+
+                if (
+                    audio.paused
+                ) {
+
+                    playAudio();
+
+                } else {
+
+                    pauseAudio();
+
+                }
+
+            }
+
+
+            if (
+                event.code === "ArrowRight"
+            ) {
+
+                nextTrack(
+                    true
+                );
+
+            }
+
+
+            if (
+                event.code === "ArrowLeft"
+            ) {
+
+                previousTrack();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
+
+    normalizeIndex();
+
+    renderPlaylist();
+
+    renderLocalList();
+
+    loadTrack(
+        currentIndex,
+        false
+    );
+
+    applyMediaLanguage();
+
+
+    /*
+     * Keep the local <audio> element in sync.
+     * It is not used as a second player anymore.
+     */
+
+    if (localAudio) {
+
+        localAudio.pause();
+
+        localAudio.removeAttribute(
+            "src"
         );
 
-
-    function applySavedTheme() {
-
-        const saved =
-            localStorage.getItem(
-                "rakkez_inline_theme"
-            );
+    }
 
 
-        if (
-            saved === "light"
-        ) {
+    /*
+     * Clean object URLs when page unloads.
+     */
 
-            document.body.classList.add(
-                "rakkez-light"
-            );
+    window.addEventListener(
+        "beforeunload",
+        function () {
 
-        } else {
+            localObjectUrls.forEach(
+                function (url) {
 
-            document.body.classList.remove(
-                "rakkez-light"
+                    try {
+
+                        URL.revokeObjectURL(
+                            url
+                        );
+
+                    } catch (error) {}
+
+                }
             );
 
         }
-
-    }
-
-
-    applySavedTheme();
-
-
-    if (themeButton) {
-
-        themeButton.addEventListener(
-            "click",
-            function () {
-
-                setTimeout(
-                    function () {
-
-                        const isLight =
-                            document.body.classList.contains(
-                                "rakkez-light"
-                            );
-
-
-                        if (isLight) {
-
-                            document.body.classList.remove(
-                                "rakkez-light"
-                            );
-
-
-                            localStorage.setItem(
-                                "rakkez_inline_theme",
-                                "dark"
-                            );
-
-                        } else {
-
-                            document.body.classList.add(
-                                "rakkez-light"
-                            );
-
-
-                            localStorage.setItem(
-                                "rakkez_inline_theme",
-                                "light"
-                            );
-
-                        }
-
-                    },
-                    20
-                );
-
-            },
-            true
-        );
-
-    }
+    );
 
 
 })();
@@ -6482,7 +7209,7 @@ body.light-theme .rk-mini-play {
 
 
 <!-- =====================================================
-     RAKKEZ PAGE LOADER SYSTEM
+     PAGE LOADER SYSTEM
 ===================================================== -->
 
 <script>
@@ -6554,6 +7281,7 @@ body.light-theme .rk-mini-play {
             current.classList.remove(
                 "hide"
             );
+
 
             return current;
 
@@ -6633,7 +7361,7 @@ body.light-theme .rk-mini-play {
 
     /* =====================================================
        BLOG
-    ====================================================== */
+    ===================================================== */
 
     const blogButton =
         document.getElementById(
@@ -6668,7 +7396,7 @@ body.light-theme .rk-mini-play {
 
     /* =====================================================
        LOGO
-    ====================================================== */
+    ===================================================== */
 
     const logo =
         document.querySelector(
@@ -6684,15 +7412,13 @@ body.light-theme .rk-mini-play {
 
                 const currentPage =
                     window.location.pathname
-                        .split("/")
-                        .pop();
+                    .split("/")
+                    .pop();
 
 
                 if (
-                    currentPage ===
-                    "index.html" ||
-                    currentPage ===
-                    ""
+                    currentPage === "index.html" ||
+                    currentPage === ""
                 ) {
 
                     return;
@@ -6721,7 +7447,7 @@ body.light-theme .rk-mini-play {
 
     /* =====================================================
        NORMAL LINKS
-    ====================================================== */
+    ===================================================== */
 
     document.addEventListener(
         "click",
@@ -6779,7 +7505,7 @@ body.light-theme .rk-mini-play {
 
     /* =====================================================
        LANGUAGE
-    ====================================================== */
+    ===================================================== */
 
     const languageButton =
         document.getElementById(
@@ -6814,7 +7540,7 @@ body.light-theme .rk-mini-play {
 
     /* =====================================================
        BACK / FORWARD
-    ====================================================== */
+    ===================================================== */
 
     window.addEventListener(
         "pageshow",
@@ -6850,7 +7576,7 @@ body.light-theme .rk-mini-play {
 
 
     const UPDATE_VERSION =
-        "1.1.0";
+        "1.0.5";
 
 
     const UPDATE_STORAGE_KEY =
@@ -6866,17 +7592,27 @@ body.light-theme .rk-mini-play {
             "What's New",
 
         description:
-            "We've added some exciting new features.",
+            "We've improved the RakkeZ media experience.",
 
         items: [
 
             {
 
                 title:
-                    "🎵 New Lofi Music Player",
+                    "🎵 Local Music",
 
                 description:
-                    "A new built-in music player with playlists, progress, next, previous, shuffle, loop and volume controls."
+                    "You can now select multiple music files from your device and play them as one playlist."
+
+            },
+
+            {
+
+                title:
+                    "⏭ Auto-Next",
+
+                description:
+                    "Local and Lofi tracks automatically continue to the next track when Auto-Next is enabled."
 
             },
 
@@ -6886,37 +7622,37 @@ body.light-theme .rk-mini-play {
                     "🎧 Mini Player",
 
                 description:
-                    "Close the Media window while your music keeps playing with the new compact player."
+                    "Close Media while music is playing and the player stays available at the bottom-right of the screen."
 
             },
 
             {
 
                 title:
-                    "☀️ Better Light Mode",
+                    "🔀 Advanced Controls",
 
                 description:
-                    "The Media Player and Dashboard now adapt to the light theme."
+                    "Shuffle, Loop, Volume, Progress, Previous and Next controls are now unified."
 
             },
 
             {
 
                 title:
-                    "📚 New Music Upload",
+                    "🌐 Language Support",
 
                 description:
-                    "You can upload multiple local music files and play them automatically one after another."
+                    "The Media Player now follows the selected RakkeZ language."
 
             },
 
             {
 
                 title:
-                    "🌐 Music Language Support",
+                    "Spotify Layout Fixed",
 
                 description:
-                    "Music Player labels now follow the selected language."
+                    "Spotify embeds now use a proper compact height instead of leaving a large empty area."
 
             }
 
@@ -7201,8 +7937,7 @@ body.light-theme .rk-mini-play {
             function (event) {
 
                 if (
-                    event.target ===
-                    modal
+                    event.target === modal
                 ) {
 
                     closeUpdate();
