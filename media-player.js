@@ -32,10 +32,10 @@
 
     /* =====================================================
        BUILT-IN LOFI PLAYLIST
-
+       
        IMPORTANT:
-       Music files are NOT inside a Music folder.
-       They are in the same location as this JS/site root.
+       All built-in media files are in the ROOT.
+       There is NO Music/ folder.
     ===================================================== */
 
     const PLAYLIST = [
@@ -438,6 +438,10 @@
 
     /* =====================================================
        AMBIENT EFFECTS ENGINE
+
+       IMPORTANT:
+       Effect files are also in ROOT.
+       There is NO Music/ folder.
     ===================================================== */
 
     (function () {
@@ -447,9 +451,6 @@
 
         /* =================================================
            EFFECTS
-
-           IMPORTANT:
-           Effects are also NOT inside a Music folder.
 
            Add new effects here only.
         ================================================= */
@@ -1032,7 +1033,8 @@
         )
     ) {
 
-        savedVolume = .7;
+        savedVolume =
+            .7;
 
     }
 
@@ -1067,7 +1069,8 @@
         volumeValue.textContent =
             Math.round(
                 audio.volume * 100
-            ) + "%";
+            ) +
+            "%";
 
     }
 
@@ -1237,11 +1240,14 @@
                 miniArtwork.style.backgroundImage =
                     artwork.style.backgroundImage;
 
+
                 miniArtwork.style.backgroundSize =
                     "cover";
 
+
                 miniArtwork.style.backgroundPosition =
                     "center";
+
 
                 miniArtwork.textContent =
                     "";
@@ -1254,6 +1260,7 @@
 
                 miniArtwork.style.backgroundImage =
                     "";
+
 
                 miniArtwork.textContent =
                     "♪";
@@ -1573,6 +1580,11 @@
         audio.pause();
 
 
+        /*
+         * IMPORTANT:
+         * Built-in music uses ROOT paths.
+         */
+
         audio.src =
             track.src;
 
@@ -1703,11 +1715,6 @@
     ===================================================== */
 
     function playAudio() {
-
-        /*
-         * If Local Audio is not being used,
-         * always use the main audio engine.
-         */
 
         if (
             localAudio &&
@@ -1963,7 +1970,9 @@
                 audio.currentTime =
                     0;
 
+
                 playAudio();
+
 
                 return;
 
@@ -2147,7 +2156,8 @@
                 allTracks.length
             ) {
 
-                nextIndex = 0;
+                nextIndex =
+                    0;
 
             }
 
@@ -2174,6 +2184,7 @@
 
             audio.currentTime =
                 0;
+
 
             return;
 
@@ -2665,6 +2676,7 @@
 
         normalizeIndex();
 
+
         renderPlaylist();
 
         renderLocalList();
@@ -3022,11 +3034,7 @@
                         <iframe
                             src="https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1"
                             title="YouTube Player"
-                            allow="
-                                autoplay;
-                                encrypted-media;
-                                picture-in-picture
-                            "
+                            allow="autoplay; encrypted-media; picture-in-picture"
                             allowfullscreen
                         ></iframe>
 
@@ -3125,13 +3133,7 @@
                         <iframe
                             src="${embedUrl}"
                             title="Spotify Player"
-                            allow="
-                                autoplay;
-                                clipboard-write;
-                                encrypted-media;
-                                fullscreen;
-                                picture-in-picture
-                            "
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                             loading="lazy"
                         ></iframe>
 
