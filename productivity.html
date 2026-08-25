@@ -1399,6 +1399,74 @@ textarea:focus {
 
 }
 
+<div class="card section-card weekly-habit-panel">
+
+    <div class="card-header">
+
+        <div>
+
+            <div class="card-title">
+                Weekly Habit Tracker
+            </div>
+
+            <div
+                class="card-subtitle"
+                id="habitWeekLabel"
+            >
+                This Week
+            </div>
+
+        </div>
+
+        <div style="display:flex;gap:6px;">
+
+            <button
+                class="small-button"
+                id="previousHabitWeek"
+                title="Previous week"
+            >
+                ‹
+            </button>
+
+            <button
+                class="small-button"
+                id="currentHabitWeek"
+                title="Current week"
+            >
+                ●
+            </button>
+
+            <button
+                class="small-button"
+                id="nextHabitWeek"
+                title="Next week"
+            >
+                ›
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="weeklyHabitTracker"
+        style="overflow-x:auto;"
+    ></div>
+
+
+    <div
+        id="weeklyHabitSummary"
+        style="
+            margin-top:15px;
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+        "
+    ></div>
+
+</div>
+
 
 /* =========================================================
    HABIT CARDS
@@ -2475,6 +2543,326 @@ textarea:focus {
         translateY(0);
 
     opacity: 1;
+
+}
+
+
+
+    /* =========================================================
+   WEEKLY HABIT TRACKER
+========================================================= */
+
+.weekly-habit-panel {
+
+    margin-bottom: 14px;
+
+}
+
+
+.weekly-table {
+
+    width: 100%;
+
+    min-width: 720px;
+
+    border-collapse: separate;
+
+    border-spacing: 5px;
+
+}
+
+
+.weekly-table th {
+
+    padding: 8px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    text-align: center;
+
+}
+
+
+.weekly-table th:first-child {
+
+    text-align: left;
+
+    min-width: 150px;
+
+}
+
+
+.weekly-habit-name {
+
+    padding: 10px;
+
+    border-radius: 11px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
+    white-space: nowrap;
+
+}
+
+
+.weekly-habit-name strong {
+
+    font-size: 10px;
+
+}
+
+
+.weekly-habit-name span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.weekly-day {
+
+    min-width: 72px;
+
+    padding: 7px;
+
+    border-radius: 11px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
+    text-align: center;
+
+}
+
+
+.weekly-day.today {
+
+    border-color:
+        rgba(35,134,255,.35);
+
+}
+
+
+.weekly-day.completed {
+
+    background:
+        rgba(74,222,128,.07);
+
+    border-color:
+        rgba(74,222,128,.20);
+
+}
+
+
+.weekly-day-button {
+
+    width: 100%;
+
+    min-height: 28px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.weekly-day.completed .weekly-day-button {
+
+    background:
+        rgba(74,222,128,.12);
+
+    color: #72e69a;
+
+}
+
+
+.weekly-hours {
+
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.weekly-total-cell {
+
+    padding: 10px;
+
+    border-radius: 11px;
+
+    background:
+        rgba(20,120,255,.07);
+
+    border:
+        1px solid rgba(60,145,255,.12);
+
+    text-align: center;
+
+}
+
+
+.weekly-total-cell strong {
+
+    display: block;
+
+    font-family:
+        "Space Grotesk";
+
+    font-size: 11px;
+
+}
+
+
+.weekly-total-cell span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.weekly-summary-card {
+
+    flex: 1;
+
+    min-width: 120px;
+
+    padding: 11px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
+}
+
+
+.weekly-summary-label {
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .7px;
+
+}
+
+
+.weekly-summary-value {
+
+    margin-top: 4px;
+
+    font-family:
+        "Space Grotesk";
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+}
+
+
+.weekly-summary-extra {
+
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+.weekly-time-input {
+
+    width: 100%;
+
+    height: 25px;
+
+    margin-top: 5px;
+
+    padding: 0 5px;
+
+    border-radius: 7px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.045);
+
+    color: white;
+
+    text-align: center;
+
+    font-size: 8px;
+
+}
+
+
+.weekly-time-input:focus {
+
+    border-color:
+        #2383ff;
+
+}
+
+
+body.light .weekly-day,
+body.light .weekly-habit-name,
+body.light .weekly-summary-card {
+
+    background:
+        rgba(0,0,0,.025);
+
+    border-color:
+        rgba(0,0,0,.07);
+
+}
+
+
+body.light .weekly-time-input {
+
+    color: #111827;
+
+    background:
+        rgba(0,0,0,.035);
 
 }
 
@@ -3731,16 +4119,24 @@ body.light .note-body {
 
 <script>
 
+"use strict";
+
 /* =========================================================
    RAKKEZ PRODUCTIVITY CENTER
-   DATA LAYER
+   UPDATED PRODUCTIVITY ENGINE
 
-   IMPORTANT:
-
-   This is intentionally separated from the UI.
-
-   Later we can replace these functions with Supabase
-   without rebuilding the dashboard.
+   FEATURES
+   ---------------------------------------------------------
+   • Daily habits
+   • Full weekly habit tracker
+   • Previous / current / next week
+   • Minutes per habit per day
+   • Weekly habit totals
+   • Weekly total focus
+   • Safe coin rewards
+   • Safe XP rewards
+   • History preservation
+   • Automatic migration from old habit format
 ========================================================= */
 
 
@@ -3748,7 +4144,8 @@ body.light .note-body {
    STORAGE
 ========================================================= */
 
-const STORAGE_KEY = "rakkez_productivity_v1";
+const STORAGE_KEY =
+    "rakkez_productivity_v1";
 
 
 const DEFAULT_DATA = {
@@ -3767,30 +4164,46 @@ const DEFAULT_DATA = {
 
         {
             id: "reading",
+
             name: "Reading",
+
             icon: "📚",
+
             history: {}
+
         },
 
         {
             id: "exercise",
+
             name: "Exercise",
+
             icon: "🏃",
+
             history: {}
+
         },
 
         {
             id: "meditation",
+
             name: "Meditation",
+
             icon: "🧘",
+
             history: {}
+
         },
 
         {
             id: "coding",
+
             name: "Coding",
+
             icon: "💻",
+
             history: {}
+
         }
 
     ],
@@ -3799,11 +4212,17 @@ const DEFAULT_DATA = {
 
         {
             id: "welcome",
-            title: "Welcome to RakkeZ",
+
+            title:
+                "Welcome to RakkeZ",
+
             body:
                 "Your productivity space.\n\n" +
                 "Write your thoughts here. Notes are automatically saved.",
-            updatedAt: Date.now()
+
+            updatedAt:
+                Date.now()
+
         }
 
     ]
@@ -3811,32 +4230,172 @@ const DEFAULT_DATA = {
 };
 
 
-let data = loadData();
+let data =
+    loadData();
 
+
+/* =========================================================
+   WEEK STATE
+========================================================= */
+
+let habitWeekOffset = 0;
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
 
 function loadData() {
 
     try {
 
         const saved =
-            localStorage.getItem(STORAGE_KEY);
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
 
         if (!saved) {
 
-            return structuredClone(DEFAULT_DATA);
+            return structuredClone(
+                DEFAULT_DATA
+            );
 
         }
+
 
         const parsed =
             JSON.parse(saved);
 
-        return {
 
-            ...structuredClone(DEFAULT_DATA),
+        const result = {
+
+            ...structuredClone(
+                DEFAULT_DATA
+            ),
 
             ...parsed
 
         };
+
+
+        /*
+           Make sure arrays always exist.
+        */
+
+        if (!Array.isArray(result.habits)) {
+
+            result.habits = [];
+
+        }
+
+
+        if (!Array.isArray(result.tasks)) {
+
+            result.tasks = [];
+
+        }
+
+
+        if (!Array.isArray(result.focusSessions)) {
+
+            result.focusSessions = [];
+
+        }
+
+
+        if (!Array.isArray(result.notes)) {
+
+            result.notes = [];
+
+        }
+
+
+        /*
+           Migrate old habit history.
+
+           OLD:
+
+           history = {
+               "2026-08-25": true
+           }
+
+           NEW:
+
+           history = {
+               "2026-08-25": {
+                   completed: true,
+                   minutes: 30
+               }
+           }
+        */
+
+        result.habits.forEach(
+            habit => {
+
+                if (!habit.history) {
+
+                    habit.history = {};
+
+                }
+
+
+                Object.keys(
+                    habit.history
+                ).forEach(
+                    key => {
+
+                        const value =
+                            habit.history[key];
+
+
+                        if (
+                            typeof value ===
+                            "boolean"
+                        ) {
+
+                            habit.history[key] = {
+
+                                completed:
+                                    value,
+
+                                minutes:
+                                    0
+
+                            };
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        /*
+           Remove impossible coin values.
+        */
+
+        result.coins =
+            Math.max(
+                0,
+                Number(
+                    result.coins || 0
+                )
+            );
+
+
+        result.xp =
+            Math.max(
+                0,
+                Number(
+                    result.xp || 0
+                )
+            );
+
+
+        return result;
 
     } catch (error) {
 
@@ -3845,12 +4404,19 @@ function loadData() {
             error
         );
 
-        return structuredClone(DEFAULT_DATA);
+
+        return structuredClone(
+            DEFAULT_DATA
+        );
 
     }
 
 }
 
+
+/* =========================================================
+   SAVE
+========================================================= */
 
 function saveData() {
 
@@ -3858,6 +4424,7 @@ function saveData() {
         STORAGE_KEY,
         JSON.stringify(data)
     );
+
 
     window.dispatchEvent(
         new CustomEvent(
@@ -3872,25 +4439,126 @@ function saveData() {
    DATE HELPERS
 ========================================================= */
 
-function dateKey(date = new Date()) {
+function dateKey(
+    date = new Date()
+) {
 
     const d =
         new Date(date);
 
-    const year =
-        d.getFullYear();
 
-    const month =
+    return [
+
+        d.getFullYear(),
+
         String(
             d.getMonth() + 1
-        ).padStart(2, "0");
+        ).padStart(2, "0"),
 
-    const day =
         String(
             d.getDate()
-        ).padStart(2, "0");
+        ).padStart(2, "0")
 
-    return `${year}-${month}-${day}`;
+    ].join("-");
+
+}
+
+
+function parseDateKey(
+    key
+) {
+
+    const parts =
+        key.split("-").map(
+            Number
+        );
+
+
+    return new Date(
+        parts[0],
+        parts[1] - 1,
+        parts[2]
+    );
+
+}
+
+
+function startOfWeek(
+    date = new Date()
+) {
+
+    const d =
+        new Date(date);
+
+
+    d.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    const day =
+        d.getDay();
+
+
+    /*
+       Monday = first day.
+    */
+
+    const diff =
+        day === 0
+            ? -6
+            : 1 - day;
+
+
+    d.setDate(
+        d.getDate() + diff
+    );
+
+
+    return d;
+
+}
+
+
+function getHabitWeek() {
+
+    const start =
+        startOfWeek();
+
+
+    start.setDate(
+        start.getDate() +
+        habitWeekOffset * 7
+    );
+
+
+    const days = [];
+
+
+    for (
+        let i = 0;
+        i < 7;
+        i++
+    ) {
+
+        const d =
+            new Date(start);
+
+
+        d.setDate(
+            start.getDate() + i
+        );
+
+
+        days.push(d);
+
+    }
+
+
+    return days;
 
 }
 
@@ -3899,28 +4567,35 @@ function getLast7Days() {
 
     const days = [];
 
+
     for (
         let i = 6;
         i >= 0;
         i--
     ) {
 
-        const d = new Date();
+        const d =
+            new Date();
+
 
         d.setDate(
             d.getDate() - i
         );
 
+
         days.push(d);
 
     }
+
 
     return days;
 
 }
 
 
-function formatDate(date) {
+function formatDate(
+    date
+) {
 
     return new Intl.DateTimeFormat(
         "en-US",
@@ -3935,6 +4610,1040 @@ function formatDate(date) {
 
 
 /* =========================================================
+   HABIT HISTORY HELPERS
+========================================================= */
+
+function getHabitDay(
+    habit,
+    key
+) {
+
+    if (!habit.history) {
+
+        habit.history = {};
+
+    }
+
+
+    const value =
+        habit.history[key];
+
+
+    if (
+        typeof value ===
+        "boolean"
+    ) {
+
+        habit.history[key] = {
+
+            completed:
+                value,
+
+            minutes:
+                0
+
+        };
+
+    }
+
+
+    if (
+        !habit.history[key]
+    ) {
+
+        habit.history[key] = {
+
+            completed: false,
+
+            minutes: 0
+
+        };
+
+    }
+
+
+    return habit.history[key];
+
+}
+
+
+function isHabitCompleted(
+    habit,
+    key
+) {
+
+    if (
+        !habit ||
+        !habit.history
+    ) {
+
+        return false;
+
+    }
+
+
+    const value =
+        habit.history[key];
+
+
+    if (
+        typeof value ===
+        "boolean"
+    ) {
+
+        return value;
+
+    }
+
+
+    return Boolean(
+        value &&
+        value.completed
+    );
+
+}
+
+
+function getHabitMinutes(
+    habit,
+    key
+) {
+
+    if (
+        !habit ||
+        !habit.history
+    ) {
+
+        return 0;
+
+    }
+
+
+    const value =
+        habit.history[key];
+
+
+    if (
+        typeof value ===
+        "boolean"
+    ) {
+
+        return 0;
+
+    }
+
+
+    return Math.max(
+        0,
+        Number(
+            value?.minutes || 0
+        )
+    );
+
+}
+
+
+/* =========================================================
+   HABIT COIN SYSTEM
+========================================================= */
+
+/*
+   IMPORTANT:
+
+   A completed habit can have only ONE reward
+   for a specific day.
+
+   Complete:
+       +1 coin
+       +10 XP
+
+   Cancel:
+       -1 coin
+       -10 XP
+
+   Therefore repeated:
+
+       complete
+       cancel
+       complete
+       cancel
+
+   can NEVER generate infinite coins.
+
+   The final balance always reflects the current
+   completed state.
+*/
+
+
+const HABIT_COIN_REWARD = 1;
+
+const HABIT_XP_REWARD = 10;
+
+
+function setHabitCompleted(
+    habitId,
+    key,
+    completed
+) {
+
+    const habit =
+        data.habits.find(
+            item =>
+                item.id === habitId
+        );
+
+
+    if (!habit) return;
+
+
+    const record =
+        getHabitDay(
+            habit,
+            key
+        );
+
+
+    const previous =
+        Boolean(
+            record.completed
+        );
+
+
+    /*
+       Nothing changed.
+    */
+
+    if (
+        previous ===
+        completed
+    ) {
+
+        return;
+
+    }
+
+
+    record.completed =
+        completed;
+
+
+    if (completed) {
+
+        data.coins +=
+            HABIT_COIN_REWARD;
+
+
+        data.xp +=
+            HABIT_XP_REWARD;
+
+    } else {
+
+        data.coins =
+            Math.max(
+                0,
+                data.coins -
+                HABIT_COIN_REWARD
+            );
+
+
+        data.xp =
+            Math.max(
+                0,
+                data.xp -
+                HABIT_XP_REWARD
+            );
+
+    }
+
+
+    saveData();
+
+    renderAll();
+
+}
+
+
+/* =========================================================
+   TOGGLE TODAY
+========================================================= */
+
+function toggleHabit(
+    habitId
+) {
+
+    const key =
+        dateKey();
+
+
+    const habit =
+        data.habits.find(
+            item =>
+                item.id === habitId
+        );
+
+
+    if (!habit) return;
+
+
+    const completed =
+        isHabitCompleted(
+            habit,
+            key
+        );
+
+
+    setHabitCompleted(
+        habitId,
+        key,
+        !completed
+    );
+
+
+    showToast(
+        !completed
+            ? "+1 coin · +10 XP"
+            : "-1 coin · -10 XP"
+    );
+
+}
+
+
+/* =========================================================
+   HABIT MINUTES
+========================================================= */
+
+function setHabitMinutes(
+    habitId,
+    key,
+    minutes
+) {
+
+    const habit =
+        data.habits.find(
+            item =>
+                item.id === habitId
+        );
+
+
+    if (!habit) return;
+
+
+    const cleanMinutes =
+        Math.max(
+            0,
+            Math.min(
+                1440,
+                Math.round(
+                    Number(
+                        minutes
+                    ) || 0
+                )
+            )
+        );
+
+
+    const record =
+        getHabitDay(
+            habit,
+            key
+        );
+
+
+    record.minutes =
+        cleanMinutes;
+
+
+    saveData();
+
+    renderAll();
+
+}
+
+
+/* =========================================================
+   WEEKLY HABIT DATA
+========================================================= */
+
+function getWeeklyHabitMinutes(
+    habit
+) {
+
+    return getHabitWeek()
+        .reduce(
+            (
+                total,
+                day
+            ) => {
+
+                return total +
+                    getHabitMinutes(
+                        habit,
+                        dateKey(day)
+                    );
+
+            },
+            0
+        );
+
+}
+
+
+function getWeeklyCompletedDays(
+    habit
+) {
+
+    return getHabitWeek()
+        .filter(
+            day =>
+                isHabitCompleted(
+                    habit,
+                    dateKey(day)
+                )
+        )
+        .length;
+
+}
+
+
+function getWeeklyAllHabitMinutes() {
+
+    return data.habits.reduce(
+        (
+            total,
+            habit
+        ) => {
+
+            return total +
+                getWeeklyHabitMinutes(
+                    habit
+                );
+
+        },
+        0
+    );
+
+}
+
+
+/* =========================================================
+   WEEKLY HABIT TRACKER
+========================================================= */
+
+function renderWeeklyHabitTracker() {
+
+    const container =
+        document.getElementById(
+            "weeklyHabitTracker"
+        );
+
+
+    if (!container) return;
+
+
+    const days =
+        getHabitWeek();
+
+
+    const start =
+        days[0];
+
+
+    const end =
+        days[6];
+
+
+    const label =
+        document.getElementById(
+            "habitWeekLabel"
+        );
+
+
+    const sameWeek =
+        habitWeekOffset === 0;
+
+
+    label.textContent =
+        sameWeek
+            ? `This Week · ${formatShortDate(start)} – ${formatShortDate(end)}`
+            : `${formatShortDate(start)} – ${formatShortDate(end)}`;
+
+
+    let html = `
+
+        <table class="weekly-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Habit
+                    </th>
+
+    `;
+
+
+    days.forEach(
+        day => {
+
+            const key =
+                dateKey(day);
+
+
+            const today =
+                key === dateKey();
+
+
+            html += `
+
+                <th
+                    class="${today ? "today" : ""}"
+                >
+
+                    ${day.toLocaleDateString(
+                        "en-US",
+                        {
+                            weekday: "short"
+                        }
+                    )}
+
+                    <br>
+
+                    <span
+                        style="
+                            font-size:8px;
+                            opacity:.55;
+                        "
+                    >
+                        ${day.getDate()}
+                    </span>
+
+                </th>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+                    <th>
+                        Total
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+    `;
+
+
+    if (!data.habits.length) {
+
+        html += `
+
+            <tr>
+
+                <td
+                    colspan="9"
+                    style="
+                        padding:35px;
+                        text-align:center;
+                        color:var(--muted);
+                    "
+                >
+
+                    No habits yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    } else {
+
+        data.habits.forEach(
+            habit => {
+
+                const weeklyMinutes =
+                    getWeeklyHabitMinutes(
+                        habit
+                    );
+
+
+                const completedDays =
+                    getWeeklyCompletedDays(
+                        habit
+                    );
+
+
+                html += `
+
+                    <tr>
+
+                        <td>
+
+                            <div
+                                class="weekly-habit-name"
+                            >
+
+                                <strong>
+                                    ${escapeHTML(
+                                        habit.icon
+                                    )}
+                                    ${escapeHTML(
+                                        habit.name
+                                    )}
+                                </strong>
+
+                                <span>
+                                    ${completedDays}/7 completed
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                `;
+
+
+                days.forEach(
+                    day => {
+
+                        const key =
+                            dateKey(day);
+
+
+                        const completed =
+                            isHabitCompleted(
+                                habit,
+                                key
+                            );
+
+
+                        const minutes =
+                            getHabitMinutes(
+                                habit,
+                                key
+                            );
+
+
+                        const today =
+                            key === dateKey();
+
+
+                        html += `
+
+                            <td>
+
+                                <div
+                                    class="
+                                        weekly-day
+                                        ${completed ? "completed" : ""}
+                                        ${today ? "today" : ""}
+                                    "
+                                >
+
+                                    <button
+                                        class="weekly-day-button"
+                                        onclick="
+                                            toggleHabitDay(
+                                                '${habit.id}',
+                                                '${key}'
+                                            )
+                                        "
+                                    >
+                                        ${completed ? "✓ Done" : "—"}
+                                    </button>
+
+                                    <input
+                                        class="weekly-time-input"
+                                        type="number"
+                                        min="0"
+                                        max="1440"
+                                        step="5"
+                                        value="${minutes || ""}"
+                                        placeholder="min"
+                                        onchange="
+                                            updateHabitMinutesFromInput(
+                                                this,
+                                                '${habit.id}',
+                                                '${key}'
+                                            )
+                                        "
+                                        title="Minutes for this habit"
+                                    >
+
+                                    <div
+                                        class="weekly-hours"
+                                    >
+                                        ${formatMinutes(minutes)}
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                        `;
+
+                    }
+                );
+
+
+                html += `
+
+                    <td>
+
+                        <div
+                            class="weekly-total-cell"
+                        >
+
+                            <strong>
+                                ${formatMinutes(
+                                    weeklyMinutes
+                                )}
+                            </strong>
+
+                            <span>
+                                ${completedDays}/7 days
+                            </span>
+
+                        </div>
+
+                    </td>
+
+                `;
+
+
+                html += `
+
+                    </tr>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    html += `
+
+            </tbody>
+
+        </table>
+
+    `;
+
+
+    container.innerHTML =
+        html;
+
+
+    renderWeeklyHabitSummary();
+
+}
+
+
+/* =========================================================
+   WEEKLY INPUT ACTIONS
+========================================================= */
+
+function toggleHabitDay(
+    habitId,
+    key
+) {
+
+    const habit =
+        data.habits.find(
+            item =>
+                item.id === habitId
+        );
+
+
+    if (!habit) return;
+
+
+    const current =
+        isHabitCompleted(
+            habit,
+            key
+        );
+
+
+    setHabitCompleted(
+        habitId,
+        key,
+        !current
+    );
+
+
+    showToast(
+        !current
+            ? "+1 coin · +10 XP"
+            : "-1 coin · -10 XP"
+    );
+
+}
+
+
+function updateHabitMinutesFromInput(
+    input,
+    habitId,
+    key
+) {
+
+    setHabitMinutes(
+        habitId,
+        key,
+        input.value
+    );
+
+}
+
+
+/* =========================================================
+   WEEK SUMMARY
+========================================================= */
+
+function renderWeeklyHabitSummary() {
+
+    const container =
+        document.getElementById(
+            "weeklyHabitSummary"
+        );
+
+
+    if (!container) return;
+
+
+    const days =
+        getHabitWeek();
+
+
+    const totalMinutes =
+        getWeeklyAllHabitMinutes();
+
+
+    let completed =
+        0;
+
+
+    data.habits.forEach(
+        habit => {
+
+            completed +=
+                getWeeklyCompletedDays(
+                    habit
+                );
+
+        }
+    );
+
+
+    const possible =
+        data.habits.length *
+        7;
+
+
+    const percentage =
+        possible
+            ? Math.round(
+                (
+                    completed /
+                    possible
+                ) * 100
+            )
+            : 0;
+
+
+    const weekFocus =
+        days.reduce(
+            (
+                total,
+                day
+            ) => {
+
+                return total +
+                    data.focusSessions
+                        .filter(
+                            session =>
+                                dateKey(
+                                    session.date
+                                ) ===
+                                dateKey(day)
+                        )
+                        .reduce(
+                            (
+                                sum,
+                                session
+                            ) =>
+                                sum +
+                                Number(
+                                    session.minutes ||
+                                    0
+                                ),
+                            0
+                        );
+
+            },
+            0
+        );
+
+
+    container.innerHTML = `
+
+        <div
+            class="weekly-summary-card"
+        >
+
+            <div class="weekly-summary-label">
+                Habit Time
+            </div>
+
+            <div class="weekly-summary-value">
+                ${formatMinutes(totalMinutes)}
+            </div>
+
+            <div class="weekly-summary-extra">
+                Total habit minutes
+            </div>
+
+        </div>
+
+
+        <div
+            class="weekly-summary-card"
+        >
+
+            <div class="weekly-summary-label">
+                Completion
+            </div>
+
+            <div class="weekly-summary-value">
+                ${percentage}%
+            </div>
+
+            <div class="weekly-summary-extra">
+                ${completed}/${possible || 0} days
+            </div>
+
+        </div>
+
+
+        <div
+            class="weekly-summary-card"
+        >
+
+            <div class="weekly-summary-label">
+                Focus Time
+            </div>
+
+            <div class="weekly-summary-value">
+                ${formatMinutes(weekFocus)}
+            </div>
+
+            <div class="weekly-summary-extra">
+                RakkeZ focus sessions
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   WEEK NAVIGATION
+========================================================= */
+
+function formatShortDate(
+    date
+) {
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            month: "short",
+            day: "numeric"
+        }
+    );
+
+}
+
+
+function goToHabitWeek(
+    offset
+) {
+
+    habitWeekOffset +=
+        offset;
+
+
+    renderWeeklyHabitTracker();
+
+}
+
+
+function resetHabitWeek() {
+
+    habitWeekOffset =
+        0;
+
+
+    renderWeeklyHabitTracker();
+
+}
+
+
+document
+    .getElementById(
+        "previousHabitWeek"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
+
+            goToHabitWeek(
+                -1
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "nextHabitWeek"
+    )
+    ?.addEventListener(
+        "click",
+        () => {
+
+            goToHabitWeek(
+                1
+            );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "currentHabitWeek"
+    )
+    ?.addEventListener(
+        "click",
+        resetHabitWeek
+    );
+
+
+/* =========================================================
    FOCUS DATA
 ========================================================= */
 
@@ -3943,9 +5652,12 @@ function getTodaySessions() {
     const today =
         dateKey();
 
+
     return data.focusSessions.filter(
         session =>
-            dateKey(session.date) === today
+            dateKey(
+                session.date
+            ) === today
     );
 
 }
@@ -3953,59 +5665,86 @@ function getTodaySessions() {
 
 function getTodayFocus() {
 
-    return getTodaySessions().reduce(
-        (total, session) =>
-            total + Number(session.minutes || 0),
-        0
-    );
+    return getTodaySessions()
+        .reduce(
+            (
+                total,
+                session
+            ) =>
+                total +
+                Number(
+                    session.minutes ||
+                    0
+                ),
+            0
+        );
 
 }
 
 
 function getTotalFocus() {
 
-    return data.focusSessions.reduce(
-        (total, session) =>
-            total + Number(session.minutes || 0),
-        0
-    );
+    return data.focusSessions
+        .reduce(
+            (
+                total,
+                session
+            ) =>
+                total +
+                Number(
+                    session.minutes ||
+                    0
+                ),
+            0
+        );
 
 }
 
 
 function getWeeklyFocus() {
 
-    return getLast7Days().map(
-        day => {
+    return getLast7Days()
+        .map(
+            day => {
 
-            const key =
-                dateKey(day);
+                const key =
+                    dateKey(day);
 
-            const minutes =
-                data.focusSessions
-                    .filter(
-                        session =>
-                            dateKey(session.date) === key
-                    )
-                    .reduce(
-                        (total, session) =>
-                            total +
-                            Number(session.minutes || 0),
-                        0
-                    );
 
-            return {
+                const minutes =
+                    data.focusSessions
+                        .filter(
+                            session =>
+                                dateKey(
+                                    session.date
+                                ) === key
+                        )
+                        .reduce(
+                            (
+                                total,
+                                session
+                            ) =>
+                                total +
+                                Number(
+                                    session.minutes ||
+                                    0
+                                ),
+                            0
+                        );
 
-                date: day,
 
-                key,
+                return {
 
-                minutes
+                    date: day,
 
-            };
+                    key,
 
-        }
-    );
+                    minutes
+
+                };
+
+            }
+        );
 
 }
 
@@ -4016,17 +5755,23 @@ function getWeeklyFocus() {
 
 function getProductivityDays() {
 
-    const days = new Set();
+    const days =
+        new Set();
+
 
     data.focusSessions.forEach(
         session => {
 
             if (
-                Number(session.minutes || 0) > 0
+                Number(
+                    session.minutes || 0
+                ) > 0
             ) {
 
                 days.add(
-                    dateKey(session.date)
+                    dateKey(
+                        session.date
+                    )
                 );
 
             }
@@ -4044,10 +5789,15 @@ function getProductivityDays() {
                 key => {
 
                     if (
-                        habit.history[key]
+                        isHabitCompleted(
+                            habit,
+                            key
+                        )
                     ) {
 
-                        days.add(key);
+                        days.add(
+                            key
+                        );
 
                     }
 
@@ -4067,7 +5817,9 @@ function getProductivityDays() {
             ) {
 
                 days.add(
-                    dateKey(task.completedAt)
+                    dateKey(
+                        task.completedAt
+                    )
                 );
 
             }
@@ -4086,15 +5838,13 @@ function calculateCurrentStreak() {
     const days =
         getProductivityDays();
 
+
     let streak = 0;
+
 
     const cursor =
         new Date();
 
-    /*
-       We allow today to be the first day.
-       If today has no activity, check yesterday.
-    */
 
     if (
         !days.has(
@@ -4117,11 +5867,13 @@ function calculateCurrentStreak() {
 
         streak++;
 
+
         cursor.setDate(
             cursor.getDate() - 1
         );
 
     }
+
 
     return streak;
 
@@ -4158,10 +5910,12 @@ function calculateLongestStreak() {
                 days[i - 1]
             );
 
+
         const currentDate =
             new Date(
                 days[i]
             );
+
 
         const difference =
             (
@@ -4182,6 +5936,7 @@ function calculateLongestStreak() {
 
             current++;
 
+
             longest =
                 Math.max(
                     longest,
@@ -4196,32 +5951,37 @@ function calculateLongestStreak() {
 
     }
 
+
     return longest;
 
 }
 
 
 /* =========================================================
-   LEVEL SYSTEM
+   LEVEL
 ========================================================= */
 
 function getLevelInfo() {
 
     const xp =
-        Number(data.xp || 0);
+        Number(
+            data.xp || 0
+        );
+
 
     const level =
         Math.floor(
             xp / 100
         ) + 1;
 
+
     const currentLevelXP =
         xp % 100;
 
-    const percent =
-        currentLevelXP;
 
-    data.level = level;
+    data.level =
+        level;
+
 
     return {
 
@@ -4229,9 +5989,11 @@ function getLevelInfo() {
 
         currentLevelXP,
 
-        percent,
+        percent:
+            currentLevelXP,
 
-        nextLevelXP: 100
+        nextLevelXP:
+            100
 
     };
 
@@ -4239,7 +6001,7 @@ function getLevelInfo() {
 
 
 /* =========================================================
-   HABITS
+   TODAY HABITS
 ========================================================= */
 
 function getTodayHabitCount() {
@@ -4247,71 +6009,14 @@ function getTodayHabitCount() {
     const today =
         dateKey();
 
+
     return data.habits.filter(
         habit =>
-            habit.history &&
-            habit.history[today]
+            isHabitCompleted(
+                habit,
+                today
+            )
     ).length;
-
-}
-
-
-function toggleHabit(
-    habitId
-) {
-
-    const habit =
-        data.habits.find(
-            item =>
-                item.id === habitId
-        );
-
-    if (!habit) return;
-
-
-    if (!habit.history) {
-
-        habit.history = {};
-
-    }
-
-
-    const today =
-        dateKey();
-
-
-    habit.history[today] =
-        !habit.history[today];
-
-
-    if (
-        habit.history[today]
-    ) {
-
-        data.xp += 10;
-
-        data.coins += 1;
-
-    } else {
-
-        data.xp =
-            Math.max(
-                0,
-                data.xp - 10
-            );
-
-        data.coins =
-            Math.max(
-                0,
-                data.coins - 1
-            );
-
-    }
-
-
-    saveData();
-
-    renderAll();
 
 }
 
@@ -4327,6 +6032,7 @@ function addTask(
     title =
         title.trim();
 
+
     if (!title) return;
 
 
@@ -4337,12 +6043,14 @@ function addTask(
 
         title,
 
-        completed: false,
+        completed:
+            false,
 
         createdAt:
             Date.now(),
 
-        completedAt: null
+        completedAt:
+            null
 
     });
 
@@ -4364,25 +6072,40 @@ function toggleTask(
                 item.id === taskId
         );
 
+
     if (!task) return;
 
 
+    const newState =
+        !Boolean(
+            task.completed
+        );
+
+
     task.completed =
-        !task.completed;
+        newState;
 
 
-    if (task.completed) {
+    if (newState) {
 
         task.completedAt =
             Date.now();
+
 
         data.xp += 20;
 
         data.coins += 2;
 
+
+        showToast(
+            "+2 coins · +20 XP"
+        );
+
     } else {
 
-        task.completedAt = null;
+        task.completedAt =
+            null;
+
 
         data.xp =
             Math.max(
@@ -4390,11 +6113,17 @@ function toggleTask(
                 data.xp - 20
             );
 
+
         data.coins =
             Math.max(
                 0,
                 data.coins - 2
             );
+
+
+        showToast(
+            "-2 coins · -20 XP"
+        );
 
     }
 
@@ -4424,13 +6153,64 @@ function deleteTask(
 }
 
 
+function editTask(
+    id
+) {
+
+    const task =
+        data.tasks.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!task) return;
+
+
+    const newTitle =
+        prompt(
+            "Edit task:",
+            task.title
+        );
+
+
+    if (
+        newTitle === null
+    ) {
+
+        return;
+
+    }
+
+
+    const clean =
+        newTitle.trim();
+
+
+    if (!clean) return;
+
+
+    task.title =
+        clean;
+
+
+    saveData();
+
+    renderAll();
+
+}
+
+
 /* =========================================================
    NOTES
 ========================================================= */
 
-let currentNoteId = null;
+let currentNoteId =
+    null;
 
-let noteSaveTimer = null;
+
+let noteSaveTimer =
+    null;
 
 
 function createNote() {
@@ -4465,8 +6245,11 @@ function createNote() {
 
     renderNotes();
 
+
     document
-        .getElementById("noteTitle")
+        .getElementById(
+            "noteTitle"
+        )
         .focus();
 
 }
@@ -4478,6 +6261,7 @@ function selectNote(
 
     currentNoteId =
         noteId;
+
 
     renderNotes();
 
@@ -4492,7 +6276,8 @@ function autoSaveNote() {
     const note =
         data.notes.find(
             item =>
-                item.id === currentNoteId
+                item.id ===
+                currentNoteId
         );
 
 
@@ -4525,12 +6310,14 @@ function autoSaveNote() {
                         )
                         .value;
 
+
                 note.body =
                     document
                         .getElementById(
                             "noteBody"
                         )
                         .value;
+
 
                 note.updatedAt =
                     Date.now();
@@ -4573,7 +6360,8 @@ function deleteCurrentNote() {
     data.notes =
         data.notes.filter(
             note =>
-                note.id !== currentNoteId
+                note.id !==
+                currentNoteId
         );
 
 
@@ -4589,7 +6377,7 @@ function deleteCurrentNote() {
 
 
 /* =========================================================
-   RENDER HEADER
+   HEADER
 ========================================================= */
 
 function renderHeader() {
@@ -4657,7 +6445,7 @@ function renderHeader() {
 
 
 /* =========================================================
-   RENDER OVERVIEW
+   OVERVIEW
 ========================================================= */
 
 function renderOverview() {
@@ -4665,23 +6453,30 @@ function renderOverview() {
     const todayFocus =
         getTodayFocus();
 
+
     const todaySessions =
         getTodaySessions().length;
+
 
     const totalFocus =
         getTotalFocus();
 
+
     const currentStreak =
         calculateCurrentStreak();
+
 
     const longestStreak =
         calculateLongestStreak();
 
+
     const habitsDone =
         getTodayHabitCount();
 
+
     const habitsTotal =
         data.habits.length;
+
 
     const tasksDone =
         data.tasks.filter(
@@ -4715,7 +6510,8 @@ function renderOverview() {
     ).textContent =
         `${Math.max(
             0,
-            habitsTotal - habitsDone
+            habitsTotal -
+            habitsDone
         )} remaining`;
 
 
@@ -4788,7 +6584,9 @@ function formatMinutes(
 
     minutes =
         Math.round(
-            Number(minutes || 0)
+            Number(
+                minutes || 0
+            )
         );
 
 
@@ -4803,6 +6601,7 @@ function formatMinutes(
         Math.floor(
             minutes / 60
         );
+
 
     const remaining =
         minutes % 60;
@@ -4848,8 +6647,12 @@ function renderWeeklyChart() {
 
     const total =
         days.reduce(
-            (sum, day) =>
-                sum + day.minutes,
+            (
+                sum,
+                day
+            ) =>
+                sum +
+                day.minutes,
             0
         );
 
@@ -4895,16 +6698,23 @@ function renderWeeklyChart() {
                 return `
 
                     <div
-                        class="chart-day ${today ? "today" : ""}"
+                        class="
+                            chart-day
+                            ${today ? "today" : ""}
+                        "
                     >
 
                         <div class="chart-value">
-                            ${formatMinutes(day.minutes)}
+                            ${formatMinutes(
+                                day.minutes
+                            )}
                         </div>
 
                         <div
                             class="chart-column"
-                            style="height:${height}px"
+                            style="
+                                height:${height}px
+                            "
                         ></div>
 
                         <div class="chart-label">
@@ -4936,12 +6746,25 @@ function renderHabitPreview() {
     if (!data.habits.length) {
 
         container.innerHTML = `
+
             <div class="empty">
-                <div class="empty-icon">🌿</div>
-                <strong>No habits yet</strong>
-                <p>Create your first habit.</p>
+
+                <div class="empty-icon">
+                    🌿
+                </div>
+
+                <strong>
+                    No habits yet
+                </strong>
+
+                <p>
+                    Create your first habit.
+                </p>
+
             </div>
+
         `;
+
 
         return;
 
@@ -4957,28 +6780,54 @@ function renderHabitPreview() {
             habit => {
 
                 const done =
-                    Boolean(
-                        habit.history &&
-                        habit.history[today]
+                    isHabitCompleted(
+                        habit,
+                        today
+                    );
+
+
+                const minutes =
+                    getHabitMinutes(
+                        habit,
+                        today
                     );
 
 
                 return `
 
                     <div
-                        class="habit-mini ${done ? "done" : ""}"
+                        class="
+                            habit-mini
+                            ${done ? "done" : ""}
+                        "
                     >
 
                         <div class="habit-mini-icon">
-                            ${escapeHTML(habit.icon)}
+                            ${escapeHTML(
+                                habit.icon
+                            )}
                         </div>
 
                         <div class="habit-mini-name">
-                            ${escapeHTML(habit.name)}
+                            ${escapeHTML(
+                                habit.name
+                            )}
                         </div>
 
                         <div class="habit-mini-status">
-                            ${done ? "Completed" : "Pending"}
+
+                            ${
+                                done
+                                    ? "Completed"
+                                    : "Pending"
+                            }
+
+                            ${
+                                minutes
+                                    ? ` · ${formatMinutes(minutes)}`
+                                    : ""
+                            }
+
                         </div>
 
                     </div>
@@ -5006,14 +6855,18 @@ function renderAchievements() {
     const streak =
         calculateCurrentStreak();
 
+
     const totalFocus =
         getTotalFocus();
+
 
     const sessions =
         data.focusSessions.length;
 
+
     const xp =
         data.xp;
+
 
     const tasks =
         data.tasks.filter(
@@ -5025,59 +6878,99 @@ function renderAchievements() {
     const achievements = [
 
         {
-            icon: "🔥",
-            name: "7-Day Streak",
+            icon:
+                "🔥",
+
+            name:
+                "7-Day Streak",
+
             unlocked:
                 streak >= 7
+
         },
 
         {
-            icon: "⚡",
-            name: "100 Hours",
+            icon:
+                "⚡",
+
+            name:
+                "100 Hours",
+
             unlocked:
                 totalFocus >= 6000
+
         },
 
         {
-            icon: "🏆",
-            name: "Speed Runner",
+            icon:
+                "🏆",
+
+            name:
+                "Speed Runner",
+
             unlocked:
                 sessions >= 10
+
         },
 
         {
-            icon: "🧘",
-            name: "No Distraction",
+            icon:
+                "🧘",
+
+            name:
+                "No Distraction",
+
             unlocked:
                 false
+
         },
 
         {
-            icon: "💎",
-            name: "Level 5",
+            icon:
+                "💎",
+
+            name:
+                "Level 5",
+
             unlocked:
                 data.level >= 5
+
         },
 
         {
-            icon: "🚀",
-            name: "50 Sessions",
+            icon:
+                "🚀",
+
+            name:
+                "50 Sessions",
+
             unlocked:
                 sessions >= 50
+
         },
 
         {
-            icon: "🌟",
-            name: "1000 XP",
+            icon:
+                "🌟",
+
+            name:
+                "1000 XP",
+
             unlocked:
                 xp >= 1000
+
         },
 
         {
-            icon: "📚",
-            name: "First Task",
+            icon:
+                "📚",
+
+            name:
+                "First Task",
+
             unlocked:
                 tasks >= 1
+
         }
 
     ];
@@ -5090,9 +6983,11 @@ function renderAchievements() {
                 <div
                     class="
                         achievement
-                        ${achievement.unlocked
-                            ? "unlocked"
-                            : ""}
+                        ${
+                            achievement.unlocked
+                                ? "unlocked"
+                                : ""
+                        }
                     "
                 >
 
@@ -5124,15 +7019,35 @@ function renderHabits() {
         );
 
 
+    /*
+       Weekly tracker.
+    */
+
+    renderWeeklyHabitTracker();
+
+
     if (!data.habits.length) {
 
         container.innerHTML = `
+
             <div class="card empty">
-                <div class="empty-icon">🌿</div>
-                <strong>No habits yet</strong>
-                <p>Add a habit to start building your routine.</p>
+
+                <div class="empty-icon">
+                    🌿
+                </div>
+
+                <strong>
+                    No habits yet
+                </strong>
+
+                <p>
+                    Add a habit to start building your routine.
+                </p>
+
             </div>
+
         `;
+
 
         return;
 
@@ -5152,19 +7067,19 @@ function renderHabits() {
             habit => {
 
                 const done =
-                    Boolean(
-                        habit.history &&
-                        habit.history[today]
+                    isHabitCompleted(
+                        habit,
+                        today
                     );
 
 
                 const completedDays =
                     days.filter(
                         day =>
-                            habit.history &&
-                            habit.history[
+                            isHabitCompleted(
+                                habit,
                                 dateKey(day)
-                            ]
+                            )
                     ).length;
 
 
@@ -5174,6 +7089,13 @@ function renderHabits() {
                             completedDays /
                             7
                         ) * 100
+                    );
+
+
+                const todayMinutes =
+                    getHabitMinutes(
+                        habit,
+                        today
                     );
 
 
@@ -5190,17 +7112,23 @@ function renderHabits() {
                                 <div
                                     class="habit-icon-large"
                                 >
-                                    ${escapeHTML(habit.icon)}
+                                    ${escapeHTML(
+                                        habit.icon
+                                    )}
                                 </div>
 
                                 <div>
 
                                     <div class="habit-name">
-                                        ${escapeHTML(habit.name)}
+                                        ${escapeHTML(
+                                            habit.name
+                                        )}
                                     </div>
 
                                     <div class="habit-streak">
-                                        ${getHabitStreak(habit)} day streak
+                                        ${getHabitStreak(
+                                            habit
+                                        )} day streak
                                     </div>
 
                                 </div>
@@ -5212,14 +7140,22 @@ function renderHabits() {
 
                                 <button
                                     class="small-button"
-                                    onclick="editHabit('${habit.id}')"
+                                    onclick="
+                                        editHabit(
+                                            '${habit.id}'
+                                        )
+                                    "
                                 >
                                     ✎
                                 </button>
 
                                 <button
                                     class="small-button"
-                                    onclick="deleteHabit('${habit.id}')"
+                                    onclick="
+                                        deleteHabit(
+                                            '${habit.id}'
+                                        )
+                                    "
                                 >
                                     ×
                                 </button>
@@ -5237,7 +7173,7 @@ function renderHabits() {
                                     font-size:9px;
                                 "
                             >
-                                This week
+                                Last 7 days
                             </span>
 
                             <span class="habit-percent">
@@ -5251,7 +7187,9 @@ function renderHabits() {
 
                             <div
                                 class="habit-progress-fill"
-                                style="width:${percent}%"
+                                style="
+                                    width:${percent}%
+                                "
                             ></div>
 
                         </div>
@@ -5265,11 +7203,13 @@ function renderHabits() {
                                     const key =
                                         dateKey(day);
 
+
                                     const completed =
-                                        Boolean(
-                                            habit.history &&
-                                            habit.history[key]
+                                        isHabitCompleted(
+                                            habit,
+                                            key
                                         );
+
 
                                     const isToday =
                                         key === today;
@@ -5280,26 +7220,37 @@ function renderHabits() {
                                         <div
                                             class="
                                                 day
-                                                ${completed
-                                                    ? "done"
-                                                    : ""}
-                                                ${isToday
-                                                    ? "today"
-                                                    : ""}
+                                                ${
+                                                    completed
+                                                        ? "done"
+                                                        : ""
+                                                }
+                                                ${
+                                                    isToday
+                                                        ? "today"
+                                                        : ""
+                                                }
                                             "
                                         >
 
                                             <div class="day-name">
+
                                                 ${day.toLocaleDateString(
                                                     "en-US",
                                                     {
-                                                        weekday:"narrow"
+                                                        weekday:
+                                                            "narrow"
                                                     }
                                                 )}
+
                                             </div>
 
                                             <div class="day-dot">
-                                                ${completed ? "✓" : ""}
+                                                ${
+                                                    completed
+                                                        ? "✓"
+                                                        : ""
+                                                }
                                             </div>
 
                                         </div>
@@ -5312,10 +7263,67 @@ function renderHabits() {
                         </div>
 
 
+                        <div
+                            style="
+                                margin-top:10px;
+                                display:flex;
+                                align-items:center;
+                                gap:7px;
+                            "
+                        >
+
+                            <span
+                                style="
+                                    color:var(--muted);
+                                    font-size:9px;
+                                "
+                            >
+                                Today:
+                            </span>
+
+                            <input
+                                class="weekly-time-input"
+                                style="
+                                    margin-top:0;
+                                    max-width:90px;
+                                "
+                                type="number"
+                                min="0"
+                                max="1440"
+                                step="5"
+                                value="${todayMinutes || ""}"
+                                placeholder="minutes"
+                                onchange="
+                                    updateHabitMinutesFromInput(
+                                        this,
+                                        '${habit.id}',
+                                        '${today}'
+                                    )
+                                "
+                            >
+
+                            <span
+                                style="
+                                    color:var(--muted);
+                                    font-size:9px;
+                                "
+                            >
+                                ${formatMinutes(
+                                    todayMinutes
+                                )}
+                            </span>
+
+                        </div>
+
+
                         <button
                             class="
                                 habit-check
-                                ${done ? "completed" : ""}
+                                ${
+                                    done
+                                        ? "completed"
+                                        : ""
+                                }
                             "
                             onclick="
                                 toggleHabit(
@@ -5324,9 +7332,11 @@ function renderHabits() {
                             "
                         >
 
-                            ${done
-                                ? "✓ Completed Today"
-                                : "Mark Complete"}
+                            ${
+                                done
+                                    ? "✓ Completed Today"
+                                    : "Mark Complete"
+                            }
 
                         </button>
 
@@ -5346,18 +7356,20 @@ function getHabitStreak(
 
     let streak = 0;
 
+
     const cursor =
         new Date();
 
 
     while (
-        habit.history &&
-        habit.history[
+        isHabitCompleted(
+            habit,
             dateKey(cursor)
-        ]
+        )
     ) {
 
         streak++;
+
 
         cursor.setDate(
             cursor.getDate() - 1
@@ -5375,7 +7387,8 @@ function getHabitStreak(
    HABIT MODAL
 ========================================================= */
 
-let editingHabitId = null;
+let editingHabitId =
+    null;
 
 
 function openHabitModal(
@@ -5470,7 +7483,8 @@ function saveHabitFromModal() {
             )
             .value
             .trim()
-            || "🌿";
+            ||
+            "🌿";
 
 
     if (!name) {
@@ -5498,6 +7512,7 @@ function saveHabitFromModal() {
 
             habit.name =
                 name;
+
 
             habit.icon =
                 icon;
@@ -5578,6 +7593,46 @@ function deleteHabit(
     }
 
 
+    /*
+       IMPORTANT:
+
+       We do NOT alter old history.
+
+       The active habit disappears,
+       but its stored record remains
+       in the local data object only until
+       it is removed.
+
+       If you want permanent historical
+       analytics after deletion, use the
+       archive system below.
+    */
+
+
+    /*
+       Instead of deleting history completely,
+       archive it.
+    */
+
+    if (!Array.isArray(data.deletedHabits)) {
+
+        data.deletedHabits = [];
+
+    }
+
+
+    data.deletedHabits.push({
+
+        ...structuredClone(
+            habit
+        ),
+
+        deletedAt:
+            Date.now()
+
+    });
+
+
     data.habits =
         data.habits.filter(
             item =>
@@ -5626,6 +7681,7 @@ function renderTasks() {
 
         `;
 
+
         return;
 
     }
@@ -5638,9 +7694,11 @@ function renderTasks() {
                 <div
                     class="
                         task-row
-                        ${task.completed
-                            ? "completed"
-                            : ""}
+                        ${
+                            task.completed
+                                ? "completed"
+                                : ""
+                        }
                     "
                 >
 
@@ -5652,22 +7710,28 @@ function renderTasks() {
                             )
                         "
                     >
-                        ${task.completed
-                            ? "✓"
-                            : ""}
+                        ${
+                            task.completed
+                                ? "✓"
+                                : ""
+                        }
                     </button>
 
 
                     <div class="task-content">
 
                         <div class="task-title">
-                            ${escapeHTML(task.title)}
+                            ${escapeHTML(
+                                task.title
+                            )}
                         </div>
 
                         <div class="task-meta">
-                            ${task.completed
-                                ? "Completed"
-                                : "Pending"}
+                            ${
+                                task.completed
+                                    ? "Completed"
+                                    : "Pending"
+                            }
                         </div>
 
                     </div>
@@ -5707,54 +7771,6 @@ function renderTasks() {
 }
 
 
-function editTask(
-    id
-) {
-
-    const task =
-        data.tasks.find(
-            item =>
-                item.id === id
-        );
-
-
-    if (!task) return;
-
-
-    const newTitle =
-        prompt(
-            "Edit task:",
-            task.title
-        );
-
-
-    if (
-        newTitle === null
-    ) {
-
-        return;
-
-    }
-
-
-    const clean =
-        newTitle.trim();
-
-
-    if (!clean) return;
-
-
-    task.title =
-        clean;
-
-
-    saveData();
-
-    renderAll();
-
-}
-
-
 /* =========================================================
    NOTES RENDER
 ========================================================= */
@@ -5788,7 +7804,8 @@ function renderNotes() {
         !currentNoteId ||
         !data.notes.some(
             note =>
-                note.id === currentNoteId
+                note.id ===
+                currentNoteId
         )
     ) {
 
@@ -5804,7 +7821,8 @@ function renderNotes() {
     const note =
         data.notes.find(
             item =>
-                item.id === currentNoteId
+                item.id ===
+                currentNoteId
         );
 
 
@@ -5846,9 +7864,12 @@ function renderNoteListOnly() {
                 <div
                     class="
                         note-item
-                        ${note.id === currentNoteId
-                            ? "active"
-                            : ""}
+                        ${
+                            note.id ===
+                            currentNoteId
+                                ? "active"
+                                : ""
+                        }
                     "
                     onclick="
                         selectNote(
@@ -5988,12 +8009,13 @@ function openTab(
         );
 
 
-    window.scrollTo(
-        {
-            top: 0,
-            behavior: "smooth"
-        }
-    );
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
 
 }
 
@@ -6065,7 +8087,9 @@ document
             );
 
 
-            input.value = "";
+            input.value =
+                "";
+
 
             input.focus();
 
@@ -6082,7 +8106,8 @@ document
         event => {
 
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
                 document
@@ -6304,34 +8329,8 @@ function showToast(
 
 
 /* =========================================================
-   SYNC WITH OTHER RAKKEZ PAGES
+   CROSS-PAGE STORAGE SYNC
 ========================================================= */
-
-/*
-    This is the important part for your Timer.
-
-    The Productivity Center listens to the same
-    localStorage key.
-
-    When your RakkeZ Timer completes a 45-minute
-    session, it should add:
-
-    {
-        date: Date.now(),
-        minutes: 45
-    }
-
-    to:
-
-    data.focusSessions
-
-    and save it under:
-
-    rakkez_productivity_v1
-
-    Then this dashboard automatically updates.
-*/
-
 
 window.addEventListener(
     "storage",
@@ -6344,6 +8343,7 @@ window.addEventListener(
 
             data =
                 loadData();
+
 
             renderAll();
 
@@ -6364,21 +8364,8 @@ window.addEventListener(
 
 
 /* =========================================================
-   OPTIONAL GLOBAL SYNC API
+   RAKKEZ TIMER API
 ========================================================= */
-
-/*
-    This gives the Timer an easy way to communicate
-    with this dashboard.
-
-    Example:
-
-    window.RakkeZProductivity.addFocusSession(45);
-
-    Later we can put this exact function inside
-    your existing RakkeZ Timer.
-*/
-
 
 window.RakkeZProductivity = {
 
@@ -6387,11 +8374,15 @@ window.RakkeZProductivity = {
     ) {
 
         minutes =
-            Number(minutes);
+            Number(
+                minutes
+            );
 
 
         if (
-            !Number.isFinite(minutes) ||
+            !Number.isFinite(
+                minutes
+            ) ||
             minutes <= 0
         ) {
 
@@ -6416,9 +8407,6 @@ window.RakkeZProductivity = {
         /*
            XP:
            1 XP per focused minute.
-
-           Example:
-           45 minutes = 45 XP.
         */
 
         data.xp +=
@@ -6429,7 +8417,7 @@ window.RakkeZProductivity = {
 
         /*
            Coins:
-           1 coin every 25 focused minutes.
+           1 coin per 25 minutes.
         */
 
         data.coins +=
@@ -6450,6 +8438,63 @@ window.RakkeZProductivity = {
     },
 
 
+    /*
+       Complete a specific habit
+       for a specific day.
+    */
+
+    completeHabit(
+        habitId,
+        key = dateKey()
+    ) {
+
+        setHabitCompleted(
+            habitId,
+            key,
+            true
+        );
+
+    },
+
+
+    /*
+       Cancel a specific habit
+       for a specific day.
+    */
+
+    cancelHabit(
+        habitId,
+        key = dateKey()
+    ) {
+
+        setHabitCompleted(
+            habitId,
+            key,
+            false
+        );
+
+    },
+
+
+    /*
+       Add minutes to a habit.
+    */
+
+    setHabitMinutes(
+        habitId,
+        minutes,
+        key = dateKey()
+    ) {
+
+        setHabitMinutes(
+            habitId,
+            key,
+            minutes
+        );
+
+    },
+
+
     getData() {
 
         return structuredClone(
@@ -6463,6 +8508,7 @@ window.RakkeZProductivity = {
 
         data =
             loadData();
+
 
         renderAll();
 
@@ -6494,21 +8540,36 @@ renderAll();
 
 
 /* =========================================================
-   DEMO / TEST
+   DEBUG / TEST
+========================================================= */
 
-   Open browser console and run:
+/*
+   Focus:
 
    RakkeZProductivity.addFocusSession(45);
 
-   The dashboard should immediately show:
 
-   Focus Today: 45m
-   Sessions: 1
-   XP: +45
-   Coins: +1
-   Weekly Focus: 45m
-   Streak: 1d
-========================================================= */
+   Complete habit:
+
+   RakkeZProductivity.completeHabit(
+       "reading"
+   );
+
+
+   Cancel habit:
+
+   RakkeZProductivity.cancelHabit(
+       "reading"
+   );
+
+
+   Add 60 minutes:
+
+   RakkeZProductivity.setHabitMinutes(
+       "reading",
+       60
+   );
+*/
 
 </script>
 
