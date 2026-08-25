@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -9,6 +11,11 @@
     >
 
     <title>RakkeZ — Tutorial</title>
+
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
 
     <link
         rel="preconnect"
@@ -26,53 +33,87 @@
         rel="stylesheet"
     >
 
+
+    <!-- =====================================================
+         TUTORIAL CSS
+    ====================================================== -->
+
     <link
         rel="stylesheet"
-        href="tutorial.css"
+        href="./tutorial.css"
     >
+
 </head>
+
 
 <body>
 
 <div class="tutorial-app">
 
-    <!-- Background -->
+
+    <!-- =====================================================
+         BACKGROUND
+    ====================================================== -->
+
     <div class="background">
+
         <div class="gradient"></div>
+
         <div class="noise"></div>
+
     </div>
 
 
-    <!-- Top -->
+    <!-- =====================================================
+         TOP BAR
+    ====================================================== -->
+
     <header class="topbar">
 
         <div class="logo">
             Rakke<span>Z</span>
         </div>
 
-        <div class="step-counter" id="stepCounter">
+
+        <div
+            class="step-counter"
+            id="stepCounter"
+        >
             01 / 26
         </div>
 
     </header>
 
 
-    <!-- Progress -->
+    <!-- =====================================================
+         PROGRESS
+    ====================================================== -->
+
     <div class="progress-track">
+
         <div
             class="progress-bar"
             id="progressBar"
         ></div>
+
     </div>
 
 
-    <!-- Main -->
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
     <main class="tutorial-main">
 
         <section
             class="tutorial-card"
             id="tutorialCard"
         >
+
+
+            <!-- =================================================
+                 ICON
+            ================================================== -->
 
             <div
                 class="icon-container"
@@ -81,6 +122,11 @@
                 ⏱
             </div>
 
+
+            <!-- =================================================
+                 CATEGORY
+            ================================================== -->
+
             <div
                 class="eyebrow"
                 id="featureCategory"
@@ -88,9 +134,19 @@
                 GETTING STARTED
             </div>
 
+
+            <!-- =================================================
+                 TITLE
+            ================================================== -->
+
             <h1 id="featureTitle">
                 Welcome to RakkeZ
             </h1>
+
+
+            <!-- =================================================
+                 DESCRIPTION
+            ================================================== -->
 
             <p
                 class="description"
@@ -101,29 +157,40 @@
             </p>
 
 
-            <!-- Feature Demo -->
+            <!-- =================================================
+                 FEATURE DEMO
+            ================================================== -->
+
             <div
                 class="demo"
                 id="featureDemo"
             ></div>
 
 
-            <!-- Navigation -->
+            <!-- =================================================
+                 NAVIGATION
+            ================================================== -->
+
             <div class="navigation">
 
+
                 <button
+                    type="button"
                     class="nav-button secondary"
                     id="backBtn"
                 >
                     Back
                 </button>
 
+
                 <button
+                    type="button"
                     class="nav-button primary"
                     id="nextBtn"
                 >
                     Next
                 </button>
+
 
             </div>
 
@@ -132,40 +199,74 @@
     </main>
 
 
-    <!-- Bottom -->
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
     <footer class="footer">
 
+
         <button
+            type="button"
             class="skip-button"
             id="skipBtn"
         >
             Skip tutorial
         </button>
 
-        <div class="dots" id="dots"></div>
+
+        <div
+            class="dots"
+            id="dots"
+        ></div>
+
 
     </footer>
 
 
-    <!-- Final -->
+    <!-- =====================================================
+         FINAL SCREEN
+    ====================================================== -->
+
     <div
         class="final-screen"
         id="finalScreen"
     >
 
+
         <div class="final-content">
+
+
+            <!-- =================================================
+                 FINAL ICON
+            ================================================== -->
 
             <div class="final-icon">
                 ✓
             </div>
 
+
+            <!-- =================================================
+                 FINAL EYEBROW
+            ================================================== -->
+
             <div class="eyebrow">
                 YOU'RE READY
             </div>
 
+
+            <!-- =================================================
+                 FINAL TITLE
+            ================================================== -->
+
             <h2>
                 Focus starts now.
             </h2>
+
+
+            <!-- =================================================
+                 FINAL DESCRIPTION
+            ================================================== -->
 
             <p>
                 You've learned everything you need
@@ -173,26 +274,39 @@
             </p>
 
 
+            <!-- =================================================
+                 FINAL QUESTION
+            ================================================== -->
+
             <div class="final-question">
                 Did you understand everything?
             </div>
 
 
+            <!-- =================================================
+                 FINAL ACTIONS
+            ================================================== -->
+
             <div class="final-actions">
 
+
                 <button
+                    type="button"
                     class="final-button primary"
                     id="readyBtn"
                 >
                     YES, I'M READY
                 </button>
 
+
                 <button
+                    type="button"
                     class="final-button secondary"
                     id="replayBtn"
                 >
                     REPLAY TUTORIAL
                 </button>
+
 
             </div>
 
@@ -200,10 +314,20 @@
 
     </div>
 
+
 </div>
 
 
-<script src="tutorial.js"></script>
+<!-- =====================================================
+     TUTORIAL JAVASCRIPT
+
+     ./ makes the path relative to the current GitHub
+     Pages directory instead of the domain root.
+====================================================== -->
+
+<script src="./tutorial.js"></script>
+
 
 </body>
+
 </html>
