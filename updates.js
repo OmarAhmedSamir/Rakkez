@@ -5,24 +5,11 @@
 
     /* =====================================================
        RAKKEZ UPDATE SYSTEM
-       =====================================================
-
-       FUTURE UPDATES:
-       You ONLY need to edit this section.
-
-       Change:
-       - version
-       - badge
-       - title
-       - description
-       - changes
-
-    ===================================================== */
-
+       ===================================================== */
 
     const RAKKEZ_UPDATE = {
 
-        version: "1.0.6",
+        version: "1.0.7",
 
         badge: "NEW",
 
@@ -64,57 +51,74 @@
 
     /* =====================================================
        SETTINGS
-    ===================================================== */
+       ===================================================== */
 
-    const STORAGE_KEY = "rakkez_seen_update_version";
-
-
-    /* =====================================================
-       DOM
-    ===================================================== */
-
-    const modal =
-        document.getElementById("updatesModal");
-
-    const badge =
-        document.getElementById("updatesBadge");
-
-    const title =
-        document.getElementById("updatesTitle");
-
-    const description =
-        document.getElementById("updatesDescription");
-
-    const list =
-        document.getElementById("updatesList");
-
-    const doneButton =
-        document.getElementById("updatesDone");
-
-    const closeButton =
-        document.getElementById("closeUpdates");
+    const STORAGE_KEY =
+        "rakkez_seen_update_version";
 
 
     /* =====================================================
-       SAFETY CHECK
-    ===================================================== */
+       VARIABLES
+       ===================================================== */
 
-    if (!modal || !list) {
+    let modal = null;
+    let badge = null;
+    let title = null;
+    let description = null;
+    let list = null;
+    let doneButton = null;
+    let closeButton = null;
 
-        console.warn(
-            "RakkeZ Updates: Updates modal was not found."
-        );
 
-        return;
+    /* =====================================================
+       FIND DOM ELEMENTS
+       ===================================================== */
+
+    function findElements() {
+
+        modal =
+            document.getElementById("updatesModal");
+
+        badge =
+            document.getElementById("updatesBadge");
+
+        title =
+            document.getElementById("updatesTitle");
+
+        description =
+            document.getElementById("updatesDescription");
+
+        list =
+            document.getElementById("updatesList");
+
+        doneButton =
+            document.getElementById("updatesDone");
+
+        closeButton =
+            document.getElementById("closeUpdates");
+
+
+        return !!modal && !!list;
 
     }
 
 
     /* =====================================================
-       RENDER UPDATE
-    ===================================================== */
+       RENDER
+       ===================================================== */
 
     function renderUpdate() {
+
+        if (!findElements()) {
+
+            console.warn(
+                "RakkeZ Updates: Required HTML elements were not found."
+            );
+
+            return false;
+
+        }
+
 
         if (badge) {
 
@@ -180,16 +184,27 @@
 
         });
 
+
+        return true;
+
     }
 
 
     /* =====================================================
        OPEN
-    ===================================================== */
+       ===================================================== */
 
     function openUpdates() {
 
-        renderUpdate();
+        if (!renderUpdate()) {
+
+            console.warn(
+                "RakkeZ Updates: Cannot open because updatesModal was not found."
+            );
+
+            return;
+
+        }
 
 
         modal.classList.add("show");
@@ -200,12 +215,16 @@
         );
 
 
+        /*
+         * Fallback in case CSS does not correctly
+         * handle the .show class.
+         */
+
+        modal.style.display = "flex";
+
+
         document.body.style.overflow = "hidden";
 
-
-        /*
-         * Small accessibility improvement.
-         */
 
         if (doneButton) {
 
@@ -222,9 +241,23 @@
 
     /* =====================================================
        CLOSE
-    ===================================================== */
+       ===================================================== */
 
     function closeUpdates() {
+
+        if (!modal) {
+
+            findElements();
+
+        }
+
+
+        if (!modal) {
+
+            return;
+
+        }
+
 
         modal.classList.remove("show");
 
@@ -234,13 +267,11 @@
         );
 
 
+        modal.style.display = "none";
+
+
         document.body.style.overflow = "";
 
-
-        /*
-         * Remember that this version
-         * has already been seen.
-         */
 
         localStorage.setItem(
             STORAGE_KEY,
@@ -252,18 +283,40 @@
 
     /* =====================================================
        CHECK FOR NEW UPDATE
-    ===================================================== */
+       ===================================================== */
 
     function checkForUpdate() {
 
+        if (!findElements()) {
+
+            console.warn(
+                "RakkeZ Updates: HTML not ready yet. Retrying..."
+            );
+
+            setTimeout(
+                checkForUpdate,
+                300
+            );
+
+            return;
+
+        }
+
+
         const seenVersion =
-            localStorage.getItem(STORAGE_KEY);
+            localStorage.getItem(
+                STORAGE_KEY
+            );
 
 
-        /*
-         * Show only when the current version
-         * has not been seen before.
-         */
+        console.log(
+            "RakkeZ Updates:",
+            "Current:",
+            RAKKEZ_UPDATE.version,
+            "Seen:",
+            seenVersion
+        );
+
 
         if (
             seenVersion !==
@@ -278,52 +331,59 @@
 
 
     /* =====================================================
-       BUTTONS
-    ===================================================== */
+       EVENTS
+       ===================================================== */
 
-    if (doneButton) {
+    function attachEvents() {
 
-        doneButton.addEventListener(
-            "click",
-            closeUpdates
-        );
+        if (!findElements()) {
 
-    }
-
-
-    if (closeButton) {
-
-        closeButton.addEventListener(
-            "click",
-            closeUpdates
-        );
-
-    }
-
-
-    /* =====================================================
-       CLICK OUTSIDE
-    ===================================================== */
-
-    modal.addEventListener(
-        "click",
-        function (event) {
-
-            if (
-                event.target === modal
-            ) {
-
-                closeUpdates();
-
-            }
+            return;
 
         }
-    );
+
+
+        if (doneButton) {
+
+            doneButton.addEventListener(
+                "click",
+                closeUpdates
+            );
+
+        }
+
+
+        if (closeButton) {
+
+            closeButton.addEventListener(
+                "click",
+                closeUpdates
+            );
+
+        }
+
+
+        modal.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeUpdates();
+
+                }
+
+            }
+        );
+
+    }
 
 
     /* =====================================================
-       ESCAPE KEY
-    ===================================================== */
+       ESCAPE
+       ===================================================== */
 
     document.addEventListener(
         "keydown",
@@ -331,6 +391,7 @@
 
             if (
                 event.key === "Escape" &&
+                modal &&
                 modal.classList.contains("show")
             ) {
 
@@ -344,12 +405,20 @@
 
     /* =====================================================
        START
-    ===================================================== */
+       ===================================================== */
 
-    /*
-     * Wait until the page is ready so all
-     * HTML elements are available.
-     */
+    function initialize() {
+
+        attachEvents();
+
+
+        setTimeout(
+            checkForUpdate,
+            500
+        );
+
+    }
+
 
     if (
         document.readyState ===
@@ -358,29 +427,19 @@
 
         document.addEventListener(
             "DOMContentLoaded",
-            function () {
-
-                setTimeout(
-                    checkForUpdate,
-                    700
-                );
-
-            },
+            initialize,
             { once: true }
         );
 
     } else {
 
-        setTimeout(
-            checkForUpdate,
-            700
-        );
+        initialize();
 
     }
 
 
     /* =====================================================
-       OPTIONAL GLOBAL API
+       GLOBAL API
        ===================================================== */
 
     window.RakkeZUpdates = {
