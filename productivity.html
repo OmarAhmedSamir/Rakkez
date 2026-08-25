@@ -1328,5710 +1328,17 @@ textarea:focus {
    HABITS PAGE
 ========================================================= */
 
-.page-toolbar {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 10px;
-
-    margin-bottom: 16px;
-
-}
-
-
-.progress-summary {
-
-    color: var(--muted);
-
-    font-size: 12px;
-
-}
-
-
-.primary-button {
-
-    height: 42px;
-
-    padding: 0 16px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 7px;
-
-    border-radius: 13px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #2386ff,
-            #1478ff
-        );
-
-    color: white;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    box-shadow:
-        0 8px 25px rgba(20,120,255,.16);
-
-    transition: .2s;
-
-}
-
-
-.primary-button:hover {
-
-    transform:
-        translateY(-1px);
-
-    filter:
-        brightness(1.06);
-
-}
-
-
-
-
-/* =========================================================
-   HABIT CARDS
-========================================================= */
-
-.habits-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0,1fr));
-
-    gap: 13px;
-
-}
-
-
-.habit-card {
-
-    padding: 18px;
-
-}
-
-
-.habit-top {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-}
-
-
-.habit-main {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-}
-
-
-.habit-icon-large {
-
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 13px;
-
-    background:
-        rgba(255,255,255,.05);
-
-    font-size: 20px;
-
-}
-
-
-.habit-name {
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-}
-
-
-.habit-streak {
-
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 9px;
-
-}
-
-
-.habit-actions {
-
-    display: flex;
-
-    gap: 5px;
-
-}
-
-
-.small-button {
-
-    width: 31px;
-    height: 31px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 9px;
-
-    background:
-        rgba(255,255,255,.05);
-
-    border:
-        1px solid rgba(255,255,255,.07);
-
-    color:
-        rgba(255,255,255,.55);
-
-    font-size: 12px;
-
-}
-
-
-.small-button:hover {
-
-    background:
-        rgba(255,255,255,.10);
-
-    color: white;
-
-}
-
-
-.habit-progress-row {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-top: 18px;
-
-}
-
-
-.habit-percent {
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-}
-
-
-.habit-progress {
-
-    height: 5px;
-
-    margin-top: 7px;
-
-    border-radius: 20px;
-
-    overflow: hidden;
-
-    background:
-        rgba(255,255,255,.08);
-
-}
-
-
-.habit-progress-fill {
-
-    height: 100%;
-
-    width: 0%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #2386ff,
-            #61adff
-        );
-
-    border-radius: 20px;
-
-}
-
-
-.week-days {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(7,1fr);
-
-    gap: 5px;
-
-    margin-top: 14px;
-
-}
-
-
-.day {
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 5px;
-
-}
-
-
-.day-name {
-
-    font-size: 8px;
-
-    color: var(--muted);
-
-}
-
-
-.day-dot {
-
-    width: 21px;
-    height: 21px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 7px;
-
-    background:
-        rgba(255,255,255,.05);
-
-    border:
-        1px solid rgba(255,255,255,.06);
-
-    font-size: 9px;
-
-}
-
-
-.day.done .day-dot {
-
-    background:
-        #1478ff;
-
-    border-color:
-        #1478ff;
-
-}
-
-
-.day.today .day-name {
-
-    color: white;
-
-    font-weight: 700;
-
-}
-
-
-.habit-check {
-
-    width: 100%;
-
-    height: 38px;
-
-    margin-top: 14px;
-
-    border-radius: 11px;
-
-    background:
-        rgba(255,255,255,.055);
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-}
-
-
-.habit-check:hover {
-
-    border-color:
-        rgba(255,255,255,.18);
-
-}
-
-
-.habit-check.completed {
-
-    background:
-        rgba(74,222,128,.10);
-
-    border-color:
-        rgba(74,222,128,.20);
-
-    color:
-        #72e69a;
-
-}
-
-
-/* =========================================================
-   TASKS
-========================================================= */
-
-.task-input {
-
-    display: flex;
-
-    gap: 8px;
-
-    margin-bottom: 15px;
-
-}
-
-
-.input {
-
-    width: 100%;
-
-    height: 44px;
-
-    padding: 0 13px;
-
-    border-radius: 12px;
-
-    background:
-        rgba(255,255,255,.045);
-
-    border:
-        1px solid var(--border);
-
-    color: white;
-
-    font-size: 12px;
-
-}
-
-
-.input::placeholder {
-
-    color:
-        rgba(255,255,255,.35);
-
-}
-
-
-.input:focus {
-
-    border-color:
-        #2383ff;
-
-    background:
-        rgba(255,255,255,.06);
-
-}
-
-
-.task-add-button {
-
-    width: 45px;
-    height: 44px;
-
-    flex-shrink: 0;
-
-    border-radius: 12px;
-
-    background:
-        #1478ff;
-
-    font-size: 20px;
-
-}
-
-
-.task-list {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-
-}
-
-
-.task-row {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 11px;
-
-    padding: 13px;
-
-    border-radius: 14px;
-
-    background:
-        rgba(255,255,255,.035);
-
-    border:
-        1px solid rgba(255,255,255,.07);
-
-}
-
-
-.task-check {
-
-    width: 21px;
-    height: 21px;
-
-    flex-shrink: 0;
-
-    border-radius: 7px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    background: transparent;
-
-    border:
-        1px solid rgba(255,255,255,.22);
-
-    font-size: 11px;
-
-}
-
-
-.task-row.completed .task-check {
-
-    background:
-        #1478ff;
-
-    border-color:
-        #1478ff;
-
-}
-
-
-.task-content {
-
-    flex: 1;
-
-    min-width: 0;
-
-}
-
-
-.task-title {
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    word-break: break-word;
-
-}
-
-
-.task-row.completed .task-title {
-
-    text-decoration:
-        line-through;
-
-    color:
-        rgba(255,255,255,.35);
-
-}
-
-
-.task-meta {
-
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 9px;
-
-}
-
-
-.task-actions {
-
-    display: flex;
-
-    gap: 4px;
-
-}
-
-
-/* =========================================================
-   NOTES
-========================================================= */
-
-.notes-layout {
-
-    display: grid;
-
-    grid-template-columns: 270px minmax(0,1fr);
-
-    min-height: 650px;
-
-    overflow: hidden;
-
-    border-radius: 22px;
-
-    background:
-        rgba(8,13,22,.68);
-
-    border:
-        1px solid var(--border);
-
-    backdrop-filter:
-        blur(24px);
-
-}
-
-
-.notes-sidebar {
-
-    border-right:
-        1px solid rgba(255,255,255,.08);
-
-    background:
-        rgba(255,255,255,.018);
-
-}
-
-
-.notes-header {
-
-    height: 68px;
-
-    padding: 0 14px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    border-bottom:
-        1px solid rgba(255,255,255,.07);
-
-}
-
-
-.notes-title {
-
-    font-family:
-        "Space Grotesk";
-
-    font-size: 16px;
-
-    font-weight: 600;
-
-}
-
-
-.note-list {
-
-    padding: 9px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 5px;
-
-}
-
-
-.note-item {
-
-    padding: 12px;
-
-    border-radius: 12px;
-
-    cursor: pointer;
-
-    transition: .2s;
-
-}
-
-
-.note-item:hover {
-
-    background:
-        rgba(255,255,255,.05);
-
-}
-
-
-.note-item.active {
-
-    background:
-        rgba(20,120,255,.13);
-
-}
-
-
-.note-item-title {
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-}
-
-
-.note-item-preview {
-
-    margin-top: 4px;
-
-    color: var(--muted);
-
-    font-size: 9px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-}
-
-
-.note-item-date {
-
-    margin-top: 5px;
-
-    color:
-        rgba(255,255,255,.30);
-
-    font-size: 8px;
-
-}
-
-
-.notes-editor {
-
-    display: flex;
-
-    flex-direction: column;
-
-    min-width: 0;
-
-}
-
-
-.editor-toolbar {
-
-    height: 68px;
-
-    padding: 0 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    border-bottom:
-        1px solid rgba(255,255,255,.07);
-
-}
-
-
-.auto-save {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    color:
-        rgba(255,255,255,.40);
-
-    font-size: 9px;
-
-}
-
-
-.save-dot {
-
-    width: 6px;
-    height: 6px;
-
-    border-radius: 50%;
-
-    background:
-        #4ade80;
-
-    box-shadow:
-        0 0 10px rgba(74,222,128,.6);
-
-}
-
-
-.editor-actions {
-
-    display: flex;
-
-    gap: 6px;
-
-}
-
-
-.note-editor {
-
-    flex: 1;
-
-    padding: 30px;
-
-    display: flex;
-
-    flex-direction: column;
-
-}
-
-
-.note-title-input {
-
-    width: 100%;
-
-    border: 0;
-
-    background: transparent;
-
-    color: white;
-
-    font-family:
-        "Space Grotesk";
-
-    font-size: 26px;
-
-    font-weight: 600;
-
-    letter-spacing: -.7px;
-
-}
-
-
-.note-title-input::placeholder {
-
-    color:
-        rgba(255,255,255,.25);
-
-}
-
-
-.note-body {
-
-    flex: 1;
-
-    width: 100%;
-
-    margin-top: 15px;
-
-    resize: none;
-
-    border: 0;
-
-    background: transparent;
-
-    color:
-        rgba(255,255,255,.78);
-
-    font-size: 13px;
-
-    line-height: 1.8;
-
-}
-
-
-.note-body::placeholder {
-
-    color:
-        rgba(255,255,255,.25);
-
-}
-
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
-.empty {
-
-    padding: 50px 20px;
-
-    text-align: center;
-
-    color: var(--muted);
-
-}
-
-
-.empty-icon {
-
-    font-size: 30px;
-
-    margin-bottom: 10px;
-
-}
-
-
-.empty strong {
-
-    display: block;
-
-    color: white;
-
-    font-size: 13px;
-
-}
-
-
-.empty p {
-
-    margin-top: 5px;
-
-    font-size: 10px;
-
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 9999;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background:
-        rgba(0,0,0,.55);
-
-    backdrop-filter:
-        blur(18px);
-
-}
-
-
-.modal.show {
-
-    display: flex;
-
-}
-
-
-.modal-box {
-
-    width: min(450px, 100%);
-
-    padding: 24px;
-
-    border-radius: 24px;
-
-    background:
-        rgba(8,13,22,.94);
-
-    border:
-        1px solid rgba(255,255,255,.13);
-
-    box-shadow:
-        var(--shadow);
-
-}
-
-
-.modal-head {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 20px;
-
-}
-
-
-.modal-title {
-
-    font-family:
-        "Space Grotesk";
-
-    font-size: 20px;
-
-    font-weight: 600;
-
-}
-
-
-.form-group {
-
-    margin-bottom: 13px;
-
-}
-
-
-.form-label {
-
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: var(--muted);
-
-    font-size: 10px;
-
-    text-transform: uppercase;
-
-    letter-spacing: 1px;
-
-}
-
-
-.form-input {
-
-    width: 100%;
-
-    height: 44px;
-
-    padding: 0 12px;
-
-    border-radius: 12px;
-
-    border:
-        1px solid var(--border);
-
-    background:
-        rgba(255,255,255,.05);
-
-    color: white;
-
-}
-
-
-.emoji-input {
-
-    font-size: 20px;
-
-}
-
-
-.modal-actions {
-
-    display: flex;
-
-    gap: 8px;
-
-    margin-top: 20px;
-
-}
-
-
-.modal-actions button {
-
-    flex: 1;
-
-    height: 44px;
-
-    border-radius: 12px;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-}
-
-
-.cancel-button {
-
-    background:
-        rgba(255,255,255,.06);
-
-    border:
-        1px solid var(--border);
-
-}
-
-
-.save-button {
-
-    background:
-        #1478ff;
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-.toast {
-
-    position: fixed;
-
-    right: 25px;
-
-    bottom: 25px;
-
-    z-index: 99999;
-
-    padding: 12px 15px;
-
-    border-radius: 13px;
-
-    background:
-        rgba(8,13,22,.90);
-
-    border:
-        1px solid rgba(255,255,255,.12);
-
-    backdrop-filter:
-        blur(20px);
-
-    color: white;
-
-    font-size: 11px;
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.35);
-
-    transform:
-        translateY(20px);
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition: .25s;
-
-}
-
-
-.toast.show {
-
-    transform:
-        translateY(0);
-
-    opacity: 1;
-
-}
-
-
-
-    /* =========================================================
-   WEEKLY HABIT TRACKER
-========================================================= */
-
-.weekly-habit-panel {
-
-    margin-bottom: 14px;
-
-}
-
-
-.weekly-table {
-
-    width: 100%;
-
-    min-width: 720px;
-
-    border-collapse: separate;
-
-    border-spacing: 5px;
-
-}
-
-
-.weekly-table th {
-
-    padding: 8px;
-
-    color: var(--muted);
-
-    font-size: 9px;
-
-    font-weight: 600;
-
-    text-align: center;
-
-}
-
-
-.weekly-table th:first-child {
-
-    text-align: left;
-
-    min-width: 150px;
-
-}
-
-
-.weekly-habit-name {
-
-    padding: 10px;
-
-    border-radius: 11px;
-
-    background:
-        rgba(255,255,255,.035);
-
-    border:
-        1px solid rgba(255,255,255,.06);
-
-    white-space: nowrap;
-
-}
-
-
-.weekly-habit-name strong {
-
-    font-size: 10px;
-
-}
-
-
-.weekly-habit-name span {
-
-    display: block;
-
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 8px;
-
-}
-
-
-.weekly-day {
-
-    min-width: 72px;
-
-    padding: 7px;
-
-    border-radius: 11px;
-
-    background:
-        rgba(255,255,255,.035);
-
-    border:
-        1px solid rgba(255,255,255,.06);
-
-    text-align: center;
-
-}
-
-
-.weekly-day.today {
-
-    border-color:
-        rgba(35,134,255,.35);
-
-}
-
-
-.weekly-day.completed {
-
-    background:
-        rgba(74,222,128,.07);
-
-    border-color:
-        rgba(74,222,128,.20);
-
-}
-
-
-.weekly-day-button {
-
-    width: 100%;
-
-    min-height: 28px;
-
-    border-radius: 8px;
-
-    background:
-        rgba(255,255,255,.045);
-
-    color: var(--muted);
-
-    font-size: 10px;
-
-}
-
-
-.weekly-day.completed .weekly-day-button {
-
-    background:
-        rgba(74,222,128,.12);
-
-    color: #72e69a;
-
-}
-
-
-.weekly-hours {
-
-    margin-top: 5px;
-
-    color: var(--muted);
-
-    font-size: 8px;
-
-}
-
-
-.weekly-total-cell {
-
-    padding: 10px;
-
-    border-radius: 11px;
-
-    background:
-        rgba(20,120,255,.07);
-
-    border:
-        1px solid rgba(60,145,255,.12);
-
-    text-align: center;
-
-}
-
-
-.weekly-total-cell strong {
-
-    display: block;
-
-    font-family:
-        "Space Grotesk";
-
-    font-size: 11px;
-
-}
-
-
-.weekly-total-cell span {
-
-    display: block;
-
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 8px;
-
-}
-
-
-.weekly-summary-card {
-
-    flex: 1;
-
-    min-width: 120px;
-
-    padding: 11px;
-
-    border-radius: 12px;
-
-    background:
-        rgba(255,255,255,.035);
-
-    border:
-        1px solid rgba(255,255,255,.06);
-
-}
-
-
-.weekly-summary-label {
-
-    color: var(--muted);
-
-    font-size: 8px;
-
-    text-transform: uppercase;
-
-    letter-spacing: .7px;
-
-}
-
-
-.weekly-summary-value {
-
-    margin-top: 4px;
-
-    font-family:
-        "Space Grotesk";
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-}
-
-
-.weekly-summary-extra {
-
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 8px;
-
-}
-
-
-.weekly-time-input {
-
-    width: 100%;
-
-    height: 25px;
-
-    margin-top: 5px;
-
-    padding: 0 5px;
-
-    border-radius: 7px;
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    background:
-        rgba(255,255,255,.045);
-
-    color: white;
-
-    text-align: center;
-
-    font-size: 8px;
-
-}
-
-
-.weekly-time-input:focus {
-
-    border-color:
-        #2383ff;
-
-}
-
-
-body.light .weekly-day,
-body.light .weekly-habit-name,
-body.light .weekly-summary-card {
-
-    background:
-        rgba(0,0,0,.025);
-
-    border-color:
-        rgba(0,0,0,.07);
-
-}
-
-
-body.light .weekly-time-input {
-
-    color: #111827;
-
-    background:
-        rgba(0,0,0,.035);
-
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:1050px) {
-
-    .layout {
-
-        grid-template-columns: 185px minmax(0,1fr);
-
-    }
-
-    .stats-grid {
-
-        grid-template-columns:
-            repeat(2,1fr);
-
-    }
-
-    .achievements {
-
-        grid-template-columns:
-            repeat(3,1fr);
-
-    }
-
-}
-
-
-@media(max-width:800px) {
-
-    .page {
-
-        padding: 18px;
-
-    }
-
-    .layout {
-
-        display: block;
-
-    }
-
-    .sidebar {
-
-        position: static;
-
-        margin-bottom: 15px;
-
-    }
-
-    .nav {
-
-        flex-direction: row;
-
-        overflow-x: auto;
-
-    }
-
-    .nav-button {
-
-        min-width: 105px;
-
-        justify-content: center;
-
-        flex-direction: column;
-
-        gap: 3px;
-
-        height: 58px;
-
-        font-size: 9px;
-
-    }
-
-    .sidebar-title,
-    .sidebar-bottom {
-
-        display: none;
-
-    }
-
-    .two-column {
-
-        grid-template-columns: 1fr;
-
-    }
-
-    .habit-preview {
-
-        grid-template-columns:
-            repeat(2,1fr);
-
-    }
-
-    .notes-layout {
-
-        grid-template-columns: 1fr;
-
-        min-height: 650px;
-
-    }
-
-    .notes-sidebar {
-
-        display: none;
-
-    }
-
-}
-
-
-@media(max-width:600px) {
-
-    .topbar {
-
-        margin-bottom: 22px;
-
-    }
-
-    .top-pill {
-
-        display: none;
-
-    }
-
-    .page-header h1 {
-
-        font-size: 30px;
-
-    }
-
-    .stats-grid {
-
-        grid-template-columns:
-            repeat(2,1fr);
-
-    }
-
-    .stat-card {
-
-        min-height: 115px;
-
-        padding: 14px;
-
-    }
-
-    .stat-number {
-
-        font-size: 21px;
-
-    }
-
-    .habits-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-    .achievements {
-
-        grid-template-columns:
-            repeat(2,1fr);
-
-    }
-
-    .chart {
-
-        gap: 7px;
-
-    }
-
-    .note-editor {
-
-        padding: 22px;
-
-    }
-
-    .note-title-input {
-
-        font-size: 22px;
-
-    }
-
-}
-
-
-@media(max-width:420px) {
-
-    .page {
-
-        padding: 13px;
-
-    }
-
-    .stats-grid {
-
-        gap: 8px;
-
-    }
-
-    .section-card,
-    .level-card,
-    .stat-card {
-
-        padding: 14px;
-
-    }
-
-}
-
-
-/* =========================================================
-   LIGHT MODE
-========================================================= */
-
-body.light {
-
-    --text: #111827;
-
-    --muted: rgba(17,24,39,.55);
-
-    --border: rgba(0,0,0,.10);
-
-    --border-hover: rgba(0,0,0,.20);
-
-}
-
-
-body.light {
-
-    background: #f5f7fb;
-
-}
-
-
-body.light .app {
-
-    background:
-
-        radial-gradient(
-            circle at 20% 20%,
-            rgba(75,150,255,.28),
-            transparent 35%
-        ),
-
-        #f5f7fb;
-
-}
-
-
-body.light .bg-gradient {
-
-    opacity: .12;
-
-}
-
-
-body.light .card,
-body.light .sidebar,
-body.light .notes-layout {
-
-    background:
-        rgba(255,255,255,.68);
-
-    border-color:
-        rgba(0,0,0,.09);
-
-}
-
-
-body.light .top-pill,
-body.light .icon-button {
-
-    color: #111827;
-
-    background:
-        rgba(255,255,255,.65);
-
-    border-color:
-        rgba(0,0,0,.09);
-
-}
-
-
-body.light .stat-number,
-body.light .card-title,
-body.light .page-header h1,
-body.light .habit-name,
-body.light .task-title,
-body.light .note-title-input,
-body.light .modal-title {
-
-    color: #111827;
-
-}
-
-
-body.light .nav-button {
-
-    color:
-        rgba(17,24,39,.55);
-
-}
-
-
-body.light .nav-button.active {
-
-    color: #111827;
-
-}
-
-
-body.light .quick-item,
-body.light .habit-card,
-body.light .task-row,
-body.light .habit-mini {
-
-    background:
-        rgba(0,0,0,.025);
-
-    border-color:
-        rgba(0,0,0,.07);
-
-}
-
-
-body.light .input,
-body.light .form-input {
-
-    color: #111827;
-
-    background:
-        rgba(0,0,0,.035);
-
-}
-
-
-body.light .note-body {
-
-    color:
-        rgba(17,24,39,.75);
-
-}
-
-
-</style>
-
-</head>
-
-
-<body>
-
-<div class="card section-card weekly-habit-panel">
-
-    <div class="card-header">
-
-        <div>
-
-            <div class="card-title">
-                Weekly Habit Tracker
-            </div>
-
-            <div
-                class="card-subtitle"
-                id="habitWeekLabel"
-            >
-                This Week
-            </div>
-
-        </div>
-
-        <div style="display:flex;gap:6px;">
-
-            <button
-                class="small-button"
-                id="previousHabitWeek"
-                title="Previous week"
-            >
-                ‹
-            </button>
-
-            <button
-                class="small-button"
-                id="currentHabitWeek"
-                title="Current week"
-            >
-                ●
-            </button>
-
-            <button
-                class="small-button"
-                id="nextHabitWeek"
-                title="Next week"
-            >
-                ›
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div
-        id="weeklyHabitTracker"
-        style="overflow-x:auto;"
-    ></div>
-
-
-    <div
-        id="weeklyHabitSummary"
-        style="
-            margin-top:15px;
-            display:flex;
-            gap:8px;
-            flex-wrap:wrap;
-        "
-    ></div>
-
-</div>
-
-<div class="app">
-
-    <div class="background">
-
-        <div class="bg-gradient"></div>
-
-        <div class="bg-overlay"></div>
-
-    </div>
-
-
-    <div class="page">
-
-        <!-- =================================================
-             HEADER
-        ================================================== -->
-
-        <header class="topbar">
-
-            <div class="logo">
-                Rakke<span>Z</span>
-            </div>
-
-            <div class="top-right">
-
-                <div class="top-pill">
-                    ⚡
-                    <strong id="headerCoins">0</strong>
-                    coins
-                </div>
-
-                <div class="top-pill">
-                    Level
-                    <strong id="headerLevel">1</strong>
-                </div>
-
-                <button
-                    class="icon-button"
-                    id="themeButton"
-                    title="Toggle theme"
-                >
-                    ☼
-                </button>
-
-            </div>
-
-        </header>
-
-
-        <!-- =================================================
-             MAIN LAYOUT
-        ================================================== -->
-
-        <div class="layout">
-
-
-            <!-- =================================================
-                 SIDEBAR
-            ================================================== -->
-
-            <aside class="sidebar">
-
-                <div class="sidebar-title">
-                    Productivity
-                </div>
-
-                <nav class="nav">
-
-                    <button
-                        class="nav-button active"
-                        data-tab="overview"
-                    >
-                        <span class="nav-icon">⌂</span>
-                        Overview
-                    </button>
-
-                    <button
-                        class="nav-button"
-                        data-tab="habits"
-                    >
-                        <span class="nav-icon">🌿</span>
-                        Habits
-                    </button>
-
-                    <button
-                        class="nav-button"
-                        data-tab="tasks"
-                    >
-                        <span class="nav-icon">✓</span>
-                        Tasks
-                    </button>
-
-                    <button
-                        class="nav-button"
-                        data-tab="notes"
-                    >
-                        <span class="nav-icon">📝</span>
-                        Notes
-                    </button>
-
-                </nav>
-
-
-                <div class="sidebar-bottom">
-
-                    <div class="mini-profile">
-
-                        <div class="avatar">
-                            R
-                        </div>
-
-                        <div class="profile-info">
-
-                            <strong>RakkeZ User</strong>
-
-                            <span>
-                                Productivity Center
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </aside>
-
-
-            <!-- =================================================
-                 CONTENT
-            ================================================== -->
-
-            <main class="content">
-
-
-                <!-- =================================================
-                     OVERVIEW
-                ================================================== -->
-
-                <section
-                    class="tab-content active"
-                    id="overview"
-                >
-
-                    <div class="page-header">
-
-                        <h1>
-                            Good evening.
-                        </h1>
-
-                        <p id="dateText">
-                            Tuesday, August 25
-                        </p>
-
-                    </div>
-
-
-                    <!-- TOP STATS -->
-
-                    <div class="stats-grid">
-
-
-                        <div class="card stat-card">
-
-                            <div class="stat-icon">
-                                ⚡
-                            </div>
-
-                            <div class="stat-label">
-                                Coins
-                            </div>
-
-                            <div
-                                class="stat-number"
-                                id="coinsValue"
-                            >
-                                0
-                            </div>
-
-                            <div class="stat-extra">
-                                Keep going
-                            </div>
-
-                        </div>
-
-
-                        <div class="card stat-card">
-
-                            <div class="stat-icon">
-                                ⏱
-                            </div>
-
-                            <div class="stat-label">
-                                Focus Today
-                            </div>
-
-                            <div
-                                class="stat-number"
-                                id="todayFocus"
-                            >
-                                0m
-                            </div>
-
-                            <div
-                                class="stat-extra"
-                                id="todaySessions"
-                            >
-                                0 sessions
-                            </div>
-
-                        </div>
-
-
-                        <div class="card stat-card">
-
-                            <div class="stat-icon">
-                                🌿
-                            </div>
-
-                            <div class="stat-label">
-                                Habits Today
-                            </div>
-
-                            <div
-                                class="stat-number"
-                                id="habitProgress"
-                            >
-                                0/4
-                            </div>
-
-                            <div
-                                class="stat-extra"
-                                id="habitRemaining"
-                            >
-                                4 remaining
-                            </div>
-
-                        </div>
-
-
-                        <div class="card stat-card">
-
-                            <div class="stat-icon">
-                                🔥
-                            </div>
-
-                            <div class="stat-label">
-                                Streak
-                            </div>
-
-                            <div
-                                class="stat-number"
-                                id="streakValue"
-                            >
-                                0d
-                            </div>
-
-                            <div
-                                class="stat-extra"
-                                id="bestStreak"
-                            >
-                                Best: 0d
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- LEVEL -->
-
-                    <div class="card level-card">
-
-                        <div class="level-row">
-
-                            <div class="level-title">
-
-                                <div
-                                    class="level-number"
-                                    id="levelNumber"
-                                >
-                                    1
-                                </div>
-
-                                <div>
-
-                                    <div class="level-name">
-                                        Level <span id="levelName">1</span>
-                                    </div>
-
-                                    <div
-                                        class="level-xp"
-                                        id="levelDescription"
-                                    >
-                                        0 / 100 XP to Level 2
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div
-                                class="xp-value"
-                                id="totalXP"
-                            >
-                                0 XP
-                            </div>
-
-                        </div>
-
-                        <div class="xp-bar">
-
-                            <div
-                                class="xp-progress"
-                                id="xpProgress"
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- WEEK + QUICK STATS -->
-
-                    <div class="two-column">
-
-
-                        <div class="card section-card">
-
-                            <div class="card-header">
-
-                                <div>
-
-                                    <div class="card-title">
-                                        Weekly Focus
-                                    </div>
-
-                                    <div class="card-subtitle">
-                                        Your focus time over the last 7 days
-                                    </div>
-
-                                </div>
-
-                                <strong
-                                    id="weeklyTotal"
-                                    style="font-size:13px;"
-                                >
-                                    0m total
-                                </strong>
-
-                            </div>
-
-
-                            <div
-                                class="chart"
-                                id="weeklyChart"
-                            ></div>
-
-                        </div>
-
-
-                        <div class="card section-card">
-
-                            <div class="card-header">
-
-                                <div>
-
-                                    <div class="card-title">
-                                        All-Time Stats
-                                    </div>
-
-                                    <div class="card-subtitle">
-                                        Your complete RakkeZ history
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="quick-list">
-
-
-                                <div class="quick-item">
-
-                                    <div class="quick-left">
-
-                                        <div class="quick-icon">
-                                            ⏱
-                                        </div>
-
-                                        <div>
-
-                                            <div class="quick-name">
-                                                Total Focus
-                                            </div>
-
-                                            <div class="quick-description">
-                                                Time spent focusing
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div
-                                        class="quick-value"
-                                        id="allTimeFocus"
-                                    >
-                                        0m
-                                    </div>
-
-                                </div>
-
-
-                                <div class="quick-item">
-
-                                    <div class="quick-left">
-
-                                        <div class="quick-icon">
-                                            ◷
-                                        </div>
-
-                                        <div>
-
-                                            <div class="quick-name">
-                                                Sessions
-                                            </div>
-
-                                            <div class="quick-description">
-                                                Completed focus sessions
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div
-                                        class="quick-value"
-                                        id="allTimeSessions"
-                                    >
-                                        0
-                                    </div>
-
-                                </div>
-
-
-                                <div class="quick-item">
-
-                                    <div class="quick-left">
-
-                                        <div class="quick-icon">
-                                            🔥
-                                        </div>
-
-                                        <div>
-
-                                            <div class="quick-name">
-                                                Longest Streak
-                                            </div>
-
-                                            <div class="quick-description">
-                                                Best consistency
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div
-                                        class="quick-value"
-                                        id="longestStreak"
-                                    >
-                                        0d
-                                    </div>
-
-                                </div>
-
-
-                                <div class="quick-item">
-
-                                    <div class="quick-left">
-
-                                        <div class="quick-icon">
-                                            ✓
-                                        </div>
-
-                                        <div>
-
-                                            <div class="quick-name">
-                                                Tasks Completed
-                                            </div>
-
-                                            <div class="quick-description">
-                                                Finished tasks
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div
-                                        class="quick-value"
-                                        id="tasksCompleted"
-                                    >
-                                        0
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- HABITS -->
-
-                    <div class="card section-card"
-                         style="margin-bottom:14px;">
-
-                        <div class="card-header">
-
-                            <div>
-
-                                <div class="card-title">
-                                    Habits
-                                </div>
-
-                                <div
-                                    class="card-subtitle"
-                                    id="overviewHabitSubtitle"
-                                >
-                                    0/4 today
-                                </div>
-
-                            </div>
-
-                            <button
-                                class="small-button"
-                                data-open-tab="habits"
-                            >
-                                →
-                            </button>
-
-                        </div>
-
-                        <div
-                            class="habit-preview"
-                            id="habitPreview"
-                        ></div>
-
-                    </div>
-
-
-                    <!-- ACHIEVEMENTS -->
-
-                    <div class="card section-card">
-
-                        <div class="card-header">
-
-                            <div>
-
-                                <div class="card-title">
-                                    Achievements
-                                </div>
-
-                                <div class="card-subtitle">
-                                    Milestones you're working toward
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="achievements"
-                            id="achievements"
-                        ></div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     HABITS
-                ================================================== -->
-
-                <section
-                    class="tab-content"
-                    id="habits"
-                >
-
-                    <div class="page-header">
-
-                        <h1>
-                            Habits
-                        </h1>
-
-                        <p>
-                            Build consistency one day at a time.
-                        </p>
-
-                    </div>
-
-
-                    <div class="page-toolbar">
-
-                        <div
-                            class="progress-summary"
-                            id="habitPageProgress"
-                        >
-                            0/4 done today
-                        </div>
-
-                        <button
-                            class="primary-button"
-                            id="addHabitButton"
-                        >
-                            ＋ New Habit
-                        </button>
-
-                    </div>
-
-
-                    <div
-                        class="habits-grid"
-                        id="habitsGrid"
-                    ></div>
-
-                </section>
-
-
-                <!-- =================================================
-                     TASKS
-                ================================================== -->
-
-                <section
-                    class="tab-content"
-                    id="tasks"
-                >
-
-                    <div class="page-header">
-
-                        <h1>
-                            Tasks
-                        </h1>
-
-                        <p>
-                            Keep your next actions clear and simple.
-                        </p>
-
-                    </div>
-
-
-                    <div class="card section-card">
-
-                        <div class="task-input">
-
-                            <input
-                                class="input"
-                                id="taskInput"
-                                placeholder="What needs to be done?"
-                            >
-
-                            <button
-                                class="task-add-button"
-                                id="addTaskButton"
-                            >
-                                +
-                            </button>
-
-                        </div>
-
-
-                        <div
-                            class="task-list"
-                            id="taskList"
-                        ></div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     NOTES
-                ================================================== -->
-
-                <section
-                    class="tab-content"
-                    id="notes"
-                >
-
-                    <div class="page-header">
-
-                        <h1>
-                            Notes
-                        </h1>
-
-                        <p>
-                            Capture ideas, plans and thoughts without friction.
-                        </p>
-
-                    </div>
-
-
-                    <div class="notes-layout">
-
-
-                        <aside class="notes-sidebar">
-
-                            <div class="notes-header">
-
-                                <div class="notes-title">
-                                    Notes
-                                </div>
-
-                                <button
-                                    class="small-button"
-                                    id="newNoteButton"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                            <div
-                                class="note-list"
-                                id="noteList"
-                            ></div>
-
-                        </aside>
-
-
-                        <div class="notes-editor">
-
-
-                            <div class="editor-toolbar">
-
-                                <div class="auto-save">
-
-                                    <span class="save-dot"></span>
-
-                                    <span id="saveStatus">
-                                        Saved
-                                    </span>
-
-                                </div>
-
-
-                                <div class="editor-actions">
-
-                                    <button
-                                        class="small-button"
-                                        id="deleteNoteButton"
-                                        title="Delete note"
-                                    >
-                                        🗑
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="note-editor">
-
-                                <input
-                                    class="note-title-input"
-                                    id="noteTitle"
-                                    placeholder="Note title"
-                                >
-
-                                <textarea
-                                    class="note-body"
-                                    id="noteBody"
-                                    placeholder="Start writing..."
-                                ></textarea>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-            </main>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     HABIT MODAL
-========================================================= -->
-
-<div
-    class="modal"
-    id="habitModal"
->
-
-    <div class="modal-box">
-
-        <div class="modal-head">
-
-            <div class="modal-title">
-                <span id="habitModalTitle">
-                    New Habit
-                </span>
-            </div>
-
-            <button
-                class="small-button"
-                id="closeHabitModal"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label class="form-label">
-                Habit name
-            </label>
-
-            <input
-                class="form-input"
-                id="habitNameInput"
-                placeholder="Reading"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label class="form-label">
-                Icon
-            </label>
-
-            <input
-                class="form-input emoji-input"
-                id="habitIconInput"
-                value="🌿"
-                maxlength="4"
-            >
-
-        </div>
-
-
-        <div class="modal-actions">
-
-            <button
-                class="cancel-button"
-                id="cancelHabit"
-            >
-                Cancel
-            </button>
-
-            <button
-                class="save-button"
-                id="saveHabit"
-            >
-                Save Habit
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     TOAST
-========================================================= -->
-
-<div
-    class="toast"
-    id="toast"
->
-    Saved
-</div>
-
-
-<script>
-
-"use strict";
-
-/* =========================================================
-   RAKKEZ PRODUCTIVITY CENTER
-   UPDATED PRODUCTIVITY ENGINE
-
-   FEATURES
-   ---------------------------------------------------------
-   • Daily habits
-   • Full weekly habit tracker
-   • Previous / current / next week
-   • Minutes per habit per day
-   • Weekly habit totals
-   • Weekly total focus
-   • Safe coin rewards
-   • Safe XP rewards
-   • History preservation
-   • Automatic migration from old habit format
-========================================================= */
-
-
-/* =========================================================
-   STORAGE
-========================================================= */
-
-const STORAGE_KEY =
-    "rakkez_productivity_v1";
-
-
-const DEFAULT_DATA = {
-
-    coins: 0,
-
-    xp: 0,
-
-    level: 1,
-
-    focusSessions: [],
-
-    tasks: [],
-
-    habits: [
-
-        {
-            id: "reading",
-
-            name: "Reading",
-
-            icon: "📚",
-
-            history: {}
-
-        },
-
-        {
-            id: "exercise",
-
-            name: "Exercise",
-
-            icon: "🏃",
-
-            history: {}
-
-        },
-
-        {
-            id: "meditation",
-
-            name: "Meditation",
-
-            icon: "🧘",
-
-            history: {}
-
-        },
-
-        {
-            id: "coding",
-
-            name: "Coding",
-
-            icon: "💻",
-
-            history: {}
-
-        }
-
-    ],
-
-    notes: [
-
-        {
-            id: "welcome",
-
-            title:
-                "Welcome to RakkeZ",
-
-            body:
-                "Your productivity space.\n\n" +
-                "Write your thoughts here. Notes are automatically saved.",
-
-            updatedAt:
-                Date.now()
-
-        }
-
-    ]
-
-};
-
-
-let data =
-    loadData();
-
-
-/* =========================================================
-   WEEK STATE
-========================================================= */
-
-let habitWeekOffset = 0;
-
-
-/* =========================================================
-   LOAD DATA
-========================================================= */
-
-function loadData() {
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                STORAGE_KEY
-            );
-
-
-        if (!saved) {
-
-            return structuredClone(
-                DEFAULT_DATA
-            );
-
-        }
-
-
-        const parsed =
-            JSON.parse(saved);
-
-
-        const result = {
-
-            ...structuredClone(
-                DEFAULT_DATA
-            ),
-
-            ...parsed
-
-        };
-
-
-        /*
-           Make sure arrays always exist.
-        */
-
-        if (!Array.isArray(result.habits)) {
-
-            result.habits = [];
-
-        }
-
-
-        if (!Array.isArray(result.tasks)) {
-
-            result.tasks = [];
-
-        }
-
-
-        if (!Array.isArray(result.focusSessions)) {
-
-            result.focusSessions = [];
-
-        }
-
-
-        if (!Array.isArray(result.notes)) {
-
-            result.notes = [];
-
-        }
-
-
-        /*
-           Migrate old habit history.
-
-           OLD:
-
-           history = {
-               "2026-08-25": true
-           }
-
-           NEW:
-
-           history = {
-               "2026-08-25": {
-                   completed: true,
-                   minutes: 30
-               }
-           }
-        */
-
-        result.habits.forEach(
-            habit => {
-
-                if (!habit.history) {
-
-                    habit.history = {};
-
-                }
-
-
-                Object.keys(
-                    habit.history
-                ).forEach(
-                    key => {
-
-                        const value =
-                            habit.history[key];
-
-
-                        if (
-                            typeof value ===
-                            "boolean"
-                        ) {
-
-                            habit.history[key] = {
-
-                                completed:
-                                    value,
-
-                                minutes:
-                                    0
-
-                            };
-
-                        }
-
-                    }
-                );
-
-            }
-        );
-
-
-        /*
-           Remove impossible coin values.
-        */
-
-        result.coins =
-            Math.max(
-                0,
-                Number(
-                    result.coins || 0
-                )
-            );
-
-
-        result.xp =
-            Math.max(
-                0,
-                Number(
-                    result.xp || 0
-                )
-            );
-
-
-        return result;
-
-    } catch (error) {
-
-        console.error(
-            "RakkeZ data load error:",
-            error
-        );
-
-
-        return structuredClone(
-            DEFAULT_DATA
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   SAVE
-========================================================= */
-
-function saveData() {
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-    );
-
-
-    window.dispatchEvent(
-        new CustomEvent(
-            "rakkez:data-updated"
-        )
-    );
-
-}
-
-
-/* =========================================================
-   DATE HELPERS
-========================================================= */
-
-function dateKey(
-    date = new Date()
-) {
-
-    const d =
-        new Date(date);
-
-
-    return [
-
-        d.getFullYear(),
-
-        String(
-            d.getMonth() + 1
-        ).padStart(2, "0"),
-
-        String(
-            d.getDate()
-        ).padStart(2, "0")
-
-    ].join("-");
-
-}
-
-
-function parseDateKey(
-    key
-) {
-
-    const parts =
-        key.split("-").map(
-            Number
-        );
-
-
-    return new Date(
-        parts[0],
-        parts[1] - 1,
-        parts[2]
-    );
-
-}
-
-
-function startOfWeek(
-    date = new Date()
-) {
-
-    const d =
-        new Date(date);
-
-
-    d.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-
-    const day =
-        d.getDay();
-
-
-    /*
-       Monday = first day.
-    */
-
-    const diff =
-        day === 0
-            ? -6
-            : 1 - day;
-
-
-    d.setDate(
-        d.getDate() + diff
-    );
-
-
-    return d;
-
-}
-
-
-function getHabitWeek() {
-
-    const start =
-        startOfWeek();
-
-
-    start.setDate(
-        start.getDate() +
-        habitWeekOffset * 7
-    );
-
-
-    const days = [];
-
-
-    for (
-        let i = 0;
-        i < 7;
-        i++
-    ) {
-
-        const d =
-            new Date(start);
-
-
-        d.setDate(
-            start.getDate() + i
-        );
-
-
-        days.push(d);
-
-    }
-
-
-    return days;
-
-}
-
-
-function getLast7Days() {
-
-    const days = [];
-
-
-    for (
-        let i = 6;
-        i >= 0;
-        i--
-    ) {
-
-        const d =
-            new Date();
-
-
-        d.setDate(
-            d.getDate() - i
-        );
-
-
-        days.push(d);
-
-    }
-
-
-    return days;
-
-}
-
-
-function formatDate(
-    date
-) {
-
-    return new Intl.DateTimeFormat(
-        "en-US",
-        {
-            weekday: "long",
-            month: "long",
-            day: "numeric"
-        }
-    ).format(date);
-
-}
-
-
-/* =========================================================
-   HABIT HISTORY HELPERS
-========================================================= */
-
-function getHabitDay(
-    habit,
-    key
-) {
-
-    if (!habit.history) {
-
-        habit.history = {};
-
-    }
-
-
-    const value =
-        habit.history[key];
-
-
-    if (
-        typeof value ===
-        "boolean"
-    ) {
-
-        habit.history[key] = {
-
-            completed:
-                value,
-
-            minutes:
-                0
-
-        };
-
-    }
-
-
-    if (
-        !habit.history[key]
-    ) {
-
-        habit.history[key] = {
-
-            completed: false,
-
-            minutes: 0
-
-        };
-
-    }
-
-
-    return habit.history[key];
-
-}
-
-
-function isHabitCompleted(
-    habit,
-    key
-) {
-
-    if (
-        !habit ||
-        !habit.history
-    ) {
-
-        return false;
-
-    }
-
-
-    const value =
-        habit.history[key];
-
-
-    if (
-        typeof value ===
-        "boolean"
-    ) {
-
-        return value;
-
-    }
-
-
-    return Boolean(
-        value &&
-        value.completed
-    );
-
-}
-
-
-function getHabitMinutes(
-    habit,
-    key
-) {
-
-    if (
-        !habit ||
-        !habit.history
-    ) {
-
-        return 0;
-
-    }
-
-
-    const value =
-        habit.history[key];
-
-
-    if (
-        typeof value ===
-        "boolean"
-    ) {
-
-        return 0;
-
-    }
-
-
-    return Math.max(
-        0,
-        Number(
-            value?.minutes || 0
-        )
-    );
-
-}
-
-
-/* =========================================================
-   HABIT COIN SYSTEM
-========================================================= */
-
-/*
-   IMPORTANT:
-
-   A completed habit can have only ONE reward
-   for a specific day.
-
-   Complete:
-       +1 coin
-       +10 XP
-
-   Cancel:
-       -1 coin
-       -10 XP
-
-   Therefore repeated:
-
-       complete
-       cancel
-       complete
-       cancel
-
-   can NEVER generate infinite coins.
-
-   The final balance always reflects the current
-   completed state.
-*/
-
-
-const HABIT_COIN_REWARD = 1;
-
-const HABIT_XP_REWARD = 10;
-
-
-function setHabitCompleted(
-    habitId,
-    key,
-    completed
-) {
-
-    const habit =
-        data.habits.find(
-            item =>
-                item.id === habitId
-        );
-
-
-    if (!habit) return;
-
-
-    const record =
-        getHabitDay(
-            habit,
-            key
-        );
-
-
-    const previous =
-        Boolean(
-            record.completed
-        );
-
-
-    /*
-       Nothing changed.
-    */
-
-    if (
-        previous ===
-        completed
-    ) {
-
-        return;
-
-    }
-
-
-    record.completed =
-        completed;
-
-
-    if (completed) {
-
-        data.coins +=
-            HABIT_COIN_REWARD;
-
-
-        data.xp +=
-            HABIT_XP_REWARD;
-
-    } else {
-
-        data.coins =
-            Math.max(
-                0,
-                data.coins -
-                HABIT_COIN_REWARD
-            );
-
-
-        data.xp =
-            Math.max(
-                0,
-                data.xp -
-                HABIT_XP_REWARD
-            );
-
-    }
-
-
-    saveData();
-
-    renderAll();
-
-}
-
-
-/* =========================================================
-   TOGGLE TODAY
-========================================================= */
-
-function toggleHabit(
-    habitId
-) {
-
-    const key =
-        dateKey();
-
-
-    const habit =
-        data.habits.find(
-            item =>
-                item.id === habitId
-        );
-
-
-    if (!habit) return;
-
-
-    const completed =
-        isHabitCompleted(
-            habit,
-            key
-        );
-
-
-    setHabitCompleted(
-        habitId,
-        key,
-        !completed
-    );
-
-
-    showToast(
-        !completed
-            ? "+1 coin · +10 XP"
-            : "-1 coin · -10 XP"
-    );
-
-}
-
-
-/* =========================================================
-   HABIT MINUTES
-========================================================= */
-
-function setHabitMinutes(
-    habitId,
-    key,
-    minutes
-) {
-
-    const habit =
-        data.habits.find(
-            item =>
-                item.id === habitId
-        );
-
-
-    if (!habit) return;
-
-
-    const cleanMinutes =
-        Math.max(
-            0,
-            Math.min(
-                1440,
-                Math.round(
-                    Number(
-                        minutes
-                    ) || 0
-                )
-            )
-        );
-
-
-    const record =
-        getHabitDay(
-            habit,
-            key
-        );
-
-
-    record.minutes =
-        cleanMinutes;
-
-
-    saveData();
-
-    renderAll();
-
-}
-
-
-/* =========================================================
-   WEEKLY HABIT DATA
-========================================================= */
-
-function getWeeklyHabitMinutes(
-    habit
-) {
-
-    return getHabitWeek()
-        .reduce(
-            (
-                total,
-                day
-            ) => {
-
-                return total +
-                    getHabitMinutes(
-                        habit,
-                        dateKey(day)
-                    );
-
-            },
-            0
-        );
-
-}
-
-
-function getWeeklyCompletedDays(
-    habit
-) {
-
-    return getHabitWeek()
-        .filter(
-            day =>
-                isHabitCompleted(
-                    habit,
-                    dateKey(day)
-                )
-        )
-        .length;
-
-}
-
-
-function getWeeklyAllHabitMinutes() {
-
-    return data.habits.reduce(
-        (
-            total,
-            habit
-        ) => {
-
-            return total +
-                getWeeklyHabitMinutes(
-                    habit
-                );
-
-        },
-        0
-    );
-
-}
-
-
-/* =========================================================
-   WEEKLY HABIT TRACKER
-========================================================= */
-
-function renderWeeklyHabitTracker() {
-
-    const container =
-        document.getElementById(
-            "weeklyHabitTracker"
-        );
-
-
-    if (!container) return;
-
-
-    const days =
-        getHabitWeek();
-
-
-    const start =
-        days[0];
-
-
-    const end =
-        days[6];
-
-
-    const label =
-        document.getElementById(
-            "habitWeekLabel"
-        );
-
-
-    const sameWeek =
-        habitWeekOffset === 0;
-
-
-    label.textContent =
-        sameWeek
-            ? `This Week · ${formatShortDate(start)} – ${formatShortDate(end)}`
-            : `${formatShortDate(start)} – ${formatShortDate(end)}`;
-
-
-    let html = `
-
-        <table class="weekly-table">
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        Habit
-                    </th>
-
-    `;
-
-
-    days.forEach(
-        day => {
-
-            const key =
-                dateKey(day);
-
-
-            const today =
-                key === dateKey();
-
-
-            html += `
-
-                <th
-                    class="${today ? "today" : ""}"
-                >
-
-                    ${day.toLocaleDateString(
-                        "en-US",
-                        {
-                            weekday: "short"
-                        }
-                    )}
-
-                    <br>
-
-                    <span
-                        style="
-                            font-size:8px;
-                            opacity:.55;
-                        "
-                    >
-                        ${day.getDate()}
-                    </span>
-
-                </th>
-
-            `;
-
-        }
-    );
-
-
-    html += `
-
-                    <th>
-                        Total
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-    `;
-
-
-    if (!data.habits.length) {
-
-        html += `
-
-            <tr>
-
-                <td
-                    colspan="9"
-                    style="
-                        padding:35px;
-                        text-align:center;
-                        color:var(--muted);
-                    "
-                >
-
-                    No habits yet.
-
-                </td>
-
-            </tr>
-
-        `;
-
-    } else {
-
-        data.habits.forEach(
-            habit => {
-
-                const weeklyMinutes =
-                    getWeeklyHabitMinutes(
-                        habit
-                    );
-
-
-                const completedDays =
-                    getWeeklyCompletedDays(
-                        habit
-                    );
-
-
-                html += `
-
-                    <tr>
-
-                        <td>
-
-                            <div
-                                class="weekly-habit-name"
-                            >
-
-                                <strong>
-                                    ${escapeHTML(
-                                        habit.icon
-                                    )}
-                                    ${escapeHTML(
-                                        habit.name
-                                    )}
-                                </strong>
-
-                                <span>
-                                    ${completedDays}/7 completed
-                                </span>
-
-                            </div>
-
-                        </td>
-
-                `;
-
-
-                days.forEach(
-                    day => {
-
-                        const key =
-                            dateKey(day);
-
-
-                        const completed =
-                            isHabitCompleted(
-                                habit,
-                                key
-                            );
-
-
-                        const minutes =
-                            getHabitMinutes(
-                                habit,
-                                key
-                            );
-
-
-                        const today =
-                            key === dateKey();
-
-
-                        html += `
-
-                            <td>
-
-                                <div
-                                    class="
-                                        weekly-day
-                                        ${completed ? "completed" : ""}
-                                        ${today ? "today" : ""}
-                                    "
-                                >
-
-                                    <button
-                                        class="weekly-day-button"
-                                        onclick="
-                                            toggleHabitDay(
-                                                '${habit.id}',
-                                                '${key}'
-                                            )
-                                        "
-                                    >
-                                        ${completed ? "✓ Done" : "—"}
-                                    </button>
-
-                                    <input
-                                        class="weekly-time-input"
-                                        type="number"
-                                        min="0"
-                                        max="1440"
-                                        step="5"
-                                        value="${minutes || ""}"
-                                        placeholder="min"
-                                        onchange="
-                                            updateHabitMinutesFromInput(
-                                                this,
-                                                '${habit.id}',
-                                                '${key}'
-                                            )
-                                        "
-                                        title="Minutes for this habit"
-                                    >
-
-                                    <div
-                                        class="weekly-hours"
-                                    >
-                                        ${formatMinutes(minutes)}
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-                        `;
-
-                    }
-                );
-
-
-                html += `
-
-                    <td>
-
-                        <div
-                            class="weekly-total-cell"
-                        >
-
-                            <strong>
-                                ${formatMinutes(
-                                    weeklyMinutes
-                                )}
-                            </strong>
-
-                            <span>
-                                ${completedDays}/7 days
-                            </span>
-
-                        </div>
-
-                    </td>
-
-                `;
-
-
-                html += `
-
-                    </tr>
-
-                `;
-
-            }
-        );
-
-    }
-
-
-    html += `
-
-            </tbody>
-
-        </table>
-
-    `;
-
-
-    container.innerHTML =
-        html;
-
-
-    renderWeeklyHabitSummary();
-
-}
-
-
-/* =========================================================
-   WEEKLY INPUT ACTIONS
-========================================================= */
-
-function toggleHabitDay(
-    habitId,
-    key
-) {
-
-    const habit =
-        data.habits.find(
-            item =>
-                item.id === habitId
-        );
-
-
-    if (!habit) return;
-
-
-    const current =
-        isHabitCompleted(
-            habit,
-            key
-        );
-
-
-    setHabitCompleted(
-        habitId,
-        key,
-        !current
-    );
-
-
-    showToast(
-        !current
-            ? "+1 coin · +10 XP"
-            : "-1 coin · -10 XP"
-    );
-
-}
-
-
-function updateHabitMinutesFromInput(
-    input,
-    habitId,
-    key
-) {
-
-    setHabitMinutes(
-        habitId,
-        key,
-        input.value
-    );
-
-}
-
-
-/* =========================================================
-   WEEK SUMMARY
-========================================================= */
-
-function renderWeeklyHabitSummary() {
-
-    const container =
-        document.getElementById(
-            "weeklyHabitSummary"
-        );
-
-
-    if (!container) return;
-
-
-    const days =
-        getHabitWeek();
-
-
-    const totalMinutes =
-        getWeeklyAllHabitMinutes();
-
-
-    let completed =
-        0;
-
-
-    data.habits.forEach(
-        habit => {
-
-            completed +=
-                getWeeklyCompletedDays(
-                    habit
-                );
-
-        }
-    );
-
-
-    const possible =
-        data.habits.length *
-        7;
-
-
-    const percentage =
-        possible
-            ? Math.round(
-                (
-                    completed /
-                    possible
-                ) * 100
-            )
-            : 0;
-
-
-    const weekFocus =
-        days.reduce(
-            (
-                total,
-                day
-            ) => {
-
-                return total +
-                    data.focusSessions
-                        .filter(
-                            session =>
-                                dateKey(
-                                    session.date
-                                ) ===
-                                dateKey(day)
-                        )
-                        .reduce(
-                            (
-                                sum,
-                                session
-                            ) =>
-                                sum +
-                                Number(
-                                    session.minutes ||
-                                    0
-                                ),
-                            0
-                        );
-
-            },
-            0
-        );
-
-
-    container.innerHTML = `
-
-        <div
-            class="weekly-summary-card"
-        >
-
-            <div class="weekly-summary-label">
-                Habit Time
-            </div>
-
-            <div class="weekly-summary-value">
-                ${formatMinutes(totalMinutes)}
-            </div>
-
-            <div class="weekly-summary-extra">
-                Total habit minutes
-            </div>
-
-        </div>
-
-
-        <div
-            class="weekly-summary-card"
-        >
-
-            <div class="weekly-summary-label">
-                Completion
-            </div>
-
-            <div class="weekly-summary-value">
-                ${percentage}%
-            </div>
-
-            <div class="weekly-summary-extra">
-                ${completed}/${possible || 0} days
-            </div>
-
-        </div>
-
-
-        <div
-            class="weekly-summary-card"
-        >
-
-            <div class="weekly-summary-label">
-                Focus Time
-            </div>
-
-            <div class="weekly-summary-value">
-                ${formatMinutes(weekFocus)}
-            </div>
-
-            <div class="weekly-summary-extra">
-                RakkeZ focus sessions
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   WEEK NAVIGATION
-========================================================= */
-
-function formatShortDate(
-    date
-) {
-
-    return date.toLocaleDateString(
-        "en-US",
-        {
-            month: "short",
-            day: "numeric"
-        }
-    );
-
-}
-
-
-function goToHabitWeek(
-    offset
-) {
-
-    habitWeekOffset +=
-        offset;
-
-
-    renderWeeklyHabitTracker();
-
-}
-
-
-function resetHabitWeek() {
-
-    habitWeekOffset =
-        0;
-
-
-    renderWeeklyHabitTracker();
-
-}
-
-
-document
-    .getElementById(
-        "previousHabitWeek"
-    )
-    ?.addEventListener(
-        "click",
-        () => {
-
-            goToHabitWeek(
-                -1
-            );
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "nextHabitWeek"
-    )
-    ?.addEventListener(
-        "click",
-        () => {
-
-            goToHabitWeek(
-                1
-            );
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "currentHabitWeek"
-    )
-    ?.addEventListener(
-        "click",
-        resetHabitWeek
-    );
-
-
-/* =========================================================
-   FOCUS DATA
-========================================================= */
-
-function getTodaySessions() {
-
-    const today =
-        dateKey();
-
-
-    return data.focusSessions.filter(
-        session =>
-            dateKey(
-                session.date
-            ) === today
-    );
-
-}
-
-
-function getTodayFocus() {
-
-    return getTodaySessions()
-        .reduce(
-            (
-                total,
-                session
-            ) =>
-                total +
-                Number(
-                    session.minutes ||
-                    0
-                ),
-            0
-        );
-
-}
-
-
-function getTotalFocus() {
-
-    return data.focusSessions
-        .reduce(
-            (
-                total,
-                session
-            ) =>
-                total +
-                Number(
-                    session.minutes ||
-                    0
-                ),
-            0
-        );
-
-}
-
-
-function getWeeklyFocus() {
-
-    return getLast7Days()
-        .map(
-            day => {
-
-                const key =
-                    dateKey(day);
-
-
-                const minutes =
-                    data.focusSessions
-                        .filter(
-                            session =>
-                                dateKey(
-                                    session.date
-                                ) === key
-                        )
-                        .reduce(
-                            (
-                                total,
-                                session
-                            ) =>
-                                total +
-                                Number(
-                                    session.minutes ||
-                                    0
-                                ),
-                            0
-                        );
-
-
-                return {
-
-                    date: day,
-
-                    key,
-
-                    minutes
-
-                };
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   STREAK
-========================================================= */
-
-function getProductivityDays() {
-
-    const days =
-        new Set();
-
-
-    data.focusSessions.forEach(
-        session => {
-
-            if (
-                Number(
-                    session.minutes || 0
-                ) > 0
-            ) {
-
-                days.add(
-                    dateKey(
-                        session.date
-                    )
-                );
-
-            }
-
-        }
-    );
-
-
-    data.habits.forEach(
-        habit => {
-
-            Object.keys(
-                habit.history || {}
-            ).forEach(
-                key => {
-
-                    if (
-                        isHabitCompleted(
-                            habit,
-                            key
-                        )
-                    ) {
-
-                        days.add(
-                            key
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-    data.tasks.forEach(
-        task => {
-
-            if (
-                task.completed &&
-                task.completedAt
-            ) {
-
-                days.add(
-                    dateKey(
-                        task.completedAt
-                    )
-                );
-
-            }
-
-        }
-    );
-
-
-    return days;
-
-}
-
-
-function calculateCurrentStreak() {
-
-    const days =
-        getProductivityDays();
-
-
-    let streak = 0;
-
-
-    const cursor =
-        new Date();
-
-
-    if (
-        !days.has(
-            dateKey(cursor)
-        )
-    ) {
-
-        cursor.setDate(
-            cursor.getDate() - 1
-        );
-
-    }
-
-
-    while (
-        days.has(
-            dateKey(cursor)
-        )
-    ) {
-
-        streak++;
-
-
-        cursor.setDate(
-            cursor.getDate() - 1
-        );
-
-    }
-
-
-    return streak;
-
-}
-
-
-function calculateLongestStreak() {
-
-    const days =
-        [...getProductivityDays()]
-            .sort();
-
-
-    if (!days.length) {
-
-        return 0;
-
-    }
-
-
-    let longest = 1;
-
-    let current = 1;
-
-
-    for (
-        let i = 1;
-        i < days.length;
-        i++
-    ) {
-
-        const previous =
-            new Date(
-                days[i - 1]
-            );
-
-
-        const currentDate =
-            new Date(
-                days[i]
-            );
-
-
-        const difference =
-            (
-                currentDate -
-                previous
-            ) /
-            (
-                1000 *
-                60 *
-                60 *
-                24
-            );
-
-
-        if (
-            difference === 1
-        ) {
-
-            current++;
-
-
-            longest =
-                Math.max(
-                    longest,
-                    current
-                );
-
-        } else {
-
-            current = 1;
-
-        }
-
-    }
-
-
-    return longest;
-
-}
-
-
-/* =========================================================
-   LEVEL
-========================================================= */
-
-function getLevelInfo() {
-
-    const xp =
-        Number(
-            data.xp || 0
-        );
-
-
-    const level =
-        Math.floor(
-            xp / 100
-        ) + 1;
-
-
-    const currentLevelXP =
-        xp % 100;
-
-
-    data.level =
-        level;
-
-
-    return {
-
-        level,
-
-        currentLevelXP,
-
-        percent:
-            currentLevelXP,
-
-        nextLevelXP:
-            100
-
-    };
-
-}
-
-
-/* =========================================================
-   TODAY HABITS
-========================================================= */
-
-function getTodayHabitCount() {
-
-    const today =
-        dateKey();
-
-
-    return data.habits.filter(
-        habit =>
-            isHabitCompleted(
-                habit,
-                today
-            )
-    ).length;
-
-}
-
-
-/* =========================================================
-   TASKS
-========================================================= */
-
-function addTask(
-    title
-) {
-
-    title =
-        title.trim();
-
-
-    if (!title) return;
-
-
-    data.tasks.unshift({
-
-        id:
-            crypto.randomUUID(),
-
-        title,
-
-        completed:
-            false,
-
-        createdAt:
-            Date.now(),
-
-        completedAt:
-            null
-
-    });
-
-
-    saveData();
-
-    renderAll();
-
-}
-
-
-function toggleTask(
-    taskId
-) {
-
-    const task =
-        data.tasks.find(
-            item =>
-                item.id === taskId
-        );
-
-
-    if (!task) return;
-
-
-    const newState =
-        !Boolean(
-            task.completed
-        );
-
-
-    task.completed =
-        newState;
-
-
-    if (newState) {
-
-        task.completedAt =
-            Date.now();
-
-
-        data.xp += 20;
-
-        data.coins += 2;
-
-
-        showToast(
-            "+2 coins · +20 XP"
-        );
-
-    } else {
-
-        task.completedAt =
-            null;
-
-
-        data.xp =
-            Math.max(
-                0,
-                data.xp - 20
-            );
-
-
-        data.coins =
-            Math.max(
-                0,
-                data.coins - 2
-            );
-
-
-        showToast(
-            "-2 coins · -20 XP"
-        );
-
-    }
-
-
-    saveData();
-
-    renderAll();
-
-}
-
-
-function deleteTask(
-    taskId
-) {
-
-    data.tasks =
-        data.tasks.filter(
-            task =>
-                task.id !== taskId
-        );
-
-
-    saveData();
-
-    renderAll();
-
-}
-
-
-function editTask(
-    id
-) {
-
-    const task =
-        data.tasks.find(
-            item =>
-                item.id === id
-        );
-
-
-    if (!task) return;
-
-
-    const newTitle =
-        prompt(
-            "Edit task:",
-            task.title
-        );
-
-
-    if (
-        newTitle === null
-    ) {
-
-        return;
-
-    }
-
-
-    const clean =
-        newTitle.trim();
-
-
-    if (!clean) return;
-
-
-    task.title =
-        clean;
-
-
-    saveData();
-
-    renderAll();
-
-}
-
-
-/* =========================================================
-   NOTES
-========================================================= */
-
-let currentNoteId =
-    null;
-
-
-let noteSaveTimer =
-    null;
-
-
-function createNote() {
-
-    const note = {
-
-        id:
-            crypto.randomUUID(),
-
-        title:
-            "New Note",
-
-        body:
-            "",
-
-        updatedAt:
-            Date.now()
-
-    };
-
-
-    data.notes.unshift(
-        note
-    );
-
-
-    currentNoteId =
-        note.id;
-
-
-    saveData();
-
-    renderNotes();
-
-
-    document
-        .getElementById(
-            "noteTitle"
-        )
-        .focus();
-
-}
-
-
-function selectNote(
-    noteId
-) {
-
-    currentNoteId =
-        noteId;
-
-
-    renderNotes();
-
-}
-
-
-function autoSaveNote() {
-
-    if (!currentNoteId) return;
-
-
-    const note =
-        data.notes.find(
-            item =>
-                item.id ===
-                currentNoteId
-        );
-
-
-    if (!note) return;
-
-
-    clearTimeout(
-        noteSaveTimer
-    );
-
-
-    const status =
-        document.getElementById(
-            "saveStatus"
-        );
-
-
-    status.textContent =
-        "Saving…";
-
-
-    noteSaveTimer =
-        setTimeout(
-            () => {
-
-                note.title =
-                    document
-                        .getElementById(
-                            "noteTitle"
-                        )
-                        .value;
-
-
-                note.body =
-                    document
-                        .getElementById(
-                            "noteBody"
-                        )
-                        .value;
-
-
-                note.updatedAt =
-                    Date.now();
-
-
-                saveData();
-
-
-                status.textContent =
-                    "Saved";
-
-
-                renderNoteListOnly();
-
-            },
-            350
-        );
-
-}
-
-
-function deleteCurrentNote() {
-
-    if (!currentNoteId) return;
-
-
-    if (
-        data.notes.length === 1
-    ) {
-
-        showToast(
-            "Keep at least one note."
-        );
-
-        return;
-
-    }
-
-
-    data.notes =
-        data.notes.filter(
-            note =>
-                note.id !==
-                currentNoteId
-        );
-
-
-    currentNoteId =
-        data.notes[0].id;
-
-
-    saveData();
-
-    renderNotes();
-
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-function renderHeader() {
-
-    const levelInfo =
-        getLevelInfo();
-
-
-    document.getElementById(
-        "headerCoins"
-    ).textContent =
-        data.coins;
-
-
-    document.getElementById(
-        "headerLevel"
-    ).textContent =
-        levelInfo.level;
-
-
-    document.getElementById(
-        "coinsValue"
-    ).textContent =
-        data.coins;
-
-
-    document.getElementById(
-        "levelNumber"
-    ).textContent =
-        levelInfo.level;
-
-
-    document.getElementById(
-        "levelName"
-    ).textContent =
-        levelInfo.level;
-
-
-    document.getElementById(
-        "totalXP"
-    ).textContent =
-        `${data.xp} XP`;
-
-
-    document.getElementById(
-        "levelDescription"
-    ).textContent =
-        `${levelInfo.currentLevelXP} / 100 XP to Level ${levelInfo.level + 1}`;
-
-
-    document.getElementById(
-        "xpProgress"
-    ).style.width =
-        `${levelInfo.percent}%`;
-
-
-    document.getElementById(
-        "dateText"
-    ).textContent =
-        formatDate(
-            new Date()
-        );
-
-}
-
-
-/* =========================================================
-   OVERVIEW
-========================================================= */
-
-function renderOverview() {
-
-    const todayFocus =
-        getTodayFocus();
-
-
-    const todaySessions =
-        getTodaySessions().length;
-
-
-    const totalFocus =
-        getTotalFocus();
-
-
-    const currentStreak =
-        calculateCurrentStreak();
-
-
-    const longestStreak =
-        calculateLongestStreak();
-
-
-    const habitsDone =
-        getTodayHabitCount();
-
-
-    const habitsTotal =
-        data.habits.length;
-
-
-    const tasksDone =
-        data.tasks.filter(
-            task =>
-                task.completed
-        ).length;
-
-
-    document.getElementById(
-        "todayFocus"
-    ).textContent =
-        formatMinutes(
-            todayFocus
-        );
-
-
-    document.getElementById(
-        "todaySessions"
-    ).textContent =
-        `${todaySessions} sessions`;
-
-
-    document.getElementById(
-        "habitProgress"
-    ).textContent =
-        `${habitsDone}/${habitsTotal}`;
-
-
-    document.getElementById(
-        "habitRemaining"
-    ).textContent =
-        `${Math.max(
-            0,
-            habitsTotal -
-            habitsDone
-        )} remaining`;
-
-
-    document.getElementById(
-        "overviewHabitSubtitle"
-    ).textContent =
-        `${habitsDone}/${habitsTotal} today`;
-
-
-    document.getElementById(
-        "habitPageProgress"
-    ).textContent =
-        `${habitsDone}/${habitsTotal} done today`;
-
-
-    document.getElementById(
-        "streakValue"
-    ).textContent =
-        `${currentStreak}d`;
-
-
-    document.getElementById(
-        "bestStreak"
-    ).textContent =
-        `Best: ${longestStreak}d`;
-
-
-    document.getElementById(
-        "allTimeFocus"
-    ).textContent =
-        formatMinutes(
-            totalFocus
-        );
-
-
-    document.getElementById(
-        "allTimeSessions"
-    ).textContent =
-        data.focusSessions.length;
-
-
-    document.getElementById(
-        "longestStreak"
-    ).textContent =
-        `${longestStreak}d`;
-
-
-    document.getElementById(
-        "tasksCompleted"
-    ).textContent =
-        tasksDone;
-
-
-    renderWeeklyChart();
-
-    renderHabitPreview();
-
-    renderAchievements();
-
-}
-
-
-/* =========================================================
-   FORMAT MINUTES
-========================================================= */
-
-function formatMinutes(
-    minutes
-) {
-
-    minutes =
-        Math.round(
-            Number(
-                minutes || 0
-            )
-        );
-
-
-    if (minutes < 60) {
-
-        return `${minutes}m`;
-
-    }
-
-
-    const hours =
-        Math.floor(
-            minutes / 60
-        );
-
-
-    const remaining =
-        minutes % 60;
-
-
-    if (!remaining) {
-
-        return `${hours}h`;
-
-    }
-
-
-    return `${hours}h ${remaining}m`;
-
-}
-
-
-/* =========================================================
-   WEEKLY CHART
-========================================================= */
-
-function renderWeeklyChart() {
-
-    const chart =
-        document.getElementById(
-            "weeklyChart"
-        );
-
-
-    const days =
-        getWeeklyFocus();
-
-
-    const max =
-        Math.max(
-            ...days.map(
-                day =>
-                    day.minutes
-            ),
-            1
-        );
-
-
-    const total =
-        days.reduce(
-            (
-                sum,
-                day
-            ) =>
-                sum +
-                day.minutes,
-            0
-        );
-
-
-    document.getElementById(
-        "weeklyTotal"
-    ).textContent =
-        `${formatMinutes(total)} total`;
-
-
-    chart.innerHTML =
-        days.map(
-            day => {
-
-                const height =
-                    day.minutes === 0
-                        ? 3
-                        :
-                        Math.max(
-                            5,
-                            (
-                                day.minutes /
-                                max
-                            ) * 160
-                        );
-
-
-                const label =
-                    day.date.toLocaleDateString(
-                        "en-US",
-                        {
-                            weekday:
-                                "short"
-                        }
-                    );
-
-
-                const today =
-                    day.key ===
-                    dateKey();
-
-
-                return `
-
-                    <div
-                        class="
-                            chart-day
-                            ${today ? "today" : ""}
-                        "
-                    >
-
-                        <div class="chart-value">
-                            ${formatMinutes(
-                                day.minutes
-                            )}
-                        </div>
-
-                        <div
-                            class="chart-column"
-                            style="
-                                height:${height}px
-                            "
-                        ></div>
-
-                        <div class="chart-label">
-                            ${label}
-                        </div>
-
-                    </div>
-
-                `;
-
-            }
-        ).join("");
-
-}
-
-
-/* =========================================================
-   HABIT PREVIEW
-========================================================= */
-
-function renderHabitPreview() {
-
-    const container =
-        document.getElementById(
-            "habitPreview"
-        );
-
-
-    if (!data.habits.length) {
-
-        container.innerHTML = `
-
-            <div class="empty">
-
-                <div class="empty-icon">
-                    🌿
-                </div>
-
-                <strong>
-                    No habits yet
-                </strong>
-
-                <p>
-                    Create your first habit.
-                </p>
-
-            </div>
-
-        `;
-
-
-        return;
-
-    }
-
-
-    const today =
-        dateKey();
-
-
-    container.innerHTML =
-        data.habits.map(
-            habit => {
-
-                const done =
-                    isHabitCompleted(
-                        habit,
-                        today
-                    );
-
-
-                const minutes =
-                    getHabitMinutes(
-                        habit,
-                        today
-                    );
-
-
-                return `
-
-                    <div
-                        class="
-                            habit-mini
-                            ${done ? "done" : ""}
-                        "
-                    >
-
-                        <div class="habit-mini-icon">
-                            ${escapeHTML(
-                                habit.icon
-                            )}
-                        </div>
-
-                        <div class="habit-mini-name">
-                            ${escapeHTML(
-                                habit.name
-                            )}
-                        </div>
-
-                        <div class="habit-mini-status">
-
-                            ${
-                                done
-                                    ? "Completed"
-                                    : "Pending"
-                            }
-
-                            ${
-                                minutes
-                                    ? ` · ${formatMinutes(minutes)}`
-                                    : ""
-                            }
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            }
-        ).join("");
-
-}
-
-
-/* =========================================================
-   ACHIEVEMENTS
-========================================================= */
-
-function renderAchievements() {
-
-    const container =
-        document.getElementById(
-            "achievements"
-        );
-
-
-    const streak =
-        calculateCurrentStreak();
-
-
-    const totalFocus =
-        getTotalFocus();
-
-
-    const sessions =
-        data.focusSessions.length;
-
-
-    const xp =
-        data.xp;
-
-
-    const tasks =
-        data.tasks.filter(
-            task =>
-                task.completed
-        ).length;
-
-
-    const achievements = [
-
-        {
-            icon:
-                "🔥",
-
-            name:
-                "7-Day Streak",
-
-            unlocked:
-                streak >= 7
-
-        },
-
-        {
-            icon:
-                "⚡",
-
-            name:
-                "100 Hours",
-
-            unlocked:
-                totalFocus >= 6000
-
-        },
-
-        {
-            icon:
-                "🏆",
-
-            name:
-                "Speed Runner",
-
-            unlocked:
-                sessions >= 10
-
-        },
-
-        {
-            icon:
-                "🧘",
-
-            name:
-                "No Distraction",
-
-            unlocked:
-                false
-
-        },
-
-        {
-            icon:
-                "💎",
-
-            name:
-                "Level 5",
-
-            unlocked:
-                data.level >= 5
-
-        },
-
-        {
-            icon:
-                "🚀",
-
-            name:
-                "50 Sessions",
-
-            unlocked:
-                sessions >= 50
-
-        },
-
-        {
-            icon:
-                "🌟",
-
-            name:
-                "1000 XP",
-
-            unlocked:
-                xp >= 1000
-
-        },
-
-        {
-            icon:
-                "📚",
-
-            name:
-                "First Task",
-
-            unlocked:
-                tasks >= 1
-
-        }
-
-    ];
-
-
-    container.innerHTML =
-        achievements.map(
-            achievement => `
-
-                <div
-                    class="
-                        achievement
-                        ${
-                            achievement.unlocked
-                                ? "unlocked"
-                                : ""
-                        }
-                    "
-                >
-
-                    <div class="achievement-icon">
-                        ${achievement.icon}
-                    </div>
-
-                    <div class="achievement-name">
-                        ${achievement.name}
-                    </div>
-
-                </div>
-
-            `
-        ).join("");
-
-}
-
-
-/* =========================================================
-   HABITS PAGE
-========================================================= */
-
 function renderHabits() {
 
     const container =
-        document.getElementById(
-            "habitsGrid"
-        );
+        document.getElementById("habitsGrid");
 
-
-    /*
-       Weekly tracker.
-    */
-
+    /* Weekly tracker. */
     renderWeeklyHabitTracker();
-
 
     if (!data.habits.length) {
 
         container.innerHTML = `
-
             <div class="card empty">
 
                 <div class="empty-icon">
@@ -7047,88 +1354,236 @@ function renderHabits() {
                 </p>
 
             </div>
-
         `;
 
-
         return;
+    }
+
+    const today = dateKey();
+
+    const days = getLast7Days();
+
+    container.innerHTML =
+        data.habits.map(habit => {
+
+            const done =
+                isHabitCompleted(
+                    habit,
+                    today
+                );
+
+            const completedDays =
+                days.filter(day =>
+                    isHabitCompleted(
+                        habit,
+                        dateKey(day)
+                    )
+                ).length;
+
+            const percent =
+                Math.round(
+                    (completedDays / 7) * 100
+                );
+
+            const todayMinutes =
+                getHabitMinutes(
+                    habit,
+                    today
+                );
+
+            const streak =
+                calculateHabitStreak(habit);
+
+            return `
+                <div class="card habit-card">
+
+                    <div class="habit-top">
+
+                        <div class="habit-main">
+
+                            <div class="habit-icon-large">
+                                ${escapeHTML(habit.icon)}
+                            </div>
+
+                            <div>
+
+                                <div class="habit-name">
+                                    ${escapeHTML(habit.name)}
+                                </div>
+
+                                <div class="habit-streak">
+                                    ${streak} day${streak === 1 ? "" : "s"} streak
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="habit-actions">
+
+                            <button
+                                class="small-button"
+                                onclick="editHabit('${habit.id}')"
+                                title="Edit habit"
+                            >
+                                ✎
+                            </button>
+
+                            <button
+                                class="small-button"
+                                onclick="deleteHabit('${habit.id}')"
+                                title="Delete habit"
+                            >
+                                ×
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="habit-progress-row">
+
+                        <span>
+                            <strong class="habit-percent">
+                                ${completedDays}/7
+                            </strong>
+                        </span>
+
+                        <span class="habit-percent">
+                            ${percent}%
+                        </span>
+
+                    </div>
+
+
+                    <div class="habit-progress">
+
+                        <div
+                            class="habit-progress-fill"
+                            style="width:${percent}%"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="week-days">
+
+                        ${days.map(day => {
+
+                            const key =
+                                dateKey(day);
+
+                            const completed =
+                                isHabitCompleted(
+                                    habit,
+                                    key
+                                );
+
+                            const isToday =
+                                key === today;
+
+                            return `
+                                <div
+                                    class="
+                                        day
+                                        ${completed ? "done" : ""}
+                                        ${isToday ? "today" : ""}
+                                    "
+                                >
+
+                                    <div class="day-name">
+                                        ${day.toLocaleDateString(
+                                            "en-US",
+                                            {
+                                                weekday: "short"
+                                            }
+                                        )}
+                                    </div>
+
+                                    <div class="day-dot">
+                                        ${completed ? "✓" : ""}
+                                    </div>
+
+                                </div>
+                            `;
+
+                        }).join("")}
+
+                    </div>
+
+
+                    <button
+                        class="
+                            habit-check
+                            ${done ? "completed" : ""}
+                        "
+                        onclick="toggleHabit('${habit.id}')"
+                    >
+
+                        ${
+                            done
+                                ? `✓ Completed${todayMinutes ? ` · ${formatMinutes(todayMinutes)}` : ""}`
+                                : "Mark as completed"
+                        }
+
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+}
+
+
+/* =========================================================
+   HABIT STREAK
+========================================================= */
+
+function calculateHabitStreak(habit) {
+
+    let streak = 0;
+
+    const cursor =
+        new Date();
+
+    while (
+        isHabitCompleted(
+            habit,
+            dateKey(cursor)
+        )
+    ) {
+
+        streak++;
+
+        cursor.setDate(
+            cursor.getDate() - 1
+        );
 
     }
 
-
-    const today =
-        dateKey();
-
-
-    const days =
-        getLast7Days();
-
-
-    container.innerHTML =
-        data.habits.map(
-            habit => {
-
-                const done =
-                    isHabitCompleted(
-                        habit,
-                        today
-                    );
-
-
-                const completedDays =
-                    days.filter(
-                        day =>
-                            isHabitCompleted(
-                                habit,
-                                dateKey(day)
-                            )
-                    ).length;
-
-
-                const percent =
-                    Math.round(
-                        (
-                            completedDays /
-                            7
-                        ) * 100
-                    );
-
-
-                const todayMinutes =
-                    getHabitMinutes(
-                        habit,
-                        today
-                    );
-
-
-                return `
-
-
+    return streak;
+}
 
 
 /* =========================================================
    HABIT MODAL
 ========================================================= */
 
-let editingHabitId =
-    null;
+let editingHabitId = null;
 
 
-function openHabitModal(
-    habit = null
-) {
+function openHabitModal(habit = null) {
 
     const modal =
         document.getElementById(
             "habitModal"
         );
 
-
     editingHabitId =
         habit
             ? habit.id
             : null;
-
 
     document.getElementById(
         "habitModalTitle"
@@ -7137,14 +1592,12 @@ function openHabitModal(
             ? "Edit Habit"
             : "New Habit";
 
-
     document.getElementById(
         "habitNameInput"
     ).value =
         habit
             ? habit.name
             : "";
-
 
     document.getElementById(
         "habitIconInput"
@@ -7153,25 +1606,19 @@ function openHabitModal(
             ? habit.icon
             : "🌿";
 
-
     modal.classList.add(
         "show"
     );
 
+    setTimeout(() => {
 
-    setTimeout(
-        () => {
+        document
+            .getElementById(
+                "habitNameInput"
+            )
+            .focus();
 
-            document
-                .getElementById(
-                    "habitNameInput"
-                )
-                .focus();
-
-        },
-        50
-    );
-
+    }, 50);
 }
 
 
@@ -7185,6 +1632,7 @@ function closeHabitModal() {
             "show"
         );
 
+    editingHabitId = null;
 }
 
 
@@ -7198,17 +1646,13 @@ function saveHabitFromModal() {
             .value
             .trim();
 
-
     const icon =
         document
             .getElementById(
                 "habitIconInput"
             )
             .value
-            .trim()
-            ||
-            "🌿";
-
+            .trim() || "🌿";
 
     if (!name) {
 
@@ -7217,7 +1661,6 @@ function saveHabitFromModal() {
         );
 
         return;
-
     }
 
 
@@ -7230,12 +1673,10 @@ function saveHabitFromModal() {
                     editingHabitId
             );
 
-
         if (habit) {
 
             habit.name =
                 name;
-
 
             habit.icon =
                 icon;
@@ -7266,19 +1707,21 @@ function saveHabitFromModal() {
 
     renderAll();
 
+    showToast(
+        editingHabitId
+            ? "Habit updated"
+            : "Habit created"
+    );
 }
 
 
-function editHabit(
-    id
-) {
+function editHabit(id) {
 
     const habit =
         data.habits.find(
             item =>
                 item.id === id
         );
-
 
     if (habit) {
 
@@ -7287,20 +1730,16 @@ function editHabit(
         );
 
     }
-
 }
 
 
-function deleteHabit(
-    id
-) {
+function deleteHabit(id) {
 
     const habit =
         data.habits.find(
             item =>
                 item.id === id
         );
-
 
     if (!habit) return;
 
@@ -7317,29 +1756,19 @@ function deleteHabit(
 
 
     /*
-       IMPORTANT:
-
-       We do NOT alter old history.
-
-       The active habit disappears,
-       but its stored record remains
-       in the local data object only until
-       it is removed.
-
-       If you want permanent historical
-       analytics after deletion, use the
-       archive system below.
+       Keep deleted habits in an archive
+       so their historical data is not
+       immediately lost.
     */
 
+    if (
+        !Array.isArray(
+            data.deletedHabits
+        )
+    ) {
 
-    /*
-       Instead of deleting history completely,
-       archive it.
-    */
-
-    if (!Array.isArray(data.deletedHabits)) {
-
-        data.deletedHabits = [];
+        data.deletedHabits =
+            [];
 
     }
 
@@ -7367,6 +1796,9 @@ function deleteHabit(
 
     renderAll();
 
+    showToast(
+        "Habit deleted"
+    );
 }
 
 
@@ -7380,7 +1812,6 @@ function renderTasks() {
         document.getElementById(
             "taskList"
         );
-
 
     if (!data.tasks.length) {
 
@@ -7404,93 +1835,82 @@ function renderTasks() {
 
         `;
 
-
         return;
-
     }
 
 
     container.innerHTML =
-        data.tasks.map(
-            task => `
+        data.tasks.map(task => `
 
-                <div
-                    class="
-                        task-row
-                        ${
-                            task.completed
-                                ? "completed"
-                                : ""
-                        }
+            <div
+                class="
+                    task-row
+                    ${task.completed ? "completed" : ""}
+                "
+            >
+
+                <button
+                    class="task-check"
+                    onclick="
+                        toggleTask('${task.id}')
                     "
                 >
-
-                    <button
-                        class="task-check"
-                        onclick="
-                            toggleTask(
-                                '${task.id}'
-                            )
-                        "
-                    >
-                        ${
-                            task.completed
-                                ? "✓"
-                                : ""
-                        }
-                    </button>
+                    ${
+                        task.completed
+                            ? "✓"
+                            : ""
+                    }
+                </button>
 
 
-                    <div class="task-content">
+                <div class="task-content">
 
-                        <div class="task-title">
-                            ${escapeHTML(
-                                task.title
-                            )}
-                        </div>
+                    <div class="task-title">
 
-                        <div class="task-meta">
-                            ${
-                                task.completed
-                                    ? "Completed"
-                                    : "Pending"
-                            }
-                        </div>
+                        ${escapeHTML(
+                            task.title
+                        )}
 
                     </div>
 
+                    <div class="task-meta">
 
-                    <div class="task-actions">
-
-                        <button
-                            class="small-button"
-                            onclick="
-                                editTask(
-                                    '${task.id}'
-                                )
-                            "
-                        >
-                            ✎
-                        </button>
-
-                        <button
-                            class="small-button"
-                            onclick="
-                                deleteTask(
-                                    '${task.id}'
-                                )
-                            "
-                        >
-                            ×
-                        </button>
+                        ${
+                            task.completed
+                                ? "Completed"
+                                : "Pending"
+                        }
 
                     </div>
 
                 </div>
 
-            `
-        ).join("");
 
+                <div class="task-actions">
+
+                    <button
+                        class="small-button"
+                        onclick="
+                            editTask('${task.id}')
+                        "
+                    >
+                        ✎
+                    </button>
+
+                    <button
+                        class="small-button"
+                        onclick="
+                            deleteTask('${task.id}')
+                        "
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
 }
 
 
@@ -7500,9 +1920,7 @@ function renderTasks() {
 
 function renderNotes() {
 
-    if (
-        !data.notes.length
-    ) {
+    if (!data.notes.length) {
 
         data.notes.push({
 
@@ -7548,7 +1966,6 @@ function renderNotes() {
                 currentNoteId
         );
 
-
     if (!note) return;
 
 
@@ -7557,18 +1974,15 @@ function renderNotes() {
     ).value =
         note.title;
 
-
     document.getElementById(
         "noteBody"
     ).value =
         note.body;
 
-
     document.getElementById(
         "saveStatus"
     ).textContent =
         "Saved";
-
 }
 
 
@@ -7579,70 +1993,66 @@ function renderNoteListOnly() {
             "noteList"
         );
 
-
     container.innerHTML =
-        data.notes.map(
-            note => `
+        data.notes.map(note => `
 
-                <div
-                    class="
-                        note-item
-                        ${
-                            note.id ===
-                            currentNoteId
-                                ? "active"
-                                : ""
-                        }
-                    "
-                    onclick="
-                        selectNote(
-                            '${note.id}'
-                        )
-                    "
-                >
+            <div
+                class="
+                    note-item
+                    ${
+                        note.id === currentNoteId
+                            ? "active"
+                            : ""
+                    }
+                "
+                onclick="
+                    selectNote('${note.id}')
+                "
+            >
 
-                    <div class="note-item-title">
-                        ${escapeHTML(
-                            note.title ||
-                            "Untitled Note"
-                        )}
-                    </div>
+                <div class="note-item-title">
 
-                    <div class="note-item-preview">
-                        ${escapeHTML(
-                            (
-                                note.body ||
-                                "No additional text"
-                            ).replace(
-                                /\n/g,
-                                " "
-                            )
-                        )}
-                    </div>
-
-                    <div class="note-item-date">
-                        ${formatNoteDate(
-                            note.updatedAt
-                        )}
-                    </div>
+                    ${escapeHTML(
+                        note.title ||
+                        "Untitled Note"
+                    )}
 
                 </div>
 
-            `
-        ).join("");
 
+                <div class="note-item-preview">
+
+                    ${escapeHTML(
+                        (
+                            note.body ||
+                            "No additional text"
+                        ).replace(
+                            /\n/g,
+                            " "
+                        )
+                    )}
+
+                </div>
+
+
+                <div class="note-item-date">
+
+                    ${formatNoteDate(
+                        note.updatedAt
+                    )}
+
+                </div>
+
+            </div>
+
+        `).join("");
 }
 
 
-function formatNoteDate(
-    timestamp
-) {
+function formatNoteDate(timestamp) {
 
     const date =
-        new Date(
-            timestamp
-        );
-
+        new Date(timestamp);
 
     return date.toLocaleDateString(
         "en-US",
@@ -7651,7 +2061,6 @@ function formatNoteDate(
             day: "numeric"
         }
     );
-
 }
 
 
@@ -7659,34 +2068,31 @@ function formatNoteDate(
    ESCAPE HTML
 ========================================================= */
 
-function escapeHTML(
-    value
-) {
+function escapeHTML(value) {
 
     return String(
         value ?? ""
     )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 }
 
 
@@ -7694,52 +2100,46 @@ function escapeHTML(
    TABS
 ========================================================= */
 
-function openTab(
-    tabName
-) {
+function openTab(tabName) {
 
     document
         .querySelectorAll(
             ".nav-button"
         )
-        .forEach(
-            button => {
+        .forEach(button => {
 
-                button.classList.toggle(
-                    "active",
-                    button.dataset.tab ===
-                    tabName
-                );
+            button.classList.toggle(
+                "active",
+                button.dataset.tab ===
+                tabName
+            );
 
-            }
-        );
+        });
 
 
     document
         .querySelectorAll(
             ".tab-content"
         )
-        .forEach(
-            section => {
+        .forEach(section => {
 
-                section.classList.toggle(
-                    "active",
-                    section.id ===
-                    tabName
-                );
+            section.classList.toggle(
+                "active",
+                section.id ===
+                tabName
+            );
 
-            }
-        );
+        });
 
 
     window.scrollTo({
 
         top: 0,
 
-        behavior: "smooth"
+        behavior:
+            "smooth"
 
     });
-
 }
 
 
@@ -7747,44 +2147,40 @@ document
     .querySelectorAll(
         ".nav-button"
     )
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    openTab(
-                        button.dataset.tab
-                    );
+                openTab(
+                    button.dataset.tab
+                );
 
-                }
-            );
+            }
+        );
 
-        }
-    );
+    });
 
 
 document
     .querySelectorAll(
         "[data-open-tab]"
     )
-    .forEach(
-        button => {
+    .forEach(button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    openTab(
-                        button.dataset.openTab
-                    );
+                openTab(
+                    button.dataset.openTab
+                );
 
-                }
-            );
+            }
+        );
 
-        }
-    );
+    });
 
 
 /* =========================================================
@@ -7804,15 +2200,12 @@ document
                     "taskInput"
                 );
 
-
             addTask(
                 input.value
             );
 
-
             input.value =
                 "";
-
 
             input.focus();
 
@@ -7974,7 +2367,6 @@ document
                 "light"
             );
 
-
             localStorage.setItem(
                 "rakkez_theme",
                 document.body.classList.contains(
@@ -7995,7 +2387,8 @@ const savedTheme =
 
 
 if (
-    savedTheme === "light"
+    savedTheme ===
+    "light"
 ) {
 
     document.body.classList.add(
@@ -8012,29 +2405,23 @@ if (
 let toastTimer;
 
 
-function showToast(
-    message
-) {
+function showToast(message) {
 
     const toast =
         document.getElementById(
             "toast"
         );
 
-
     toast.textContent =
         message;
-
 
     toast.classList.add(
         "show"
     );
 
-
     clearTimeout(
         toastTimer
     );
-
 
     toastTimer =
         setTimeout(
@@ -8047,7 +2434,6 @@ function showToast(
             },
             2200
         );
-
 }
 
 
@@ -8066,7 +2452,6 @@ window.addEventListener(
 
             data =
                 loadData();
-
 
             renderAll();
 
@@ -8092,15 +2477,10 @@ window.addEventListener(
 
 window.RakkeZProductivity = {
 
-    addFocusSession(
-        minutes
-    ) {
+    addFocusSession(minutes) {
 
         minutes =
-            Number(
-                minutes
-            );
-
+            Number(minutes);
 
         if (
             !Number.isFinite(
@@ -8140,7 +2520,7 @@ window.RakkeZProductivity = {
 
         /*
            Coins:
-           1 coin per 25 minutes.
+           1 coin per 25 focused minutes.
         */
 
         data.coins +=
@@ -8153,18 +2533,12 @@ window.RakkeZProductivity = {
 
         renderAll();
 
-
         showToast(
             `+${minutes}m focus recorded`
         );
 
     },
 
-
-    /*
-       Complete a specific habit
-       for a specific day.
-    */
 
     completeHabit(
         habitId,
@@ -8180,11 +2554,6 @@ window.RakkeZProductivity = {
     },
 
 
-    /*
-       Cancel a specific habit
-       for a specific day.
-    */
-
     cancelHabit(
         habitId,
         key = dateKey()
@@ -8198,10 +2567,6 @@ window.RakkeZProductivity = {
 
     },
 
-
-    /*
-       Add minutes to a habit.
-    */
 
     setHabitMinutes(
         habitId,
@@ -8231,7 +2596,6 @@ window.RakkeZProductivity = {
 
         data =
             loadData();
-
 
         renderAll();
 
@@ -8267,35 +2631,31 @@ renderAll();
 ========================================================= */
 
 /*
-   Focus:
 
-   RakkeZProductivity.addFocusSession(45);
+Focus:
 
-
-   Complete habit:
-
-   RakkeZProductivity.completeHabit(
-       "reading"
-   );
+RakkeZProductivity.addFocusSession(45);
 
 
-   Cancel habit:
+Complete habit:
 
-   RakkeZProductivity.cancelHabit(
-       "reading"
-   );
+RakkeZProductivity.completeHabit(
+    "reading"
+);
 
 
-   Add 60 minutes:
+Cancel habit:
 
-   RakkeZProductivity.setHabitMinutes(
-       "reading",
-       60
-   );
+RakkeZProductivity.cancelHabit(
+    "reading"
+);
+
+
+Add 60 minutes:
+
+RakkeZProductivity.setHabitMinutes(
+    "reading",
+    60
+);
+
 */
-
-</script>
-
-</body>
-
-</html>
