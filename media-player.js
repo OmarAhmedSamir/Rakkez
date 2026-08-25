@@ -4,9 +4,8 @@
 
     /* =====================================================
        RAKKEZ MEDIA PLAYER
-       Full Replacement
+       Full Replacement Version
        ===================================================== */
-
 
     /* =====================================================
        STORAGE
@@ -21,10 +20,8 @@
         localTracks: "rakkez_local_music_names"
     };
 
-
     /* =====================================================
        BUILT-IN PLAYLIST
-       DO NOT CHANGE
        ===================================================== */
 
     const PLAYLIST = [
@@ -32,137 +29,101 @@
             title: "بحب الله موسيقى مع بيز هادي",
             artist: "Ahmed S",
             src: "Music/Guitar.mp3",
-            artwork: "Music/artwork/Guitar.png",
+            artwork: "Music/artwork/Blog/Guitar.png",
             type: "lofi"
         },
         {
             title: "Airplane",
             artist: "RakkeZ Ambient",
             src: "Airplane.mp3",
-            artwork: "Music/artwork/Airplane.png",
+            artwork: "Music/artwork/Blog/Airplane.png",
             type: "lofi"
         },
         {
             title: "Coffee",
             artist: "RakkeZ Ambient",
             src: "Caffee.mp3",
-            artwork: "Music/artwork/Caffee.png",
+            artwork: "Music/artwork/Blog/Caffee.png",
             type: "lofi"
         },
         {
             title: "Fireplace",
             artist: "RakkeZ Ambient",
             src: "FirePlace.mp3",
-            artwork: "Music/artwork/FirePlace.png",
+            artwork: "Music/artwork/Blog/FirePlace.png",
             type: "lofi"
         },
         {
             title: "Peaceful Piano",
             artist: "RakkeZ Lofi",
             src: "peaceful-piano.mp3",
-            artwork: "Music/artwork/peaceful-piano.png",
+            artwork: "Music/artwork/Blog/peaceful-piano.png",
             type: "lofi"
         },
         {
             title: "Rain",
             artist: "RakkeZ Ambient",
             src: "rain.mp3",
-            artwork: "Music/artwork/rain.png",
+            artwork: "Music/artwork/Blog/rain.png",
             type: "lofi"
         }
     ];
-
 
     /* =====================================================
        EFFECTS
        
        IMPORTANT:
-       Add / edit Effects ONLY HERE.
+       Add future effects ONLY inside this list.
        
-       image = image inside:
-       assets/blog/effects/
+       The image paths below match the actual GitHub files
+       supplied by the user.
        
-       audio = audio inside:
-       assets/blog/effects/
-       
-       If audio is empty or missing:
-       Effect remains safe and does NOT break the player.
+       Audio is null when an actual audio file has not been
+       provided yet. This prevents 404 errors.
        ===================================================== */
 
     const AMBIENT_EFFECTS = [
-
-        {
-            id: "rain",
-            name: "Rain",
-            icon: "🌧️",
-
-            image:
-                "assets/blog/effects/RAIN.jpg",
-
-            audio:
-                "assets/blog/effects/rain.mp3",
-
-            defaultVolume: 0.50
-        },
-
         {
             id: "coffee",
             name: "Coffee",
             icon: "☕",
-
-            image:
-                "assets/blog/effects/CAFFEE.jpg",
-
-            audio:
-                "assets/blog/effects/coffee.mp3",
-
-            defaultVolume: 0.50
+            image: "assets/blog/effects/CAFFEE.jpg",
+            src: null,
+            defaultVolume: 0.5
         },
-
         {
             id: "fireplace",
             name: "Fireplace",
             icon: "🔥",
-
-            image:
-                "assets/blog/effects/Fireplace.jfif",
-
-            audio:
-                "assets/blog/effects/fireplace.mp3",
-
-            defaultVolume: 0.50
+            image: "assets/blog/effects/Fireplace.jfif",
+            src: null,
+            defaultVolume: 0.5
         },
-
         {
             id: "guitar",
             name: "Guitar",
             icon: "🎸",
-
-            image:
-                "assets/blog/effects/Guitar.jpg",
-
-            audio:
-                "assets/blog/effects/guitar.mp3",
-
-            defaultVolume: 0.50
+            image: "assets/blog/effects/Guitar.jpg",
+            src: null,
+            defaultVolume: 0.5
         },
-
         {
             id: "peaceful-piano",
             name: "Peaceful Piano",
             icon: "🎹",
-
-            image:
-                "assets/blog/effects/PEACEFUL-PIANO.jpg",
-
-            audio:
-                "assets/blog/effects/peaceful-piano.mp3",
-
-            defaultVolume: 0.50
+            image: "assets/blog/effects/PEACEFUL-PIANO.jpg",
+            src: null,
+            defaultVolume: 0.5
+        },
+        {
+            id: "rain",
+            name: "Rain",
+            icon: "🌧️",
+            image: "assets/blog/effects/RAIN.jpg",
+            src: null,
+            defaultVolume: 0.5
         }
-
     ];
-
 
     /* =====================================================
        LOCAL TRACKS
@@ -172,270 +133,162 @@
 
     const localObjectUrls = [];
 
-
     function getAllTracks() {
         return PLAYLIST.concat(LOCAL_TRACKS);
     }
-
 
     /* =====================================================
        ELEMENTS
        ===================================================== */
 
     const overlay =
-        document.getElementById(
-            "rakkezMediaOverlay"
-        );
+        document.getElementById("rakkezMediaOverlay");
 
     const closeButton =
-        document.getElementById(
-            "rakkezMediaClose"
-        );
+        document.getElementById("rakkezMediaClose");
 
     const mediaButton =
-        document.getElementById(
-            "mediaOpen"
-        );
-
+        document.getElementById("mediaOpen");
 
     const tabs =
-        document.querySelectorAll(
-            ".rakkez-media-tab"
-        );
+        document.querySelectorAll(".rakkez-media-tab");
 
     const sources =
-        document.querySelectorAll(
-            ".rakkez-media-source"
-        );
-
+        document.querySelectorAll(".rakkez-media-source");
 
     const artwork =
-        document.getElementById(
-            "rakkezArtwork"
-        );
+        document.getElementById("rakkezArtwork");
 
     const trackName =
-        document.getElementById(
-            "rakkezTrackName"
-        );
+        document.getElementById("rakkezTrackName");
 
     const trackArtist =
-        document.getElementById(
-            "rakkezTrackArtist"
-        );
+        document.getElementById("rakkezTrackArtist");
 
     const playlistElement =
-        document.getElementById(
-            "rakkezPlaylist"
-        );
+        document.getElementById("rakkezPlaylist");
 
     const playlistCount =
-        document.getElementById(
-            "rakkezPlaylistCount"
-        );
-
+        document.getElementById("rakkezPlaylistCount");
 
     const playButton =
-        document.getElementById(
-            "rakkezPlay"
-        );
+        document.getElementById("rakkezPlay");
 
     const previousButton =
-        document.getElementById(
-            "rakkezPrevious"
-        );
+        document.getElementById("rakkezPrevious");
 
     const nextButton =
-        document.getElementById(
-            "rakkezNext"
-        );
+        document.getElementById("rakkezNext");
 
     const shuffleButton =
-        document.getElementById(
-            "rakkezShuffle"
-        );
+        document.getElementById("rakkezShuffle");
 
     const loopButton =
-        document.getElementById(
-            "rakkezLoop"
-        );
+        document.getElementById("rakkezLoop");
 
     const autoNextButton =
-        document.getElementById(
-            "rakkezAutoNext"
-        );
-
+        document.getElementById("rakkezAutoNext");
 
     const progress =
-        document.getElementById(
-            "rakkezProgress"
-        );
+        document.getElementById("rakkezProgress");
 
     const currentTimeElement =
-        document.getElementById(
-            "rakkezCurrentTime"
-        );
+        document.getElementById("rakkezCurrentTime");
 
     const durationElement =
-        document.getElementById(
-            "rakkezDuration"
-        );
-
+        document.getElementById("rakkezDuration");
 
     const volume =
-        document.getElementById(
-            "rakkezVolume"
-        );
+        document.getElementById("rakkezVolume");
 
     const volumeValue =
-        document.getElementById(
-            "rakkezVolumeValue"
-        );
-
+        document.getElementById("rakkezVolumeValue");
 
     const youtubeInput =
-        document.getElementById(
-            "rakkezYoutubeInput"
-        );
+        document.getElementById("rakkezYoutubeInput");
 
     const youtubePlay =
-        document.getElementById(
-            "rakkezYoutubePlay"
-        );
+        document.getElementById("rakkezYoutubePlay");
 
     const youtubeEmbed =
-        document.getElementById(
-            "rakkezYoutubeEmbed"
-        );
-
+        document.getElementById("rakkezYoutubeEmbed");
 
     const spotifyInput =
-        document.getElementById(
-            "rakkezSpotifyInput"
-        );
+        document.getElementById("rakkezSpotifyInput");
 
     const spotifyPlay =
-        document.getElementById(
-            "rakkezSpotifyPlay"
-        );
+        document.getElementById("rakkezSpotifyPlay");
 
     const spotifyEmbed =
-        document.getElementById(
-            "rakkezSpotifyEmbed"
-        );
-
+        document.getElementById("rakkezSpotifyEmbed");
 
     const localFile =
-        document.getElementById(
-            "rakkezLocalFile"
-        );
+        document.getElementById("rakkezLocalFile");
 
     const localAudio =
-        document.getElementById(
-            "rakkezLocalAudio"
-        );
+        document.getElementById("rakkezLocalAudio");
 
     const localList =
-        document.getElementById(
-            "rakkezLocalList"
-        );
-
+        document.getElementById("rakkezLocalList");
 
     /* =====================================================
        MINI PLAYER
        ===================================================== */
 
     const miniPlayer =
-        document.getElementById(
-            "rakkezMiniPlayer"
-        );
+        document.getElementById("rakkezMiniPlayer");
 
     const miniArtwork =
-        document.getElementById(
-            "rakkezMiniArtwork"
-        );
+        document.getElementById("rakkezMiniArtwork");
 
     const miniTitle =
-        document.getElementById(
-            "rakkezMiniTitle"
-        );
+        document.getElementById("rakkezMiniTitle");
 
     const miniArtist =
-        document.getElementById(
-            "rakkezMiniArtist"
-        );
+        document.getElementById("rakkezMiniArtist");
 
     const miniPlay =
-        document.getElementById(
-            "rakkezMiniPlay"
-        );
+        document.getElementById("rakkezMiniPlay");
 
     const miniNext =
-        document.getElementById(
-            "rakkezMiniNext"
-        );
+        document.getElementById("rakkezMiniNext");
 
     const miniClose =
-        document.getElementById(
-            "rakkezMiniClose"
-        );
+        document.getElementById("rakkezMiniClose");
 
     const miniProgress =
-        document.getElementById(
-            "rakkezMiniProgress"
-        );
-
+        document.getElementById("rakkezMiniProgress");
 
     /* =====================================================
        AUDIO ENGINE
        ===================================================== */
 
-    const audio =
-        new Audio();
+    const audio = new Audio();
 
     audio.preload = "metadata";
     audio.controls = false;
 
-
-    let currentIndex =
-        parseInt(
-            localStorage.getItem(
-                STORAGE.track
-            ),
-            10
-        );
-
+    let currentIndex = parseInt(
+        localStorage.getItem(STORAGE.track),
+        10
+    );
 
     let shuffle =
-        localStorage.getItem(
-            STORAGE.shuffle
-        ) === "true";
-
+        localStorage.getItem(STORAGE.shuffle) === "true";
 
     let loop =
-        localStorage.getItem(
-            STORAGE.loop
-        ) === "true";
-
+        localStorage.getItem(STORAGE.loop) === "true";
 
     let autoNext =
-        localStorage.getItem(
-            STORAGE.autoNext
-        ) !== "false";
-
+        localStorage.getItem(STORAGE.autoNext) !== "false";
 
     let isDraggingProgress = false;
-
     let miniPlayerClosed = true;
-
     let currentIsLocal = false;
-
     let currentTrackFailed = false;
 
     let loadingTimer = null;
-
     let currentLoadToken = 0;
-
 
     /* =====================================================
        MEDIA STATUS
@@ -451,13 +304,10 @@
             getAllTracks()[currentIndex];
 
         if (current) {
-
             trackName.textContent =
-                current.title +
-                " — unavailable";
+                current.title + " — unavailable";
         }
     }
-
 
     function clearLoadingTimer() {
 
@@ -465,49 +315,37 @@
             return;
         }
 
-        clearTimeout(
-            loadingTimer
-        );
-
+        clearTimeout(loadingTimer);
         loadingTimer = null;
     }
-
 
     function startLoadingGuard(token) {
 
         clearLoadingTimer();
 
-        loadingTimer =
-            setTimeout(
-                function () {
+        loadingTimer = setTimeout(function () {
 
-                    if (
-                        token !==
-                        currentLoadToken
-                    ) {
-                        return;
-                    }
+            if (token !== currentLoadToken) {
+                return;
+            }
 
-                    if (
-                        audio.readyState <
-                        HTMLMediaElement.HAVE_METADATA
-                    ) {
+            if (
+                audio.readyState <
+                HTMLMediaElement.HAVE_METADATA
+            ) {
 
-                        console.warn(
-                            "RakkeZ Media: Audio loading timeout:",
-                            audio.src
-                        );
+                console.warn(
+                    "RakkeZ Media: Audio loading timeout:",
+                    audio.src
+                );
 
-                        handleTrackError(
-                            "Loading timeout"
-                        );
-                    }
+                handleTrackError(
+                    "Loading timeout"
+                );
+            }
 
-                },
-                12000
-            );
+        }, 12000);
     }
-
 
     function handleTrackError(reason) {
 
@@ -518,19 +356,12 @@
         audio.pause();
 
         if (playButton) {
-
-            playButton.textContent =
-                "▶";
-
-            playButton.title =
-                "Play";
+            playButton.textContent = "▶";
+            playButton.title = "Play";
         }
 
         if (artwork) {
-
-            artwork.classList.remove(
-                "playing"
-            );
+            artwork.classList.remove("playing");
         }
 
         console.warn(
@@ -544,7 +375,6 @@
         updateMiniPlayer();
     }
 
-
     /* =====================================================
        AMBIENT EFFECTS ENGINE
        ===================================================== */
@@ -554,12 +384,10 @@
         const STORAGE_PREFIX =
             "rakkez_effect_";
 
-
         const effectsSource =
             document.getElementById(
                 "rakkezEffectsSource"
             );
-
 
         const effectsContainer =
             document.getElementById(
@@ -567,281 +395,97 @@
             ) ||
             effectsSource;
 
-
         const effectPlayers = {};
-
 
         /* =================================================
            CREATE EFFECT PLAYERS
            ================================================= */
 
-        AMBIENT_EFFECTS.forEach(
-            function (effect) {
+        AMBIENT_EFFECTS.forEach(function (effect) {
 
-                let savedVolume =
-                    parseFloat(
-                        localStorage.getItem(
-                            STORAGE_PREFIX +
-                            effect.id +
-                            "_volume"
-                        )
-                    );
-
-
-                if (
-                    !Number.isFinite(
-                        savedVolume
+            let savedVolume =
+                parseFloat(
+                    localStorage.getItem(
+                        STORAGE_PREFIX +
+                        effect.id +
+                        "_volume"
                     )
-                ) {
+                );
 
-                    savedVolume =
-                        effect.defaultVolume;
-                }
-
-
+            if (!Number.isFinite(savedVolume)) {
                 savedVolume =
-                    Math.max(
-                        0,
-                        Math.min(
-                            1,
-                            savedVolume
-                        )
-                    );
+                    effect.defaultVolume;
+            }
 
+            savedVolume = Math.max(
+                0,
+                Math.min(
+                    1,
+                    savedVolume
+                )
+            );
 
-                const effectAudio =
-                    new Audio();
+            /*
+             * IMPORTANT:
+             * Do not create Audio(null).
+             *
+             * Effects without a real audio source are kept
+             * safely unavailable.
+             */
 
+            let effectAudio = null;
+
+            if (
+                typeof effect.src === "string" &&
+                effect.src.trim()
+            ) {
+
+                effectAudio =
+                    new Audio(effect.src);
 
                 effectAudio.loop = true;
-
-                effectAudio.preload =
-                    "none";
-
+                effectAudio.preload = "metadata";
                 effectAudio.volume =
                     savedVolume;
-
-
-                const player = {
-
-                    audio:
-                        effectAudio,
-
-                    volume:
-                        savedVolume,
-
-                    available:
-                        false,
-
-                    checked:
-                        false,
-
-                    loading:
-                        false
-
-                };
-
-
-                effectPlayers[
-                    effect.id
-                ] = player;
-
-
-                /*
-                 * IMPORTANT:
-                 *
-                 * Do NOT set src immediately.
-                 *
-                 * This prevents the browser from requesting
-                 * rain.mp3 / missing files on page load.
-                 *
-                 * The audio is checked only when the user
-                 * actually tries to play it.
-                 */
 
                 effectAudio.addEventListener(
                     "error",
                     function () {
 
-                        player.available =
-                            false;
-
-                        player.loading =
-                            false;
-
-                        player.checked =
-                            true;
-
-
                         console.warn(
-                            "RakkeZ: Effect audio unavailable:",
-                            effect.audio
+                            "RakkeZ: Effect unavailable:",
+                            effect.src
                         );
-
-
-                        const card =
-                            findEffectCard(
-                                effect
-                            );
-
-
-                        if (card) {
-
-                            card.classList.add(
-                                "unavailable"
-                            );
-
-                            card.setAttribute(
-                                "data-effect-unavailable",
-                                "true"
-                            );
-                        }
                     }
                 );
-
-
-                effectAudio.addEventListener(
-                    "canplay",
-                    function () {
-
-                        player.available =
-                            true;
-
-                        player.loading =
-                            false;
-
-                        player.checked =
-                            true;
-
-
-                        const card =
-                            findEffectCard(
-                                effect
-                            );
-
-
-                        if (card) {
-
-                            card.classList.remove(
-                                "unavailable"
-                            );
-
-                            card.removeAttribute(
-                                "data-effect-unavailable"
-                            );
-                        }
-                    }
-                );
-
-
-                effectAudio.addEventListener(
-                    "play",
-                    function () {
-
-                        const card =
-                            findEffectCard(
-                                effect
-                            );
-
-
-                        if (card) {
-
-                            card.classList.add(
-                                "active"
-                            );
-
-
-                            const toggle =
-                                getEffectToggle(
-                                    card
-                                );
-
-
-                            if (toggle) {
-
-                                toggle.classList.add(
-                                    "active"
-                                );
-
-                                toggle.textContent =
-                                    getEffectStopText(
-                                        effect
-                                    );
-                            }
-                        }
-                    }
-                );
-
-
-                effectAudio.addEventListener(
-                    "pause",
-                    function () {
-
-                        const card =
-                            findEffectCard(
-                                effect
-                            );
-
-
-                        if (card) {
-
-                            card.classList.remove(
-                                "active"
-                            );
-
-
-                            const toggle =
-                                getEffectToggle(
-                                    card
-                                );
-
-
-                            if (toggle) {
-
-                                toggle.classList.remove(
-                                    "active"
-                                );
-
-                                toggle.textContent =
-                                    getEffectPlayText(
-                                        effect
-                                    );
-                            }
-                        }
-                    }
-                );
-
             }
-        );
 
+            effectPlayers[effect.id] = {
+                audio: effectAudio,
+                volume: savedVolume,
+                available: !!effectAudio
+            };
+        });
 
         /* =================================================
-           EFFECT HELPERS
+           FIND EXISTING EFFECT CARD
            ================================================= */
 
-        function findEffectCard(effect) {
+        function getExistingEffectCard(effect) {
 
             if (!effectsContainer) {
                 return null;
             }
 
-
             const selectors = [
-
                 `[data-effect="${effect.id}"]`,
-
                 `[data-rakkez-effect="${effect.id}"]`,
-
                 `#rakkezEffect-${effect.id}`,
-
                 `.rakkez-effect-${effect.id}`
-
             ];
 
-
             for (
-                const selector
-                of selectors
+                const selector of selectors
             ) {
 
                 try {
@@ -851,132 +495,77 @@
                             selector
                         );
 
-
                     if (element) {
                         return element;
                     }
 
                 } catch (error) {
-
-                    /*
-                     * Ignore invalid selectors.
-                     */
+                    // Ignore invalid selectors.
                 }
             }
-
 
             return null;
         }
 
+        /* =================================================
+           UPDATE EFFECT CARD STATE
+           ================================================= */
 
-        function getEffectToggle(card) {
-
-            if (!card) {
-                return null;
-            }
-
-
-            return card.querySelector(
-                ".rakkez-effect-toggle, [data-effect-toggle], button"
-            );
-        }
-
-
-        function getEffectVolumeInput(card) {
-
-            if (!card) {
-                return null;
-            }
-
-
-            return card.querySelector(
-                ".rakkez-effect-volume-input, [data-effect-volume], input[type='range']"
-            );
-        }
-
-
-        function getEffectVolumeValue(card) {
-
-            if (!card) {
-                return null;
-            }
-
-
-            return card.querySelector(
-                ".rakkez-effect-volume-value, [data-effect-volume-value]"
-            );
-        }
-
-
-        function getEffectPlayText(effect) {
-
-            const language =
-                detectLanguage();
-
-
-            if (language === "ar") {
-                return "تشغيل";
-            }
-
-
-            return "Play";
-        }
-
-
-        function getEffectStopText(effect) {
-
-            const language =
-                detectLanguage();
-
-
-            if (language === "ar") {
-                return "إيقاف";
-            }
-
-
-            return "Stop";
-        }
-
-
-        function updateEffectVolumeUI(
+        function updateEffectCardState(
             effect,
-            card,
-            player
+            card
         ) {
 
-            const volumeInput =
-                getEffectVolumeInput(
-                    card
-                );
+            const player =
+                effectPlayers[effect.id];
 
-
-            const volumeValue =
-                getEffectVolumeValue(
-                    card
-                );
-
-
-            if (volumeInput) {
-
-                volumeInput.value =
-                    player.audio.volume;
+            if (!player || !card) {
+                return;
             }
 
+            const toggle =
+                card.querySelector(
+                    ".rakkez-effect-toggle, [data-effect-toggle], button"
+                );
 
-            if (volumeValue) {
+            const isPlaying =
+                player.audio &&
+                !player.audio.paused;
 
-                volumeValue.textContent =
-                    Math.round(
-                        player.audio.volume *
-                        100
-                    ) +
-                    "%";
+            card.classList.toggle(
+                "active",
+                !!isPlaying
+            );
+
+            if (toggle) {
+
+                toggle.classList.toggle(
+                    "active",
+                    !!isPlaying
+                );
+
+                if (!player.available) {
+
+                    toggle.disabled = true;
+
+                    toggle.textContent =
+                        "Unavailable";
+
+                } else {
+
+                    toggle.disabled = false;
+
+                    toggle.textContent =
+                        isPlaying
+                            ? "Stop"
+                            : "Play " +
+                              effect.name;
+                }
             }
         }
 
-
         /* =================================================
-           BIND EFFECT CARD
+           BIND EXISTING EFFECT
            ================================================= */
 
         function bindExistingEffect(
@@ -985,135 +574,82 @@
         ) {
 
             const player =
-                effectPlayers[
-                    effect.id
-                ];
-
+                effectPlayers[effect.id];
 
             if (!player || !card) {
                 return;
             }
 
+            const toggle =
+                card.querySelector(
+                    ".rakkez-effect-toggle, [data-effect-toggle], button"
+                );
+
+            const volumeInput =
+                card.querySelector(
+                    ".rakkez-effect-volume-input, [data-effect-volume], input[type='range']"
+                );
+
+            const volumeValue =
+                card.querySelector(
+                    ".rakkez-effect-volume-value, [data-effect-volume-value]"
+                );
 
             if (
                 card.dataset.rakkezEffectBound ===
                 "true"
             ) {
-
-                updateEffectVolumeUI(
+                updateEffectCardState(
                     effect,
-                    card,
-                    player
+                    card
                 );
 
                 return;
             }
 
-
             card.dataset.rakkezEffectBound =
                 "true";
 
-
-            /*
-             * Store effect ID.
-             */
-
-            card.dataset.rakkezEffect =
-                effect.id;
-
-
-            /* =============================================
+            /* ---------------------------------------------
                IMAGE
-               ============================================= */
+               --------------------------------------------- */
 
-            if (effect.image) {
+            if (
+                effect.image &&
+                typeof effect.image === "string"
+            ) {
 
-                const imageElement =
-                    card.querySelector(
-                        "img"
-                    );
+                card.style.backgroundImage =
+                    "url('" +
+                    effect.image.replace(
+                        /'/g,
+                        "\\'"
+                    ) +
+                    "')";
 
+                card.style.backgroundSize =
+                    "cover";
 
-                if (imageElement) {
-
-                    imageElement.src =
-                        effect.image;
-
-                    imageElement.removeAttribute(
-                        "loading"
-                    );
-
-                    imageElement.loading =
-                        "eager";
-                }
-
-
-                /*
-                 * Background image if the card has
-                 * an element designed for artwork.
-                 */
-
-                const imageTarget =
-                    card.querySelector(
-                        ".rakkez-effect-image, .rakkez-effect-art, .rakkez-effect-icon"
-                    );
-
-
-                if (
-                    imageTarget &&
-                    imageTarget.tagName !==
-                    "IMG"
-                ) {
-
-                    imageTarget.style.backgroundImage =
-                        "url('" +
-                        effect.image.replace(
-                            /'/g,
-                            "\\'"
-                        ) +
-                        "')";
-
-                    imageTarget.style.backgroundSize =
-                        "cover";
-
-                    imageTarget.style.backgroundPosition =
-                        "center";
-                }
+                card.style.backgroundPosition =
+                    "center";
             }
 
-
-            /* =============================================
+            /* ---------------------------------------------
                VOLUME
-               ============================================= */
-
-            const volumeInput =
-                getEffectVolumeInput(
-                    card
-                );
-
-
-            const volumeValue =
-                getEffectVolumeValue(
-                    card
-                );
-
+               --------------------------------------------- */
 
             if (volumeInput) {
 
                 volumeInput.value =
-                    player.audio.volume;
-
+                    player.volume;
 
                 if (volumeValue) {
 
                     volumeValue.textContent =
                         Math.round(
-                            player.audio.volume *
-                            100
-                        ) +
-                        "%";
+                            player.volume * 100
+                        ) + "%";
                 }
-
 
                 volumeInput.addEventListener(
                     "input",
@@ -1124,7 +660,6 @@
                                 volumeInput.value
                             );
 
-
                         if (
                             !Number.isFinite(
                                 value
@@ -1133,8 +668,7 @@
                             return;
                         }
 
-
-                        player.audio.volume =
+                        const safeValue =
                             Math.max(
                                 0,
                                 Math.min(
@@ -1143,564 +677,275 @@
                                 )
                             );
 
-
                         player.volume =
-                            player.audio.volume;
+                            safeValue;
 
+                        if (player.audio) {
+                            player.audio.volume =
+                                safeValue;
+                        }
 
                         localStorage.setItem(
                             STORAGE_PREFIX +
                             effect.id +
                             "_volume",
                             String(
-                                player.audio.volume
+                                safeValue
                             )
                         );
-
 
                         if (volumeValue) {
 
                             volumeValue.textContent =
                                 Math.round(
-                                    player.audio.volume *
+                                    safeValue *
                                     100
-                                ) +
-                                "%";
+                                ) + "%";
                         }
-
                     }
                 );
             }
 
-
-            /* =============================================
+            /* ---------------------------------------------
                TOGGLE
-               ============================================= */
-
-            const toggle =
-                getEffectToggle(
-                    card
-                );
-
+               --------------------------------------------- */
 
             if (toggle) {
-
-                toggle.type =
-                    "button";
-
 
                 toggle.addEventListener(
                     "click",
-                    function (event) {
+                    function () {
 
-                        event.preventDefault();
+                        if (!player.available) {
 
-                        event.stopPropagation();
-
-                        toggleEffect(
-                            effect.id
-                        );
-
-                    }
-                );
-            }
-
-
-            /*
-             * Initial state.
-             */
-
-            if (
-                !effect.audio ||
-                typeof effect.audio !==
-                "string" ||
-                !effect.audio.trim()
-            ) {
-
-                markEffectUnavailable(
-                    effect,
-                    card,
-                    "No audio file configured."
-                );
-            }
-
-
-            updateEffectVolumeUI(
-                effect,
-                card,
-                player
-            );
-        }
-
-
-        /* =================================================
-           MARK EFFECT UNAVAILABLE
-           ================================================= */
-
-        function markEffectUnavailable(
-            effect,
-            card,
-            reason
-        ) {
-
-            if (!card) {
-                return;
-            }
-
-
-            card.classList.add(
-                "unavailable"
-            );
-
-
-            card.setAttribute(
-                "data-effect-unavailable",
-                "true"
-            );
-
-
-            const toggle =
-                getEffectToggle(
-                    card
-                );
-
-
-            if (toggle) {
-
-                toggle.textContent =
-                    detectLanguage() ===
-                    "ar"
-                        ? "غير متاح"
-                        : "Unavailable";
-
-                toggle.disabled =
-                    true;
-            }
-
-
-            if (reason) {
-
-                card.setAttribute(
-                    "title",
-                    reason
-                );
-            }
-        }
-
-
-        /* =================================================
-           CHECK EFFECT AUDIO
-           ================================================= */
-
-        function prepareEffect(
-            effect
-        ) {
-
-            const player =
-                effectPlayers[
-                    effect.id
-                ];
-
-
-            if (!player) {
-                return Promise.resolve(
-                    false
-                );
-            }
-
-
-            if (
-                !effect.audio ||
-                typeof effect.audio !==
-                "string" ||
-                !effect.audio.trim()
-            ) {
-
-                player.available =
-                    false;
-
-                player.checked =
-                    true;
-
-                return Promise.resolve(
-                    false
-                );
-            }
-
-
-            /*
-             * If already confirmed available.
-             */
-
-            if (
-                player.available &&
-                player.audio.src
-            ) {
-
-                return Promise.resolve(
-                    true
-                );
-            }
-
-
-            /*
-             * Avoid multiple requests.
-             */
-
-            if (player.loading) {
-
-                return new Promise(
-                    function (resolve) {
-
-                        const timeout =
-                            setTimeout(
-                                function () {
-
-                                    resolve(
-                                        player.available
-                                    );
-
-                                },
-                                5000
+                            console.warn(
+                                "RakkeZ: Effect has no audio source:",
+                                effect.id
                             );
 
-
-                        const check =
-                            function () {
-
-                                if (
-                                    player.available
-                                ) {
-
-                                    clearTimeout(
-                                        timeout
-                                    );
-
-                                    player.audio.removeEventListener(
-                                        "canplay",
-                                        check
-                                    );
-
-                                    resolve(
-                                        true
-                                    );
-                                }
-                            };
-
-
-                        player.audio.addEventListener(
-                            "canplay",
-                            check
-                        );
-
-                    }
-                );
-            }
-
-
-            player.loading =
-                true;
-
-
-            return new Promise(
-                function (resolve) {
-
-                    let finished =
-                        false;
-
-
-                    function finish(
-                        available
-                    ) {
-
-                        if (finished) {
                             return;
                         }
 
+                        if (
+                            !player.audio.paused
+                        ) {
 
-                        finished =
-                            true;
+                            player.audio.pause();
 
+                            return;
+                        }
 
-                        player.loading =
-                            false;
+                        const promise =
+                            player.audio.play();
 
+                        if (
+                            promise &&
+                            typeof promise.catch ===
+                            "function"
+                        ) {
 
-                        player.available =
-                            available;
+                            promise.catch(
+                                function (error) {
 
+                                    console.warn(
+                                        "RakkeZ Effect play failed:",
+                                        effect.id,
+                                        error
+                                    );
 
-                        player.checked =
-                            true;
+                                    updateEffectCardState(
+                                        effect,
+                                        card
+                                    );
+                                }
+                            );
+                        }
+                    }
+                );
+            }
 
+            /* ---------------------------------------------
+               AUDIO EVENTS
+               --------------------------------------------- */
 
-                        cleanup();
+            if (player.audio) {
 
+                player.audio.addEventListener(
+                    "play",
+                    function () {
 
-                        resolve(
-                            available
+                        card.classList.add(
+                            "active"
+                        );
+
+                        if (toggle) {
+                            toggle.classList.add(
+                                "active"
+                            );
+                        }
+
+                        updateEffectCardState(
+                            effect,
+                            card
                         );
                     }
+                );
 
+                player.audio.addEventListener(
+                    "pause",
+                    function () {
 
-                    function cleanup() {
-
-                        player.audio.removeEventListener(
-                            "canplay",
-                            onCanPlay
+                        card.classList.remove(
+                            "active"
                         );
 
-                        player.audio.removeEventListener(
-                            "error",
-                            onError
-                        );
-                    }
+                        if (toggle) {
+                            toggle.classList.remove(
+                                "active"
+                            );
+                        }
 
-
-                    function onCanPlay() {
-
-                        finish(
-                            true
-                        );
-                    }
-
-
-                    function onError() {
-
-                        finish(
-                            false
+                        updateEffectCardState(
+                            effect,
+                            card
                         );
                     }
+                );
 
+                player.audio.addEventListener(
+                    "ended",
+                    function () {
 
-                    player.audio.addEventListener(
-                        "canplay",
-                        onCanPlay
-                    );
+                        updateEffectCardState(
+                            effect,
+                            card
+                        );
+                    }
+                );
 
+                player.audio.addEventListener(
+                    "error",
+                    function () {
 
-                    player.audio.addEventListener(
-                        "error",
-                        onError
-                    );
-
-
-                    /*
-                     * IMPORTANT:
-                     *
-                     * Set source only now.
-                     *
-                     * Missing rain.mp3 will NOT affect
-                     * the main music player.
-                     */
-
-                    player.audio.src =
-                        effect.audio;
-
-
-                    try {
-
-                        player.audio.load();
-
-                    } catch (error) {
-
-                        finish(
-                            false
+                        console.warn(
+                            "RakkeZ: Effect unavailable:",
+                            effect.src
                         );
 
-                        return;
+                        updateEffectCardState(
+                            effect,
+                            card
+                        );
                     }
+                );
+            }
 
-
-                    /*
-                     * Safety timeout.
-                     */
-
-                    setTimeout(
-                        function () {
-
-                            if (
-                                !finished
-                            ) {
-
-                                finish(
-                                    false
-                                );
-                            }
-
-                        },
-                        5000
-                    );
-
-                }
+            updateEffectCardState(
+                effect,
+                card
             );
         }
 
-
         /* =================================================
-           PLAY EFFECT
+           CREATE EFFECT CARD
            ================================================= */
 
-        async function playEffect(
-            id
-        ) {
-
-            const effect =
-                AMBIENT_EFFECTS.find(
-                    function (item) {
-                        return item.id === id;
-                    }
-                );
-
+        function createEffectCard(effect) {
 
             const player =
-                effectPlayers[id];
+                effectPlayers[effect.id];
 
-
-            if (!effect || !player) {
-
-                console.warn(
-                    "RakkeZ: Unknown effect:",
-                    id
-                );
-
-                return false;
-            }
-
-
-            const available =
-                await prepareEffect(
-                    effect
-                );
-
-
-            if (!available) {
-
-                const card =
-                    findEffectCard(
-                        effect
-                    );
-
-
-                markEffectUnavailable(
-                    effect,
-                    card,
-                    "Audio file not found: " +
-                    effect.audio
-                );
-
-
-                /*
-                 * IMPORTANT:
-                 *
-                 * Do NOT throw an error.
-                 * Do NOT touch the main audio player.
-                 */
-
-                return false;
-            }
-
-
-            try {
-
-                player.audio.volume =
-                    player.volume;
-
-
-                const promise =
-                    player.audio.play();
-
-
-                if (
-                    promise &&
-                    typeof promise.then ===
-                    "function"
-                ) {
-
-                    await promise;
-                }
-
-
-                return true;
-
-            } catch (error) {
-
-                console.warn(
-                    "RakkeZ: Effect could not play:",
-                    effect.id,
-                    error
-                );
-
-
-                return false;
-            }
-        }
-
-
-        /* =================================================
-           STOP EFFECT
-           ================================================= */
-
-        function stopEffect(
-            id
-        ) {
-
-            const player =
-                effectPlayers[id];
-
-
-            if (!player) {
+            if (!player || !effectsContainer) {
                 return;
             }
 
+            const card =
+                document.createElement("div");
 
-            try {
+            card.className =
+                "rakkez-effect-card";
 
-                player.audio.pause();
+            card.dataset.rakkezEffect =
+                effect.id;
 
-            } catch (error) {
+            if (effect.image) {
 
-                /*
-                 * Ignore.
-                 */
-            }
-        }
+                card.style.backgroundImage =
+                    "url('" +
+                    effect.image.replace(
+                        /'/g,
+                        "\\'"
+                    ) +
+                    "')";
 
+                card.style.backgroundSize =
+                    "cover";
 
-        /* =================================================
-           TOGGLE EFFECT
-           ================================================= */
-
-        async function toggleEffect(
-            id
-        ) {
-
-            const player =
-                effectPlayers[id];
-
-
-            if (!player) {
-                return;
+                card.style.backgroundPosition =
+                    "center";
             }
 
+            card.innerHTML = `
+                <div class="rakkez-effect-info">
 
-            if (
-                !player.audio.paused
-            ) {
+                    <div class="rakkez-effect-icon">
+                        ${effect.icon || "♪"}
+                    </div>
 
-                stopEffect(
-                    id
-                );
+                    <div>
+                        <div class="rakkez-effect-title">
+                            ${effect.name}
+                        </div>
 
-                return;
-            }
+                        <div class="rakkez-effect-subtitle">
+                            Ambient sound
+                        </div>
+                    </div>
 
+                </div>
 
-            await playEffect(
-                id
+                <button
+                    class="rakkez-effect-toggle"
+                    type="button"
+                >
+                    Play ${effect.name}
+                </button>
+
+                <div class="rakkez-effect-volume">
+
+                    <span>
+                        Volume
+                    </span>
+
+                    <input
+                        class="rakkez-effect-volume-input"
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value="${player.volume}"
+                    >
+
+                    <span
+                        class="rakkez-effect-volume-value"
+                    >
+                        ${Math.round(
+                            player.volume * 100
+                        )}%
+                    </span>
+
+                </div>
+            `;
+
+            effectsContainer.appendChild(
+                card
+            );
+
+            bindExistingEffect(
+                effect,
+                card
             );
         }
-
 
         /* =================================================
            RENDER EFFECTS
@@ -1717,180 +962,55 @@
                 return;
             }
 
-
-            /*
-             * First try existing HTML cards.
-             */
-
             let foundExisting =
                 false;
-
 
             AMBIENT_EFFECTS.forEach(
                 function (effect) {
 
                     const card =
-                        findEffectCard(
+                        getExistingEffectCard(
                             effect
                         );
-
 
                     if (card) {
 
                         foundExisting =
                             true;
 
-
                         bindExistingEffect(
                             effect,
                             card
                         );
                     }
-
                 }
             );
 
-
             /*
-             * If existing cards exist, do not duplicate them.
+             * If the HTML already contains effect cards,
+             * preserve them.
              */
 
             if (foundExisting) {
                 return;
             }
 
-
             /*
-             * Otherwise generate cards.
+             * Otherwise generate them automatically
+             * from AMBIENT_EFFECTS.
              */
 
             AMBIENT_EFFECTS.forEach(
                 function (effect) {
 
-                    const player =
-                        effectPlayers[
-                            effect.id
-                        ];
-
-
-                    if (!player) {
-                        return;
-                    }
-
-
-                    const card =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    card.className =
-                        "rakkez-effect-card";
-
-
-                    card.dataset.rakkezEffect =
-                        effect.id;
-
-
-                    card.innerHTML = `
-
-                        <div class="rakkez-effect-info">
-
-                            <div
-                                class="rakkez-effect-icon"
-                                style="
-                                    background-image:
-                                    url('${effect.image}');
-                                    background-size:cover;
-                                    background-position:center;
-                                "
-                            >
-                                <span>
-                                    ${effect.icon}
-                                </span>
-                            </div>
-
-                            <div>
-
-                                <div
-                                    class="rakkez-effect-title"
-                                >
-                                    ${effect.name}
-                                </div>
-
-                                <div
-                                    class="rakkez-effect-subtitle"
-                                >
-                                    Ambient sound
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            class="rakkez-effect-toggle"
-                            type="button"
-                        >
-                            ${getEffectPlayText(effect)}
-                        </button>
-
-
-                        <div
-                            class="rakkez-effect-volume"
-                        >
-
-                            <span>
-                                Volume
-                            </span>
-
-
-                            <input
-                                class="rakkez-effect-volume-input"
-                                type="range"
-                                min="0"
-                                max="1"
-                                step="0.01"
-                                value="${player.audio.volume}"
-                            >
-
-
-                            <span
-                                class="rakkez-effect-volume-value"
-                            >
-                                ${Math.round(
-                                    player.audio.volume *
-                                    100
-                                )}%
-                            </span>
-
-                        </div>
-
-                    `;
-
-
-                    effectsContainer.appendChild(
-                        card
+                    createEffectCard(
+                        effect
                     );
-
-
-                    bindExistingEffect(
-                        effect,
-                        card
-                    );
-
                 }
             );
         }
 
-
-        /* =================================================
-           INITIALIZE EFFECTS
-           ================================================= */
-
         renderEffects();
-
 
         /* =================================================
            PUBLIC EFFECT API
@@ -1898,53 +1018,133 @@
 
         window.rakkezAmbient = {
 
-            play:
-                function (id) {
+            play: function (id) {
 
-                    return playEffect(
+                const player =
+                    effectPlayers[id];
+
+                if (!player) {
+
+                    console.warn(
+                        "RakkeZ: Unknown effect:",
                         id
                     );
-                },
 
+                    return false;
+                }
 
-            stop:
-                function (id) {
+                if (!player.audio) {
 
-                    stopEffect(
+                    console.warn(
+                        "RakkeZ: Effect has no audio source:",
                         id
                     );
-                },
 
+                    return false;
+                }
 
-            toggle:
-                function (id) {
+                const promise =
+                    player.audio.play();
 
-                    return toggleEffect(
-                        id
-                    );
-                },
+                if (
+                    promise &&
+                    typeof promise.catch ===
+                    "function"
+                ) {
 
+                    promise.catch(
+                        function (error) {
 
-            getEffects:
-                function () {
-
-                    return AMBIENT_EFFECTS.slice();
-                },
-
-
-            getPlayer:
-                function (id) {
-
-                    return (
-                        effectPlayers[id] ||
-                        null
+                            console.warn(
+                                "RakkeZ Effect play failed:",
+                                id,
+                                error
+                            );
+                        }
                     );
                 }
 
+                return true;
+            },
+
+            stop: function (id) {
+
+                const player =
+                    effectPlayers[id];
+
+                if (!player) {
+                    return false;
+                }
+
+                if (!player.audio) {
+                    return false;
+                }
+
+                player.audio.pause();
+
+                return true;
+            },
+
+            toggle: function (id) {
+
+                const player =
+                    effectPlayers[id];
+
+                if (!player) {
+                    return false;
+                }
+
+                if (!player.audio) {
+
+                    console.warn(
+                        "RakkeZ: Effect has no audio source:",
+                        id
+                    );
+
+                    return false;
+                }
+
+                if (player.audio.paused) {
+
+                    const promise =
+                        player.audio.play();
+
+                    if (
+                        promise &&
+                        typeof promise.catch ===
+                        "function"
+                    ) {
+
+                        promise.catch(
+                            function () {}
+                        );
+                    }
+
+                } else {
+
+                    player.audio.pause();
+                }
+
+                return true;
+            },
+
+            getEffects: function () {
+                return AMBIENT_EFFECTS.slice();
+            },
+
+            getEffect: function (id) {
+
+                return (
+                    AMBIENT_EFFECTS.find(
+                        function (effect) {
+                            return effect.id === id;
+                        }
+                    ) || null
+                );
+            }
         };
 
     })();
-
 
     /* =====================================================
        INDEX
@@ -1955,15 +1155,12 @@
         const allTracks =
             getAllTracks();
 
-
         if (!allTracks.length) {
 
-            currentIndex =
-                0;
+            currentIndex = 0;
 
             return;
         }
-
 
         if (
             !Number.isInteger(
@@ -1974,14 +1171,11 @@
             allTracks.length
         ) {
 
-            currentIndex =
-                0;
+            currentIndex = 0;
         }
     }
 
-
     normalizeIndex();
-
 
     /* =====================================================
        VOLUME
@@ -1994,17 +1188,9 @@
             )
         );
 
-
-    if (
-        !Number.isFinite(
-            savedVolume
-        )
-    ) {
-
-        savedVolume =
-            0.7;
+    if (!Number.isFinite(savedVolume)) {
+        savedVolume = 0.7;
     }
-
 
     savedVolume =
         Math.max(
@@ -2015,17 +1201,13 @@
             )
         );
 
-
     audio.volume =
         savedVolume;
 
-
     if (volume) {
-
         volume.value =
             savedVolume;
     }
-
 
     function updateVolumeUI() {
 
@@ -2033,18 +1215,13 @@
             return;
         }
 
-
         volumeValue.textContent =
             Math.round(
-                audio.volume *
-                100
-            ) +
-            "%";
+                audio.volume * 100
+            ) + "%";
     }
 
-
     updateVolumeUI();
-
 
     /* =====================================================
        OPEN MEDIA
@@ -2056,29 +1233,23 @@
             return;
         }
 
-
         overlay.classList.add(
             "show"
         );
-
 
         overlay.setAttribute(
             "aria-hidden",
             "false"
         );
 
-
         miniPlayerClosed =
             false;
 
-
         hideMiniPlayer();
-
 
         document.body.style.overflow =
             "hidden";
     }
-
 
     /* =====================================================
        CLOSE MEDIA
@@ -2090,21 +1261,17 @@
             return;
         }
 
-
         overlay.classList.remove(
             "show"
         );
-
 
         overlay.setAttribute(
             "aria-hidden",
             "true"
         );
 
-
         document.body.style.overflow =
             "";
-
 
         if (
             !audio.paused &&
@@ -2114,11 +1281,9 @@
             miniPlayerClosed =
                 false;
 
-
             showMiniPlayer();
         }
     }
-
 
     /* =====================================================
        MINI PLAYER
@@ -2130,30 +1295,24 @@
             return;
         }
 
-
         if (
             !audio.src ||
             audio.paused
         ) {
-
             return;
         }
-
 
         miniPlayer.classList.add(
             "show"
         );
-
 
         miniPlayer.setAttribute(
             "aria-hidden",
             "false"
         );
 
-
         updateMiniPlayer();
     }
-
 
     function hideMiniPlayer() {
 
@@ -2161,11 +1320,9 @@
             return;
         }
 
-
         miniPlayer.classList.remove(
             "show"
         );
-
 
         miniPlayer.setAttribute(
             "aria-hidden",
@@ -2173,13 +1330,11 @@
         );
     }
 
-
     function updateMiniPlayer() {
 
         if (!miniPlayer) {
             return;
         }
-
 
         if (miniTitle) {
 
@@ -2189,7 +1344,6 @@
                     : "";
         }
 
-
         if (miniArtist) {
 
             miniArtist.textContent =
@@ -2197,7 +1351,6 @@
                     ? trackArtist.textContent
                     : "";
         }
-
 
         if (
             artwork &&
@@ -2211,14 +1364,11 @@
                 miniArtwork.style.backgroundImage =
                     artwork.style.backgroundImage;
 
-
                 miniArtwork.style.backgroundSize =
                     "cover";
 
-
                 miniArtwork.style.backgroundPosition =
                     "center";
-
 
                 miniArtwork.textContent =
                     "";
@@ -2229,11 +1379,9 @@
             miniArtwork.style.backgroundImage =
                 "";
 
-
             miniArtwork.textContent =
                 "♪";
         }
-
 
         if (miniPlay) {
 
@@ -2244,7 +1392,6 @@
         }
     }
 
-
     if (miniPlay) {
 
         miniPlay.addEventListener(
@@ -2252,33 +1399,23 @@
             function () {
 
                 if (audio.paused) {
-
                     playAudio();
-
                 } else {
-
                     pauseAudio();
                 }
-
             }
         );
     }
-
 
     if (miniNext) {
 
         miniNext.addEventListener(
             "click",
             function () {
-
-                nextTrack(
-                    true
-                );
-
+                nextTrack(true);
             }
         );
     }
-
 
     if (miniClose) {
 
@@ -2290,11 +1427,9 @@
                     true;
 
                 hideMiniPlayer();
-
             }
         );
     }
-
 
     if (mediaButton) {
 
@@ -2303,7 +1438,6 @@
             function (event) {
 
                 event.preventDefault();
-
                 event.stopImmediatePropagation();
 
                 openMedia();
@@ -2313,7 +1447,6 @@
         );
     }
 
-
     if (closeButton) {
 
         closeButton.addEventListener(
@@ -2321,7 +1454,6 @@
             closeMedia
         );
     }
-
 
     if (overlay) {
 
@@ -2333,22 +1465,18 @@
                     event.target ===
                     overlay
                 ) {
-
                     closeMedia();
                 }
-
             }
         );
     }
-
 
     document.addEventListener(
         "keydown",
         function (event) {
 
             if (
-                event.key ===
-                "Escape" &&
+                event.key === "Escape" &&
                 overlay &&
                 overlay.classList.contains(
                     "show"
@@ -2357,10 +1485,8 @@
 
                 closeMedia();
             }
-
         }
     );
-
 
     /* =====================================================
        TABS
@@ -2376,7 +1502,6 @@
                     const source =
                         tab.dataset.rakkezSource;
 
-
                     tabs.forEach(
                         function (item) {
 
@@ -2385,7 +1510,6 @@
                             );
                         }
                     );
-
 
                     sources.forEach(
                         function (item) {
@@ -2396,16 +1520,13 @@
                         }
                     );
 
-
                     tab.classList.add(
                         "active"
                     );
 
-
                     if (!source) {
                         return;
                     }
-
 
                     const target =
                         document.getElementById(
@@ -2417,51 +1538,39 @@
                             "Source"
                         );
 
-
                     if (target) {
 
                         target.classList.add(
                             "active"
                         );
                     }
-
                 }
             );
-
         }
     );
-
 
     /* =====================================================
        FORMAT TIME
        ===================================================== */
 
-    function formatTime(
-        seconds
-    ) {
+    function formatTime(seconds) {
 
         if (
-            !Number.isFinite(
-                seconds
-            ) ||
+            !Number.isFinite(seconds) ||
             seconds < 0
         ) {
-
             return "0:00";
         }
-
 
         const minutes =
             Math.floor(
                 seconds / 60
             );
 
-
         const remaining =
             Math.floor(
                 seconds % 60
             );
-
 
         return (
             minutes +
@@ -2475,7 +1584,6 @@
         );
     }
 
-
     /* =====================================================
        ARTWORK
        ===================================================== */
@@ -2486,31 +1594,23 @@
             return;
         }
 
-
         artwork.style.backgroundImage =
             "none";
-
 
         const icon =
             artwork.querySelector(
                 ".rakkez-artwork-icon"
             );
 
-
         if (icon) {
-
             icon.style.opacity =
                 "1";
         }
     }
 
-
-    function setArtwork(
-        image
-    ) {
+    function setArtwork(image) {
 
         clearArtwork();
-
 
         if (
             !image ||
@@ -2518,18 +1618,14 @@
             "string" ||
             !image.trim()
         ) {
-
             return;
         }
-
 
         const cleanImage =
             image.trim();
 
-
         const testImage =
             new Image();
-
 
         testImage.onload =
             function () {
@@ -2537,7 +1633,6 @@
                 if (!artwork) {
                     return;
                 }
-
 
                 artwork.style.backgroundImage =
                     "url('" +
@@ -2547,29 +1642,22 @@
                     ) +
                     "')";
 
-
                 artwork.style.backgroundSize =
                     "cover";
 
-
                 artwork.style.backgroundPosition =
                     "center";
-
 
                 const icon =
                     artwork.querySelector(
                         ".rakkez-artwork-icon"
                     );
 
-
                 if (icon) {
-
                     icon.style.opacity =
                         "0";
                 }
-
             };
-
 
         testImage.onerror =
             function () {
@@ -2577,11 +1665,9 @@
                 clearArtwork();
             };
 
-
         testImage.src =
             cleanImage;
     }
-
 
     /* =====================================================
        LOAD TRACK
@@ -2595,7 +1681,6 @@
         const allTracks =
             getAllTracks();
 
-
         if (!allTracks.length) {
 
             console.warn(
@@ -2605,65 +1690,48 @@
             return;
         }
 
-
         if (index < 0) {
-
             index =
                 allTracks.length - 1;
         }
-
 
         if (
             index >=
             allTracks.length
         ) {
-
-            index =
-                0;
+            index = 0;
         }
-
 
         currentIndex =
             index;
-
 
         const track =
             allTracks[
                 currentIndex
             ];
 
-
         if (!track) {
             return;
         }
 
-
         const token =
             ++currentLoadToken;
-
 
         currentTrackFailed =
             false;
 
-
         currentIsLocal =
-            track.type ===
-            "local";
-
+            track.type === "local";
 
         clearLoadingTimer();
 
-
         audio.pause();
-
 
         audio.removeAttribute(
             "src"
         );
 
-
         audio.load();
-
 
         if (trackName) {
 
@@ -2672,14 +1740,12 @@
                 "Unknown Track";
         }
 
-
         if (trackArtist) {
 
             trackArtist.textContent =
                 track.artist ||
                 "RakkeZ";
         }
-
 
         localStorage.setItem(
             STORAGE.track,
@@ -2688,39 +1754,29 @@
             )
         );
 
-
         setArtwork(
             track.artwork
         );
 
-
         if (progress) {
-
-            progress.value =
-                0;
+            progress.value = 0;
         }
 
-
         if (currentTimeElement) {
-
             currentTimeElement.textContent =
                 "0:00";
         }
 
-
         if (durationElement) {
-
             durationElement.textContent =
                 "0:00";
         }
-
 
         renderPlaylist();
 
         renderLocalList();
 
         updateMiniPlayer();
-
 
         if (!track.src) {
 
@@ -2731,25 +1787,19 @@
             return;
         }
 
-
         audio.src =
             track.src;
 
-
         audio.load();
-
 
         startLoadingGuard(
             token
         );
 
-
         if (shouldPlay) {
-
             playAudio();
         }
     }
-
 
     /* =====================================================
        PLAY / PAUSE
@@ -2761,14 +1811,12 @@
             return;
         }
 
-
         if (currentTrackFailed) {
 
             const track =
                 getAllTracks()[
                     currentIndex
                 ];
-
 
             if (
                 track &&
@@ -2778,7 +1826,6 @@
                 currentTrackFailed =
                     false;
 
-
                 loadTrack(
                     currentIndex,
                     false
@@ -2786,23 +1833,18 @@
             }
         }
 
-
         if (
             localAudio &&
             localAudio.src
         ) {
 
             try {
-
                 localAudio.pause();
-
             } catch (error) {}
         }
 
-
         const promise =
             audio.play();
-
 
         if (
             promise &&
@@ -2818,16 +1860,13 @@
                         error
                     );
 
-
                     if (
                         error &&
                         error.name ===
                         "AbortError"
                     ) {
-
                         return;
                     }
-
 
                     handleTrackError(
                         error
@@ -2837,12 +1876,9 @@
         }
     }
 
-
     function pauseAudio() {
-
         audio.pause();
     }
-
 
     if (playButton) {
 
@@ -2851,18 +1887,13 @@
             function () {
 
                 if (audio.paused) {
-
                     playAudio();
-
                 } else {
-
                     pauseAudio();
                 }
-
             }
         );
     }
-
 
     /* =====================================================
        AUDIO EVENTS
@@ -2874,32 +1905,25 @@
 
             clearLoadingTimer();
 
-
             currentTrackFailed =
                 false;
-
 
             if (playButton) {
 
                 playButton.textContent =
                     "Ⅱ";
 
-
                 playButton.title =
                     "Pause";
             }
 
-
             if (artwork) {
-
                 artwork.classList.add(
                     "playing"
                 );
             }
 
-
             updateMiniPlayer();
-
 
             if (
                 overlay &&
@@ -2911,10 +1935,8 @@
 
                 showMiniPlayer();
             }
-
         }
     );
-
 
     audio.addEventListener(
         "pause",
@@ -2925,11 +1947,9 @@
                 playButton.textContent =
                     "▶";
 
-
                 playButton.title =
                     "Play";
             }
-
 
             if (artwork) {
 
@@ -2938,12 +1958,9 @@
                 );
             }
 
-
             updateMiniPlayer();
-
         }
     );
-
 
     audio.addEventListener(
         "loadstart",
@@ -2952,10 +1969,8 @@
             startLoadingGuard(
                 currentLoadToken
             );
-
         }
     );
-
 
     audio.addEventListener(
         "loadedmetadata",
@@ -2963,7 +1978,6 @@
 
             clearLoadingTimer();
 
-
             if (
                 durationElement &&
                 Number.isFinite(
@@ -2976,20 +1990,16 @@
                         audio.duration
                     );
             }
-
         }
     );
-
 
     audio.addEventListener(
         "loadeddata",
         function () {
 
             clearLoadingTimer();
-
         }
     );
-
 
     audio.addEventListener(
         "canplay",
@@ -2997,7 +2007,6 @@
 
             clearLoadingTimer();
 
-
             if (
                 durationElement &&
                 Number.isFinite(
@@ -3010,20 +2019,16 @@
                         audio.duration
                     );
             }
-
         }
     );
-
 
     audio.addEventListener(
         "canplaythrough",
         function () {
 
             clearLoadingTimer();
-
         }
     );
-
 
     audio.addEventListener(
         "stalled",
@@ -3033,32 +2038,23 @@
                 "RakkeZ Media: Audio stalled:",
                 audio.src
             );
-
         }
     );
-
 
     audio.addEventListener(
         "abort",
         function () {
 
             clearLoadingTimer();
-
         }
     );
-
 
     audio.addEventListener(
         "waiting",
         function () {
-
-            /*
-             * Normal buffering.
-             */
-
+            // Normal buffering.
         }
     );
-
 
     audio.addEventListener(
         "timeupdate",
@@ -3077,10 +2073,8 @@
                     (
                         audio.currentTime /
                         audio.duration
-                    ) *
-                    100;
+                    ) * 100;
             }
-
 
             if (currentTimeElement) {
 
@@ -3089,7 +2083,6 @@
                         audio.currentTime
                     );
             }
-
 
             if (
                 miniProgress &&
@@ -3103,14 +2096,11 @@
                     (
                         audio.currentTime /
                         audio.duration
-                    ) *
-                    100 +
+                    ) * 100 +
                     "%";
             }
-
         }
     );
-
 
     audio.addEventListener(
         "ended",
@@ -3118,19 +2108,14 @@
 
             clearLoadingTimer();
 
-
             if (loop) {
 
-                audio.currentTime =
-                    0;
-
+                audio.currentTime = 0;
 
                 playAudio();
 
-
                 return;
             }
-
 
             if (autoNext) {
 
@@ -3142,10 +2127,8 @@
 
                 updateMiniPlayer();
             }
-
         }
     );
-
 
     audio.addEventListener(
         "error",
@@ -3153,14 +2136,11 @@
 
             clearLoadingTimer();
 
-
             const mediaError =
                 audio.error;
 
-
             let message =
                 "Unknown media error";
-
 
             if (mediaError) {
 
@@ -3169,38 +2149,26 @@
                 ) {
 
                     case 1:
-
                         message =
                             "MEDIA_ERR_ABORTED";
-
                         break;
-
 
                     case 2:
-
                         message =
                             "MEDIA_ERR_NETWORK";
-
                         break;
-
 
                     case 3:
-
                         message =
                             "MEDIA_ERR_DECODE";
-
                         break;
 
-
                     case 4:
-
                         message =
                             "MEDIA_ERR_SRC_NOT_SUPPORTED";
-
                         break;
                 }
             }
-
 
             console.warn(
                 "RakkeZ Media: Unable to load audio:",
@@ -3209,14 +2177,11 @@
                 mediaError
             );
 
-
             handleTrackError(
                 message
             );
-
         }
     );
-
 
     /* =====================================================
        PROGRESS
@@ -3231,7 +2196,6 @@
                 isDraggingProgress =
                     true;
 
-
                 if (
                     Number.isFinite(
                         audio.duration
@@ -3242,11 +2206,9 @@
                         (
                             parseFloat(
                                 progress.value
-                            ) /
-                            100
+                            ) / 100
                         ) *
                         audio.duration;
-
 
                     if (
                         currentTimeElement
@@ -3258,10 +2220,8 @@
                             );
                     }
                 }
-
             }
         );
-
 
         progress.addEventListener(
             "change",
@@ -3277,19 +2237,15 @@
                         (
                             parseFloat(
                                 progress.value
-                            ) /
-                            100
+                            ) / 100
                         ) *
                         audio.duration;
                 }
 
-
                 isDraggingProgress =
                     false;
-
             }
         );
-
 
         progress.addEventListener(
             "pointerup",
@@ -3297,11 +2253,9 @@
 
                 isDraggingProgress =
                     false;
-
             }
         );
     }
-
 
     /* =====================================================
        NEXT
@@ -3314,20 +2268,16 @@
         const allTracks =
             getAllTracks();
 
-
         if (!allTracks.length) {
             return;
         }
 
-
         let nextIndex;
-
 
         if (shuffle) {
 
             if (
-                allTracks.length <=
-                1
+                allTracks.length <= 1
             ) {
 
                 nextIndex =
@@ -3352,27 +2302,21 @@
         } else {
 
             nextIndex =
-                currentIndex +
-                1;
-
+                currentIndex + 1;
 
             if (
                 nextIndex >=
                 allTracks.length
             ) {
-
-                nextIndex =
-                    0;
+                nextIndex = 0;
             }
         }
-
 
         loadTrack(
             nextIndex,
             shouldPlay
         );
     }
-
 
     /* =====================================================
        PREVIOUS
@@ -3381,8 +2325,7 @@
     function previousTrack() {
 
         if (
-            audio.currentTime >
-            3
+            audio.currentTime > 3
         ) {
 
             audio.currentTime =
@@ -3391,31 +2334,21 @@
             return;
         }
 
-
         const allTracks =
             getAllTracks();
-
 
         if (!allTracks.length) {
             return;
         }
 
-
         let previousIndex =
-            currentIndex -
-            1;
+            currentIndex - 1;
 
-
-        if (
-            previousIndex <
-            0
-        ) {
+        if (previousIndex < 0) {
 
             previousIndex =
-                allTracks.length -
-                1;
+                allTracks.length - 1;
         }
-
 
         loadTrack(
             previousIndex,
@@ -3423,21 +2356,15 @@
         );
     }
 
-
     if (nextButton) {
 
         nextButton.addEventListener(
             "click",
             function () {
-
-                nextTrack(
-                    true
-                );
-
+                nextTrack(true);
             }
         );
     }
-
 
     if (previousButton) {
 
@@ -3446,7 +2373,6 @@
             previousTrack
         );
     }
-
 
     /* =====================================================
        SHUFFLE / LOOP / AUTO NEXT
@@ -3461,7 +2387,6 @@
                 shuffle =
                     !shuffle;
 
-
                 localStorage.setItem(
                     STORAGE.shuffle,
                     String(
@@ -3469,22 +2394,18 @@
                     )
                 );
 
-
                 shuffleButton.classList.toggle(
                     "active",
                     shuffle
                 );
-
             }
         );
-
 
         shuffleButton.classList.toggle(
             "active",
             shuffle
         );
     }
-
 
     if (loopButton) {
 
@@ -3495,7 +2416,6 @@
                 loop =
                     !loop;
 
-
                 localStorage.setItem(
                     STORAGE.loop,
                     String(
@@ -3503,22 +2423,18 @@
                     )
                 );
 
-
                 loopButton.classList.toggle(
                     "active",
                     loop
                 );
-
             }
         );
-
 
         loopButton.classList.toggle(
             "active",
             loop
         );
     }
-
 
     if (autoNextButton) {
 
@@ -3529,7 +2445,6 @@
                 autoNext =
                     !autoNext;
 
-
                 localStorage.setItem(
                     STORAGE.autoNext,
                     String(
@@ -3537,22 +2452,18 @@
                     )
                 );
 
-
                 autoNextButton.classList.toggle(
                     "active",
                     autoNext
                 );
-
             }
         );
-
 
         autoNextButton.classList.toggle(
             "active",
             autoNext
         );
     }
-
 
     /* =====================================================
        VOLUME
@@ -3569,25 +2480,34 @@
                         volume.value
                     );
 
+                if (
+                    !Number.isFinite(
+                        value
+                    )
+                ) {
+                    return;
+                }
 
                 audio.volume =
-                    value;
-
+                    Math.max(
+                        0,
+                        Math.min(
+                            1,
+                            value
+                        )
+                    );
 
                 localStorage.setItem(
                     STORAGE.volume,
                     String(
-                        value
+                        audio.volume
                     )
                 );
 
-
                 updateVolumeUI();
-
             }
         );
     }
-
 
     /* =====================================================
        PLAYLIST RENDER
@@ -3599,32 +2519,24 @@
             return;
         }
 
-
         const allTracks =
             getAllTracks();
 
-
         playlistElement.innerHTML =
             "";
-
 
         if (playlistCount) {
 
             const language =
                 detectLanguage();
 
-
-            if (
-                language ===
-                "ar"
-            ) {
+            if (language === "ar") {
 
                 playlistCount.textContent =
                     allTracks.length +
                     " " +
                     (
-                        allTracks.length ===
-                        1
+                        allTracks.length === 1
                             ? "مقطع"
                             : "مقاطع"
                     );
@@ -3634,14 +2546,12 @@
                 playlistCount.textContent =
                     allTracks.length +
                     (
-                        allTracks.length ===
-                        1
+                        allTracks.length === 1
                             ? " track"
                             : " tracks"
                     );
             }
         }
-
 
         allTracks.forEach(
             function (
@@ -3654,14 +2564,11 @@
                         "button"
                     );
 
-
                 item.type =
                     "button";
 
-
                 item.className =
                     "rakkez-track";
-
 
                 if (
                     index ===
@@ -3673,16 +2580,13 @@
                     );
                 }
 
-
                 const art =
                     document.createElement(
                         "div"
                     );
 
-
                 art.className =
                     "rakkez-track-art";
-
 
                 if (
                     track.artwork &&
@@ -3699,10 +2603,8 @@
                         ) +
                         "')";
 
-
                     art.style.backgroundSize =
                         "cover";
-
 
                     art.style.backgroundPosition =
                         "center";
@@ -3713,88 +2615,70 @@
                         "♪";
                 }
 
-
                 const details =
                     document.createElement(
                         "div"
                     );
 
-
                 details.className =
                     "rakkez-track-details";
-
 
                 const title =
                     document.createElement(
                         "div"
                     );
 
-
                 title.className =
                     "rakkez-track-title";
-
 
                 title.textContent =
                     track.title ||
                     "Unknown Track";
-
 
                 const source =
                     document.createElement(
                         "div"
                     );
 
-
                 source.className =
                     "rakkez-track-source";
-
 
                 source.textContent =
                     track.artist ||
                     "RakkeZ";
 
-
                 details.appendChild(
                     title
                 );
 
-
                 details.appendChild(
                     source
                 );
-
 
                 const type =
                     document.createElement(
                         "div"
                     );
 
-
                 type.className =
                     "rakkez-track-duration";
 
-
                 type.textContent =
-                    track.type ===
-                    "local"
+                    track.type === "local"
                         ? "Local"
                         : "Lofi";
-
 
                 item.appendChild(
                     art
                 );
 
-
                 item.appendChild(
                     details
                 );
 
-
                 item.appendChild(
                     type
                 );
-
 
                 item.addEventListener(
                     "click",
@@ -3804,19 +2688,15 @@
                             index,
                             true
                         );
-
                     }
                 );
-
 
                 playlistElement.appendChild(
                     item
                 );
-
             }
         );
     }
-
 
     /* =====================================================
        LOCAL FILES
@@ -3830,14 +2710,11 @@
             !files ||
             !files.length
         ) {
-
             return;
         }
 
-
         let addedCount =
             0;
-
 
         Array.from(
             files
@@ -3850,71 +2727,53 @@
                         "audio/"
                     )
                 ) {
-
                     return;
                 }
-
 
                 const url =
                     URL.createObjectURL(
                         file
                     );
 
-
                 localObjectUrls.push(
                     url
                 );
 
-
                 LOCAL_TRACKS.push({
-
                     title:
                         file.name.replace(
                             /\.[^/.]+$/,
                             ""
                         ),
-
                     artist:
                         "Local Music",
-
                     src:
                         url,
-
                     artwork:
                         "",
-
                     type:
                         "local",
-
                     file:
                         file
-
                 });
 
-
                 addedCount++;
-
             }
         );
-
 
         if (!addedCount) {
             return;
         }
 
-
         normalizeIndex();
-
 
         renderPlaylist();
 
         renderLocalList();
 
-
         activateSource(
             "local"
         );
-
 
         const firstNewIndex =
             PLAYLIST.length +
@@ -3923,13 +2782,11 @@
                 addedCount
             );
 
-
         loadTrack(
             firstNewIndex,
             true
         );
     }
-
 
     if (localFile) {
 
@@ -3941,14 +2798,11 @@
                     localFile.files
                 );
 
-
                 localFile.value =
                     "";
-
             }
         );
     }
-
 
     /* =====================================================
        LOCAL LIST
@@ -3960,10 +2814,8 @@
             return;
         }
 
-
         localList.innerHTML =
             "";
-
 
         LOCAL_TRACKS.forEach(
             function (
@@ -3976,19 +2828,15 @@
                         "button"
                     );
 
-
                 button.type =
                     "button";
-
 
                 button.className =
                     "rakkez-local-track";
 
-
                 const globalIndex =
                     PLAYLIST.length +
                     localIndex;
-
 
                 if (
                     globalIndex ===
@@ -4000,78 +2848,62 @@
                     );
                 }
 
-
                 const icon =
                     document.createElement(
                         "div"
                     );
 
-
                 icon.className =
                     "rakkez-local-track-icon";
 
-
                 icon.textContent =
                     "♪";
-
 
                 const info =
                     document.createElement(
                         "div"
                     );
 
-
                 info.className =
                     "rakkez-local-track-info";
-
 
                 const name =
                     document.createElement(
                         "div"
                     );
 
-
                 name.className =
                     "rakkez-local-track-name";
 
-
                 name.textContent =
                     track.title;
-
 
                 const meta =
                     document.createElement(
                         "div"
                     );
 
-
                 meta.className =
                     "rakkez-local-track-meta";
 
-
                 meta.textContent =
                     "Local Music";
-
 
                 info.appendChild(
                     name
                 );
 
-
                 info.appendChild(
                     meta
                 );
-
 
                 button.appendChild(
                     icon
                 );
 
-
                 button.appendChild(
                     info
                 );
-
 
                 button.addEventListener(
                     "click",
@@ -4081,19 +2913,15 @@
                             globalIndex,
                             true
                         );
-
                     }
                 );
-
 
                 localList.appendChild(
                     button
                 );
-
             }
         );
     }
-
 
     /* =====================================================
        ACTIVATE SOURCE
@@ -4111,10 +2939,8 @@
                     tab.dataset.rakkezSource ===
                     sourceName
                 );
-
             }
         );
-
 
         sources.forEach(
             function (source) {
@@ -4122,15 +2948,12 @@
                 source.classList.remove(
                     "active"
                 );
-
             }
         );
-
 
         if (!sourceName) {
             return;
         }
-
 
         const target =
             document.getElementById(
@@ -4142,7 +2965,6 @@
                 "Source"
             );
 
-
         if (target) {
 
             target.classList.add(
@@ -4150,7 +2972,6 @@
             );
         }
     }
-
 
     /* =====================================================
        YOUTUBE
@@ -4164,34 +2985,24 @@
             return null;
         }
 
-
         const text =
             value.trim();
 
-
         const patterns = [
-
             /youtube\.com\/watch\?v=([^&]+)/i,
-
             /youtu\.be\/([^?&]+)/i,
-
             /youtube\.com\/embed\/([^?&]+)/i,
-
             /youtube\.com\/shorts\/([^?&]+)/i
-
         ];
 
-
         for (
-            const pattern
-            of patterns
+            const pattern of patterns
         ) {
 
             const match =
                 text.match(
                     pattern
                 );
-
 
             if (
                 match &&
@@ -4202,10 +3013,8 @@
             }
         }
 
-
         return null;
     }
-
 
     if (youtubePlay) {
 
@@ -4220,13 +3029,11 @@
                             : ""
                     );
 
-
                 if (!id) {
 
                     if (youtubeEmbed) {
 
                         youtubeEmbed.innerHTML = `
-
                             <div
                                 style="
                                     padding:20px;
@@ -4236,33 +3043,26 @@
                             >
                                 Please enter a valid YouTube URL.
                             </div>
-
                         `;
                     }
-
 
                     return;
                 }
 
-
                 if (youtubeEmbed) {
 
                     youtubeEmbed.innerHTML = `
-
                         <iframe
                             src="https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1"
                             title="YouTube Player"
                             allow="autoplay; encrypted-media; picture-in-picture"
                             allowfullscreen
                         ></iframe>
-
                     `;
                 }
-
             }
         );
     }
-
 
     /* =====================================================
        SPOTIFY
@@ -4276,21 +3076,17 @@
             return null;
         }
 
-
         const text =
             value.trim();
-
 
         const match =
             text.match(
                 /spotify\.com\/(track|album|playlist|artist|episode|show)\/([A-Za-z0-9]+)/
             );
 
-
         if (!match) {
             return null;
         }
-
 
         return (
             "https://open.spotify.com/embed/" +
@@ -4300,7 +3096,6 @@
             "?utm_source=generator"
         );
     }
-
 
     if (spotifyPlay) {
 
@@ -4315,13 +3110,11 @@
                             : ""
                     );
 
-
                 if (!embedUrl) {
 
                     if (spotifyEmbed) {
 
                         spotifyEmbed.innerHTML = `
-
                             <div
                                 style="
                                     padding:20px;
@@ -4331,33 +3124,26 @@
                             >
                                 Please enter a valid Spotify URL.
                             </div>
-
                         `;
                     }
-
 
                     return;
                 }
 
-
                 if (spotifyEmbed) {
 
                     spotifyEmbed.innerHTML = `
-
                         <iframe
                             src="${embedUrl}"
                             title="Spotify Player"
                             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                             loading="lazy"
                         ></iframe>
-
                     `;
                 }
-
             }
         );
     }
-
 
     /* =====================================================
        LANGUAGE SYSTEM
@@ -4444,9 +3230,7 @@
 
             spotifyPlaceholder:
                 "Paste Spotify URL..."
-
         },
-
 
         ar: {
 
@@ -4527,11 +3311,8 @@
 
             spotifyPlaceholder:
                 "الصق رابط سبوتيفاي..."
-
         }
-
     };
-
 
     function detectLanguage() {
 
@@ -4540,53 +3321,37 @@
                 "lang"
             );
 
-
         if (
             htmlLang &&
             htmlLang
                 .toLowerCase()
-                .startsWith(
-                    "ar"
-                )
+                .startsWith("ar")
         ) {
 
             return "ar";
         }
 
-
         if (
             htmlLang &&
             htmlLang
                 .toLowerCase()
-                .startsWith(
-                    "en"
-                )
+                .startsWith("en")
         ) {
 
             return "en";
         }
 
-
         const possibleKeys = [
-
             "language",
-
             "lang",
-
             "rakkez_language",
-
             "rakkez_lang",
-
             "selectedLanguage",
-
             "siteLanguage"
-
         ];
 
-
         for (
-            const key
-            of possibleKeys
+            const key of possibleKeys
         ) {
 
             const value =
@@ -4594,57 +3359,43 @@
                     key
                 );
 
-
             if (!value) {
                 continue;
             }
 
-
             const normalized =
                 value.toLowerCase();
 
-
             if (
-                normalized.startsWith(
-                    "ar"
-                ) ||
-                value ===
-                "Arabic"
+                normalized.startsWith("ar") ||
+                value === "Arabic"
             ) {
 
                 return "ar";
             }
 
-
             if (
-                normalized.startsWith(
-                    "en"
-                ) ||
-                value ===
-                "English"
+                normalized.startsWith("en") ||
+                value === "English"
             ) {
 
                 return "en";
             }
         }
 
-
         return "en";
     }
-
 
     function applyMediaLanguage() {
 
         const language =
             detectLanguage();
 
-
         const dictionary =
             MEDIA_TRANSLATIONS[
                 language
             ] ||
             MEDIA_TRANSLATIONS.en;
-
 
         document
             .querySelectorAll(
@@ -4657,7 +3408,6 @@
                         element.dataset
                             .mediaI18n;
 
-
                     if (
                         dictionary[key] !==
                         undefined
@@ -4666,10 +3416,8 @@
                         element.textContent =
                             dictionary[key];
                     }
-
                 }
             );
-
 
         document
             .querySelectorAll(
@@ -4682,7 +3430,6 @@
                         element.dataset
                             .mediaI18nTitle;
 
-
                     if (
                         dictionary[key] !==
                         undefined
@@ -4693,10 +3440,8 @@
                             dictionary[key]
                         );
                     }
-
                 }
             );
-
 
         document
             .querySelectorAll(
@@ -4709,7 +3454,6 @@
                         element.dataset
                             .mediaI18nPlaceholder;
 
-
                     if (
                         dictionary[key] !==
                         undefined
@@ -4720,84 +3464,23 @@
                             dictionary[key]
                         );
                     }
-
                 }
             );
-
-
-        /*
-         * Update effect buttons after language change.
-         */
-
-        AMBIENT_EFFECTS.forEach(
-            function (effect) {
-
-                const card =
-                    document.querySelector(
-                        `[data-rakkez-effect="${effect.id}"]`
-                    );
-
-
-                if (!card) {
-                    return;
-                }
-
-
-                const player =
-                    window.rakkezAmbient &&
-                    window.rakkezAmbient.getPlayer
-                        ? window.rakkezAmbient.getPlayer(
-                            effect.id
-                        )
-                        : null;
-
-
-                const toggle =
-                    card.querySelector(
-                        ".rakkez-effect-toggle"
-                    );
-
-
-                if (
-                    toggle &&
-                    player &&
-                    !toggle.disabled
-                ) {
-
-                    toggle.textContent =
-                        player.audio.paused
-                            ? (
-                                language === "ar"
-                                    ? "تشغيل"
-                                    : "Play"
-                            )
-                            : (
-                                language === "ar"
-                                    ? "إيقاف"
-                                    : "Stop"
-                            );
-                }
-            }
-        );
-
 
         const allTracks =
             getAllTracks();
 
-
         if (playlistCount) {
 
             if (
-                language ===
-                "ar"
+                language === "ar"
             ) {
 
                 playlistCount.textContent =
                     allTracks.length +
                     " " +
                     (
-                        allTracks.length ===
-                        1
+                        allTracks.length === 1
                             ? "مقطع"
                             : "مقاطع"
                     );
@@ -4807,15 +3490,13 @@
                 playlistCount.textContent =
                     allTracks.length +
                     (
-                        allTracks.length ===
-                        1
+                        allTracks.length === 1
                             ? " track"
                             : " tracks"
                     );
             }
         }
     }
-
 
     /* =====================================================
        LANGUAGE OBSERVER
@@ -4826,47 +3507,37 @@
             function () {
 
                 applyMediaLanguage();
-
             }
         );
-
 
     languageObserver.observe(
         document.documentElement,
         {
-            attributes:
-                true,
-
-            attributeFilter:
-                [
-                    "lang",
-                    "dir",
-                    "class"
-                ]
+            attributes: true,
+            attributeFilter: [
+                "lang",
+                "dir",
+                "class"
+            ]
         }
     );
-
 
     window.addEventListener(
         "storage",
         function () {
 
             applyMediaLanguage();
-
         }
     );
 
-
     let lastDetectedLanguage =
         detectLanguage();
-
 
     setInterval(
         function () {
 
             const currentLanguage =
                 detectLanguage();
-
 
             if (
                 currentLanguage !==
@@ -4876,14 +3547,12 @@
                 lastDetectedLanguage =
                     currentLanguage;
 
-
                 applyMediaLanguage();
             }
 
         },
         500
     );
-
 
     /* =====================================================
        KEYBOARD SHORTCUTS
@@ -4899,14 +3568,11 @@
                     "show"
                 )
             ) {
-
                 return;
             }
 
-
             const target =
                 event.target;
-
 
             if (
                 target &&
@@ -4917,10 +3583,8 @@
                     "TEXTAREA"
                 )
             ) {
-
                 return;
             }
-
 
             if (
                 event.code ===
@@ -4929,17 +3593,12 @@
 
                 event.preventDefault();
 
-
                 if (audio.paused) {
-
                     playAudio();
-
                 } else {
-
                     pauseAudio();
                 }
             }
-
 
             if (
                 event.code ===
@@ -4951,7 +3610,6 @@
                 );
             }
 
-
             if (
                 event.code ===
                 "ArrowLeft"
@@ -4959,10 +3617,8 @@
 
                 previousTrack();
             }
-
         }
     );
-
 
     /* =====================================================
        PUBLIC API
@@ -4973,41 +3629,30 @@
         play:
             playAudio,
 
-
         pause:
             pauseAudio,
 
-
         next:
             function () {
-
-                nextTrack(
-                    true
-                );
+                nextTrack(true);
             },
-
 
         previous:
             previousTrack,
 
-
         load:
             function (index) {
-
                 loadTrack(
                     index,
                     false
                 );
             },
 
-
         open:
             openMedia,
 
-
         close:
             closeMedia,
-
 
         getCurrentTrack:
             function () {
@@ -5020,29 +3665,19 @@
                 );
             },
 
-
         getPlaylist:
             function () {
 
-                return getAllTracks().slice();
+                return getAllTracks()
+                    .slice();
             },
-
 
         getAudio:
             function () {
 
                 return audio;
-            },
-
-
-        getEffects:
-            function () {
-
-                return AMBIENT_EFFECTS.slice();
             }
-
     };
-
 
     /* =====================================================
        INITIALIZE
@@ -5050,21 +3685,16 @@
 
     normalizeIndex();
 
-
     renderPlaylist();
 
-
     renderLocalList();
-
 
     loadTrack(
         currentIndex,
         false
     );
 
-
     applyMediaLanguage();
-
 
     /* =====================================================
        LOCAL AUDIO SYNC
@@ -5073,17 +3703,13 @@
     if (localAudio) {
 
         try {
-
             localAudio.pause();
-
         } catch (error) {}
-
 
         localAudio.removeAttribute(
             "src"
         );
     }
-
 
     /* =====================================================
        CLEAN OBJECT URLS
@@ -5095,7 +3721,6 @@
 
             clearLoadingTimer();
 
-
             localObjectUrls.forEach(
                 function (url) {
 
@@ -5106,13 +3731,10 @@
                         );
 
                     } catch (error) {}
-
                 }
             );
-
         }
     );
-
 
     /* =====================================================
        READY
