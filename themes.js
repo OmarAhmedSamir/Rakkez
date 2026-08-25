@@ -53,7 +53,7 @@
        =========================================================
 
        لو theme.js تم تحميله مرتين بالخطأ في HTML
-       لن يتم إنشاء نظامين Ambient فوق بعض.
+       لن يتم إنشاء نظامين Theme / Ambient فوق بعض.
 
        لا تعدل هذا الجزء.
        ========================================================= */
@@ -608,6 +608,10 @@
        13 — الوصول إلى عنصر Gradient
        =========================================================
 
+       HTML المطلوب:
+
+       <div class="bg-gradient"></div>
+
        لا تعدل.
        ========================================================= */
 
@@ -792,18 +796,26 @@
         );
 
 
-        document.body.classList.toggle(
-            "light",
-            theme === "light"
-        );
+        if (document.body) {
+
+            document.body.classList.toggle(
+                "light",
+                theme === "light"
+            );
+
+        }
 
 
         document.documentElement.dataset.theme =
             theme;
 
 
-        document.body.dataset.theme =
-            theme;
+        if (document.body) {
+
+            document.body.dataset.theme =
+                theme;
+
+        }
 
 
         const themeButton =
@@ -811,6 +823,12 @@
 
 
         if (themeButton) {
+
+            /*
+             * مهم:
+             * لا نستبدل innerHTML.
+             * نغير فقط النص إذا كان الزر مبنيًا كنص.
+             */
 
             themeButton.textContent =
                 theme === "light"
@@ -1078,6 +1096,17 @@
             "show"
         );
 
+
+        /*
+         * دعم إضافي لو CSS الحالي يستخدم
+         * aria-hidden للتحكم في حالة الـ Overlay.
+         */
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
     }
 
 
@@ -1092,7 +1121,6 @@
        1. يعيد رسم الخلفيات
        2. يفتح الـ Overlay
 
-       لا تعدل.
        ========================================================= */
 
     function openAmbient() {
@@ -1117,6 +1145,12 @@
 
         overlay.classList.add(
             "show"
+        );
+
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "false"
         );
 
     }
@@ -1184,6 +1218,18 @@
             "ambient-card";
 
 
+        card.setAttribute(
+            "role",
+            "button"
+        );
+
+
+        card.setAttribute(
+            "tabindex",
+            "0"
+        );
+
+
         if (
             selectedAmbient ===
             item.id
@@ -1230,24 +1276,52 @@
            عند الضغط على Gradient
            ===================================================== */
 
+        function chooseGradient() {
+
+            selectAmbient(
+                item.id
+            );
+
+
+            resetBackground();
+
+
+            applyGradient(
+                item.background
+            );
+
+
+            renderAmbient();
+
+        }
+
+
         card.addEventListener(
             "click",
-            function () {
+            function (event) {
 
-                selectAmbient(
-                    item.id
-                );
+                event.preventDefault();
 
+                chooseGradient();
 
-                resetBackground();
-
-
-                applyGradient(
-                    item.background
-                );
+            }
+        );
 
 
-                renderAmbient();
+        card.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    chooseGradient();
+
+                }
 
             }
         );
@@ -1279,6 +1353,18 @@
 
         card.className =
             "ambient-card";
+
+
+        card.setAttribute(
+            "role",
+            "button"
+        );
+
+
+        card.setAttribute(
+            "tabindex",
+            "0"
+        );
 
 
         if (
@@ -1344,21 +1430,49 @@
            عند الضغط على الصورة
            ===================================================== */
 
+        function chooseImage() {
+
+            selectAmbient(
+                item.id
+            );
+
+
+            applyAmbient(
+                item
+            );
+
+
+            renderAmbient();
+
+        }
+
+
         card.addEventListener(
             "click",
-            function () {
+            function (event) {
 
-                selectAmbient(
-                    item.id
-                );
+                event.preventDefault();
 
+                chooseImage();
 
-                applyAmbient(
-                    item
-                );
+            }
+        );
 
 
-                renderAmbient();
+        card.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    chooseImage();
+
+                }
 
             }
         );
@@ -1394,6 +1508,18 @@
 
         card.className =
             "ambient-card";
+
+
+        card.setAttribute(
+            "role",
+            "button"
+        );
+
+
+        card.setAttribute(
+            "tabindex",
+            "0"
+        );
 
 
         if (
@@ -1462,23 +1588,51 @@
            عند الضغط يفتح File Picker
            ===================================================== */
 
+        function openFilePicker() {
+
+            const input =
+                $("bgFile");
+
+
+            if (input) {
+
+                input.click();
+
+            } else {
+
+                console.warn(
+                    "RakkeZ Theme: #bgFile not found."
+                );
+
+            }
+
+        }
+
+
         card.addEventListener(
             "click",
-            function () {
+            function (event) {
 
-                const input =
-                    $("bgFile");
+                event.preventDefault();
+
+                openFilePicker();
+
+            }
+        );
 
 
-                if (input) {
+        card.addEventListener(
+            "keydown",
+            function (event) {
 
-                    input.click();
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
 
-                } else {
+                    event.preventDefault();
 
-                    console.warn(
-                        "RakkeZ Theme: #bgFile not found."
-                    );
+                    openFilePicker();
 
                 }
 
@@ -1860,7 +2014,14 @@
                 ) {
 
                     playPromise.catch(
-                        function () {}
+                        function (error) {
+
+                            console.warn(
+                                "RakkeZ Theme: local video autoplay failed.",
+                                error
+                            );
+
+                        }
                     );
 
                 }
@@ -1874,7 +2035,11 @@
            إذا كان الملف IMAGE
            ===================================================== */
 
-        else {
+        else if (
+            file.type.startsWith(
+                "image/"
+            )
+        ) {
 
             stopVideo();
 
@@ -1893,6 +2058,48 @@
                     "Local Background";
 
             }
+
+        }
+
+
+        /* =====================================================
+           لو الملف ليس صورة ولا فيديو
+           ===================================================== */
+
+        else {
+
+            if (localBackgroundURL) {
+
+                try {
+
+                    URL.revokeObjectURL(
+                        localBackgroundURL
+                    );
+
+                } catch (error) {}
+
+            }
+
+
+            localBackgroundURL =
+                null;
+
+
+            selectedAmbient =
+                "gradient";
+
+
+            try {
+
+                localStorage.setItem(
+                    STORAGE.ambient,
+                    "gradient"
+                );
+
+            } catch (error) {}
+
+
+            restoreAmbient();
 
         }
 
@@ -1953,6 +2160,20 @@
         }
 
 
+        if (
+            button.dataset.rakkezThemeBound ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        button.dataset.rakkezThemeBound =
+            "true";
+
+
         button.addEventListener(
             "click",
             function (event) {
@@ -2005,6 +2226,20 @@
             return;
 
         }
+
+
+        if (
+            button.dataset.rakkezAmbientBound ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        button.dataset.rakkezAmbientBound =
+            "true";
 
 
         button.addEventListener(
@@ -2066,6 +2301,20 @@
                     .forEach(
                         function (button) {
 
+                            if (
+                                button.dataset.rakkezAmbientCloseBound ===
+                                "true"
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            button.dataset.rakkezAmbientCloseBound =
+                                "true";
+
+
                             button.addEventListener(
                                 "click",
                                 function (event) {
@@ -2115,6 +2364,20 @@
         }
 
 
+        if (
+            overlay.dataset.rakkezOverlayBound ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        overlay.dataset.rakkezOverlayBound =
+            "true";
+
+
         overlay.addEventListener(
             "click",
             function (event) {
@@ -2146,6 +2409,19 @@
        ========================================================= */
 
     function bindEscapeKey() {
+
+        if (
+            window.__RAKKEZ_ESCAPE_BOUND__
+        ) {
+
+            return;
+
+        }
+
+
+        window.__RAKKEZ_ESCAPE_BOUND__ =
+            true;
+
 
         document.addEventListener(
             "keydown",
@@ -2195,6 +2471,20 @@
             return;
 
         }
+
+
+        if (
+            input.dataset.rakkezBackgroundBound ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        input.dataset.rakkezBackgroundBound =
+            "true";
 
 
         input.addEventListener(
@@ -2342,4 +2632,3 @@
 
 
 })();
-
