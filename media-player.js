@@ -29,42 +29,42 @@
             title: "بحب الله موسيقى مع بيز هادي",
             artist: "Ahmed S",
             src: "Music/Guitar.mp3",
-            artwork: "Music/artwork/Blog/Guitar.png",
+            artwork: "assets/blog/effects/Guitar.jpg",
             type: "lofi"
         },
         {
             title: "Airplane",
             artist: "RakkeZ Ambient",
             src: "Airplane.mp3",
-            artwork: "Music/artwork/Blog/Airplane.png",
+            artwork: null,
             type: "lofi"
         },
         {
             title: "Coffee",
             artist: "RakkeZ Ambient",
             src: "Caffee.mp3",
-            artwork: "Music/artwork/Blog/Caffee.png",
+            artwork: "assets/blog/effects/CAFFEE.jpg",
             type: "lofi"
         },
         {
             title: "Fireplace",
             artist: "RakkeZ Ambient",
             src: "FirePlace.mp3",
-            artwork: "Music/artwork/Blog/FirePlace.png",
+            artwork: "assets/blog/effects/Fireplace.jfif",
             type: "lofi"
         },
         {
             title: "Peaceful Piano",
             artist: "RakkeZ Lofi",
             src: "peaceful-piano.mp3",
-            artwork: "Music/artwork/Blog/peaceful-piano.png",
+            artwork: "assets/blog/effects/PEACEFUL-PIANO.jpg",
             type: "lofi"
         },
         {
             title: "Rain",
             artist: "RakkeZ Ambient",
             src: "rain.mp3",
-            artwork: "Music/artwork/Blog/rain.png",
+            artwork: "assets/blog/effects/RAIN.jpg",
             type: "lofi"
         }
     ];
@@ -75,11 +75,18 @@
        IMPORTANT:
        Add future effects ONLY inside this list.
        
-       The image paths below match the actual GitHub files
-       supplied by the user.
+       Current GitHub files:
        
-       Audio is null when an actual audio file has not been
-       provided yet. This prevents 404 errors.
+       assets/blog/effects/CAFFEE.jpg
+       assets/blog/effects/Fireplace.jfif
+       assets/blog/effects/Guitar.jpg
+       assets/blog/effects/PEACEFUL-PIANO.jpg
+       assets/blog/effects/RAIN.jpg
+       
+       These are artwork/image files.
+       
+       No effect audio file has been supplied yet,
+       therefore src is intentionally null.
        ===================================================== */
 
     const AMBIENT_EFFECTS = [
@@ -425,15 +432,12 @@
                 )
             );
 
-            /*
-             * IMPORTANT:
-             * Do not create Audio(null).
-             *
-             * Effects without a real audio source are kept
-             * safely unavailable.
-             */
-
             let effectAudio = null;
+
+            /*
+             * Only create an Audio object when an actual
+             * audio source exists.
+             */
 
             if (
                 typeof effect.src === "string" &&
@@ -499,9 +503,7 @@
                         return element;
                     }
 
-                } catch (error) {
-                    // Ignore invalid selectors.
-                }
+                } catch (error) {}
             }
 
             return null;
@@ -599,6 +601,7 @@
                 card.dataset.rakkezEffectBound ===
                 "true"
             ) {
+
                 updateEffectCardState(
                     effect,
                     card
@@ -681,6 +684,7 @@
                             safeValue;
 
                         if (player.audio) {
+
                             player.audio.volume =
                                 safeValue;
                         }
@@ -779,6 +783,7 @@
                         );
 
                         if (toggle) {
+
                             toggle.classList.add(
                                 "active"
                             );
@@ -800,6 +805,7 @@
                         );
 
                         if (toggle) {
+
                             toggle.classList.remove(
                                 "active"
                             );
@@ -907,8 +913,13 @@
                 <button
                     class="rakkez-effect-toggle"
                     type="button"
+                    ${player.available ? "" : "disabled"}
                 >
-                    Play ${effect.name}
+                    ${
+                        player.available
+                            ? "Play " + effect.name
+                            : "Unavailable"
+                    }
                 </button>
 
                 <div class="rakkez-effect-volume">
@@ -986,19 +997,9 @@
                 }
             );
 
-            /*
-             * If the HTML already contains effect cards,
-             * preserve them.
-             */
-
             if (foundExisting) {
                 return;
             }
-
-            /*
-             * Otherwise generate them automatically
-             * from AMBIENT_EFFECTS.
-             */
 
             AMBIENT_EFFECTS.forEach(
                 function (effect) {
@@ -1662,6 +1663,11 @@
         testImage.onerror =
             function () {
 
+                console.warn(
+                    "RakkeZ Media: Artwork unavailable:",
+                    cleanImage
+                );
+
                 clearArtwork();
             };
 
@@ -2051,9 +2057,7 @@
 
     audio.addEventListener(
         "waiting",
-        function () {
-            // Normal buffering.
-        }
+        function () {}
     );
 
     audio.addEventListener(
