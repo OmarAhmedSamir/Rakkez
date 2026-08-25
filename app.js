@@ -7419,18 +7419,6 @@ window.RakkeZOverlay = {
 
 };
 
-/* =====================================================
-   BLOG
-===================================================== */
-
-const blogOpen = document.getElementById("blogOpen");
-
-if (blogOpen) {
-    blogOpen.addEventListener("click", function () {
-        window.location.href = "rakkez-blog.html";
-    });
-}
-
 
 /* =========================================================
    END OF RAKKEZ MAIN JS
