@@ -49,6 +49,7 @@
             title: "Lofi Chill Music",
             artist: "RakkeZ",
             src: "Music/lofi (1).mp3",
+            image: "assets/blog/effects/7.png",
             type: "lofi"
         },
 
@@ -56,6 +57,7 @@
             title: "Lofi Chill Music 2",
             artist: "RakkeZ",
             src: "Music/lofi (2).mp3",
+            image: "assets/blog/effects/4.png",
             type: "lofi"
         },
 
@@ -63,6 +65,7 @@
             title: "Lofi Chill Music 3",
             artist: "RakkeZ",
             src: "Music/lofi (3).mp3",
+            image: "assets/blog/effects/1.png",
             type: "lofi"
         },
 
@@ -70,6 +73,7 @@
             title: "Lofi Chill Music 4",
             artist: "RakkeZ",
             src: "Music/lofi (4).mp3",
+            image: "assets/blog/effects/3.png", 
             type: "lofi"
         },
 
@@ -77,6 +81,7 @@
             title: "Lofi Chill Music 5",
             artist: "RakkeZ",
             src: "Music/lofi (5).mp3",
+            image: "assets/blog/effects/6.png",
             type: "lofi"
         },
 
@@ -84,6 +89,7 @@
             title: "Lofi Chill Music 6",
             artist: "RakkeZ",
             src: "Music/lofi (6).mp3",
+            image: "assets/blog/effects/5.png",
             type: "lofi"
         },
 
@@ -91,6 +97,7 @@
             title: "Lofi Chill Music 7",
             artist: "RakkeZ",
             src: "Music/lofi (7).mp3",
+            image: "assets/blog/effects/2.png",
             type: "lofi"
         }
 
