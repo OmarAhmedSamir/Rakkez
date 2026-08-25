@@ -1949,6 +1949,70 @@
 
 </div>
 
+     <!-- =====================================================
+     PAGE LOADER
+===================================================== -->
+
+<div id="pageLoader">
+
+    <div class="loader-inner">
+
+        <div class="loader-logo">
+            Rakke<span>Z</span>
+        </div>
+
+        <div class="loader-spinner"></div>
+
+    </div>
+
+</div>
+
+<script>
+(function () {
+
+    function hidePageLoader() {
+
+        const loader = document.getElementById("pageLoader");
+
+        if (!loader) return;
+
+        loader.classList.add("hide");
+
+        setTimeout(function () {
+
+            loader.style.display = "none";
+
+        }, 550);
+
+    }
+
+    /*
+     * Hide normally after the page is ready.
+     */
+    if (document.readyState === "loading") {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            hidePageLoader,
+            { once: true }
+        );
+
+    } else {
+
+        hidePageLoader();
+
+    }
+
+    /*
+     * Safety fallback.
+     * Even if another JavaScript file crashes,
+     * the loading screen can never stay forever.
+     */
+    setTimeout(hidePageLoader, 4000);
+
+})();
+</script>
+
 
 <!-- =====================================================
      APP
