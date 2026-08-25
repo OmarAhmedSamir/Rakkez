@@ -43,15 +43,58 @@
        MAIN MUSIC PLAYLIST
        ===================================================== */
 
-    const PLAYLIST = [
+        const PLAYLIST = [
 
         {
-            title: "بحب الله موسيقى مع بيز هادي",
-            artist: "Ahmed S",
-            src: "Music/Guitar.mp3",
-            artwork: "assets/blog/effects/Guitar.jpg",
+            title: "Lofi Chill Music",
+            artist: "RakkeZ",
+            src: "Music/lofi (1).mp3",
+            type: "lofi"
+        },
+
+        {
+            title: "Lofi Chill Music 2",
+            artist: "RakkeZ",
+            src: "Music/lofi (2).mp3",
+            type: "lofi"
+        },
+
+        {
+            title: "Lofi Chill Music 3",
+            artist: "RakkeZ",
+            src: "Music/lofi (3).mp3",
+            type: "lofi"
+        },
+
+        {
+            title: "Lofi Chill Music 4",
+            artist: "RakkeZ",
+            src: "Music/lofi (4).mp3",
+            type: "lofi"
+        },
+
+        {
+            title: "Lofi Chill Music 5",
+            artist: "RakkeZ",
+            src: "Music/lofi (5).mp3",
+            type: "lofi"
+        },
+
+        {
+            title: "Lofi Chill Music 6",
+            artist: "RakkeZ",
+            src: "Music/lofi (6).mp3",
+            type: "lofi"
+        },
+
+         {
+            title: "Lofi Chill Music 7",
+            artist: "RakkeZ",
+            src: "Music/lofi (7).mp3",
             type: "lofi"
         }
+
+
 
     ];
 
