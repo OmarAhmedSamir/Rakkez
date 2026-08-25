@@ -3341,15 +3341,12 @@ min-width:105px;
 .updates-modal {
 
     position: fixed;
-
     inset: 0;
-
     z-index: 999999;
 
     display: none;
 
     align-items: center;
-
     justify-content: center;
 
     padding: 20px;
@@ -3357,11 +3354,9 @@ min-width:105px;
     background: rgba(0, 0, 0, .72);
 
     backdrop-filter: blur(12px);
-
     -webkit-backdrop-filter: blur(12px);
 
 }
-
 
 .updates-modal.show {
 
@@ -3370,12 +3365,15 @@ min-width:105px;
 }
 
 
+/* =====================================================
+   UPDATES BOX
+===================================================== */
+
 .updates-box {
 
     position: relative;
 
     width: min(520px, 100%);
-
     max-height: 85vh;
 
     overflow-y: auto;
@@ -3383,7 +3381,6 @@ min-width:105px;
     padding: 32px;
 
     border: 1px solid rgba(255,255,255,.12);
-
     border-radius: 24px;
 
     background: rgba(10, 15, 24, .96);
@@ -3393,23 +3390,30 @@ min-width:105px;
 
     color: #fff;
 
+    box-sizing: border-box;
+
 }
 
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
 
 .updates-close {
 
     position: absolute;
 
     top: 16px;
-
     right: 16px;
 
     width: 36px;
-
     height: 36px;
 
-    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    border: 0;
     border-radius: 50%;
 
     background: rgba(255,255,255,.08);
@@ -3417,25 +3421,42 @@ min-width:105px;
     color: #fff;
 
     font-size: 22px;
+    line-height: 1;
 
     cursor: pointer;
 
+    transition:
+        background .2s ease,
+        transform .2s ease;
+
 }
 
+.updates-close:hover {
+
+    background: rgba(255,255,255,.14);
+
+    transform: scale(1.05);
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 .updates-header {
 
-    padding-right: 40px;
+    padding-right: 48px;
+
+    margin-bottom: 22px;
 
 }
-
 
 .updates-badge {
 
     display: inline-flex;
 
     align-items: center;
-
     justify-content: center;
 
     padding: 6px 10px;
@@ -3449,66 +3470,128 @@ min-width:105px;
     color: #fff;
 
     font-size: 11px;
-
     font-weight: 800;
 
     letter-spacing: .08em;
 
 }
 
-
 .updates-header h2 {
 
     margin: 0 0 10px;
 
     font-size: 28px;
+    line-height: 1.2;
 
 }
 
-
 .updates-header p {
 
-    margin: 0 0 24px;
+    margin: 0;
 
     color: rgba(255,255,255,.65);
+
+    font-size: 14px;
 
     line-height: 1.6;
 
 }
 
 
+/* =====================================================
+   UPDATE ITEMS
+===================================================== */
+
 .update-item {
 
-    padding: 16px 0;
+    display: block;
 
-    border-top: 1px solid rgba(255,255,255,.08);
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 16px;
+
+    margin-top: 12px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-radius: 14px;
+
+    background: rgba(255,255,255,.035);
+
+    overflow: hidden;
 
 }
 
+
+/* =====================================================
+   UPDATE TITLE
+===================================================== */
 
 .update-item h3 {
 
-    margin: 0 0 6px;
+    display: block;
+
+    width: 100%;
+
+    margin: 0 0 8px;
+
+    padding: 0;
+
+    color: #fff;
 
     font-size: 16px;
 
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    word-break: normal;
+
+    overflow-wrap: break-word;
+
 }
 
+
+/* =====================================================
+   UPDATE TEXT
+===================================================== */
 
 .update-item p {
 
+    display: block;
+
+    width: 100%;
+
     margin: 0;
+
+    padding: 0;
 
     color: rgba(255,255,255,.62);
 
-    line-height: 1.55;
+    font-size: 13px;
+
+    line-height: 1.65;
+
+    word-break: normal;
+
+    overflow-wrap: break-word;
 
 }
 
 
+/* =====================================================
+   DONE BUTTON
+===================================================== */
+
 .updates-done {
 
+    display: block;
+
     width: 100%;
+
+    box-sizing: border-box;
 
     margin-top: 20px;
 
@@ -3526,7 +3609,65 @@ min-width:105px;
 
     font-weight: 700;
 
+    line-height: 1.3;
+
     cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
 
 }
 
+.updates-done:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .updates-modal {
+
+        padding: 14px;
+
+    }
+
+    .updates-box {
+
+        width: 100%;
+
+        max-height: 90vh;
+
+        padding: 22px;
+
+        border-radius: 20px;
+
+    }
+
+    .updates-header {
+
+        padding-right: 42px;
+
+    }
+
+    .updates-header h2 {
+
+        font-size: 24px;
+
+    }
+
+    .update-item {
+
+        padding: 14px;
+
+    }
+
+}
