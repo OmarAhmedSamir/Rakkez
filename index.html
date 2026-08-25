@@ -5,25 +5,33 @@
 
 <script>
 (function () {
+
     const TUTORIAL_KEY = "rakkez_tutorial_completed";
 
-    const currentPage = window.location.pathname.split("/").pop().toLowerCase();
+    const currentPage =
+        window.location.pathname
+            .split("/")
+            .pop()
+            .toLowerCase();
 
-    // لا تعمل Redirect إذا كان المستخدم بالفعل داخل الـ Tutorial
     if (currentPage === "tutorial.html") {
         return;
     }
 
-    // إذا لم يكمل المستخدم الـ Tutorial من قبل
     if (localStorage.getItem(TUTORIAL_KEY) !== "true") {
         window.location.replace("tutorial.html");
     }
+
 })();
 </script>
 
+
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>RakkeZ — Focus Better</title>
 
@@ -34,9 +42,11 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link rel="preconnect"
-      href="https://fonts.googleapis.com"
-      crossorigin>
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+    crossorigin
+>
 
 <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
@@ -293,278 +303,6 @@
         animation: none;
 
     }
-
-}
-
-
-/* =====================================================
-   RAKKEZ UPDATES SYSTEM
-===================================================== */
-
-.updates-modal {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 2147483000;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    background: rgba(0,0,0,.72);
-
-    backdrop-filter: blur(14px);
-
-    -webkit-backdrop-filter: blur(14px);
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    pointer-events: none;
-
-    transition:
-        opacity .3s ease,
-        visibility .3s ease;
-
-}
-
-
-.updates-modal.show {
-
-    opacity: 1;
-
-    visibility: visible;
-
-    pointer-events: auto;
-
-}
-
-
-.updates-modal-content {
-
-    position: relative;
-
-    width: min(520px, 100%);
-
-    max-height: 85vh;
-
-    overflow-y: auto;
-
-    padding: 34px;
-
-    border-radius: 26px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(15,22,34,.98),
-            rgba(5,9,16,.98)
-        );
-
-    border: 1px solid rgba(255,255,255,.11);
-
-    box-shadow:
-        0 30px 100px rgba(0,0,0,.55);
-
-    transform:
-        translateY(20px)
-        scale(.96);
-
-    transition:
-        transform .4s cubic-bezier(.16,1,.3,1);
-
-}
-
-
-.updates-modal.show .updates-modal-content {
-
-    transform:
-        translateY(0)
-        scale(1);
-
-}
-
-
-.updates-close {
-
-    position: absolute;
-
-    top: 16px;
-
-    right: 16px;
-
-    width: 36px;
-
-    height: 36px;
-
-    border: 0;
-
-    border-radius: 11px;
-
-    background: rgba(255,255,255,.06);
-
-    color: rgba(255,255,255,.7);
-
-    font-size: 22px;
-
-    cursor: pointer;
-
-    transition: .2s ease;
-
-}
-
-
-.updates-close:hover {
-
-    background: rgba(255,255,255,.12);
-
-    color: #fff;
-
-    transform: rotate(90deg);
-
-}
-
-
-.updates-badge {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 7px 11px;
-
-    border-radius: 999px;
-
-    background: rgba(22,131,255,.12);
-
-    border: 1px solid rgba(22,131,255,.25);
-
-    color: #1683ff;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    letter-spacing: .8px;
-
-}
-
-
-.updates-modal-content h2 {
-
-    margin: 18px 0 8px;
-
-    color: #fff;
-
-    font-family: "Space Grotesk", sans-serif;
-
-    font-size: 30px;
-
-    line-height: 1.1;
-
-}
-
-
-.updates-modal-content > p {
-
-    margin: 0 0 22px;
-
-    color: rgba(255,255,255,.55);
-
-    line-height: 1.6;
-
-    font-size: 14px;
-
-}
-
-
-.update-item {
-
-    padding: 17px 18px;
-
-    margin-top: 12px;
-
-    border-radius: 16px;
-
-    background: rgba(255,255,255,.045);
-
-    border: 1px solid rgba(255,255,255,.07);
-
-}
-
-
-.update-item h3 {
-
-    margin: 0 0 6px;
-
-    color: #fff;
-
-    font-size: 15px;
-
-    font-weight: 700;
-
-}
-
-
-.update-item p {
-
-    margin: 0;
-
-    color: rgba(255,255,255,.48);
-
-    font-size: 13px;
-
-    line-height: 1.55;
-
-}
-
-
-#updatesDone {
-
-    width: 100%;
-
-    margin-top: 24px;
-
-    padding: 13px 18px;
-
-    border: 0;
-
-    border-radius: 13px;
-
-    background: #1683ff;
-
-    color: #fff;
-
-    font-family: "DM Sans", sans-serif;
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease;
-
-}
-
-
-#updatesDone:hover {
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 8px 25px rgba(22,131,255,.25);
 
 }
 
@@ -1973,7 +1711,8 @@
 
     function hidePageLoader() {
 
-        const loader = document.getElementById("pageLoader");
+        const loader =
+            document.getElementById("pageLoader");
 
         if (!loader) return;
 
@@ -1987,9 +1726,7 @@
 
     }
 
-    /*
-     * Hide normally after the page is ready.
-     */
+
     if (document.readyState === "loading") {
 
         document.addEventListener(
@@ -2004,11 +1741,7 @@
 
     }
 
-    /*
-     * Safety fallback.
-     * Even if another JavaScript file crashes,
-     * the loading screen can never stay forever.
-     */
+
     setTimeout(hidePageLoader, 4000);
 
 })();
@@ -3119,8 +2852,6 @@ Add something you want to accomplish.
 <div class="rakkez-player-main">
 
 
-<!-- ARTWORK -->
-
 <div class="rakkez-artwork-wrap">
 
 <div
@@ -3138,8 +2869,6 @@ Add something you want to accomplish.
 
 </div>
 
-
-<!-- TRACK INFO -->
 
 <div class="rakkez-track-info">
 
@@ -3160,8 +2889,6 @@ Add something you want to accomplish.
 
 </div>
 
-
-<!-- PROGRESS -->
 
 <div class="rakkez-progress-area">
 
@@ -3189,8 +2916,6 @@ Add something you want to accomplish.
 
 </div>
 
-
-<!-- CONTROLS -->
 
 <div class="rakkez-player-controls">
 
@@ -3251,8 +2976,6 @@ Add something you want to accomplish.
 </div>
 
 
-<!-- VOLUME -->
-
 <div class="rakkez-volume">
 
 <span>
@@ -3278,8 +3001,6 @@ Add something you want to accomplish.
 
 </div>
 
-
-<!-- PLAYLIST -->
 
 <div class="rakkez-playlist-section">
 
@@ -3336,6 +3057,7 @@ Add something you want to accomplish.
     id="rakkezEffectsSource"
     data-rakkez-source="effects"
 >
+
 
 <!-- RAIN -->
 
@@ -3856,69 +3578,6 @@ Add something you want to accomplish.
 </button>
 
 </div>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     RAKKEZ UPDATES SYSTEM
-===================================================== -->
-
-<div
-    id="updatesModal"
-    class="updates-modal"
-    aria-hidden="true"
->
-
-<div
-    class="updates-modal-content"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="updatesTitle"
->
-
-<button
-    id="closeUpdates"
-    class="updates-close"
-    type="button"
-    aria-label="Close updates"
->
-    ×
-</button>
-
-
-<span
-    class="updates-badge"
-    id="updatesBadge"
->
-    NEW
-</span>
-
-
-<h2 id="updatesTitle">
-    What's New
-</h2>
-
-
-<p id="updatesDescription">
-    We've added some exciting new features.
-</p>
-
-
-<div
-    class="updates-list"
-    id="updatesList"
-></div>
-
-
-<button
-    id="updatesDone"
-    type="button"
->
-    Got it
-</button>
 
 </div>
 
@@ -4693,6 +4352,8 @@ body.light .rakkez-mini-close,
 <script src="language.js"></script>
 
 <script src="media-player.js"></script>
+
+<script src="updates.js"></script>
 
 
 </body>
