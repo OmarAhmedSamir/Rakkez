@@ -4547,53 +4547,6 @@ if ($("mediaOpen")) {
 
 
 /* =========================================================
-   AMBIENT PANEL
-========================================================= */
-
-if ($("ambientOpen")) {
-
-    $("ambientOpen").onclick =
-        () => {
-
-            renderAmbient();
-
-            $("ambientOverlay")
-                .classList.add(
-                    "show"
-                );
-
-        };
-
-}
-
-document
-    .querySelectorAll("[data-close]")
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const target =
-                        $(button.dataset.close);
-
-                    if (target) {
-
-                        target.classList.remove(
-                            "show"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
    FOCUS ONLY
 ========================================================= */
 
