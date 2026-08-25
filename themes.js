@@ -209,28 +209,9 @@
                 ),
                 #10020b
             `
-        },
-
-        {
-            id: "green",
-
-            name: "Emerald Green",
-
-            background: `
-                radial-gradient(
-                    circle at 20% 25%,
-                    #00ff88,
-                    transparent 35%
-                ),
-                radial-gradient(
-                    circle at 80% 70%,
-                    #008f5a,
-                    transparent 45%
-                ),
-                #00100a
-            `
         }
 
+        
     ];
 
 
