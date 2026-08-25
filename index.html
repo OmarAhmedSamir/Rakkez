@@ -4928,7 +4928,7 @@ body.light .rakkez-mini-close,
         }
     );
 
-    /* =====================================================
+/* =====================================================
    RENDER EFFECTS
 ===================================================== */
 
@@ -4950,11 +4950,13 @@ function renderEffects() {
                 return;
             }
 
+
             const card =
                 document.createElement("div");
 
             card.className =
                 "rakkez-effect-card";
+
 
             card.innerHTML = `
 
@@ -4980,7 +4982,6 @@ function renderEffects() {
 
 
                 <button
-                    id="rakkez${capitalize(effect.id)}Toggle"
                     class="rakkez-effect-toggle"
                     type="button"
                 >
@@ -4995,7 +4996,7 @@ function renderEffects() {
                     </span>
 
                     <input
-                        id="rakkez${capitalize(effect.id)}Volume"
+                        class="rakkez-effect-volume-input"
                         type="range"
                         min="0"
                         max="1"
@@ -5004,7 +5005,7 @@ function renderEffects() {
                     >
 
                     <span
-                        id="rakkez${capitalize(effect.id)}VolumeValue"
+                        class="rakkez-effect-volume-value"
                     >
                         ${Math.round(
                             player.audio.volume * 100
@@ -5012,16 +5013,151 @@ function renderEffects() {
                     </span>
 
                 </div>
+
             `;
 
-            effectsContainer.appendChild(card);
+
+            const toggle =
+                card.querySelector(
+                    ".rakkez-effect-toggle"
+                );
+
+
+            const volume =
+                card.querySelector(
+                    ".rakkez-effect-volume-input"
+                );
+
+
+            const volumeValue =
+                card.querySelector(
+                    ".rakkez-effect-volume-value"
+                );
+
+
+            /* PLAY / STOP */
+
+            toggle.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        player.audio.paused
+                    ) {
+
+                        const promise =
+                            player.audio.play();
+
+                        if (
+                            promise &&
+                            typeof promise.catch ===
+                                "function"
+                        ) {
+
+                            promise.catch(
+                                function (error) {
+
+                                    console.error(
+                                        "Effect playback failed:",
+                                        error
+                                    );
+
+                                }
+                            );
+
+                        }
+
+                    } else {
+
+                        player.audio.pause();
+
+                    }
+
+                }
+            );
+
+
+            /* VOLUME */
+
+            volume.addEventListener(
+                "input",
+                function () {
+
+                    const value =
+                        parseFloat(
+                            volume.value
+                        );
+
+
+                    player.audio.volume =
+                        value;
+
+
+                    player.volume =
+                        value;
+
+
+                    localStorage.setItem(
+                        STORAGE_PREFIX +
+                        effect.id +
+                        "_volume",
+                        String(value)
+                    );
+
+
+                    volumeValue.textContent =
+                        Math.round(
+                            value * 100
+                        ) + "%";
+
+                }
+            );
+
+
+            /* PLAY STATE */
+
+            player.audio.addEventListener(
+                "play",
+                function () {
+
+                    toggle.classList.add(
+                        "active"
+                    );
+
+                    toggle.textContent =
+                        "Ⅱ  " +
+                        effect.name;
+
+                }
+            );
+
+
+            player.audio.addEventListener(
+                "pause",
+                function () {
+
+                    toggle.classList.remove(
+                        "active"
+                    );
+
+                    toggle.textContent =
+                        "Play " +
+                        effect.name;
+
+                }
+            );
+
+
+            effectsContainer.appendChild(
+                card
+            );
 
         }
     );
 
 }
 
-renderEffects();
+    renderEffects();
 
 
     /* =====================================================
