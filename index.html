@@ -5,10 +5,7 @@
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>RakkeZ — Focus Better</title>
 
@@ -17,16 +14,11 @@
      FONTS
 ===================================================== -->
 
-<link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
->
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-    crossorigin
->
+<link rel="preconnect"
+      href="https://fonts.googleapis.com"
+      crossorigin>
 
 <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
@@ -79,6 +71,7 @@
     inset: 0;
 
     width: 100vw;
+
     height: 100vh;
 
     z-index: 2147483647;
@@ -86,6 +79,7 @@
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     background: #03050a;
@@ -101,6 +95,7 @@
     transition:
         opacity .5s ease,
         visibility .5s ease;
+
 }
 
 
@@ -111,6 +106,7 @@
     visibility: hidden;
 
     pointer-events: none;
+
 }
 
 
@@ -121,12 +117,14 @@
     flex-direction: column;
 
     align-items: center;
+
     justify-content: center;
 
     gap: 20px;
 
     animation:
         loaderEnter .7s cubic-bezier(.16,1,.3,1) both;
+
 }
 
 
@@ -134,9 +132,7 @@
 
     color: #ffffff;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+    font-family: "Space Grotesk", sans-serif;
 
     font-size: 40px;
 
@@ -148,32 +144,33 @@
 
     animation:
         logoEnter .8s cubic-bezier(.16,1,.3,1) both;
+
 }
 
 
 .loader-logo span {
 
     color: #1683ff;
+
 }
 
 
 .loader-spinner {
 
     width: 25px;
+
     height: 25px;
 
     border-radius: 50%;
 
-    border:
-        3px solid
-        rgba(255,255,255,.10);
+    border: 3px solid rgba(255,255,255,.10);
 
-    border-top-color:
-        #1683ff;
+    border-top-color: #1683ff;
 
     animation:
         spinnerAppear .5s ease .2s both,
         loaderSpin .8s linear infinite;
+
 }
 
 
@@ -183,17 +180,18 @@
 
         opacity: 0;
 
-        transform:
-            scale(.88);
+        transform: scale(.88);
+
     }
 
     to {
 
         opacity: 1;
 
-        transform:
-            scale(1);
+        transform: scale(1);
+
     }
+
 }
 
 
@@ -203,23 +201,22 @@
 
         opacity: 0;
 
-        transform:
-            translateY(18px);
+        transform: translateY(18px);
 
-        filter:
-            blur(8px);
+        filter: blur(8px);
+
     }
 
     to {
 
         opacity: 1;
 
-        transform:
-            translateY(0);
+        transform: translateY(0);
 
-        filter:
-            blur(0);
+        filter: blur(0);
+
     }
+
 }
 
 
@@ -229,17 +226,18 @@
 
         opacity: 0;
 
-        transform:
-            scale(.5);
+        transform: scale(.5);
+
     }
 
     to {
 
         opacity: 1;
 
-        transform:
-            scale(1);
+        transform: scale(1);
+
     }
+
 }
 
 
@@ -247,15 +245,16 @@
 
     from {
 
-        transform:
-            rotate(0deg);
+        transform: rotate(0deg);
+
     }
 
     to {
 
-        transform:
-            rotate(360deg);
+        transform: rotate(360deg);
+
     }
+
 }
 
 
@@ -266,6 +265,7 @@
         transition:
             opacity .2s ease,
             visibility .2s ease;
+
     }
 
     .loader-inner,
@@ -273,6 +273,7 @@
     .loader-spinner {
 
         animation: none;
+
     }
 
 }
@@ -298,14 +299,11 @@
 
     padding: 20px;
 
-    background:
-        rgba(0,0,0,.72);
+    background: rgba(0,0,0,.72);
 
-    backdrop-filter:
-        blur(14px);
+    backdrop-filter: blur(14px);
 
-    -webkit-backdrop-filter:
-        blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 
     opacity: 0;
 
@@ -316,6 +314,7 @@
     transition:
         opacity .3s ease,
         visibility .3s ease;
+
 }
 
 
@@ -326,6 +325,7 @@
     visibility: visible;
 
     pointer-events: auto;
+
 }
 
 
@@ -350,13 +350,10 @@
             rgba(5,9,16,.98)
         );
 
-    border:
-        1px solid
-        rgba(255,255,255,.11);
+    border: 1px solid rgba(255,255,255,.11);
 
     box-shadow:
-        0 30px 100px
-        rgba(0,0,0,.55);
+        0 30px 100px rgba(0,0,0,.55);
 
     transform:
         translateY(20px)
@@ -364,15 +361,16 @@
 
     transition:
         transform .4s cubic-bezier(.16,1,.3,1);
+
 }
 
 
-.updates-modal.show
-.updates-modal-content {
+.updates-modal.show .updates-modal-content {
 
     transform:
         translateY(0)
         scale(1);
+
 }
 
 
@@ -381,17 +379,18 @@
     position: absolute;
 
     top: 16px;
+
     right: 16px;
 
     width: 36px;
+
     height: 36px;
 
     border: 0;
 
     border-radius: 11px;
 
-    background:
-        rgba(255,255,255,.06);
+    background: rgba(255,255,255,.06);
 
     color: rgba(255,255,255,.7);
 
@@ -399,20 +398,19 @@
 
     cursor: pointer;
 
-    transition:
-        .2s ease;
+    transition: .2s ease;
+
 }
 
 
 .updates-close:hover {
 
-    background:
-        rgba(255,255,255,.12);
+    background: rgba(255,255,255,.12);
 
     color: #fff;
 
-    transform:
-        rotate(90deg);
+    transform: rotate(90deg);
+
 }
 
 
@@ -421,18 +419,16 @@
     display: inline-flex;
 
     align-items: center;
+
     justify-content: center;
 
     padding: 7px 11px;
 
     border-radius: 999px;
 
-    background:
-        rgba(22,131,255,.12);
+    background: rgba(22,131,255,.12);
 
-    border:
-        1px solid
-        rgba(22,131,255,.25);
+    border: 1px solid rgba(22,131,255,.25);
 
     color: #1683ff;
 
@@ -441,37 +437,35 @@
     font-weight: 700;
 
     letter-spacing: .8px;
+
 }
 
 
 .updates-modal-content h2 {
 
-    margin:
-        18px 0 8px;
+    margin: 18px 0 8px;
 
     color: #fff;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+    font-family: "Space Grotesk", sans-serif;
 
     font-size: 30px;
 
     line-height: 1.1;
+
 }
 
 
 .updates-modal-content > p {
 
-    margin:
-        0 0 22px;
+    margin: 0 0 22px;
 
-    color:
-        rgba(255,255,255,.55);
+    color: rgba(255,255,255,.55);
 
     line-height: 1.6;
 
     font-size: 14px;
+
 }
 
 
@@ -483,25 +477,23 @@
 
     border-radius: 16px;
 
-    background:
-        rgba(255,255,255,.045);
+    background: rgba(255,255,255,.045);
 
-    border:
-        1px solid
-        rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.07);
+
 }
 
 
 .update-item h3 {
 
-    margin:
-        0 0 6px;
+    margin: 0 0 6px;
 
     color: #fff;
 
     font-size: 15px;
 
     font-weight: 700;
+
 }
 
 
@@ -509,12 +501,12 @@
 
     margin: 0;
 
-    color:
-        rgba(255,255,255,.48);
+    color: rgba(255,255,255,.48);
 
     font-size: 13px;
 
     line-height: 1.55;
+
 }
 
 
@@ -534,9 +526,7 @@
 
     color: #fff;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    font-family: "DM Sans", sans-serif;
 
     font-size: 14px;
 
@@ -547,17 +537,17 @@
     transition:
         transform .2s ease,
         box-shadow .2s ease;
+
 }
 
 
 #updatesDone:hover {
 
-    transform:
-        translateY(-1px);
+    transform: translateY(-1px);
 
     box-shadow:
-        0 8px 25px
-        rgba(22,131,255,.25);
+        0 8px 25px rgba(22,131,255,.25);
+
 }
 
 
@@ -581,14 +571,11 @@
 
     padding: 20px;
 
-    background:
-        rgba(0,0,0,.70);
+    background: rgba(0,0,0,.70);
 
-    backdrop-filter:
-        blur(22px);
+    backdrop-filter: blur(22px);
 
-    -webkit-backdrop-filter:
-        blur(22px);
+    -webkit-backdrop-filter: blur(22px);
 
     opacity: 0;
 
@@ -599,6 +586,7 @@
     transition:
         opacity .3s ease,
         visibility .3s ease;
+
 }
 
 
@@ -609,6 +597,7 @@
     visibility: visible;
 
     pointer-events: auto;
+
 }
 
 
@@ -633,13 +622,10 @@
             rgba(4,8,15,.98)
         );
 
-    border:
-        1px solid
-        rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.10);
 
     box-shadow:
-        0 35px 120px
-        rgba(0,0,0,.65);
+        0 35px 120px rgba(0,0,0,.65);
 
     transform:
         translateY(20px)
@@ -653,36 +639,39 @@
     scrollbar-color:
         rgba(255,255,255,.15)
         transparent;
+
 }
 
 
-.rakkez-media-overlay.show
-.rakkez-media-panel {
+.rakkez-media-overlay.show .rakkez-media-panel {
 
     transform:
         translateY(0)
         scale(1);
+
 }
 
 
 .rakkez-media-panel::-webkit-scrollbar {
 
     width: 5px;
+
 }
 
 
 .rakkez-media-panel::-webkit-scrollbar-track {
 
     background: transparent;
+
 }
 
 
 .rakkez-media-panel::-webkit-scrollbar-thumb {
 
-    background:
-        rgba(255,255,255,.14);
+    background: rgba(255,255,255,.14);
 
     border-radius: 20px;
+
 }
 
 
@@ -699,6 +688,7 @@
     gap: 20px;
 
     margin-bottom: 22px;
+
 }
 
 
@@ -706,14 +696,14 @@
 
     margin-bottom: 5px;
 
-    color:
-        rgba(255,255,255,.35);
+    color: rgba(255,255,255,.35);
 
     font-size: 10px;
 
     font-weight: 700;
 
     letter-spacing: 1.5px;
+
 }
 
 
@@ -721,21 +711,21 @@
 
     color: #fff;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+    font-family: "Space Grotesk", sans-serif;
 
     font-size: 25px;
 
     font-weight: 600;
 
     letter-spacing: -.5px;
+
 }
 
 
 .rakkez-media-close {
 
     width: 38px;
+
     height: 38px;
 
     flex-shrink: 0;
@@ -744,29 +734,27 @@
 
     border-radius: 12px;
 
-    background:
-        rgba(255,255,255,.055);
+    background: rgba(255,255,255,.055);
 
-    color:
-        rgba(255,255,255,.65);
+    color: rgba(255,255,255,.65);
 
     font-size: 22px;
 
     cursor: pointer;
 
     transition: .2s ease;
+
 }
 
 
 .rakkez-media-close:hover {
 
-    background:
-        rgba(255,255,255,.11);
+    background: rgba(255,255,255,.11);
 
     color: #fff;
 
-    transform:
-        rotate(90deg);
+    transform: rotate(90deg);
+
 }
 
 
@@ -784,12 +772,10 @@
 
     border-radius: 15px;
 
-    background:
-        rgba(255,255,255,.035);
+    background: rgba(255,255,255,.035);
 
-    border:
-        1px solid
-        rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.06);
+
 }
 
 
@@ -807,12 +793,9 @@
 
     background: transparent;
 
-    color:
-        rgba(255,255,255,.43);
+    color: rgba(255,255,255,.43);
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    font-family: "DM Sans", sans-serif;
 
     font-size: 12px;
 
@@ -821,6 +804,7 @@
     cursor: pointer;
 
     transition: .2s ease;
+
 }
 
 
@@ -828,8 +812,8 @@
 
     color: #fff;
 
-    background:
-        rgba(255,255,255,.045);
+    background: rgba(255,255,255,.045);
+
 }
 
 
@@ -837,12 +821,11 @@
 
     color: #fff;
 
-    background:
-        rgba(255,255,255,.09);
+    background: rgba(255,255,255,.09);
 
     box-shadow:
-        0 4px 18px
-        rgba(0,0,0,.18);
+        0 4px 18px rgba(0,0,0,.18);
+
 }
 
 
@@ -851,6 +834,7 @@
 .rakkez-media-source {
 
     display: none;
+
 }
 
 
@@ -860,6 +844,7 @@
 
     animation:
         rakkezMediaFade .25s ease;
+
 }
 
 
@@ -869,17 +854,18 @@
 
         opacity: 0;
 
-        transform:
-            translateY(6px);
+        transform: translateY(6px);
+
     }
 
     to {
 
         opacity: 1;
 
-        transform:
-            translateY(0);
+        transform: translateY(0);
+
     }
+
 }
 
 
@@ -891,14 +877,12 @@
 
     border-radius: 24px;
 
-    background:
-        rgba(255,255,255,.035);
+    background: rgba(255,255,255,.035);
 
-    border:
-        1px solid
-        rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.07);
 
     text-align: center;
+
 }
 
 
@@ -911,6 +895,7 @@
     justify-content: center;
 
     margin-bottom: 18px;
+
 }
 
 
@@ -919,6 +904,7 @@
     position: relative;
 
     width: 190px;
+
     height: 190px;
 
     overflow: hidden;
@@ -938,28 +924,25 @@
             #080c13
         );
 
-    border:
-        1px solid
-        rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.10);
 
     box-shadow:
-        0 25px 55px
-        rgba(0,0,0,.35);
+        0 25px 55px rgba(0,0,0,.35);
 
     transition:
         transform .35s ease,
         box-shadow .35s ease;
+
 }
 
 
 .rakkez-artwork.playing {
 
-    transform:
-        scale(1.015);
+    transform: scale(1.015);
 
     box-shadow:
-        0 25px 65px
-        rgba(22,131,255,.15);
+        0 25px 65px rgba(22,131,255,.15);
+
 }
 
 
@@ -968,6 +951,7 @@
     position: absolute;
 
     width: 120px;
+
     height: 120px;
 
     border-radius: 50%;
@@ -975,8 +959,8 @@
     background:
         rgba(22,131,255,.20);
 
-    filter:
-        blur(45px);
+    filter: blur(45px);
+
 }
 
 
@@ -990,9 +974,8 @@
 
     font-size: 54px;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+    font-family: "Space Grotesk", sans-serif;
+
 }
 
 
@@ -1001,6 +984,7 @@
 .rakkez-track-info {
 
     margin-bottom: 18px;
+
 }
 
 
@@ -1008,15 +992,14 @@
 
     color: #fff;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+    font-family: "Space Grotesk", sans-serif;
 
     font-size: 18px;
 
     font-weight: 600;
 
     line-height: 1.3;
+
 }
 
 
@@ -1024,10 +1007,10 @@
 
     margin-top: 5px;
 
-    color:
-        rgba(255,255,255,.42);
+    color: rgba(255,255,255,.42);
 
     font-size: 12px;
+
 }
 
 
@@ -1038,6 +1021,7 @@
     width: 100%;
 
     margin-top: 10px;
+
 }
 
 
@@ -1059,6 +1043,7 @@
 
     background:
         rgba(255,255,255,.10);
+
 }
 
 
@@ -1069,6 +1054,7 @@
     -webkit-appearance: none;
 
     width: 12px;
+
     height: 12px;
 
     border-radius: 50%;
@@ -1078,14 +1064,15 @@
     cursor: pointer;
 
     box-shadow:
-        0 2px 8px
-        rgba(0,0,0,.3);
+        0 2px 8px rgba(0,0,0,.3);
+
 }
 
 
 #rakkezProgress::-moz-range-thumb {
 
     width: 12px;
+
     height: 12px;
 
     border: 0;
@@ -1095,6 +1082,7 @@
     background: #fff;
 
     cursor: pointer;
+
 }
 
 
@@ -1106,13 +1094,12 @@
 
     margin-top: 7px;
 
-    color:
-        rgba(255,255,255,.35);
+    color: rgba(255,255,255,.35);
 
     font-size: 10px;
 
-    font-variant-numeric:
-        tabular-nums;
+    font-variant-numeric: tabular-nums;
+
 }
 
 
@@ -1129,6 +1116,7 @@
     gap: 12px;
 
     margin-top: 20px;
+
 }
 
 
@@ -1149,35 +1137,35 @@
         transform .2s ease,
         background .2s ease,
         color .2s ease;
+
 }
 
 
 .rakkez-control {
 
     width: 38px;
+
     height: 38px;
 
     border-radius: 12px;
 
-    background:
-        rgba(255,255,255,.045);
+    background: rgba(255,255,255,.045);
 
-    color:
-        rgba(255,255,255,.65);
+    color: rgba(255,255,255,.65);
 
     font-size: 15px;
+
 }
 
 
 .rakkez-control:hover {
 
-    background:
-        rgba(255,255,255,.09);
+    background: rgba(255,255,255,.09);
 
     color: #fff;
 
-    transform:
-        translateY(-1px);
+    transform: translateY(-1px);
+
 }
 
 
@@ -1185,8 +1173,8 @@
 
     font-size: 17px;
 
-    color:
-        rgba(255,255,255,.42);
+    color: rgba(255,255,255,.42);
+
 }
 
 
@@ -1194,14 +1182,15 @@
 
     color: #1683ff;
 
-    background:
-        rgba(22,131,255,.10);
+    background: rgba(22,131,255,.10);
+
 }
 
 
 .rakkez-play {
 
     width: 52px;
+
     height: 52px;
 
     border-radius: 50%;
@@ -1213,15 +1202,15 @@
     font-size: 17px;
 
     box-shadow:
-        0 10px 30px
-        rgba(0,0,0,.30);
+        0 10px 30px rgba(0,0,0,.30);
+
 }
 
 
 .rakkez-play:hover {
 
-    transform:
-        scale(1.05);
+    transform: scale(1.05);
+
 }
 
 
@@ -1239,10 +1228,10 @@
 
     margin-top: 20px;
 
-    color:
-        rgba(255,255,255,.42);
+    color: rgba(255,255,255,.42);
 
     font-size: 12px;
+
 }
 
 
@@ -1264,6 +1253,7 @@
 
     background:
         rgba(255,255,255,.10);
+
 }
 
 
@@ -1274,6 +1264,7 @@
     -webkit-appearance: none;
 
     width: 11px;
+
     height: 11px;
 
     border-radius: 50%;
@@ -1281,12 +1272,14 @@
     background: #fff;
 
     cursor: pointer;
+
 }
 
 
 #rakkezVolume::-moz-range-thumb {
 
     width: 11px;
+
     height: 11px;
 
     border: 0;
@@ -1296,6 +1289,7 @@
     background: #fff;
 
     cursor: pointer;
+
 }
 
 
@@ -1306,6 +1300,7 @@
     text-align: right;
 
     font-size: 10px;
+
 }
 
 
@@ -1314,6 +1309,7 @@
 .rakkez-playlist-section {
 
     margin-top: 18px;
+
 }
 
 
@@ -1328,6 +1324,7 @@
     gap: 15px;
 
     margin-bottom: 10px;
+
 }
 
 
@@ -1335,13 +1332,12 @@
 
     color: #fff;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+    font-family: "Space Grotesk", sans-serif;
 
     font-size: 14px;
 
     font-weight: 600;
+
 }
 
 
@@ -1349,27 +1345,24 @@
 
     margin-top: 2px;
 
-    color:
-        rgba(255,255,255,.35);
+    color: rgba(255,255,255,.35);
 
     font-size: 10px;
+
 }
 
 
 .rakkez-auto-next {
 
-    border: 1px solid
-        rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.08);
 
     border-radius: 9px;
 
     padding: 7px 9px;
 
-    background:
-        rgba(255,255,255,.035);
+    background: rgba(255,255,255,.035);
 
-    color:
-        rgba(255,255,255,.42);
+    color: rgba(255,255,255,.42);
 
     font-size: 9px;
 
@@ -1380,6 +1373,7 @@
     cursor: pointer;
 
     transition: .2s ease;
+
 }
 
 
@@ -1387,11 +1381,10 @@
 
     color: #fff;
 
-    border-color:
-        rgba(22,131,255,.25);
+    border-color: rgba(22,131,255,.25);
 
-    background:
-        rgba(22,131,255,.10);
+    background: rgba(22,131,255,.10);
+
 }
 
 
@@ -1412,21 +1405,23 @@
     scrollbar-color:
         rgba(255,255,255,.12)
         transparent;
+
 }
 
 
 .rakkez-playlist::-webkit-scrollbar {
 
     width: 4px;
+
 }
 
 
 .rakkez-playlist::-webkit-scrollbar-thumb {
 
-    background:
-        rgba(255,255,255,.12);
+    background: rgba(255,255,255,.12);
 
     border-radius: 20px;
+
 }
 
 
@@ -1442,13 +1437,11 @@
 
     padding: 10px;
 
-    border: 1px solid
-        transparent;
+    border: 1px solid transparent;
 
     border-radius: 13px;
 
-    background:
-        rgba(255,255,255,.025);
+    background: rgba(255,255,255,.025);
 
     color: #fff;
 
@@ -1457,16 +1450,17 @@
     cursor: pointer;
 
     transition: .2s ease;
+
 }
 
 
 .rakkez-track:hover {
 
-    background:
-        rgba(255,255,255,.055);
+    background: rgba(255,255,255,.055);
 
     border-color:
         rgba(255,255,255,.06);
+
 }
 
 
@@ -1477,12 +1471,14 @@
 
     border-color:
         rgba(22,131,255,.16);
+
 }
 
 
 .rakkez-track-art {
 
     width: 38px;
+
     height: 38px;
 
     flex-shrink: 0;
@@ -1490,6 +1486,7 @@
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 10px;
@@ -1501,10 +1498,10 @@
             #090d14
         );
 
-    color:
-        rgba(255,255,255,.65);
+    color: rgba(255,255,255,.65);
 
     font-size: 15px;
+
 }
 
 
@@ -1513,6 +1510,7 @@
     min-width: 0;
 
     flex: 1;
+
 }
 
 
@@ -1520,8 +1518,7 @@
 
     overflow: hidden;
 
-    color:
-        rgba(255,255,255,.82);
+    color: rgba(255,255,255,.82);
 
     font-size: 12px;
 
@@ -1530,6 +1527,7 @@
     white-space: nowrap;
 
     text-overflow: ellipsis;
+
 }
 
 
@@ -1537,22 +1535,21 @@
 
     margin-top: 3px;
 
-    color:
-        rgba(255,255,255,.32);
+    color: rgba(255,255,255,.32);
 
     font-size: 9px;
+
 }
 
 
 .rakkez-track-duration {
 
-    color:
-        rgba(255,255,255,.30);
+    color: rgba(255,255,255,.30);
 
     font-size: 9px;
 
-    font-variant-numeric:
-        tabular-nums;
+    font-variant-numeric: tabular-nums;
+
 }
 
 
@@ -1564,50 +1561,48 @@
 
     border-radius: 22px;
 
-    background:
-        rgba(255,255,255,.035);
+    background: rgba(255,255,255,.035);
 
-    border:
-        1px solid
-        rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.07);
 
     text-align: center;
+
 }
 
 
 .rakkez-external-icon {
 
     width: 55px;
+
     height: 55px;
 
-    margin:
-        0 auto 15px;
+    margin: 0 auto 15px;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 16px;
 
-    background:
-        rgba(255,255,255,.06);
+    background: rgba(255,255,255,.06);
 
     color: #fff;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+    font-family: "Space Grotesk", sans-serif;
 
     font-size: 21px;
 
     font-weight: 700;
+
 }
 
 
 .rakkez-external-icon.spotify {
 
     color: #fff;
+
 }
 
 
@@ -1615,13 +1610,12 @@
 
     color: #fff;
 
-    font-family:
-        "Space Grotesk",
-        sans-serif;
+    font-family: "Space Grotesk", sans-serif;
 
     font-size: 18px;
 
     font-weight: 600;
+
 }
 
 
@@ -1629,15 +1623,14 @@
 
     max-width: 420px;
 
-    margin:
-        7px auto 20px;
+    margin: 7px auto 20px;
 
-    color:
-        rgba(255,255,255,.40);
+    color: rgba(255,255,255,.40);
 
     font-size: 12px;
 
     line-height: 1.5;
+
 }
 
 
@@ -1650,6 +1643,7 @@
     max-width: 570px;
 
     margin: 0 auto;
+
 }
 
 
@@ -1661,35 +1655,31 @@
 
     height: 43px;
 
-    padding:
-        0 14px;
+    padding: 0 14px;
 
-    border: 1px solid
-        rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.08);
 
     border-radius: 12px;
 
     outline: none;
 
-    background:
-        rgba(255,255,255,.045);
+    background: rgba(255,255,255,.045);
 
     color: #fff;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    font-family: "DM Sans", sans-serif;
 
     font-size: 12px;
 
     transition: .2s ease;
+
 }
 
 
 .rakkez-media-input::placeholder {
 
-    color:
-        rgba(255,255,255,.28);
+    color: rgba(255,255,255,.28);
+
 }
 
 
@@ -1700,6 +1690,7 @@
 
     background:
         rgba(255,255,255,.06);
+
 }
 
 
@@ -1707,8 +1698,7 @@
 
     height: 43px;
 
-    padding:
-        0 18px;
+    padding: 0 18px;
 
     border: 0;
 
@@ -1725,17 +1715,17 @@
     cursor: pointer;
 
     transition: .2s ease;
+
 }
 
 
 .rakkez-media-action:hover {
 
-    transform:
-        translateY(-1px);
+    transform: translateY(-1px);
 
     box-shadow:
-        0 8px 25px
-        rgba(22,131,255,.22);
+        0 8px 25px rgba(22,131,255,.22);
+
 }
 
 
@@ -1747,8 +1737,8 @@
 
     border-radius: 16px;
 
-    background:
-        rgba(0,0,0,.25);
+    background: rgba(0,0,0,.25);
+
 }
 
 
@@ -1761,6 +1751,7 @@
     min-height: 300px;
 
     border: 0;
+
 }
 
 
@@ -1771,21 +1762,18 @@
     display: inline-flex;
 
     align-items: center;
+
     justify-content: center;
 
     min-height: 43px;
 
-    padding:
-        0 18px;
+    padding: 0 18px;
 
     border-radius: 12px;
 
-    background:
-        rgba(255,255,255,.07);
+    background: rgba(255,255,255,.07);
 
-    border:
-        1px solid
-        rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.08);
 
     color: #fff;
 
@@ -1796,19 +1784,21 @@
     cursor: pointer;
 
     transition: .2s ease;
+
 }
 
 
 .rakkez-file-button:hover {
 
-    background:
-        rgba(255,255,255,.11);
+    background: rgba(255,255,255,.11);
+
 }
 
 
 #rakkezLocalAudio {
 
     display: none;
+
 }
 
 
@@ -1821,8 +1811,8 @@
         padding: 10px;
 
         align-items: flex-end;
-    }
 
+    }
 
     .rakkez-media-panel {
 
@@ -1833,74 +1823,75 @@
         padding: 18px;
 
         border-radius: 24px;
-    }
 
+    }
 
     .rakkez-media-title {
 
         font-size: 21px;
-    }
 
+    }
 
     .rakkez-media-tabs {
 
         overflow-x: auto;
-    }
 
+    }
 
     .rakkez-media-tab {
 
         min-width: 70px;
 
-        padding:
-            9px 8px;
+        padding: 9px 8px;
 
         font-size: 11px;
-    }
 
+    }
 
     .rakkez-player-main {
 
         padding: 18px;
-    }
 
+    }
 
     .rakkez-artwork {
 
         width: 150px;
+
         height: 150px;
 
         border-radius: 20px;
-    }
 
+    }
 
     .rakkez-artwork-icon {
 
         font-size: 44px;
-    }
 
+    }
 
     .rakkez-input-row {
 
         flex-direction: column;
-    }
 
+    }
 
     .rakkez-media-action {
 
         width: 100%;
-    }
 
+    }
 
     .rakkez-volume {
 
         gap: 7px;
-    }
 
+    }
 
     #rakkezVolume {
 
         width: 120px;
+
     }
 
 }
@@ -1911,20 +1902,23 @@
     .rakkez-player-controls {
 
         gap: 7px;
-    }
 
+    }
 
     .rakkez-control {
 
         width: 34px;
-        height: 34px;
-    }
 
+        height: 34px;
+
+    }
 
     .rakkez-play {
 
         width: 48px;
+
         height: 48px;
+
     }
 
 }
@@ -1963,307 +1957,307 @@
 <div class="app">
 
 
-    <!-- =====================================================
-         BACKGROUND
-    ====================================================== -->
+<!-- =====================================================
+     BACKGROUND
+===================================================== -->
 
-    <div class="background">
+<div class="background">
 
-        <div class="bg-gradient"></div>
+    <div class="bg-gradient"></div>
 
-        <img
-            id="customImage"
-            class="custom-bg"
-            alt=""
-        >
+    <img
+        id="customImage"
+        class="custom-bg"
+        alt=""
+    >
 
-        <video
-            id="customVideo"
-            class="custom-bg"
-            autoplay
-            muted
-            loop
-            playsinline
-        ></video>
+    <video
+        id="customVideo"
+        class="custom-bg"
+        autoplay
+        muted
+        loop
+        playsinline
+    ></video>
 
-        <div class="bg-overlay"></div>
+    <div class="bg-overlay"></div>
+
+</div>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="topbar">
+
+    <div
+        class="logo"
+        onclick="window.location.href='/'"
+        style="cursor:pointer"
+    >
+
+        Rakke<span>Z</span>
 
     </div>
 
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+    <div class="top-actions">
 
-    <header class="topbar">
-
-        <div
-            class="logo"
-            onclick="window.location.href='/'"
-            style="cursor:pointer"
+        <button
+            class="icon-btn blog-btn"
+            id="blogOpen"
+            title="Blog"
+            type="button"
         >
-            Rakke<span>Z</span>
-        </div>
-
-
-        <div class="top-actions">
-
-
-            <button
-                class="icon-btn blog-btn"
-                id="blogOpen"
-                title="Blog"
-                type="button"
-            >
-                Blog
-            </button>
-
-
-            <button
-                class="language-btn"
-                id="languageToggle"
-                type="button"
-                title="Change language"
-            >
-                <span id="languageLabel">
-                    العربية
-                </span>
-            </button>
-
-
-            <button
-                class="icon-btn"
-                id="mediaOpen"
-                title="Media"
-                type="button"
-            >
-                ♫
-            </button>
-
-
-            <button
-                class="icon-btn"
-                id="tasksOpen"
-                title="Tasks"
-                type="button"
-            >
-                ✓
-            </button>
-
-
-            <button
-                class="icon-btn"
-                id="focusOnlyBtn"
-                title="Focus Only"
-                type="button"
-            >
-                ◉
-            </button>
-
-
-            <button
-                class="icon-btn"
-                id="themeBtn"
-                title="Theme"
-                type="button"
-            >
-                ☾
-            </button>
-
-
-            <button
-                class="icon-btn"
-                id="settingsOpen"
-                title="Settings"
-                type="button"
-            >
-                ⚙
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <!-- =====================================================
-         MAIN TIMER
-    ====================================================== -->
-
-    <main class="main">
-
-        <section class="timer-card">
-
-
-            <div
-                class="mode"
-                id="modeText"
-            >
-                FOCUS
-            </div>
-
-
-            <div
-                class="timer"
-                id="timer"
-            >
-                25:00
-            </div>
-
-
-            <div
-                class="timer-label"
-                id="timerLabel"
-            >
-                Stay focused. One thing at a time.
-            </div>
-
-
-            <div
-                class="current-task"
-                id="currentTask"
-            >
-
-                <span>
-                    NO TASK SELECTED
-                </span>
-
-            </div>
-
-
-            <div class="progress-wrap">
-
-                <div
-                    class="progress"
-                    id="progress"
-                ></div>
-
-            </div>
-
-
-            <div class="controls">
-
-                <button
-                    class="primary"
-                    id="startBtn"
-                    type="button"
-                >
-                    START
-                </button>
-
-
-                <button
-                    class="secondary"
-                    id="resetBtn"
-                    type="button"
-                >
-                    ↻
-                </button>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- =====================================================
-         BOTTOM
-    ====================================================== -->
-
-    <div class="bottom-bar">
-
-
-        <div class="stats">
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    Focus
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="focusStat"
-                >
-                    0m
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    Daily Goal
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="goalStat"
-                >
-                    0m / 4h
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    Sessions
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="sessionsStat"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-title">
-                    Streak
-                </div>
-
-                <div
-                    class="stat-value"
-                    id="streakStat"
-                >
-                    0 days
-                </div>
-
-            </div>
-
-        </div>
+            Blog
+        </button>
 
 
         <button
-            class="ambient-btn"
-            id="ambientOpen"
+            class="language-btn"
+            id="languageToggle"
+            type="button"
+            title="Change language"
+        >
+
+            <span id="languageLabel">
+                العربية
+            </span>
+
+        </button>
+
+
+        <button
+            class="icon-btn"
+            id="mediaOpen"
+            title="Media"
             type="button"
         >
-            ✦ AMBIENT
+            ♫
+        </button>
+
+
+        <button
+            class="icon-btn"
+            id="tasksOpen"
+            title="Tasks"
+            type="button"
+        >
+            ✓
+        </button>
+
+
+        <button
+            class="icon-btn"
+            id="focusOnlyBtn"
+            title="Focus Only"
+            type="button"
+        >
+            ◉
+        </button>
+
+
+        <button
+            class="icon-btn"
+            id="themeBtn"
+            title="Theme"
+            type="button"
+        >
+            ☾
+        </button>
+
+
+        <button
+            class="icon-btn"
+            id="settingsOpen"
+            title="Settings"
+            type="button"
+        >
+            ⚙
         </button>
 
     </div>
 
+</header>
 
-    <!-- =====================================================
-         FOCUS ONLY EXIT
-    ====================================================== -->
+
+<!-- =====================================================
+     MAIN TIMER
+===================================================== -->
+
+<main class="main">
+
+    <section class="timer-card">
+
+        <div
+            class="mode"
+            id="modeText"
+        >
+            FOCUS
+        </div>
+
+
+        <div
+            class="timer"
+            id="timer"
+        >
+            25:00
+        </div>
+
+
+        <div
+            class="timer-label"
+            id="timerLabel"
+        >
+            Stay focused. One thing at a time.
+        </div>
+
+
+        <div
+            class="current-task"
+            id="currentTask"
+        >
+
+            <span>
+                NO TASK SELECTED
+            </span>
+
+        </div>
+
+
+        <div class="progress-wrap">
+
+            <div
+                class="progress"
+                id="progress"
+            ></div>
+
+        </div>
+
+
+        <div class="controls">
+
+            <button
+                class="primary"
+                id="startBtn"
+                type="button"
+            >
+                START
+            </button>
+
+
+            <button
+                class="secondary"
+                id="resetBtn"
+                type="button"
+            >
+                ↻
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     BOTTOM
+===================================================== -->
+
+<div class="bottom-bar">
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Focus
+            </div>
+
+            <div
+                class="stat-value"
+                id="focusStat"
+            >
+                0m
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Daily Goal
+            </div>
+
+            <div
+                class="stat-value"
+                id="goalStat"
+            >
+                0m / 4h
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Sessions
+            </div>
+
+            <div
+                class="stat-value"
+                id="sessionsStat"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                Streak
+            </div>
+
+            <div
+                class="stat-value"
+                id="streakStat"
+            >
+                0 days
+            </div>
+
+        </div>
+
+    </div>
+
 
     <button
-        class="focus-exit"
-        id="focusExit"
+        class="ambient-btn"
+        id="ambientOpen"
         type="button"
     >
-        EXIT FOCUS
+        ✦ AMBIENT
     </button>
+
+</div>
+
+
+<!-- =====================================================
+     FOCUS ONLY EXIT
+===================================================== -->
+
+<button
+    class="focus-exit"
+    id="focusExit"
+    type="button"
+>
+    EXIT FOCUS
+</button>
 
 </div>
 
@@ -2277,584 +2271,584 @@
     id="settingsOverlay"
 >
 
-    <div class="panel">
+<div class="panel">
 
-        <div class="panel-head">
+<div class="panel-head">
 
-            <div class="panel-title">
-                Settings
-            </div>
-
-            <button
-                class="close"
-                data-close="settingsOverlay"
-                type="button"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="section">
-
-            <div class="section-title">
-                Timer
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Focus Duration
-                    </div>
-
-                    <div class="setting-description">
-                        Minutes for every focus session
-                    </div>
-
-                </div>
-
-                <input
-                    class="number-input"
-                    id="focusInput"
-                    type="number"
-                    min="1"
-                    max="180"
-                >
-
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Short Break
-                    </div>
-
-                    <div class="setting-description">
-                        Break between sessions
-                    </div>
-
-                </div>
-
-                <input
-                    class="number-input"
-                    id="shortBreakInput"
-                    type="number"
-                    min="1"
-                    max="60"
-                >
-
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Long Break
-                    </div>
-
-                    <div class="setting-description">
-                        Longer break
-                    </div>
-
-                </div>
-
-                <input
-                    class="number-input"
-                    id="longBreakInput"
-                    type="number"
-                    min="1"
-                    max="120"
-                >
-
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Sessions Before Long Break
-                    </div>
-
-                </div>
-
-                <input
-                    class="number-input"
-                    id="longBreakAfterInput"
-                    type="number"
-                    min="1"
-                    max="10"
-                >
-
-            </div>
-
-        </div>
-
-
-        <div class="section">
-
-            <div class="section-title">
-                Daily Goal
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Daily Focus Goal
-                    </div>
-
-                    <div class="setting-description">
-                        Your target focus time
-                    </div>
-
-                </div>
-
-
-                <div class="goal-input-wrap">
-
-                    <input
-                        class="number-input"
-                        id="dailyGoalInput"
-                        type="number"
-                        min="1"
-                        max="1440"
-                    >
-
-                    <span>
-                        minutes
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="section">
-
-            <div class="section-title">
-                Smart Timer
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Auto Start
-                    </div>
-
-                    <div class="setting-description">
-                        Automatically start next phase
-                    </div>
-
-                </div>
-
-                <button
-                    class="toggle"
-                    id="autoStartToggle"
-                    type="button"
-                ></button>
-
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Smart Timer
-                    </div>
-
-                    <div class="setting-description">
-                        Restore timer after leaving
-                    </div>
-
-                </div>
-
-                <button
-                    class="toggle active"
-                    id="smartTimerToggle"
-                    type="button"
-                ></button>
-
-            </div>
-
-        </div>
-
-
-        <div class="section">
-
-            <div class="section-title">
-                Alarm
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Completion Sound
-                    </div>
-
-                    <div class="setting-description">
-                        Sound when a phase finishes
-                    </div>
-
-                </div>
-
-                <button
-                    class="toggle active"
-                    id="soundToggle"
-                    type="button"
-                ></button>
-
-            </div>
-
-
-            <div class="setting alarm-setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Alarm Volume
-                    </div>
-
-                    <div class="setting-description">
-                        Notification volume
-                    </div>
-
-                </div>
-
-
-                <div class="volume-control">
-
-                    <input
-                        type="range"
-                        id="alarmVolume"
-                        min="0"
-                        max="100"
-                        value="70"
-                    >
-
-                    <span id="alarmVolumeValue">
-                        70%
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Alarm Sound
-                    </div>
-
-                    <div class="setting-description">
-                        Choose your completion sound
-                    </div>
-
-                </div>
-
-
-                <select
-                    id="alarmSound"
-                    class="select-input"
-                >
-
-                    <option value="soft">
-                        Soft Bell
-                    </option>
-
-                    <option value="digital">
-                        Digital
-                    </option>
-
-                    <option value="focus">
-                        Focus
-                    </option>
-
-                    <option value="gentle">
-                        Gentle
-                    </option>
-
-                    <option value="deep">
-                        Deep
-                    </option>
-
-                    <option value="success">
-                        Success
-                    </option>
-
-                    <option value="custom">
-                        Custom
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="setting">
-
-                <div>
-
-                    <div class="setting-name">
-                        Test Sound
-                    </div>
-
-                    <div class="setting-description">
-                        Preview the selected alarm
-                    </div>
-
-                </div>
-
-
-                <button
-                    id="testAlarmBtn"
-                    class="secondary"
-                    type="button"
-                    data-testing="false"
-                >
-
-                    <span id="testAlarmIcon">
-                        ▶
-                    </span>
-
-                    <span id="testAlarmText">
-                        Test
-                    </span>
-
-                </button>
-
-            </div>
-
-
-            <label
-                class="alarm-upload"
-                for="alarmFile"
-                id="alarmUploadLabel"
-            >
-
-                <strong>
-                    + Upload Custom Alarm
-                </strong>
-
-                <span>
-                    MP3 / WAV / M4A
-                </span>
-
-            </label>
-
-
-            <input
-                id="alarmFile"
-                type="file"
-                accept="audio/*"
-                hidden
-            >
-
-
-            <div
-                id="customAlarmInfo"
-                style="
-                    display:none;
-                    margin-top:10px;
-                    padding:12px 14px;
-                    border-radius:14px;
-                    background:rgba(255,255,255,.045);
-                    border:1px solid rgba(255,255,255,.09);
-                    font-size:12px;
-                    color:rgba(255,255,255,.68);
-                "
-            >
-
-                <div
-                    style="
-                        display:flex;
-                        align-items:center;
-                        gap:10px;
-                    "
-                >
-
-                    <span
-                        id="alarmUploadIcon"
-                        style="
-                            width:28px;
-                            height:28px;
-                            border-radius:9px;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                            background:rgba(255,255,255,.08);
-                            color:white;
-                            font-size:14px;
-                            flex-shrink:0;
-                        "
-                    >
-                        ✓
-                    </span>
-
-
-                    <div
-                        style="
-                            min-width:0;
-                            flex:1;
-                        "
-                    >
-
-                        <div
-                            id="alarmUploadStatus"
-                            style="
-                                color:rgba(255,255,255,.82);
-                                font-weight:600;
-                                margin-bottom:3px;
-                            "
-                        >
-                            Custom alarm ready
-                        </div>
-
-
-                        <div
-                            id="customAlarmName"
-                            style="
-                                color:rgba(255,255,255,.45);
-                                white-space:nowrap;
-                                overflow:hidden;
-                                text-overflow:ellipsis;
-                            "
-                        >
-                            Custom alarm
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div
-                id="mediaUploadStatus"
-                class="media-upload-status"
-            >
-                No file uploaded
-            </div>
-
-        </div>
-
-
-        <div class="section">
-
-            <div class="section-title">
-                Accounts
-            </div>
-
-
-            <div
-                class="account-card"
-                id="spotifyAccount"
-            >
-
-                <div class="account-icon spotify-icon">
-                    S
-                </div>
-
-                <div class="account-info">
-
-                    <strong>
-                        Spotify
-                    </strong>
-
-                    <span id="spotifyStatus">
-                        Not connected
-                    </span>
-
-                </div>
-
-                <button
-                    class="account-button"
-                    id="spotifyLogin"
-                    type="button"
-                >
-                    Connect
-                </button>
-
-            </div>
-
-
-            <div
-                class="account-card"
-                id="googleAccount"
-            >
-
-                <div class="account-icon google-icon">
-                    G
-                </div>
-
-                <div class="account-info">
-
-                    <strong>
-                        Google / YouTube
-                    </strong>
-
-                    <span id="googleStatus">
-                        Not connected
-                    </span>
-
-                </div>
-
-                <button
-                    class="account-button"
-                    id="googleLogin"
-                    type="button"
-                >
-                    Connect
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="section">
-
-            <div class="section-title">
-                Reset
-            </div>
-
-            <button
-                id="resetStatsBtn"
-                class="danger-button"
-                type="button"
-            >
-                Reset All Statistics
-            </button>
-
-        </div>
-
+    <div class="panel-title">
+        Settings
     </div>
+
+    <button
+        class="close"
+        data-close="settingsOverlay"
+        type="button"
+    >
+        ×
+    </button>
+
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+    Timer
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Focus Duration
+</div>
+
+<div class="setting-description">
+    Minutes for every focus session
+</div>
+
+</div>
+
+<input
+    class="number-input"
+    id="focusInput"
+    type="number"
+    min="1"
+    max="180"
+>
+
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Short Break
+</div>
+
+<div class="setting-description">
+    Break between sessions
+</div>
+
+</div>
+
+<input
+    class="number-input"
+    id="shortBreakInput"
+    type="number"
+    min="1"
+    max="60"
+>
+
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Long Break
+</div>
+
+<div class="setting-description">
+    Longer break
+</div>
+
+</div>
+
+<input
+    class="number-input"
+    id="longBreakInput"
+    type="number"
+    min="1"
+    max="120"
+>
+
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Sessions Before Long Break
+</div>
+
+</div>
+
+<input
+    class="number-input"
+    id="longBreakAfterInput"
+    type="number"
+    min="1"
+    max="10"
+>
+
+</div>
+
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+    Daily Goal
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Daily Focus Goal
+</div>
+
+<div class="setting-description">
+    Your target focus time
+</div>
+
+</div>
+
+
+<div class="goal-input-wrap">
+
+<input
+    class="number-input"
+    id="dailyGoalInput"
+    type="number"
+    min="1"
+    max="1440"
+>
+
+<span>
+    minutes
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+    Smart Timer
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Auto Start
+</div>
+
+<div class="setting-description">
+    Automatically start next phase
+</div>
+
+</div>
+
+<button
+    class="toggle"
+    id="autoStartToggle"
+    type="button"
+></button>
+
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Smart Timer
+</div>
+
+<div class="setting-description">
+    Restore timer after leaving
+</div>
+
+</div>
+
+<button
+    class="toggle active"
+    id="smartTimerToggle"
+    type="button"
+></button>
+
+</div>
+
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+    Alarm
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Completion Sound
+</div>
+
+<div class="setting-description">
+    Sound when a phase finishes
+</div>
+
+</div>
+
+<button
+    class="toggle active"
+    id="soundToggle"
+    type="button"
+></button>
+
+</div>
+
+
+<div class="setting alarm-setting">
+
+<div>
+
+<div class="setting-name">
+    Alarm Volume
+</div>
+
+<div class="setting-description">
+    Notification volume
+</div>
+
+</div>
+
+
+<div class="volume-control">
+
+<input
+    type="range"
+    id="alarmVolume"
+    min="0"
+    max="100"
+    value="70"
+>
+
+<span id="alarmVolumeValue">
+    70%
+</span>
+
+</div>
+
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Alarm Sound
+</div>
+
+<div class="setting-description">
+    Choose your completion sound
+</div>
+
+</div>
+
+
+<select
+    id="alarmSound"
+    class="select-input"
+>
+
+<option value="soft">
+    Soft Bell
+</option>
+
+<option value="digital">
+    Digital
+</option>
+
+<option value="focus">
+    Focus
+</option>
+
+<option value="gentle">
+    Gentle
+</option>
+
+<option value="deep">
+    Deep
+</option>
+
+<option value="success">
+    Success
+</option>
+
+<option value="custom">
+    Custom
+</option>
+
+</select>
+
+</div>
+
+
+<div class="setting">
+
+<div>
+
+<div class="setting-name">
+    Test Sound
+</div>
+
+<div class="setting-description">
+    Preview the selected alarm
+</div>
+
+</div>
+
+
+<button
+    id="testAlarmBtn"
+    class="secondary"
+    type="button"
+    data-testing="false"
+>
+
+<span id="testAlarmIcon">
+    ▶
+</span>
+
+<span id="testAlarmText">
+    Test
+</span>
+
+</button>
+
+</div>
+
+
+<label
+    class="alarm-upload"
+    for="alarmFile"
+    id="alarmUploadLabel"
+>
+
+<strong>
+    + Upload Custom Alarm
+</strong>
+
+<span>
+    MP3 / WAV / M4A
+</span>
+
+</label>
+
+
+<input
+    id="alarmFile"
+    type="file"
+    accept="audio/*"
+    hidden
+>
+
+
+<div
+    id="customAlarmInfo"
+    style="
+        display:none;
+        margin-top:10px;
+        padding:12px 14px;
+        border-radius:14px;
+        background:rgba(255,255,255,.045);
+        border:1px solid rgba(255,255,255,.09);
+        font-size:12px;
+        color:rgba(255,255,255,.68);
+    "
+>
+
+<div
+    style="
+        display:flex;
+        align-items:center;
+        gap:10px;
+    "
+>
+
+<span
+    id="alarmUploadIcon"
+    style="
+        width:28px;
+        height:28px;
+        border-radius:9px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:rgba(255,255,255,.08);
+        color:white;
+        font-size:14px;
+        flex-shrink:0;
+    "
+>
+    ✓
+</span>
+
+
+<div
+    style="
+        min-width:0;
+        flex:1;
+    "
+>
+
+<div
+    id="alarmUploadStatus"
+    style="
+        color:rgba(255,255,255,.82);
+        font-weight:600;
+        margin-bottom:3px;
+    "
+>
+    Custom alarm ready
+</div>
+
+
+<div
+    id="customAlarmName"
+    style="
+        color:rgba(255,255,255,.45);
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    "
+>
+    Custom alarm
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div
+    id="mediaUploadStatus"
+    class="media-upload-status"
+>
+    No file uploaded
+</div>
+
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+    Accounts
+</div>
+
+
+<div
+    class="account-card"
+    id="spotifyAccount"
+>
+
+<div class="account-icon spotify-icon">
+    S
+</div>
+
+<div class="account-info">
+
+<strong>
+    Spotify
+</strong>
+
+<span id="spotifyStatus">
+    Not connected
+</span>
+
+</div>
+
+<button
+    class="account-button"
+    id="spotifyLogin"
+    type="button"
+>
+    Connect
+</button>
+
+</div>
+
+
+<div
+    class="account-card"
+    id="googleAccount"
+>
+
+<div class="account-icon google-icon">
+    G
+</div>
+
+<div class="account-info">
+
+<strong>
+    Google / YouTube
+</strong>
+
+<span id="googleStatus">
+    Not connected
+</span>
+
+</div>
+
+<button
+    class="account-button"
+    id="googleLogin"
+    type="button"
+>
+    Connect
+</button>
+
+</div>
+
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+    Reset
+</div>
+
+<button
+    id="resetStatsBtn"
+    class="danger-button"
+    type="button"
+>
+    Reset All Statistics
+</button>
+
+</div>
+
+</div>
 
 </div>
 
@@ -2868,73 +2862,73 @@
     id="tasksOverlay"
 >
 
-    <div class="panel task-panel">
+<div class="panel task-panel">
 
-        <div class="panel-head">
+<div class="panel-head">
 
-            <div>
+<div>
 
-                <div class="panel-title">
-                    Tasks
-                </div>
+<div class="panel-title">
+    Tasks
+</div>
 
-                <div class="panel-subtitle">
-                    What are you focusing on?
-                </div>
+<div class="panel-subtitle">
+    What are you focusing on?
+</div>
 
-            </div>
-
-            <button
-                class="close"
-                data-close="tasksOverlay"
-                type="button"
-            >
-                ×
-            </button>
-
-        </div>
+</div>
 
 
-        <div class="task-input-row">
+<button
+    class="close"
+    data-close="tasksOverlay"
+    type="button"
+>
+    ×
+</button>
 
-            <input
-                id="taskInput"
-                class="media-input"
-                placeholder="Add a task..."
-                maxlength="100"
-            >
-
-            <button
-                id="addTaskBtn"
-                class="task-add"
-                type="button"
-            >
-                +
-            </button>
-
-        </div>
+</div>
 
 
-        <div
-            class="task-list"
-            id="taskList"
-        ></div>
+<div class="task-input-row">
+
+<input
+    id="taskInput"
+    class="media-input"
+    placeholder="Add a task..."
+    maxlength="100"
+>
 
 
-        <div
-            class="task-empty"
-            id="taskEmpty"
-        >
+<button
+    id="addTaskBtn"
+    class="task-add"
+    type="button"
+>
+    +
+</button>
 
-            No tasks yet.
+</div>
 
-            <br>
 
-            Add something you want to accomplish.
+<div
+    class="task-list"
+    id="taskList"
+></div>
 
-        </div>
 
-    </div>
+<div
+    class="task-empty"
+    id="taskEmpty"
+>
+
+No tasks yet.
+<br>
+Add something you want to accomplish.
+
+</div>
+
+</div>
 
 </div>
 
@@ -2949,57 +2943,63 @@
     aria-hidden="true"
 >
 
-    <div class="rakkez-media-panel">
-
-        <!-- HEADER -->
-
-        <div class="rakkez-media-header">
-
-            <div>
-
-                <div
-                    class="rakkez-media-eyebrow"
-                    data-media-i18n="eyebrow"
-                >
-                    RAKKEZ MEDIA
-                </div>
-
-                <div
-                    class="rakkez-media-title"
-                    data-media-i18n="focusMusic"
-                >
-                    Focus Music
-                </div>
-
-            </div>
-
-            <button
-                class="rakkez-media-close"
-                id="rakkezMediaClose"
-                type="button"
-                aria-label="Close"
-                data-media-i18n-title="close"
-            >
-                ×
-            </button>
-
-        </div>
+<div class="rakkez-media-panel">
 
 
-        <!-- TABS -->
+<!-- HEADER -->
 
-        <div class="rakkez-media-tabs">
+<div class="rakkez-media-header">
 
-            <button
-                class="rakkez-media-tab active"
-                data-rakkez-source="lofi"
-                type="button"
-                data-media-i18n="lofi"
-            >
-                Lofi
-            </button>
+<div>
 
-             <button
+<div
+    class="rakkez-media-eyebrow"
+    data-media-i18n="eyebrow"
+>
+    RAKKEZ MEDIA
+</div>
+
+
+<div
+    class="rakkez-media-title"
+    data-media-i18n="focusMusic"
+>
+    Focus Music
+</div>
+
+</div>
+
+
+<button
+    class="rakkez-media-close"
+    id="rakkezMediaClose"
+    type="button"
+    aria-label="Close"
+    data-media-i18n-title="close"
+>
+    ×
+</button>
+
+</div>
+
+
+<!-- =====================================================
+     TABS
+===================================================== -->
+
+<div class="rakkez-media-tabs">
+
+    <button
+        class="rakkez-media-tab active"
+        data-rakkez-source="lofi"
+        type="button"
+        data-media-i18n="lofi"
+    >
+        Lofi
+    </button>
+
+
+    <button
         class="rakkez-media-tab"
         data-rakkez-source="effects"
         type="button"
@@ -3007,580 +3007,596 @@
     >
         Effects
     </button>
+
+
+    <button
+        class="rakkez-media-tab"
+        data-rakkez-source="youtube"
+        type="button"
+        data-media-i18n="youtube"
+    >
+        YouTube
+    </button>
+
+
+    <button
+        class="rakkez-media-tab"
+        data-rakkez-source="spotify"
+        type="button"
+        data-media-i18n="spotify"
+    >
+        Spotify
+    </button>
+
+
+    <button
+        class="rakkez-media-tab"
+        data-rakkez-source="local"
+        type="button"
+        data-media-i18n="local"
+    >
+        Local
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     LOFI
+===================================================== -->
+
+<div
+    class="rakkez-media-source active"
+    id="rakkezLofiSource"
+    data-rakkez-source="lofi"
+>
+
+<div class="rakkez-player-main">
+
+
+<!-- ARTWORK -->
+
+<div class="rakkez-artwork-wrap">
+
+<div
+    class="rakkez-artwork"
+    id="rakkezArtwork"
+>
+
+<div class="rakkez-artwork-glow"></div>
+
+<div class="rakkez-artwork-icon">
+    ♪
+</div>
+
+</div>
+
+</div>
+
+
+<!-- TRACK INFO -->
+
+<div class="rakkez-track-info">
+
+<div
+    class="rakkez-track-name"
+    id="rakkezTrackName"
+>
+    Rainy Night
+</div>
+
+
+<div
+    class="rakkez-track-artist"
+    id="rakkezTrackArtist"
+>
+    RakkeZ Lofi
+</div>
+
+</div>
+
+
+<!-- PROGRESS -->
+
+<div class="rakkez-progress-area">
+
+<input
+    type="range"
+    id="rakkezProgress"
+    min="0"
+    max="100"
+    value="0"
+    step="0.1"
+>
+
+
+<div class="rakkez-time-row">
+
+<span id="rakkezCurrentTime">
+    0:00
+</span>
+
+<span id="rakkezDuration">
+    0:00
+</span>
+
+</div>
+
+</div>
+
+
+<!-- CONTROLS -->
+
+<div class="rakkez-player-controls">
+
+<button
+    class="rakkez-control small"
+    id="rakkezShuffle"
+    type="button"
+    title="Shuffle"
+    data-media-i18n-title="shuffle"
+>
+    ⤨
+</button>
+
+
+<button
+    class="rakkez-control"
+    id="rakkezPrevious"
+    type="button"
+    title="Previous"
+    data-media-i18n-title="previous"
+>
+    ⏮
+</button>
+
+
+<button
+    class="rakkez-play"
+    id="rakkezPlay"
+    type="button"
+    title="Play"
+    data-media-i18n-title="play"
+>
+    ▶
+</button>
+
+
+<button
+    class="rakkez-control"
+    id="rakkezNext"
+    type="button"
+    title="Next"
+    data-media-i18n-title="next"
+>
+    ⏭
+</button>
+
+
+<button
+    class="rakkez-control small"
+    id="rakkezLoop"
+    type="button"
+    title="Loop"
+    data-media-i18n-title="loop"
+>
+    ↻
+</button>
+
+</div>
+
+
+<!-- VOLUME -->
+
+<div class="rakkez-volume">
+
+<span>
+    🔊
+</span>
+
+
+<input
+    type="range"
+    id="rakkezVolume"
+    min="0"
+    max="1"
+    value=".7"
+    step=".01"
+>
+
+
+<span id="rakkezVolumeValue">
+    70%
+</span>
+
+</div>
+
+</div>
+
+
+<!-- PLAYLIST -->
+
+<div class="rakkez-playlist-section">
+
+<div class="rakkez-playlist-header">
+
+<div>
+
+<div
+    class="rakkez-playlist-title"
+    data-media-i18n="playlist"
+>
+    Playlist
+</div>
+
+
+<div
+    class="rakkez-playlist-count"
+    id="rakkezPlaylistCount"
+>
+    0 tracks
+</div>
+
+</div>
+
+
+<button
+    class="rakkez-auto-next active"
+    id="rakkezAutoNext"
+    type="button"
+    data-media-i18n="autoNext"
+>
+    AUTO-NEXT
+</button>
+
+</div>
+
+
+<div
+    class="rakkez-playlist"
+    id="rakkezPlaylist"
+></div>
+
+</div>
+
+</div>
+
+
 <!-- =====================================================
      EFFECTS
 ===================================================== -->
 
 <div
-    id="rakkezEffectsSource"
     class="rakkez-media-source"
+    id="rakkezEffectsSource"
     data-rakkez-source="effects"
 >
 
-    <div id="rakkezEffectsContainer"></div>
+<!-- RAIN -->
+
+<div class="rakkez-effect-card">
+
+<div class="rakkez-effect-info">
+
+<div class="rakkez-effect-icon">
+    🌧️
+</div>
+
+
+<div>
+
+<div class="rakkez-effect-title">
+    Rain
+</div>
+
+
+<div class="rakkez-effect-subtitle">
+    Soft rain for focus
+</div>
 
 </div>
 
-            
+</div>
 
-            <button
-                class="rakkez-media-tab"
-                data-rakkez-source="youtube"
-                type="button"
-                data-media-i18n="youtube"
-            >
-                YouTube
-            </button>
 
-            <button
-                class="rakkez-media-tab"
-                data-rakkez-source="spotify"
-                type="button"
-                data-media-i18n="spotify"
-            >
-                Spotify
-            </button>
+<button
+    id="rakkezRainToggle"
+    class="rakkez-effect-toggle"
+    type="button"
+>
+    Play Rain
+</button>
 
-            <button
-                class="rakkez-media-tab"
-                data-rakkez-source="local"
-                type="button"
-                data-media-i18n="local"
-            >
-                Local
-            </button>
 
-        </div>
+<div class="rakkez-effect-volume">
 
+<span>
+    Volume
+</span>
 
-        <!-- =================================================
-             LOFI / MAIN PLAYER
-        ================================================== -->
 
-        <div
-            class="rakkez-media-source active"
-            id="rakkezLofiSource"
-        >
+<input
+    id="rakkezRainVolume"
+    type="range"
+    min="0"
+    max="1"
+    step="0.01"
+    value="0.5"
+>
 
-            <div class="rakkez-player-main">
 
-                <!-- ARTWORK -->
+<span id="rakkezRainVolumeValue">
+    50%
+</span>
 
-                <div class="rakkez-artwork-wrap">
-
-                    <div
-                        class="rakkez-artwork"
-                        id="rakkezArtwork"
-                    >
-
-                        <div
-                            class="rakkez-artwork-glow"
-                        ></div>
-
-                        <div
-                            class="rakkez-artwork-icon"
-                        >
-                            ♪
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- TRACK INFO -->
-
-                <div class="rakkez-track-info">
-
-                    <div
-                        class="rakkez-track-name"
-                        id="rakkezTrackName"
-                    >
-                        Rainy Night
-                    </div>
-
-                    <div
-                        class="rakkez-track-artist"
-                        id="rakkezTrackArtist"
-                    >
-                        RakkeZ Lofi
-                    </div>
-
-                </div>
-
-
-                <!-- PROGRESS -->
-
-                <div class="rakkez-progress-area">
-
-                    <input
-                        type="range"
-                        id="rakkezProgress"
-                        min="0"
-                        max="100"
-                        value="0"
-                        step="0.1"
-                    >
-
-                    <div class="rakkez-time-row">
-
-                        <span id="rakkezCurrentTime">
-                            0:00
-                        </span>
+</div>
 
-                        <span id="rakkezDuration">
-                            0:00
-                        </span>
+</div>
 
-                    </div>
 
-                </div>
+<!-- AIRPLANE -->
 
+<div class="rakkez-effect-card">
 
-                <!-- CONTROLS -->
-
-                <div class="rakkez-player-controls">
-
-                    <button
-                        class="rakkez-control small"
-                        id="rakkezShuffle"
-                        type="button"
-                        title="Shuffle"
-                        data-media-i18n-title="shuffle"
-                    >
-                        ⤨
-                    </button>
-
-                    <button
-                        class="rakkez-control"
-                        id="rakkezPrevious"
-                        type="button"
-                        title="Previous"
-                        data-media-i18n-title="previous"
-                    >
-                        ⏮
-                    </button>
-
-                    <button
-                        class="rakkez-play"
-                        id="rakkezPlay"
-                        type="button"
-                        title="Play"
-                        data-media-i18n-title="play"
-                    >
-                        ▶
-                    </button>
+<div class="rakkez-effect-info">
 
-                    <button
-                        class="rakkez-control"
-                        id="rakkezNext"
-                        type="button"
-                        title="Next"
-                        data-media-i18n-title="next"
-                    >
-                        ⏭
-                    </button>
+<div class="rakkez-effect-icon">
+    ✈️
+</div>
 
-                    <button
-                        class="rakkez-control small"
-                        id="rakkezLoop"
-                        type="button"
-                        title="Loop"
-                        data-media-i18n-title="loop"
-                    >
-                        ↻
-                    </button>
-
-                </div>
-
-
-                <!-- VOLUME -->
-
-                <div class="rakkez-volume">
 
-                    <span>
-                        🔊
-                    </span>
-
-                    <input
-                        type="range"
-                        id="rakkezVolume"
-                        min="0"
-                        max="1"
-                        value=".7"
-                        step=".01"
-                    >
-
-                    <span id="rakkezVolumeValue">
-                        70%
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- PLAYLIST -->
-
-            <div class="rakkez-playlist-section">
-
-                <div class="rakkez-playlist-header">
-
-                    <div>
-
-                        <div
-                            class="rakkez-playlist-title"
-                            data-media-i18n="playlist"
-                        >
-                            Playlist
-                        </div>
-
-                        <div
-                            class="rakkez-playlist-count"
-                            id="rakkezPlaylistCount"
-                        >
-                            0 tracks
-                        </div>
-
-                    </div>
-
-                    <button
-                        class="rakkez-auto-next active"
-                        id="rakkezAutoNext"
-                        type="button"
-                        data-media-i18n="autoNext"
-                    >
-                        AUTO-NEXT
-                    </button>
-
-                </div>
-
-                <div
-                    class="rakkez-playlist"
-                    id="rakkezPlaylist"
-                ></div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             YOUTUBE
-        ================================================== -->
-
-        <div
-            class="rakkez-media-source"
-            id="rakkezYoutubeSource"
-        >
-
-            <div class="rakkez-external-box">
-
-                <div class="rakkez-external-icon">
-                    ▶
-                </div>
-
-                <div
-                    class="rakkez-external-title"
-                    data-media-i18n="youtube"
-                >
-                    YouTube
-                </div>
-
-                <div
-                    class="rakkez-external-description"
-                    data-media-i18n="youtubeDescription"
-                >
-                    Paste a YouTube video URL and play it inside RakkeZ.
-                </div>
-
-                <div class="rakkez-input-row">
-
-                    <input
-                        id="rakkezYoutubeInput"
-                        class="rakkez-media-input"
-                        type="text"
-                        placeholder="Paste YouTube URL..."
-                        data-media-i18n-placeholder="youtubePlaceholder"
-                    >
-
-                    <button
-                        id="rakkezYoutubePlay"
-                        class="rakkez-media-action"
-                        type="button"
-                        data-media-i18n="play"
-                    >
-                        Play
-                    </button>
-
-                </div>
-
-                <div
-                    id="rakkezYoutubeEmbed"
-                    class="rakkez-external-embed"
-                ></div>
-
-            </div>
-
-        </div>
-
-        <!-- =====================================================
-     EFFECTS SOURCE
+<div>
+
+<div class="rakkez-effect-title">
+    Airplane
+</div>
+
+
+<div class="rakkez-effect-subtitle">
+    Calm airplane cabin ambience
+</div>
+
+</div>
+
+</div>
+
+
+<button
+    id="rakkezAirplaneToggle"
+    class="rakkez-effect-toggle"
+    type="button"
+>
+    Play Airplane
+</button>
+
+
+<div class="rakkez-effect-volume">
+
+<span>
+    Volume
+</span>
+
+
+<input
+    id="rakkezAirplaneVolume"
+    type="range"
+    min="0"
+    max="1"
+    step="0.01"
+    value="0.5"
+>
+
+
+<span id="rakkezAirplaneVolumeValue">
+    50%
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     YOUTUBE
 ===================================================== -->
 
 <div
     class="rakkez-media-source"
-    data-rakkez-source="effects"
+    id="rakkezYoutubeSource"
+    data-rakkez-source="youtube"
 >
 
-    <!-- RAIN -->
+<div class="rakkez-external-box">
 
-    <div class="rakkez-effect-card">
-
-        <div class="rakkez-effect-info">
-
-            <div class="rakkez-effect-icon">
-                🌧️
-            </div>
-
-            <div>
-
-                <div class="rakkez-effect-title">
-                    Rain
-                </div>
-
-                <div class="rakkez-effect-subtitle">
-                    Soft rain for focus
-                </div>
-
-            </div>
-
-        </div>
+<div class="rakkez-external-icon">
+    ▶
+</div>
 
 
-        <button
-            id="rakkezRainToggle"
-            class="rakkez-effect-toggle"
-            type="button"
-        >
-            Play Rain
-        </button>
+<div
+    class="rakkez-external-title"
+    data-media-i18n="youtube"
+>
+    YouTube
+</div>
 
 
-        <div class="rakkez-effect-volume">
-
-            <span>
-                Volume
-            </span>
-
-
-            <input
-                id="rakkezRainVolume"
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value="0.5"
-            >
+<div
+    class="rakkez-external-description"
+    data-media-i18n="youtubeDescription"
+>
+    Paste a YouTube video URL and play it inside RakkeZ.
+</div>
 
 
-            <span
-                id="rakkezRainVolumeValue"
-            >
-                50%
-            </span>
+<div class="rakkez-input-row">
 
-        </div>
-
-    </div>
-
-
-    <!-- AIRPLANE -->
-
-    <div class="rakkez-effect-card">
-
-        <div class="rakkez-effect-info">
-
-            <div class="rakkez-effect-icon">
-                ✈️
-            </div>
-
-            <div>
-
-                <div class="rakkez-effect-title">
-                    Airplane
-                </div>
-
-                <div class="rakkez-effect-subtitle">
-                    Calm airplane cabin ambience
-                </div>
-
-            </div>
-
-        </div>
+<input
+    id="rakkezYoutubeInput"
+    class="rakkez-media-input"
+    type="text"
+    placeholder="Paste YouTube URL..."
+    data-media-i18n-placeholder="youtubePlaceholder"
+>
 
 
-        <button
-            id="rakkezAirplaneToggle"
-            class="rakkez-effect-toggle"
-            type="button"
-        >
-            Play Airplane
-        </button>
-
-
-        <div class="rakkez-effect-volume">
-
-            <span>
-                Volume
-            </span>
-
-
-            <input
-                id="rakkezAirplaneVolume"
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value="0.5"
-            >
-
-
-            <span
-                id="rakkezAirplaneVolumeValue"
-            >
-                50%
-            </span>
-
-        </div>
-
-    </div>
+<button
+    id="rakkezYoutubePlay"
+    class="rakkez-media-action"
+    type="button"
+    data-media-i18n="play"
+>
+    Play
+</button>
 
 </div>
 
 
-        <!-- =================================================
-             SPOTIFY
-        ================================================== -->
+<div
+    id="rakkezYoutubeEmbed"
+    class="rakkez-external-embed"
+></div>
 
-        <div
-            class="rakkez-media-source"
-            id="rakkezSpotifySource"
-        >
+</div>
 
-            <div class="rakkez-external-box">
-
-                <div class="rakkez-external-icon spotify">
-                    S
-                </div>
-
-                <div
-                    class="rakkez-external-title"
-                    data-media-i18n="spotify"
-                >
-                    Spotify
-                </div>
-
-                <div
-                    class="rakkez-external-description"
-                    data-media-i18n="spotifyDescription"
-                >
-                    Paste a Spotify track, album or playlist URL.
-                </div>
-
-                <div class="rakkez-input-row">
-
-                    <input
-                        id="rakkezSpotifyInput"
-                        class="rakkez-media-input"
-                        type="text"
-                        placeholder="Paste Spotify URL..."
-                        data-media-i18n-placeholder="spotifyPlaceholder"
-                    >
-
-                    <button
-                        id="rakkezSpotifyPlay"
-                        class="rakkez-media-action"
-                        type="button"
-                        data-media-i18n="open"
-                    >
-                        Open
-                    </button>
-
-                </div>
-
-                <div
-                    id="rakkezSpotifyEmbed"
-                    class="rakkez-external-embed"
-                ></div>
-
-            </div>
-
-        </div>
+</div>
 
 
-        <!-- =================================================
-             LOCAL
-        ================================================== -->
+<!-- =====================================================
+     SPOTIFY
+===================================================== -->
 
-        <div
-            class="rakkez-media-source"
-            id="rakkezLocalSource"
-        >
+<div
+    class="rakkez-media-source"
+    id="rakkezSpotifySource"
+    data-rakkez-source="spotify"
+>
 
-            <div class="rakkez-external-box">
+<div class="rakkez-external-box">
 
-                <div class="rakkez-external-icon">
-                    ♪
-                </div>
+<div class="rakkez-external-icon spotify">
+    S
+</div>
 
-                <div
-                    class="rakkez-external-title"
-                    data-media-i18n="localMusic"
-                >
-                    Local Music
-                </div>
 
-                <div
-                    class="rakkez-external-description"
-                    data-media-i18n="localDescription"
-                >
-                    Choose multiple music files from your device.
-                </div>
+<div
+    class="rakkez-external-title"
+    data-media-i18n="spotify"
+>
+    Spotify
+</div>
 
-                <label
-                    class="rakkez-file-button"
-                    for="rakkezLocalFile"
-                    data-media-i18n="chooseMusic"
-                >
-                    Choose Music
-                </label>
 
-                <!-- MULTIPLE FILES -->
+<div
+    class="rakkez-external-description"
+    data-media-i18n="spotifyDescription"
+>
+    Paste a Spotify track, album or playlist URL.
+</div>
 
-                <input
-                    id="rakkezLocalFile"
-                    type="file"
-                    accept="audio/*"
-                    multiple
-                    hidden
-                >
 
-                <div
-                    id="rakkezLocalList"
-                    class="rakkez-local-list"
-                ></div>
+<div class="rakkez-input-row">
 
-                <audio
-                    id="rakkezLocalAudio"
-                    preload="metadata"
-                ></audio>
+<input
+    id="rakkezSpotifyInput"
+    class="rakkez-media-input"
+    type="text"
+    placeholder="Paste Spotify URL..."
+    data-media-i18n-placeholder="spotifyPlaceholder"
+>
 
-            </div>
 
-        </div>
+<button
+    id="rakkezSpotifyPlay"
+    class="rakkez-media-action"
+    type="button"
+    data-media-i18n="open"
+>
+    Open
+</button>
 
-    </div>
+</div>
+
+
+<div
+    id="rakkezSpotifyEmbed"
+    class="rakkez-external-embed"
+></div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     LOCAL
+===================================================== -->
+
+<div
+    class="rakkez-media-source"
+    id="rakkezLocalSource"
+    data-rakkez-source="local"
+>
+
+<div class="rakkez-external-box">
+
+<div class="rakkez-external-icon">
+    ♪
+</div>
+
+
+<div
+    class="rakkez-external-title"
+    data-media-i18n="localMusic"
+>
+    Local Music
+</div>
+
+
+<div
+    class="rakkez-external-description"
+    data-media-i18n="localDescription"
+>
+    Choose multiple music files from your device.
+</div>
+
+
+<label
+    class="rakkez-file-button"
+    for="rakkezLocalFile"
+    data-media-i18n="chooseMusic"
+>
+    Choose Music
+</label>
+
+
+<input
+    id="rakkezLocalFile"
+    type="file"
+    accept="audio/*"
+    multiple
+    hidden
+>
+
+
+<div
+    id="rakkezLocalList"
+    class="rakkez-local-list"
+></div>
+
+
+<audio
+    id="rakkezLocalAudio"
+    preload="metadata"
+></audio>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -3595,61 +3611,72 @@
     aria-hidden="true"
 >
 
-    <div class="rakkez-mini-artwork" id="rakkezMiniArtwork">
-        ♪
-    </div>
+<div
+    class="rakkez-mini-artwork"
+    id="rakkezMiniArtwork"
+>
+    ♪
+</div>
 
-    <div class="rakkez-mini-info">
 
-        <div
-            class="rakkez-mini-title"
-            id="rakkezMiniTitle"
-        >
-            Rainy Night
-        </div>
+<div class="rakkez-mini-info">
 
-        <div
-            class="rakkez-mini-artist"
-            id="rakkezMiniArtist"
-        >
-            RakkeZ Lofi
-        </div>
+<div
+    class="rakkez-mini-title"
+    id="rakkezMiniTitle"
+>
+    Rainy Night
+</div>
 
-    </div>
 
-    <button
-        class="rakkez-mini-control"
-        id="rakkezMiniPlay"
-        type="button"
-        title="Play"
-        data-media-i18n-title="play"
-    >
-        ▶
-    </button>
+<div
+    class="rakkez-mini-artist"
+    id="rakkezMiniArtist"
+>
+    RakkeZ Lofi
+</div>
 
-    <button
-        class="rakkez-mini-control"
-        id="rakkezMiniNext"
-        type="button"
-        title="Next"
-        data-media-i18n-title="next"
-    >
-        ⏭
-    </button>
+</div>
 
-    <button
-        class="rakkez-mini-close"
-        id="rakkezMiniClose"
-        type="button"
-        title="Close"
-        data-media-i18n-title="close"
-    >
-        ×
-    </button>
 
-    <div class="rakkez-mini-progress">
-        <span id="rakkezMiniProgress"></span>
-    </div>
+<button
+    class="rakkez-mini-control"
+    id="rakkezMiniPlay"
+    type="button"
+    title="Play"
+    data-media-i18n-title="play"
+>
+    ▶
+</button>
+
+
+<button
+    class="rakkez-mini-control"
+    id="rakkezMiniNext"
+    type="button"
+    title="Next"
+    data-media-i18n-title="next"
+>
+    ⏭
+</button>
+
+
+<button
+    class="rakkez-mini-close"
+    id="rakkezMiniClose"
+    type="button"
+    title="Close"
+    data-media-i18n-title="close"
+>
+    ×
+</button>
+
+
+<div class="rakkez-mini-progress">
+
+<span id="rakkezMiniProgress"></span>
+
+</div>
 
 </div>
 
@@ -3663,52 +3690,56 @@
     id="ambientOverlay"
 >
 
-    <div class="panel ambient-panel">
+<div class="panel ambient-panel">
 
-        <div class="panel-head">
+<div class="panel-head">
 
-            <div>
+<div>
 
-                <div class="panel-title">
-                    Ambient
-                </div>
+<div class="panel-title">
+    Ambient
+</div>
 
-                <div class="panel-subtitle">
-                    Choose your atmosphere.
-                </div>
+<div class="panel-subtitle">
+    Choose your atmosphere.
+</div>
 
-            </div>
+</div>
 
-            <button
-                class="close"
-                data-close="ambientOverlay"
-                type="button"
-            >
-                ×
-            </button>
 
-        </div>
+<button
+    class="close"
+    data-close="ambientOverlay"
+    type="button"
+>
+    ×
+</button>
 
-        <div
-            class="ambient-grid"
-            id="ambientGrid"
-        ></div>
+</div>
 
-        <label
-            class="upload-ambient"
-            for="bgFile"
-        >
-            + Upload Image / Video Background
-        </label>
 
-        <input
-            id="bgFile"
-            type="file"
-            accept="image/*,video/*"
-            hidden
-        >
+<div
+    class="ambient-grid"
+    id="ambientGrid"
+></div>
 
-    </div>
+
+<label
+    class="upload-ambient"
+    for="bgFile"
+>
+    + Upload Image / Video Background
+</label>
+
+
+<input
+    id="bgFile"
+    type="file"
+    accept="image/*,video/*"
+    hidden
+>
+
+</div>
 
 </div>
 
@@ -3722,46 +3753,46 @@
     id="confirmOverlay"
 >
 
-    <div class="panel confirm-panel">
+<div class="panel confirm-panel">
 
-        <div class="confirm-icon">
-            ↻
-        </div>
+<div class="confirm-icon">
+    ↻
+</div>
 
-        <div class="panel-title">
-            Reset everything?
-        </div>
 
-        <div class="confirm-description">
+<div class="panel-title">
+    Reset everything?
+</div>
 
-            This will remove your sessions,
-            focus time, streak and tasks.
 
-            This cannot be undone.
+<div class="confirm-description">
+    This will remove your sessions, focus time, streak and tasks.
+    This cannot be undone.
+</div>
 
-        </div>
 
-        <div class="confirm-actions">
+<div class="confirm-actions">
 
-            <button
-                class="secondary"
-                data-close="confirmOverlay"
-                type="button"
-            >
-                Cancel
-            </button>
+<button
+    class="secondary"
+    data-close="confirmOverlay"
+    type="button"
+>
+    Cancel
+</button>
 
-            <button
-                id="confirmReset"
-                class="danger-confirm"
-                type="button"
-            >
-                Reset
-            </button>
 
-        </div>
+<button
+    id="confirmReset"
+    class="danger-confirm"
+    type="button"
+>
+    Reset
+</button>
 
-    </div>
+</div>
+
+</div>
 
 </div>
 
@@ -3776,68 +3807,74 @@
     aria-hidden="true"
 >
 
-    <div
-        class="updates-modal-content"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="updatesTitle"
-    >
+<div
+    class="updates-modal-content"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="updatesTitle"
+>
 
-        <button
-            id="closeUpdates"
-            class="updates-close"
-            type="button"
-            aria-label="Close updates"
-        >
-            ×
-        </button>
+<button
+    id="closeUpdates"
+    class="updates-close"
+    type="button"
+    aria-label="Close updates"
+>
+    ×
+</button>
 
-        <span
-            class="updates-badge"
-            id="updatesBadge"
-        >
-            NEW
-        </span>
 
-        <h2 id="updatesTitle">
-            What's New
-        </h2>
+<span
+    class="updates-badge"
+    id="updatesBadge"
+>
+    NEW
+</span>
 
-        <p id="updatesDescription">
-            We've added some exciting new features.
-        </p>
 
-        <div
-            class="updates-list"
-            id="updatesList"
-        ></div>
+<h2 id="updatesTitle">
+    What's New
+</h2>
 
-        <button
-            id="updatesDone"
-            type="button"
-        >
-            Got it
-        </button>
 
-    </div>
+<p id="updatesDescription">
+    We've added some exciting new features.
+</p>
+
+
+<div
+    class="updates-list"
+    id="updatesList"
+></div>
+
+
+<button
+    id="updatesDone"
+    type="button"
+>
+    Got it
+</button>
+
+</div>
 
 </div>
 
 
 <!-- =====================================================
      MEDIA SUPPORT CSS
-     
      هذا الـCSS خاص بالإضافات الجديدة فقط.
      لا يغير التصميم الأساسي.
 ===================================================== -->
 
 <style>
 
+
 /* =====================================================
    EFFECTS
 ===================================================== */
 
 .rakkez-effect-card {
+
     width: 100%;
 
     margin-top: 22px;
@@ -3845,25 +3882,38 @@
     padding: 16px;
 
     border: 1px solid rgba(255,255,255,.09);
+
     border-radius: 16px;
 
-    background: rgba(255,255,255,.035);
+    background:
+        rgba(255,255,255,.035);
 
     box-sizing: border-box;
+
 }
+
 
 .rakkez-effect-info {
+
     display: flex;
+
     align-items: center;
+
     gap: 12px;
+
 }
 
+
 .rakkez-effect-icon {
+
     width: 46px;
+
     height: 46px;
+
     flex: 0 0 46px;
 
     display: grid;
+
     place-items: center;
 
     border-radius: 13px;
@@ -3876,24 +3926,35 @@
         );
 
     font-size: 21px;
+
 }
 
+
 .rakkez-effect-title {
+
     color: var(--text, #fff);
 
     font-size: 14px;
+
     font-weight: 700;
+
 }
+
 
 .rakkez-effect-subtitle {
+
     margin-top: 4px;
 
-    color: var(--muted, rgba(255,255,255,.56));
+    color:
+        var(--muted, rgba(255,255,255,.56));
 
     font-size: 11px;
+
 }
 
+
 .rakkez-effect-toggle {
+
     width: 100%;
 
     margin-top: 16px;
@@ -3901,13 +3962,16 @@
     height: 42px;
 
     border: 1px solid rgba(22,131,255,.28);
+
     border-radius: 12px;
 
-    background: rgba(22,131,255,.10);
+    background:
+        rgba(22,131,255,.10);
 
     color: #fff;
 
     font-size: 12px;
+
     font-weight: 700;
 
     cursor: pointer;
@@ -3916,75 +3980,135 @@
         background .18s ease,
         border-color .18s ease,
         transform .18s ease;
+
 }
+
 
 .rakkez-effect-toggle:hover {
+
     transform: translateY(-1px);
 
-    background: rgba(22,131,255,.16);
+    background:
+        rgba(22,131,255,.16);
 
-    border-color: rgba(22,131,255,.45);
+    border-color:
+        rgba(22,131,255,.45);
+
 }
+
 
 .rakkez-effect-toggle.active {
-    background: rgba(22,131,255,.22);
 
-    border-color: rgba(22,131,255,.55);
+    background:
+        rgba(22,131,255,.22);
+
+    border-color:
+        rgba(22,131,255,.55);
+
 }
 
+
 .rakkez-effect-volume {
+
     display: flex;
+
     align-items: center;
+
     gap: 10px;
 
     margin-top: 14px;
 
-    color: var(--muted, rgba(255,255,255,.56));
+    color:
+        var(--muted, rgba(255,255,255,.56));
 
     font-size: 12px;
+
 }
+
 
 .rakkez-effect-volume input {
+
     flex: 1;
+
 }
 
+
 #rakkezRainVolumeValue {
+
     width: 36px;
 
     text-align: right;
 
-    color: var(--muted, rgba(255,255,255,.56));
+    color:
+        var(--muted, rgba(255,255,255,.56));
 
     font-size: 11px;
+
 }
 
+
+#rakkezAirplaneVolumeValue {
+
+    width: 36px;
+
+    text-align: right;
+
+    color:
+        var(--muted, rgba(255,255,255,.56));
+
+    font-size: 11px;
+
+}
+
+
+/* =====================================================
+   MINI PLAYER
+===================================================== */
+
 .rakkez-mini-player {
+
     position: fixed;
+
     right: 22px;
+
     bottom: 22px;
-    width: min(380px, calc(100vw - 32px));
+
+    width:
+        min(380px, calc(100vw - 32px));
+
     min-height: 76px;
+
     z-index: 99998;
 
     display: flex;
+
     align-items: center;
+
     gap: 12px;
 
     padding: 10px 12px;
 
     border: 1px solid rgba(255,255,255,.12);
+
     border-radius: 18px;
 
-    background: rgba(8,13,22,.94);
+    background:
+        rgba(8,13,22,.94);
+
     backdrop-filter: blur(22px);
+
     -webkit-backdrop-filter: blur(22px);
 
     box-shadow:
         0 18px 50px rgba(0,0,0,.35);
 
     opacity: 0;
+
     visibility: hidden;
-    transform: translateY(18px) scale(.96);
+
+    transform:
+        translateY(18px)
+        scale(.96);
 
     pointer-events: none;
 
@@ -3992,21 +4116,35 @@
         opacity .25s ease,
         transform .25s ease,
         visibility .25s ease;
+
 }
+
 
 .rakkez-mini-player.show {
+
     opacity: 1;
+
     visibility: visible;
-    transform: translateY(0) scale(1);
+
+    transform:
+        translateY(0)
+        scale(1);
+
     pointer-events: auto;
+
 }
 
+
 .rakkez-mini-artwork {
+
     width: 52px;
+
     height: 52px;
+
     flex: 0 0 52px;
 
     display: grid;
+
     place-items: center;
 
     border-radius: 13px;
@@ -4019,54 +4157,85 @@
         );
 
     background-size: cover;
+
     background-position: center;
 
     color: #fff;
+
     font-size: 21px;
 
     overflow: hidden;
+
 }
+
 
 .rakkez-mini-info {
+
     min-width: 0;
+
     flex: 1;
+
 }
 
+
 .rakkez-mini-title {
-    color: var(--text, #fff);
+
+    color:
+        var(--text, #fff);
+
     font-size: 13px;
+
     font-weight: 700;
 
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
+
 }
 
+
 .rakkez-mini-artist {
+
     margin-top: 4px;
 
-    color: var(--muted, rgba(255,255,255,.56));
+    color:
+        var(--muted, rgba(255,255,255,.56));
+
     font-size: 11px;
 
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
+
 }
+
 
 .rakkez-mini-control,
 .rakkez-mini-close {
+
     width: 34px;
+
     height: 34px;
+
     flex: 0 0 34px;
 
     display: grid;
+
     place-items: center;
 
     border: 1px solid rgba(255,255,255,.09);
+
     border-radius: 10px;
 
-    background: rgba(255,255,255,.055);
-    color: var(--text, #fff);
+    background:
+        rgba(255,255,255,.055);
+
+    color:
+        var(--text, #fff);
 
     cursor: pointer;
 
@@ -4074,80 +4243,123 @@
         transform .18s ease,
         background .18s ease,
         border-color .18s ease;
+
 }
+
 
 .rakkez-mini-control:hover,
 .rakkez-mini-close:hover {
+
     transform: translateY(-1px);
-    background: rgba(255,255,255,.10);
-    border-color: rgba(255,255,255,.18);
+
+    background:
+        rgba(255,255,255,.10);
+
+    border-color:
+        rgba(255,255,255,.18);
+
 }
+
 
 .rakkez-mini-close {
+
     font-size: 18px;
+
 }
 
+
 .rakkez-mini-progress {
+
     position: absolute;
+
     left: 12px;
+
     right: 12px;
+
     bottom: 4px;
 
     height: 2px;
 
     overflow: hidden;
+
     border-radius: 99px;
 
-    background: rgba(255,255,255,.08);
+    background:
+        rgba(255,255,255,.08);
+
 }
 
+
 .rakkez-mini-progress span {
+
     display: block;
 
     width: 0%;
+
     height: 100%;
 
     border-radius: inherit;
 
-    background: var(--blue, #1683ff);
+    background:
+        var(--blue, #1683ff);
 
-    transition: width .12s linear;
+    transition:
+        width .12s linear;
+
 }
 
 
-/* LOCAL LIST */
+/* =====================================================
+   LOCAL LIST
+===================================================== */
 
 .rakkez-local-list {
+
     width: 100%;
+
     margin-top: 18px;
 
     display: flex;
+
     flex-direction: column;
+
     gap: 8px;
 
     max-height: 260px;
+
     overflow-y: auto;
+
 }
+
 
 .rakkez-local-list:empty {
+
     display: none;
+
 }
 
+
 .rakkez-local-track {
+
     width: 100%;
 
     display: flex;
+
     align-items: center;
+
     gap: 10px;
 
     padding: 10px 12px;
 
     border: 1px solid rgba(255,255,255,.08);
+
     border-radius: 12px;
 
-    background: rgba(255,255,255,.035);
+    background:
+        rgba(255,255,255,.035);
 
-    color: var(--text, #fff);
+    color:
+        var(--text, #fff);
 
     text-align: left;
 
@@ -4156,126 +4368,189 @@
     transition:
         background .18s ease,
         border-color .18s ease;
+
 }
+
 
 .rakkez-local-track:hover {
-    background: rgba(255,255,255,.065);
-    border-color: rgba(255,255,255,.15);
+
+    background:
+        rgba(255,255,255,.065);
+
+    border-color:
+        rgba(255,255,255,.15);
+
 }
+
 
 .rakkez-local-track.active {
-    border-color: rgba(22,131,255,.45);
-    background: rgba(22,131,255,.10);
+
+    border-color:
+        rgba(22,131,255,.45);
+
+    background:
+        rgba(22,131,255,.10);
+
 }
 
+
 .rakkez-local-track-icon {
+
     width: 34px;
+
     height: 34px;
+
     flex: 0 0 34px;
 
     display: grid;
+
     place-items: center;
 
     border-radius: 9px;
 
-    background: rgba(255,255,255,.07);
+    background:
+        rgba(255,255,255,.07);
 
     font-size: 14px;
+
 }
+
 
 .rakkez-local-track-info {
+
     min-width: 0;
+
     flex: 1;
+
 }
 
+
 .rakkez-local-track-name {
+
     font-size: 12px;
+
     font-weight: 650;
 
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
+
 }
 
+
 .rakkez-local-track-meta {
+
     margin-top: 3px;
 
     font-size: 10px;
 
-    color: var(--muted, rgba(255,255,255,.5));
+    color:
+        var(--muted, rgba(255,255,255,.5));
+
 }
 
 
-/* SPOTIFY */
+/* =====================================================
+   SPOTIFY
+===================================================== */
 
 #rakkezSpotifyEmbed {
+
     width: 100%;
+
     margin-top: 18px;
 
     overflow: hidden;
+
     border-radius: 14px;
+
 }
 
+
 #rakkezSpotifyEmbed iframe {
+
     display: block;
 
     width: 100% !important;
 
-    /*
-     * Prevent the huge empty area.
-     */
     height: 152px !important;
 
     min-height: 152px !important;
 
     border: 0;
+
     border-radius: 14px;
+
 }
+
 
 #rakkezSpotifyEmbed iframe[src*="/playlist/"],
 #rakkezSpotifyEmbed iframe[src*="/album/"],
 #rakkezSpotifyEmbed iframe[src*="/artist/"],
 #rakkezSpotifyEmbed iframe[src*="/show/"] {
+
     height: 352px !important;
+
     min-height: 352px !important;
+
 }
 
 
-/* YOUTUBE */
+/* =====================================================
+   YOUTUBE
+===================================================== */
 
 #rakkezYoutubeEmbed {
+
     width: 100%;
+
     margin-top: 18px;
 
     overflow: hidden;
+
     border-radius: 14px;
+
 }
 
+
 #rakkezYoutubeEmbed iframe {
+
     display: block;
 
     width: 100%;
+
     aspect-ratio: 16 / 9;
 
     min-height: 220px;
 
     border: 0;
+
     border-radius: 14px;
+
 }
 
 
-/* LIGHT MODE */
+/* =====================================================
+   LIGHT MODE
+===================================================== */
 
 html.light .rakkez-mini-player,
 body.light .rakkez-mini-player,
 [data-theme="light"] .rakkez-mini-player {
-    background: rgba(255,255,255,.94);
 
-    border-color: rgba(0,0,0,.10);
+    background:
+        rgba(255,255,255,.94);
+
+    border-color:
+        rgba(0,0,0,.10);
 
     box-shadow:
         0 18px 50px rgba(0,0,0,.14);
+
 }
+
 
 html.light .rakkez-mini-control,
 body.light .rakkez-mini-control,
@@ -4283,39 +4558,60 @@ body.light .rakkez-mini-control,
 html.light .rakkez-mini-close,
 body.light .rakkez-mini-close,
 [data-theme="light"] .rakkez-mini-close {
+
     color: #111;
 
-    background: rgba(0,0,0,.045);
-    border-color: rgba(0,0,0,.09);
+    background:
+        rgba(0,0,0,.045);
+
+    border-color:
+        rgba(0,0,0,.09);
+
 }
 
 
-/* MOBILE */
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media (max-width: 600px) {
 
     .rakkez-mini-player {
+
         right: 12px;
+
         bottom: 12px;
 
-        width: calc(100vw - 24px);
+        width:
+            calc(100vw - 24px);
 
         min-height: 70px;
 
         padding: 8px 10px;
+
     }
 
+
     .rakkez-mini-artwork {
+
         width: 46px;
+
         height: 46px;
+
         flex-basis: 46px;
+
     }
+
 
     .rakkez-mini-control,
     .rakkez-mini-close {
+
         width: 32px;
+
         height: 32px;
+
         flex-basis: 32px;
+
     }
 
 }
@@ -4328,9 +4624,14 @@ body.light .rakkez-mini-close,
 ===================================================== -->
 
 <script src="config.js"></script>
+
 <script src="app.js"></script>
+
 <script src="language.js"></script>
+
 <script src="media-player.js"></script>
 
+
 </body>
+
 </html>
