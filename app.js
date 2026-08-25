@@ -1,7 +1,5 @@
 /* =========================================================
-   RAKKEZ V2
-   TIMER + STATS + PERSISTENCE + LANGUAGE SAFE
-   FULL VERSION
+   RAKKEZ V2 TIMER + STATS + PERSISTENCE + LANGUAGE SAFE FULL VERSION
    ========================================================= */
 
 
@@ -18,25 +16,17 @@ const $ = id => document.getElementById(id);
    STORAGE
    ---------------------------------------------------------
    جميع بيانات RakkeZ المحفوظة في LocalStorage.
-   لو أردت إضافة Storage جديد مستقبلاً، أضفه هنا.
    ========================================================= */
 
 const STORAGE = {
 
     settings: "rakkez_settings",
-
     stats: "rakkez_stats",
-
     tasks: "rakkez_tasks",
-
     timer: "rakkez_timer_state",
-
     spotify: "rakkez_spotify",
-
     google: "rakkez_google",
-
     ambient: "rakkez_ambient",
-
     alarm: "rakkez_alarm"
 
 };
@@ -44,31 +34,22 @@ const STORAGE = {
 
 /* =========================================================
    DEFAULT SETTINGS
-   ---------------------------------------------------------
-   الإعدادات الافتراضية للتطبيق.
-   يمكنك تعديل القيم من هنا.
    ========================================================= */
 
 const DEFAULT_SETTINGS = {
 
     focus: 25,
-
     shortBreak: 5,
-
     longBreak: 15,
-
     longBreakAfter: 4,
 
     dailyGoal: 240,
 
     autoStart: false,
-
     smartTimer: true,
 
     sound: true,
-
     alarmVolume: 0.70,
-
     alarmSound: "soft",
 
     theme: "dark"
@@ -84,19 +65,13 @@ function load(key, fallback) {
 
     try {
 
-        const value =
-            localStorage.getItem(key);
+        const value = localStorage.getItem(key);
 
-        return value
-            ? JSON.parse(value)
-            : fallback;
+        return value ? JSON.parse(value) : fallback;
 
     } catch (error) {
 
-        console.error(
-            "Load error:",
-            error
-        );
+        console.error("Load error:", error);
 
         return fallback;
 
@@ -116,10 +91,7 @@ function save(key, value) {
 
     } catch (error) {
 
-        console.error(
-            "Storage error:",
-            error
-        );
+        console.error("Storage error:", error);
 
     }
 
@@ -144,6 +116,20 @@ let settings = {
 
 /* =========================================================
    STATS
+   ---------------------------------------------------------
+   IMPORTANT:
+
+   totalFocusSeconds
+   = إجمالي الوقت التاريخي Lifetime.
+
+   dailyFocus
+   = وقت التركيز لكل يوم.
+
+   dailySessions
+   = عدد الجلسات لكل يوم.
+
+   streak
+   = مستقل تمامًا عن Reset.
    ========================================================= */
 
 let stats = {
@@ -158,6 +144,8 @@ let stats = {
 
     dailyFocus: {},
 
+    dailySessions: {},
+
     ...load(
         STORAGE.stats,
         {}
@@ -167,14 +155,30 @@ let stats = {
 
 
 /* =========================================================
+   BACKWARD COMPATIBILITY
+   ---------------------------------------------------------
+   لو المستخدم عنده نسخة قديمة من RakkeZ
+   بدون dailySessions.
+   ========================================================= */
+
+if (
+    !stats.dailySessions ||
+    typeof stats.dailySessions !== "object"
+) {
+
+    stats.dailySessions = {};
+
+}
+
+
+/* =========================================================
    TASKS
    ========================================================= */
 
-let tasks =
-    load(
-        STORAGE.tasks,
-        []
-    );
+let tasks = load(
+    STORAGE.tasks,
+    []
+);
 
 
 /* =========================================================
@@ -233,8 +237,7 @@ function arabicNumbers(value) {
 
     return String(value).replace(
         /\d/g,
-        digit =>
-            "٠١٢٣٤٥٦٧٨٩"[digit]
+        digit => "٠١٢٣٤٥٦٧٨٩"[digit]
     );
 
 }
@@ -249,9 +252,7 @@ function englishNumbers(value) {
     return String(value).replace(
         /[٠-٩]/g,
         digit =>
-            "٠١٢٣٤٥٦٧٨٩".indexOf(
-                digit
-            )
+            "٠١٢٣٤٥٦٧٨٩".indexOf(digit)
     );
 
 }
@@ -288,18 +289,15 @@ function todayKey() {
 
 function formatTime(seconds) {
 
-    seconds =
-        Math.max(
-            0,
-            Math.floor(
-                Number(seconds) || 0
-            )
-        );
+    seconds = Math.max(
+        0,
+        Math.floor(
+            Number(seconds) || 0
+        )
+    );
 
     const minutes =
-        Math.floor(
-            seconds / 60
-        );
+        Math.floor(seconds / 60);
 
     const secs =
         seconds % 60;
@@ -354,7 +352,6 @@ function getTimerModeText() {
 
     }
 
-
     if (
         timerState.mode === "short"
     ) {
@@ -363,7 +360,6 @@ function getTimerModeText() {
 
     }
 
-
     if (
         timerState.mode === "long"
     ) {
@@ -371,7 +367,6 @@ function getTimerModeText() {
         return "LONG BREAK";
 
     }
-
 
     return "FOCUS";
 
@@ -444,8 +439,7 @@ function updateTimerUI() {
        TIMER NUMBER
        ===================================================== */
 
-    const timer =
-        $("timer");
+    const timer = $("timer");
 
     if (timer) {
 
@@ -512,7 +506,6 @@ function updateTimerUI() {
             ) * 100
 
             : 0;
-
 
     const progress =
         $("progress");
@@ -598,8 +591,7 @@ function startTimer() {
 
 
     if (
-        timerState.interval !==
-        null
+        timerState.interval !== null
     ) {
 
         clearInterval(
@@ -626,9 +618,7 @@ function startTimer() {
     }
 
 
-    timerState.running =
-        true;
-
+    timerState.running = true;
 
     timerState.interval =
         setInterval(
@@ -650,13 +640,11 @@ function startTimer() {
 
 function pauseTimer() {
 
-    timerState.running =
-        false;
+    timerState.running = false;
 
 
     if (
-        timerState.interval !==
-        null
+        timerState.interval !== null
     ) {
 
         clearInterval(
@@ -666,8 +654,7 @@ function pauseTimer() {
     }
 
 
-    timerState.interval =
-        null;
+    timerState.interval = null;
 
 
     saveTimer();
@@ -691,8 +678,7 @@ function tick() {
 
 
     if (
-        timerState.remaining <=
-        0
+        timerState.remaining <= 0
     ) {
 
         completePhase();
@@ -704,26 +690,50 @@ function tick() {
 
     /* =====================================================
        FOCUS STATISTICS
+       -----------------------------------------------------
+       كل ثانية تركيز:
+
+       1. تزيد Lifetime
+       2. تزيد Daily Focus
        ===================================================== */
 
     if (
-        timerState.mode ===
-        "focus"
+        timerState.mode === "focus"
     ) {
 
-        stats.totalFocusSeconds++;
+        /* =================================================
+           LIFETIME
+           ================================================= */
 
+        stats.totalFocusSeconds =
+            Number(
+                stats.totalFocusSeconds
+            ) + 1;
+
+
+        /* =================================================
+           TODAY
+           ================================================= */
 
         const today =
             todayKey();
 
 
         if (
+            !stats.dailyFocus ||
+            typeof stats.dailyFocus !== "object"
+        ) {
+
+            stats.dailyFocus = {};
+
+        }
+
+
+        if (
             !stats.dailyFocus[today]
         ) {
 
-            stats.dailyFocus[today] =
-                0;
+            stats.dailyFocus[today] = 0;
 
         }
 
@@ -756,8 +766,7 @@ function tick() {
 
 
     if (
-        timerState.remaining <=
-        0
+        timerState.remaining <= 0
     ) {
 
         updateTimerUI();
@@ -794,17 +803,49 @@ function completePhase() {
 
 
     if (
-        timerState.mode ===
-        "focus"
+        timerState.mode === "focus"
     ) {
 
         completedFocusInCycle++;
 
-        stats.sessions++;
+
+        /* =================================================
+           SESSIONS
+           -------------------------------------------------
+           Lifetime sessions
+           + Daily sessions
+           ================================================= */
+
+        stats.sessions =
+            Number(
+                stats.sessions
+            ) + 1;
 
 
         const today =
             todayKey();
+
+
+        if (
+            !stats.dailySessions ||
+            typeof stats.dailySessions !== "object"
+        ) {
+
+            stats.dailySessions = {};
+
+        }
+
+
+        if (
+            !stats.dailySessions[today]
+        ) {
+
+            stats.dailySessions[today] = 0;
+
+        }
+
+
+        stats.dailySessions[today]++;
 
 
         stats.lastFocusDate =
@@ -826,7 +867,6 @@ function completePhase() {
                         task.id ===
                         currentTaskId
                 );
-
 
             if (task) {
 
@@ -857,8 +897,7 @@ function completePhase() {
             )
         ) {
 
-            completedFocusInCycle =
-                0;
+            completedFocusInCycle = 0;
 
             setMode("long");
 
@@ -1003,8 +1042,7 @@ function setMode(mode) {
 
 
     if (
-        timerState.interval !==
-        null
+        timerState.interval !== null
     ) {
 
         clearInterval(
@@ -1027,20 +1065,17 @@ function setMode(mode) {
 
 /* =========================================================
    RESET TIMER
-   =========================================================
-   IMPORTANT:
+   ---------------------------------------------------------
    هذا لا يمسح الإحصائيات.
    ========================================================= */
 
 function resetTimer() {
 
-    timerState.running =
-        false;
+    timerState.running = false;
 
 
     if (
-        timerState.interval !==
-        null
+        timerState.interval !== null
     ) {
 
         clearInterval(
@@ -1050,8 +1085,7 @@ function resetTimer() {
     }
 
 
-    timerState.interval =
-        null;
+    timerState.interval = null;
 
 
     if (
@@ -1124,45 +1158,86 @@ function resetTimer() {
 
 /* =========================================================
    STATS
+   ---------------------------------------------------------
+   IMPORTANT:
+
+   الـUI يعرض بيانات اليوم فقط.
+
+   Focus Time:
+   dailyFocus[today]
+
+   Sessions:
+   dailySessions[today]
+
+   Streak:
+   stats.streak
    ========================================================= */
 
 function updateStats() {
 
+    const today =
+        todayKey();
+
+
+    /* =====================================================
+       TODAY FOCUS
+       ===================================================== */
+
+    const todayFocusSeconds =
+        Number(
+            stats.dailyFocus &&
+            stats.dailyFocus[today]
+        ) || 0;
+
+
+    /* =====================================================
+       FOCUS STAT
+       ===================================================== */
+
     const focusStat =
         $("focusStat");
-
 
     if (focusStat) {
 
         focusStat.textContent =
             formatFocus(
-                stats.totalFocusSeconds
+                todayFocusSeconds
             );
 
     }
 
 
+    /* =====================================================
+       TODAY SESSIONS
+       ===================================================== */
+
+    const todaySessions =
+        Number(
+            stats.dailySessions &&
+            stats.dailySessions[today]
+        ) || 0;
+
+
     const sessionsStat =
         $("sessionsStat");
 
-
     if (sessionsStat) {
-
-        const value =
-            Number(
-                stats.sessions
-            ) || 0;
-
 
         sessionsStat.textContent =
             getCurrentLanguage() === "ar"
 
-                ? arabicNumbers(value)
+                ? arabicNumbers(
+                    todaySessions
+                )
 
-                : value;
+                : todaySessions;
 
     }
 
+
+    /* =====================================================
+       STREAK
+       ===================================================== */
 
     updateStreak();
 
@@ -1206,6 +1281,10 @@ function updateStats() {
     }
 
 
+    /* =====================================================
+       DAILY GOAL
+       ===================================================== */
+
     updateDailyGoal();
 
 }
@@ -1235,10 +1314,15 @@ function formatFocus(seconds) {
         if (minutes < 60) {
 
             return (
+
                 arabicNumbers(
                     minutes
-                ) +
+                )
+
+                +
+
                 "د"
+
             );
 
         }
@@ -1257,20 +1341,40 @@ function formatFocus(seconds) {
         if (remaining > 0) {
 
             return (
-                arabicNumbers(hours) +
-                "س " +
+
+                arabicNumbers(
+                    hours
+                )
+
+                +
+
+                "س "
+
+                +
+
                 arabicNumbers(
                     remaining
-                ) +
+                )
+
+                +
+
                 "د"
+
             );
 
         }
 
 
         return (
-            arabicNumbers(hours) +
+
+            arabicNumbers(
+                hours
+            )
+
+            +
+
             "س"
+
         );
 
     }
@@ -1278,10 +1382,7 @@ function formatFocus(seconds) {
 
     if (minutes < 60) {
 
-        return (
-            minutes +
-            "m"
-        );
+        return minutes + "m";
 
     }
 
@@ -1299,25 +1400,26 @@ function formatFocus(seconds) {
     if (remaining > 0) {
 
         return (
+
             hours +
             "h " +
             remaining +
             "m"
+
         );
 
     }
 
 
-    return (
-        hours +
-        "h"
-    );
+    return hours + "h";
 
 }
 
 
 /* =========================================================
    DAILY GOAL
+   ---------------------------------------------------------
+   دائمًا يعتمد على اليوم الحالي فقط.
    ========================================================= */
 
 function updateDailyGoal() {
@@ -1339,6 +1441,7 @@ function updateDailyGoal() {
 
     const seconds =
         Number(
+            stats.dailyFocus &&
             stats.dailyFocus[today]
         ) || 0;
 
@@ -1379,8 +1482,7 @@ function updateDailyGoal() {
         currentText =
             arabicNumbers(
                 minutes
-            ) +
-            "د";
+            ) + "د";
 
 
         if (goalHours) {
@@ -1388,8 +1490,7 @@ function updateDailyGoal() {
             goalText =
                 arabicNumbers(
                     goalHours
-                ) +
-                "س";
+                ) + "س";
 
 
             if (goalMinutes) {
@@ -1408,23 +1509,20 @@ function updateDailyGoal() {
             goalText =
                 arabicNumbers(
                     goal
-                ) +
-                "د";
+                ) + "د";
 
         }
 
     } else {
 
         currentText =
-            minutes +
-            "m";
+            minutes + "m";
 
 
         if (goalHours) {
 
             goalText =
-                goalHours +
-                "h";
+                goalHours + "h";
 
 
             if (goalMinutes) {
@@ -1439,8 +1537,7 @@ function updateDailyGoal() {
         } else {
 
             goalText =
-                goal +
-                "m";
+                goal + "m";
 
         }
 
@@ -1471,7 +1568,9 @@ function updateStreakOnFocus() {
         );
 
 
-    if (previous === today) {
+    if (
+        previous === today
+    ) {
 
         return;
 
@@ -1497,8 +1596,7 @@ function updateStreakOnFocus() {
         const diff =
             Math.round(
                 (
-                    current -
-                    last
+                    current - last
                 ) /
                 (
                     1000 *
@@ -1545,7 +1643,9 @@ function updateStreakOnFocus() {
 
 function updateStreak() {
 
-    if (!stats.lastFocusDate) {
+    if (
+        !stats.lastFocusDate
+    ) {
 
         return;
 
@@ -1573,8 +1673,7 @@ function updateStreak() {
     const difference =
         Math.round(
             (
-                current -
-                last
+                current - last
             ) /
             (
                 1000 *
@@ -1588,6 +1687,11 @@ function updateStreak() {
     if (difference > 1) {
 
         stats.streak = 0;
+
+        save(
+            STORAGE.stats,
+            stats
+        );
 
     }
 
@@ -1683,9 +1787,8 @@ function restoreTimer() {
     timerState.total =
         Number(saved.total) ||
         (
-            Number(
-                settings.focus
-            ) * 60
+            Number(settings.focus) *
+            60
         );
 
 
@@ -1838,16 +1941,15 @@ function unlockAudio() {
         );
 
 
-        oscillator.onended =
-            () => {
+        oscillator.onended = () => {
 
-                try {
+            try {
 
-                    context.close();
+                context.close();
 
-                } catch {}
+            } catch {}
 
-            };
+        };
 
 
         audioUnlocked = true;
@@ -1887,6 +1989,8 @@ window.updateLanguageNumbers =
 
         updateTimerUI();
 
+        updateStats();
+
     };
 
 
@@ -1897,14 +2001,11 @@ window.updateLanguageNumbers =
 window.startTimer =
     startTimer;
 
-
 window.pauseTimer =
     pauseTimer;
 
-
 window.resetTimer =
     resetTimer;
-
 
 window.setMode =
     setMode;
@@ -1914,58 +2015,42 @@ window.setMode =
    ALARM SYSTEM
    ========================================================= */
 
-let customAlarmURL =
-    null;
+let customAlarmURL = null;
 
-let customAlarmName =
-    null;
+let customAlarmName = null;
 
-let alarmAudio =
-    null;
+let alarmAudio = null;
 
-let alarmAudioContext =
-    null;
+let alarmAudioContext = null;
 
-let alarmOscillators =
-    [];
+let alarmOscillators = [];
 
-let alarmLoopTimeout =
-    null;
+let alarmLoopTimeout = null;
 
-let alarmPlaying =
-    false;
+let alarmPlaying = false;
 
-let alarmSequenceId =
-    0;
+let alarmSequenceId = 0;
 
 
 /* =========================================================
    TEST ALARM STATE
    ========================================================= */
 
-let testAudio =
-    null;
+let testAudio = null;
 
-let testAudioContext =
-    null;
+let testAudioContext = null;
 
-let testOscillators =
-    [];
+let testOscillators = [];
 
-let testTimeout =
-    null;
+let testTimeout = null;
 
-let testPlaying =
-    false;
+let testPlaying = false;
 
-let testSequenceId =
-    0;
+let testSequenceId = 0;
 
 
 /* =========================================================
    ALARM FREQUENCIES
-   ---------------------------------------------------------
-   يمكنك إضافة أصوات جديدة هنا.
    ========================================================= */
 
 const ALARM_FREQUENCIES = {
@@ -2090,17 +2175,21 @@ function createAlarmPopup() {
 
             justify-content:center;
 
-            background:rgba(0,0,0,.55);
+            background:
+                rgba(0,0,0,.55);
 
-            backdrop-filter:blur(14px);
+            backdrop-filter:
+                blur(14px);
 
         }
+
 
         #rakkezAlarmPopup.show {
 
             display:flex;
 
         }
+
 
         .rakkez-alarm-box {
 
@@ -2115,14 +2204,16 @@ function createAlarmPopup() {
 
             text-align:center;
 
-            background:rgba(
-                20,
-                20,
-                24,
-                .96
-            );
+            background:
+                rgba(
+                    20,
+                    20,
+                    24,
+                    .96
+                );
 
-            border:1px solid
+            border:
+                1px solid
                 rgba(
                     255,
                     255,
@@ -2141,6 +2232,7 @@ function createAlarmPopup() {
 
         }
 
+
         .rakkez-alarm-icon {
 
             font-size:36px;
@@ -2148,6 +2240,7 @@ function createAlarmPopup() {
             margin-bottom:12px;
 
         }
+
 
         .rakkez-alarm-title {
 
@@ -2164,6 +2257,7 @@ function createAlarmPopup() {
             margin-bottom:8px;
 
         }
+
 
         .rakkez-alarm-text {
 
@@ -2184,6 +2278,7 @@ function createAlarmPopup() {
             margin-bottom:22px;
 
         }
+
 
         #rakkezStopAlarm {
 
@@ -2206,6 +2301,7 @@ function createAlarmPopup() {
             letter-spacing:.5px;
 
         }
+
 
         #rakkezStopAlarm:hover {
 
@@ -2254,8 +2350,7 @@ function stopAlarm() {
 
     alarmSequenceId++;
 
-    alarmPlaying =
-        false;
+    alarmPlaying = false;
 
 
     clearTimeout(
@@ -2270,27 +2365,16 @@ function stopAlarm() {
     if (alarmAudio) {
 
         try {
-
             alarmAudio.pause();
-
         } catch {}
-
 
         try {
-
-            alarmAudio.currentTime =
-                0;
-
+            alarmAudio.currentTime = 0;
         } catch {}
-
 
         try {
-
-            alarmAudio.loop =
-                false;
-
+            alarmAudio.loop = false;
         } catch {}
-
 
         try {
 
@@ -2302,9 +2386,7 @@ function stopAlarm() {
 
         } catch {}
 
-
-        alarmAudio =
-            null;
+        alarmAudio = null;
 
     }
 
@@ -2313,24 +2395,18 @@ function stopAlarm() {
         oscillator => {
 
             try {
-
                 oscillator.stop();
-
             } catch {}
 
-
             try {
-
                 oscillator.disconnect();
-
             } catch {}
 
         }
     );
 
 
-    alarmOscillators =
-        [];
+    alarmOscillators = [];
 
 
     if (alarmAudioContext) {
@@ -2340,7 +2416,6 @@ function stopAlarm() {
             alarmAudioContext.close();
 
         } catch {}
-
 
         alarmAudioContext =
             null;
@@ -2389,8 +2464,7 @@ function playAlarm() {
     stopAlarm();
 
 
-    alarmPlaying =
-        true;
+    alarmPlaying = true;
 
 
     createAlarmPopup();
@@ -2412,7 +2486,7 @@ function playAlarm() {
     if (
         customAlarmURL &&
         settings.alarmSound ===
-            "custom"
+        "custom"
     ) {
 
         if (
@@ -2448,11 +2522,16 @@ function playAlarm() {
 function playCustomAlarm() {
 
     if (
+
         !alarmPlaying ||
+
         !customAlarmURL ||
+
         settings.alarmSound !==
             "custom" ||
+
         !settings.sound
+
     ) {
 
         return;
@@ -2484,9 +2563,7 @@ function playCustomAlarm() {
             );
 
 
-        audio.loop =
-            true;
-
+        audio.loop = true;
 
         audio.preload =
             "auto";
@@ -2589,7 +2666,6 @@ function playGeneratedAlarmLoop() {
 
             } catch {}
 
-
             alarmAudioContext =
                 null;
 
@@ -2616,8 +2692,7 @@ function playGeneratedAlarmLoop() {
             alarmAudioContext.currentTime;
 
 
-        alarmOscillators =
-            [];
+        alarmOscillators = [];
 
 
         frequencies.forEach(
@@ -2646,7 +2721,8 @@ function playGeneratedAlarmLoop() {
 
                 const start =
                     now +
-                    index * 0.16;
+                    index *
+                    0.16;
 
 
                 const end =
@@ -2775,8 +2851,7 @@ function stopTestAlarm() {
 
     testSequenceId++;
 
-    testPlaying =
-        false;
+    testPlaying = false;
 
 
     clearTimeout(
@@ -2791,27 +2866,16 @@ function stopTestAlarm() {
     if (testAudio) {
 
         try {
-
             testAudio.pause();
-
         } catch {}
-
 
         try {
-
-            testAudio.currentTime =
-                0;
-
+            testAudio.currentTime = 0;
         } catch {}
-
 
         try {
-
-            testAudio.loop =
-                false;
-
+            testAudio.loop = false;
         } catch {}
-
 
         try {
 
@@ -2823,9 +2887,7 @@ function stopTestAlarm() {
 
         } catch {}
 
-
-        testAudio =
-            null;
+        testAudio = null;
 
     }
 
@@ -2834,24 +2896,18 @@ function stopTestAlarm() {
         oscillator => {
 
             try {
-
                 oscillator.stop();
-
             } catch {}
 
-
             try {
-
                 oscillator.disconnect();
-
             } catch {}
 
         }
     );
 
 
-    testOscillators =
-        [];
+    testOscillators = [];
 
 
     if (testAudioContext) {
@@ -2861,7 +2917,6 @@ function stopTestAlarm() {
             testAudioContext.close();
 
         } catch {}
-
 
         testAudioContext =
             null;
@@ -2889,12 +2944,10 @@ function testAlarm() {
 
     unlockAudio();
 
-
     stopAlarm();
 
 
-    testPlaying =
-        true;
+    testPlaying = true;
 
 
     const sequenceId =
@@ -2904,7 +2957,7 @@ function testAlarm() {
     if (
         customAlarmURL &&
         settings.alarmSound ===
-            "custom"
+        "custom"
     ) {
 
         try {
@@ -2937,23 +2990,22 @@ function testAlarm() {
                 "auto";
 
 
-            audio.onended =
-                () => {
+            audio.onended = () => {
 
-                    if (
-                        sequenceId ===
-                        testSequenceId
-                    ) {
+                if (
+                    sequenceId ===
+                    testSequenceId
+                ) {
 
-                        testAudio =
-                            null;
+                    testAudio =
+                        null;
 
-                        testPlaying =
-                            false;
+                    testPlaying =
+                        false;
 
-                    }
+                }
 
-                };
+            };
 
 
             const promise =
@@ -3080,7 +3132,8 @@ function testAlarm() {
 
                 const start =
                     now +
-                    index * 0.16;
+                    index *
+                    0.16;
 
 
                 const end =
@@ -3403,19 +3456,21 @@ function setAlarmUploadStatus(
 
     feedback.innerHTML = `
 
-        <span style="
-            display:inline-flex;
-            width:18px;
-            height:18px;
-            min-width:18px;
-            align-items:center;
-            justify-content:center;
-            border-radius:50%;
-            background:#22c55e;
-            color:white;
-            font-size:11px;
-            font-weight:700;
-        ">
+        <span
+            style="
+                display:inline-flex;
+                width:18px;
+                height:18px;
+                min-width:18px;
+                align-items:center;
+                justify-content:center;
+                border-radius:50%;
+                background:#22c55e;
+                color:white;
+                font-size:11px;
+                font-weight:700;
+            "
+        >
             ✓
         </span>
 
@@ -3516,6 +3571,7 @@ function syncSettingsUI() {
 
 
     if ($("autoStartToggle"))
+
         $("autoStartToggle")
             .classList.toggle(
                 "active",
@@ -3524,6 +3580,7 @@ function syncSettingsUI() {
 
 
     if ($("smartTimerToggle"))
+
         $("smartTimerToggle")
             .classList.toggle(
                 "active",
@@ -3532,6 +3589,7 @@ function syncSettingsUI() {
 
 
     if ($("soundToggle"))
+
         $("soundToggle")
             .classList.toggle(
                 "active",
@@ -3540,11 +3598,13 @@ function syncSettingsUI() {
 
 
     if ($("alarmVolume"))
+
         $("alarmVolume").value =
             settings.alarmVolume * 100;
 
 
     if ($("alarmVolumeValue"))
+
         $("alarmVolumeValue")
             .textContent =
                 Math.round(
@@ -3554,6 +3614,7 @@ function syncSettingsUI() {
 
 
     if ($("alarmSound"))
+
         $("alarmSound").value =
             settings.alarmSound;
 
@@ -3586,9 +3647,7 @@ if ($("focusInput")) {
                         "focus"
                 ) {
 
-                    setMode(
-                        "focus"
-                    );
+                    setMode("focus");
 
                 }
 
@@ -3626,9 +3685,7 @@ if ($("shortBreakInput")) {
                         "short"
                 ) {
 
-                    setMode(
-                        "short"
-                    );
+                    setMode("short");
 
                 }
 
@@ -3666,9 +3723,7 @@ if ($("longBreakInput")) {
                         "long"
                 ) {
 
-                    setMode(
-                        "long"
-                    );
+                    setMode("long");
 
                 }
 
@@ -4033,14 +4088,11 @@ function addTask() {
 
         title,
 
-        completed:
-            false,
+        completed: false,
 
-        created:
-            Date.now(),
+        created: Date.now(),
 
-        focusMinutes:
-            0
+        focusMinutes: 0
 
     };
 
@@ -4235,6 +4287,7 @@ function updateCurrentTask() {
 
                 : "<span>NO TASK SELECTED</span>";
 
+
         return;
 
     }
@@ -4278,7 +4331,9 @@ if ($("taskInput")) {
             "keydown",
             e => {
 
-                if (e.key === "Enter") {
+                if (
+                    e.key === "Enter"
+                ) {
 
                     addTask();
 
@@ -4381,36 +4436,6 @@ if ($("taskList")) {
 
 /* =========================================================
    OVERLAY / PANEL SYSTEM
-   ---------------------------------------------------------
-   هذا هو الجزء المهم الذي تم إصلاحه.
-
-   المشكلة القديمة:
-   كان عندك فتح للـ overlays فقط:
-
-       classList.add("show")
-
-   لكن لم يكن هناك نظام مركزي يغلقها.
-
-   الآن:
-   - X buttons
-   - Background click
-   - Escape
-   - data-close
-   كلها تعمل.
-   ========================================================= */
-
-
-/* =========================================================
-   CLOSE OVERLAY BY ID
-   ---------------------------------------------------------
-   يمكنك استخدام هذه الدالة من أي مكان:
-
-   closeOverlayById("settingsOverlay");
-
-   closeOverlayById("tasksOverlay");
-
-   closeOverlayById("mediaOverlay");
-
    ========================================================= */
 
 function closeOverlayById(id) {
@@ -4437,11 +4462,6 @@ function closeOverlayById(id) {
     );
 
 
-    /*
-     * لو الـ CSS يعتمد على display
-     * نخليه يرجع للحالة الطبيعية.
-     */
-
     if (
         overlay.style.display ===
         "flex"
@@ -4452,12 +4472,6 @@ function closeOverlayById(id) {
 
     }
 
-
-    /*
-     * مهم جدًا:
-     * لا نترك body مقفولًا بعد إغلاق
-     * آخر overlay.
-     */
 
     syncBodyScrollLock();
 
@@ -4480,6 +4494,7 @@ function openOverlayById(id) {
             "RakkeZ: Overlay not found:",
             id
         );
+
 
         return;
 
@@ -4512,13 +4527,9 @@ function syncBodyScrollLock() {
     const overlays = [
 
         "settingsOverlay",
-
         "tasksOverlay",
-
         "mediaOverlay",
-
         "confirmOverlay",
-
         "updatesModal"
 
     ];
@@ -4533,10 +4544,12 @@ function syncBodyScrollLock() {
 
 
                 return (
+
                     element &&
                     element.classList.contains(
                         "show"
                     )
+
                 );
 
             }
@@ -4560,13 +4573,9 @@ function closeAllOverlays() {
     const overlays = [
 
         "settingsOverlay",
-
         "tasksOverlay",
-
         "mediaOverlay",
-
         "confirmOverlay",
-
         "updatesModal"
 
     ];
@@ -4676,20 +4685,7 @@ if ($("mediaOpen")) {
 
 
 /* =========================================================
-   X BUTTONS — EXPLICIT SUPPORT
-   ---------------------------------------------------------
-   لو الـ HTML عندك يحتوي على:
-
-       id="closeSettings"
-
-       id="closeTasks"
-
-       id="closeMedia"
-
-       id="closeConfirm"
-
-   فهي ستعمل مباشرة.
-
+   X BUTTONS
    ========================================================= */
 
 const CLOSE_BUTTONS = {
@@ -4715,7 +4711,12 @@ const CLOSE_BUTTONS = {
 Object.entries(
     CLOSE_BUTTONS
 ).forEach(
-    ([buttonId, overlayId]) => {
+    (
+        [
+            buttonId,
+            overlayId
+        ]
+    ) => {
 
         const button =
             $(buttonId);
@@ -4749,14 +4750,6 @@ Object.entries(
 
 /* =========================================================
    UNIVERSAL CLOSE BUTTON
-   ---------------------------------------------------------
-   أي زر في HTML مثل:
-
-       <button data-close="settingsOverlay">×</button>
-
-   سيعمل تلقائيًا.
-
-   وهذا مفيد جدًا للمستقبل.
    ========================================================= */
 
 document.addEventListener(
@@ -4802,19 +4795,13 @@ document.addEventListener(
 
 /* =========================================================
    BACKGROUND CLICK
-   ---------------------------------------------------------
-   الضغط على الخلفية خارج الـ panel يغلقه.
    ========================================================= */
 
 [
     "settingsOverlay",
-
     "tasksOverlay",
-
     "mediaOverlay",
-
     "confirmOverlay",
-
     "updatesModal"
 
 ].forEach(
@@ -4834,12 +4821,6 @@ document.addEventListener(
         overlay.addEventListener(
             "click",
             event => {
-
-                /*
-                 * مهم:
-                 * لا تغلق إذا ضغط المستخدم
-                 * داخل الـ box نفسه.
-                 */
 
                 if (
                     event.target ===
@@ -4861,8 +4842,6 @@ document.addEventListener(
 
 /* =========================================================
    ESCAPE CLOSE
-   ---------------------------------------------------------
-   الضغط على ESC يغلق آخر/كل الـ overlays.
    ========================================================= */
 
 document.addEventListener(
@@ -4926,6 +4905,16 @@ if ($("focusExit")) {
 
 /* =========================================================
    RESET
+   ---------------------------------------------------------
+   IMPORTANT:
+
+   Reset يمسح بيانات اليوم فقط.
+
+   لا يمسح:
+
+   - streak
+   - lastFocusDate
+   - lifetime stats
    ========================================================= */
 
 function openResetConfirmation() {
@@ -4963,29 +4952,52 @@ if ($("confirmReset")) {
             stopTestAlarm();
 
 
-            stats = {
-
-                totalFocusSeconds: 0,
-
-                sessions: 0,
-
-                streak: 0,
-
-                lastFocusDate:
-                    null,
-
-                dailyFocus: {}
-
-            };
+            const today =
+                todayKey();
 
 
-            tasks =
-                [];
+            /* =============================================
+               RESET TODAY ONLY
+               ============================================= */
+
+            if (
+                !stats.dailyFocus ||
+                typeof stats.dailyFocus !==
+                    "object"
+            ) {
+
+                stats.dailyFocus = {};
+
+            }
 
 
-            localStorage.removeItem(
-                "rakkez_last_focus_day"
-            );
+            if (
+                !stats.dailySessions ||
+                typeof stats.dailySessions !==
+                    "object"
+            ) {
+
+                stats.dailySessions = {};
+
+            }
+
+
+            stats.dailyFocus[today] =
+                0;
+
+
+            stats.dailySessions[today] =
+                0;
+
+
+            /* =============================================
+               DO NOT TOUCH:
+
+               stats.streak
+               stats.lastFocusDate
+               stats.totalFocusSeconds
+               stats.sessions
+               ============================================= */
 
 
             save(
@@ -4994,13 +5006,12 @@ if ($("confirmReset")) {
             );
 
 
-            save(
-                STORAGE.tasks,
-                tasks
-            );
-
+            /* =============================================
+               RESET TIMER
+               ============================================= */
 
             resetTimer();
+
 
             renderTasks();
 
@@ -5186,13 +5197,16 @@ if ($("youtubePlay")) {
                     "Please paste a YouTube URL."
                 );
 
+
                 return;
 
             }
 
 
             const videoId =
-                getYouTubeId(url);
+                getYouTubeId(
+                    url
+                );
 
 
             if (!videoId) {
@@ -5200,6 +5214,7 @@ if ($("youtubePlay")) {
                 alert(
                     "Invalid YouTube URL."
                 );
+
 
                 return;
 
@@ -5274,14 +5289,22 @@ function spotifyEmbedUrl(url) {
                 .filter(Boolean);
 
 
-        if (parts.length >= 2) {
+        if (
+            parts.length >= 2
+        ) {
 
             return (
+
                 "https://open.spotify.com/embed/" +
+
                 parts[0] +
+
                 "/" +
+
                 parts[1] +
+
                 "?utm_source=generator"
+
             );
 
         }
@@ -5316,6 +5339,7 @@ if ($("spotifyPlay")) {
                 alert(
                     "Paste a Spotify track, playlist or album URL."
                 );
+
 
                 return;
 
@@ -5448,18 +5472,20 @@ function showUploadFeedback(
 
             ? `
 
-                <span style="
-                    display:inline-flex;
-                    width:20px;
-                    height:20px;
-                    align-items:center;
-                    justify-content:center;
-                    border-radius:50%;
-                    background:#22c55e;
-                    color:white;
-                    font-size:12px;
-                    font-weight:700;
-                ">
+                <span
+                    style="
+                        display:inline-flex;
+                        width:20px;
+                        height:20px;
+                        align-items:center;
+                        justify-content:center;
+                        border-radius:50%;
+                        background:#22c55e;
+                        color:white;
+                        font-size:12px;
+                        font-weight:700;
+                    "
+                >
                     ✓
                 </span>
 
@@ -5471,18 +5497,20 @@ function showUploadFeedback(
 
             : `
 
-                <span style="
-                    display:inline-flex;
-                    width:20px;
-                    height:20px;
-                    align-items:center;
-                    justify-content:center;
-                    border-radius:50%;
-                    background:#ef4444;
-                    color:white;
-                    font-size:12px;
-                    font-weight:700;
-                ">
+                <span
+                    style="
+                        display:inline-flex;
+                        width:20px;
+                        height:20px;
+                        align-items:center;
+                        justify-content:center;
+                        border-radius:50%;
+                        background:#ef4444;
+                        color:white;
+                        font-size:12px;
+                        font-weight:700;
+                    "
+                >
                     !
                 </span>
 
@@ -5542,6 +5570,7 @@ if ($("mediaFile")) {
                         localMediaURL
                     );
 
+
                     localMediaURL =
                         null;
 
@@ -5550,8 +5579,7 @@ if ($("mediaFile")) {
 
                 if ($("audioPlayer")) {
 
-                    $("audioPlayer")
-                        .pause();
+                    $("audioPlayer").pause();
 
                     $("audioPlayer")
                         .removeAttribute(
@@ -5567,8 +5595,7 @@ if ($("mediaFile")) {
 
                 if ($("videoPlayer")) {
 
-                    $("videoPlayer")
-                        .pause();
+                    $("videoPlayer").pause();
 
                     $("videoPlayer")
                         .removeAttribute(
@@ -5809,24 +5836,27 @@ function showNowPlaying(
 
     if ($("mediaName")) {
 
-        $("mediaName").textContent =
-            name;
+        $("mediaName")
+            .textContent =
+                name;
 
     }
 
 
     if ($("mediaSource")) {
 
-        $("mediaSource").textContent =
-            source;
+        $("mediaSource")
+            .textContent =
+                source;
 
     }
 
 
     if ($("mediaArtwork")) {
 
-        $("mediaArtwork").textContent =
-            artwork;
+        $("mediaArtwork")
+            .textContent =
+                artwork;
 
     }
 
@@ -5895,7 +5925,9 @@ async function sha256(value) {
 
     const data =
         new TextEncoder()
-            .encode(value);
+            .encode(
+                value
+            );
 
 
     return crypto.subtle.digest(
@@ -5934,17 +5966,24 @@ function base64url(buffer) {
 async function spotifyLogin() {
 
     if (
+
         !window.RAKKEZ_CONFIG ||
+
         !RAKKEZ_CONFIG.spotify ||
+
         !RAKKEZ_CONFIG.spotify.clientId ||
+
         !RAKKEZ_CONFIG.spotify.clientId.trim() ||
+
         RAKKEZ_CONFIG.spotify.clientId ===
             "YOUR_SPOTIFY_CLIENT_ID"
+
     ) {
 
         alert(
             "Add your Spotify Client ID inside config.js first."
         );
+
 
         return;
 
@@ -6091,7 +6130,10 @@ async function handleSpotifyCallback() {
 
         if (!token.access_token) {
 
-            console.error(token);
+            console.error(
+                token
+            );
+
 
             return;
 
@@ -6157,6 +6199,7 @@ async function loadSpotifyUser() {
         updateSpotifyUI(
             null
         );
+
 
         return;
 
@@ -6304,6 +6347,7 @@ if ($("spotifyLogin")) {
 let googleUser =
     null;
 
+
 let googleTokenClient =
     null;
 
@@ -6321,12 +6365,17 @@ function initializeGoogle() {
 
 
     if (
+
         !window.RAKKEZ_CONFIG ||
+
         !RAKKEZ_CONFIG.google ||
+
         !RAKKEZ_CONFIG.google.clientId ||
+
         RAKKEZ_CONFIG.google.clientId.includes(
             "YOUR_GOOGLE"
         )
+
     ) {
 
         return;
@@ -6362,6 +6411,7 @@ function googleLogin() {
             "Add your Google Client ID inside config.js first."
         );
 
+
         return;
 
     }
@@ -6382,6 +6432,7 @@ async function handleGoogleToken(
         console.error(
             response
         );
+
 
         return;
 
@@ -6527,9 +6578,6 @@ if ($("googleLogin")) {
 
 /* =========================================================
    THEME
-   ---------------------------------------------------------
-   لو applyTheme موجودة في ملف آخر، نستخدمها.
-   لو غير موجودة، لا نكسر التطبيق.
    ========================================================= */
 
 function applyTheme() {
@@ -6542,6 +6590,7 @@ function applyTheme() {
         window.applyRakkeZTheme(
             settings.theme
         );
+
 
         return;
 
@@ -6557,9 +6606,6 @@ function applyTheme() {
 
 /* =========================================================
    AMBIENT
-   ---------------------------------------------------------
-   لو restoreAmbient موجودة في ملف آخر،
-   يتم استدعاؤها بشكل آمن.
    ========================================================= */
 
 function restoreAmbient() {
@@ -6597,11 +6643,15 @@ document.addEventListener(
     e => {
 
         if (
+
             e.target.tagName ===
                 "INPUT" ||
+
             e.target.tagName ===
                 "TEXTAREA" ||
+
             e.target.isContentEditable
+
         ) {
 
             return;
@@ -6739,55 +6789,43 @@ function safeAsync(fn) {
 
 }
 
+
 /* =========================================================
    THEME SYSTEM
-   =========================================================
-   
+   ---------------------------------------------------------
    DARK MODE = NIGHT
    LIGHT MODE = SUN
-   
-   This system:
-   - Saves the selected theme
-   - Restores it after refresh
-   - Supports existing theme buttons
-   - Does NOT affect timer/statistics
-   - Uses the existing settings.theme value
-   
-   IMPORTANT:
-   If your HTML uses different IDs for the theme buttons,
-   change the IDs inside THEME_SELECTORS below.
    ========================================================= */
 
 const THEME_SELECTORS = {
 
-    /* Main theme buttons */
+    dark: [
 
-    dark:
-        [
-            "darkMode",
-            "nightMode",
-            "nightBtn",
-            "darkBtn",
-            "themeDark"
-        ],
+        "darkMode",
+        "nightMode",
+        "nightBtn",
+        "darkBtn",
+        "themeDark"
 
-    light:
-        [
-            "lightMode",
-            "sunMode",
-            "sunBtn",
-            "lightBtn",
-            "themeLight"
-        ],
+    ],
 
-    /* Optional single toggle button */
+    light: [
 
-    toggle:
-        [
-            "themeToggle",
-            "themeBtn",
-            "themeSwitch"
-        ]
+        "lightMode",
+        "sunMode",
+        "sunBtn",
+        "lightBtn",
+        "themeLight"
+
+    ],
+
+    toggle: [
+
+        "themeToggle",
+        "themeBtn",
+        "themeSwitch"
+
+    ]
 
 };
 
@@ -6800,13 +6838,18 @@ function getFirstExistingElement(ids) {
 
     for (const id of ids) {
 
-        const element = $(id);
+        const element =
+            $(id);
+
 
         if (element) {
+
             return element;
+
         }
 
     }
+
 
     return null;
 
@@ -6825,24 +6868,18 @@ function applyTheme() {
             : "dark";
 
 
-    /* -----------------------------------------------------
-       HTML ATTRIBUTE
-       ----------------------------------------------------- */
+    document.documentElement
+        .setAttribute(
+            "data-theme",
+            theme
+        );
 
-    document.documentElement.setAttribute(
-        "data-theme",
-        theme
-    );
-
-
-    /* -----------------------------------------------------
-       BODY CLASS
-       ----------------------------------------------------- */
 
     document.body.classList.toggle(
         "light-mode",
         theme === "light"
     );
+
 
     document.body.classList.toggle(
         "dark-mode",
@@ -6850,24 +6887,17 @@ function applyTheme() {
     );
 
 
-    /* -----------------------------------------------------
-       OPTIONAL BODY DATA ATTRIBUTE
-       ----------------------------------------------------- */
-
     document.body.setAttribute(
         "data-theme",
         theme
     );
 
 
-    /* -----------------------------------------------------
-       UPDATE THEME BUTTONS
-       ----------------------------------------------------- */
-
     const darkButton =
         getFirstExistingElement(
             THEME_SELECTORS.dark
         );
+
 
     const lightButton =
         getFirstExistingElement(
@@ -6881,6 +6911,7 @@ function applyTheme() {
             "active",
             theme === "dark"
         );
+
 
         darkButton.setAttribute(
             "aria-pressed",
@@ -6899,6 +6930,7 @@ function applyTheme() {
             theme === "light"
         );
 
+
         lightButton.setAttribute(
             "aria-pressed",
             theme === "light"
@@ -6908,10 +6940,6 @@ function applyTheme() {
 
     }
 
-
-    /* -----------------------------------------------------
-       UPDATE TOGGLE BUTTON
-       ----------------------------------------------------- */
 
     const toggleButton =
         getFirstExistingElement(
@@ -6926,6 +6954,7 @@ function applyTheme() {
             theme === "light"
         );
 
+
         toggleButton.setAttribute(
             "aria-pressed",
             theme === "light"
@@ -6936,11 +6965,9 @@ function applyTheme() {
     }
 
 
-    /* -----------------------------------------------------
-       SAVE
-       ----------------------------------------------------- */
+    settings.theme =
+        theme;
 
-    settings.theme = theme;
 
     save(
         STORAGE.settings,
@@ -6961,12 +6988,15 @@ function setTheme(theme) {
         theme !== "light"
     ) {
 
-        theme = "dark";
+        theme =
+            "dark";
 
     }
 
 
-    settings.theme = theme;
+    settings.theme =
+        theme;
+
 
     save(
         STORAGE.settings,
@@ -6986,15 +7016,22 @@ function setTheme(theme) {
 function toggleTheme() {
 
     const currentTheme =
-        settings.theme === "light"
+        settings.theme ===
+            "light"
+
             ? "light"
             : "dark";
 
 
     setTheme(
-        currentTheme === "dark"
+
+        currentTheme ===
+            "dark"
+
             ? "light"
+
             : "dark"
+
     );
 
 }
@@ -7005,10 +7042,6 @@ function toggleTheme() {
    ========================================================= */
 
 function initializeThemeEvents() {
-
-    /* -----------------------------------------------------
-       NIGHT / DARK
-       ----------------------------------------------------- */
 
     const darkButton =
         getFirstExistingElement(
@@ -7022,17 +7055,15 @@ function initializeThemeEvents() {
             "click",
             function () {
 
-                setTheme("dark");
+                setTheme(
+                    "dark"
+                );
 
             }
         );
 
     }
 
-
-    /* -----------------------------------------------------
-       SUN / LIGHT
-       ----------------------------------------------------- */
 
     const lightButton =
         getFirstExistingElement(
@@ -7046,17 +7077,15 @@ function initializeThemeEvents() {
             "click",
             function () {
 
-                setTheme("light");
+                setTheme(
+                    "light"
+                );
 
             }
         );
 
     }
 
-
-    /* -----------------------------------------------------
-       SINGLE TOGGLE
-       ----------------------------------------------------- */
 
     const toggleButton =
         getFirstExistingElement(
@@ -7086,19 +7115,26 @@ function initializeThemeEvents() {
 
 window.RakkeZTheme = {
 
-    set: setTheme,
+    set:
+        setTheme,
 
-    toggle: toggleTheme,
+    toggle:
+        toggleTheme,
 
-    apply: applyTheme,
+    apply:
+        applyTheme,
 
-    get: function () {
+    get:
+        function () {
 
-        return settings.theme === "light"
-            ? "light"
-            : "dark";
+            return settings.theme ===
+                "light"
 
-    }
+                ? "light"
+
+                : "dark";
+
+        }
 
 };
 
@@ -7309,6 +7345,20 @@ async function init() {
     }
 
 
+    try {
+
+        initializeThemeEvents();
+
+    } catch (error) {
+
+        console.warn(
+            "Theme events initialization failed:",
+            error
+        );
+
+    }
+
+
     /* =====================================================
        AMBIENT
        ===================================================== */
@@ -7401,9 +7451,6 @@ if (
 
 /* =========================================================
    FINAL SAFETY
-   ---------------------------------------------------------
-   يمنع body من البقاء مقفولًا إذا تم إغلاق overlay
-   من كود خارجي.
    ========================================================= */
 
 window.RakkeZOverlay = {
