@@ -5,20 +5,29 @@
     /* =====================================================
        RAKKEZ MEDIA PLAYER
        FULL REPLACEMENT
-       
-       IMPORTANT:
-       - Lofi/player = music only
-       - Effects = Rain / Airplane / Coffee / Fireplace /
-                  Peaceful Piano
-       - Multiple effects can play at the same time
-       - Each effect has independent volume
-       - Effects are NOT part of the main playlist
+
+       MAIN PLAYER:
+       - Lofi / Music only
+
+       EFFECTS:
+       - Rain
+       - Airplane
+       - Coffee
+       - Fireplace
+       - Peaceful Piano
+
+       EFFECT RULES:
+       - Effects are completely independent from music
+       - Multiple effects can play simultaneously
+       - Each effect has its own volume
+       - Effects never enter the main playlist
+       - Effects are generated from ONE centralized list
        ===================================================== */
 
 
     /* =====================================================
        STORAGE
-    ===================================================== */
+       ===================================================== */
 
     const STORAGE = {
         track: "rakkez_media_track",
@@ -31,13 +40,7 @@
 
 
     /* =====================================================
-       MAIN LOFI PLAYLIST
-       
-       IMPORTANT:
-       ONLY REAL MUSIC GOES HERE.
-       
-       Do NOT put Rain / Airplane / Coffee /
-       Fireplace / Peaceful Piano here.
+       MAIN MUSIC PLAYLIST
        ===================================================== */
 
     const PLAYLIST = [
@@ -54,15 +57,12 @@
 
 
     /* =====================================================
-       AMBIENT EFFECTS
+       EFFECTS
        
-       Add new effects ONLY HERE.
+       ADD NEW EFFECTS ONLY HERE.
        
-       Every effect:
-       - has its own Audio object
-       - loops independently
-       - has independent volume
-       - can play simultaneously with other effects
+       IMPORTANT:
+       src = exact audio file path
        ===================================================== */
 
     const AMBIENT_EFFECTS = [
@@ -71,6 +71,7 @@
             id: "rain",
             name: "Rain",
             icon: "🌧️",
+            description: "Soft rain for focus",
             image: "assets/blog/effects/RAIN.jpg",
             src: "rain.mp3",
             defaultVolume: 0.50
@@ -80,6 +81,7 @@
             id: "airplane",
             name: "Airplane",
             icon: "✈️",
+            description: "Calm airplane cabin ambience",
             image: null,
             src: "Airplane.mp3",
             defaultVolume: 0.50
@@ -89,6 +91,7 @@
             id: "coffee",
             name: "Coffee",
             icon: "☕",
+            description: "Cozy coffee shop ambience",
             image: "assets/blog/effects/CAFFEE.jpg",
             src: "Caffee.mp3",
             defaultVolume: 0.50
@@ -98,6 +101,7 @@
             id: "fireplace",
             name: "Fireplace",
             icon: "🔥",
+            description: "Warm fireplace ambience",
             image: "assets/blog/effects/Fireplace.jfif",
             src: "FirePlace.mp3",
             defaultVolume: 0.50
@@ -107,6 +111,7 @@
             id: "peaceful-piano",
             name: "Peaceful Piano",
             icon: "🎹",
+            description: "Peaceful piano ambience",
             image: "assets/blog/effects/PEACEFUL-PIANO.jpg",
             src: "peaceful-piano.mp3",
             defaultVolume: 0.50
@@ -143,6 +148,7 @@
 
     const mediaButton =
         document.getElementById("mediaOpen");
+
 
     const tabs =
         document.querySelectorAll(".rakkez-media-tab");
@@ -263,20 +269,27 @@
 
 
     /* =====================================================
-       MAIN AUDIO ENGINE
+       MAIN AUDIO
        ===================================================== */
 
-    const audio = new Audio();
+    const audio =
+        new Audio();
 
-    audio.preload = "metadata";
+    audio.preload =
+        "metadata";
 
-    audio.controls = false;
+    audio.controls =
+        false;
 
 
-    let currentIndex = parseInt(
-        localStorage.getItem(STORAGE.track),
-        10
-    );
+    let currentIndex =
+        parseInt(
+            localStorage.getItem(
+                STORAGE.track
+            ),
+            10
+        );
+
 
     if (
         !Number.isFinite(currentIndex) ||
@@ -290,43 +303,71 @@
 
 
     let shuffle =
-        localStorage.getItem(STORAGE.shuffle) === "true";
+        localStorage.getItem(
+            STORAGE.shuffle
+        ) === "true";
+
 
     let loop =
-        localStorage.getItem(STORAGE.loop) === "true";
+        localStorage.getItem(
+            STORAGE.loop
+        ) === "true";
+
 
     let autoNext =
-        localStorage.getItem(STORAGE.autoNext) !== "false";
+        localStorage.getItem(
+            STORAGE.autoNext
+        ) !== "false";
 
 
-    let isDraggingProgress = false;
+    let isDraggingProgress =
+        false;
 
-    let miniPlayerClosed = true;
 
-    let currentIsLocal = false;
+    let miniPlayerClosed =
+        true;
 
-    let currentTrackFailed = false;
 
-    let loadingTimer = null;
+    let currentIsLocal =
+        false;
 
-    let currentLoadToken = 0;
+
+    let currentTrackFailed =
+        false;
+
+
+    let loadingTimer =
+        null;
+
+
+    let currentLoadToken =
+        0;
 
 
     /* =====================================================
        HELPERS
        ===================================================== */
 
-    function clamp(value, min, max) {
+    function clamp(
+        value,
+        min,
+        max
+    ) {
 
         return Math.max(
             min,
-            Math.min(max, value)
+            Math.min(
+                max,
+                value
+            )
         );
 
     }
 
 
-    function formatTime(seconds) {
+    function formatTime(
+        seconds
+    ) {
 
         if (
             !Number.isFinite(seconds) ||
@@ -339,17 +380,57 @@
 
 
         const minutes =
-            Math.floor(seconds / 60);
+            Math.floor(
+                seconds / 60
+            );
+
 
         const secs =
-            Math.floor(seconds % 60);
+            Math.floor(
+                seconds % 60
+            );
 
 
         return (
             minutes +
             ":" +
-            String(secs).padStart(2, "0")
+            String(secs)
+                .padStart(
+                    2,
+                    "0"
+                )
         );
+
+    }
+
+
+    function escapeHTML(
+        value
+    ) {
+
+        return String(
+            value || ""
+        )
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
 
     }
 
@@ -361,49 +442,59 @@
         }
 
 
-        clearTimeout(loadingTimer);
+        clearTimeout(
+            loadingTimer
+        );
 
-        loadingTimer = null;
+
+        loadingTimer =
+            null;
 
     }
 
 
-    function startLoadingGuard(token) {
+    function startLoadingGuard(
+        token
+    ) {
 
         clearLoadingTimer();
 
 
-        loadingTimer = setTimeout(
-            function () {
+        loadingTimer =
+            setTimeout(
+                function () {
 
-                if (
-                    token !== currentLoadToken
-                ) {
+                    if (
+                        token !==
+                        currentLoadToken
+                    ) {
 
-                    return;
+                        return;
 
-                }
+                    }
 
 
-                if (
-                    audio.readyState <
-                    HTMLMediaElement.HAVE_METADATA
-                ) {
+                    if (
+                        audio.readyState <
+                        HTMLMediaElement.HAVE_METADATA
+                    ) {
 
-                    handleTrackError(
-                        "Loading timeout"
-                    );
+                        handleTrackError(
+                            "Loading timeout"
+                        );
 
-                }
+                    }
 
-            },
-            12000
-        );
+                },
+                12000
+            );
 
     }
 
 
-    function setMediaStatus(status) {
+    function setMediaStatus(
+        status
+    ) {
 
         if (
             !trackName ||
@@ -417,6 +508,7 @@
 
         const tracks =
             getAllTracks();
+
 
         const current =
             tracks[currentIndex];
@@ -433,12 +525,15 @@
     }
 
 
-    function handleTrackError(reason) {
+    function handleTrackError(
+        reason
+    ) {
 
         clearLoadingTimer();
 
 
-        currentTrackFailed = true;
+        currentTrackFailed =
+            true;
 
 
         audio.pause();
@@ -462,13 +557,16 @@
 
 
         console.warn(
-            "RakkeZ Media: Track unavailable:",
-            audio.src,
-            reason || ""
+            "RakkeZ Media:",
+            reason,
+            audio.src
         );
 
 
-        setMediaStatus("error");
+        setMediaStatus(
+            "error"
+        );
+
 
         updateMiniPlayer();
 
@@ -489,9 +587,7 @@
 
 
         if (!tracks.length) {
-
             return;
-
         }
 
 
@@ -503,7 +599,8 @@
             );
 
 
-        currentIndex = index;
+        currentIndex =
+            index;
 
 
         const track =
@@ -511,9 +608,7 @@
 
 
         if (!track) {
-
             return;
-
         }
 
 
@@ -521,7 +616,8 @@
             !!track.isLocal;
 
 
-        currentTrackFailed = false;
+        currentTrackFailed =
+            false;
 
 
         clearLoadingTimer();
@@ -537,13 +633,20 @@
         audio.pause();
 
 
-        audio.currentTime = 0;
+        audio.removeAttribute(
+            "src"
+        );
 
 
-        audio.src = track.src;
+        audio.load();
 
 
-        audio.loop = loop;
+        audio.src =
+            track.src;
+
+
+        audio.loop =
+            loop;
 
 
         audio.volume =
@@ -584,8 +687,10 @@
                     ) +
                     "')";
 
+
                 artwork.style.backgroundSize =
                     "cover";
+
 
                 artwork.style.backgroundPosition =
                     "center";
@@ -611,7 +716,9 @@
 
         if (autoplay) {
 
-            startLoadingGuard(token);
+            startLoadingGuard(
+                token
+            );
 
 
             const promise =
@@ -631,6 +738,7 @@
                             "RakkeZ Media play failed:",
                             error
                         );
+
 
                         handleTrackError(
                             "Playback failed"
@@ -679,6 +787,7 @@
                         error
                     );
 
+
                     handleTrackError(
                         "Playback failed"
                     );
@@ -726,13 +835,17 @@
 
         if (shuffle) {
 
-            if (tracks.length === 1) {
+            if (
+                tracks.length === 1
+            ) {
 
-                currentIndex = 0;
+                currentIndex =
+                    0;
 
             } else {
 
                 let next;
+
 
                 do {
 
@@ -743,11 +856,13 @@
                         );
 
                 } while (
-                    next === currentIndex
+                    next ===
+                    currentIndex
                 );
 
 
-                currentIndex = next;
+                currentIndex =
+                    next;
 
             }
 
@@ -871,7 +986,7 @@
 
 
     /* =====================================================
-       PLAYLIST UI
+       PLAYLIST
        ===================================================== */
 
     function updatePlaylistUI() {
@@ -886,11 +1001,15 @@
                 ".rakkez-track"
             )
             .forEach(
-                function (element, index) {
+                function (
+                    element,
+                    index
+                ) {
 
                     element.classList.toggle(
                         "active",
-                        index === currentIndex
+                        index ===
+                        currentIndex
                     );
 
                 }
@@ -928,7 +1047,10 @@
 
 
         getAllTracks().forEach(
-            function (track, index) {
+            function (
+                track,
+                index
+            ) {
 
                 const item =
                     document.createElement(
@@ -954,16 +1076,18 @@
 
                         ${
                             track.artwork
-                                ? `<img
-                                    src="${track.artwork}"
-                                    alt=""
-                                    style="
-                                        width:100%;
-                                        height:100%;
-                                        object-fit:cover;
-                                        border-radius:10px;
-                                    "
-                                >`
+                                ? `
+                                    <img
+                                        src="${escapeHTML(track.artwork)}"
+                                        alt=""
+                                        style="
+                                            width:100%;
+                                            height:100%;
+                                            object-fit:cover;
+                                            border-radius:10px;
+                                        "
+                                    >
+                                `
                                 : "♪"
                         }
 
@@ -972,7 +1096,9 @@
                     <div class="rakkez-track-details">
 
                         <div class="rakkez-track-title">
-                            ${escapeHTML(track.title)}
+                            ${escapeHTML(
+                                track.title
+                            )}
                         </div>
 
                         <div class="rakkez-track-source">
@@ -1013,33 +1139,6 @@
     }
 
 
-    function escapeHTML(value) {
-
-        return String(value || "")
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
-    }
-
-
     /* =====================================================
        MINI PLAYER
        ===================================================== */
@@ -1064,6 +1163,7 @@
             miniPlayer.classList.remove(
                 "show"
             );
+
 
             return;
 
@@ -1099,6 +1199,7 @@
                     ) +
                     "')";
 
+
                 miniArtwork.textContent =
                     "";
 
@@ -1106,6 +1207,7 @@
 
                 miniArtwork.style.backgroundImage =
                     "";
+
 
                 miniArtwork.textContent =
                     "♪";
@@ -1167,7 +1269,9 @@
        TABS
        ===================================================== */
 
-    function switchTab(name) {
+    function switchTab(
+        name
+    ) {
 
         tabs.forEach(
             function (tab) {
@@ -1267,9 +1371,7 @@
         );
 
 
-        if (
-            !audio.paused
-        ) {
+        if (!audio.paused) {
 
             showMiniPlayer();
 
@@ -1305,7 +1407,8 @@
             function (event) {
 
                 if (
-                    event.target === overlay
+                    event.target ===
+                    overlay
                 ) {
 
                     closeMedia();
@@ -1504,7 +1607,7 @@
 
 
     /* =====================================================
-       VOLUME
+       MAIN VOLUME
        ===================================================== */
 
     if (volume) {
@@ -1525,7 +1628,7 @@
 
 
     /* =====================================================
-       AUDIO EVENTS
+       MAIN AUDIO EVENTS
        ===================================================== */
 
     audio.addEventListener(
@@ -1534,6 +1637,7 @@
 
             currentTrackFailed =
                 false;
+
 
             startLoadingGuard(
                 currentLoadToken
@@ -1606,7 +1710,8 @@
                         ? (
                             audio.currentTime /
                             audio.duration
-                        ) * 100
+                        ) *
+                        100
                         : 0;
 
 
@@ -1721,18 +1826,14 @@
 
 
     /* =====================================================
-       MINI PLAYER CONTROLS
+       MINI CONTROLS
        ===================================================== */
 
     if (miniPlay) {
 
         miniPlay.addEventListener(
             "click",
-            function () {
-
-                toggleMainPlay();
-
-            }
+            toggleMainPlay
         );
 
     }
@@ -1762,7 +1863,9 @@
        YOUTUBE
        ===================================================== */
 
-    function getYouTubeId(url) {
+    function getYouTubeId(
+        url
+    ) {
 
         if (!url) {
             return null;
@@ -1781,13 +1884,11 @@
                 )
             ) {
 
-                return (
-                    parsed.pathname
-                        .replace(
-                            "/",
-                            ""
-                        )
-                );
+                return parsed.pathname
+                    .replace(
+                        "/",
+                        ""
+                    );
 
             }
 
@@ -1804,9 +1905,9 @@
                     )
                 ) {
 
-                    return parsed
-                        .searchParams
-                        .get("v");
+                    return parsed.searchParams.get(
+                        "v"
+                    );
 
                 }
 
@@ -1817,17 +1918,19 @@
                         .filter(Boolean);
 
 
-                const index =
-                    parts.indexOf("embed");
+                const embedIndex =
+                    parts.indexOf(
+                        "embed"
+                    );
 
 
                 if (
-                    index !== -1 &&
-                    parts[index + 1]
+                    embedIndex !== -1 &&
+                    parts[embedIndex + 1]
                 ) {
 
                     return parts[
-                        index + 1
+                        embedIndex + 1
                     ];
 
                 }
@@ -1866,8 +1969,8 @@
 
         if (!id) {
 
-            youtubeEmbed.innerHTML =
-                `<div
+            youtubeEmbed.innerHTML = `
+                <div
                     style="
                         padding:20px;
                         color:rgba(255,255,255,.55);
@@ -1875,7 +1978,9 @@
                     "
                 >
                     Invalid YouTube URL
-                </div>`;
+                </div>
+            `;
+
 
             return;
 
@@ -1934,7 +2039,9 @@
        SPOTIFY
        ===================================================== */
 
-    function getSpotifyEmbed(url) {
+    function getSpotifyEmbed(
+        url
+    ) {
 
         if (!url) {
             return null;
@@ -1976,6 +2083,7 @@
             const type =
                 parts[0];
 
+
             const id =
                 parts[1];
 
@@ -1991,7 +2099,9 @@
 
 
             if (
-                !allowed.includes(type)
+                !allowed.includes(
+                    type
+                )
             ) {
 
                 return null;
@@ -2036,8 +2146,8 @@
 
         if (!embed) {
 
-            spotifyEmbed.innerHTML =
-                `<div
+            spotifyEmbed.innerHTML = `
+                <div
                     style="
                         padding:20px;
                         color:rgba(255,255,255,.55);
@@ -2045,7 +2155,9 @@
                     "
                 >
                     Invalid Spotify URL
-                </div>`;
+                </div>
+            `;
+
 
             return;
 
@@ -2106,33 +2218,6 @@
        LOCAL MUSIC
        ===================================================== */
 
-    function loadSavedLocalNames() {
-
-        try {
-
-            const saved =
-                JSON.parse(
-                    localStorage.getItem(
-                        STORAGE.localTracks
-                    ) || "[]"
-                );
-
-
-            if (
-                Array.isArray(saved)
-            ) {
-
-                return saved;
-
-            }
-
-        } catch (error) {}
-
-        return [];
-
-    }
-
-
     function saveLocalNames() {
 
         localStorage.setItem(
@@ -2163,7 +2248,10 @@
 
 
         LOCAL_TRACKS.forEach(
-            function (track, index) {
+            function (
+                track,
+                index
+            ) {
 
                 const item =
                     document.createElement(
@@ -2296,7 +2384,9 @@
 
                 saveLocalNames();
 
+
                 renderLocalTracks();
+
 
                 renderPlaylist();
 
@@ -2307,26 +2397,19 @@
 
 
     /* =====================================================
-       AMBIENT EFFECT ENGINE
+       EFFECT ENGINE
+       
+       ONE AUDIO ELEMENT PER EFFECT.
        
        IMPORTANT:
-       This is completely independent from
-       the main music player.
-       
-       That means:
-       
-       Rain + Coffee
-       Rain + Fireplace
-       Airplane + Piano
-       Rain + Airplane + Coffee + Piano
-       
-       can all play together.
+       This is NOT connected to the main audio.
        ===================================================== */
 
-    const effectPlayers = {};
+    const effectPlayers =
+        Object.create(null);
 
 
-    function effectStorageKey(
+    function getEffectStorageKey(
         effect,
         suffix
     ) {
@@ -2348,7 +2431,7 @@
         const saved =
             parseFloat(
                 localStorage.getItem(
-                    effectStorageKey(
+                    getEffectStorageKey(
                         effect,
                         "volume"
                     )
@@ -2370,7 +2453,7 @@
 
 
         return clamp(
-            effect.defaultVolume || 0.5,
+            effect.defaultVolume,
             0,
             1
         );
@@ -2381,6 +2464,10 @@
     function createEffectPlayer(
         effect
     ) {
+
+        /*
+         * NEVER create the same Audio object twice.
+         */
 
         if (
             effectPlayers[effect.id]
@@ -2409,44 +2496,55 @@
         };
 
 
-        if (
-            effect.src &&
-            typeof effect.src ===
-            "string"
-        ) {
+        /*
+         * Create ONE independent Audio.
+         */
 
-            player.audio =
-                new Audio(
-                    effect.src
+        player.audio =
+            new Audio();
+
+
+        player.audio.preload =
+            "auto";
+
+
+        player.audio.loop =
+            true;
+
+
+        player.audio.volume =
+            player.volume;
+
+
+        /*
+         * Set source explicitly.
+         */
+
+        player.audio.src =
+            effect.src;
+
+
+        /*
+         * Force browser to load the file.
+         */
+
+        player.audio.load();
+
+
+        player.audio.addEventListener(
+            "error",
+            function () {
+
+                console.error(
+                    "RakkeZ Effect ERROR:",
+                    effect.name,
+                    "Source:",
+                    effect.src,
+                    player.audio.error
                 );
 
-
-            player.audio.loop =
-                true;
-
-
-            player.audio.preload =
-                "metadata";
-
-
-            player.audio.volume =
-                player.volume;
-
-
-            player.audio.addEventListener(
-                "error",
-                function () {
-
-                    console.warn(
-                        "RakkeZ Effect unavailable:",
-                        effect.name,
-                        effect.src
-                    );
-
-                }
-            );
-
-        }
+            }
+        );
 
 
         effectPlayers[
@@ -2459,30 +2557,32 @@
     }
 
 
+    /*
+     * Create exactly ONE player for
+     * every effect.
+     */
+
     AMBIENT_EFFECTS.forEach(
         createEffectPlayer
     );
 
 
     /* =====================================================
-       EFFECT UI
-       
-       We REMOVE the old manually-created
-       Rain / Airplane cards first.
-       
-       Then we generate EXACTLY ONE card
-       for each effect in AMBIENT_EFFECTS.
-       
-       This fixes duplicate Rain / Airplane.
+       EFFECTS CONTAINER
        ===================================================== */
 
-    function getEffectsContainer() {
+    function getEffectsSource() {
 
-        const source =
-            document.getElementById(
-                "rakkezEffectsSource"
-            );
+        return document.getElementById(
+            "rakkezEffectsSource"
+        );
 
+    }
+
+
+    function getOrCreateEffectsContainer(
+        source
+    ) {
 
         if (!source) {
             return null;
@@ -2490,29 +2590,32 @@
 
 
         let container =
-            document.getElementById(
-                "rakkezEffectsContainer"
+            source.querySelector(
+                "#rakkezEffectsContainer"
             );
 
 
-        if (container) {
-            return container;
+        if (!container) {
+
+            container =
+                document.createElement(
+                    "div"
+                );
+
+
+            container.id =
+                "rakkezEffectsContainer";
+
+
+            container.className =
+                "rakkez-effects-container";
+
+
+            source.appendChild(
+                container
+            );
+
         }
-
-
-        container =
-            document.createElement(
-                "div"
-            );
-
-
-        container.id =
-            "rakkezEffectsContainer";
-
-
-        source.appendChild(
-            container
-        );
 
 
         return container;
@@ -2520,29 +2623,203 @@
     }
 
 
-    function clearOldEffectCards(
+    /* =====================================================
+       REMOVE ALL OLD EFFECT CARDS
+       
+       This is the important fix for:
+       
+       Rain
+       Airplane
+       Rain
+       
+       and other duplicates.
+       ===================================================== */
+
+    function removeOldEffectCards(
+        source,
         container
     ) {
+
+        if (!source) {
+            return;
+        }
+
+
+        /*
+         * Remove cards that were generated
+         * by previous versions.
+         */
+
+        source.querySelectorAll(
+            ".rakkez-effect-card"
+        ).forEach(
+            function (card) {
+
+                card.remove();
+
+            }
+        );
+
+
+        /*
+         * Remove old effect elements
+         * that may have different classes
+         * but carry an effect identifier.
+         */
+
+        source.querySelectorAll(
+            "[data-rakkez-effect]"
+        ).forEach(
+            function (element) {
+
+                if (
+                    element !== container &&
+                    !element.closest(
+                        "#rakkezEffectsContainer"
+                    )
+                ) {
+
+                    element.remove();
+
+                }
+
+            }
+        );
+
+
+        /*
+         * Remove old cards using effect IDs.
+         */
+
+        AMBIENT_EFFECTS.forEach(
+            function (effect) {
+
+                const selectors = [
+
+                    `[data-effect="${effect.id}"]`,
+
+                    `[data-effect-id="${effect.id}"]`,
+
+                    `[data-rakkez-effect="${effect.id}"]`
+
+                ];
+
+
+                selectors.forEach(
+                    function (selector) {
+
+                        source
+                            .querySelectorAll(
+                                selector
+                            )
+                            .forEach(
+                                function (element) {
+
+                                    if (
+                                        element !== container &&
+                                        !element.closest(
+                                            "#rakkezEffectsContainer"
+                                        )
+                                    ) {
+
+                                        element.remove();
+
+                                    }
+
+                                }
+                            );
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       EFFECT UI UPDATE
+       ===================================================== */
+
+    function updateEffectCard(
+        effect
+    ) {
+
+        const player =
+            effectPlayers[
+                effect.id
+            ];
+
+
+        if (!player) {
+            return;
+        }
+
+
+        const container =
+            document.getElementById(
+                "rakkezEffectsContainer"
+            );
+
 
         if (!container) {
             return;
         }
 
 
-        container
-            .querySelectorAll(
-                ".rakkez-effect-card"
-            )
-            .forEach(
-                function (card) {
-
-                    card.remove();
-
-                }
+        const card =
+            container.querySelector(
+                `[data-effect="${effect.id}"]`
             );
+
+
+        if (!card) {
+            return;
+        }
+
+
+        const button =
+            card.querySelector(
+                "[data-effect-toggle]"
+            );
+
+
+        const playing =
+            !!(
+                player.audio &&
+                !player.audio.paused
+            );
+
+
+        card.classList.toggle(
+            "active",
+            playing
+        );
+
+
+        if (button) {
+
+            button.classList.toggle(
+                "active",
+                playing
+            );
+
+
+            button.textContent =
+                playing
+                    ? "Stop"
+                    : "Play " +
+                      effect.name;
+
+        }
 
     }
 
+
+    /* =====================================================
+       CREATE EFFECT CARD
+       ===================================================== */
 
     function createEffectCard(
         effect,
@@ -2588,18 +2865,16 @@
 
                 <div>
 
-                    <div
-                        class="rakkez-effect-title"
-                    >
+                    <div class="rakkez-effect-title">
                         ${escapeHTML(
                             effect.name
                         )}
                     </div>
 
-                    <div
-                        class="rakkez-effect-subtitle"
-                    >
-                        Ambient sound
+                    <div class="rakkez-effect-subtitle">
+                        ${escapeHTML(
+                            effect.description
+                        )}
                     </div>
 
                 </div>
@@ -2608,8 +2883,8 @@
 
 
             <button
-                class="rakkez-effect-toggle"
                 type="button"
+                class="rakkez-effect-toggle"
                 data-effect-toggle
             >
                 Play ${escapeHTML(
@@ -2618,9 +2893,7 @@
             </button>
 
 
-            <div
-                class="rakkez-effect-volume"
-            >
+            <div class="rakkez-effect-volume">
 
                 <span>
                     Volume
@@ -2651,6 +2924,10 @@
 
         `;
 
+
+        /*
+         * Background image.
+         */
 
         if (effect.image) {
 
@@ -2694,24 +2971,32 @@
             );
 
 
-        /* ---------------------------------------------
-           PLAY / STOP
-           --------------------------------------------- */
+        /* =================================================
+           PLAY / STOP EFFECT
+           ================================================= */
 
         toggle.addEventListener(
             "click",
             function () {
 
-                if (!player.audio) {
+                if (
+                    !player.audio
+                ) {
 
-                    toggle.textContent =
-                        "Audio unavailable";
+                    console.error(
+                        "No Audio object for:",
+                        effect.name
+                    );
 
 
                     return;
 
                 }
 
+
+                /*
+                 * STOP
+                 */
 
                 if (
                     !player.audio.paused
@@ -2720,7 +3005,7 @@
                     player.audio.pause();
 
 
-                    updateEffectUI(
+                    updateEffectCard(
                         effect
                     );
 
@@ -2730,8 +3015,27 @@
                 }
 
 
+                /*
+                 * PLAY
+                 */
+
                 player.audio.volume =
                     player.volume;
+
+
+                /*
+                 * Important:
+                 * Reset only if ended.
+                 */
+
+                if (
+                    player.audio.ended
+                ) {
+
+                    player.audio.currentTime =
+                        0;
+
+                }
 
 
                 const promise =
@@ -2740,26 +3044,37 @@
 
                 if (
                     promise &&
-                    typeof promise.catch ===
+                    typeof promise.then ===
                     "function"
                 ) {
 
-                    promise.catch(
-                        function (error) {
+                    promise
+                        .then(
+                            function () {
 
-                            console.warn(
-                                "RakkeZ Effect play failed:",
-                                effect.name,
-                                error
-                            );
+                                updateEffectCard(
+                                    effect
+                                );
+
+                            }
+                        )
+                        .catch(
+                            function (error) {
+
+                                console.error(
+                                    "RakkeZ Effect playback failed:",
+                                    effect.name,
+                                    effect.src,
+                                    error
+                                );
 
 
-                            updateEffectUI(
-                                effect
-                            );
+                                updateEffectCard(
+                                    effect
+                                );
 
-                        }
-                    );
+                            }
+                        );
 
                 }
 
@@ -2767,9 +3082,9 @@
         );
 
 
-        /* ---------------------------------------------
-           VOLUME
-           --------------------------------------------- */
+        /* =================================================
+           EFFECT VOLUME
+           ================================================= */
 
         volumeInput.addEventListener(
             "input",
@@ -2789,16 +3104,12 @@
                     value;
 
 
-                if (player.audio) {
-
-                    player.audio.volume =
-                        value;
-
-                }
+                player.audio.volume =
+                    value;
 
 
                 localStorage.setItem(
-                    effectStorageKey(
+                    getEffectStorageKey(
                         effect,
                         "volume"
                     ),
@@ -2806,95 +3117,89 @@
                 );
 
 
-                volumeValue.textContent =
-                    Math.round(
-                        value * 100
-                    ) +
-                    "%";
+                if (volumeValue) {
+
+                    volumeValue.textContent =
+                        Math.round(
+                            value * 100
+                        ) +
+                        "%";
+
+                }
 
             }
         );
 
 
-        /* ---------------------------------------------
+        /* =================================================
            AUDIO EVENTS
-           --------------------------------------------- */
+           ================================================= */
 
-        if (player.audio) {
+        player.audio.addEventListener(
+            "play",
+            function () {
 
-            player.audio.addEventListener(
-                "play",
-                function () {
+                updateEffectCard(
+                    effect
+                );
 
-                    updateEffectUI(
-                        effect
-                    );
+            }
+        );
+
+
+        player.audio.addEventListener(
+            "pause",
+            function () {
+
+                updateEffectCard(
+                    effect
+                );
+
+            }
+        );
+
+
+        player.audio.addEventListener(
+            "ended",
+            function () {
+
+                updateEffectCard(
+                    effect
+                );
+
+            }
+        );
+
+
+        player.audio.addEventListener(
+            "volumechange",
+            function () {
+
+                if (
+                    volumeInput
+                ) {
+
+                    volumeInput.value =
+                        player.audio.volume;
 
                 }
-            );
 
 
-            player.audio.addEventListener(
-                "pause",
-                function () {
+                if (
+                    volumeValue
+                ) {
 
-                    updateEffectUI(
-                        effect
-                    );
-
-                }
-            );
-
-
-            player.audio.addEventListener(
-                "ended",
-                function () {
-
-                    updateEffectUI(
-                        effect
-                    );
+                    volumeValue.textContent =
+                        Math.round(
+                            player.audio.volume *
+                            100
+                        ) +
+                        "%";
 
                 }
-            );
 
-        }
-
-
-        function updateEffectUI(
-            effectToUpdate
-        ) {
-
-            const currentPlayer =
-                effectPlayers[
-                    effectToUpdate.id
-                ];
-
-
-            const playing =
-                currentPlayer &&
-                currentPlayer.audio &&
-                !currentPlayer.audio.paused;
-
-
-            card.classList.toggle(
-                "active",
-                !!playing
-            );
-
-
-            toggle.classList.toggle(
-                "active",
-                !!playing
-            );
-
-
-            toggle.textContent =
-                playing
-                    ? "Stop"
-                    : "Play " +
-                      effectToUpdate.name;
-
-        }
+            }
+        );
 
 
         container.appendChild(
@@ -2902,23 +3207,29 @@
         );
 
 
-        updateEffectUI(
+        updateEffectCard(
             effect
         );
 
     }
 
 
+    /* =====================================================
+       RENDER EFFECTS
+       
+       EXACTLY ONE CARD PER EFFECT.
+       ===================================================== */
+
     function renderEffects() {
 
-        const container =
-            getEffectsContainer();
+        const source =
+            getEffectsSource();
 
 
-        if (!container) {
+        if (!source) {
 
             console.warn(
-                "RakkeZ: Effects container not found."
+                "RakkeZ: #rakkezEffectsSource was not found."
             );
 
 
@@ -2927,19 +3238,39 @@
         }
 
 
+        const container =
+            getOrCreateEffectsContainer(
+                source
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
         /*
-         * Remove every old card.
-         * This specifically prevents the old
-         * Rain / Airplane duplicates.
+         * First remove EVERY generated
+         * effect card from the source.
          */
 
-        clearOldEffectCards(
+        removeOldEffectCards(
+            source,
             container
         );
 
 
         /*
-         * Create exactly one card per effect.
+         * Clear our own container completely.
+         */
+
+        container.innerHTML =
+            "";
+
+
+        /*
+         * Now create exactly one card
+         * for every effect.
          */
 
         AMBIENT_EFFECTS.forEach(
@@ -2953,10 +3284,112 @@
             }
         );
 
+
+        console.log(
+            "RakkeZ Effects rendered:",
+            AMBIENT_EFFECTS.map(
+                function (effect) {
+
+                    return effect.name;
+
+                }
+            )
+        );
+
     }
 
 
-    renderEffects();
+    /* =====================================================
+       EFFECT DEBUG
+       ===================================================== */
+
+    window.RakkeZEffects = {
+
+        list:
+            AMBIENT_EFFECTS,
+
+        players:
+            effectPlayers,
+
+        play:
+            function (id) {
+
+                const player =
+                    effectPlayers[id];
+
+
+                if (
+                    !player ||
+                    !player.audio
+                ) {
+
+                    console.error(
+                        "Effect not found:",
+                        id
+                    );
+
+
+                    return;
+
+                }
+
+
+                player.audio.volume =
+                    player.volume;
+
+
+                player.audio.play()
+                    .catch(
+                        console.error
+                    );
+
+            },
+
+        stop:
+            function (id) {
+
+                const player =
+                    effectPlayers[id];
+
+
+                if (
+                    player &&
+                    player.audio
+                ) {
+
+                    player.audio.pause();
+
+                }
+
+            },
+
+        stopAll:
+            function () {
+
+                Object.keys(
+                    effectPlayers
+                ).forEach(
+                    function (id) {
+
+                        const player =
+                            effectPlayers[id];
+
+
+                        if (
+                            player &&
+                            player.audio
+                        ) {
+
+                            player.audio.pause();
+
+                        }
+
+                    }
+                );
+
+            }
+
+    };
 
 
     /* =====================================================
@@ -2976,6 +3409,7 @@
             ) {
 
                 event.preventDefault();
+
 
                 toggleMainPlay();
 
@@ -3039,6 +3473,28 @@
                 }
             );
 
+
+            Object.keys(
+                effectPlayers
+            ).forEach(
+                function (id) {
+
+                    const player =
+                        effectPlayers[id];
+
+
+                    if (
+                        player &&
+                        player.audio
+                    ) {
+
+                        player.audio.pause();
+
+                    }
+
+                }
+            );
+
         }
     );
 
@@ -3051,6 +3507,7 @@
 
         renderPlaylist();
 
+
         renderLocalTracks();
 
 
@@ -3062,6 +3519,7 @@
 
             volume.value =
                 savedVolume;
+
 
             updateMainVolume();
 
@@ -3106,6 +3564,18 @@
             );
 
         }
+
+
+        /*
+         * Render Effects LAST.
+         *
+         * This guarantees that the DOM
+         * is ready and that old cards
+         * are removed before new cards
+         * are created.
+         */
+
+        renderEffects();
 
 
         console.log(
