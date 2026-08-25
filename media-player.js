@@ -132,7 +132,7 @@
             name: "Airplane",
             icon: "✈️",
             description: "Calm airplane cabin ambience",
-            image: null,
+            image: "assets/blog/effects/Airplane.jpg",
             src: "Airplane.mp3",
             defaultVolume: 0.50
         },
