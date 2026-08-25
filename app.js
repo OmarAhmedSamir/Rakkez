@@ -6938,183 +6938,558 @@ if ($("googleLogin")) {
 
 /* =========================================================
    INIT
-========================================================= */
+   ========================================================= */
 
 if ($("startBtn")) {
+    $("startBtn").onclick = startTimer;
+}
 
-    $("startBtn").onclick =
-        startTimer;
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+document.addEventListener("keydown", e => {
+
+    if (
+        e.target.tagName === "INPUT" ||
+        e.target.tagName === "TEXTAREA" ||
+        e.target.isContentEditable
+    ) {
+        return;
+    }
+
+    if (e.code === "Space") {
+        e.preventDefault();
+        startTimer();
+    }
+
+    if (e.key.toLowerCase() === "r") {
+        openResetConfirmation();
+    }
+
+    if (e.key.toLowerCase() === "f") {
+        toggleFocusOnly();
+    }
+
+});
+
+
+/* =========================================================
+   LOADING SCREEN SAFE HANDLER
+   ========================================================= */
+
+/*
+    IMPORTANT:
+
+    The loading screen must NEVER wait for:
+    - Spotify
+    - Google
+    - YouTube
+    - external images
+    - external APIs
+    - audio
+    - background media
+
+    The main RakkeZ UI should become available immediately.
+*/
+
+function finishLoadingScreen() {
+
+    const loading =
+        document.getElementById("loadingScreen") ||
+        document.getElementById("loader") ||
+        document.querySelector(".loading-screen") ||
+        document.querySelector(".loader");
+
+    if (!loading) {
+        return;
+    }
+
+    loading.classList.add("hide");
+
+    setTimeout(() => {
+
+        try {
+            loading.style.display = "none";
+        } catch {}
+
+    }, 500);
+}
+
+
+/* =========================================================
+   SAFE ASYNC
+   ========================================================= */
+
+function safeAsync(fn) {
+
+    try {
+
+        const result = fn();
+
+        if (result && typeof result.catch === "function") {
+
+            result.catch(error => {
+
+                console.warn(
+                    "Background initialization failed:",
+                    error
+                );
+
+            });
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Background initialization failed:",
+            error
+        );
+
+    }
 
 }
 
 
-document.addEventListener(
-    "keydown",
-    e => {
+/* =========================================================
+   STARTUP
+   ========================================================= */
+
+async function init() {
+
+    /*
+        -----------------------------------------------------
+        STEP 1
+        -----------------------------------------------------
+
+        Everything required for the actual app UI runs first.
+        Nothing here should depend on an external API.
+    */
+
+    try {
+
+        createAlarmPopup();
+
+    } catch (error) {
+
+        console.warn(
+            "Alarm popup initialization failed:",
+            error
+        );
+
+    }
+
+
+    /*
+        -----------------------------------------------------
+        CUSTOM ALARM
+        -----------------------------------------------------
+
+        Object URLs cannot survive a full page refresh.
+        Therefore a saved "custom" alarm without a current
+        Blob URL must safely fall back to soft.
+    */
+
+    try {
 
         if (
-            e.target.tagName ===
-            "INPUT" ||
-            e.target.tagName ===
-            "TEXTAREA" ||
-            e.target.isContentEditable
+            settings.alarmSound === "custom" &&
+            !customAlarmURL
         ) {
+
+            settings.alarmSound = "soft";
+
+            save(
+                STORAGE.settings,
+                settings
+            );
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Alarm settings initialization failed:",
+            error
+        );
+
+    }
+
+
+    /*
+        -----------------------------------------------------
+        TIMER
+        -----------------------------------------------------
+    */
+
+    try {
+
+        updateStreak();
+
+    } catch (error) {
+
+        console.warn(
+            "Streak initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        restoreTimer();
+
+    } catch (error) {
+
+        console.warn(
+            "Timer restore failed:",
+            error
+        );
+
+        /*
+            Emergency timer fallback.
+        */
+
+        timerState.mode = "focus";
+
+        const focusMinutes =
+            Number(settings.focus);
+
+        const safeFocus =
+            Number.isFinite(focusMinutes) &&
+            focusMinutes > 0
+                ? focusMinutes
+                : DEFAULT_SETTINGS.focus;
+
+        timerState.total =
+            Math.floor(safeFocus * 60);
+
+        timerState.remaining =
+            timerState.total;
+
+        timerState.running = false;
+        timerState.interval = null;
+
+    }
+
+
+    /*
+        -----------------------------------------------------
+        UI
+        -----------------------------------------------------
+    */
+
+    try {
+
+        updateTimerUI();
+
+    } catch (error) {
+
+        console.warn(
+            "Timer UI initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        updateStats();
+
+    } catch (error) {
+
+        console.warn(
+            "Stats initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        syncSettingsUI();
+
+    } catch (error) {
+
+        console.warn(
+            "Settings UI initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        renderTasks();
+
+    } catch (error) {
+
+        console.warn(
+            "Tasks initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        applyTheme();
+
+    } catch (error) {
+
+        console.warn(
+            "Theme initialization failed:",
+            error
+        );
+
+    }
+
+
+    /*
+        -----------------------------------------------------
+        AMBIENT
+        -----------------------------------------------------
+
+        Restore the saved ambient immediately.
+        External images are allowed to load separately.
+    */
+
+    try {
+
+        restoreAmbient();
+
+    } catch (error) {
+
+        console.warn(
+            "Ambient initialization failed:",
+            error
+        );
+
+    }
+
+
+    /*
+        -----------------------------------------------------
+        LOADING SCREEN
+        -----------------------------------------------------
+
+        IMPORTANT:
+
+        Finish the loading screen NOW.
+
+        Do NOT wait for:
+        Spotify
+        Google
+        YouTube
+        external APIs
+    */
+
+    finishLoadingScreen();
+
+
+    /*
+        -----------------------------------------------------
+        BACKGROUND SERVICES
+        -----------------------------------------------------
+
+        Everything below runs AFTER the main UI is ready.
+    */
+
+
+    /*
+        Spotify callback
+    */
+
+    safeAsync(async () => {
+
+        await handleSpotifyCallback();
+
+    });
+
+
+    /*
+        Spotify account
+    */
+
+    safeAsync(async () => {
+
+        await loadSpotifyUser();
+
+    });
+
+
+    /*
+        Google OAuth
+    */
+
+    safeAsync(async () => {
+
+        initializeGoogle();
+
+    });
+
+}
+
+
+/* =========================================================
+   UPDATES MODAL
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const updatesModal =
+            document.getElementById("updatesModal");
+
+        const closeUpdates =
+            document.getElementById("closeUpdates");
+
+        const updatesDone =
+            document.getElementById("updatesDone");
+
+
+        /*
+            If the updates modal doesn't exist,
+            simply continue.
+
+            IMPORTANT:
+            Do NOT stop the rest of the application.
+        */
+
+        if (!updatesModal) {
+
+            console.warn(
+                "Updates modal not found. Continuing normally."
+            );
 
             return;
 
         }
 
 
-        if (e.code === "Space") {
+        const UPDATE_VERSION = "2.0";
 
-            e.preventDefault();
+        const seenVersion =
+            localStorage.getItem(
+                "rakkez_updates_version"
+            );
 
-            startTimer();
 
-        }
-
-
-        if (
-            e.key.toLowerCase() ===
-            "r"
-        ) {
-
-            openResetConfirmation();
-
-        }
-
+        /*
+            Show update popup after the app itself
+            has already become usable.
+        */
 
         if (
-            e.key.toLowerCase() ===
-            "f"
+            seenVersion !== UPDATE_VERSION
         ) {
 
-            toggleFocusOnly();
+            setTimeout(() => {
+
+                try {
+
+                    updatesModal.classList.add(
+                        "show"
+                    );
+
+                } catch {}
+
+            }, 500);
 
         }
+
+
+        function closeModal() {
+
+            try {
+
+                updatesModal.classList.remove(
+                    "show"
+                );
+
+            } catch {}
+
+
+            try {
+
+                localStorage.setItem(
+                    "rakkez_updates_version",
+                    UPDATE_VERSION
+                );
+
+            } catch {}
+
+        }
+
+
+        if (closeUpdates) {
+
+            closeUpdates.addEventListener(
+                "click",
+                closeModal
+            );
+
+        }
+
+
+        if (updatesDone) {
+
+            updatesDone.addEventListener(
+                "click",
+                closeModal
+            );
+
+        }
+
+
+        updatesModal.addEventListener(
+            "click",
+            e => {
+
+                if (
+                    e.target === updatesModal
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
+        );
 
     }
 );
 
 
 /* =========================================================
-   STARTUP
-========================================================= */
+   START APPLICATION
+   ========================================================= */
 
-async function init() {
+if (
+    document.readyState === "loading"
+) {
 
-    createAlarmPopup();
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
 
+            safeAsync(init);
 
-    /*
-       If settings say CUSTOM but there is no file
-       available after refresh, fall back to soft.
-       Object URLs cannot survive a page refresh.
-    */
+        },
+        {
+            once: true
+        }
+    );
 
-    if (
-        settings.alarmSound === "custom" &&
-        !customAlarmURL
-    ) {
+} else {
 
-        /*
-           Do not show a fake uploaded state.
-           The browser cannot restore a local Blob URL
-           after a full page reload.
-        */
-
-        settings.alarmSound = "soft";
-
-
-        save(
-            STORAGE.settings,
-            settings
-        );
-
-    }
-
-
-    updateStreak();
-
-    restoreTimer();
-
-    updateTimerUI();
-
-    updateStats();
-
-    syncSettingsUI();
-
-    renderTasks();
-
-    applyTheme();
-
-
-    const ambient =
-        ambientPresets.find(
-            item =>
-                item.id ===
-                selectedAmbient
-        );
-
-
-    if (ambient) {
-
-        applyAmbient(
-            ambient
-        );
-
-    }
-
-
-    await handleSpotifyCallback();
-
-    await loadSpotifyUser();
-
-    initializeGoogle();
+    safeAsync(init);
 
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const updatesModal = document.getElementById("updatesModal");
-    const closeUpdates = document.getElementById("closeUpdates");
-    const updatesDone = document.getElementById("updatesDone");
-
-    if (!updatesModal) {
-        console.error("Updates modal not found!");
-        return;
-    }
-
-    const UPDATE_VERSION = "2.0";
-
-    const seenVersion = localStorage.getItem("rakkez_updates_version");
-
-    if (seenVersion !== UPDATE_VERSION) {
-        setTimeout(() => {
-            updatesModal.classList.add("show");
-        }, 500);
-    }
-
-    function closeModal() {
-        updatesModal.classList.remove("show");
-
-        localStorage.setItem(
-            "rakkez_updates_version",
-            UPDATE_VERSION
-        );
-    }
-
-    closeUpdates?.addEventListener("click", closeModal);
-    updatesDone?.addEventListener("click", closeModal);
-
-    updatesModal.addEventListener("click", (e) => {
-        if (e.target === updatesModal) {
-            closeModal();
-        }
-    });
-
-});
-
-
-
-init();
