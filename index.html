@@ -9432,6 +9432,245 @@ window.dispatchEvent(
 </script>
 
 
+
+
+
+
+
+
+
+
+
+
+    <!-- =====================================================
+     RAKKEZ PERFORMANCE BOOST
+     Non-invasive — does not modify existing features
+===================================================== -->
+
+<script>
+(function () {
+
+    "use strict";
+
+    /* -------------------------------------------------
+       1. Defer non-critical images
+    ------------------------------------------------- */
+
+    function optimizeImages() {
+
+        document.querySelectorAll("img").forEach(function (img) {
+
+            if (!img.hasAttribute("loading")) {
+                img.setAttribute("loading", "lazy");
+            }
+
+            if (!img.hasAttribute("decoding")) {
+                img.setAttribute("decoding", "async");
+            }
+
+        });
+
+    }
+
+
+    /* -------------------------------------------------
+       2. Lazy-load videos
+    ------------------------------------------------- */
+
+    function optimizeVideos() {
+
+        document.querySelectorAll("video").forEach(function (video) {
+
+            if (!video.hasAttribute("preload")) {
+                video.setAttribute("preload", "metadata");
+            }
+
+        });
+
+    }
+
+
+    /* -------------------------------------------------
+       3. Pause expensive media when tab is hidden
+       Does NOT permanently stop anything.
+    ------------------------------------------------- */
+
+    let wasPlaying = [];
+
+    document.addEventListener("visibilitychange", function () {
+
+        if (document.hidden) {
+
+            wasPlaying = [];
+
+            document.querySelectorAll("video").forEach(function (video) {
+
+                if (!video.paused) {
+
+                    wasPlaying.push(video);
+
+                    try {
+                        video.pause();
+                    } catch (e) {}
+
+                }
+
+            });
+
+        } else {
+
+            wasPlaying.forEach(function (video) {
+
+                try {
+
+                    video.play().catch(function () {});
+
+                } catch (e) {}
+
+            });
+
+            wasPlaying = [];
+
+        }
+
+    });
+
+
+    /* -------------------------------------------------
+       4. Reduce rendering pressure while scrolling
+    ------------------------------------------------- */
+
+    let scrollTimer = null;
+
+    window.addEventListener(
+        "scroll",
+        function () {
+
+            document.documentElement.classList.add(
+                "rakkez-scrolling"
+            );
+
+            clearTimeout(scrollTimer);
+
+            scrollTimer = setTimeout(function () {
+
+                document.documentElement.classList.remove(
+                    "rakkez-scrolling"
+                );
+
+            }, 120);
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    /* -------------------------------------------------
+       5. Optimize after page load
+    ------------------------------------------------- */
+
+    function runOptimization() {
+
+        optimizeImages();
+        optimizeVideos();
+
+    }
+
+
+    if (document.readyState === "loading") {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            runOptimization,
+            { once: true }
+        );
+
+    } else {
+
+        runOptimization();
+
+    }
+
+
+    /* -------------------------------------------------
+       6. Run again for dynamically created elements
+       Lightweight observer
+    ------------------------------------------------- */
+
+    let observerTimer = null;
+
+    const observer = new MutationObserver(function () {
+
+        clearTimeout(observerTimer);
+
+        observerTimer = setTimeout(function () {
+
+            optimizeImages();
+            optimizeVideos();
+
+        }, 300);
+
+    });
+
+
+    observer.observe(
+        document.body,
+        {
+            childList: true,
+            subtree: true
+        }
+    );
+
+
+})();
+</script>
+
+
+<style>
+
+/* =====================================================
+   RAKKEZ PERFORMANCE CSS
+===================================================== */
+
+.rakkez-scrolling * {
+
+    /*
+     * Temporarily reduce expensive visual effects
+     * while the user is actively scrolling.
+     */
+
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+
+        scroll-behavior: auto !important;
+
+    }
+
+}
+
+</style>
+
+
 </body>
 
 </html>
