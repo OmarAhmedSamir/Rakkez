@@ -19,6 +19,8 @@
        - Keeps Mini Player
        - Keeps language system
        - Keeps saved settings
+       - FIXED Effects container compatibility
+       - Does NOT overwrite existing Effects HTML
     ===================================================== */
 
 
@@ -51,9 +53,6 @@
 
     /* =====================================================
        BUILT-IN PLAYLIST
-       
-       IMPORTANT:
-       These are the files that actually exist.
     ===================================================== */
 
     const PLAYLIST = [
@@ -69,7 +68,7 @@
                 "Music/Guitar.mp3",
 
             artwork:
-                "",
+                "Music/artwork/Guitar.png",
 
             type:
                 "lofi"
@@ -86,7 +85,7 @@
                 "Airplane.mp3",
 
             artwork:
-                "",
+                "Music/artwork/Airplane.png",
 
             type:
                 "lofi"
@@ -103,7 +102,7 @@
                 "Caffee.mp3",
 
             artwork:
-                "",
+                "Music/artwork/Caffee.png",
 
             type:
                 "lofi"
@@ -120,7 +119,7 @@
                 "FirePlace.mp3",
 
             artwork:
-                "",
+                "Music/artwork/FirePlace.png",
 
             type:
                 "lofi"
@@ -137,7 +136,7 @@
                 "peaceful-piano.mp3",
 
             artwork:
-                "",
+                "Music/artwork/peaceful-piano.png",
 
             type:
                 "lofi"
@@ -154,7 +153,7 @@
                 "rain.mp3",
 
             artwork:
-                "",
+                "Music/artwork/rain.png",
 
             type:
                 "lofi"
@@ -631,19 +630,24 @@
 
         updateMiniPlayer();
 
-
-        /*
-         * Do NOT automatically jump to another track.
-         *
-         * This prevents a broken playlist from creating
-         * an endless loading / error loop.
-         */
-
     }
 
 
     /* =====================================================
        AMBIENT EFFECTS
+       
+       IMPORTANT:
+       The HTML already contains the Effects section.
+
+       Previous version searched only for:
+           #rakkezEffectsContainer
+
+       Current HTML uses:
+           #rakkezEffectsSource
+
+       This version supports BOTH.
+
+       It also DOES NOT replace the existing HTML.
     ===================================================== */
 
     (function () {
@@ -693,10 +697,25 @@
             "rakkez_effect_";
 
 
+        /*
+         * Support the new HTML structure first.
+         */
+
+        const effectsSource =
+            document.getElementById(
+                "rakkezEffectsSource"
+            );
+
+
+        /*
+         * Keep compatibility with the old structure.
+         */
+
         const effectsContainer =
             document.getElementById(
                 "rakkezEffectsContainer"
-            );
+            ) ||
+            effectsSource;
 
 
         const effectPlayers =
@@ -772,12 +791,325 @@
         );
 
 
+        /*
+         * Find existing effect cards in the HTML.
+         *
+         * We intentionally do not wipe the container.
+         */
+
+        function getExistingEffectCard(
+            effect
+        ) {
+
+            if (!effectsContainer) {
+                return null;
+            }
+
+
+            const selectors = [
+
+                `[data-effect="${effect.id}"]`,
+
+                `[data-rakkez-effect="${effect.id}"]`,
+
+                `#rakkezEffect-${effect.id}`,
+
+                `.rakkez-effect-${effect.id}`
+
+            ];
+
+
+            for (
+                let i = 0;
+                i < selectors.length;
+                i++
+            ) {
+
+                try {
+
+                    const element =
+                        effectsContainer.querySelector(
+                            selectors[i]
+                        );
+
+
+                    if (element) {
+                        return element;
+                    }
+
+                } catch (error) {}
+
+            }
+
+
+            return null;
+
+        }
+
+
+        /*
+         * Bind an existing effect card if the HTML
+         * already provides controls.
+         */
+
+        function bindExistingEffect(
+            effect,
+            card
+        ) {
+
+            const player =
+                effectPlayers[
+                    effect.id
+                ];
+
+
+            if (
+                !player ||
+                !card
+            ) {
+
+                return;
+
+            }
+
+
+            const toggle =
+                card.querySelector(
+                    ".rakkez-effect-toggle, [data-effect-toggle], button"
+                );
+
+
+            const volumeInput =
+                card.querySelector(
+                    ".rakkez-effect-volume-input, [data-effect-volume], input[type='range']"
+                );
+
+
+            const volumeValue =
+                card.querySelector(
+                    ".rakkez-effect-volume-value, [data-effect-volume-value]"
+                );
+
+
+            /*
+             * Prevent duplicate listeners.
+             */
+
+            if (
+                card.dataset.rakkezEffectBound ===
+                "true"
+            ) {
+
+                return;
+
+            }
+
+
+            card.dataset.rakkezEffectBound =
+                "true";
+
+
+            if (volumeInput) {
+
+                volumeInput.value =
+                    player.audio.volume;
+
+
+                if (volumeValue) {
+
+                    volumeValue.textContent =
+                        Math.round(
+                            player.audio.volume * 100
+                        ) +
+                        "%";
+
+                }
+
+
+                volumeInput.addEventListener(
+                    "input",
+                    function () {
+
+                        const value =
+                            parseFloat(
+                                volumeInput.value
+                            );
+
+
+                        if (
+                            !Number.isFinite(
+                                value
+                            )
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        player.audio.volume =
+                            Math.max(
+                                0,
+                                Math.min(
+                                    1,
+                                    value
+                                )
+                            );
+
+
+                        player.volume =
+                            player.audio.volume;
+
+
+                        localStorage.setItem(
+                            STORAGE_PREFIX +
+                            effect.id +
+                            "_volume",
+                            String(
+                                player.audio.volume
+                            )
+                        );
+
+
+                        if (volumeValue) {
+
+                            volumeValue.textContent =
+                                Math.round(
+                                    player.audio.volume * 100
+                                ) +
+                                "%";
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            if (toggle) {
+
+                toggle.addEventListener(
+                    "click",
+                    function () {
+
+                        if (
+                            player.audio.paused
+                        ) {
+
+                            const promise =
+                                player.audio.play();
+
+
+                            if (
+                                promise &&
+                                typeof promise.catch ===
+                                "function"
+                            ) {
+
+                                promise.catch(
+                                    function (error) {
+
+                                        console.warn(
+                                            "RakkeZ Effect:",
+                                            error
+                                        );
+
+                                    }
+                                );
+
+                            }
+
+                        } else {
+
+                            player.audio.pause();
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            player.audio.addEventListener(
+                "play",
+                function () {
+
+                    card.classList.add(
+                        "active"
+                    );
+
+
+                    if (toggle) {
+
+                        toggle.classList.add(
+                            "active"
+                        );
+
+
+                        /*
+                         * Do not destroy existing
+                         * button text if the HTML
+                         * already controls it.
+                         */
+
+                    }
+
+                }
+            );
+
+
+            player.audio.addEventListener(
+                "pause",
+                function () {
+
+                    card.classList.remove(
+                        "active"
+                    );
+
+
+                    if (toggle) {
+
+                        toggle.classList.remove(
+                            "active"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            player.audio.addEventListener(
+                "error",
+                function () {
+
+                    console.warn(
+                        "RakkeZ: Effect unavailable:",
+                        effect.src
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * If the HTML has effect cards, bind to them.
+         *
+         * If it doesn't, create the minimal fallback UI.
+         *
+         * This keeps compatibility with both versions.
+         */
+
         function renderEffects() {
 
             if (!effectsContainer) {
 
                 console.warn(
-                    "RakkeZ: Effects container not found. Ambient UI skipped."
+                    "RakkeZ: Effects container not found."
                 );
 
                 return;
@@ -785,9 +1117,51 @@
             }
 
 
-            effectsContainer.innerHTML =
-                "";
+            let foundExisting =
+                false;
 
+
+            AMBIENT_EFFECTS.forEach(
+                function (effect) {
+
+                    const card =
+                        getExistingEffectCard(
+                            effect
+                        );
+
+
+                    if (card) {
+
+                        foundExisting =
+                            true;
+
+
+                        bindExistingEffect(
+                            effect,
+                            card
+                        );
+
+                    }
+
+                }
+            );
+
+
+            /*
+             * If the current HTML already contains
+             * Effects markup, DO NOTHING ELSE.
+             */
+
+            if (foundExisting) {
+
+                return;
+
+            }
+
+
+            /*
+             * Fallback only for an empty/old container.
+             */
 
             AMBIENT_EFFECTS.forEach(
                 function (effect) {
@@ -811,6 +1185,10 @@
 
                     card.className =
                         "rakkez-effect-card";
+
+
+                    card.dataset.rakkezEffect =
+                        effect.id;
 
 
                     card.innerHTML = `
@@ -870,149 +1248,13 @@
                     `;
 
 
-                    const toggle =
-                        card.querySelector(
-                            ".rakkez-effect-toggle"
-                        );
-
-
-                    const volumeInput =
-                        card.querySelector(
-                            ".rakkez-effect-volume-input"
-                        );
-
-
-                    const volumeValue =
-                        card.querySelector(
-                            ".rakkez-effect-volume-value"
-                        );
-
-
-                    toggle.addEventListener(
-                        "click",
-                        function () {
-
-                            if (
-                                player.audio.paused
-                            ) {
-
-                                const promise =
-                                    player.audio.play();
-
-
-                                if (
-                                    promise &&
-                                    typeof promise.catch ===
-                                    "function"
-                                ) {
-
-                                    promise.catch(
-                                        function (error) {
-
-                                            console.warn(
-                                                "RakkeZ Effect:",
-                                                error
-                                            );
-
-                                        }
-                                    );
-
-                                }
-
-                            } else {
-
-                                player.audio.pause();
-
-                            }
-
-                        }
-                    );
-
-
-                    volumeInput.addEventListener(
-                        "input",
-                        function () {
-
-                            const value =
-                                parseFloat(
-                                    volumeInput.value
-                                );
-
-
-                            player.audio.volume =
-                                value;
-
-
-                            player.volume =
-                                value;
-
-
-                            localStorage.setItem(
-                                STORAGE_PREFIX +
-                                effect.id +
-                                "_volume",
-                                String(value)
-                            );
-
-
-                            volumeValue.textContent =
-                                Math.round(
-                                    value * 100
-                                ) +
-                                "%";
-
-                        }
-                    );
-
-
-                    player.audio.addEventListener(
-                        "play",
-                        function () {
-
-                            toggle.classList.add(
-                                "active"
-                            );
-
-
-                            toggle.textContent =
-                                "Ⅱ  " +
-                                effect.name;
-
-                        }
-                    );
-
-
-                    player.audio.addEventListener(
-                        "pause",
-                        function () {
-
-                            toggle.classList.remove(
-                                "active"
-                            );
-
-
-                            toggle.textContent =
-                                "Play " +
-                                effect.name;
-
-                        }
-                    );
-
-
-                    player.audio.addEventListener(
-                        "error",
-                        function () {
-
-                            console.warn(
-                                "RakkeZ: Effect unavailable:",
-                                effect.src
-                            );
-
-                        }
-                    );
-
-
                     effectsContainer.appendChild(
+                        card
+                    );
+
+
+                    bindExistingEffect(
+                        effect,
                         card
                     );
 
@@ -1953,10 +2195,6 @@
         updateMiniPlayer();
 
 
-        /*
-         * Validate source before trying to play.
-         */
-
         if (
             !track.src
         ) {
@@ -1970,11 +2208,6 @@
         }
 
 
-        /*
-         * Local object URLs are already complete.
-         * Built-in paths are relative to the site root.
-         */
-
         audio.src =
             track.src;
 
@@ -1986,11 +2219,6 @@
             token
         );
 
-
-        /*
-         * We only play after the browser has accepted
-         * the source.
-         */
 
         if (shouldPlay) {
 
@@ -2019,10 +2247,6 @@
         if (
             currentTrackFailed
         ) {
-
-            /*
-             * Retry current track.
-             */
 
             const allTracks =
                 getAllTracks();
@@ -2085,13 +2309,6 @@
                         error
                     );
 
-
-                    /*
-                     * AbortError usually means the user
-                     * or another load interrupted playback.
-                     *
-                     * Don't mark it as a broken file.
-                     */
 
                     if (
                         error &&
@@ -2253,12 +2470,6 @@
         "loadstart",
         function () {
 
-            /*
-             * The player can show loading visually through
-             * the browser/UI, but we never allow it to
-             * remain indefinitely.
-             */
-
             startLoadingGuard(
                 currentLoadToken
             );
@@ -2341,11 +2552,6 @@
         "stalled",
         function () {
 
-            /*
-             * Don't immediately kill playback.
-             * Browser may temporarily stall.
-             */
-
             console.warn(
                 "RakkeZ Media: Audio stalled:",
                 audio.src
@@ -2375,7 +2581,6 @@
 
             /*
              * Normal buffering.
-             * No error is triggered here.
              */
 
         }
@@ -3273,10 +3478,6 @@
             "local"
         );
 
-
-        /*
-         * Start the first newly added track.
-         */
 
         const firstNewIndex =
             PLAYLIST.length +
@@ -4378,10 +4579,6 @@
 
     renderLocalList();
 
-
-    /*
-     * Load saved track WITHOUT autoplay.
-     */
 
     loadTrack(
         currentIndex,
