@@ -1399,73 +1399,7 @@ textarea:focus {
 
 }
 
-<div class="card section-card weekly-habit-panel">
 
-    <div class="card-header">
-
-        <div>
-
-            <div class="card-title">
-                Weekly Habit Tracker
-            </div>
-
-            <div
-                class="card-subtitle"
-                id="habitWeekLabel"
-            >
-                This Week
-            </div>
-
-        </div>
-
-        <div style="display:flex;gap:6px;">
-
-            <button
-                class="small-button"
-                id="previousHabitWeek"
-                title="Previous week"
-            >
-                ‹
-            </button>
-
-            <button
-                class="small-button"
-                id="currentHabitWeek"
-                title="Current week"
-            >
-                ●
-            </button>
-
-            <button
-                class="small-button"
-                id="nextHabitWeek"
-                title="Next week"
-            >
-                ›
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div
-        id="weeklyHabitTracker"
-        style="overflow-x:auto;"
-    ></div>
-
-
-    <div
-        id="weeklyHabitSummary"
-        style="
-            margin-top:15px;
-            display:flex;
-            gap:8px;
-            flex-wrap:wrap;
-        "
-    ></div>
-
-</div>
 
 
 /* =========================================================
@@ -3219,6 +3153,74 @@ body.light .note-body {
 
 
 <body>
+
+<div class="card section-card weekly-habit-panel">
+
+    <div class="card-header">
+
+        <div>
+
+            <div class="card-title">
+                Weekly Habit Tracker
+            </div>
+
+            <div
+                class="card-subtitle"
+                id="habitWeekLabel"
+            >
+                This Week
+            </div>
+
+        </div>
+
+        <div style="display:flex;gap:6px;">
+
+            <button
+                class="small-button"
+                id="previousHabitWeek"
+                title="Previous week"
+            >
+                ‹
+            </button>
+
+            <button
+                class="small-button"
+                id="currentHabitWeek"
+                title="Current week"
+            >
+                ●
+            </button>
+
+            <button
+                class="small-button"
+                id="nextHabitWeek"
+                title="Next week"
+            >
+                ›
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="weeklyHabitTracker"
+        style="overflow-x:auto;"
+    ></div>
+
+
+    <div
+        id="weeklyHabitSummary"
+        style="
+            margin-top:15px;
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+        "
+    ></div>
+
+</div>
 
 <div class="app">
 
@@ -7101,286 +7103,7 @@ function renderHabits() {
 
                 return `
 
-                    <div
-                        class="card habit-card"
-                    >
 
-                        <div class="habit-top">
-
-                            <div class="habit-main">
-
-                                <div
-                                    class="habit-icon-large"
-                                >
-                                    ${escapeHTML(
-                                        habit.icon
-                                    )}
-                                </div>
-
-                                <div>
-
-                                    <div class="habit-name">
-                                        ${escapeHTML(
-                                            habit.name
-                                        )}
-                                    </div>
-
-                                    <div class="habit-streak">
-                                        ${getHabitStreak(
-                                            habit
-                                        )} day streak
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="habit-actions">
-
-                                <button
-                                    class="small-button"
-                                    onclick="
-                                        editHabit(
-                                            '${habit.id}'
-                                        )
-                                    "
-                                >
-                                    ✎
-                                </button>
-
-                                <button
-                                    class="small-button"
-                                    onclick="
-                                        deleteHabit(
-                                            '${habit.id}'
-                                        )
-                                    "
-                                >
-                                    ×
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="habit-progress-row">
-
-                            <span
-                                style="
-                                    color:var(--muted);
-                                    font-size:9px;
-                                "
-                            >
-                                Last 7 days
-                            </span>
-
-                            <span class="habit-percent">
-                                ${percent}%
-                            </span>
-
-                        </div>
-
-
-                        <div class="habit-progress">
-
-                            <div
-                                class="habit-progress-fill"
-                                style="
-                                    width:${percent}%
-                                "
-                            ></div>
-
-                        </div>
-
-
-                        <div class="week-days">
-
-                            ${days.map(
-                                day => {
-
-                                    const key =
-                                        dateKey(day);
-
-
-                                    const completed =
-                                        isHabitCompleted(
-                                            habit,
-                                            key
-                                        );
-
-
-                                    const isToday =
-                                        key === today;
-
-
-                                    return `
-
-                                        <div
-                                            class="
-                                                day
-                                                ${
-                                                    completed
-                                                        ? "done"
-                                                        : ""
-                                                }
-                                                ${
-                                                    isToday
-                                                        ? "today"
-                                                        : ""
-                                                }
-                                            "
-                                        >
-
-                                            <div class="day-name">
-
-                                                ${day.toLocaleDateString(
-                                                    "en-US",
-                                                    {
-                                                        weekday:
-                                                            "narrow"
-                                                    }
-                                                )}
-
-                                            </div>
-
-                                            <div class="day-dot">
-                                                ${
-                                                    completed
-                                                        ? "✓"
-                                                        : ""
-                                                }
-                                            </div>
-
-                                        </div>
-
-                                    `;
-
-                                }
-                            ).join("")}
-
-                        </div>
-
-
-                        <div
-                            style="
-                                margin-top:10px;
-                                display:flex;
-                                align-items:center;
-                                gap:7px;
-                            "
-                        >
-
-                            <span
-                                style="
-                                    color:var(--muted);
-                                    font-size:9px;
-                                "
-                            >
-                                Today:
-                            </span>
-
-                            <input
-                                class="weekly-time-input"
-                                style="
-                                    margin-top:0;
-                                    max-width:90px;
-                                "
-                                type="number"
-                                min="0"
-                                max="1440"
-                                step="5"
-                                value="${todayMinutes || ""}"
-                                placeholder="minutes"
-                                onchange="
-                                    updateHabitMinutesFromInput(
-                                        this,
-                                        '${habit.id}',
-                                        '${today}'
-                                    )
-                                "
-                            >
-
-                            <span
-                                style="
-                                    color:var(--muted);
-                                    font-size:9px;
-                                "
-                            >
-                                ${formatMinutes(
-                                    todayMinutes
-                                )}
-                            </span>
-
-                        </div>
-
-
-                        <button
-                            class="
-                                habit-check
-                                ${
-                                    done
-                                        ? "completed"
-                                        : ""
-                                }
-                            "
-                            onclick="
-                                toggleHabit(
-                                    '${habit.id}'
-                                )
-                            "
-                        >
-
-                            ${
-                                done
-                                    ? "✓ Completed Today"
-                                    : "Mark Complete"
-                            }
-
-                        </button>
-
-                    </div>
-
-                `;
-
-            }
-        ).join("");
-
-}
-
-
-function getHabitStreak(
-    habit
-) {
-
-    let streak = 0;
-
-
-    const cursor =
-        new Date();
-
-
-    while (
-        isHabitCompleted(
-            habit,
-            dateKey(cursor)
-        )
-    ) {
-
-        streak++;
-
-
-        cursor.setDate(
-            cursor.getDate() - 1
-        );
-
-    }
-
-
-    return streak;
-
-}
 
 
 /* =========================================================
