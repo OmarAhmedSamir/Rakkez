@@ -4622,206 +4622,612 @@ body.light .rakkez-mini-close,
     let currentIsLocal =
         false;
 
-    /* =====================================================
+
+
+
+    
+/* =====================================================
    AMBIENT EFFECTS ENGINE
-===================================================== */
+   ===================================================== */
 
-const rainAudio =
-    new Audio(
-        "Music/rain.mp3"
-    );
+(function () {
 
-rainAudio.loop =
-    true;
-
-rainAudio.preload =
-    "auto";
+    "use strict";
 
 
-const rainToggle =
-    document.getElementById(
-        "rakkezRainToggle"
-    );
+    /* =====================================================
+       EFFECTS
+       Add new effects here only.
+       ===================================================== */
+
+    const AMBIENT_EFFECTS = [
+
+        {
+            id: "rain",
+
+            name: "Rain",
+
+            icon: "🌧️",
+
+            src: "Music/rain.mp3",
+
+            defaultVolume: 0.5
+
+        }
+
+        // Add future effects here:
+        //
+        // {
+        //     id: "coffee",
+        //     name: "Coffee Shop",
+        //     icon: "☕",
+        //     src: "Music/coffee.mp3",
+        //     defaultVolume: 0.5
+        // }
+
+    ];
 
 
-const rainVolume =
-    document.getElementById(
-        "rakkezRainVolume"
-    );
+    /* =====================================================
+       STORAGE
+       ===================================================== */
+
+    const STORAGE_PREFIX =
+        "rakkez_effect_";
 
 
-const rainVolumeValue =
-    document.getElementById(
-        "rakkezRainVolumeValue"
-    );
+    /* =====================================================
+       EFFECT INSTANCES
+       ===================================================== */
+
+    const effectPlayers = {};
 
 
-let rainSavedVolume =
-    parseFloat(
-        localStorage.getItem(
-            "rakkez_rain_volume"
-        )
-    );
+    /* =====================================================
+       CREATE AUDIO PLAYERS
+       ===================================================== */
+
+    AMBIENT_EFFECTS.forEach(
+        function (effect) {
+
+            const audio =
+                new Audio(
+                    effect.src
+                );
 
 
-if (
-    !Number.isFinite(
-        rainSavedVolume
-    )
-) {
-
-    rainSavedVolume =
-        0.5;
-
-}
+            audio.loop =
+                true;
 
 
-rainSavedVolume =
-    Math.max(
-        0,
-        Math.min(
-            1,
-            rainSavedVolume
-        )
-    );
+            audio.preload =
+                "auto";
 
 
-rainAudio.volume =
-    rainSavedVolume;
+            let savedVolume =
+                parseFloat(
+                    localStorage.getItem(
+                        STORAGE_PREFIX +
+                        effect.id +
+                        "_volume"
+                    )
+                );
 
-
-if (rainVolume) {
-
-    rainVolume.value =
-        rainSavedVolume;
-
-}
-
-
-function updateRainVolumeUI() {
-
-    if (!rainVolumeValue) {
-        return;
-    }
-
-
-    rainVolumeValue.textContent =
-        Math.round(
-            rainAudio.volume * 100
-        ) + "%";
-
-}
-
-
-updateRainVolumeUI();
-
-
-function updateRainButton() {
-
-    if (!rainToggle) {
-        return;
-    }
-
-
-    const playing =
-        !rainAudio.paused;
-
-
-    rainToggle.classList.toggle(
-        "active",
-        playing
-    );
-
-
-    rainToggle.textContent =
-        playing
-            ? "Ⅱ  Rain"
-            : "Play Rain";
-
-}
-
-
-if (rainToggle) {
-
-    rainToggle.addEventListener(
-        "click",
-        function () {
 
             if (
-                rainAudio.paused
+                !Number.isFinite(
+                    savedVolume
+                )
             ) {
 
-                const promise =
-                    rainAudio.play();
-
-
-                if (
-                    promise &&
-                    typeof promise.catch ===
-                        "function"
-                ) {
-
-                    promise.catch(
-                        function () {}
-                    );
-
-                }
-
-            } else {
-
-                rainAudio.pause();
+                savedVolume =
+                    effect.defaultVolume ??
+                    0.5;
 
             }
 
 
-            updateRainButton();
-
-        }
-    );
-
-}
-
-
-if (rainVolume) {
-
-    rainVolume.addEventListener(
-        "input",
-        function () {
-
-            const value =
-                parseFloat(
-                    rainVolume.value
+            savedVolume =
+                Math.max(
+                    0,
+                    Math.min(
+                        1,
+                        savedVolume
+                    )
                 );
 
 
-            rainAudio.volume =
-                value;
+            audio.volume =
+                savedVolume;
 
 
-            localStorage.setItem(
-                "rakkez_rain_volume",
-                String(value)
-            );
+            effectPlayers[
+                effect.id
+            ] = {
 
+                audio:
+                    audio,
 
-            updateRainVolumeUI();
+                volume:
+                    savedVolume,
+
+                playing:
+                    false
+
+            };
 
         }
     );
 
-}
+
+    /* =====================================================
+       GET ELEMENTS
+       ===================================================== */
+
+    function getToggle(
+        effect
+    ) {
+
+        return document.getElementById(
+            "rakkez" +
+            capitalize(
+                effect.id
+            ) +
+            "Toggle"
+        );
+
+    }
 
 
-rainAudio.addEventListener(
-    "play",
-    updateRainButton
-);
+    function getVolume(
+        effect
+    ) {
+
+        return document.getElementById(
+            "rakkez" +
+            capitalize(
+                effect.id
+            ) +
+            "Volume"
+        );
+
+    }
 
 
-rainAudio.addEventListener(
-    "pause",
-    updateRainButton
-);
+    function getVolumeValue(
+        effect
+    ) {
+
+        return document.getElementById(
+            "rakkez" +
+            capitalize(
+                effect.id
+            ) +
+            "VolumeValue"
+        );
+
+    }
+
+
+    /* =====================================================
+       CAPITALIZE
+       ===================================================== */
+
+    function capitalize(
+        value
+    ) {
+
+        if (!value) {
+            return "";
+        }
+
+
+        return (
+            value.charAt(0).toUpperCase() +
+            value.slice(1)
+        );
+
+    }
+
+
+    /* =====================================================
+       UPDATE VOLUME UI
+       ===================================================== */
+
+    function updateVolumeUI(
+        effect
+    ) {
+
+        const player =
+            effectPlayers[
+                effect.id
+            ];
+
+
+        const volumeValue =
+            getVolumeValue(
+                effect
+            );
+
+
+        if (!volumeValue) {
+            return;
+        }
+
+
+        volumeValue.textContent =
+            Math.round(
+                player.audio.volume * 100
+            ) +
+            "%";
+
+    }
+
+
+    /* =====================================================
+       UPDATE BUTTON
+       ===================================================== */
+
+    function updateButton(
+        effect
+    ) {
+
+        const player =
+            effectPlayers[
+                effect.id
+            ];
+
+
+        const toggle =
+            getToggle(
+                effect
+            );
+
+
+        if (!toggle) {
+            return;
+        }
+
+
+        const playing =
+            !player.audio.paused;
+
+
+        player.playing =
+            playing;
+
+
+        toggle.classList.toggle(
+            "active",
+            playing
+        );
+
+
+        toggle.textContent =
+            playing
+                ? "Ⅱ  " + effect.name
+                : "Play " + effect.name;
+
+    }
+
+
+    /* =====================================================
+       PLAY
+       ===================================================== */
+
+    function playEffect(
+        effect
+    ) {
+
+        const player =
+            effectPlayers[
+                effect.id
+            ];
+
+
+        if (!player) {
+            return;
+        }
+
+
+        const promise =
+            player.audio.play();
+
+
+        if (
+            promise &&
+            typeof promise.catch ===
+                "function"
+        ) {
+
+            promise.catch(
+                function () {
+
+                    updateButton(
+                        effect
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       STOP
+       ===================================================== */
+
+    function stopEffect(
+        effect
+    ) {
+
+        const player =
+            effectPlayers[
+                effect.id
+            ];
+
+
+        if (!player) {
+            return;
+        }
+
+
+        player.audio.pause();
+
+    }
+
+
+    /* =====================================================
+       TOGGLE
+       ===================================================== */
+
+    function toggleEffect(
+        effect
+    ) {
+
+        const player =
+            effectPlayers[
+                effect.id
+            ];
+
+
+        if (!player) {
+            return;
+        }
+
+
+        if (
+            player.audio.paused
+        ) {
+
+            playEffect(
+                effect
+            );
+
+        } else {
+
+            stopEffect(
+                effect
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CONNECT CONTROLS
+       ===================================================== */
+
+    AMBIENT_EFFECTS.forEach(
+        function (effect) {
+
+            const player =
+                effectPlayers[
+                    effect.id
+                ];
+
+
+            const toggle =
+                getToggle(
+                    effect
+                );
+
+
+            const volume =
+                getVolume(
+                    effect
+                );
+
+
+            if (volume) {
+
+                volume.value =
+                    player.audio.volume;
+
+
+                volume.addEventListener(
+                    "input",
+                    function () {
+
+                        const value =
+                            parseFloat(
+                                volume.value
+                            );
+
+
+                        player.audio.volume =
+                            value;
+
+
+                        player.volume =
+                            value;
+
+
+                        localStorage.setItem(
+                            STORAGE_PREFIX +
+                            effect.id +
+                            "_volume",
+                            String(
+                                value
+                            )
+                        );
+
+
+                        updateVolumeUI(
+                            effect
+                        );
+
+                    }
+                );
+
+            }
+
+
+            if (toggle) {
+
+                toggle.addEventListener(
+                    "click",
+                    function () {
+
+                        toggleEffect(
+                            effect
+                        );
+
+                    }
+                );
+
+            }
+
+
+            player.audio.addEventListener(
+                "play",
+                function () {
+
+                    updateButton(
+                        effect
+                    );
+
+                }
+            );
+
+
+            player.audio.addEventListener(
+                "pause",
+                function () {
+
+                    updateButton(
+                        effect
+                    );
+
+                }
+            );
+
+
+            updateVolumeUI(
+                effect
+            );
+
+
+            updateButton(
+                effect
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       PUBLIC API
+       ===================================================== */
+
+    window.rakkezAmbient = {
+
+        play:
+            function (id) {
+
+                const effect =
+                    AMBIENT_EFFECTS.find(
+                        function (item) {
+
+                            return item.id === id;
+
+                        }
+                    );
+
+
+                if (effect) {
+
+                    playEffect(
+                        effect
+                    );
+
+                }
+
+            },
+
+
+        stop:
+            function (id) {
+
+                const effect =
+                    AMBIENT_EFFECTS.find(
+                        function (item) {
+
+                            return item.id === id;
+
+                        }
+                    );
+
+
+                if (effect) {
+
+                    stopEffect(
+                        effect
+                    );
+
+                }
+
+            },
+
+
+        toggle:
+            function (id) {
+
+                const effect =
+                    AMBIENT_EFFECTS.find(
+                        function (item) {
+
+                            return item.id === id;
+
+                        }
+                    );
+
+
+                if (effect) {
+
+                    toggleEffect(
+                        effect
+                    );
+
+                }
+
+            },
+
+
+        getEffects:
+            function () {
+
+                return AMBIENT_EFFECTS;
+
+            }
+
+    };
+
+
+})();
 
 
     /* =====================================================
