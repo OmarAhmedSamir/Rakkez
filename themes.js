@@ -1,44 +1,30 @@
 /* =========================================================
    RAKKEZ THEME + AMBIENT SYSTEM
-   FULL STANDALONE VERSION
+   FULL REPLACEMENT
    =========================================================
 
-   هذا الملف مسؤول فقط عن:
+   RESPONSIBILITIES:
 
-   1. الوضع الليلي / النهاري
-   2. زر تغيير الـ Theme
-   3. زر Ambient / الأجواء
-   4. فتح وإغلاق نافذة الأجواء
-   5. الخلفيات المتدرجة Gradient
-   6. الخلفيات الجاهزة بالصور
-   7. رفع صورة أو فيديو من الجهاز
-   8. حفظ الخلفية المختارة
-   9. حفظ الـ Dark / Light Theme
-
-   =========================================================
-
-   هذا الملف لا يتحكم في:
-
-   ❌ Timer
-   ❌ Stats
-   ❌ Tasks
-   ❌ Media Player
-   ❌ Spotify
-   ❌ YouTube
-   ❌ Alarm
-   ❌ Google
-
-   =========================================================
+   1. Dark / Light Theme
+   2. Theme Button
+   3. Ambient Button
+   4. Ambient Overlay
+   5. Ambient Close Buttons
+   6. Gradient Backgrounds
+   7. Image Backgrounds
+   8. Local Image / Video Background
+   9. Persistent Theme
+   10. Persistent Ambient
 
    IMPORTANT:
 
-   لو عايز تضيف Gradient جديد:
-   عدل فقط AMBIENT_GRADIENTS
+   This version uses EVENT DELEGATION for buttons.
 
-   لو عايز تضيف صورة جديدة:
-   عدل فقط AMBIENT_PRESETS
-
-   لا تحتاج لتعديل app.js.
+   Therefore it still works if:
+   - Header is re-rendered
+   - Buttons are dynamically created
+   - app.js changes the DOM
+   - Header content is replaced
 
    ========================================================= */
 
@@ -49,13 +35,7 @@
 
 
     /* =========================================================
-       01 — منع تشغيل الملف أكثر من مرة
-       =========================================================
-
-       لو theme.js تم تحميله مرتين بالخطأ في HTML
-       لن يتم إنشاء نظامين Theme / Ambient فوق بعض.
-
-       لا تعدل هذا الجزء.
+       01 — PREVENT DOUBLE INITIALIZATION
        ========================================================= */
 
     if (window.__RAKKEZ_THEME_INITIALIZED__) {
@@ -72,16 +52,6 @@
 
     /* =========================================================
        02 — HELPER
-
-       الدالة $ تجعل كتابة:
-
-           $("themeBtn")
-
-       بدل:
-
-           document.getElementById("themeBtn")
-
-       لا تعدل هذا الجزء.
        ========================================================= */
 
     const $ = function (id) {
@@ -93,20 +63,6 @@
 
     /* =========================================================
        03 — STORAGE
-
-       هنا أسماء الأشياء التي يتم حفظها داخل Browser Storage.
-
-       theme:
-       يحفظ Dark / Light Mode.
-
-       ambient:
-       يحفظ الخلفية التي اختارها المستخدم.
-
-       IMPORTANT:
-       استخدمنا أسماء مستقلة عن app.js حتى لا يحصل تعارض.
-
-       لا تغير هذه الأسماء بعد أن يستخدمها الموقع،
-       إلا إذا كنت تعرف أنك تريد تصفير البيانات القديمة.
        ========================================================= */
 
     const STORAGE = {
@@ -121,20 +77,7 @@
 
 
     /* =========================================================
-       04 — DEFAULT THEME
-
-       هذا هو الوضع الافتراضي عند أول تشغيل.
-
-       dark
-       = الوضع الليلي
-
-       light
-       = الوضع النهاري
-
-       لو عايز الموقع يبدأ Light بدل Dark:
-
-           theme: "light"
-
+       04 — DEFAULT SETTINGS
        ========================================================= */
 
     const DEFAULT_SETTINGS = {
@@ -145,11 +88,7 @@
 
 
     /* =========================================================
-       05 — قراءة البيانات المحفوظة
-
-       هذه الدالة تقرأ البيانات من localStorage.
-
-       لا تحتاج لتعديلها.
+       05 — LOAD JSON
        ========================================================= */
 
     function loadJSON(key, fallback) {
@@ -186,11 +125,7 @@
 
 
     /* =========================================================
-       06 — حفظ البيانات
-
-       هذه الدالة تحفظ البيانات في localStorage.
-
-       لا تحتاج لتعديلها.
+       06 — SAVE JSON
        ========================================================= */
 
     function saveJSON(key, value) {
@@ -216,15 +151,7 @@
 
 
     /* =========================================================
-       07 — إعدادات الـ Theme الحالية
-
-       يتم دمج:
-
-       DEFAULT_SETTINGS
-
-       مع الإعدادات المحفوظة.
-
-       لا تعدل هذا الجزء.
+       07 — CURRENT SETTINGS
        ========================================================= */
 
     let settings = {
@@ -240,12 +167,7 @@
 
 
     /* =========================================================
-       08 — التأكد أن الـ Theme صحيح
-
-       لو حصلت قيمة غريبة في Storage،
-       يرجع تلقائيًا إلى Dark.
-
-       لا تعدل هذا الجزء.
+       08 — VALIDATE THEME
        ========================================================= */
 
     if (
@@ -260,16 +182,7 @@
 
 
     /* =========================================================
-       09 — الخلفية الحالية
-
-       الافتراضي:
-
-           gradient
-
-       لو المستخدم اختار صورة أو خلفية أخرى
-       يتم حفظ الـ ID الخاص بها.
-
-       لا تعدل هذا الجزء.
+       09 — SELECTED AMBIENT
        ========================================================= */
 
     let selectedAmbient =
@@ -279,12 +192,7 @@
 
 
     /* =========================================================
-       10 — Local Background URL
-
-       هنا يتم تخزين رابط الصورة / الفيديو
-       الذي رفعه المستخدم من جهازه.
-
-       لا تعدل هذا الجزء.
+       10 — LOCAL BACKGROUND URL
        ========================================================= */
 
     let localBackgroundURL = null;
@@ -292,56 +200,11 @@
 
     /* =========================================================
        11 — GRADIENT BACKGROUNDS
-       =========================================================
-
-       ⭐⭐ هنا المكان الذي تعدل فيه الـ Gradients ⭐⭐
-
-       لإضافة Gradient جديد:
-
-       انسخ هذا الشكل:
-
-       {
-           id: "purple",
-           name: "Purple Dream",
-           background: `
-               radial-gradient(
-                   circle at 20% 20%,
-                   #9b5cff,
-                   transparent 35%
-               ),
-               #090014
-           `
-       }
-
-       ثم ضعه قبل:
-
-           ];
-
-       =========================================================
-
-       IMPORTANT:
-
-       id:
-       اسم داخلي فريد.
-
-       name:
-       الاسم الذي يظهر للمستخدم.
-
-       background:
-       شكل وألوان الخلفية.
-
-       لا تجعل id متكررًا.
-
        ========================================================= */
 
     const AMBIENT_GRADIENTS = [
 
-        /* =====================================================
-           GRADIENT 01 — RakkeZ الأساسي
-           ===================================================== */
-
         {
-
             id: "gradient",
 
             name: "RakkeZ Gradient",
@@ -359,16 +222,10 @@
                 ),
                 #02040b
             `
-
         },
 
 
-        /* =====================================================
-           GRADIENT 02 — Yellow
-           ===================================================== */
-
         {
-
             id: "yellow",
 
             name: "Solar Yellow",
@@ -386,16 +243,10 @@
                 ),
                 #120900
             `
-
         },
 
 
-        /* =====================================================
-           GRADIENT 03 — Pink
-           ===================================================== */
-
         {
-
             id: "pink",
 
             name: "Neon Pink",
@@ -413,7 +264,6 @@
                 ),
                 #10020b
             `
-
         }
 
     ];
@@ -421,198 +271,104 @@
 
     /* =========================================================
        12 — IMAGE AMBIENT PRESETS
-       =========================================================
-
-       ⭐⭐ هنا المكان الذي تضيف فيه صور الخلفيات ⭐⭐
-
-       لإضافة صورة جديدة:
-
-       {
-
-           id: "tokyo",
-
-           name: "Tokyo Night",
-
-           url:
-               "https://example.com/image.jpg"
-
-       }
-
-       =========================================================
-
-       id:
-       اسم داخلي فريد.
-
-       name:
-       الاسم الذي سيظهر أسفل الصورة.
-
-       url:
-       رابط الصورة.
-
-       =========================================================
-
-       تقدر تضيف أي عدد من الصور.
-
-       لا تحتاج لتعديل أي شيء آخر.
        ========================================================= */
 
     const AMBIENT_PRESETS = [
 
-        /* =====================================================
-           IMAGE 01
-           ===================================================== */
-
         {
-
             id: "anime-girl",
 
             name: "✨ NEW ✨ Anime Girl",
 
             url:
                 "https://image.cdn2.seaart.ai/2024-03-02/cnhb3jde878c73a9lp80/0c7c4c2054c4dd5d4dce8769ef3e4fdc02c9f2d6_high.webp"
-
         },
 
 
-        /* =====================================================
-           IMAGE 02
-           ===================================================== */
-
         {
-
             id: "newyork",
 
             name: "New York",
 
             url:
                 "https://wallpapercave.com/wp/wp3544754.jpg"
-
         },
 
 
-        /* =====================================================
-           IMAGE 03
-           ===================================================== */
-
         {
-
             id: "ocean",
 
             name: "Ocean",
 
             url:
                 "https://wallpapercave.com/wp/wp8963442.jpg"
-
         },
 
 
-        /* =====================================================
-           IMAGE 04
-           ===================================================== */
-
         {
-
             id: "nature",
 
             name: "Nature",
 
             url:
                 "https://wallpapercave.com/wp/wp2506793.jpg"
-
         },
 
 
-        /* =====================================================
-           IMAGE 05
-           ===================================================== */
-
         {
-
             id: "coffee",
 
             name: "Lofi Coffee",
 
             url:
                 "https://wallpaperaccess.com/full/8891446.jpg"
-
         },
 
 
-        /* =====================================================
-           IMAGE 06
-           ===================================================== */
-
         {
-
             id: "coffee2",
 
             name: "Lofi Coffee 2",
 
             url:
                 "https://i.ytimg.com/vi/8-BsxrE1bY8/maxresdefault.jpg"
-
         },
 
 
-        /* =====================================================
-           IMAGE 07
-           ===================================================== */
-
         {
-
             id: "room",
 
             name: "Lofi Room",
 
             url:
                 "https://wallpapercave.com/wp/wp12446857.jpg"
-
         },
 
 
-        /* =====================================================
-           IMAGE 08
-           ===================================================== */
-
         {
-
             id: "swiss",
 
             name: "Swiss",
 
             url:
                 "https://wallpaperaccess.com/full/1455073.jpg"
-
         },
 
 
-        /* =====================================================
-           IMAGE 09
-           ===================================================== */
-
         {
-
             id: "city",
 
             name: "Lofi City",
 
             url:
                 "https://images.hdqwalls.com/download/van-ov-2560x1600.jpg"
-
         }
 
     ];
 
 
     /* =========================================================
-       13 — الوصول إلى عنصر Gradient
-       =========================================================
-
-       HTML المطلوب:
-
-       <div class="bg-gradient"></div>
-
-       لا تعدل.
+       13 — GET GRADIENT ELEMENT
        ========================================================= */
 
     function getGradientElement() {
@@ -625,14 +381,7 @@
 
 
     /* =========================================================
-       14 — الوصول إلى صورة الخلفية
-       =========================================================
-
-       HTML المطلوب:
-
-       <img id="customImage">
-
-       لا تعدل.
+       14 — GET IMAGE ELEMENT
        ========================================================= */
 
     function getImageElement() {
@@ -643,14 +392,7 @@
 
 
     /* =========================================================
-       15 — الوصول إلى فيديو الخلفية
-       =========================================================
-
-       HTML المطلوب:
-
-       <video id="customVideo">
-
-       لا تعدل.
+       15 — GET VIDEO ELEMENT
        ========================================================= */
 
     function getVideoElement() {
@@ -661,14 +403,7 @@
 
 
     /* =========================================================
-       16 — إيقاف فيديو الخلفية
-
-       يتم استخدامه عندما ننتقل من:
-
-       Video → Image
-       Video → Gradient
-
-       لا تعدل.
+       16 — STOP VIDEO
        ========================================================= */
 
     function stopVideo() {
@@ -709,16 +444,13 @@
 
 
     /* =========================================================
-       17 — إخفاء صورة الخلفية
-
-       لا تعدل.
+       17 — HIDE IMAGE
        ========================================================= */
 
     function hideImage() {
 
         const image =
             getImageElement();
-
 
         if (!image) {
 
@@ -739,16 +471,13 @@
 
 
     /* =========================================================
-       18 — إخفاء Gradient
-
-       لا تعدل.
+       18 — HIDE GRADIENT
        ========================================================= */
 
     function hideGradient() {
 
         const gradient =
             getGradientElement();
-
 
         if (!gradient) {
 
@@ -764,22 +493,7 @@
 
 
     /* =========================================================
-       19 — تطبيق Dark / Light Theme
-       =========================================================
-
-       هذا الجزء يضيف:
-
-           .light
-
-       إلى:
-
-           body
-           html
-
-       ويحدث زر Theme.
-
-       لا تعدل إلا إذا كنت تريد تغيير
-       طريقة عمل الـ Theme في CSS.
+       19 — APPLY THEME
        ========================================================= */
 
     function applyTheme() {
@@ -790,27 +504,35 @@
                 : "dark";
 
 
+        const isLight =
+            theme === "light";
+
+
+        /* =====================================================
+           HTML
+           ===================================================== */
+
         document.documentElement.classList.toggle(
             "light",
-            theme === "light"
+            isLight
         );
-
-
-        if (document.body) {
-
-            document.body.classList.toggle(
-                "light",
-                theme === "light"
-            );
-
-        }
 
 
         document.documentElement.dataset.theme =
             theme;
 
 
+        /* =====================================================
+           BODY
+           ===================================================== */
+
         if (document.body) {
+
+            document.body.classList.toggle(
+                "light",
+                isLight
+            );
+
 
             document.body.dataset.theme =
                 theme;
@@ -818,27 +540,29 @@
         }
 
 
+        /* =====================================================
+           THEME BUTTON
+
+           Support:
+
+           #themeBtn
+           ===================================================== */
+
         const themeButton =
             $("themeBtn");
 
 
         if (themeButton) {
 
-            /*
-             * مهم:
-             * لا نستبدل innerHTML.
-             * نغير فقط النص إذا كان الزر مبنيًا كنص.
-             */
-
             themeButton.textContent =
-                theme === "light"
+                isLight
                     ? "☀"
                     : "☾";
 
 
             themeButton.setAttribute(
                 "aria-label",
-                theme === "light"
+                isLight
                     ? "Switch to dark mode"
                     : "Switch to light mode"
             );
@@ -846,26 +570,42 @@
 
             themeButton.setAttribute(
                 "title",
-                theme === "light"
+                isLight
                     ? "Dark Mode"
                     : "Light Mode"
             );
 
+
+            themeButton.dataset.theme =
+                theme;
+
         }
+
+
+        /* =====================================================
+           OPTIONAL SUPPORT FOR COMMON ICON ELEMENTS
+           ===================================================== */
+
+        document
+            .querySelectorAll(
+                "[data-theme-icon]"
+            )
+            .forEach(
+                function (element) {
+
+                    element.textContent =
+                        isLight
+                            ? "☀"
+                            : "☾";
+
+                }
+            );
 
     }
 
 
     /* =========================================================
-       20 — تبديل Dark / Light
-
-       عند الضغط على زر Theme:
-
-       Dark → Light
-
-       Light → Dark
-
-       لا تعدل.
+       20 — TOGGLE THEME
        ========================================================= */
 
     function toggleTheme() {
@@ -876,24 +616,42 @@
                 : "light";
 
 
-        applyTheme();
-
-
         saveJSON(
             STORAGE.settings,
             settings
         );
 
+
+        applyTheme();
+
+
+        /* =====================================================
+           EVENT
+
+           يسمح لملفات أخرى بمعرفة أن Theme تغير.
+           ===================================================== */
+
+        try {
+
+            window.dispatchEvent(
+                new CustomEvent(
+                    "rakkez:themechange",
+                    {
+                        detail: {
+                            theme:
+                                settings.theme
+                        }
+                    }
+                )
+            );
+
+        } catch (error) {}
+
     }
 
 
     /* =========================================================
-       21 — تطبيق Gradient
-
-       تستخدم عندما يختار المستخدم Gradient.
-
-       لا تعدل إلا إذا كنت تريد تغيير
-       طريقة عرض الخلفية.
+       21 — APPLY GRADIENT
        ========================================================= */
 
     function applyGradient(
@@ -931,17 +689,7 @@
 
 
     /* =========================================================
-       22 — تطبيق صورة Ambient
-
-       تستخدم مع:
-
-       Ocean
-       Nature
-       Coffee
-       New York
-       إلخ...
-
-       لا تعدل.
+       22 — APPLY IMAGE AMBIENT
        ========================================================= */
 
     function applyAmbient(item) {
@@ -992,13 +740,7 @@
 
 
     /* =========================================================
-       23 — إلغاء كل الخلفيات
-
-       Gradient OFF
-       Image OFF
-       Video OFF
-
-       لا تعدل.
+       23 — RESET BACKGROUND
        ========================================================= */
 
     function resetBackground() {
@@ -1027,17 +769,7 @@
 
 
     /* =========================================================
-       24 — حفظ Ambient المختار
-
-       مثال:
-
-           gradient
-           yellow
-           pink
-           ocean
-           coffee
-
-       لا تعدل.
+       24 — SELECT AMBIENT
        ========================================================= */
 
     function selectAmbient(id) {
@@ -1062,21 +794,32 @@
 
         }
 
+
+        /* =====================================================
+           EVENT
+           ===================================================== */
+
+        try {
+
+            window.dispatchEvent(
+                new CustomEvent(
+                    "rakkez:ambientchange",
+                    {
+                        detail: {
+                            ambient:
+                                selectedAmbient
+                        }
+                    }
+                )
+            );
+
+        } catch (error) {}
+
     }
 
 
     /* =========================================================
-       25 — إغلاق نافذة Ambient
-
-       يتم إزالة:
-
-           show
-
-       من:
-
-           #ambientOverlay
-
-       لا تعدل.
+       25 — CLOSE AMBIENT
        ========================================================= */
 
     function closeAmbient() {
@@ -1097,11 +840,6 @@
         );
 
 
-        /*
-         * دعم إضافي لو CSS الحالي يستخدم
-         * aria-hidden للتحكم في حالة الـ Overlay.
-         */
-
         overlay.setAttribute(
             "aria-hidden",
             "true"
@@ -1111,16 +849,7 @@
 
 
     /* =========================================================
-       26 — فتح نافذة Ambient
-
-       هذا هو الجزء المسؤول فعليًا
-       عن زر الأجواء.
-
-       عند الضغط:
-
-       1. يعيد رسم الخلفيات
-       2. يفتح الـ Overlay
-
+       26 — OPEN AMBIENT
        ========================================================= */
 
     function openAmbient() {
@@ -1157,12 +886,7 @@
 
 
     /* =========================================================
-       27 — إنشاء اسم كارت Ambient
-
-       نستخدم textContent بدل innerHTML
-       حتى يكون أكثر أمانًا.
-
-       لا تعدل.
+       27 — AMBIENT NAME
        ========================================================= */
 
     function createAmbientName(
@@ -1190,18 +914,7 @@
 
 
     /* =========================================================
-       28 — إنشاء كارت Gradient
-
-       هذا الجزء يبني كارت كل Gradient
-       تلقائيًا.
-
-       لا تحتاج لإضافة كود هنا
-       عندما تضيف Gradient جديد.
-
-       فقط أضفه في:
-
-           AMBIENT_GRADIENTS
-
+       28 — GRADIENT CARD
        ========================================================= */
 
     function createGradientCard(
@@ -1218,18 +931,6 @@
             "ambient-card";
 
 
-        card.setAttribute(
-            "role",
-            "button"
-        );
-
-
-        card.setAttribute(
-            "tabindex",
-            "0"
-        );
-
-
         if (
             selectedAmbient ===
             item.id
@@ -1240,6 +941,10 @@
             );
 
         }
+
+
+        card.dataset.ambient =
+            item.id;
 
 
         const preview =
@@ -1272,56 +977,24 @@
         );
 
 
-        /* =====================================================
-           عند الضغط على Gradient
-           ===================================================== */
-
-        function chooseGradient() {
-
-            selectAmbient(
-                item.id
-            );
-
-
-            resetBackground();
-
-
-            applyGradient(
-                item.background
-            );
-
-
-            renderAmbient();
-
-        }
-
-
         card.addEventListener(
             "click",
-            function (event) {
+            function () {
 
-                event.preventDefault();
-
-                chooseGradient();
-
-            }
-        );
+                selectAmbient(
+                    item.id
+                );
 
 
-        card.addEventListener(
-            "keydown",
-            function (event) {
+                resetBackground();
 
-                if (
-                    event.key === "Enter" ||
-                    event.key === " "
-                ) {
 
-                    event.preventDefault();
+                applyGradient(
+                    item.background
+                );
 
-                    chooseGradient();
 
-                }
+                renderAmbient();
 
             }
         );
@@ -1333,12 +1006,7 @@
 
 
     /* =========================================================
-       29 — إنشاء كارت Image
-
-       لا تحتاج لتعديل.
-
-       كل الصور الجديدة يتم توليد كروتها تلقائيًا
-       من AMBIENT_PRESETS.
+       29 — IMAGE CARD
        ========================================================= */
 
     function createImageCard(
@@ -1355,18 +1023,6 @@
             "ambient-card";
 
 
-        card.setAttribute(
-            "role",
-            "button"
-        );
-
-
-        card.setAttribute(
-            "tabindex",
-            "0"
-        );
-
-
         if (
             selectedAmbient ===
             item.id
@@ -1377,6 +1033,10 @@
             );
 
         }
+
+
+        card.dataset.ambient =
+            item.id;
 
 
         const image =
@@ -1397,11 +1057,6 @@
         image.loading =
             "lazy";
 
-
-        /* =====================================================
-           لو الصورة الخارجية فشلت
-           لا يكسر النظام.
-           ===================================================== */
 
         image.addEventListener(
             "error",
@@ -1426,53 +1081,21 @@
         );
 
 
-        /* =====================================================
-           عند الضغط على الصورة
-           ===================================================== */
-
-        function chooseImage() {
-
-            selectAmbient(
-                item.id
-            );
-
-
-            applyAmbient(
-                item
-            );
-
-
-            renderAmbient();
-
-        }
-
-
         card.addEventListener(
             "click",
-            function (event) {
+            function () {
 
-                event.preventDefault();
-
-                chooseImage();
-
-            }
-        );
+                selectAmbient(
+                    item.id
+                );
 
 
-        card.addEventListener(
-            "keydown",
-            function (event) {
+                applyAmbient(
+                    item
+                );
 
-                if (
-                    event.key === "Enter" ||
-                    event.key === " "
-                ) {
 
-                    event.preventDefault();
-
-                    chooseImage();
-
-                }
+                renderAmbient();
 
             }
         );
@@ -1484,18 +1107,7 @@
 
 
     /* =========================================================
-       30 — Local Background Card
-
-       هذا هو الكارت:
-
-           +
-
-       الذي يسمح للمستخدم باختيار:
-
-       🖼 صورة من الجهاز
-       🎥 فيديو من الجهاز
-
-       لا تعدل.
+       30 — LOCAL BACKGROUND CARD
        ========================================================= */
 
     function createLocalCard() {
@@ -1510,18 +1122,6 @@
             "ambient-card";
 
 
-        card.setAttribute(
-            "role",
-            "button"
-        );
-
-
-        card.setAttribute(
-            "tabindex",
-            "0"
-        );
-
-
         if (
             selectedAmbient ===
             "local"
@@ -1532,6 +1132,10 @@
             );
 
         }
+
+
+        card.dataset.ambient =
+            "local";
 
 
         const preview =
@@ -1584,55 +1188,23 @@
         );
 
 
-        /* =====================================================
-           عند الضغط يفتح File Picker
-           ===================================================== */
-
-        function openFilePicker() {
-
-            const input =
-                $("bgFile");
-
-
-            if (input) {
-
-                input.click();
-
-            } else {
-
-                console.warn(
-                    "RakkeZ Theme: #bgFile not found."
-                );
-
-            }
-
-        }
-
-
         card.addEventListener(
             "click",
-            function (event) {
+            function () {
 
-                event.preventDefault();
-
-                openFilePicker();
-
-            }
-        );
+                const input =
+                    $("bgFile");
 
 
-        card.addEventListener(
-            "keydown",
-            function (event) {
+                if (input) {
 
-                if (
-                    event.key === "Enter" ||
-                    event.key === " "
-                ) {
+                    input.click();
 
-                    event.preventDefault();
+                } else {
 
-                    openFilePicker();
+                    console.warn(
+                        "RakkeZ Theme: #bgFile not found."
+                    );
 
                 }
 
@@ -1646,25 +1218,7 @@
 
 
     /* =========================================================
-       31 — رسم كل Ambient Cards
-
-       هذا الجزء يجمع:
-
-       Gradients
-       +
-       Images
-       +
-       Local Background
-
-       لا تعدل هنا لإضافة خلفية جديدة.
-
-       التعديل يكون في:
-
-           AMBIENT_GRADIENTS
-
-       أو:
-
-           AMBIENT_PRESETS
+       31 — RENDER AMBIENT
        ========================================================= */
 
     function renderAmbient() {
@@ -1684,15 +1238,11 @@
         }
 
 
-        /* =====================================================
-           حذف الكروت القديمة
-           ===================================================== */
-
         grid.replaceChildren();
 
 
         /* =====================================================
-           إضافة Gradients
+           GRADIENTS
            ===================================================== */
 
         AMBIENT_GRADIENTS.forEach(
@@ -1709,7 +1259,7 @@
 
 
         /* =====================================================
-           إضافة الصور
+           IMAGES
            ===================================================== */
 
         AMBIENT_PRESETS.forEach(
@@ -1726,7 +1276,7 @@
 
 
         /* =====================================================
-           إضافة Local Background
+           LOCAL
            ===================================================== */
 
         grid.appendChild(
@@ -1737,26 +1287,13 @@
 
 
     /* =========================================================
-       32 — استرجاع Ambient المحفوظ
-
-       عند فتح الموقع:
-
-       يقرأ الخلفية التي اختارها المستخدم آخر مرة.
-
-       مثال:
-
-           pink
-           ↓
-           يطبق Pink تلقائيًا
-
+       32 — RESTORE AMBIENT
        ========================================================= */
 
     function restoreAmbient() {
 
         /* =====================================================
-           Local files لا تستمر بعد Refresh.
-
-           لذلك نرجع للـ Gradient.
+           LOCAL FILES CANNOT SURVIVE REFRESH
            ===================================================== */
 
         if (
@@ -1781,7 +1318,7 @@
 
 
         /* =====================================================
-           البحث عن Gradient
+           GRADIENT
            ===================================================== */
 
         const gradient =
@@ -1813,7 +1350,7 @@
 
 
         /* =====================================================
-           البحث عن Image
+           IMAGE
            ===================================================== */
 
         const image =
@@ -1842,8 +1379,7 @@
 
 
         /* =====================================================
-           لو الخلفية المحفوظة غير موجودة
-           نرجع إلى Gradient الأساسي.
+           FALLBACK
            ===================================================== */
 
         selectedAmbient =
@@ -1888,18 +1424,7 @@
 
 
     /* =========================================================
-       33 — Local Image / Video
-
-       هذا الجزء يعمل عندما يختار المستخدم
-       ملفًا من جهازه.
-
-       يقبل:
-
-           Image
-           Video
-
-       لا تعدل إلا إذا كنت تريد إضافة
-       أنواع ملفات جديدة.
+       33 — LOCAL IMAGE / VIDEO
        ========================================================= */
 
     function handleLocalBackground(
@@ -1923,7 +1448,7 @@
 
 
         /* =====================================================
-           حذف Blob URL القديم
+           REVOKE OLD URL
            ===================================================== */
 
         if (localBackgroundURL) {
@@ -1940,7 +1465,7 @@
 
 
         /* =====================================================
-           إنشاء Blob URL جديد
+           CREATE NEW URL
            ===================================================== */
 
         localBackgroundURL =
@@ -1963,7 +1488,7 @@
 
 
         /* =====================================================
-           إذا كان الملف VIDEO
+           VIDEO
            ===================================================== */
 
         if (
@@ -1973,6 +1498,8 @@
         ) {
 
             hideImage();
+
+            hideGradient();
 
 
             if (video) {
@@ -2014,14 +1541,7 @@
                 ) {
 
                     playPromise.catch(
-                        function (error) {
-
-                            console.warn(
-                                "RakkeZ Theme: local video autoplay failed.",
-                                error
-                            );
-
-                        }
+                        function () {}
                     );
 
                 }
@@ -2032,16 +1552,14 @@
 
 
         /* =====================================================
-           إذا كان الملف IMAGE
+           IMAGE
            ===================================================== */
 
-        else if (
-            file.type.startsWith(
-                "image/"
-            )
-        ) {
+        else {
 
             stopVideo();
+
+            hideGradient();
 
 
             if (image) {
@@ -2063,59 +1581,14 @@
 
 
         /* =====================================================
-           لو الملف ليس صورة ولا فيديو
-           ===================================================== */
-
-        else {
-
-            if (localBackgroundURL) {
-
-                try {
-
-                    URL.revokeObjectURL(
-                        localBackgroundURL
-                    );
-
-                } catch (error) {}
-
-            }
-
-
-            localBackgroundURL =
-                null;
-
-
-            selectedAmbient =
-                "gradient";
-
-
-            try {
-
-                localStorage.setItem(
-                    STORAGE.ambient,
-                    "gradient"
-                );
-
-            } catch (error) {}
-
-
-            restoreAmbient();
-
-        }
-
-
-        /* =====================================================
-           إغلاق نافذة Ambient بعد اختيار الملف
+           CLOSE
            ===================================================== */
 
         closeAmbient();
 
 
         /* =====================================================
-           تصفير Input
-
-           يسمح للمستخدم باختيار نفس الملف
-           مرة أخرى.
+           RESET INPUT
            ===================================================== */
 
         if (event.target) {
@@ -2132,296 +1605,160 @@
 
 
     /* =========================================================
-       34 — زر Theme
+       34 — THEME BUTTON EVENT DELEGATION
+       =========================================================
 
-       HTML المطلوب:
+       IMPORTANT:
 
-           id="themeBtn"
+       لا نستخدم:
 
-       لا تستخدم onclick في HTML.
+           button.addEventListener(...)
 
-       هذا الملف هو المسؤول عن الزر.
+       هنا.
+
+       لأن Header ممكن يتغير.
+
+       نستخدم document delegation.
+
        ========================================================= */
 
-    function bindThemeButton() {
+    function handleGlobalClick(event) {
 
-        const button =
-            $("themeBtn");
+        const target =
+            event.target;
 
 
-        if (!button) {
+        if (!target) {
 
-            console.warn(
-                "RakkeZ Theme: #themeBtn not found."
+            return;
+
+        }
+
+
+        /* =====================================================
+           THEME BUTTON
+           ===================================================== */
+
+        const themeButton =
+            target.closest &&
+            target.closest(
+                "#themeBtn"
             );
 
+
+        if (themeButton) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            toggleTheme();
+
+
             return;
 
         }
 
 
-        if (
-            button.dataset.rakkezThemeBound ===
-            "true"
-        ) {
+        /* =====================================================
+           AMBIENT BUTTON
 
-            return;
+           Supported:
 
-        }
+           #ambientOpen
+           [data-open-ambient]
+           .ambient-open
+           ===================================================== */
 
-
-        button.dataset.rakkezThemeBound =
-            "true";
-
-
-        button.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                event.stopPropagation();
-
-                toggleTheme();
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       35 — زر Ambient ⭐
-
-       HTML المطلوب:
-
-           id="ambientOpen"
-
-       هذا هو الجزء المسؤول عن تشغيل زر الأجواء.
-
-       عند الضغط:
-
-           Ambient Button
-                 ↓
-           openAmbient()
-                 ↓
-           renderAmbient()
-                 ↓
-           ambientOverlay.show
-
-       ========================================================= */
-
-    function bindAmbientButton() {
-
-        const button =
-            $("ambientOpen");
-
-
-        if (!button) {
-
-            console.warn(
-                "RakkeZ Theme: #ambientOpen not found."
+        const ambientButton =
+            target.closest &&
+            target.closest(
+                "#ambientOpen, [data-open-ambient], .ambient-open"
             );
 
+
+        if (ambientButton) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            openAmbient();
+
+
             return;
 
         }
 
 
-        if (
-            button.dataset.rakkezAmbientBound ===
-            "true"
-        ) {
+        /* =====================================================
+           AMBIENT CLOSE BUTTONS
+           ===================================================== */
+
+        const closeButton =
+            target.closest &&
+            target.closest(
+                "#ambientClose, #ambientCloseBtn, .ambient-close, .ambient-overlay-close, [data-close-ambient]"
+            );
+
+
+        if (closeButton) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            closeAmbient();
+
 
             return;
 
         }
 
 
-        button.dataset.rakkezAmbientBound =
-            "true";
-
-
-        button.addEventListener(
-            "click",
-            function (event) {
-
-                event.preventDefault();
-
-                event.stopPropagation();
-
-                openAmbient();
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       36 — أزرار X لإغلاق Ambient
-
-       يدعم النظام أكثر من اسم حتى لو كان
-       الـ HTML الحالي عندك يستخدم واحدًا منها:
-
-           #ambientClose
-
-           #ambientCloseBtn
-
-           .ambient-close
-
-           .ambient-overlay-close
-
-       لذلك لا تحتاج تعديل JavaScript
-       إذا كان عندك واحد من هذه الأسماء.
-       ========================================================= */
-
-    function bindAmbientCloseButtons() {
-
-        const selectors = [
-
-            "#ambientClose",
-
-            "#ambientCloseBtn",
-
-            ".ambient-close",
-
-            ".ambient-overlay-close"
-
-        ];
-
-
-        selectors.forEach(
-            function (selector) {
-
-                document
-                    .querySelectorAll(
-                        selector
-                    )
-                    .forEach(
-                        function (button) {
-
-                            if (
-                                button.dataset.rakkezAmbientCloseBound ===
-                                "true"
-                            ) {
-
-                                return;
-
-                            }
-
-
-                            button.dataset.rakkezAmbientCloseBound =
-                                "true";
-
-
-                            button.addEventListener(
-                                "click",
-                                function (event) {
-
-                                    event.preventDefault();
-
-                                    event.stopPropagation();
-
-                                    closeAmbient();
-
-                                }
-                            );
-
-                        }
-                    );
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       37 — الضغط خارج نافذة Ambient
-
-       لو المستخدم ضغط على الخلفية السوداء
-       خارج الـ Panel:
-
-           يتم إغلاق النافذة.
-
-       ========================================================= */
-
-    function bindAmbientOverlay() {
+        /* =====================================================
+           CLICK ON OVERLAY BACKGROUND
+           ===================================================== */
 
         const overlay =
             $("ambientOverlay");
 
 
-        if (!overlay) {
-
-            console.warn(
-                "RakkeZ Theme: #ambientOverlay not found."
-            );
-
-            return;
-
-        }
-
-
         if (
-            overlay.dataset.rakkezOverlayBound ===
-            "true"
+            overlay &&
+            target === overlay
         ) {
 
-            return;
+            closeAmbient();
 
         }
 
-
-        overlay.dataset.rakkezOverlayBound =
-            "true";
+    }
 
 
-        overlay.addEventListener(
+    /* =========================================================
+       35 — GLOBAL CLICK BINDING
+       ========================================================= */
+
+    function bindGlobalClicks() {
+
+        document.addEventListener(
             "click",
-            function (event) {
-
-                if (
-                    event.target ===
-                    overlay
-                ) {
-
-                    closeAmbient();
-
-                }
-
-            }
+            handleGlobalClick,
+            true
         );
 
     }
 
 
     /* =========================================================
-       38 — زر ESC
-
-       الضغط على:
-
-           ESC
-
-       يغلق Ambient.
-
+       36 — ESC KEY
        ========================================================= */
 
     function bindEscapeKey() {
-
-        if (
-            window.__RAKKEZ_ESCAPE_BOUND__
-        ) {
-
-            return;
-
-        }
-
-
-        window.__RAKKEZ_ESCAPE_BOUND__ =
-            true;
-
 
         document.addEventListener(
             "keydown",
@@ -2443,17 +1780,7 @@
 
 
     /* =========================================================
-       39 — File Input
-
-       HTML المطلوب:
-
-           <input
-               id="bgFile"
-               type="file"
-               accept="image/*,video/*"
-           >
-
-       لا تعدل.
+       37 — FILE INPUT
        ========================================================= */
 
     function bindLocalBackground() {
@@ -2473,20 +1800,6 @@
         }
 
 
-        if (
-            input.dataset.rakkezBackgroundBound ===
-            "true"
-        ) {
-
-            return;
-
-        }
-
-
-        input.dataset.rakkezBackgroundBound =
-            "true";
-
-
         input.addEventListener(
             "change",
             handleLocalBackground
@@ -2496,15 +1809,7 @@
 
 
     /* =========================================================
-       40 — PUBLIC API
-
-       هذا يسمح لملفات أخرى باستخدام
-       وظائف Theme عند الضرورة.
-
-       مثال:
-
-           window.rakkezTheme.toggleTheme();
-
+       38 — PUBLIC API
        ========================================================= */
 
     window.rakkezTheme = {
@@ -2552,42 +1857,49 @@
 
 
     /* =========================================================
-       41 — INITIALIZATION
-
-       هنا يبدأ النظام بالكامل.
-
-       الترتيب:
-
-       1. Theme
-       2. Ambient المحفوظ
-       3. رسم الكروت
-       4. زر Theme
-       5. زر Ambient
-       6. أزرار الإغلاق
-       7. Overlay
-       8. ESC
-       9. Local Background
-
-       لا تعدل.
+       39 — INITIALIZATION
        ========================================================= */
 
     function initThemeSystem() {
 
+        /* =====================================================
+           THEME
+           ===================================================== */
+
         applyTheme();
+
+
+        /* =====================================================
+           AMBIENT
+           ===================================================== */
 
         restoreAmbient();
 
+
+        /* =====================================================
+           DRAW AMBIENT CARDS
+           ===================================================== */
+
         renderAmbient();
 
-        bindThemeButton();
 
-        bindAmbientButton();
+        /* =====================================================
+           GLOBAL BUTTON SYSTEM
+           ===================================================== */
 
-        bindAmbientCloseButtons();
+        bindGlobalClicks();
 
-        bindAmbientOverlay();
+
+        /* =====================================================
+           ESC
+           ===================================================== */
 
         bindEscapeKey();
+
+
+        /* =====================================================
+           LOCAL FILE
+           ===================================================== */
 
         bindLocalBackground();
 
@@ -2600,15 +1912,7 @@
 
 
     /* =========================================================
-       42 — DOM READY
-
-       لو JavaScript اشتغل قبل HTML:
-       ننتظر DOMContentLoaded.
-
-       لو HTML جاهز:
-       نشغل النظام فورًا.
-
-       لا تعدل.
+       40 — DOM READY
        ========================================================= */
 
     if (
