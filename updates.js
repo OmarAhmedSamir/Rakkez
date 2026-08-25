@@ -22,7 +22,7 @@
 
     const RAKKEZ_UPDATE = {
 
-        version: "1.0.1",
+        version: "1.0.6",
 
         badge: "NEW",
 
