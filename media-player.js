@@ -4,96 +4,160 @@
 
 
     /* =====================================================
+       RAKKEZ MEDIA PLAYER
+       =====================================================
+
+       FULL REPLACEMENT VERSION
+
+       Fixes:
+       - Correct Music/Guitar.mp3 path
+       - Removes missing fake playlist files
+       - Prevents endless loading
+       - Handles audio errors safely
+       - Keeps YouTube / Spotify / Local Music
+       - Keeps Ambient Effects
+       - Keeps Mini Player
+       - Keeps language system
+       - Keeps saved settings
+    ===================================================== */
+
+
+    /* =====================================================
        STORAGE
     ===================================================== */
 
     const STORAGE = {
 
-        track: "rakkez_media_track",
+        track:
+            "rakkez_media_track",
 
-        volume: "rakkez_media_volume",
+        volume:
+            "rakkez_media_volume",
 
-        shuffle: "rakkez_media_shuffle",
+        shuffle:
+            "rakkez_media_shuffle",
 
-        loop: "rakkez_media_loop",
+        loop:
+            "rakkez_media_loop",
 
-        autoNext: "rakkez_media_auto_next",
+        autoNext:
+            "rakkez_media_auto_next",
 
-        localTracks: "rakkez_local_music_names"
+        localTracks:
+            "rakkez_local_music_names"
 
     };
 
 
     /* =====================================================
-       BUILT-IN LOFI PLAYLIST
+       BUILT-IN PLAYLIST
        
        IMPORTANT:
-       All audio files are in ROOT.
-       
-       Artwork is intentionally disabled here because
-       the artwork files were returning 404.
+       These are the files that actually exist.
     ===================================================== */
 
     const PLAYLIST = [
 
         {
-            title: "بحب الله موسيقى مع بيز هادي",
+            title:
+                "بحب الله موسيقى مع بيز هادي",
 
-            artist: "Ahmed S",
+            artist:
+                "Ahmed S",
 
-            src: "Guitar.mp3",
+            src:
+                "Music/Guitar.mp3",
 
-            artwork: "",
+            artwork:
+                "",
 
-            type: "lofi"
+            type:
+                "lofi"
         },
 
         {
-            title: "Late Night Study",
+            title:
+                "Airplane",
 
-            artist: "RakkeZ Lofi",
+            artist:
+                "RakkeZ Ambient",
 
-            src: "late-night-study.mp3",
+            src:
+                "Airplane.mp3",
 
-            artwork: "",
+            artwork:
+                "",
 
-            type: "lofi"
+            type:
+                "lofi"
         },
 
         {
-            title: "Coffee Shop",
+            title:
+                "Coffee",
 
-            artist: "RakkeZ Lofi",
+            artist:
+                "RakkeZ Ambient",
 
-            src: "coffee-shop.mp3",
+            src:
+                "Caffee.mp3",
 
-            artwork: "",
+            artwork:
+                "",
 
-            type: "lofi"
+            type:
+                "lofi"
         },
 
         {
-            title: "Deep Focus",
+            title:
+                "Fireplace",
 
-            artist: "RakkeZ Lofi",
+            artist:
+                "RakkeZ Ambient",
 
-            src: "deep-focus.mp3",
+            src:
+                "FirePlace.mp3",
 
-            artwork: "",
+            artwork:
+                "",
 
-            type: "lofi"
+            type:
+                "lofi"
         },
 
         {
-            title: "Midnight",
+            title:
+                "Peaceful Piano",
 
-            artist: "RakkeZ Lofi",
+            artist:
+                "RakkeZ Lofi",
 
-            src: "midnight.mp3",
+            src:
+                "peaceful-piano.mp3",
 
-            artwork: "",
+            artwork:
+                "",
 
-            type: "lofi"
+            type:
+                "lofi"
+        },
+
+        {
+            title:
+                "Rain",
+
+            artist:
+                "RakkeZ Ambient",
+
+            src:
+                "rain.mp3",
+
+            artwork:
+                "",
+
+            type:
+                "lofi"
         }
 
     ];
@@ -130,145 +194,174 @@
             "rakkezMediaOverlay"
         );
 
+
     const closeButton =
         document.getElementById(
             "rakkezMediaClose"
         );
+
 
     const mediaButton =
         document.getElementById(
             "mediaOpen"
         );
 
+
     const tabs =
         document.querySelectorAll(
             ".rakkez-media-tab"
         );
+
 
     const sources =
         document.querySelectorAll(
             ".rakkez-media-source"
         );
 
+
     const artwork =
         document.getElementById(
             "rakkezArtwork"
         );
+
 
     const trackName =
         document.getElementById(
             "rakkezTrackName"
         );
 
+
     const trackArtist =
         document.getElementById(
             "rakkezTrackArtist"
         );
+
 
     const playlistElement =
         document.getElementById(
             "rakkezPlaylist"
         );
 
+
     const playlistCount =
         document.getElementById(
             "rakkezPlaylistCount"
         );
+
 
     const playButton =
         document.getElementById(
             "rakkezPlay"
         );
 
+
     const previousButton =
         document.getElementById(
             "rakkezPrevious"
         );
+
 
     const nextButton =
         document.getElementById(
             "rakkezNext"
         );
 
+
     const shuffleButton =
         document.getElementById(
             "rakkezShuffle"
         );
+
 
     const loopButton =
         document.getElementById(
             "rakkezLoop"
         );
 
+
     const autoNextButton =
         document.getElementById(
             "rakkezAutoNext"
         );
+
 
     const progress =
         document.getElementById(
             "rakkezProgress"
         );
 
+
     const currentTimeElement =
         document.getElementById(
             "rakkezCurrentTime"
         );
+
 
     const durationElement =
         document.getElementById(
             "rakkezDuration"
         );
 
+
     const volume =
         document.getElementById(
             "rakkezVolume"
         );
+
 
     const volumeValue =
         document.getElementById(
             "rakkezVolumeValue"
         );
 
+
     const youtubeInput =
         document.getElementById(
             "rakkezYoutubeInput"
         );
+
 
     const youtubePlay =
         document.getElementById(
             "rakkezYoutubePlay"
         );
 
+
     const youtubeEmbed =
         document.getElementById(
             "rakkezYoutubeEmbed"
         );
+
 
     const spotifyInput =
         document.getElementById(
             "rakkezSpotifyInput"
         );
 
+
     const spotifyPlay =
         document.getElementById(
             "rakkezSpotifyPlay"
         );
+
 
     const spotifyEmbed =
         document.getElementById(
             "rakkezSpotifyEmbed"
         );
 
+
     const localFile =
         document.getElementById(
             "rakkezLocalFile"
         );
 
+
     const localAudio =
         document.getElementById(
             "rakkezLocalAudio"
         );
+
 
     const localList =
         document.getElementById(
@@ -285,35 +378,42 @@
             "rakkezMiniPlayer"
         );
 
+
     const miniArtwork =
         document.getElementById(
             "rakkezMiniArtwork"
         );
+
 
     const miniTitle =
         document.getElementById(
             "rakkezMiniTitle"
         );
 
+
     const miniArtist =
         document.getElementById(
             "rakkezMiniArtist"
         );
+
 
     const miniPlay =
         document.getElementById(
             "rakkezMiniPlay"
         );
 
+
     const miniNext =
         document.getElementById(
             "rakkezMiniNext"
         );
 
+
     const miniClose =
         document.getElementById(
             "rakkezMiniClose"
         );
+
 
     const miniProgress =
         document.getElementById(
@@ -328,8 +428,13 @@
     const audio =
         new Audio();
 
+
     audio.preload =
         "metadata";
+
+
+    audio.controls =
+        false;
 
 
     let currentIndex =
@@ -371,39 +476,214 @@
         false;
 
 
+    let currentTrackFailed =
+        false;
+
+
+    let loadingTimer =
+        null;
+
+
+    let currentLoadToken =
+        0;
+
+
     /* =====================================================
-       AMBIENT EFFECTS ENGINE
+       MEDIA STATUS
+    ===================================================== */
+
+    function setMediaStatus(
+        status
+    ) {
+
+        if (
+            trackName &&
+            status === "error"
+        ) {
+
+            const current =
+                getAllTracks()[
+                    currentIndex
+                ];
+
+
+            if (current) {
+
+                trackName.textContent =
+                    current.title +
+                    " — unavailable";
+
+            }
+
+        }
+
+    }
+
+
+    function clearLoadingTimer() {
+
+        if (
+            loadingTimer
+        ) {
+
+            clearTimeout(
+                loadingTimer
+            );
+
+            loadingTimer =
+                null;
+
+        }
+
+    }
+
+
+    function startLoadingGuard(
+        token
+    ) {
+
+        clearLoadingTimer();
+
+
+        loadingTimer =
+            setTimeout(
+                function () {
+
+                    if (
+                        token !==
+                        currentLoadToken
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        audio.readyState <
+                        HTMLMediaElement.HAVE_METADATA
+                    ) {
+
+                        console.warn(
+                            "RakkeZ Media: Audio loading timeout:",
+                            audio.src
+                        );
+
+
+                        handleTrackError(
+                            "Loading timeout"
+                        );
+
+                    }
+
+                },
+                12000
+            );
+
+    }
+
+
+    function handleTrackError(
+        reason
+    ) {
+
+        clearLoadingTimer();
+
+
+        currentTrackFailed =
+            true;
+
+
+        audio.pause();
+
+
+        if (playButton) {
+
+            playButton.textContent =
+                "▶";
+
+            playButton.title =
+                "Play";
+
+        }
+
+
+        if (artwork) {
+
+            artwork.classList.remove(
+                "playing"
+            );
+
+        }
+
+
+        console.warn(
+            "RakkeZ Media: Track unavailable:",
+            audio.src,
+            reason || ""
+        );
+
+
+        setMediaStatus(
+            "error"
+        );
+
+
+        updateMiniPlayer();
+
+
+        /*
+         * Do NOT automatically jump to another track.
+         *
+         * This prevents a broken playlist from creating
+         * an endless loading / error loop.
+         */
+
+    }
+
+
+    /* =====================================================
+       AMBIENT EFFECTS
     ===================================================== */
 
     (function () {
 
-        "use strict";
-
-
         const AMBIENT_EFFECTS = [
 
             {
-                id: "rain",
+                id:
+                    "rain",
 
-                name: "Rain",
+                name:
+                    "Rain",
 
-                icon: "🌧️",
+                icon:
+                    "🌧️",
 
-                src: "rain.mp3",
+                src:
+                    "rain.mp3",
 
-                defaultVolume: 0.5
+                defaultVolume:
+                    0.5
+
             },
 
             {
-                id: "airplane",
+                id:
+                    "airplane",
 
-                name: "Airplane",
+                name:
+                    "Airplane",
 
-                icon: "✈️",
+                icon:
+                    "✈️",
 
-                src: "Airplane.mp3",
+                src:
+                    "Airplane.mp3",
 
-                defaultVolume: 0.5
+                defaultVolume:
+                    0.5
+
             }
 
         ];
@@ -419,18 +699,8 @@
             );
 
 
-        if (!effectsContainer) {
-
-            console.warn(
-                "RakkeZ: Effects container not found."
-            );
-
-            return;
-
-        }
-
-
-        const effectPlayers = {};
+        const effectPlayers =
+            {};
 
 
         AMBIENT_EFFECTS.forEach(
@@ -503,6 +773,17 @@
 
 
         function renderEffects() {
+
+            if (!effectsContainer) {
+
+                console.warn(
+                    "RakkeZ: Effects container not found. Ambient UI skipped."
+                );
+
+                return;
+
+            }
+
 
             effectsContainer.innerHTML =
                 "";
@@ -746,66 +1027,17 @@
 
         window.rakkezAmbient = {
 
-            play: function (id) {
+            play:
+                function (id) {
 
-                const player =
-                    effectPlayers[id];
-
-
-                if (!player) {
-                    return;
-                }
+                    const player =
+                        effectPlayers[id];
 
 
-                const promise =
-                    player.audio.play();
+                    if (!player) {
+                        return;
+                    }
 
-
-                if (
-                    promise &&
-                    typeof promise.catch ===
-                    "function"
-                ) {
-
-                    promise.catch(
-                        function () {}
-                    );
-
-                }
-
-            },
-
-
-            stop: function (id) {
-
-                const player =
-                    effectPlayers[id];
-
-
-                if (!player) {
-                    return;
-                }
-
-
-                player.audio.pause();
-
-            },
-
-
-            toggle: function (id) {
-
-                const player =
-                    effectPlayers[id];
-
-
-                if (!player) {
-                    return;
-                }
-
-
-                if (
-                    player.audio.paused
-                ) {
 
                     const promise =
                         player.audio.play();
@@ -823,20 +1055,73 @@
 
                     }
 
-                } else {
+                },
+
+
+            stop:
+                function (id) {
+
+                    const player =
+                        effectPlayers[id];
+
+
+                    if (!player) {
+                        return;
+                    }
+
 
                     player.audio.pause();
 
+                },
+
+
+            toggle:
+                function (id) {
+
+                    const player =
+                        effectPlayers[id];
+
+
+                    if (!player) {
+                        return;
+                    }
+
+
+                    if (
+                        player.audio.paused
+                    ) {
+
+                        const promise =
+                            player.audio.play();
+
+
+                        if (
+                            promise &&
+                            typeof promise.catch ===
+                            "function"
+                        ) {
+
+                            promise.catch(
+                                function () {}
+                            );
+
+                        }
+
+                    } else {
+
+                        player.audio.pause();
+
+                    }
+
+                },
+
+
+            getEffects:
+                function () {
+
+                    return AMBIENT_EFFECTS;
+
                 }
-
-            },
-
-
-            getEffects: function () {
-
-                return AMBIENT_EFFECTS;
-
-            }
 
         };
 
@@ -844,13 +1129,25 @@
 
 
     /* =====================================================
-       VALIDATE TRACK INDEX
+       INDEX
     ===================================================== */
 
     function normalizeIndex() {
 
         const allTracks =
             getAllTracks();
+
+
+        if (
+            !allTracks.length
+        ) {
+
+            currentIndex =
+                0;
+
+            return;
+
+        }
 
 
         if (
@@ -1098,11 +1395,6 @@
         }
 
 
-        /*
-         * Artwork is optional.
-         * If no artwork exists, use the default icon.
-         */
-
         if (
             artwork &&
             artwork.style.backgroundImage &&
@@ -1250,7 +1542,8 @@
             function (event) {
 
                 if (
-                    event.target === overlay
+                    event.target ===
+                    overlay
                 ) {
 
                     closeMedia();
@@ -1325,6 +1618,11 @@
                     );
 
 
+                    if (!source) {
+                        return;
+                    }
+
+
                     const target =
                         document.getElementById(
                             "rakkez" +
@@ -1353,7 +1651,9 @@
        FORMAT TIME
     ===================================================== */
 
-    function formatTime(seconds) {
+    function formatTime(
+        seconds
+    ) {
 
         if (
             !Number.isFinite(
@@ -1394,10 +1694,7 @@
 
 
     /* =====================================================
-       ARTWORK RESET
-       
-       IMPORTANT:
-       Never create a request for a missing image.
+       ARTWORK
     ===================================================== */
 
     function clearArtwork() {
@@ -1426,10 +1723,6 @@
 
     }
 
-
-    /* =====================================================
-       SAFE ARTWORK
-    ===================================================== */
 
     function setArtwork(
         image
@@ -1526,7 +1819,13 @@
 
 
         if (!allTracks.length) {
+
+            console.warn(
+                "RakkeZ Media: Playlist is empty."
+            );
+
             return;
+
         }
 
 
@@ -1565,8 +1864,20 @@
         }
 
 
+        const token =
+            ++currentLoadToken;
+
+
+        currentTrackFailed =
+            false;
+
+
         currentIsLocal =
-            track.type === "local";
+            track.type ===
+            "local";
+
+
+        clearLoadingTimer();
 
 
         audio.pause();
@@ -1575,21 +1886,6 @@
         audio.removeAttribute(
             "src"
         );
-
-
-        /*
-         * Built-in audio files are in ROOT.
-         * Local tracks use their object URL.
-         */
-
-        if (
-            track.src
-        ) {
-
-            audio.src =
-                track.src;
-
-        }
 
 
         audio.load();
@@ -1657,6 +1953,45 @@
         updateMiniPlayer();
 
 
+        /*
+         * Validate source before trying to play.
+         */
+
+        if (
+            !track.src
+        ) {
+
+            handleTrackError(
+                "Missing audio source"
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Local object URLs are already complete.
+         * Built-in paths are relative to the site root.
+         */
+
+        audio.src =
+            track.src;
+
+
+        audio.load();
+
+
+        startLoadingGuard(
+            token
+        );
+
+
+        /*
+         * We only play after the browser has accepted
+         * the source.
+         */
+
         if (shouldPlay) {
 
             playAudio();
@@ -1672,8 +2007,49 @@
 
     function playAudio() {
 
-        if (!audio.src) {
+        if (
+            !audio.src
+        ) {
+
             return;
+
+        }
+
+
+        if (
+            currentTrackFailed
+        ) {
+
+            /*
+             * Retry current track.
+             */
+
+            const allTracks =
+                getAllTracks();
+
+
+            const track =
+                allTracks[
+                    currentIndex
+                ];
+
+
+            if (
+                track &&
+                track.src
+            ) {
+
+                currentTrackFailed =
+                    false;
+
+
+                loadTrack(
+                    currentIndex,
+                    false
+                );
+
+            }
+
         }
 
 
@@ -1682,7 +2058,11 @@
             localAudio.src
         ) {
 
-            localAudio.pause();
+            try {
+
+                localAudio.pause();
+
+            } catch (error) {}
 
         }
 
@@ -1702,6 +2082,29 @@
 
                     console.warn(
                         "RakkeZ Media: Play prevented or failed.",
+                        error
+                    );
+
+
+                    /*
+                     * AbortError usually means the user
+                     * or another load interrupted playback.
+                     *
+                     * Don't mark it as a broken file.
+                     */
+
+                    if (
+                        error &&
+                        error.name ===
+                        "AbortError"
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    handleTrackError(
                         error
                     );
 
@@ -1759,6 +2162,13 @@
     audio.addEventListener(
         "play",
         function () {
+
+            clearLoadingTimer();
+
+
+            currentTrackFailed =
+                false;
+
 
             if (playButton) {
 
@@ -1836,12 +2246,33 @@
 
 
     /* =====================================================
-       METADATA
+       LOADING EVENTS
     ===================================================== */
+
+    audio.addEventListener(
+        "loadstart",
+        function () {
+
+            /*
+             * The player can show loading visually through
+             * the browser/UI, but we never allow it to
+             * remain indefinitely.
+             */
+
+            startLoadingGuard(
+                currentLoadToken
+            );
+
+        }
+    );
+
 
     audio.addEventListener(
         "loadedmetadata",
         function () {
+
+            clearLoadingTimer();
+
 
             if (
                 durationElement &&
@@ -1861,16 +2292,22 @@
     );
 
 
-    /* =====================================================
-       CAN PLAY
-       
-       Prevents the player from appearing stuck while
-       metadata is still loading.
-    ===================================================== */
+    audio.addEventListener(
+        "loadeddata",
+        function () {
+
+            clearLoadingTimer();
+
+        }
+    );
+
 
     audio.addEventListener(
         "canplay",
         function () {
+
+            clearLoadingTimer();
+
 
             if (
                 durationElement &&
@@ -1885,6 +2322,61 @@
                     );
 
             }
+
+        }
+    );
+
+
+    audio.addEventListener(
+        "canplaythrough",
+        function () {
+
+            clearLoadingTimer();
+
+        }
+    );
+
+
+    audio.addEventListener(
+        "stalled",
+        function () {
+
+            /*
+             * Don't immediately kill playback.
+             * Browser may temporarily stall.
+             */
+
+            console.warn(
+                "RakkeZ Media: Audio stalled:",
+                audio.src
+            );
+
+        }
+    );
+
+
+    audio.addEventListener(
+        "abort",
+        function () {
+
+            clearLoadingTimer();
+
+        }
+    );
+
+
+    /* =====================================================
+       WAITING
+    ===================================================== */
+
+    audio.addEventListener(
+        "waiting",
+        function () {
+
+            /*
+             * Normal buffering.
+             * No error is triggered here.
+             */
 
         }
     );
@@ -1957,6 +2449,9 @@
         "ended",
         function () {
 
+            clearLoadingTimer();
+
+
             if (loop) {
 
                 audio.currentTime =
@@ -1995,14 +2490,58 @@
         "error",
         function () {
 
+            clearLoadingTimer();
+
+
             const mediaError =
                 audio.error;
+
+
+            let message =
+                "Unknown media error";
+
+
+            if (mediaError) {
+
+                switch (
+                    mediaError.code
+                ) {
+
+                    case 1:
+                        message =
+                            "MEDIA_ERR_ABORTED";
+                        break;
+
+                    case 2:
+                        message =
+                            "MEDIA_ERR_NETWORK";
+                        break;
+
+                    case 3:
+                        message =
+                            "MEDIA_ERR_DECODE";
+                        break;
+
+                    case 4:
+                        message =
+                            "MEDIA_ERR_SRC_NOT_SUPPORTED";
+                        break;
+
+                }
+
+            }
 
 
             console.warn(
                 "RakkeZ Media: Unable to load audio:",
                 audio.src,
+                message,
                 mediaError
+            );
+
+
+            handleTrackError(
+                message
             );
 
         }
@@ -2108,8 +2647,12 @@
             getAllTracks();
 
 
-        if (!allTracks.length) {
+        if (
+            !allTracks.length
+        ) {
+
             return;
+
         }
 
 
@@ -2192,8 +2735,12 @@
             getAllTracks();
 
 
-        if (!allTracks.length) {
+        if (
+            !allTracks.length
+        ) {
+
             return;
+
         }
 
 
@@ -2419,13 +2966,34 @@
 
         if (playlistCount) {
 
-            playlistCount.textContent =
-                allTracks.length +
-                (
-                    allTracks.length === 1
-                        ? " track"
-                        : " tracks"
-                );
+            const language =
+                detectLanguage();
+
+
+            if (
+                language === "ar"
+            ) {
+
+                playlistCount.textContent =
+                    allTracks.length +
+                    " " +
+                    (
+                        allTracks.length === 1
+                            ? "مقطع"
+                            : "مقاطع"
+                    );
+
+            } else {
+
+                playlistCount.textContent =
+                    allTracks.length +
+                    (
+                        allTracks.length === 1
+                            ? " track"
+                            : " tracks"
+                    );
+
+            }
 
         }
 
@@ -2472,14 +3040,10 @@
                     "rakkez-track-art";
 
 
-                /*
-                 * Only create a background image if
-                 * artwork actually exists.
-                 */
-
                 if (
                     track.artwork &&
-                    typeof track.artwork === "string" &&
+                    typeof track.artwork ===
+                    "string" &&
                     track.artwork.trim()
                 ) {
 
@@ -2528,7 +3092,8 @@
 
 
                 title.textContent =
-                    track.title;
+                    track.title ||
+                    "Unknown Track";
 
 
                 const source =
@@ -2542,7 +3107,8 @@
 
 
                 source.textContent =
-                    track.artist;
+                    track.artist ||
+                    "RakkeZ";
 
 
                 details.appendChild(
@@ -2566,7 +3132,8 @@
 
 
                 type.textContent =
-                    track.type === "local"
+                    track.type ===
+                    "local"
                         ? "Local"
                         : "Lofi";
 
@@ -2610,7 +3177,7 @@
 
 
     /* =====================================================
-       LOCAL MULTIPLE FILE UPLOAD
+       LOCAL FILES
     ===================================================== */
 
     function addLocalFiles(
@@ -2625,6 +3192,10 @@
             return;
 
         }
+
+
+        let addedCount =
+            0;
 
 
         Array.from(files).forEach(
@@ -2678,40 +3249,47 @@
 
                 });
 
+
+                addedCount++;
+
             }
         );
 
 
+        if (!addedCount) {
+            return;
+        }
+
+
         normalizeIndex();
+
 
         renderPlaylist();
 
         renderLocalList();
+
 
         activateSource(
             "local"
         );
 
 
+        /*
+         * Start the first newly added track.
+         */
+
         const firstNewIndex =
             PLAYLIST.length +
             (
                 LOCAL_TRACKS.length -
-                files.length
+                addedCount
             );
 
 
-        if (
-            LOCAL_TRACKS.length ===
-            files.length
-        ) {
-
-            loadTrack(
-                firstNewIndex,
-                true
-            );
-
-        }
+        loadTrack(
+            firstNewIndex,
+            true
+        );
 
     }
 
@@ -2913,6 +3491,11 @@
 
             }
         );
+
+
+        if (!sourceName) {
+            return;
+        }
 
 
         const target =
@@ -3161,31 +3744,41 @@
 
         en: {
 
-            effects: "Effects",
+            effects:
+                "Effects",
 
             effectsDescription:
                 "Add ambient sounds while you focus.",
 
-            rain: "Rain",
+            rain:
+                "Rain",
 
             rainDescription:
                 "Soft rain for deeper focus.",
 
-            eyebrow: "RAKKEZ MEDIA",
+            eyebrow:
+                "RAKKEZ MEDIA",
 
-            focusMusic: "Focus Music",
+            focusMusic:
+                "Focus Music",
 
-            lofi: "Lofi",
+            lofi:
+                "Lofi",
 
-            youtube: "YouTube",
+            youtube:
+                "YouTube",
 
-            spotify: "Spotify",
+            spotify:
+                "Spotify",
 
-            local: "Local",
+            local:
+                "Local",
 
-            playlist: "Playlist",
+            playlist:
+                "Playlist",
 
-            autoNext: "AUTO-NEXT",
+            autoNext:
+                "AUTO-NEXT",
 
             youtubeDescription:
                 "Paste a YouTube video URL and play it inside RakkeZ.",
@@ -3193,26 +3786,35 @@
             spotifyDescription:
                 "Paste a Spotify track, album or playlist URL.",
 
-            localMusic: "Local Music",
+            localMusic:
+                "Local Music",
 
             localDescription:
                 "Choose multiple music files from your device.",
 
-            chooseMusic: "Choose Music",
+            chooseMusic:
+                "Choose Music",
 
-            play: "Play",
+            play:
+                "Play",
 
-            previous: "Previous",
+            previous:
+                "Previous",
 
-            next: "Next",
+            next:
+                "Next",
 
-            shuffle: "Shuffle",
+            shuffle:
+                "Shuffle",
 
-            loop: "Loop",
+            loop:
+                "Loop",
 
-            close: "Close",
+            close:
+                "Close",
 
-            open: "Open",
+            open:
+                "Open",
 
             youtubePlaceholder:
                 "Paste YouTube URL...",
@@ -3321,7 +3923,9 @@
             htmlLang &&
             htmlLang
                 .toLowerCase()
-                .startsWith("ar")
+                .startsWith(
+                    "ar"
+                )
         ) {
 
             return "ar";
@@ -3333,7 +3937,9 @@
             htmlLang &&
             htmlLang
                 .toLowerCase()
-                .startsWith("en")
+                .startsWith(
+                    "en"
+                )
         ) {
 
             return "en";
@@ -3380,7 +3986,9 @@
 
 
             if (
-                normalized.startsWith("ar") ||
+                normalized.startsWith(
+                    "ar"
+                ) ||
                 value === "Arabic"
             ) {
 
@@ -3390,7 +3998,9 @@
 
 
             if (
-                normalized.startsWith("en") ||
+                normalized.startsWith(
+                    "en"
+                ) ||
                 value === "English"
             ) {
 
@@ -3554,13 +4164,17 @@
     languageObserver.observe(
         document.documentElement,
         {
-            attributes: true,
 
-            attributeFilter: [
-                "lang",
-                "dir",
-                "class"
-            ]
+            attributes:
+                true,
+
+            attributeFilter:
+                [
+                    "lang",
+                    "dir",
+                    "class"
+                ]
+
         }
     );
 
@@ -3631,8 +4245,10 @@
             if (
                 target &&
                 (
-                    target.tagName === "INPUT" ||
-                    target.tagName === "TEXTAREA"
+                    target.tagName ===
+                    "INPUT" ||
+                    target.tagName ===
+                    "TEXTAREA"
                 )
             ) {
 
@@ -3642,7 +4258,8 @@
 
 
             if (
-                event.code === "Space"
+                event.code ===
+                "Space"
             ) {
 
                 event.preventDefault();
@@ -3664,7 +4281,8 @@
 
 
             if (
-                event.code === "ArrowRight"
+                event.code ===
+                "ArrowRight"
             ) {
 
                 nextTrack(
@@ -3675,7 +4293,8 @@
 
 
             if (
-                event.code === "ArrowLeft"
+                event.code ===
+                "ArrowLeft"
             ) {
 
                 previousTrack();
@@ -3684,6 +4303,67 @@
 
         }
     );
+
+
+    /* =====================================================
+       PUBLIC API
+    ===================================================== */
+
+    window.rakkezMedia = {
+
+        play:
+            playAudio,
+
+        pause:
+            pauseAudio,
+
+        next:
+            function () {
+                nextTrack(true);
+            },
+
+        previous:
+            previousTrack,
+
+        load:
+            function (index) {
+                loadTrack(
+                    index,
+                    false
+                );
+            },
+
+        open:
+            openMedia,
+
+        close:
+            closeMedia,
+
+        getCurrentTrack:
+            function () {
+
+                return getAllTracks()[
+                    currentIndex
+                ] || null;
+
+            },
+
+        getPlaylist:
+            function () {
+
+                return getAllTracks()
+                    .slice();
+
+            },
+
+        getAudio:
+            function () {
+
+                return audio;
+
+            }
+
+    };
 
 
     /* =====================================================
@@ -3700,10 +4380,7 @@
 
 
     /*
-     * Load the saved track without playing it.
-     *
-     * Artwork is disabled for the built-in tracks,
-     * so no 404 image requests will be generated.
+     * Load saved track WITHOUT autoplay.
      */
 
     loadTrack(
@@ -3721,7 +4398,11 @@
 
     if (localAudio) {
 
-        localAudio.pause();
+        try {
+
+            localAudio.pause();
+
+        } catch (error) {}
 
 
         localAudio.removeAttribute(
@@ -3738,6 +4419,9 @@
     window.addEventListener(
         "beforeunload",
         function () {
+
+            clearLoadingTimer();
+
 
             localObjectUrls.forEach(
                 function (url) {
