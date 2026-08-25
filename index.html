@@ -4774,10 +4774,9 @@ body.light .rakkez-mini-close,
 
 
 
-    
 /* =====================================================
    AMBIENT EFFECTS ENGINE
-   ===================================================== */
+===================================================== */
 
 (function () {
 
@@ -4787,39 +4786,33 @@ body.light .rakkez-mini-close,
     /* =====================================================
        EFFECTS
        Add new effects here only.
-       ===================================================== */
+    ===================================================== */
 
     const AMBIENT_EFFECTS = [
 
-    {
-        id: "rain",
-        name: "Rain",
-        icon: "🌧️",
-        src: "Music/rain.mp3",
-        defaultVolume: 0.5
-    },
+        {
+            id: "rain",
 
-    {
-        id: "airplane",
-        name: "Airplane",
-        icon: "✈️",
-        src: "Music/Airplane.mp3",
-        defaultVolume: 0.5
-    }
+            name: "Rain",
 
-    // Add future effects here:
-    //
-    // {
-    //     id: "coffee",
-    //     name: "Coffee Shop",
-    //     icon: "☕",
-    //     src: "Music/coffee.mp3",
-    //     defaultVolume: 0.5
-    // }
+            icon: "🌧️",
 
-];
+            src: "Music/rain.mp3",
 
+            defaultVolume: 0.5
+        },
 
+        {
+            id: "airplane",
+
+            name: "Airplane",
+
+            icon: "✈️",
+
+            src: "Music/Airplane.mp3",
+
+            defaultVolume: 0.5
+        }
 
         // Add future effects here:
         //
@@ -4831,45 +4824,63 @@ body.light .rakkez-mini-close,
         //     defaultVolume: 0.5
         // }
 
+    ];
+
 
     /* =====================================================
        STORAGE
-       ===================================================== */
+    ===================================================== */
 
     const STORAGE_PREFIX =
         "rakkez_effect_";
 
 
     /* =====================================================
-       EFFECT INSTANCES
-       ===================================================== */
-
-    const effectPlayers = {};
+       EFFECTS CONTAINER
+    ===================================================== */
 
     const effectsContainer =
-    document.getElementById(
-        "rakkezEffectsContainer"
-    );
+        document.getElementById(
+            "rakkezEffectsContainer"
+        );
+
+
+    if (!effectsContainer) {
+
+        console.error(
+            "RakkeZ: Effects container not found."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       EFFECT PLAYERS
+    ===================================================== */
+
+    const effectPlayers = {};
 
 
     /* =====================================================
        CREATE AUDIO PLAYERS
-       ===================================================== */
+    ===================================================== */
 
     AMBIENT_EFFECTS.forEach(
         function (effect) {
 
-            const audio =
+            const effectAudio =
                 new Audio(
                     effect.src
                 );
 
 
-            audio.loop =
+            effectAudio.loop =
                 true;
 
 
-            audio.preload =
+            effectAudio.preload =
                 "auto";
 
 
@@ -4890,8 +4901,7 @@ body.light .rakkez-mini-close,
             ) {
 
                 savedVolume =
-                    effect.defaultVolume ??
-                    0.5;
+                    effect.defaultVolume;
 
             }
 
@@ -4906,7 +4916,7 @@ body.light .rakkez-mini-close,
                 );
 
 
-            audio.volume =
+            effectAudio.volume =
                 savedVolume;
 
 
@@ -4915,546 +4925,196 @@ body.light .rakkez-mini-close,
             ] = {
 
                 audio:
-                    audio,
+                    effectAudio,
 
                 volume:
-                    savedVolume,
-
-                playing:
-                    false
+                    savedVolume
 
             };
 
         }
     );
 
-/* =====================================================
-   RENDER EFFECTS
-===================================================== */
 
-function renderEffects() {
+    /* =====================================================
+       RENDER EFFECTS
+    ===================================================== */
 
-    if (!effectsContainer) {
-        return;
-    }
+    function renderEffects() {
 
-    effectsContainer.innerHTML = "";
-
-    AMBIENT_EFFECTS.forEach(
-        function (effect) {
-
-            const player =
-                effectPlayers[effect.id];
-
-            if (!player) {
-                return;
-            }
+        effectsContainer.innerHTML =
+            "";
 
 
-            const card =
-                document.createElement("div");
+        AMBIENT_EFFECTS.forEach(
+            function (effect) {
 
-            card.className =
-                "rakkez-effect-card";
+                const player =
+                    effectPlayers[
+                        effect.id
+                    ];
 
 
-            card.innerHTML = `
+                if (!player) {
+                    return;
+                }
 
-                <div class="rakkez-effect-info">
 
-                    <div class="rakkez-effect-icon">
-                        ${effect.icon}
-                    </div>
+                /* =================================================
+                   CARD
+                ================================================= */
 
-                    <div>
+                const card =
+                    document.createElement(
+                        "div"
+                    );
 
-                        <div class="rakkez-effect-title">
-                            ${effect.name}
+
+                card.className =
+                    "rakkez-effect-card";
+
+
+                /* =================================================
+                   CARD HTML
+                ================================================= */
+
+                card.innerHTML = `
+
+                    <div class="rakkez-effect-info">
+
+                        <div class="rakkez-effect-icon">
+                            ${effect.icon}
                         </div>
 
-                        <div class="rakkez-effect-subtitle">
-                            Ambient sound
+                        <div>
+
+                            <div class="rakkez-effect-title">
+                                ${effect.name}
+                            </div>
+
+                            <div class="rakkez-effect-subtitle">
+                                Ambient sound
+                            </div>
+
                         </div>
 
                     </div>
 
-                </div>
 
-
-                <button
-                    class="rakkez-effect-toggle"
-                    type="button"
-                >
-                    Play ${effect.name}
-                </button>
-
-
-                <div class="rakkez-effect-volume">
-
-                    <span>
-                        Volume
-                    </span>
-
-                    <input
-                        class="rakkez-effect-volume-input"
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.01"
-                        value="${player.audio.volume}"
+                    <button
+                        class="rakkez-effect-toggle"
+                        type="button"
                     >
-
-                    <span
-                        class="rakkez-effect-volume-value"
-                    >
-                        ${Math.round(
-                            player.audio.volume * 100
-                        )}%
-                    </span>
-
-                </div>
-
-            `;
+                        Play ${effect.name}
+                    </button>
 
 
-            const toggle =
-                card.querySelector(
-                    ".rakkez-effect-toggle"
-                );
+                    <div class="rakkez-effect-volume">
+
+                        <span>
+                            Volume
+                        </span>
+
+                        <input
+                            class="rakkez-effect-volume-input"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value="${player.audio.volume}"
+                        >
+
+                        <span
+                            class="rakkez-effect-volume-value"
+                        >
+                            ${Math.round(
+                                player.audio.volume * 100
+                            )}%
+                        </span>
+
+                    </div>
+
+                `;
 
 
-            const volume =
-                card.querySelector(
-                    ".rakkez-effect-volume-input"
-                );
+                /* =================================================
+                   ELEMENTS
+                ================================================= */
+
+                const toggle =
+                    card.querySelector(
+                        ".rakkez-effect-toggle"
+                    );
 
 
-            const volumeValue =
-                card.querySelector(
-                    ".rakkez-effect-volume-value"
-                );
+                const volumeInput =
+                    card.querySelector(
+                        ".rakkez-effect-volume-input"
+                    );
 
 
-            /* PLAY / STOP */
+                const volumeValue =
+                    card.querySelector(
+                        ".rakkez-effect-volume-value"
+                    );
 
-            toggle.addEventListener(
-                "click",
-                function () {
 
-                    if (
-                        player.audio.paused
-                    ) {
+                /* =================================================
+                   PLAY / PAUSE
+                ================================================= */
 
-                        const promise =
-                            player.audio.play();
+                toggle.addEventListener(
+                    "click",
+                    function () {
 
                         if (
-                            promise &&
-                            typeof promise.catch ===
-                                "function"
+                            player.audio.paused
                         ) {
 
-                            promise.catch(
-                                function (error) {
+                            const playPromise =
+                                player.audio.play();
 
-                                    console.error(
-                                        "Effect playback failed:",
-                                        error
-                                    );
 
-                                }
-                            );
+                            if (
+                                playPromise &&
+                                typeof playPromise.catch ===
+                                    "function"
+                            ) {
+
+                                playPromise.catch(
+                                    function (error) {
+
+                                        console.error(
+                                            "RakkeZ Effect Error:",
+                                            error
+                                        );
+
+                                    }
+                                );
+
+                            }
+
+                        } else {
+
+                            player.audio.pause();
 
                         }
 
-                    } else {
-
-                        player.audio.pause();
-
                     }
-
-                }
-            );
-
-
-            /* VOLUME */
-
-            volume.addEventListener(
-                "input",
-                function () {
-
-                    const value =
-                        parseFloat(
-                            volume.value
-                        );
-
-
-                    player.audio.volume =
-                        value;
-
-
-                    player.volume =
-                        value;
-
-
-                    localStorage.setItem(
-                        STORAGE_PREFIX +
-                        effect.id +
-                        "_volume",
-                        String(value)
-                    );
-
-
-                    volumeValue.textContent =
-                        Math.round(
-                            value * 100
-                        ) + "%";
-
-                }
-            );
-
-
-            /* PLAY STATE */
-
-            player.audio.addEventListener(
-                "play",
-                function () {
-
-                    toggle.classList.add(
-                        "active"
-                    );
-
-                    toggle.textContent =
-                        "Ⅱ  " +
-                        effect.name;
-
-                }
-            );
-
-
-            player.audio.addEventListener(
-                "pause",
-                function () {
-
-                    toggle.classList.remove(
-                        "active"
-                    );
-
-                    toggle.textContent =
-                        "Play " +
-                        effect.name;
-
-                }
-            );
-
-
-            effectsContainer.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-    renderEffects();
-
-
-    /* =====================================================
-       GET ELEMENTS
-       ===================================================== */
-
-    function getToggle(
-        effect
-    ) {
-
-        return document.getElementById(
-            "rakkez" +
-            capitalize(
-                effect.id
-            ) +
-            "Toggle"
-        );
-
-    }
-
-
-    function getVolume(
-        effect
-    ) {
-
-        return document.getElementById(
-            "rakkez" +
-            capitalize(
-                effect.id
-            ) +
-            "Volume"
-        );
-
-    }
-
-
-    function getVolumeValue(
-        effect
-    ) {
-
-        return document.getElementById(
-            "rakkez" +
-            capitalize(
-                effect.id
-            ) +
-            "VolumeValue"
-        );
-
-    }
-
-
-    /* =====================================================
-       CAPITALIZE
-       ===================================================== */
-
-    function capitalize(
-        value
-    ) {
-
-        if (!value) {
-            return "";
-        }
-
-
-        return (
-            value.charAt(0).toUpperCase() +
-            value.slice(1)
-        );
-
-    }
-
-
-    /* =====================================================
-       UPDATE VOLUME UI
-       ===================================================== */
-
-    function updateVolumeUI(
-        effect
-    ) {
-
-        const player =
-            effectPlayers[
-                effect.id
-            ];
-
-
-        const volumeValue =
-            getVolumeValue(
-                effect
-            );
-
-
-        if (!volumeValue) {
-            return;
-        }
-
-
-        volumeValue.textContent =
-            Math.round(
-                player.audio.volume * 100
-            ) +
-            "%";
-
-    }
-
-
-    /* =====================================================
-       UPDATE BUTTON
-       ===================================================== */
-
-    function updateButton(
-        effect
-    ) {
-
-        const player =
-            effectPlayers[
-                effect.id
-            ];
-
-
-        const toggle =
-            getToggle(
-                effect
-            );
-
-
-        if (!toggle) {
-            return;
-        }
-
-
-        const playing =
-            !player.audio.paused;
-
-
-        player.playing =
-            playing;
-
-
-        toggle.classList.toggle(
-            "active",
-            playing
-        );
-
-
-        toggle.textContent =
-            playing
-                ? "Ⅱ  " + effect.name
-                : "Play " + effect.name;
-
-    }
-
-
-    /* =====================================================
-       PLAY
-       ===================================================== */
-
-    function playEffect(
-        effect
-    ) {
-
-        const player =
-            effectPlayers[
-                effect.id
-            ];
-
-
-        if (!player) {
-            return;
-        }
-
-
-        const promise =
-            player.audio.play();
-
-
-        if (
-            promise &&
-            typeof promise.catch ===
-                "function"
-        ) {
-
-            promise.catch(
-                function () {
-
-                    updateButton(
-                        effect
-                    );
-
-                }
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       STOP
-       ===================================================== */
-
-    function stopEffect(
-        effect
-    ) {
-
-        const player =
-            effectPlayers[
-                effect.id
-            ];
-
-
-        if (!player) {
-            return;
-        }
-
-
-        player.audio.pause();
-
-    }
-
-
-    /* =====================================================
-       TOGGLE
-       ===================================================== */
-
-    function toggleEffect(
-        effect
-    ) {
-
-        const player =
-            effectPlayers[
-                effect.id
-            ];
-
-
-        if (!player) {
-            return;
-        }
-
-
-        if (
-            player.audio.paused
-        ) {
-
-            playEffect(
-                effect
-            );
-
-        } else {
-
-            stopEffect(
-                effect
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       CONNECT CONTROLS
-       ===================================================== */
-
-    AMBIENT_EFFECTS.forEach(
-        function (effect) {
-
-            const player =
-                effectPlayers[
-                    effect.id
-                ];
-
-
-            const toggle =
-                getToggle(
-                    effect
                 );
 
 
-            const volume =
-                getVolume(
-                    effect
-                );
+                /* =================================================
+                   VOLUME
+                ================================================= */
 
-
-            if (volume) {
-
-                volume.value =
-                    player.audio.volume;
-
-
-                volume.addEventListener(
+                volumeInput.addEventListener(
                     "input",
                     function () {
 
                         const value =
                             parseFloat(
-                                volume.value
+                                volumeInput.value
                             );
 
 
@@ -5470,98 +5130,137 @@ function renderEffects() {
                             STORAGE_PREFIX +
                             effect.id +
                             "_volume",
-                            String(
-                                value
-                            )
+                            String(value)
                         );
 
 
-                        updateVolumeUI(
-                            effect
-                        );
+                        volumeValue.textContent =
+                            Math.round(
+                                value * 100
+                            ) +
+                            "%";
 
                     }
                 );
 
-            }
 
+                /* =================================================
+                   PLAY EVENT
+                ================================================= */
 
-            if (toggle) {
-
-                toggle.addEventListener(
-                    "click",
+                player.audio.addEventListener(
+                    "play",
                     function () {
 
-                        toggleEffect(
-                            effect
+                        toggle.classList.add(
+                            "active"
+                        );
+
+
+                        toggle.textContent =
+                            "Ⅱ  " +
+                            effect.name;
+
+                    }
+                );
+
+
+                /* =================================================
+                   PAUSE EVENT
+                ================================================= */
+
+                player.audio.addEventListener(
+                    "pause",
+                    function () {
+
+                        toggle.classList.remove(
+                            "active"
+                        );
+
+
+                        toggle.textContent =
+                            "Play " +
+                            effect.name;
+
+                    }
+                );
+
+
+                /* =================================================
+                   ERROR EVENT
+                ================================================= */
+
+                player.audio.addEventListener(
+                    "error",
+                    function () {
+
+                        console.error(
+                            "RakkeZ: Failed to load effect:",
+                            effect.src
                         );
 
                     }
                 );
 
+
+                /* =================================================
+                   ADD CARD
+                ================================================= */
+
+                effectsContainer.appendChild(
+                    card
+                );
+
             }
+        );
+
+    }
 
 
-            player.audio.addEventListener(
-                "play",
-                function () {
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
 
-                    updateButton(
-                        effect
-                    );
-
-                }
-            );
-
-
-            player.audio.addEventListener(
-                "pause",
-                function () {
-
-                    updateButton(
-                        effect
-                    );
-
-                }
-            );
-
-
-            updateVolumeUI(
-                effect
-            );
-
-
-            updateButton(
-                effect
-            );
-
-        }
-    );
+    renderEffects();
 
 
     /* =====================================================
        PUBLIC API
-       ===================================================== */
+    ===================================================== */
 
     window.rakkezAmbient = {
 
         play:
             function (id) {
 
-                const effect =
-                    AMBIENT_EFFECTS.find(
-                        function (item) {
+                const player =
+                    effectPlayers[id];
 
-                            return item.id === id;
+
+                if (!player) {
+                    return;
+                }
+
+
+                const promise =
+                    player.audio.play();
+
+
+                if (
+                    promise &&
+                    typeof promise.catch ===
+                        "function"
+                ) {
+
+                    promise.catch(
+                        function (error) {
+
+                            console.error(
+                                "RakkeZ Effect Error:",
+                                error
+                            );
 
                         }
-                    );
-
-
-                if (effect) {
-
-                    playEffect(
-                        effect
                     );
 
                 }
@@ -5572,23 +5271,16 @@ function renderEffects() {
         stop:
             function (id) {
 
-                const effect =
-                    AMBIENT_EFFECTS.find(
-                        function (item) {
-
-                            return item.id === id;
-
-                        }
-                    );
+                const player =
+                    effectPlayers[id];
 
 
-                if (effect) {
-
-                    stopEffect(
-                        effect
-                    );
-
+                if (!player) {
+                    return;
                 }
+
+
+                player.audio.pause();
 
             },
 
@@ -5596,21 +5288,45 @@ function renderEffects() {
         toggle:
             function (id) {
 
-                const effect =
-                    AMBIENT_EFFECTS.find(
-                        function (item) {
-
-                            return item.id === id;
-
-                        }
-                    );
+                const player =
+                    effectPlayers[id];
 
 
-                if (effect) {
+                if (!player) {
+                    return;
+                }
 
-                    toggleEffect(
-                        effect
-                    );
+
+                if (
+                    player.audio.paused
+                ) {
+
+                    const promise =
+                        player.audio.play();
+
+
+                    if (
+                        promise &&
+                        typeof promise.catch ===
+                            "function"
+                    ) {
+
+                        promise.catch(
+                            function (error) {
+
+                                console.error(
+                                    "RakkeZ Effect Error:",
+                                    error
+                                );
+
+                            }
+                        );
+
+                    }
+
+                } else {
+
+                    player.audio.pause();
 
                 }
 
@@ -5628,6 +5344,34 @@ function renderEffects() {
 
 
 })();
+
+
+/* =====================================================
+   VALIDATE TRACK INDEX
+===================================================== */
+
+function normalizeIndex() {
+
+    const allTracks =
+        getAllTracks();
+
+
+    if (
+        !Number.isInteger(
+            currentIndex
+        ) ||
+        currentIndex < 0 ||
+        currentIndex >= allTracks.length
+    ) {
+
+        currentIndex = 0;
+
+    }
+
+}
+
+
+normalizeIndex();
 
 
     /* =====================================================
