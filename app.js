@@ -1,36 +1,53 @@
 /* =========================================================
    RAKKEZ V2
-   TIMER + STATS + PERSISTENCE
-   LANGUAGE SAFE VERSION
-========================================================= */
+   TIMER + STATS + PERSISTENCE + LANGUAGE SAFE
+   FULL VERSION
+   ========================================================= */
 
 
 /* =========================================================
    HELPERS
-========================================================= */
+   ---------------------------------------------------------
+   $() = shortcut للحصول على عنصر من HTML عن طريق ID.
+   ========================================================= */
 
 const $ = id => document.getElementById(id);
 
 
 /* =========================================================
    STORAGE
-========================================================= */
+   ---------------------------------------------------------
+   جميع بيانات RakkeZ المحفوظة في LocalStorage.
+   لو أردت إضافة Storage جديد مستقبلاً، أضفه هنا.
+   ========================================================= */
 
 const STORAGE = {
+
     settings: "rakkez_settings",
+
     stats: "rakkez_stats",
+
     tasks: "rakkez_tasks",
+
     timer: "rakkez_timer_state",
+
     spotify: "rakkez_spotify",
+
     google: "rakkez_google",
+
     ambient: "rakkez_ambient",
+
     alarm: "rakkez_alarm"
+
 };
 
 
 /* =========================================================
    DEFAULT SETTINGS
-========================================================= */
+   ---------------------------------------------------------
+   الإعدادات الافتراضية للتطبيق.
+   يمكنك تعديل القيم من هنا.
+   ========================================================= */
 
 const DEFAULT_SETTINGS = {
 
@@ -60,8 +77,8 @@ const DEFAULT_SETTINGS = {
 
 
 /* =========================================================
-   LOCAL STORAGE
-========================================================= */
+   LOCAL STORAGE HELPERS
+   ========================================================= */
 
 function load(key, fallback) {
 
@@ -111,7 +128,7 @@ function save(key, value) {
 
 /* =========================================================
    SETTINGS
-========================================================= */
+   ========================================================= */
 
 let settings = {
 
@@ -127,7 +144,7 @@ let settings = {
 
 /* =========================================================
    STATS
-========================================================= */
+   ========================================================= */
 
 let stats = {
 
@@ -151,7 +168,7 @@ let stats = {
 
 /* =========================================================
    TASKS
-========================================================= */
+   ========================================================= */
 
 let tasks =
     load(
@@ -162,7 +179,7 @@ let tasks =
 
 /* =========================================================
    TIMER STATE
-========================================================= */
+   ========================================================= */
 
 let timerState = {
 
@@ -183,7 +200,7 @@ let timerState = {
 
 /* =========================================================
    OTHER STATE
-========================================================= */
+   ========================================================= */
 
 let completedFocusInCycle = 0;
 
@@ -192,7 +209,7 @@ let currentTaskId = null;
 
 /* =========================================================
    LANGUAGE
-========================================================= */
+   ========================================================= */
 
 function getCurrentLanguage() {
 
@@ -210,7 +227,7 @@ function getCurrentLanguage() {
 
 /* =========================================================
    ARABIC NUMBERS
-========================================================= */
+   ========================================================= */
 
 function arabicNumbers(value) {
 
@@ -225,7 +242,7 @@ function arabicNumbers(value) {
 
 /* =========================================================
    ENGLISH NUMBERS
-========================================================= */
+   ========================================================= */
 
 function englishNumbers(value) {
 
@@ -242,12 +259,11 @@ function englishNumbers(value) {
 
 /* =========================================================
    DATE
-========================================================= */
+   ========================================================= */
 
 function todayKey() {
 
-    const d =
-        new Date();
+    const d = new Date();
 
     return [
 
@@ -268,7 +284,7 @@ function todayKey() {
 
 /* =========================================================
    FORMAT TIMER
-========================================================= */
+   ========================================================= */
 
 function formatTime(seconds) {
 
@@ -280,16 +296,13 @@ function formatTime(seconds) {
             )
         );
 
-
     const minutes =
         Math.floor(
             seconds / 60
         );
 
-
     const secs =
         seconds % 60;
-
 
     return (
 
@@ -312,13 +325,12 @@ function formatTime(seconds) {
 
 /* =========================================================
    TIMER MODE TEXT
-========================================================= */
+   ========================================================= */
 
 function getTimerModeText() {
 
     const lang =
         getCurrentLanguage();
-
 
     if (lang === "ar") {
 
@@ -330,7 +342,6 @@ function getTimerModeText() {
 
         }
 
-
         if (
             timerState.mode === "long"
         ) {
@@ -338,7 +349,6 @@ function getTimerModeText() {
             return "استراحة طويلة";
 
         }
-
 
         return "التركيز";
 
@@ -370,13 +380,12 @@ function getTimerModeText() {
 
 /* =========================================================
    TIMER LABEL
-========================================================= */
+   ========================================================= */
 
 function getTimerLabel() {
 
     const lang =
         getCurrentLanguage();
-
 
     if (lang === "ar") {
 
@@ -387,7 +396,6 @@ function getTimerLabel() {
             : "خذ نفسًا. لقد استحققت الراحة.";
 
     }
-
 
     return timerState.mode === "focus"
 
@@ -400,13 +408,12 @@ function getTimerLabel() {
 
 /* =========================================================
    START BUTTON TEXT
-========================================================= */
+   ========================================================= */
 
 function getStartButtonText() {
 
     const lang =
         getCurrentLanguage();
-
 
     if (lang === "ar") {
 
@@ -415,7 +422,6 @@ function getStartButtonText() {
             : "ابدأ";
 
     }
-
 
     return timerState.running
         ? "PAUSE"
@@ -426,20 +432,9 @@ function getStartButtonText() {
 
 /* =========================================================
    TIMER UI
-========================================================= */
+   ========================================================= */
 
 function updateTimerUI() {
-
-    /*
-       IMPORTANT:
-
-       The timer uses ONLY timerState.remaining
-       for counting.
-
-       Language only changes how the value is displayed.
-       It NEVER changes the numeric timer state.
-    */
-
 
     const lang =
         getCurrentLanguage();
@@ -447,11 +442,10 @@ function updateTimerUI() {
 
     /* =====================================================
        TIMER NUMBER
-    ===================================================== */
+       ===================================================== */
 
     const timer =
         $("timer");
-
 
     if (timer) {
 
@@ -459,7 +453,6 @@ function updateTimerUI() {
             formatTime(
                 timerState.remaining
             );
-
 
         timer.textContent =
             lang === "ar"
@@ -471,17 +464,15 @@ function updateTimerUI() {
 
     /* =====================================================
        MODE
-    ===================================================== */
+       ===================================================== */
 
     const modeText =
         $("modeText");
-
 
     if (modeText) {
 
         modeText.dataset.mode =
             timerState.mode;
-
 
         modeText.textContent =
             getTimerModeText();
@@ -491,11 +482,10 @@ function updateTimerUI() {
 
     /* =====================================================
        TIMER LABEL
-    ===================================================== */
+       ===================================================== */
 
     const timerLabel =
         $("timerLabel");
-
 
     if (timerLabel) {
 
@@ -507,12 +497,11 @@ function updateTimerUI() {
 
     /* =====================================================
        PROGRESS
-    ===================================================== */
+       ===================================================== */
 
     const elapsed =
         timerState.total -
         timerState.remaining;
-
 
     const percentage =
         timerState.total > 0
@@ -527,7 +516,6 @@ function updateTimerUI() {
 
     const progress =
         $("progress");
-
 
     if (progress) {
 
@@ -544,12 +532,11 @@ function updateTimerUI() {
 
 
     /* =====================================================
-       START / PAUSE BUTTON
-    ===================================================== */
+       START / PAUSE
+       ===================================================== */
 
     const startButton =
         $("startBtn");
-
 
     if (startButton) {
 
@@ -561,7 +548,7 @@ function updateTimerUI() {
 
     /* =====================================================
        CURRENT TASK
-    ===================================================== */
+       ===================================================== */
 
     if (
         typeof updateCurrentTask ===
@@ -577,17 +564,11 @@ function updateTimerUI() {
 
 /* =========================================================
    START TIMER
-========================================================= */
+   ========================================================= */
 
 function startTimer() {
 
-    /*
-       START = PAUSE if already running.
-    */
-
-    if (
-        timerState.running
-    ) {
+    if (timerState.running) {
 
         pauseTimer();
 
@@ -595,10 +576,6 @@ function startTimer() {
 
     }
 
-
-    /*
-       Stop any alarm.
-    */
 
     if (
         typeof stopAlarm ===
@@ -610,10 +587,6 @@ function startTimer() {
     }
 
 
-    /*
-       Unlock audio.
-    */
-
     if (
         typeof unlockAudio ===
         "function"
@@ -624,27 +597,19 @@ function startTimer() {
     }
 
 
-    /*
-       Prevent duplicate intervals.
-    */
-
     if (
-        timerState.interval !== null
+        timerState.interval !==
+        null
     ) {
 
         clearInterval(
             timerState.interval
         );
 
-        timerState.interval =
-            null;
+        timerState.interval = null;
 
     }
 
-
-    /*
-       Make sure the timer has a valid value.
-    */
 
     if (
         !Number.isFinite(
@@ -674,7 +639,6 @@ function startTimer() {
 
     saveTimer();
 
-
     updateTimerUI();
 
 }
@@ -682,7 +646,7 @@ function startTimer() {
 
 /* =========================================================
    PAUSE TIMER
-========================================================= */
+   ========================================================= */
 
 function pauseTimer() {
 
@@ -691,7 +655,8 @@ function pauseTimer() {
 
 
     if (
-        timerState.interval !== null
+        timerState.interval !==
+        null
     ) {
 
         clearInterval(
@@ -707,7 +672,6 @@ function pauseTimer() {
 
     saveTimer();
 
-
     updateTimerUI();
 
 }
@@ -715,22 +679,11 @@ function pauseTimer() {
 
 /* =========================================================
    TICK
-========================================================= */
+   ========================================================= */
 
 function tick() {
 
-    /*
-       IMPORTANT:
-
-       NEVER read textContent from #timer here.
-
-       The timer is purely numeric.
-    */
-
-
-    if (
-        !timerState.running
-    ) {
+    if (!timerState.running) {
 
         return;
 
@@ -738,7 +691,8 @@ function tick() {
 
 
     if (
-        timerState.remaining <= 0
+        timerState.remaining <=
+        0
     ) {
 
         completePhase();
@@ -750,10 +704,11 @@ function tick() {
 
     /* =====================================================
        FOCUS STATISTICS
-    ===================================================== */
+       ===================================================== */
 
     if (
-        timerState.mode === "focus"
+        timerState.mode ===
+        "focus"
     ) {
 
         stats.totalFocusSeconds++;
@@ -789,7 +744,7 @@ function tick() {
 
     /* =====================================================
        DECREASE TIMER
-    ===================================================== */
+       ===================================================== */
 
     timerState.remaining =
         Math.max(
@@ -800,13 +755,9 @@ function tick() {
         );
 
 
-    /*
-       If this second reached zero,
-       finish immediately.
-    */
-
     if (
-        timerState.remaining <= 0
+        timerState.remaining <=
+        0
     ) {
 
         updateTimerUI();
@@ -825,16 +776,12 @@ function tick() {
 
 /* =========================================================
    PHASE COMPLETE
-========================================================= */
+   ========================================================= */
 
 function completePhase() {
 
     pauseTimer();
 
-
-    /* =====================================================
-       ALARM
-    ===================================================== */
 
     if (
         typeof playAlarm ===
@@ -846,16 +793,12 @@ function completePhase() {
     }
 
 
-    /* =====================================================
-       FOCUS COMPLETE
-    ===================================================== */
-
     if (
-        timerState.mode === "focus"
+        timerState.mode ===
+        "focus"
     ) {
 
         completedFocusInCycle++;
-
 
         stats.sessions++;
 
@@ -868,21 +811,14 @@ function completePhase() {
             today;
 
 
-        /*
-           ONLY a completed focus session
-           changes streak.
-        */
-
         updateStreakOnFocus();
 
 
         /* =================================================
            TASK FOCUS TIME
-        ================================================= */
+           ================================================= */
 
-        if (
-            currentTaskId
-        ) {
+        if (currentTaskId) {
 
             const task =
                 tasks.find(
@@ -898,12 +834,11 @@ function completePhase() {
                     (
                         task.focusMinutes ||
                         0
-                    )
-
-                    +
+                    ) +
 
                     Math.round(
-                        timerState.total / 60
+                        timerState.total /
+                        60
                     );
 
             }
@@ -913,7 +848,7 @@ function completePhase() {
 
         /* =================================================
            NEXT MODE
-        ================================================= */
+           ================================================= */
 
         if (
             completedFocusInCycle >=
@@ -922,7 +857,8 @@ function completePhase() {
             )
         ) {
 
-            completedFocusInCycle = 0;
+            completedFocusInCycle =
+                0;
 
             setMode("long");
 
@@ -933,10 +869,6 @@ function completePhase() {
         }
 
     } else {
-
-        /*
-           Break complete → Focus.
-        */
 
         setMode("focus");
 
@@ -960,18 +892,12 @@ function completePhase() {
 
     /* =====================================================
        AUTO START
-    ===================================================== */
+       ===================================================== */
 
-    if (
-        settings.autoStart
-    ) {
+    if (settings.autoStart) {
 
         setTimeout(
             () => {
-
-                /*
-                   Never start while alarm is playing.
-                */
 
                 if (
                     typeof isAlarmPlaying ===
@@ -1003,13 +929,9 @@ function completePhase() {
 
 /* =========================================================
    SET MODE
-========================================================= */
+   ========================================================= */
 
 function setMode(mode) {
-
-    /*
-       Validate mode.
-    */
 
     if (
         mode !== "focus" &&
@@ -1029,19 +951,14 @@ function setMode(mode) {
     let minutes;
 
 
-    if (
-        mode === "focus"
-    ) {
+    if (mode === "focus") {
 
         minutes =
             Number(
                 settings.focus
             );
 
-    }
-
-
-    else if (
+    } else if (
         mode === "short"
     ) {
 
@@ -1050,10 +967,7 @@ function setMode(mode) {
                 settings.shortBreak
             );
 
-    }
-
-
-    else {
+    } else {
 
         minutes =
             Number(
@@ -1062,10 +976,6 @@ function setMode(mode) {
 
     }
 
-
-    /*
-       Protect against invalid values.
-    */
 
     if (
         !Number.isFinite(minutes) ||
@@ -1088,16 +998,13 @@ function setMode(mode) {
         timerState.total;
 
 
-    /*
-       New mode is paused.
-    */
-
     timerState.running =
         false;
 
 
     if (
-        timerState.interval !== null
+        timerState.interval !==
+        null
     ) {
 
         clearInterval(
@@ -1113,7 +1020,6 @@ function setMode(mode) {
 
     saveTimer();
 
-
     updateTimerUI();
 
 }
@@ -1121,37 +1027,20 @@ function setMode(mode) {
 
 /* =========================================================
    RESET TIMER
-========================================================= */
+   =========================================================
+   IMPORTANT:
+   هذا لا يمسح الإحصائيات.
+   ========================================================= */
 
 function resetTimer() {
-
-    /*
-       IMPORTANT:
-
-       THIS FUNCTION DOES NOT RESET:
-
-       - streak
-       - sessions
-       - focus time
-       - daily goal
-       - dailyFocus
-       - lastFocusDate
-       - completedFocusInCycle
-
-       It ONLY resets the current timer.
-    */
-
-
-    /*
-       Stop timer.
-    */
 
     timerState.running =
         false;
 
 
     if (
-        timerState.interval !== null
+        timerState.interval !==
+        null
     ) {
 
         clearInterval(
@@ -1164,10 +1053,6 @@ function resetTimer() {
     timerState.interval =
         null;
 
-
-    /*
-       Stop alarms.
-    */
 
     if (
         typeof stopAlarm ===
@@ -1189,10 +1074,6 @@ function resetTimer() {
     }
 
 
-    /*
-       Reset ONLY the timer.
-    */
-
     timerState.mode =
         "focus";
 
@@ -1206,7 +1087,8 @@ function resetTimer() {
     const safeFocus =
         Number.isFinite(
             focusMinutes
-        ) && focusMinutes > 0
+        ) &&
+        focusMinutes > 0
 
             ? focusMinutes
 
@@ -1233,13 +1115,7 @@ function resetTimer() {
 
     saveTimer();
 
-
-    /*
-       Refresh UI without touching statistics.
-    */
-
     updateTimerUI();
-
 
     updateStats();
 
@@ -1248,13 +1124,9 @@ function resetTimer() {
 
 /* =========================================================
    STATS
-========================================================= */
+   ========================================================= */
 
 function updateStats() {
-
-    /* =====================================================
-       FOCUS
-    ===================================================== */
 
     const focusStat =
         $("focusStat");
@@ -1269,10 +1141,6 @@ function updateStats() {
 
     }
 
-
-    /* =====================================================
-       SESSIONS
-    ===================================================== */
 
     const sessionsStat =
         $("sessionsStat");
@@ -1296,10 +1164,6 @@ function updateStats() {
     }
 
 
-    /* =====================================================
-       STREAK
-    ===================================================== */
-
     updateStreak();
 
 
@@ -1316,7 +1180,8 @@ function updateStats() {
 
 
         if (
-            getCurrentLanguage() === "ar"
+            getCurrentLanguage() ===
+            "ar"
         ) {
 
             streakStat.textContent =
@@ -1341,10 +1206,6 @@ function updateStats() {
     }
 
 
-    /* =====================================================
-       DAILY GOAL
-    ===================================================== */
-
     updateDailyGoal();
 
 }
@@ -1352,14 +1213,15 @@ function updateStats() {
 
 /* =========================================================
    FORMAT FOCUS
-========================================================= */
+   ========================================================= */
 
 function formatFocus(seconds) {
 
     const minutes =
         Math.floor(
             (
-                Number(seconds) || 0
+                Number(seconds) ||
+                0
             ) / 60
         );
 
@@ -1368,13 +1230,9 @@ function formatFocus(seconds) {
         getCurrentLanguage();
 
 
-    if (
-        lang === "ar"
-    ) {
+    if (lang === "ar") {
 
-        if (
-            minutes < 60
-        ) {
+        if (minutes < 60) {
 
             return (
                 arabicNumbers(
@@ -1396,14 +1254,10 @@ function formatFocus(seconds) {
             minutes % 60;
 
 
-        if (
-            remaining > 0
-        ) {
+        if (remaining > 0) {
 
             return (
-                arabicNumbers(
-                    hours
-                ) +
+                arabicNumbers(hours) +
                 "س " +
                 arabicNumbers(
                     remaining
@@ -1415,18 +1269,14 @@ function formatFocus(seconds) {
 
 
         return (
-            arabicNumbers(
-                hours
-            ) +
+            arabicNumbers(hours) +
             "س"
         );
 
     }
 
 
-    if (
-        minutes < 60
-    ) {
+    if (minutes < 60) {
 
         return (
             minutes +
@@ -1446,9 +1296,7 @@ function formatFocus(seconds) {
         minutes % 60;
 
 
-    if (
-        remaining > 0
-    ) {
+    if (remaining > 0) {
 
         return (
             hours +
@@ -1470,7 +1318,7 @@ function formatFocus(seconds) {
 
 /* =========================================================
    DAILY GOAL
-========================================================= */
+   ========================================================= */
 
 function updateDailyGoal() {
 
@@ -1526,13 +1374,7 @@ function updateDailyGoal() {
     let goalText;
 
 
-    /* =====================================================
-       ARABIC
-    ===================================================== */
-
-    if (
-        lang === "ar"
-    ) {
+    if (lang === "ar") {
 
         currentText =
             arabicNumbers(
@@ -1541,9 +1383,7 @@ function updateDailyGoal() {
             "د";
 
 
-        if (
-            goalHours
-        ) {
+        if (goalHours) {
 
             goalText =
                 arabicNumbers(
@@ -1552,9 +1392,7 @@ function updateDailyGoal() {
                 "س";
 
 
-            if (
-                goalMinutes
-            ) {
+            if (goalMinutes) {
 
                 goalText +=
                     " " +
@@ -1575,32 +1413,21 @@ function updateDailyGoal() {
 
         }
 
-    }
-
-
-    /* =====================================================
-       ENGLISH
-    ===================================================== */
-
-    else {
+    } else {
 
         currentText =
             minutes +
             "m";
 
 
-        if (
-            goalHours
-        ) {
+        if (goalHours) {
 
             goalText =
                 goalHours +
                 "h";
 
 
-            if (
-                goalMinutes
-            ) {
+            if (goalMinutes) {
 
                 goalText +=
                     " " +
@@ -1630,7 +1457,7 @@ function updateDailyGoal() {
 
 /* =========================================================
    STREAK
-========================================================= */
+   ========================================================= */
 
 function updateStreakOnFocus() {
 
@@ -1644,23 +1471,14 @@ function updateStreakOnFocus() {
         );
 
 
-    /*
-       Same day:
-       Do NOT increase streak.
-    */
-
-    if (
-        previous === today
-    ) {
+    if (previous === today) {
 
         return;
 
     }
 
 
-    if (
-        previous
-    ) {
+    if (previous) {
 
         const last =
             new Date(
@@ -1679,7 +1497,8 @@ function updateStreakOnFocus() {
         const diff =
             Math.round(
                 (
-                    current - last
+                    current -
+                    last
                 ) /
                 (
                     1000 *
@@ -1690,9 +1509,7 @@ function updateStreakOnFocus() {
             );
 
 
-        if (
-            diff === 1
-        ) {
+        if (diff === 1) {
 
             stats.streak =
                 (
@@ -1703,15 +1520,13 @@ function updateStreakOnFocus() {
 
         } else {
 
-            stats.streak =
-                1;
+            stats.streak = 1;
 
         }
 
     } else {
 
-        stats.streak =
-            1;
+        stats.streak = 1;
 
     }
 
@@ -1726,24 +1541,11 @@ function updateStreakOnFocus() {
 
 /* =========================================================
    CHECK STREAK
-========================================================= */
+   ========================================================= */
 
 function updateStreak() {
 
-    /*
-       IMPORTANT:
-
-       Do NOT reset streak simply because
-       resetTimer() was pressed.
-
-       Streak only expires naturally when
-       more than one full day has passed.
-    */
-
-
-    if (
-        !stats.lastFocusDate
-    ) {
+    if (!stats.lastFocusDate) {
 
         return;
 
@@ -1771,7 +1573,8 @@ function updateStreak() {
     const difference =
         Math.round(
             (
-                current - last
+                current -
+                last
             ) /
             (
                 1000 *
@@ -1782,12 +1585,9 @@ function updateStreak() {
         );
 
 
-    if (
-        difference > 1
-    ) {
+    if (difference > 1) {
 
-        stats.streak =
-            0;
+        stats.streak = 0;
 
     }
 
@@ -1796,13 +1596,11 @@ function updateStreak() {
 
 /* =========================================================
    TIMER PERSISTENCE
-========================================================= */
+   ========================================================= */
 
 function saveTimer() {
 
-    if (
-        !settings.smartTimer
-    ) {
+    if (!settings.smartTimer) {
 
         return;
 
@@ -1842,13 +1640,11 @@ function saveTimer() {
 
 /* =========================================================
    RESTORE TIMER
-========================================================= */
+   ========================================================= */
 
 function restoreTimer() {
 
-    if (
-        !settings.smartTimer
-    ) {
+    if (!settings.smartTimer) {
 
         return;
 
@@ -1885,9 +1681,8 @@ function restoreTimer() {
 
 
     timerState.total =
-        Number(
-            saved.total
-        ) || (
+        Number(saved.total) ||
+        (
             Number(
                 settings.focus
             ) * 60
@@ -1955,13 +1750,6 @@ function restoreTimer() {
     }
 
 
-    /*
-       IMPORTANT:
-
-       Restore NEVER starts the interval automatically.
-       User presses START.
-    */
-
     timerState.running =
         false;
 
@@ -1977,17 +1765,14 @@ function restoreTimer() {
 
 /* =========================================================
    AUDIO UNLOCK
-   ONLY ONE VERSION — DUPLICATE REMOVED
-========================================================= */
+   ========================================================= */
 
 let audioUnlocked = false;
 
 
 function unlockAudio() {
 
-    if (
-        audioUnlocked
-    ) {
+    if (audioUnlocked) {
 
         return;
 
@@ -2001,9 +1786,7 @@ function unlockAudio() {
             window.webkitAudioContext;
 
 
-        if (
-            !AudioContextClass
-        ) {
+        if (!AudioContextClass) {
 
             return;
 
@@ -2067,8 +1850,7 @@ function unlockAudio() {
             };
 
 
-        audioUnlocked =
-            true;
+        audioUnlocked = true;
 
     } catch (error) {
 
@@ -2084,16 +1866,10 @@ function unlockAudio() {
 
 /* =========================================================
    LANGUAGE REFRESH HOOK
-========================================================= */
+   ========================================================= */
 
 window.refreshTimerLanguage =
     function () {
-
-        /*
-           Refresh display only.
-
-           Timer state is untouched.
-        */
 
         updateTimerUI();
 
@@ -2104,17 +1880,10 @@ window.refreshTimerLanguage =
 
 /* =========================================================
    SAFE NUMBER UPDATE HOOK
-========================================================= */
+   ========================================================= */
 
 window.updateLanguageNumbers =
     function () {
-
-        /*
-           Compatibility function.
-
-           It does NOT modify timerState.
-           It only redraws the timer.
-        */
 
         updateTimerUI();
 
@@ -2123,9 +1892,7 @@ window.updateLanguageNumbers =
 
 /* =========================================================
    GLOBAL TIMER FUNCTIONS
-   Makes buttons safe even if another script
-   needs to call them.
-========================================================= */
+   ========================================================= */
 
 window.startTimer =
     startTimer;
@@ -2145,68 +1912,105 @@ window.setMode =
 
 /* =========================================================
    ALARM SYSTEM
-========================================================= */
+   ========================================================= */
 
-let customAlarmURL = null;
+let customAlarmURL =
+    null;
 
-let customAlarmName = null;
+let customAlarmName =
+    null;
 
-let alarmAudio = null;
+let alarmAudio =
+    null;
 
-let alarmAudioContext = null;
+let alarmAudioContext =
+    null;
 
-let alarmOscillators = [];
+let alarmOscillators =
+    [];
 
-let alarmLoopTimeout = null;
+let alarmLoopTimeout =
+    null;
 
-let alarmPlaying = false;
+let alarmPlaying =
+    false;
 
-let alarmSequenceId = 0;
+let alarmSequenceId =
+    0;
 
 
 /* =========================================================
    TEST ALARM STATE
-========================================================= */
+   ========================================================= */
 
-let testAudio = null;
+let testAudio =
+    null;
 
-let testAudioContext = null;
+let testAudioContext =
+    null;
 
-let testOscillators = [];
+let testOscillators =
+    [];
 
-let testTimeout = null;
+let testTimeout =
+    null;
 
-let testPlaying = false;
+let testPlaying =
+    false;
 
-let testSequenceId = 0;
+let testSequenceId =
+    0;
 
+
+/* =========================================================
+   ALARM FREQUENCIES
+   ---------------------------------------------------------
+   يمكنك إضافة أصوات جديدة هنا.
+   ========================================================= */
 
 const ALARM_FREQUENCIES = {
 
-    soft:
-        [660, 880],
+    soft: [
+        660,
+        880
+    ],
 
-    digital:
-        [880, 660, 880],
+    digital: [
+        880,
+        660,
+        880
+    ],
 
-    focus:
-        [520, 780, 1040],
+    focus: [
+        520,
+        780,
+        1040
+    ],
 
-    gentle:
-        [523, 659, 784],
+    gentle: [
+        523,
+        659,
+        784
+    ],
 
-    deep:
-        [220, 330, 440],
+    deep: [
+        220,
+        330,
+        440
+    ],
 
-    success:
-        [784, 988, 1174]
+    success: [
+        784,
+        988,
+        1174
+    ]
 
 };
 
 
 /* =========================================================
    ALARM POPUP
-========================================================= */
+   ========================================================= */
 
 function createAlarmPopup() {
 
@@ -2273,64 +2077,140 @@ function createAlarmPopup() {
     style.textContent = `
 
         #rakkezAlarmPopup {
+
             position:fixed;
+
             inset:0;
+
             z-index:99999;
+
             display:none;
+
             align-items:center;
+
             justify-content:center;
+
             background:rgba(0,0,0,.55);
+
             backdrop-filter:blur(14px);
+
         }
 
         #rakkezAlarmPopup.show {
+
             display:flex;
+
         }
 
         .rakkez-alarm-box {
-            width:min(360px,calc(100vw - 40px));
+
+            width:min(
+                360px,
+                calc(100vw - 40px)
+            );
+
             padding:30px;
+
             border-radius:24px;
+
             text-align:center;
-            background:rgba(20,20,24,.96);
-            border:1px solid rgba(255,255,255,.1);
-            box-shadow:0 30px 80px rgba(0,0,0,.5);
+
+            background:rgba(
+                20,
+                20,
+                24,
+                .96
+            );
+
+            border:1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .1
+                );
+
+            box-shadow:
+                0 30px 80px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .5
+                );
+
         }
 
         .rakkez-alarm-icon {
+
             font-size:36px;
+
             margin-bottom:12px;
+
         }
 
         .rakkez-alarm-title {
-            font-family:"Space Grotesk",sans-serif;
+
+            font-family:
+                "Space Grotesk",
+                sans-serif;
+
             font-size:24px;
+
             font-weight:700;
+
             color:white;
+
             margin-bottom:8px;
+
         }
 
         .rakkez-alarm-text {
-            font-family:"DM Sans",sans-serif;
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+
             font-size:14px;
-            color:rgba(255,255,255,.55);
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .55
+                );
+
             margin-bottom:22px;
+
         }
 
         #rakkezStopAlarm {
+
             width:100%;
+
             height:48px;
+
             border:0;
+
             border-radius:14px;
+
             cursor:pointer;
+
             background:white;
+
             color:#111;
+
             font-weight:700;
+
             letter-spacing:.5px;
+
         }
 
         #rakkezStopAlarm:hover {
+
             opacity:.9;
+
         }
 
     `;
@@ -2357,7 +2237,7 @@ function createAlarmPopup() {
 
 /* =========================================================
    IS ALARM PLAYING
-========================================================= */
+   ========================================================= */
 
 function isAlarmPlaying() {
 
@@ -2368,16 +2248,11 @@ function isAlarmPlaying() {
 
 /* =========================================================
    STOP ALARM
-========================================================= */
+   ========================================================= */
 
 function stopAlarm() {
 
-    /*
-       Invalidate every existing alarm sequence.
-    */
-
     alarmSequenceId++;
-
 
     alarmPlaying =
         false;
@@ -2391,10 +2266,6 @@ function stopAlarm() {
     alarmLoopTimeout =
         null;
 
-
-    /* =====================================================
-       CUSTOM AUDIO
-    ===================================================== */
 
     if (alarmAudio) {
 
@@ -2438,10 +2309,6 @@ function stopAlarm() {
     }
 
 
-    /* =====================================================
-       GENERATED OSCILLATORS
-    ===================================================== */
-
     alarmOscillators.forEach(
         oscillator => {
 
@@ -2466,13 +2333,7 @@ function stopAlarm() {
         [];
 
 
-    /* =====================================================
-       AUDIO CONTEXT
-    ===================================================== */
-
-    if (
-        alarmAudioContext
-    ) {
+    if (alarmAudioContext) {
 
         try {
 
@@ -2486,10 +2347,6 @@ function stopAlarm() {
 
     }
 
-
-    /* =====================================================
-       POPUP
-    ===================================================== */
 
     const popup =
         $("rakkezAlarmPopup");
@@ -2508,22 +2365,16 @@ function stopAlarm() {
 
 /* =========================================================
    PLAY REAL ALARM
-========================================================= */
+   ========================================================= */
 
 function playAlarm() {
 
-    if (
-        !settings.sound
-    ) {
+    if (!settings.sound) {
 
         return;
 
     }
 
-
-    /*
-       Kill BOTH test and real alarm first.
-    */
 
     if (
         typeof stopTestAlarm ===
@@ -2558,14 +2409,10 @@ function playAlarm() {
     }
 
 
-    /* =====================================================
-       CUSTOM ALARM
-    ===================================================== */
-
     if (
         customAlarmURL &&
         settings.alarmSound ===
-        "custom"
+            "custom"
     ) {
 
         if (
@@ -2582,10 +2429,6 @@ function playAlarm() {
     }
 
 
-    /* =====================================================
-       BUILT-IN ALARM
-    ===================================================== */
-
     if (
         typeof playGeneratedAlarmLoop ===
         "function"
@@ -2600,14 +2443,15 @@ function playAlarm() {
 
 /* =========================================================
    CUSTOM REAL ALARM
-========================================================= */
+   ========================================================= */
 
 function playCustomAlarm() {
 
     if (
         !alarmPlaying ||
         !customAlarmURL ||
-        settings.alarmSound !== "custom" ||
+        settings.alarmSound !==
+            "custom" ||
         !settings.sound
     ) {
 
@@ -2640,14 +2484,12 @@ function playCustomAlarm() {
             );
 
 
-        /*
-           REAL ALARM:
-           INFINITE LOOP.
-        */
+        audio.loop =
+            true;
 
-        audio.loop = true;
 
-        audio.preload = "auto";
+        audio.preload =
+            "auto";
 
 
         audio.addEventListener(
@@ -2670,7 +2512,7 @@ function playCustomAlarm() {
         if (
             playPromise &&
             typeof playPromise.catch ===
-            "function"
+                "function"
         ) {
 
             playPromise.catch(
@@ -2700,7 +2542,7 @@ function playCustomAlarm() {
 
 /* =========================================================
    GENERATED REAL ALARM
-========================================================= */
+   ========================================================= */
 
 function playGeneratedAlarmLoop() {
 
@@ -2721,8 +2563,7 @@ function playGeneratedAlarmLoop() {
     const frequencies =
         ALARM_FREQUENCIES[
             settings.alarmSound
-        ]
-        ||
+        ] ||
         ALARM_FREQUENCIES.soft;
 
 
@@ -2740,11 +2581,6 @@ function playGeneratedAlarmLoop() {
         }
 
 
-        /*
-           Close any context accidentally left
-           from an older sequence.
-        */
-
         if (alarmAudioContext) {
 
             try {
@@ -2753,7 +2589,9 @@ function playGeneratedAlarmLoop() {
 
             } catch {}
 
-            alarmAudioContext = null;
+
+            alarmAudioContext =
+                null;
 
         }
 
@@ -2767,7 +2605,8 @@ function playGeneratedAlarmLoop() {
             "suspended"
         ) {
 
-            alarmAudioContext.resume()
+            alarmAudioContext
+                .resume()
                 .catch(() => {});
 
         }
@@ -2777,15 +2616,15 @@ function playGeneratedAlarmLoop() {
             alarmAudioContext.currentTime;
 
 
-        /*
-           Clear stale oscillator references.
-        */
-
-        alarmOscillators = [];
+        alarmOscillators =
+            [];
 
 
         frequencies.forEach(
-            (frequency, index) => {
+            (
+                frequency,
+                index
+            ) => {
 
                 const oscillator =
                     alarmAudioContext
@@ -2821,20 +2660,22 @@ function playGeneratedAlarmLoop() {
                 );
 
 
-                gain.gain.exponentialRampToValueAtTime(
-                    Math.max(
+                gain.gain
+                    .exponentialRampToValueAtTime(
+                        Math.max(
+                            0.0001,
+                            0.28 *
+                            settings.alarmVolume
+                        ),
+                        start + 0.03
+                    );
+
+
+                gain.gain
+                    .exponentialRampToValueAtTime(
                         0.0001,
-                        0.28 *
-                        settings.alarmVolume
-                    ),
-                    start + 0.03
-                );
-
-
-                gain.gain.exponentialRampToValueAtTime(
-                    0.0001,
-                    end
-                );
+                        end
+                    );
 
 
                 oscillator.connect(
@@ -2847,9 +2688,14 @@ function playGeneratedAlarmLoop() {
                 );
 
 
-                oscillator.start(start);
+                oscillator.start(
+                    start
+                );
 
-                oscillator.stop(end);
+
+                oscillator.stop(
+                    end
+                );
 
 
                 alarmOscillators.push(
@@ -2862,24 +2708,19 @@ function playGeneratedAlarmLoop() {
 
         const duration =
             (
-                frequencies.length * 160
-            ) +
-            700;
+                frequencies.length *
+                160
+            ) + 700;
 
 
         alarmLoopTimeout =
             setTimeout(
                 () => {
 
-                    /*
-                       If STOP ALARM was pressed,
-                       this sequence is dead.
-                    */
-
                     if (
                         !alarmPlaying ||
                         sequenceId !==
-                        alarmSequenceId
+                            alarmSequenceId
                     ) {
 
                         return;
@@ -2887,7 +2728,8 @@ function playGeneratedAlarmLoop() {
                     }
 
 
-                    alarmOscillators = [];
+                    alarmOscillators =
+                        [];
 
 
                     if (
@@ -2906,10 +2748,6 @@ function playGeneratedAlarmLoop() {
                     alarmAudioContext =
                         null;
 
-
-                    /*
-                       LOOP FOREVER.
-                    */
 
                     playGeneratedAlarmLoop();
 
@@ -2931,18 +2769,14 @@ function playGeneratedAlarmLoop() {
 
 /* =========================================================
    STOP TEST ALARM
-========================================================= */
+   ========================================================= */
 
 function stopTestAlarm() {
 
-    /*
-       Invalidate the previous TEST sequence.
-    */
-
     testSequenceId++;
 
-
-    testPlaying = false;
+    testPlaying =
+        false;
 
 
     clearTimeout(
@@ -2950,10 +2784,9 @@ function stopTestAlarm() {
     );
 
 
-    testTimeout = null;
+    testTimeout =
+        null;
 
-
-    /* CUSTOM TEST AUDIO */
 
     if (testAudio) {
 
@@ -2966,14 +2799,16 @@ function stopTestAlarm() {
 
         try {
 
-            testAudio.currentTime = 0;
+            testAudio.currentTime =
+                0;
 
         } catch {}
 
 
         try {
 
-            testAudio.loop = false;
+            testAudio.loop =
+                false;
 
         } catch {}
 
@@ -2989,12 +2824,11 @@ function stopTestAlarm() {
         } catch {}
 
 
-        testAudio = null;
+        testAudio =
+            null;
 
     }
 
-
-    /* GENERATED TEST OSCILLATORS */
 
     testOscillators.forEach(
         oscillator => {
@@ -3016,10 +2850,9 @@ function stopTestAlarm() {
     );
 
 
-    testOscillators = [];
+    testOscillators =
+        [];
 
-
-    /* TEST AUDIO CONTEXT */
 
     if (testAudioContext) {
 
@@ -3030,7 +2863,8 @@ function stopTestAlarm() {
         } catch {}
 
 
-        testAudioContext = null;
+        testAudioContext =
+            null;
 
     }
 
@@ -3039,23 +2873,9 @@ function stopTestAlarm() {
 
 /* =========================================================
    TEST ALARM
-========================================================= */
+   ========================================================= */
 
 function testAlarm() {
-
-    /*
-       CRITICAL FIX:
-
-       Every TEST click first destroys the old test.
-       This means:
-
-       TEST
-       TEST
-       TEST
-       TEST
-
-       = one sound only, always the newest one.
-    */
 
     stopTestAlarm();
 
@@ -3070,28 +2890,21 @@ function testAlarm() {
     unlockAudio();
 
 
-    /*
-       Stop the real alarm too so TEST can never
-       overlap with the actual alarm.
-    */
-
     stopAlarm();
 
 
-    testPlaying = true;
+    testPlaying =
+        true;
 
 
     const sequenceId =
         testSequenceId;
 
 
-    /*
-       CUSTOM TEST
-    */
-
     if (
         customAlarmURL &&
-        settings.alarmSound === "custom"
+        settings.alarmSound ===
+            "custom"
     ) {
 
         try {
@@ -3116,15 +2929,12 @@ function testAlarm() {
                 );
 
 
-            /*
-               TEST is one playback.
-               Real alarm is infinite.
-            */
-
-            audio.loop = false;
+            audio.loop =
+                false;
 
 
-            audio.preload = "auto";
+            audio.preload =
+                "auto";
 
 
             audio.onended =
@@ -3135,9 +2945,11 @@ function testAlarm() {
                         testSequenceId
                     ) {
 
-                        testAudio = null;
+                        testAudio =
+                            null;
 
-                        testPlaying = false;
+                        testPlaying =
+                            false;
 
                     }
 
@@ -3151,7 +2963,7 @@ function testAlarm() {
             if (
                 promise &&
                 typeof promise.catch ===
-                "function"
+                    "function"
             ) {
 
                 promise.catch(
@@ -3195,10 +3007,6 @@ function testAlarm() {
     }
 
 
-    /*
-       GENERATED TEST ALARM
-    */
-
     try {
 
         const AudioContextClass =
@@ -3224,7 +3032,8 @@ function testAlarm() {
             "suspended"
         ) {
 
-            testAudioContext.resume()
+            testAudioContext
+                .resume()
                 .catch(() => {});
 
         }
@@ -3233,8 +3042,7 @@ function testAlarm() {
         const frequencies =
             ALARM_FREQUENCIES[
                 settings.alarmSound
-            ]
-            ||
+            ] ||
             ALARM_FREQUENCIES.soft;
 
 
@@ -3242,11 +3050,15 @@ function testAlarm() {
             testAudioContext.currentTime;
 
 
-        testOscillators = [];
+        testOscillators =
+            [];
 
 
         frequencies.forEach(
-            (frequency, index) => {
+            (
+                frequency,
+                index
+            ) => {
 
                 const oscillator =
                     testAudioContext
@@ -3282,20 +3094,22 @@ function testAlarm() {
                 );
 
 
-                gain.gain.exponentialRampToValueAtTime(
-                    Math.max(
+                gain.gain
+                    .exponentialRampToValueAtTime(
+                        Math.max(
+                            0.0001,
+                            0.28 *
+                            settings.alarmVolume
+                        ),
+                        start + 0.03
+                    );
+
+
+                gain.gain
+                    .exponentialRampToValueAtTime(
                         0.0001,
-                        0.28 *
-                        settings.alarmVolume
-                    ),
-                    start + 0.03
-                );
-
-
-                gain.gain.exponentialRampToValueAtTime(
-                    0.0001,
-                    end
-                );
+                        end
+                    );
 
 
                 oscillator.connect(
@@ -3308,9 +3122,14 @@ function testAlarm() {
                 );
 
 
-                oscillator.start(start);
+                oscillator.start(
+                    start
+                );
 
-                oscillator.stop(end);
+
+                oscillator.stop(
+                    end
+                );
 
 
                 testOscillators.push(
@@ -3335,7 +3154,9 @@ function testAlarm() {
                     }
 
                 },
-                frequencies.length * 160 + 800
+                frequencies.length *
+                    160 +
+                    800
             );
 
     } catch (error) {
@@ -3345,6 +3166,7 @@ function testAlarm() {
             error
         );
 
+
         stopTestAlarm();
 
     }
@@ -3353,8 +3175,8 @@ function testAlarm() {
 
 
 /* =========================================================
-   TEST BUTTON
-========================================================= */
+   TEST ALARM BUTTON
+   ========================================================= */
 
 if ($("testAlarmBtn")) {
 
@@ -3362,11 +3184,6 @@ if ($("testAlarmBtn")) {
         .addEventListener(
             "click",
             () => {
-
-                /*
-                   Always restart with the latest selected
-                   alarm. Never stack sounds.
-                */
 
                 testAlarm();
 
@@ -3378,7 +3195,7 @@ if ($("testAlarmBtn")) {
 
 /* =========================================================
    UPLOAD CUSTOM ALARM
-========================================================= */
+   ========================================================= */
 
 const alarmUploadInput =
     $("alarmFile") ||
@@ -3415,7 +3232,8 @@ if (alarmUploadInput) {
                 );
 
 
-                e.target.value = "";
+                e.target.value =
+                    "";
 
 
                 return;
@@ -3423,18 +3241,10 @@ if (alarmUploadInput) {
             }
 
 
-            /*
-               Stop everything using the old alarm.
-            */
-
             stopAlarm();
 
             stopTestAlarm();
 
-
-            /*
-               Delete old object URL.
-            */
 
             if (customAlarmURL) {
 
@@ -3449,10 +3259,6 @@ if (alarmUploadInput) {
             }
 
 
-            /*
-               Create new object URL.
-            */
-
             customAlarmURL =
                 URL.createObjectURL(
                     file
@@ -3462,10 +3268,6 @@ if (alarmUploadInput) {
             customAlarmName =
                 file.name;
 
-
-            /*
-               Automatically switch to CUSTOM.
-            */
 
             settings.alarmSound =
                 "custom";
@@ -3485,19 +3287,10 @@ if (alarmUploadInput) {
             }
 
 
-            /*
-               CLEAR old stock/upload status
-               then show the NEW uploaded file.
-            */
-
             setAlarmUploadStatus(
                 file.name
             );
 
-
-            /*
-               Optional labels.
-            */
 
             if ($("alarmName")) {
 
@@ -3528,7 +3321,7 @@ if (alarmUploadInput) {
 
 /* =========================================================
    ALARM UPLOAD STATUS
-========================================================= */
+   ========================================================= */
 
 function setAlarmUploadStatus(
     fileName = null
@@ -3565,18 +3358,46 @@ function setAlarmUploadStatus(
 
 
     feedback.style.cssText = `
+
         margin-top:10px;
+
         padding:9px 12px;
+
         border-radius:10px;
+
         display:flex;
+
         align-items:center;
+
         gap:8px;
+
         font-size:12px;
+
         line-height:1.4;
+
         color:#86efac;
-        background:rgba(34,197,94,.10);
-        border:1px solid rgba(34,197,94,.20);
-        font-family:"DM Sans",sans-serif;
+
+        background:
+            rgba(
+                34,
+                197,
+                94,
+                .10
+            );
+
+        border:
+            1px solid
+            rgba(
+                34,
+                197,
+                94,
+                .20
+            );
+
+        font-family:
+            "DM Sans",
+            sans-serif;
+
     `;
 
 
@@ -3594,7 +3415,9 @@ function setAlarmUploadStatus(
             color:white;
             font-size:11px;
             font-weight:700;
-        ">✓</span>
+        ">
+            ✓
+        </span>
 
         <span>
             Uploaded:
@@ -3626,7 +3449,7 @@ function setAlarmUploadStatus(
 
 /* =========================================================
    CLEAR ALARM UPLOAD STATUS
-========================================================= */
+   ========================================================= */
 
 function clearAlarmUploadStatus() {
 
@@ -3645,11 +3468,6 @@ function clearAlarmUploadStatus() {
 
     if ($("alarmName")) {
 
-        /*
-           Only clear the custom upload label
-           when switching back to stock.
-        */
-
         $("alarmName").textContent =
             "";
 
@@ -3667,8 +3485,8 @@ function clearAlarmUploadStatus() {
 
 
 /* =========================================================
-   SETTINGS
-========================================================= */
+   SETTINGS UI
+   ========================================================= */
 
 function syncSettingsUI() {
 
@@ -3729,9 +3547,10 @@ function syncSettingsUI() {
     if ($("alarmVolumeValue"))
         $("alarmVolumeValue")
             .textContent =
-            Math.round(
-                settings.alarmVolume * 100
-            ) + "%";
+                Math.round(
+                    settings.alarmVolume *
+                    100
+                ) + "%";
 
 
     if ($("alarmSound"))
@@ -3743,7 +3562,7 @@ function syncSettingsUI() {
 
 /* =========================================================
    SETTINGS EVENTS
-========================================================= */
+   ========================================================= */
 
 if ($("focusInput")) {
 
@@ -3764,10 +3583,12 @@ if ($("focusInput")) {
                 if (
                     !timerState.running &&
                     timerState.mode ===
-                    "focus"
+                        "focus"
                 ) {
 
-                    setMode("focus");
+                    setMode(
+                        "focus"
+                    );
 
                 }
 
@@ -3802,10 +3623,12 @@ if ($("shortBreakInput")) {
                 if (
                     !timerState.running &&
                     timerState.mode ===
-                    "short"
+                        "short"
                 ) {
 
-                    setMode("short");
+                    setMode(
+                        "short"
+                    );
 
                 }
 
@@ -3840,10 +3663,12 @@ if ($("longBreakInput")) {
                 if (
                     !timerState.running &&
                     timerState.mode ===
-                    "long"
+                        "long"
                 ) {
 
-                    setMode("long");
+                    setMode(
+                        "long"
+                    );
 
                 }
 
@@ -4004,12 +3829,14 @@ if ($("alarmVolume")) {
                     ) / 100;
 
 
-                if ($("alarmVolumeValue")) {
+                if (
+                    $("alarmVolumeValue")
+                ) {
 
                     $("alarmVolumeValue")
                         .textContent =
-                        e.target.value +
-                        "%";
+                            e.target.value +
+                            "%";
 
                 }
 
@@ -4048,26 +3875,12 @@ if ($("alarmSound")) {
             "change",
             e => {
 
-                /*
-                   Stop ONLY current TEST.
-                */
-
                 stopTestAlarm();
 
-
-                /*
-                   Update selected sound.
-                */
 
                 settings.alarmSound =
                     e.target.value;
 
-
-                /*
-                   IMPORTANT:
-                   If a stock sound was selected,
-                   the uploaded-file status must disappear.
-                */
 
                 if (
                     settings.alarmSound !==
@@ -4092,7 +3905,7 @@ if ($("alarmSound")) {
 
 /* =========================================================
    TASK SYSTEM
-========================================================= */
+   ========================================================= */
 
 function renderTasks() {
 
@@ -4100,19 +3913,24 @@ function renderTasks() {
         $("taskList");
 
 
-    if (!list) return;
+    if (!list) {
+
+        return;
+
+    }
 
 
-    list.innerHTML = "";
+    list.innerHTML =
+        "";
 
 
     if ($("taskEmpty")) {
 
         $("taskEmpty")
             .style.display =
-            tasks.length
-                ? "none"
-                : "block";
+                tasks.length
+                    ? "none"
+                    : "block";
 
     }
 
@@ -4142,7 +3960,11 @@ function renderTasks() {
                     data-action="complete"
                     data-id="${task.id}"
                 >
-                    ${task.completed ? "✓" : ""}
+                    ${
+                        task.completed
+                            ? "✓"
+                            : ""
+                    }
                 </button>
 
                 <div class="task-text">
@@ -4174,13 +3996,21 @@ function renderTasks() {
 }
 
 
+/* =========================================================
+   ADD TASK
+   ========================================================= */
+
 function addTask() {
 
     const input =
         $("taskInput");
 
 
-    if (!input) return;
+    if (!input) {
+
+        return;
+
+    }
 
 
     const title =
@@ -4203,17 +4033,21 @@ function addTask() {
 
         title,
 
-        completed: false,
+        completed:
+            false,
 
         created:
             Date.now(),
 
-        focusMinutes: 0
+        focusMinutes:
+            0
 
     };
 
 
-    tasks.unshift(task);
+    tasks.unshift(
+        task
+    );
 
 
     save(
@@ -4222,13 +4056,18 @@ function addTask() {
     );
 
 
-    input.value = "";
+    input.value =
+        "";
 
 
     renderTasks();
 
 }
 
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
 
 function escapeHTML(value) {
 
@@ -4247,6 +4086,10 @@ function escapeHTML(value) {
 }
 
 
+/* =========================================================
+   TOGGLE TASK
+   ========================================================= */
+
 function toggleTask(id) {
 
     const task =
@@ -4255,7 +4098,11 @@ function toggleTask(id) {
         );
 
 
-    if (!task) return;
+    if (!task) {
+
+        return;
+
+    }
 
 
     task.completed =
@@ -4273,6 +4120,10 @@ function toggleTask(id) {
 }
 
 
+/* =========================================================
+   DELETE TASK
+   ========================================================= */
+
 function deleteTask(id) {
 
     tasks =
@@ -4281,9 +4132,12 @@ function deleteTask(id) {
         );
 
 
-    if (currentTaskId === id) {
+    if (
+        currentTaskId === id
+    ) {
 
-        currentTaskId = null;
+        currentTaskId =
+            null;
 
     }
 
@@ -4299,25 +4153,29 @@ function deleteTask(id) {
 }
 
 
+/* =========================================================
+   SELECT TASK
+   ========================================================= */
+
 function selectTask(id) {
 
-    currentTaskId = id;
+    currentTaskId =
+        id;
 
 
     updateCurrentTask();
 
 
-    if ($("tasksOverlay")) {
-
-        $("tasksOverlay")
-            .classList.remove(
-                "show"
-            );
-
-    }
+    closeOverlayById(
+        "tasksOverlay"
+    );
 
 }
 
+
+/* =========================================================
+   CURRENT TASK
+   ========================================================= */
 
 function updateCurrentTask() {
 
@@ -4325,12 +4183,20 @@ function updateCurrentTask() {
         $("currentTask");
 
 
-    if (!container) return;
+    if (!container) {
+
+        return;
+
+    }
 
 
     const lang =
-        localStorage.getItem("language") ||
-        localStorage.getItem("rakkez_language") ||
+        localStorage.getItem(
+            "language"
+        ) ||
+        localStorage.getItem(
+            "rakkez_language"
+        ) ||
         "en";
 
 
@@ -4338,7 +4204,9 @@ function updateCurrentTask() {
 
         container.innerHTML =
             lang === "ar"
+
                 ? "<span>لم يتم اختيار مهمة</span>"
+
                 : "<span>NO TASK SELECTED</span>";
 
         return;
@@ -4356,11 +4224,15 @@ function updateCurrentTask() {
 
     if (!task) {
 
-        currentTaskId = null;
+        currentTaskId =
+            null;
+
 
         container.innerHTML =
             lang === "ar"
+
                 ? "<span>لم يتم اختيار مهمة</span>"
+
                 : "<span>NO TASK SELECTED</span>";
 
         return;
@@ -4371,6 +4243,7 @@ function updateCurrentTask() {
     container.innerHTML = `
 
         <span>
+
             ${
                 lang === "ar"
                     ? "التركيز على:"
@@ -4378,12 +4251,17 @@ function updateCurrentTask() {
             }
 
             ${escapeHTML(task.title)}
+
         </span>
 
     `;
 
 }
 
+
+/* =========================================================
+   TASK EVENTS
+   ========================================================= */
 
 if ($("addTaskBtn")) {
 
@@ -4425,7 +4303,11 @@ if ($("taskList")) {
                     );
 
 
-                if (!button) return;
+                if (!button) {
+
+                    return;
+
+                }
 
 
                 const action =
@@ -4470,7 +4352,11 @@ if ($("taskList")) {
                     );
 
 
-                if (!task) return;
+                if (!task) {
+
+                    return;
+
+                }
 
 
                 const check =
@@ -4494,8 +4380,246 @@ if ($("taskList")) {
 
 
 /* =========================================================
-   PANELS
-========================================================= */
+   OVERLAY / PANEL SYSTEM
+   ---------------------------------------------------------
+   هذا هو الجزء المهم الذي تم إصلاحه.
+
+   المشكلة القديمة:
+   كان عندك فتح للـ overlays فقط:
+
+       classList.add("show")
+
+   لكن لم يكن هناك نظام مركزي يغلقها.
+
+   الآن:
+   - X buttons
+   - Background click
+   - Escape
+   - data-close
+   كلها تعمل.
+   ========================================================= */
+
+
+/* =========================================================
+   CLOSE OVERLAY BY ID
+   ---------------------------------------------------------
+   يمكنك استخدام هذه الدالة من أي مكان:
+
+   closeOverlayById("settingsOverlay");
+
+   closeOverlayById("tasksOverlay");
+
+   closeOverlayById("mediaOverlay");
+
+   ========================================================= */
+
+function closeOverlayById(id) {
+
+    const overlay =
+        $(id);
+
+
+    if (!overlay) {
+
+        return;
+
+    }
+
+
+    overlay.classList.remove(
+        "show"
+    );
+
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    /*
+     * لو الـ CSS يعتمد على display
+     * نخليه يرجع للحالة الطبيعية.
+     */
+
+    if (
+        overlay.style.display ===
+        "flex"
+    ) {
+
+        overlay.style.display =
+            "";
+
+    }
+
+
+    /*
+     * مهم جدًا:
+     * لا نترك body مقفولًا بعد إغلاق
+     * آخر overlay.
+     */
+
+    syncBodyScrollLock();
+
+}
+
+
+/* =========================================================
+   OPEN OVERLAY BY ID
+   ========================================================= */
+
+function openOverlayById(id) {
+
+    const overlay =
+        $(id);
+
+
+    if (!overlay) {
+
+        console.warn(
+            "RakkeZ: Overlay not found:",
+            id
+        );
+
+        return;
+
+    }
+
+
+    overlay.classList.add(
+        "show"
+    );
+
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   CHECK IF ANY MAIN OVERLAY IS OPEN
+   ========================================================= */
+
+function syncBodyScrollLock() {
+
+    const overlays = [
+
+        "settingsOverlay",
+
+        "tasksOverlay",
+
+        "mediaOverlay",
+
+        "confirmOverlay",
+
+        "updatesModal"
+
+    ];
+
+
+    const anyOpen =
+        overlays.some(
+            id => {
+
+                const element =
+                    $(id);
+
+
+                return (
+                    element &&
+                    element.classList.contains(
+                        "show"
+                    )
+                );
+
+            }
+        );
+
+
+    document.body.style.overflow =
+        anyOpen
+            ? "hidden"
+            : "";
+
+}
+
+
+/* =========================================================
+   CLOSE ALL OVERLAYS
+   ========================================================= */
+
+function closeAllOverlays() {
+
+    const overlays = [
+
+        "settingsOverlay",
+
+        "tasksOverlay",
+
+        "mediaOverlay",
+
+        "confirmOverlay",
+
+        "updatesModal"
+
+    ];
+
+
+    overlays.forEach(
+        id => {
+
+            const overlay =
+                $(id);
+
+
+            if (!overlay) {
+
+                return;
+
+            }
+
+
+            overlay.classList.remove(
+                "show"
+            );
+
+
+            overlay.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+
+            if (
+                overlay.style.display ===
+                "flex"
+            ) {
+
+                overlay.style.display =
+                    "";
+
+            }
+
+        }
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   OPEN SETTINGS
+   ========================================================= */
 
 if ($("settingsOpen")) {
 
@@ -4504,15 +4628,18 @@ if ($("settingsOpen")) {
 
             syncSettingsUI();
 
-            $("settingsOverlay")
-                .classList.add(
-                    "show"
-                );
+            openOverlayById(
+                "settingsOverlay"
+            );
 
         };
 
 }
 
+
+/* =========================================================
+   OPEN TASKS
+   ========================================================= */
 
 if ($("tasksOpen")) {
 
@@ -4521,25 +4648,9 @@ if ($("tasksOpen")) {
 
             renderTasks();
 
-            $("tasksOverlay")
-                .classList.add(
-                    "show"
-                );
-
-        };
-
-}
-
-
-if ($("mediaOpen")) {
-
-    $("mediaOpen").onclick =
-        () => {
-
-            $("mediaOverlay")
-                .classList.add(
-                    "show"
-                );
+            openOverlayById(
+                "tasksOverlay"
+            );
 
         };
 
@@ -4547,15 +4658,245 @@ if ($("mediaOpen")) {
 
 
 /* =========================================================
-   FOCUS ONLY
-========================================================= */
+   OPEN MEDIA
+   ========================================================= */
 
-let focusOnly = false;
+if ($("mediaOpen")) {
+
+    $("mediaOpen").onclick =
+        () => {
+
+            openOverlayById(
+                "mediaOverlay"
+            );
+
+        };
+
+}
+
+
+/* =========================================================
+   X BUTTONS — EXPLICIT SUPPORT
+   ---------------------------------------------------------
+   لو الـ HTML عندك يحتوي على:
+
+       id="closeSettings"
+
+       id="closeTasks"
+
+       id="closeMedia"
+
+       id="closeConfirm"
+
+   فهي ستعمل مباشرة.
+
+   ========================================================= */
+
+const CLOSE_BUTTONS = {
+
+    closeSettings:
+        "settingsOverlay",
+
+    closeTasks:
+        "tasksOverlay",
+
+    closeMedia:
+        "mediaOverlay",
+
+    closeConfirm:
+        "confirmOverlay",
+
+    closeUpdates:
+        "updatesModal"
+
+};
+
+
+Object.entries(
+    CLOSE_BUTTONS
+).forEach(
+    ([buttonId, overlayId]) => {
+
+        const button =
+            $(buttonId);
+
+
+        if (!button) {
+
+            return;
+
+        }
+
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                closeOverlayById(
+                    overlayId
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   UNIVERSAL CLOSE BUTTON
+   ---------------------------------------------------------
+   أي زر في HTML مثل:
+
+       <button data-close="settingsOverlay">×</button>
+
+   سيعمل تلقائيًا.
+
+   وهذا مفيد جدًا للمستقبل.
+   ========================================================= */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const button =
+            event.target.closest(
+                "[data-close]"
+            );
+
+
+        if (!button) {
+
+            return;
+
+        }
+
+
+        const overlayId =
+            button.dataset.close;
+
+
+        if (!overlayId) {
+
+            return;
+
+        }
+
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        closeOverlayById(
+            overlayId
+        );
+
+    }
+);
+
+
+/* =========================================================
+   BACKGROUND CLICK
+   ---------------------------------------------------------
+   الضغط على الخلفية خارج الـ panel يغلقه.
+   ========================================================= */
+
+[
+    "settingsOverlay",
+
+    "tasksOverlay",
+
+    "mediaOverlay",
+
+    "confirmOverlay",
+
+    "updatesModal"
+
+].forEach(
+    overlayId => {
+
+        const overlay =
+            $(overlayId);
+
+
+        if (!overlay) {
+
+            return;
+
+        }
+
+
+        overlay.addEventListener(
+            "click",
+            event => {
+
+                /*
+                 * مهم:
+                 * لا تغلق إذا ضغط المستخدم
+                 * داخل الـ box نفسه.
+                 */
+
+                if (
+                    event.target ===
+                    overlay
+                ) {
+
+                    closeOverlayById(
+                        overlayId
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ESCAPE CLOSE
+   ---------------------------------------------------------
+   الضغط على ESC يغلق آخر/كل الـ overlays.
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key !==
+            "Escape"
+        ) {
+
+            return;
+
+        }
+
+
+        closeAllOverlays();
+
+    }
+);
+
+
+/* =========================================================
+   FOCUS ONLY
+   ========================================================= */
+
+let focusOnly =
+    false;
 
 
 function toggleFocusOnly() {
 
-    focusOnly = !focusOnly;
+    focusOnly =
+        !focusOnly;
 
 
     document.body
@@ -4585,18 +4926,13 @@ if ($("focusExit")) {
 
 /* =========================================================
    RESET
-========================================================= */
+   ========================================================= */
 
 function openResetConfirmation() {
 
-    if ($("confirmOverlay")) {
-
-        $("confirmOverlay")
-            .classList.add(
-                "show"
-            );
-
-    }
+    openOverlayById(
+        "confirmOverlay"
+    );
 
 }
 
@@ -4633,14 +4969,18 @@ if ($("confirmReset")) {
 
                 sessions: 0,
 
-                lastFocusDate: null,
+                streak: 0,
+
+                lastFocusDate:
+                    null,
 
                 dailyFocus: {}
 
             };
 
 
-            tasks = [];
+            tasks =
+                [];
 
 
             localStorage.removeItem(
@@ -4662,16 +5002,14 @@ if ($("confirmReset")) {
 
             resetTimer();
 
-
             renderTasks();
 
             updateStats();
 
 
-            $("confirmOverlay")
-                .classList.remove(
-                    "show"
-                );
+            closeOverlayById(
+                "confirmOverlay"
+            );
 
         };
 
@@ -4680,7 +5018,7 @@ if ($("confirmReset")) {
 
 /* =========================================================
    MEDIA TABS
-========================================================= */
+   ========================================================= */
 
 document
     .querySelectorAll(
@@ -4748,7 +5086,7 @@ document
 
 /* =========================================================
    YOUTUBE
-========================================================= */
+   ========================================================= */
 
 function getYouTubeId(url) {
 
@@ -4759,12 +5097,12 @@ function getYouTubeId(url) {
 
 
         const hostname =
-            parsed.hostname
-                .toLowerCase();
+            parsed.hostname.toLowerCase();
 
 
         if (
-            hostname === "youtu.be"
+            hostname ===
+            "youtu.be"
         ) {
 
             return parsed.pathname
@@ -4776,11 +5114,17 @@ function getYouTubeId(url) {
 
 
         if (
-            hostname.includes("youtube.com") &&
-            parsed.searchParams.get("v")
+            hostname.includes(
+                "youtube.com"
+            ) &&
+            parsed.searchParams.get(
+                "v"
+            )
         ) {
 
-            return parsed.searchParams.get("v");
+            return parsed.searchParams.get(
+                "v"
+            );
 
         }
 
@@ -4878,7 +5222,6 @@ if ($("youtubePlay")) {
                     <iframe
                         src="${embedUrl}"
                         title="YouTube Player"
-
                         allow="
                             accelerometer;
                             autoplay;
@@ -4888,11 +5231,9 @@ if ($("youtubePlay")) {
                             picture-in-picture;
                             web-share
                         "
-
                         referrerpolicy="
                             strict-origin-when-cross-origin
                         "
-
                         allowfullscreen>
                     </iframe>
 
@@ -4916,8 +5257,8 @@ if ($("youtubePlay")) {
 
 
 /* =========================================================
-   SPOTIFY
-========================================================= */
+   SPOTIFY EMBED
+   ========================================================= */
 
 function spotifyEmbedUrl(url) {
 
@@ -4946,6 +5287,7 @@ function spotifyEmbedUrl(url) {
         }
 
     } catch {}
+
 
     return null;
 
@@ -4991,16 +5333,15 @@ if ($("spotifyPlay")) {
                             encrypted-media;
                             fullscreen;
                             picture-in-picture
-                        "
-                    ></iframe>
+                        ">
+                    </iframe>
 
                 `;
 
 
             $("spotifyEmbed")
-                .classList.add(
-                    "show"
-                );
+                .classList
+                .add("show");
 
 
             showNowPlaying(
@@ -5016,25 +5357,33 @@ if ($("spotifyPlay")) {
 
 /* =========================================================
    LOCAL MEDIA
-========================================================= */
+   ========================================================= */
 
-let localMediaURL = null;
+let localMediaURL =
+    null;
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    UPLOAD FEEDBACK
---------------------------------------------------------- */
+   ========================================================= */
 
-function showUploadFeedback(message, success = true) {
+function showUploadFeedback(
+    message,
+    success = true
+) {
 
     let feedback =
-        document.getElementById("uploadFeedback");
+        document.getElementById(
+            "uploadFeedback"
+        );
 
 
     if (!feedback) {
 
         feedback =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         feedback.id =
@@ -5042,20 +5391,35 @@ function showUploadFeedback(message, success = true) {
 
 
         feedback.style.cssText = `
+
             margin-top:12px;
+
             padding:10px 14px;
+
             border-radius:12px;
+
             font-size:13px;
-            font-family:"DM Sans",sans-serif;
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+
             display:flex;
+
             align-items:center;
+
             gap:8px;
-            transition:all .25s ease;
+
+            transition:
+                all .25s ease;
+
         `;
 
 
         const mediaFile =
-            document.getElementById("mediaFile");
+            document.getElementById(
+                "mediaFile"
+            );
 
 
         if (
@@ -5063,9 +5427,10 @@ function showUploadFeedback(message, success = true) {
             mediaFile.parentElement
         ) {
 
-            mediaFile.parentElement.appendChild(
-                feedback
-            );
+            mediaFile.parentElement
+                .appendChild(
+                    feedback
+                );
 
         } else {
 
@@ -5080,7 +5445,9 @@ function showUploadFeedback(message, success = true) {
 
     feedback.innerHTML =
         success
+
             ? `
+
                 <span style="
                     display:inline-flex;
                     width:20px;
@@ -5092,13 +5459,18 @@ function showUploadFeedback(message, success = true) {
                     color:white;
                     font-size:12px;
                     font-weight:700;
-                ">✓</span>
+                ">
+                    ✓
+                </span>
 
                 <span>
                     ${escapeHTML(message)}
                 </span>
-              `
+
+            `
+
             : `
+
                 <span style="
                     display:inline-flex;
                     width:20px;
@@ -5110,12 +5482,15 @@ function showUploadFeedback(message, success = true) {
                     color:white;
                     font-size:12px;
                     font-weight:700;
-                ">!</span>
+                ">
+                    !
+                </span>
 
                 <span>
                     ${escapeHTML(message)}
                 </span>
-              `;
+
+            `;
 
 
     feedback.style.background =
@@ -5138,9 +5513,9 @@ function showUploadFeedback(message, success = true) {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    LOCAL MEDIA UPLOAD
---------------------------------------------------------- */
+   ========================================================= */
 
 if ($("mediaFile")) {
 
@@ -5167,43 +5542,62 @@ if ($("mediaFile")) {
                         localMediaURL
                     );
 
-                    localMediaURL = null;
+                    localMediaURL =
+                        null;
 
                 }
 
 
-                $("audioPlayer").pause();
+                if ($("audioPlayer")) {
 
-                $("videoPlayer").pause();
+                    $("audioPlayer")
+                        .pause();
+
+                    $("audioPlayer")
+                        .removeAttribute(
+                            "src"
+                        );
+
+                    $("audioPlayer")
+                        .style.display =
+                            "none";
+
+                }
 
 
-                $("audioPlayer")
-                    .removeAttribute("src");
+                if ($("videoPlayer")) {
 
+                    $("videoPlayer")
+                        .pause();
 
-                $("videoPlayer")
-                    .removeAttribute("src");
+                    $("videoPlayer")
+                        .removeAttribute(
+                            "src"
+                        );
 
+                    $("videoPlayer")
+                        .style.display =
+                            "none";
 
-                $("audioPlayer")
-                    .style.display =
-                    "none";
-
-
-                $("videoPlayer")
-                    .style.display =
-                    "none";
+                }
 
 
                 const isAudio =
-                    file.type.startsWith("audio/");
+                    file.type.startsWith(
+                        "audio/"
+                    );
 
 
                 const isVideo =
-                    file.type.startsWith("video/");
+                    file.type.startsWith(
+                        "video/"
+                    );
 
 
-                if (!isAudio && !isVideo) {
+                if (
+                    !isAudio &&
+                    !isVideo
+                ) {
 
                     showUploadFeedback(
                         "Unsupported file. Please upload an audio or video file.",
@@ -5211,7 +5605,8 @@ if ($("mediaFile")) {
                     );
 
 
-                    e.target.value = "";
+                    e.target.value =
+                        "";
 
 
                     return;
@@ -5229,6 +5624,13 @@ if ($("mediaFile")) {
 
                     const player =
                         $("audioPlayer");
+
+
+                    if (!player) {
+
+                        return;
+
+                    }
 
 
                     player.src =
@@ -5251,36 +5653,48 @@ if ($("mediaFile")) {
 
 
                     player.play()
-                        .then(() => {
+                        .then(
+                            () => {
 
-                            showUploadFeedback(
-                                "Uploaded • Playing in loop"
-                            );
+                                showUploadFeedback(
+                                    "Uploaded • Playing in loop"
+                                );
 
-                        })
-                        .catch(error => {
+                            }
+                        )
+                        .catch(
+                            error => {
 
-                            console.warn(
-                                "Autoplay blocked:",
-                                error
-                            );
-
-
-                            showUploadFeedback(
-                                "Uploaded • Press play to start"
-                            );
-
-                        });
+                                console.warn(
+                                    "Autoplay blocked:",
+                                    error
+                                );
 
 
-                    $("mediaName")
-                        .textContent =
-                        file.name;
+                                showUploadFeedback(
+                                    "Uploaded • Press play to start"
+                                );
+
+                            }
+                        );
 
 
-                    $("mediaSource")
-                        .textContent =
-                        "Local Audio";
+                    if ($("mediaName")) {
+
+                        $("mediaName")
+                            .textContent =
+                                file.name;
+
+                    }
+
+
+                    if ($("mediaSource")) {
+
+                        $("mediaSource")
+                            .textContent =
+                                "Local Audio";
+
+                    }
 
 
                     showNowPlaying(
@@ -5296,6 +5710,13 @@ if ($("mediaFile")) {
 
                     const player =
                         $("videoPlayer");
+
+
+                    if (!player) {
+
+                        return;
+
+                    }
 
 
                     player.src =
@@ -5318,36 +5739,48 @@ if ($("mediaFile")) {
 
 
                     player.play()
-                        .then(() => {
+                        .then(
+                            () => {
 
-                            showUploadFeedback(
-                                "Uploaded • Playing in loop"
-                            );
+                                showUploadFeedback(
+                                    "Uploaded • Playing in loop"
+                                );
 
-                        })
-                        .catch(error => {
+                            }
+                        )
+                        .catch(
+                            error => {
 
-                            console.warn(
-                                "Autoplay blocked:",
-                                error
-                            );
-
-
-                            showUploadFeedback(
-                                "Uploaded • Press play to start"
-                            );
-
-                        });
+                                console.warn(
+                                    "Autoplay blocked:",
+                                    error
+                                );
 
 
-                    $("mediaName")
-                        .textContent =
-                        file.name;
+                                showUploadFeedback(
+                                    "Uploaded • Press play to start"
+                                );
+
+                            }
+                        );
 
 
-                    $("mediaSource")
-                        .textContent =
-                        "Local Video";
+                    if ($("mediaName")) {
+
+                        $("mediaName")
+                            .textContent =
+                                file.name;
+
+                    }
+
+
+                    if ($("mediaSource")) {
+
+                        $("mediaSource")
+                            .textContent =
+                                "Local Video";
+
+                    }
 
 
                     showNowPlaying(
@@ -5363,9 +5796,10 @@ if ($("mediaFile")) {
 
 }
 
+
 /* =========================================================
    NOW PLAYING
-========================================================= */
+   ========================================================= */
 
 function showNowPlaying(
     name,
@@ -5400,9 +5834,8 @@ function showNowPlaying(
     if ($("nowPlaying")) {
 
         $("nowPlaying")
-            .classList.add(
-                "show"
-            );
+            .classList
+            .add("show");
 
     }
 
@@ -5411,22 +5844,28 @@ function showNowPlaying(
 
 /* =========================================================
    SPOTIFY OAUTH — PKCE
-========================================================= */
+   ========================================================= */
 
-let spotifyUser = null;
+let spotifyUser =
+    null;
 
 
-function randomString(length = 64) {
+function randomString(
+    length = 64
+) {
 
     const chars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
 
 
-    let result = "";
+    let result =
+        "";
 
 
     const array =
-        new Uint8Array(length);
+        new Uint8Array(
+            length
+        );
 
 
     crypto.getRandomValues(
@@ -5476,9 +5915,18 @@ function base64url(buffer) {
             )
         )
     )
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=/g, "");
+        .replace(
+            /\+/g,
+            "-"
+        )
+        .replace(
+            /\//g,
+            "_"
+        )
+        .replace(
+            /=/g,
+            ""
+        );
 
 }
 
@@ -5491,7 +5939,7 @@ async function spotifyLogin() {
         !RAKKEZ_CONFIG.spotify.clientId ||
         !RAKKEZ_CONFIG.spotify.clientId.trim() ||
         RAKKEZ_CONFIG.spotify.clientId ===
-        "YOUR_SPOTIFY_CLIENT_ID"
+            "YOUR_SPOTIFY_CLIENT_ID"
     ) {
 
         alert(
@@ -5620,14 +6068,19 @@ async function handleSpotifyCallback() {
             await fetch(
                 "https://accounts.spotify.com/api/token",
                 {
-                    method: "POST",
+
+                    method:
+                        "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/x-www-form-urlencoded"
+
                     },
 
                     body
+
                 }
             );
 
@@ -5654,7 +6107,8 @@ async function handleSpotifyCallback() {
 
                 expiresAt:
                     Date.now() +
-                    token.expires_in * 1000
+                    token.expires_in *
+                    1000
 
             }
         );
@@ -5700,7 +6154,9 @@ async function loadSpotifyUser() {
         !auth.accessToken
     ) {
 
-        updateSpotifyUI(null);
+        updateSpotifyUI(
+            null
+        );
 
         return;
 
@@ -5715,9 +6171,11 @@ async function loadSpotifyUser() {
                 {
 
                     headers: {
+
                         Authorization:
                             "Bearer " +
                             auth.accessToken
+
                     }
 
                 }
@@ -5731,7 +6189,10 @@ async function loadSpotifyUser() {
             );
 
 
-            updateSpotifyUI(null);
+            updateSpotifyUI(
+                null
+            );
+
 
             return;
 
@@ -5748,7 +6209,9 @@ async function loadSpotifyUser() {
 
     } catch {
 
-        updateSpotifyUI(null);
+        updateSpotifyUI(
+            null
+        );
 
     }
 
@@ -5763,8 +6226,8 @@ function updateSpotifyUI(user) {
 
             $("spotifyStatus")
                 .textContent =
-                user.display_name ||
-                user.id;
+                    user.display_name ||
+                    user.id;
 
         }
 
@@ -5773,13 +6236,12 @@ function updateSpotifyUI(user) {
 
             $("spotifyLogin")
                 .textContent =
-                "Connected";
+                    "Connected";
 
 
             $("spotifyLogin")
-                .classList.add(
-                    "connected"
-                );
+                .classList
+                .add("connected");
 
         }
 
@@ -5788,11 +6250,11 @@ function updateSpotifyUI(user) {
 
             $("spotifyUser")
                 .textContent =
-                "Connected: " +
-                (
-                    user.display_name ||
-                    user.id
-                );
+                    "Connected: " +
+                    (
+                        user.display_name ||
+                        user.id
+                    );
 
         }
 
@@ -5802,7 +6264,7 @@ function updateSpotifyUI(user) {
 
             $("spotifyStatus")
                 .textContent =
-                "Not connected";
+                    "Not connected";
 
         }
 
@@ -5811,11 +6273,12 @@ function updateSpotifyUI(user) {
 
             $("spotifyLogin")
                 .textContent =
-                "Connect";
+                    "Connect";
 
 
             $("spotifyLogin")
-                .classList.remove(
+                .classList
+                .remove(
                     "connected"
                 );
 
@@ -5836,10 +6299,13 @@ if ($("spotifyLogin")) {
 
 /* =========================================================
    GOOGLE / YOUTUBE OAUTH
-========================================================= */
+   ========================================================= */
 
-let googleUser = null;
-let googleTokenClient = null;
+let googleUser =
+    null;
+
+let googleTokenClient =
+    null;
 
 
 function initializeGoogle() {
@@ -5907,11 +6373,15 @@ function googleLogin() {
 }
 
 
-async function handleGoogleToken(response) {
+async function handleGoogleToken(
+    response
+) {
 
     if (response.error) {
 
-        console.error(response);
+        console.error(
+            response
+        );
 
         return;
 
@@ -5944,9 +6414,11 @@ async function handleGoogleToken(response) {
                 {
 
                     headers: {
+
                         Authorization:
                             "Bearer " +
                             token
+
                     }
 
                 }
@@ -5963,7 +6435,9 @@ async function handleGoogleToken(response) {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
 
     }
 
@@ -5984,7 +6458,7 @@ function updateGoogleUI(user) {
 
             $("googleStatus")
                 .textContent =
-                name;
+                    name;
 
         }
 
@@ -5993,13 +6467,12 @@ function updateGoogleUI(user) {
 
             $("googleLogin")
                 .textContent =
-                "Connected";
+                    "Connected";
 
 
             $("googleLogin")
-                .classList.add(
-                    "connected"
-                );
+                .classList
+                .add("connected");
 
         }
 
@@ -6008,8 +6481,8 @@ function updateGoogleUI(user) {
 
             $("youtubeUser")
                 .textContent =
-                "Connected: " +
-                name;
+                    "Connected: " +
+                    name;
 
         }
 
@@ -6019,7 +6492,7 @@ function updateGoogleUI(user) {
 
             $("googleStatus")
                 .textContent =
-                "Not connected";
+                    "Not connected";
 
         }
 
@@ -6028,11 +6501,12 @@ function updateGoogleUI(user) {
 
             $("googleLogin")
                 .textContent =
-                "Connect";
+                    "Connect";
 
 
             $("googleLogin")
-                .classList.remove(
+                .classList
+                .remove(
                     "connected"
                 );
 
@@ -6052,83 +6526,174 @@ if ($("googleLogin")) {
 
 
 /* =========================================================
-   INIT
+   THEME
+   ---------------------------------------------------------
+   لو applyTheme موجودة في ملف آخر، نستخدمها.
+   لو غير موجودة، لا نكسر التطبيق.
+   ========================================================= */
+
+function applyTheme() {
+
+    if (
+        typeof window.applyRakkeZTheme ===
+        "function"
+    ) {
+
+        window.applyRakkeZTheme(
+            settings.theme
+        );
+
+        return;
+
+    }
+
+
+    document.documentElement
+        .dataset.theme =
+            settings.theme;
+
+}
+
+
+/* =========================================================
+   AMBIENT
+   ---------------------------------------------------------
+   لو restoreAmbient موجودة في ملف آخر،
+   يتم استدعاؤها بشكل آمن.
+   ========================================================= */
+
+function restoreAmbient() {
+
+    if (
+        typeof window.restoreRakkeZAmbient ===
+        "function"
+    ) {
+
+        window.restoreRakkeZAmbient();
+
+    }
+
+}
+
+
+/* =========================================================
+   TIMER BUTTON
    ========================================================= */
 
 if ($("startBtn")) {
-    $("startBtn").onclick = startTimer;
+
+    $("startBtn").onclick =
+        startTimer;
+
 }
+
 
 /* =========================================================
    KEYBOARD SHORTCUTS
    ========================================================= */
 
-document.addEventListener("keydown", e => {
+document.addEventListener(
+    "keydown",
+    e => {
 
-    if (
-        e.target.tagName === "INPUT" ||
-        e.target.tagName === "TEXTAREA" ||
-        e.target.isContentEditable
-    ) {
-        return;
+        if (
+            e.target.tagName ===
+                "INPUT" ||
+            e.target.tagName ===
+                "TEXTAREA" ||
+            e.target.isContentEditable
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            e.code ===
+            "Space"
+        ) {
+
+            e.preventDefault();
+
+            startTimer();
+
+        }
+
+
+        if (
+            e.key.toLowerCase() ===
+            "r"
+        ) {
+
+            openResetConfirmation();
+
+        }
+
+
+        if (
+            e.key.toLowerCase() ===
+            "f"
+        ) {
+
+            toggleFocusOnly();
+
+        }
+
     }
-
-    if (e.code === "Space") {
-        e.preventDefault();
-        startTimer();
-    }
-
-    if (e.key.toLowerCase() === "r") {
-        openResetConfirmation();
-    }
-
-    if (e.key.toLowerCase() === "f") {
-        toggleFocusOnly();
-    }
-
-});
+);
 
 
 /* =========================================================
    LOADING SCREEN SAFE HANDLER
    ========================================================= */
 
-/*
-    IMPORTANT:
-
-    The loading screen must NEVER wait for:
-    - Spotify
-    - Google
-    - YouTube
-    - external images
-    - external APIs
-    - audio
-    - background media
-
-    The main RakkeZ UI should become available immediately.
-*/
-
 function finishLoadingScreen() {
 
     const loading =
-        document.getElementById("loadingScreen") ||
-        document.getElementById("loader") ||
-        document.querySelector(".loading-screen") ||
-        document.querySelector(".loader");
+        document.getElementById(
+            "loadingScreen"
+        ) ||
+
+        document.getElementById(
+            "loader"
+        ) ||
+
+        document.querySelector(
+            ".loading-screen"
+        ) ||
+
+        document.querySelector(
+            ".loader"
+        );
+
 
     if (!loading) {
+
         return;
+
     }
 
-    loading.classList.add("hide");
 
-    setTimeout(() => {
+    loading.classList.add(
+        "hide"
+    );
 
-        try {
-            loading.style.display = "none";
-        } catch {}
 
-    }, 500);
+    setTimeout(
+        () => {
+
+            try {
+
+                loading.style.display =
+                    "none";
+
+            } catch {}
+
+        },
+        500
+    );
+
 }
 
 
@@ -6140,18 +6705,26 @@ function safeAsync(fn) {
 
     try {
 
-        const result = fn();
+        const result =
+            fn();
 
-        if (result && typeof result.catch === "function") {
 
-            result.catch(error => {
+        if (
+            result &&
+            typeof result.catch ===
+                "function"
+        ) {
 
-                console.warn(
-                    "Background initialization failed:",
-                    error
-                );
+            result.catch(
+                error => {
 
-            });
+                    console.warn(
+                        "Background initialization failed:",
+                        error
+                    );
+
+                }
+            );
 
         }
 
@@ -6173,14 +6746,9 @@ function safeAsync(fn) {
 
 async function init() {
 
-    /*
-        -----------------------------------------------------
-        STEP 1
-        -----------------------------------------------------
-
-        Everything required for the actual app UI runs first.
-        Nothing here should depend on an external API.
-    */
+    /* =====================================================
+       ALARM POPUP
+       ===================================================== */
 
     try {
 
@@ -6196,24 +6764,21 @@ async function init() {
     }
 
 
-    /*
-        -----------------------------------------------------
-        CUSTOM ALARM
-        -----------------------------------------------------
-
-        Object URLs cannot survive a full page refresh.
-        Therefore a saved "custom" alarm without a current
-        Blob URL must safely fall back to soft.
-    */
+    /* =====================================================
+       CUSTOM ALARM
+       ===================================================== */
 
     try {
 
         if (
-            settings.alarmSound === "custom" &&
+            settings.alarmSound ===
+                "custom" &&
             !customAlarmURL
         ) {
 
-            settings.alarmSound = "soft";
+            settings.alarmSound =
+                "soft";
+
 
             save(
                 STORAGE.settings,
@@ -6232,11 +6797,9 @@ async function init() {
     }
 
 
-    /*
-        -----------------------------------------------------
-        TIMER
-        -----------------------------------------------------
-    */
+    /* =====================================================
+       STREAK
+       ===================================================== */
 
     try {
 
@@ -6252,6 +6815,10 @@ async function init() {
     }
 
 
+    /* =====================================================
+       TIMER
+       ===================================================== */
+
     try {
 
         restoreTimer();
@@ -6263,38 +6830,51 @@ async function init() {
             error
         );
 
-        /*
-            Emergency timer fallback.
-        */
 
-        timerState.mode = "focus";
+        timerState.mode =
+            "focus";
+
 
         const focusMinutes =
-            Number(settings.focus);
+            Number(
+                settings.focus
+            );
+
 
         const safeFocus =
-            Number.isFinite(focusMinutes) &&
+            Number.isFinite(
+                focusMinutes
+            ) &&
             focusMinutes > 0
+
                 ? focusMinutes
+
                 : DEFAULT_SETTINGS.focus;
 
+
         timerState.total =
-            Math.floor(safeFocus * 60);
+            Math.floor(
+                safeFocus * 60
+            );
+
 
         timerState.remaining =
             timerState.total;
 
-        timerState.running = false;
-        timerState.interval = null;
+
+        timerState.running =
+            false;
+
+
+        timerState.interval =
+            null;
 
     }
 
 
-    /*
-        -----------------------------------------------------
-        UI
-        -----------------------------------------------------
-    */
+    /* =====================================================
+       UI
+       ===================================================== */
 
     try {
 
@@ -6366,14 +6946,9 @@ async function init() {
     }
 
 
-    /*
-        -----------------------------------------------------
-        AMBIENT
-        -----------------------------------------------------
-
-        Restore the saved ambient immediately.
-        External images are allowed to load separately.
-    */
+    /* =====================================================
+       AMBIENT
+       ===================================================== */
 
     try {
 
@@ -6389,65 +6964,42 @@ async function init() {
     }
 
 
-    /*
-        -----------------------------------------------------
-        LOADING SCREEN
-        -----------------------------------------------------
-
-        IMPORTANT:
-
-        Finish the loading screen NOW.
-
-        Do NOT wait for:
-        Spotify
-        Google
-        YouTube
-        external APIs
-    */
+    /* =====================================================
+       LOADING SCREEN
+       ===================================================== */
 
     finishLoadingScreen();
 
 
-    /*
-        -----------------------------------------------------
-        BACKGROUND SERVICES
-        -----------------------------------------------------
+    /* =====================================================
+       BACKGROUND SERVICES
+       ===================================================== */
 
-        Everything below runs AFTER the main UI is ready.
-    */
+    safeAsync(
+        async () => {
 
+            await handleSpotifyCallback();
 
-    /*
-        Spotify callback
-    */
-
-    safeAsync(async () => {
-
-        await handleSpotifyCallback();
-
-    });
+        }
+    );
 
 
-    /*
-        Spotify account
-    */
+    safeAsync(
+        async () => {
 
-    safeAsync(async () => {
+            await loadSpotifyUser();
 
-        await loadSpotifyUser();
-
-    });
+        }
+    );
 
 
-    /*
-        Google OAuth
-    */
+    safeAsync(
+        async () => {
 
-    safeAsync(async () => {
+            initializeGoogle();
 
-        initializeGoogle();
-
-    });
+        }
+    );
 
 }
 
@@ -6457,14 +7009,17 @@ async function init() {
    ========================================================= */
 
 if (
-    document.readyState === "loading"
+    document.readyState ===
+    "loading"
 ) {
 
     document.addEventListener(
         "DOMContentLoaded",
         () => {
 
-            safeAsync(init);
+            safeAsync(
+                init
+            );
 
         },
         {
@@ -6474,6 +7029,34 @@ if (
 
 } else {
 
-    safeAsync(init);
+    safeAsync(
+        init
+    );
 
 }
+
+
+/* =========================================================
+   FINAL SAFETY
+   ---------------------------------------------------------
+   يمنع body من البقاء مقفولًا إذا تم إغلاق overlay
+   من كود خارجي.
+   ========================================================= */
+
+window.RakkeZOverlay = {
+
+    open:
+        openOverlayById,
+
+    close:
+        closeOverlayById,
+
+    closeAll:
+        closeAllOverlays
+
+};
+
+
+/* =========================================================
+   END OF RAKKEZ MAIN JS
+   ========================================================= */
