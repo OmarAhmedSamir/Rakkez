@@ -5870,6 +5870,9 @@ body.light .rakkez-mini-close,
 }
 
 
+
+
+
 /* =========================================================
    DAY PLANNER
 ========================================================= */
@@ -16459,6 +16462,6653 @@ setInterval(
 }
 
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- =========================================================
+     RAKKEZ DAY PLANNER
+     GOOGLE-CALENDAR-STYLE
+     SELF CONTAINED
+     
+     Features:
+     - Day / Week / Month
+     - Create button
+     - Drag to create
+     - Drag events
+     - Resize events
+     - 15 minute snap
+     - All-day events
+     - Recurring events
+     - Current time indicator
+     - Auto scroll
+     - RTL / LTR
+     - Local persistence
+     - Water reminder
+     - No external libraries
+========================================================= -->
+
+<style>
+/* =========================================================
+   ROOT
+========================================================= */
+
+#rpzPlanner {
+    --rp-blue: #4285f4;
+    --rp-blue-soft: rgba(66,133,244,.14);
+    --rp-bg: #111;
+    --rp-panel: #181818;
+    --rp-panel-2: #202124;
+    --rp-border: rgba(255,255,255,.10);
+    --rp-border-soft: rgba(255,255,255,.065);
+    --rp-text: rgba(255,255,255,.90);
+    --rp-text-soft: rgba(255,255,255,.58);
+    --rp-text-muted: rgba(255,255,255,.35);
+    --rp-hour-height: 64px;
+
+    width: 100%;
+    height: 760px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: var(--rp-bg);
+    border: 1px solid var(--rp-border);
+    border-radius: 18px;
+
+    color: var(--rp-text);
+
+    font-family:
+        "Google Sans",
+        "Inter",
+        "DM Sans",
+        system-ui,
+        sans-serif;
+
+    position: relative;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.rpz-planner-header {
+
+    min-height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    padding: 10px 16px;
+
+    border-bottom:
+        1px solid var(--rp-border);
+
+    background:
+        rgba(20,20,20,.96);
+
+    flex-shrink: 0;
+}
+
+.rpz-planner-left {
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    min-width: 0;
+}
+
+.rpz-planner-create {
+
+    height: 40px;
+
+    padding:
+        0 18px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background:
+        #fff;
+
+    color:
+        #202124;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.20);
+
+    transition:
+        transform .16s ease,
+        box-shadow .16s ease;
+}
+
+.rpz-planner-create:hover {
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.28);
+}
+
+.rpz-planner-create-plus {
+
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.rpz-planner-navigation {
+
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.rpz-planner-nav-btn {
+
+    width: 34px;
+    height: 34px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255,255,255,.72);
+
+    cursor: pointer;
+
+    font-size: 20px;
+
+    display: grid;
+    place-items: center;
+
+    transition:
+        background .15s ease,
+        color .15s ease;
+}
+
+.rpz-planner-nav-btn:hover {
+
+    background:
+        rgba(255,255,255,.08);
+
+    color:
+        #fff;
+}
+
+.rpz-planner-today {
+
+    height: 34px;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid var(--rp-border);
+
+    border-radius: 8px;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255,255,255,.82);
+
+    cursor: pointer;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.rpz-planner-today:hover {
+
+    background:
+        rgba(255,255,255,.07);
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.rpz-planner-title {
+
+    min-width: 170px;
+
+    color:
+        #fff;
+
+    font-size:
+        18px;
+
+    font-weight:
+        500;
+
+    white-space:
+        nowrap;
+}
+
+/* =========================================================
+   VIEW SWITCHER
+========================================================= */
+
+.rpz-planner-right {
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.rpz-planner-views {
+
+    display: flex;
+
+    padding: 3px;
+
+    border:
+        1px solid var(--rp-border);
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+.rpz-planner-view-btn {
+
+    height: 30px;
+
+    padding:
+        0 11px;
+
+    border: 0;
+
+    border-radius: 7px;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255,255,255,.40);
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+    transition:
+        background .15s ease,
+        color .15s ease;
+}
+
+.rpz-planner-view-btn:hover {
+
+    color:
+        #fff;
+}
+
+.rpz-planner-view-btn.active {
+
+    background:
+        rgba(255,255,255,.10);
+
+    color:
+        #fff;
+}
+
+/* =========================================================
+   CALENDAR BODY
+========================================================= */
+
+.rpz-planner-body {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================================
+   WEEK HEADER
+========================================================= */
+
+.rpz-calendar-header {
+
+    display: grid;
+
+    grid-template-columns:
+        58px
+        repeat(7, minmax(100px, 1fr));
+
+    min-height:
+        58px;
+
+    border-bottom:
+        1px solid var(--rp-border);
+
+    flex-shrink: 0;
+}
+
+.rpz-time-header {
+
+    border-right:
+        1px solid var(--rp-border);
+
+    background:
+        #111;
+}
+
+.rpz-day-header {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap: 3px;
+
+    border-right:
+        1px solid var(--rp-border);
+
+    color:
+        rgba(255,255,255,.42);
+
+    font-size:
+        10px;
+}
+
+.rpz-day-header-number {
+
+    width:
+        30px;
+
+    height:
+        30px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border-radius:
+        50%;
+
+    color:
+        rgba(255,255,255,.82);
+
+    font-size:
+        15px;
+}
+
+.rpz-day-header.today
+.rpz-day-header-number {
+
+    background:
+        var(--rp-blue);
+
+    color:
+        #fff;
+}
+
+/* =========================================================
+   ALL DAY AREA
+========================================================= */
+
+.rpz-all-day-row {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        58px
+        repeat(7, minmax(100px, 1fr));
+
+    min-height:
+        38px;
+
+    max-height:
+        110px;
+
+    overflow-y:
+        auto;
+
+    border-bottom:
+        1px solid var(--rp-border);
+
+    flex-shrink:
+        0;
+}
+
+.rpz-all-day-label {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    padding-top:
+        10px;
+
+    color:
+        var(--rp-text-muted);
+
+    font-size:
+        8px;
+}
+
+.rpz-all-day-cell {
+
+    position:
+        relative;
+
+    min-width:
+        0;
+
+    padding:
+        4px;
+
+    border-right:
+        1px solid var(--rp-border-soft);
+}
+
+.rpz-all-day-event {
+
+    height:
+        25px;
+
+    margin-bottom:
+        3px;
+
+    padding:
+        4px 8px;
+
+    border-radius:
+        5px;
+
+    overflow:
+        hidden;
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+
+    font-size:
+        10px;
+
+    font-weight:
+        500;
+
+    cursor:
+        pointer;
+}
+
+/* =========================================================
+   SCROLL AREA
+========================================================= */
+
+.rpz-calendar-scroll {
+
+    flex:
+        1;
+
+    min-height:
+        0;
+
+    overflow:
+        auto;
+
+    position:
+        relative;
+}
+
+/* =========================================================
+   TIME GRID
+========================================================= */
+
+.rpz-calendar-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        58px
+        repeat(7, minmax(100px, 1fr));
+
+    position:
+        relative;
+
+    min-height:
+        calc(24 * var(--rp-hour-height));
+
+    direction:
+        ltr;
+}
+
+.rpz-time-column {
+
+    position:
+        relative;
+
+    border-right:
+        1px solid var(--rp-border);
+
+    background:
+        #111;
+}
+
+.rpz-time-label {
+
+    position:
+        absolute;
+
+    right:
+        8px;
+
+    transform:
+        translateY(-50%);
+
+    color:
+        rgba(255,255,255,.31);
+
+    font-size:
+        9px;
+
+    white-space:
+        nowrap;
+}
+
+.rpz-day-column {
+
+    position:
+        relative;
+
+    border-right:
+        1px solid var(--rp-border-soft);
+
+    background:
+        #111;
+
+    min-width:
+        100px;
+}
+
+/* =========================================================
+   HOUR / QUARTER LINES
+========================================================= */
+
+.rpz-hour-line {
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    border-top:
+        1px solid rgba(255,255,255,.085);
+
+    pointer-events:
+        none;
+}
+
+.rpz-quarter-line {
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    border-top:
+        1px solid rgba(255,255,255,.032);
+
+    pointer-events:
+        none;
+}
+
+/* =========================================================
+   EVENTS LAYER
+========================================================= */
+
+.rpz-events-layer {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        5;
+
+    pointer-events:
+        none;
+}
+
+.rpz-event {
+
+    position:
+        absolute;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        5px 8px;
+
+    border-radius:
+        6px;
+
+    overflow:
+        hidden;
+
+    color:
+        #fff;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.35;
+
+    cursor:
+        grab;
+
+    pointer-events:
+        auto;
+
+    user-select:
+        none;
+
+    border-left:
+        3px solid rgba(255,255,255,.38);
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,.18);
+
+    transition:
+        box-shadow .12s ease;
+}
+
+.rpz-event:hover {
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.30);
+
+    z-index:
+        20;
+}
+
+.rpz-event.dragging {
+
+    cursor:
+        grabbing;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.40);
+
+    z-index:
+        100;
+}
+
+.rpz-event-title {
+
+    font-weight:
+        600;
+
+    overflow:
+        hidden;
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+}
+
+.rpz-event-time {
+
+    margin-top:
+        2px;
+
+    color:
+        rgba(255,255,255,.72);
+
+    font-size:
+        8px;
+}
+
+/* =========================================================
+   RESIZE HANDLE
+========================================================= */
+
+.rpz-event-resize {
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    bottom:
+        0;
+
+    height:
+        8px;
+
+    cursor:
+        ns-resize;
+
+    z-index:
+        5;
+}
+
+.rpz-event-resize::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        35%;
+
+    right:
+        35%;
+
+    bottom:
+        2px;
+
+    height:
+        2px;
+
+    border-radius:
+        5px;
+
+    background:
+        rgba(255,255,255,.42);
+}
+
+/* =========================================================
+   DRAG PREVIEW
+========================================================= */
+
+.rpz-drag-preview {
+
+    position:
+        absolute;
+
+    z-index:
+        200;
+
+    pointer-events:
+        none;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid rgba(66,133,244,.8);
+
+    border-radius:
+        6px;
+
+    background:
+        rgba(66,133,244,.23);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.05);
+}
+
+.rpz-drag-preview-label {
+
+    position:
+        absolute;
+
+    top:
+        5px;
+
+    left:
+        7px;
+
+    color:
+        #fff;
+
+    font-size:
+        9px;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+}
+
+/* =========================================================
+   CURRENT TIME
+========================================================= */
+
+.rpz-current-time {
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    height:
+        2px;
+
+    background:
+        #ea4335;
+
+    z-index:
+        150;
+
+    pointer-events:
+        none;
+
+    box-shadow:
+        0 0 4px rgba(234,67,53,.45);
+}
+
+.rpz-current-time-dot {
+
+    position:
+        absolute;
+
+    left:
+        -4px;
+
+    top:
+        -4px;
+
+    width:
+        9px;
+
+    height:
+        9px;
+
+    border-radius:
+        50%;
+
+    background:
+        #ea4335;
+}
+
+.rpz-current-time-label {
+
+    position:
+        absolute;
+
+    top:
+        -10px;
+
+    left:
+        7px;
+
+    padding:
+        3px 5px;
+
+    border-radius:
+        4px;
+
+    background:
+        #ea4335;
+
+    color:
+        #fff;
+
+    font-size:
+        8px;
+
+    font-weight:
+        600;
+}
+
+/* =========================================================
+   MONTH VIEW
+========================================================= */
+
+.rpz-month {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    grid-template-rows:
+        auto repeat(6, minmax(90px, 1fr));
+
+    height:
+        100%;
+
+    overflow:
+        auto;
+}
+
+.rpz-month-weekday {
+
+    padding:
+        10px;
+
+    border-right:
+        1px solid var(--rp-border-soft);
+
+    border-bottom:
+        1px solid var(--rp-border);
+
+    color:
+        rgba(255,255,255,.38);
+
+    font-size:
+        9px;
+
+    text-align:
+        center;
+}
+
+.rpz-month-cell {
+
+    min-height:
+        90px;
+
+    padding:
+        7px;
+
+    border-right:
+        1px solid var(--rp-border-soft);
+
+    border-bottom:
+        1px solid var(--rp-border-soft);
+
+    overflow:
+        hidden;
+
+    cursor:
+        pointer;
+
+    transition:
+        background .15s ease;
+}
+
+.rpz-month-cell:hover {
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+.rpz-month-cell.other-month {
+
+    opacity:
+        .35;
+}
+
+.rpz-month-number {
+
+    width:
+        24px;
+
+    height:
+        24px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    margin-bottom:
+        4px;
+
+    border-radius:
+        50%;
+
+    color:
+        rgba(255,255,255,.68);
+
+    font-size:
+        10px;
+}
+
+.rpz-month-cell.today
+.rpz-month-number {
+
+    background:
+        var(--rp-blue);
+
+    color:
+        #fff;
+}
+
+.rpz-month-event {
+
+    height:
+        20px;
+
+    margin-bottom:
+        2px;
+
+    padding:
+        3px 5px;
+
+    border-radius:
+        4px;
+
+    overflow:
+        hidden;
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+
+    color:
+        #fff;
+
+    font-size:
+        8px;
+
+    cursor:
+        pointer;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.rpz-event-modal {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        2147483600;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        20px;
+
+    background:
+        rgba(0,0,0,.62);
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity .18s ease;
+}
+
+.rpz-event-modal.show {
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    pointer-events:
+        auto;
+}
+
+.rpz-event-box {
+
+    width:
+        min(540px, 100%);
+
+    max-height:
+        90vh;
+
+    overflow:
+        auto;
+
+    padding:
+        24px;
+
+    border-radius:
+        22px;
+
+    background:
+        #202124;
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    box-shadow:
+        0 25px 90px rgba(0,0,0,.55);
+}
+
+/* =========================================================
+   MODAL TOP
+========================================================= */
+
+.rpz-event-modal-top {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    margin-bottom:
+        17px;
+}
+
+.rpz-event-modal-close {
+
+    width:
+        34px;
+
+    height:
+        34px;
+
+    border:
+        0;
+
+    border-radius:
+        50%;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255,255,255,.65);
+
+    font-size:
+        23px;
+
+    cursor:
+        pointer;
+}
+
+.rpz-event-modal-close:hover {
+
+    background:
+        rgba(255,255,255,.08);
+
+    color:
+        #fff;
+}
+
+/* =========================================================
+   TITLE INPUT
+========================================================= */
+
+.rpz-event-title-input {
+
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    height:
+        48px;
+
+    margin-bottom:
+        16px;
+
+    padding:
+        0 3px;
+
+    border:
+        0;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.20);
+
+    outline:
+        none;
+
+    background:
+        transparent;
+
+    color:
+        #fff;
+
+    font-size:
+        21px;
+
+    font-weight:
+        500;
+}
+
+.rpz-event-title-input:focus {
+
+    border-bottom-color:
+        var(--rp-blue);
+}
+
+.rpz-event-title-input::placeholder {
+
+    color:
+        rgba(255,255,255,.45);
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.rpz-event-form-row {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        9px;
+
+    margin-bottom:
+        10px;
+}
+
+.rpz-event-field {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        5px;
+}
+
+.rpz-event-field label {
+
+    color:
+        rgba(255,255,255,.40);
+
+    font-size:
+        9px;
+
+    font-weight:
+        600;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .7px;
+}
+
+.rpz-event-input,
+.rpz-event-select,
+.rpz-event-textarea {
+
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    border-radius:
+        9px;
+
+    outline:
+        none;
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:
+        #fff;
+
+    font-size:
+        11px;
+}
+
+.rpz-event-input,
+.rpz-event-select {
+
+    height:
+        42px;
+
+    padding:
+        0 11px;
+}
+
+.rpz-event-textarea {
+
+    min-height:
+        95px;
+
+    padding:
+        10px;
+
+    resize:
+        vertical;
+
+    line-height:
+        1.6;
+}
+
+.rpz-event-input:focus,
+.rpz-event-select:focus,
+.rpz-event-textarea:focus {
+
+    border-color:
+        rgba(66,133,244,.65);
+}
+
+/* =========================================================
+   CHECKBOX
+========================================================= */
+
+.rpz-event-checkbox {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    margin:
+        5px 0 14px;
+
+    color:
+        rgba(255,255,255,.72);
+
+    font-size:
+        11px;
+
+    cursor:
+        pointer;
+}
+
+.rpz-event-checkbox input {
+
+    accent-color:
+        var(--rp-blue);
+}
+
+/* =========================================================
+   COLORS
+========================================================= */
+
+.rpz-event-colors {
+
+    display:
+        flex;
+
+    gap:
+        8px;
+
+    flex-wrap:
+        wrap;
+}
+
+.rpz-event-color {
+
+    width:
+        23px;
+
+    height:
+        23px;
+
+    border-radius:
+        50%;
+
+    border:
+        2px solid transparent;
+
+    cursor:
+        pointer;
+}
+
+.rpz-event-color.selected {
+
+    border-color:
+        #fff;
+
+    box-shadow:
+        0 0 0 2px rgba(255,255,255,.18);
+}
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
+
+.rpz-event-modal-footer {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin-top:
+        20px;
+}
+
+.rpz-event-delete {
+
+    height:
+        38px;
+
+    padding:
+        0 13px;
+
+    border:
+        0;
+
+    border-radius:
+        8px;
+
+    background:
+        transparent;
+
+    color:
+        #ea4335;
+
+    cursor:
+        pointer;
+
+    font-size:
+        11px;
+}
+
+.rpz-event-delete:hover {
+
+    background:
+        rgba(234,67,53,.10);
+}
+
+.rpz-event-modal-actions {
+
+    display:
+        flex;
+
+    gap:
+        7px;
+}
+
+.rpz-event-cancel,
+.rpz-event-save {
+
+    height:
+        38px;
+
+    padding:
+        0 17px;
+
+    border:
+        0;
+
+    border-radius:
+        8px;
+
+    cursor:
+        pointer;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+}
+
+.rpz-event-cancel {
+
+    background:
+        rgba(255,255,255,.07);
+
+    color:
+        rgba(255,255,255,.70);
+}
+
+.rpz-event-save {
+
+    background:
+        #a8c7fa;
+
+    color:
+        #17213a;
+}
+
+.rpz-event-save:hover {
+
+    background:
+        #c0d7fb;
+}
+
+/* =========================================================
+   WATER SETTINGS
+========================================================= */
+
+.rpz-water-settings {
+
+    margin-top:
+        14px;
+
+    padding:
+        15px;
+
+    border:
+        1px solid var(--rp-border);
+
+    border-radius:
+        13px;
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+.rpz-water-head {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    margin-bottom:
+        12px;
+}
+
+.rpz-water-title {
+
+    color:
+        #fff;
+
+    font-size:
+        12px;
+
+    font-weight:
+        600;
+}
+
+.rpz-water-toggle {
+
+    position:
+        relative;
+
+    width:
+        38px;
+
+    height:
+        21px;
+
+    border:
+        0;
+
+    border-radius:
+        99px;
+
+    background:
+        rgba(255,255,255,.18);
+
+    cursor:
+        pointer;
+
+    transition:
+        background .2s ease;
+}
+
+.rpz-water-toggle.on {
+
+    background:
+        var(--rp-blue);
+}
+
+.rpz-water-toggle::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        15px;
+
+    height:
+        15px;
+
+    top:
+        3px;
+
+    left:
+        3px;
+
+    border-radius:
+        50%;
+
+    background:
+        #fff;
+
+    transition:
+        transform .2s ease;
+}
+
+.rpz-water-toggle.on::after {
+
+    transform:
+        translateX(17px);
+}
+
+.rpz-water-controls {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        8px;
+}
+
+.rpz-water-label {
+
+    color:
+        rgba(255,255,255,.38);
+
+    font-size:
+        9px;
+
+    margin-bottom:
+        5px;
+}
+
+.rpz-water-select {
+
+    width:
+        100%;
+
+    height:
+        38px;
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    border-radius:
+        8px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:
+        #fff;
+
+    padding:
+        0 9px;
+
+    outline:
+        none;
+
+    font-size:
+        10px;
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.rpz-planner-empty {
+
+    height:
+        100%;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    color:
+        rgba(255,255,255,.25);
+
+    font-size:
+        11px;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    #rpzPlanner {
+
+        height:
+            720px;
+    }
+
+    .rpz-planner-title {
+
+        min-width:
+            100px;
+
+        font-size:
+            15px;
+    }
+
+    .rpz-planner-right {
+
+        gap:
+            5px;
+    }
+
+    .rpz-planner-view-btn {
+
+        padding:
+            0 8px;
+    }
+
+    .rpz-calendar-header,
+    .rpz-all-day-row,
+    .rpz-calendar-grid {
+
+        grid-template-columns:
+            48px
+            repeat(7, minmax(90px, 1fr));
+    }
+
+    .rpz-event-form-row {
+
+        grid-template-columns:
+            1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .rpz-planner-header {
+
+        flex-wrap:
+            wrap;
+
+        min-height:
+            auto;
+
+        padding:
+            10px;
+    }
+
+    .rpz-planner-left {
+
+        width:
+            100%;
+    }
+
+    .rpz-planner-right {
+
+        width:
+            100%;
+
+        justify-content:
+            space-between;
+    }
+
+    .rpz-planner-title {
+
+        flex:
+            1;
+
+        min-width:
+            0;
+    }
+
+    .rpz-planner-create {
+
+        padding:
+            0 13px;
+    }
+
+    .rpz-event-box {
+
+        padding:
+            18px;
+
+        border-radius:
+            17px;
+    }
+}
+</style>
+
+
+<!-- =========================================================
+     PLANNER HTML
+========================================================= -->
+
+<div id="rpzPlanner">
+
+    <!-- HEADER -->
+
+    <div class="rpz-planner-header">
+
+        <div class="rpz-planner-left">
+
+            <button
+                class="rpz-planner-create"
+                id="rpzPlannerCreate"
+                type="button"
+            >
+                <span class="rpz-planner-create-plus">+</span>
+                <span>Create</span>
+            </button>
+
+            <div class="rpz-planner-navigation">
+
+                <button
+                    class="rpz-planner-nav-btn"
+                    id="rpzPlannerPrev"
+                    type="button"
+                    aria-label="Previous"
+                >
+                    ‹
+                </button>
+
+                <button
+                    class="rpz-planner-today"
+                    id="rpzPlannerToday"
+                    type="button"
+                >
+                    Today
+                </button>
+
+                <button
+                    class="rpz-planner-nav-btn"
+                    id="rpzPlannerNext"
+                    type="button"
+                    aria-label="Next"
+                >
+                    ›
+                </button>
+
+            </div>
+
+            <div
+                class="rpz-planner-title"
+                id="rpzPlannerTitle"
+            >
+                Today
+            </div>
+
+        </div>
+
+
+        <div class="rpz-planner-right">
+
+            <div class="rpz-planner-views">
+
+                <button
+                    class="rpz-planner-view-btn"
+                    data-planner-view="day"
+                    type="button"
+                >
+                    Day
+                </button>
+
+                <button
+                    class="rpz-planner-view-btn active"
+                    data-planner-view="week"
+                    type="button"
+                >
+                    Week
+                </button>
+
+                <button
+                    class="rpz-planner-view-btn"
+                    data-planner-view="month"
+                    type="button"
+                >
+                    Month
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BODY -->
+
+    <div class="rpz-planner-body">
+
+        <div
+            class="rpz-calendar-header"
+            id="rpzCalendarHeader"
+        ></div>
+
+        <div
+            class="rpz-all-day-row"
+            id="rpzAllDayRow"
+        ></div>
+
+        <div
+            class="rpz-calendar-scroll"
+            id="rpzCalendarScroll"
+        >
+
+            <div
+                class="rpz-calendar-grid"
+                id="rpzCalendarGrid"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     EVENT MODAL
+========================================================= -->
+
+<div
+    class="rpz-event-modal"
+    id="rpzPlannerEventModal"
+>
+
+    <div class="rpz-event-box">
+
+        <div class="rpz-event-modal-top">
+
+            <div></div>
+
+            <button
+                class="rpz-event-modal-close"
+                id="rpzPlannerModalClose"
+                type="button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <input
+            class="rpz-event-title-input"
+            id="rpzPlannerEventTitle"
+            placeholder="Add title"
+            maxlength="120"
+            autocomplete="off"
+        >
+
+
+        <div class="rpz-event-form-row">
+
+            <div class="rpz-event-field">
+
+                <label>Date</label>
+
+                <input
+                    class="rpz-event-input"
+                    id="rpzPlannerEventDate"
+                    type="date"
+                >
+
+            </div>
+
+            <div class="rpz-event-field">
+
+                <label>Repeat</label>
+
+                <select
+                    class="rpz-event-select"
+                    id="rpzPlannerEventRepeat"
+                >
+
+                    <option value="none">
+                        Does not repeat
+                    </option>
+
+                    <option value="daily">
+                        Daily
+                    </option>
+
+                    <option value="weekly">
+                        Weekly
+                    </option>
+
+                    <option value="monthly">
+                        Monthly
+                    </option>
+
+                    <option value="custom">
+                        Custom days
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <label class="rpz-event-checkbox">
+
+            <input
+                id="rpzPlannerAllDay"
+                type="checkbox"
+            >
+
+            <span>All day</span>
+
+        </label>
+
+
+        <div
+            id="rpzPlannerTimedFields"
+        >
+
+            <div class="rpz-event-form-row">
+
+                <div class="rpz-event-field">
+
+                    <label>Start</label>
+
+                    <input
+                        class="rpz-event-input"
+                        id="rpzPlannerEventStart"
+                        type="time"
+                        step="900"
+                    >
+
+                </div>
+
+                <div class="rpz-event-field">
+
+                    <label>End</label>
+
+                    <input
+                        class="rpz-event-input"
+                        id="rpzPlannerEventEnd"
+                        type="time"
+                        step="900"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="rpzPlannerCustomDays"
+            style="display:none;margin-bottom:12px;"
+        >
+
+            <div
+                class="rpz-event-field"
+            >
+
+                <label>Repeat on</label>
+
+                <div
+                    style="
+                        display:flex;
+                        gap:6px;
+                        flex-wrap:wrap;
+                        margin-top:3px;
+                    "
+                >
+
+                    <label class="rpz-event-checkbox">
+                        <input
+                            type="checkbox"
+                            value="0"
+                            data-repeat-day
+                        >
+                        Sun
+                    </label>
+
+                    <label class="rpz-event-checkbox">
+                        <input
+                            type="checkbox"
+                            value="1"
+                            data-repeat-day
+                        >
+                        Mon
+                    </label>
+
+                    <label class="rpz-event-checkbox">
+                        <input
+                            type="checkbox"
+                            value="2"
+                            data-repeat-day
+                        >
+                        Tue
+                    </label>
+
+                    <label class="rpz-event-checkbox">
+                        <input
+                            type="checkbox"
+                            value="3"
+                            data-repeat-day
+                        >
+                        Wed
+                    </label>
+
+                    <label class="rpz-event-checkbox">
+                        <input
+                            type="checkbox"
+                            value="4"
+                            data-repeat-day
+                        >
+                        Thu
+                    </label>
+
+                    <label class="rpz-event-checkbox">
+                        <input
+                            type="checkbox"
+                            value="5"
+                            data-repeat-day
+                        >
+                        Fri
+                    </label>
+
+                    <label class="rpz-event-checkbox">
+                        <input
+                            type="checkbox"
+                            value="6"
+                            data-repeat-day
+                        >
+                        Sat
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="rpz-event-field"
+            style="margin-bottom:10px;"
+        >
+
+            <label>Description</label>
+
+            <textarea
+                class="rpz-event-textarea"
+                id="rpzPlannerEventDescription"
+                placeholder="Add description"
+            ></textarea>
+
+        </div>
+
+
+        <div
+            class="rpz-event-field"
+        >
+
+            <label>Color</label>
+
+            <div
+                class="rpz-event-colors"
+                id="rpzPlannerColors"
+            >
+
+                <button
+                    class="rpz-event-color selected"
+                    data-color="#4285f4"
+                    style="background:#4285f4"
+                    type="button"
+                ></button>
+
+                <button
+                    class="rpz-event-color"
+                    data-color="#34a853"
+                    style="background:#34a853"
+                    type="button"
+                ></button>
+
+                <button
+                    class="rpz-event-color"
+                    data-color="#fbbc04"
+                    style="background:#fbbc04"
+                    type="button"
+                ></button>
+
+                <button
+                    class="rpz-event-color"
+                    data-color="#ea4335"
+                    style="background:#ea4335"
+                    type="button"
+                ></button>
+
+                <button
+                    class="rpz-event-color"
+                    data-color="#a142f4"
+                    style="background:#a142f4"
+                    type="button"
+                ></button>
+
+                <button
+                    class="rpz-event-color"
+                    data-color="#00acc1"
+                    style="background:#00acc1"
+                    type="button"
+                ></button>
+
+            </div>
+
+        </div>
+
+
+        <div class="rpz-event-modal-footer">
+
+            <button
+                class="rpz-event-delete"
+                id="rpzPlannerDelete"
+                type="button"
+                style="display:none;"
+            >
+                Delete
+            </button>
+
+            <div class="rpz-event-modal-actions">
+
+                <button
+                    class="rpz-event-cancel"
+                    id="rpzPlannerCancel"
+                    type="button"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="rpz-event-save"
+                    id="rpzPlannerSave"
+                    type="button"
+                >
+                    Save
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     WATER REMINDER PANEL
+========================================================= -->
+
+<div
+    class="rpz-water-settings"
+    id="rpzWaterSettings"
+>
+
+    <div class="rpz-water-head">
+
+        <div>
+
+            <div class="rpz-water-title">
+                💧 Water Reminder
+            </div>
+
+            <div
+                style="
+                    color:rgba(255,255,255,.32);
+                    font-size:9px;
+                    margin-top:3px;
+                "
+            >
+                A quiet reminder to stay hydrated.
+            </div>
+
+        </div>
+
+        <button
+            class="rpz-water-toggle"
+            id="rpzWaterToggle"
+            type="button"
+            aria-label="Water Reminder"
+        ></button>
+
+    </div>
+
+
+    <div class="rpz-water-controls">
+
+        <div>
+
+            <div class="rpz-water-label">
+                Interval
+            </div>
+
+            <select
+                class="rpz-water-select"
+                id="rpzWaterInterval"
+            >
+
+                <option value="5">
+                    Every 5 minutes
+                </option>
+
+                <option value="10" selected>
+                    Every 10 minutes
+                </option>
+
+                <option value="15">
+                    Every 15 minutes
+                </option>
+
+                <option value="20">
+                    Every 20 minutes
+                </option>
+
+                <option value="30">
+                    Every 30 minutes
+                </option>
+
+                <option value="60">
+                    Every 60 minutes
+                </option>
+
+            </select>
+
+        </div>
+
+        <div>
+
+            <div class="rpz-water-label">
+                Status
+            </div>
+
+            <div
+                id="rpzWaterStatus"
+                style="
+                    height:38px;
+                    display:flex;
+                    align-items:center;
+                    color:rgba(255,255,255,.40);
+                    font-size:10px;
+                "
+            >
+                Off
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+(function () {
+
+    "use strict";
+
+
+    /* =========================================================
+       CONFIG
+    ========================================================= */
+
+    const STORAGE_KEY =
+        "rakkez_day_planner_v3";
+
+    const WATER_STORAGE_KEY =
+        "rakkez_water_reminder_v2";
+
+    const SNAP_MINUTES =
+        15;
+
+    const HOUR_HEIGHT =
+        64;
+
+
+    /* =========================================================
+       DOM
+    ========================================================= */
+
+    const planner =
+        document.getElementById(
+            "rpzPlanner"
+        );
+
+    if (!planner) return;
+
+
+    const header =
+        document.getElementById(
+            "rpzCalendarHeader"
+        );
+
+    const allDayRow =
+        document.getElementById(
+            "rpzAllDayRow"
+        );
+
+    const scroll =
+        document.getElementById(
+            "rpzCalendarScroll"
+        );
+
+    const grid =
+        document.getElementById(
+            "rpzCalendarGrid"
+        );
+
+    const title =
+        document.getElementById(
+            "rpzPlannerTitle"
+        );
+
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    const defaultState = {
+
+        events: [],
+
+        view:
+            "week",
+
+        currentDate:
+            new Date().toISOString()
+
+    };
+
+
+    function loadState() {
+
+        try {
+
+            const raw =
+                localStorage.getItem(
+                    STORAGE_KEY
+                );
+
+            if (!raw) {
+
+                return {
+                    ...defaultState
+                };
+
+            }
+
+            const parsed =
+                JSON.parse(raw);
+
+            return {
+                ...defaultState,
+                ...parsed,
+                events:
+                    Array.isArray(
+                        parsed.events
+                    )
+                        ? parsed.events
+                        : []
+            };
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ Planner:",
+                error
+            );
+
+            return {
+                ...defaultState
+            };
+
+        }
+
+    }
+
+
+    let state =
+        loadState();
+
+
+    state.currentDate =
+        new Date(
+            state.currentDate
+        );
+
+
+    function saveState() {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+
+                ...state,
+
+                currentDate:
+                    state.currentDate
+                        .toISOString()
+
+            })
+        );
+
+    }
+
+
+    /* =========================================================
+       DATE HELPERS
+    ========================================================= */
+
+    function startOfDay(date) {
+
+        const d =
+            new Date(date);
+
+        d.setHours(
+            0, 0, 0, 0
+        );
+
+        return d;
+
+    }
+
+
+    function addDays(
+        date,
+        amount
+    ) {
+
+        const d =
+            new Date(date);
+
+        d.setDate(
+            d.getDate() + amount
+        );
+
+        return d;
+
+    }
+
+
+    function dateKey(date) {
+
+        const y =
+            date.getFullYear();
+
+        const m =
+            String(
+                date.getMonth() + 1
+            ).padStart(2, "0");
+
+        const d =
+            String(
+                date.getDate()
+            ).padStart(2, "0");
+
+        return (
+            y +
+            "-" +
+            m +
+            "-" +
+            d
+        );
+
+    }
+
+
+    function sameDay(
+        a,
+        b
+    ) {
+
+        return (
+            dateKey(a) ===
+            dateKey(b)
+        );
+
+    }
+
+
+    function startOfWeek(
+        date
+    ) {
+
+        const d =
+            startOfDay(date);
+
+        const day =
+            d.getDay();
+
+        d.setDate(
+            d.getDate() - day
+        );
+
+        return d;
+
+    }
+
+
+    function daysForView() {
+
+        if (
+            state.view ===
+            "day"
+        ) {
+
+            return [
+                startOfDay(
+                    state.currentDate
+                )
+            ];
+
+        }
+
+        const week =
+            startOfWeek(
+                state.currentDate
+            );
+
+        return Array.from(
+            { length: 7 },
+            (_, i) =>
+                addDays(week, i)
+        );
+
+    }
+
+
+    /* =========================================================
+       TIME HELPERS
+    ========================================================= */
+
+    function minutesFromTime(
+        value
+    ) {
+
+        const parts =
+            String(value)
+                .split(":")
+                .map(Number);
+
+        return (
+            (parts[0] || 0) * 60 +
+            (parts[1] || 0)
+        );
+
+    }
+
+
+    function timeFromMinutes(
+        minutes
+    ) {
+
+        minutes =
+            Math.max(
+                0,
+                Math.min(
+                    1439,
+                    minutes
+                )
+            );
+
+        const h =
+            Math.floor(
+                minutes / 60
+            );
+
+        const m =
+            minutes % 60;
+
+        return (
+            String(h)
+                .padStart(2, "0") +
+            ":" +
+            String(m)
+                .padStart(2, "0")
+        );
+
+    }
+
+
+    function snapMinutes(
+        minutes
+    ) {
+
+        return (
+            Math.round(
+                minutes /
+                SNAP_MINUTES
+            ) *
+            SNAP_MINUTES
+        );
+
+    }
+
+
+    function formatTime(
+        minutes
+    ) {
+
+        const h =
+            Math.floor(
+                minutes / 60
+            );
+
+        const m =
+            minutes % 60;
+
+        const suffix =
+            h >= 12
+                ? "PM"
+                : "AM";
+
+        const hour =
+            h % 12 || 12;
+
+        return (
+            hour +
+            ":" +
+            String(m)
+                .padStart(2, "0") +
+            " " +
+            suffix
+        );
+
+    }
+
+
+    function formatDateInput(
+        date
+    ) {
+
+        return dateKey(date);
+
+    }
+
+
+    /* =========================================================
+       EVENT NORMALIZATION
+    ========================================================= */
+
+    function normalizeEvent(
+        event
+    ) {
+
+        return {
+
+            id:
+                event.id ||
+                (
+                    "event_" +
+                    Date.now() +
+                    "_" +
+                    Math.random()
+                        .toString(36)
+                        .slice(2)
+                ),
+
+            title:
+                event.title ||
+                "(No title)",
+
+            date:
+                event.date ||
+                dateKey(
+                    state.currentDate
+                ),
+
+            start:
+                event.start ||
+                "09:00",
+
+            end:
+                event.end ||
+                "10:00",
+
+            allDay:
+                Boolean(
+                    event.allDay
+                ),
+
+            description:
+                event.description ||
+                "",
+
+            color:
+                event.color ||
+                "#4285f4",
+
+            repeat:
+                event.repeat ||
+                "none",
+
+            repeatDays:
+                Array.isArray(
+                    event.repeatDays
+                )
+                    ? event.repeatDays
+                    : []
+
+        };
+
+    }
+
+
+    /* =========================================================
+       RECURRING EVENTS
+    ========================================================= */
+
+    function eventOccursOn(
+        event,
+        date
+    ) {
+
+        const original =
+            new Date(
+                event.date +
+                "T00:00:00"
+            );
+
+        const target =
+            startOfDay(date);
+
+        if (
+            target < original
+        ) {
+
+            return false;
+
+        }
+
+
+        if (
+            event.repeat ===
+            "none"
+        ) {
+
+            return (
+                dateKey(target) ===
+                event.date
+            );
+
+        }
+
+
+        if (
+            event.repeat ===
+            "daily"
+        ) {
+
+            return true;
+
+        }
+
+
+        if (
+            event.repeat ===
+            "weekly"
+        ) {
+
+            return (
+                target.getDay() ===
+                original.getDay()
+            );
+
+        }
+
+
+        if (
+            event.repeat ===
+            "monthly"
+        ) {
+
+            return (
+                target.getDate() ===
+                original.getDate()
+            );
+
+        }
+
+
+        if (
+            event.repeat ===
+            "custom"
+        ) {
+
+            return event.repeatDays
+                .includes(
+                    target.getDay()
+                );
+
+        }
+
+
+        return false;
+
+    }
+
+
+    function eventsForDate(
+        date
+    ) {
+
+        return state.events
+            .map(normalizeEvent)
+            .filter(
+                event =>
+                    eventOccursOn(
+                        event,
+                        date
+                    )
+            );
+
+    }
+
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    function renderHeader(
+        days
+    ) {
+
+        header.innerHTML = "";
+
+        header.style.gridTemplateColumns =
+            "58px repeat(" +
+            days.length +
+            ", minmax(100px, 1fr))";
+
+
+        const timeHead =
+            document.createElement(
+                "div"
+            );
+
+        timeHead.className =
+            "rpz-time-header";
+
+        header.appendChild(
+            timeHead
+        );
+
+
+        days.forEach(
+            day => {
+
+                const cell =
+                    document.createElement(
+                        "div"
+                    );
+
+                cell.className =
+                    "rpz-day-header" +
+                    (
+                        sameDay(
+                            day,
+                            new Date()
+                        )
+                            ? " today"
+                            : ""
+                    );
+
+                const weekday =
+                    day.toLocaleDateString(
+                        undefined,
+                        {
+                            weekday:
+                                "short"
+                        }
+                    );
+
+                const number =
+                    day.getDate();
+
+
+                cell.innerHTML = `
+
+                    <div>
+                        ${weekday}
+                    </div>
+
+                    <div
+                        class="rpz-day-header-number"
+                    >
+                        ${number}
+                    </div>
+
+                `;
+
+                header.appendChild(
+                    cell
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       ALL DAY
+    ========================================================= */
+
+    function renderAllDay(
+        days
+    ) {
+
+        allDayRow.innerHTML = "";
+
+        allDayRow.style.gridTemplateColumns =
+            "58px repeat(" +
+            days.length +
+            ", minmax(100px, 1fr))";
+
+
+        const label =
+            document.createElement(
+                "div"
+            );
+
+        label.className =
+            "rpz-all-day-label";
+
+        label.textContent =
+            "ALL DAY";
+
+        allDayRow.appendChild(
+            label
+        );
+
+
+        days.forEach(
+            day => {
+
+                const cell =
+                    document.createElement(
+                        "div"
+                    );
+
+                cell.className =
+                    "rpz-all-day-cell";
+
+
+                const events =
+                    eventsForDate(day)
+                        .filter(
+                            event =>
+                                event.allDay
+                        );
+
+
+                events.forEach(
+                    event => {
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+                        item.className =
+                            "rpz-all-day-event";
+
+                        item.textContent =
+                            event.title;
+
+                        item.style.background =
+                            event.color;
+
+                        item.dataset.eventId =
+                            event.id;
+
+                        item.addEventListener(
+                            "click",
+                            () =>
+                                openEventModal(
+                                    event,
+                                    day
+                                )
+                        );
+
+                        cell.appendChild(
+                            item
+                        );
+
+                    }
+                );
+
+
+                cell.addEventListener(
+                    "dblclick",
+                    () => {
+
+                        openEventModal(
+                            null,
+                            day
+                        );
+
+                    }
+                );
+
+
+                allDayRow.appendChild(
+                    cell
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       GRID
+    ========================================================= */
+
+    function createTimeLines(
+        column
+    ) {
+
+        for (
+            let hour = 0;
+            hour <= 24;
+            hour++
+        ) {
+
+            const line =
+                document.createElement(
+                    "div"
+                );
+
+            line.className =
+                "rpz-hour-line";
+
+            line.style.top =
+                (
+                    hour *
+                    HOUR_HEIGHT
+                ) +
+                "px";
+
+            column.appendChild(
+                line
+            );
+
+
+            if (
+                hour < 24
+            ) {
+
+                for (
+                    let q = 1;
+                    q < 4;
+                    q++
+                ) {
+
+                    const quarter =
+                        document.createElement(
+                            "div"
+                        );
+
+                    quarter.className =
+                        "rpz-quarter-line";
+
+                    quarter.style.top =
+                        (
+                            (
+                                hour +
+                                q / 4
+                            ) *
+                            HOUR_HEIGHT
+                        ) +
+                        "px";
+
+                    column.appendChild(
+                        quarter
+                    );
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    function createTimeLabels(
+        column
+    ) {
+
+        for (
+            let hour = 0;
+            hour <= 24;
+            hour++
+        ) {
+
+            const label =
+                document.createElement(
+                    "div"
+                );
+
+            label.className =
+                "rpz-time-label";
+
+            label.style.top =
+                (
+                    hour *
+                    HOUR_HEIGHT
+                ) +
+                "px";
+
+            label.textContent =
+                hour === 24
+                    ? ""
+                    : formatTime(
+                        hour * 60
+                    );
+
+            column.appendChild(
+                label
+            );
+
+        }
+
+    }
+
+
+    function renderGrid(
+        days
+    ) {
+
+        grid.innerHTML = "";
+
+        grid.style.gridTemplateColumns =
+            "58px repeat(" +
+            days.length +
+            ", minmax(100px, 1fr))";
+
+
+        /* TIME COLUMN */
+
+        const timeColumn =
+            document.createElement(
+                "div"
+            );
+
+        timeColumn.className =
+            "rpz-time-column";
+
+        timeColumn.style.height =
+            (
+                24 *
+                HOUR_HEIGHT
+            ) +
+            "px";
+
+        createTimeLabels(
+            timeColumn
+        );
+
+        createTimeLines(
+            timeColumn
+        );
+
+        grid.appendChild(
+            timeColumn
+        );
+
+
+        /* DAY COLUMNS */
+
+        days.forEach(
+            day => {
+
+                const column =
+                    document.createElement(
+                        "div"
+                    );
+
+                column.className =
+                    "rpz-day-column";
+
+                column.style.height =
+                    (
+                        24 *
+                        HOUR_HEIGHT
+                    ) +
+                    "px";
+
+                column.dataset.date =
+                    dateKey(day);
+
+
+                createTimeLines(
+                    column
+                );
+
+
+                const eventsLayer =
+                    document.createElement(
+                        "div"
+                    );
+
+                eventsLayer.className =
+                    "rpz-events-layer";
+
+
+                column.appendChild(
+                    eventsLayer
+                );
+
+
+                setupCreateDrag(
+                    column,
+                    day,
+                    eventsLayer
+                );
+
+
+                const events =
+                    eventsForDate(day)
+                        .filter(
+                            event =>
+                                !event.allDay
+                        );
+
+
+                renderEvents(
+                    eventsLayer,
+                    events,
+                    day
+                );
+
+
+                grid.appendChild(
+                    column
+                );
+
+            }
+        );
+
+
+        addCurrentTimeIndicator(
+            days
+        );
+
+    }
+
+
+    /* =========================================================
+       EVENT LAYOUT
+    ========================================================= */
+
+    function renderEvents(
+        layer,
+        events,
+        day
+    ) {
+
+        const timed =
+            events
+                .map(
+                    event => {
+
+                        const start =
+                            minutesFromTime(
+                                event.start
+                            );
+
+                        const end =
+                            Math.max(
+                                start +
+                                SNAP_MINUTES,
+                                minutesFromTime(
+                                    event.end
+                                )
+                            );
+
+                        return {
+                            event,
+                            start,
+                            end
+                        };
+
+                    }
+                )
+                .sort(
+                    (a, b) =>
+                        a.start -
+                        b.start
+                );
+
+
+        /*
+         * Simple collision layout.
+         * No expensive calendar engine.
+         */
+
+        const groups = [];
+
+
+        timed.forEach(
+            item => {
+
+                let placed =
+                    false;
+
+
+                for (
+                    const group of groups
+                ) {
+
+                    const overlaps =
+                        group.some(
+                            other =>
+                                item.start <
+                                    other.end &&
+                                item.end >
+                                    other.start
+                        );
+
+                    if (!overlaps) {
+
+                        group.push(
+                            item
+                        );
+
+                        item.group =
+                            group;
+
+                        placed =
+                            true;
+
+                        break;
+
+                    }
+
+                }
+
+
+                if (!placed) {
+
+                    const group = [
+                        item
+                    ];
+
+                    groups.push(
+                        group
+                    );
+
+                    item.group =
+                        group;
+
+                }
+
+            }
+        );
+
+
+        timed.forEach(
+            item => {
+
+                const event =
+                    item.event;
+
+                const start =
+                    item.start;
+
+                const end =
+                    item.end;
+
+
+                const top =
+                    (
+                        start /
+                        60
+                    ) *
+                    HOUR_HEIGHT;
+
+                const height =
+                    Math.max(
+                        (
+                            (
+                                end -
+                                start
+                            ) /
+                            60
+                        ) *
+                        HOUR_HEIGHT,
+                        18
+                    );
+
+
+                const group =
+                    item.group;
+
+                const index =
+                    group.indexOf(
+                        item
+                    );
+
+                const width =
+                    100 /
+                    group.length;
+
+                const left =
+                    width *
+                    index;
+
+
+                const element =
+                    document.createElement(
+                        "div"
+                    );
+
+                element.className =
+                    "rpz-event";
+
+                element.style.top =
+                    top + "px";
+
+                element.style.height =
+                    height + "px";
+
+                element.style.left =
+                    left + "%";
+
+                element.style.width =
+                    "calc(" +
+                    width +
+                    "% - 3px)";
+
+                element.style.background =
+                    event.color;
+
+                element.dataset.eventId =
+                    event.id;
+
+
+                element.innerHTML = `
+
+                    <div class="rpz-event-title">
+                        ${escapeHTML(
+                            event.title
+                        )}
+                    </div>
+
+                    ${
+                        height >= 32
+                            ? `
+                            <div
+                                class="rpz-event-time"
+                            >
+                                ${formatTime(start)}
+                                –
+                                ${formatTime(end)}
+                            </div>
+                            `
+                            : ""
+                    }
+
+                    <div
+                        class="rpz-event-resize"
+                    ></div>
+
+                `;
+
+
+                setupEventDrag(
+                    element,
+                    event,
+                    day
+                );
+
+
+                const resize =
+                    element.querySelector(
+                        ".rpz-event-resize"
+                    );
+
+                setupResize(
+                    resize,
+                    element,
+                    event,
+                    day
+                );
+
+
+                element.addEventListener(
+                    "dblclick",
+                    eventObject => {
+
+                        eventObject.stopPropagation();
+
+                        openEventModal(
+                            event,
+                            day
+                        );
+
+                    }
+                );
+
+
+                layer.appendChild(
+                    element
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       CREATE BY DRAG
+    ========================================================= */
+
+    let createDrag = null;
+
+
+    function getMinutesFromPointer(
+        column,
+        clientY
+    ) {
+
+        const rect =
+            column.getBoundingClientRect();
+
+        const y =
+            clientY -
+            rect.top;
+
+        const raw =
+            (
+                y /
+                HOUR_HEIGHT
+            ) *
+            60;
+
+        return Math.max(
+            0,
+            Math.min(
+                1439,
+                snapMinutes(raw)
+            )
+        );
+
+    }
+
+
+    function setupCreateDrag(
+        column,
+        day,
+        layer
+    ) {
+
+        column.addEventListener(
+            "pointerdown",
+            event => {
+
+                if (
+                    event.target.closest(
+                        ".rpz-event"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    event.button !==
+                    0
+                ) {
+
+                    return;
+
+                }
+
+
+                const start =
+                    getMinutesFromPointer(
+                        column,
+                        event.clientY
+                    );
+
+
+                createDrag = {
+
+                    column,
+                    day,
+                    start,
+                    current:
+                        start,
+                    layer,
+
+                    pointerId:
+                        event.pointerId,
+
+                    preview:
+                        null
+
+                };
+
+
+                column.setPointerCapture(
+                    event.pointerId
+                );
+
+
+                const preview =
+                    document.createElement(
+                        "div"
+                    );
+
+                preview.className =
+                    "rpz-drag-preview";
+
+
+                const label =
+                    document.createElement(
+                        "div"
+                    );
+
+                label.className =
+                    "rpz-drag-preview-label";
+
+                preview.appendChild(
+                    label
+                );
+
+
+                layer.appendChild(
+                    preview
+                );
+
+
+                createDrag.preview =
+                    preview;
+
+
+                updateCreatePreview(
+                    event.clientY
+                );
+
+
+                event.preventDefault();
+
+            }
+        );
+
+
+        column.addEventListener(
+            "pointermove",
+            event => {
+
+                if (
+                    !createDrag ||
+                    createDrag.column !==
+                        column
+                ) {
+
+                    return;
+
+                }
+
+                updateCreatePreview(
+                    event.clientY
+                );
+
+            }
+        );
+
+
+        column.addEventListener(
+            "pointerup",
+            event => {
+
+                if (
+                    !createDrag ||
+                    createDrag.column !==
+                        column
+                ) {
+
+                    return;
+
+                }
+
+
+                updateCreatePreview(
+                    event.clientY
+                );
+
+
+                const data =
+                    createDrag;
+
+
+                const start =
+                    Math.min(
+                        data.start,
+                        data.current
+                    );
+
+                const end =
+                    Math.max(
+                        data.start,
+                        data.current
+                    );
+
+
+                if (
+                    end -
+                    start >=
+                    SNAP_MINUTES
+                ) {
+
+                    closeModal();
+
+                    openNewEventModal(
+                        data.day,
+                        start,
+                        end
+                    );
+
+                }
+
+
+                if (
+                    data.preview
+                ) {
+
+                    data.preview.remove();
+
+                }
+
+
+                createDrag =
+                    null;
+
+            }
+        );
+
+    }
+
+
+    function updateCreatePreview(
+        clientY
+    ) {
+
+        if (!createDrag) return;
+
+
+        const minutes =
+            getMinutesFromPointer(
+                createDrag.column,
+                clientY
+            );
+
+
+        createDrag.current =
+            minutes;
+
+
+        const start =
+            Math.min(
+                createDrag.start,
+                minutes
+            );
+
+        const end =
+            Math.max(
+                createDrag.start,
+                minutes
+            );
+
+
+        const preview =
+            createDrag.preview;
+
+
+        preview.style.top =
+            (
+                start /
+                60 *
+                HOUR_HEIGHT
+            ) +
+            "px";
+
+
+        preview.style.height =
+            Math.max(
+                (
+                    (
+                        end -
+                        start
+                    ) /
+                    60
+                ) *
+                HOUR_HEIGHT,
+                4
+            ) +
+            "px";
+
+
+        preview.style.left =
+            "0";
+
+        preview.style.right =
+            "0";
+
+
+        const label =
+            preview.querySelector(
+                ".rpz-drag-preview-label"
+            );
+
+
+        if (label) {
+
+            label.textContent =
+                formatTime(start) +
+                " – " +
+                formatTime(
+                    Math.max(
+                        end,
+                        start +
+                        SNAP_MINUTES
+                    )
+                );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       DRAG EXISTING EVENT
+    ========================================================= */
+
+    function setupEventDrag(
+        element,
+        event,
+        originalDay
+    ) {
+
+        let drag = null;
+
+
+        element.addEventListener(
+            "pointerdown",
+            e => {
+
+                if (
+                    e.target.closest(
+                        ".rpz-event-resize"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    e.button !==
+                    0
+                ) {
+
+                    return;
+
+                }
+
+
+                const start =
+                    minutesFromTime(
+                        event.start
+                    );
+
+                const end =
+                    minutesFromTime(
+                        event.end
+                    );
+
+                const duration =
+                    Math.max(
+                        SNAP_MINUTES,
+                        end - start
+                    );
+
+
+                drag = {
+
+                    start,
+                    duration,
+
+                    startX:
+                        e.clientX,
+
+                    startY:
+                        e.clientY,
+
+                    currentDay:
+                        new Date(
+                            originalDay
+                        ),
+
+                    currentMinutes:
+                        start
+
+                };
+
+
+                element.setPointerCapture(
+                    e.pointerId
+                );
+
+                element.classList.add(
+                    "dragging"
+                );
+
+                e.preventDefault();
+
+            }
+        );
+
+
+        element.addEventListener(
+            "pointermove",
+            e => {
+
+                if (!drag) return;
+
+
+                const dx =
+                    e.clientX -
+                    drag.startX;
+
+                const dy =
+                    e.clientY -
+                    drag.startY;
+
+
+                /*
+                 * Determine target day
+                 * from horizontal movement.
+                 */
+
+                const columnWidth =
+                    originalDay &&
+                    element.parentElement
+                        ?.parentElement
+                        ?.getBoundingClientRect()
+                        .width
+                    || 1000;
+
+
+                const days =
+                    daysForView();
+
+                const dayWidth =
+                    (
+                        columnWidth -
+                        58
+                    ) /
+                    days.length;
+
+
+                const dayOffset =
+                    Math.round(
+                        dx /
+                        dayWidth
+                    );
+
+
+                const targetIndex =
+                    days.findIndex(
+                        d =>
+                            sameDay(
+                                d,
+                                originalDay
+                            )
+                    );
+
+
+                const nextIndex =
+                    Math.max(
+                        0,
+                        Math.min(
+                            days.length - 1,
+                            targetIndex +
+                            dayOffset
+                        )
+                    );
+
+
+                drag.currentDay =
+                    new Date(
+                        days[nextIndex]
+                    );
+
+
+                const minuteDelta =
+                    (
+                        dy /
+                        HOUR_HEIGHT
+                    ) *
+                    60;
+
+
+                drag.currentMinutes =
+                    Math.max(
+                        0,
+                        Math.min(
+                            1439 -
+                            drag.duration,
+                            snapMinutes(
+                                drag.start +
+                                minuteDelta
+                            )
+                        )
+                    );
+
+
+                element.style.top =
+                    (
+                        drag.currentMinutes /
+                        60 *
+                        HOUR_HEIGHT
+                    ) +
+                    "px";
+
+            }
+        );
+
+
+        element.addEventListener(
+            "pointerup",
+            () => {
+
+                if (!drag) return;
+
+
+                const oldDate =
+                    event.date;
+
+
+                const newDate =
+                    dateKey(
+                        drag.currentDay
+                    );
+
+
+                event.date =
+                    newDate;
+
+                event.start =
+                    timeFromMinutes(
+                        drag.currentMinutes
+                    );
+
+                event.end =
+                    timeFromMinutes(
+                        Math.min(
+                            1439,
+                            drag.currentMinutes +
+                            drag.duration
+                        )
+                    );
+
+
+                const index =
+                    state.events.findIndex(
+                        item =>
+                            item.id ===
+                            event.id
+                    );
+
+
+                if (
+                    index !==
+                    -1
+                ) {
+
+                    state.events[index] =
+                        event;
+
+                }
+
+
+                element.classList.remove(
+                    "dragging"
+                );
+
+
+                drag =
+                    null;
+
+
+                saveState();
+
+                render();
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       RESIZE
+    ========================================================= */
+
+    function setupResize(
+        handle,
+        element,
+        event,
+        day
+    ) {
+
+        let resizing = null;
+
+
+        handle.addEventListener(
+            "pointerdown",
+            e => {
+
+                e.stopPropagation();
+
+
+                const start =
+                    minutesFromTime(
+                        event.start
+                    );
+
+                resizing = {
+
+                    start,
+
+                    startY:
+                        e.clientY
+
+                };
+
+
+                handle.setPointerCapture(
+                    e.pointerId
+                );
+
+                e.preventDefault();
+
+            }
+        );
+
+
+        handle.addEventListener(
+            "pointermove",
+            e => {
+
+                if (!resizing) return;
+
+
+                const dy =
+                    e.clientY -
+                    resizing.startY;
+
+
+                const delta =
+                    (
+                        dy /
+                        HOUR_HEIGHT
+                    ) *
+                    60;
+
+
+                let newEnd =
+                    snapMinutes(
+                        resizing.start +
+                        Math.max(
+                            SNAP_MINUTES,
+                            (
+                                minutesFromTime(
+                                    event.end
+                                ) -
+                                resizing.start
+                            ) +
+                            delta
+                        )
+                    );
+
+
+                newEnd =
+                    Math.max(
+                        resizing.start +
+                        SNAP_MINUTES,
+                        Math.min(
+                            1439,
+                            newEnd
+                        )
+                    );
+
+
+                event.end =
+                    timeFromMinutes(
+                        newEnd
+                    );
+
+
+                const height =
+                    (
+                        (
+                            newEnd -
+                            resizing.start
+                        ) /
+                        60
+                    ) *
+                    HOUR_HEIGHT;
+
+
+                element.style.height =
+                    Math.max(
+                        18,
+                        height
+                    ) +
+                    "px";
+
+            }
+        );
+
+
+        handle.addEventListener(
+            "pointerup",
+            () => {
+
+                if (!resizing) return;
+
+
+                const index =
+                    state.events.findIndex(
+                        item =>
+                            item.id ===
+                            event.id
+                    );
+
+
+                if (
+                    index !==
+                    -1
+                ) {
+
+                    state.events[index] =
+                        event;
+
+                }
+
+
+                resizing =
+                    null;
+
+
+                saveState();
+
+                render();
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       CURRENT TIME
+    ========================================================= */
+
+    function addCurrentTimeIndicator(
+        days
+    ) {
+
+        if (
+            state.view ===
+            "month"
+        ) {
+
+            return;
+
+        }
+
+
+        const now =
+            new Date();
+
+
+        const index =
+            days.findIndex(
+                day =>
+                    sameDay(
+                        day,
+                        now
+                    )
+            );
+
+
+        if (
+            index ===
+            -1
+        ) {
+
+            return;
+
+        }
+
+
+        const columns =
+            grid.querySelectorAll(
+                ".rpz-day-column"
+            );
+
+
+        const column =
+            columns[index];
+
+        if (!column) return;
+
+
+        const line =
+            document.createElement(
+                "div"
+            );
+
+        line.className =
+            "rpz-current-time";
+
+
+        const minutes =
+            now.getHours() *
+            60 +
+            now.getMinutes() +
+            now.getSeconds() /
+            60;
+
+
+        line.style.top =
+            (
+                minutes /
+                60 *
+                HOUR_HEIGHT
+            ) +
+            "px";
+
+
+        const dot =
+            document.createElement(
+                "div"
+            );
+
+        dot.className =
+            "rpz-current-time-dot";
+
+
+        const label =
+            document.createElement(
+                "div"
+            );
+
+        label.className =
+            "rpz-current-time-label";
+
+        label.textContent =
+            formatTime(
+                Math.floor(minutes)
+            );
+
+
+        line.appendChild(
+            dot
+        );
+
+        line.appendChild(
+            label
+        );
+
+
+        column.appendChild(
+            line
+        );
+
+    }
+
+
+    /* =========================================================
+       MONTH
+    ========================================================= */
+
+    function renderMonth() {
+
+        header.innerHTML = "";
+
+        allDayRow.style.display =
+            "none";
+
+        scroll.innerHTML = "";
+
+        const month =
+            new Date(
+                state.currentDate
+            );
+
+        const first =
+            new Date(
+                month.getFullYear(),
+                month.getMonth(),
+                1
+            );
+
+        const start =
+            startOfWeek(first);
+
+
+        const monthContainer =
+            document.createElement(
+                "div"
+            );
+
+        monthContainer.className =
+            "rpz-month";
+
+
+        const weekdays =
+            Array.from(
+                { length: 7 },
+                (_, i) => {
+
+                    const d =
+                        addDays(
+                            start,
+                            i
+                        );
+
+                    return d.toLocaleDateString(
+                        undefined,
+                        {
+                            weekday:
+                                "short"
+                        }
+                    );
+
+                }
+            );
+
+
+        weekdays.forEach(
+            name => {
+
+                const cell =
+                    document.createElement(
+                        "div"
+                    );
+
+                cell.className =
+                    "rpz-month-weekday";
+
+                cell.textContent =
+                    name;
+
+                monthContainer.appendChild(
+                    cell
+                );
+
+            }
+        );
+
+
+        for (
+            let i = 0;
+            i < 42;
+            i++
+        ) {
+
+            const date =
+                addDays(
+                    start,
+                    i
+                );
+
+
+            const cell =
+                document.createElement(
+                    "div"
+                );
+
+            cell.className =
+                "rpz-month-cell";
+
+
+            if (
+                date.getMonth() !==
+                month.getMonth()
+            ) {
+
+                cell.classList.add(
+                    "other-month"
+                );
+
+            }
+
+
+            if (
+                sameDay(
+                    date,
+                    new Date()
+                )
+            ) {
+
+                cell.classList.add(
+                    "today"
+                );
+
+            }
+
+
+            const number =
+                document.createElement(
+                    "div"
+                );
+
+            number.className =
+                "rpz-month-number";
+
+            number.textContent =
+                date.getDate();
+
+            cell.appendChild(
+                number
+            );
+
+
+            const events =
+                eventsForDate(date);
+
+
+            events
+                .slice(0, 5)
+                .forEach(
+                    event => {
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+                        item.className =
+                            "rpz-month-event";
+
+                        item.textContent =
+                            (
+                                event.allDay
+                                    ? ""
+                                    : formatTime(
+                                        minutesFromTime(
+                                            event.start
+                                        )
+                                    ) +
+                                      " "
+                            ) +
+                            event.title;
+
+                        item.style.background =
+                            event.color;
+
+                        item.addEventListener(
+                            "click",
+                            e => {
+
+                                e.stopPropagation();
+
+                                openEventModal(
+                                    event,
+                                    date
+                                );
+
+                            }
+                        );
+
+                        cell.appendChild(
+                            item
+                        );
+
+                    }
+                );
+
+
+            if (
+                events.length > 5
+            ) {
+
+                const more =
+                    document.createElement(
+                        "div"
+                    );
+
+                more.textContent =
+                    "+" +
+                    (
+                        events.length -
+                        5
+                    ) +
+                    " more";
+
+                more.style.cssText = `
+                    color:rgba(255,255,255,.38);
+                    font-size:8px;
+                    padding:2px 4px;
+                `;
+
+                cell.appendChild(
+                    more
+                );
+
+            }
+
+
+            cell.addEventListener(
+                "dblclick",
+                () => {
+
+                    state.currentDate =
+                        new Date(date);
+
+                    state.view =
+                        "day";
+
+                    saveState();
+
+                    render();
+
+                }
+            );
+
+
+            monthContainer.appendChild(
+                cell
+            );
+
+        }
+
+
+        scroll.appendChild(
+            monthContainer
+        );
+
+    }
+
+
+    /* =========================================================
+       MAIN RENDER
+    ========================================================= */
+
+    function render() {
+
+        if (
+            state.view ===
+            "month"
+        ) {
+
+            renderMonth();
+
+            updateTitle();
+
+            updateViewButtons();
+
+            return;
+
+        }
+
+
+        allDayRow.style.display =
+            "grid";
+
+        scroll.innerHTML = "";
+
+        /*
+         * Reinsert the grid.
+         */
+
+        scroll.appendChild(
+            grid
+        );
+
+
+        const days =
+            daysForView();
+
+
+        renderHeader(
+            days
+        );
+
+        renderAllDay(
+            days
+        );
+
+        renderGrid(
+            days
+        );
+
+        updateTitle();
+
+        updateViewButtons();
+
+    }
+
+
+    /* =========================================================
+       TITLE
+    ========================================================= */
+
+    function updateTitle() {
+
+        const date =
+            state.currentDate;
+
+
+        if (
+            state.view ===
+            "day"
+        ) {
+
+            title.textContent =
+                date.toLocaleDateString(
+                    undefined,
+                    {
+                        weekday:
+                            "long",
+                        month:
+                            "long",
+                        day:
+                            "numeric",
+                        year:
+                            "numeric"
+                    }
+                );
+
+            return;
+
+        }
+
+
+        if (
+            state.view ===
+            "week"
+        ) {
+
+            const start =
+                startOfWeek(
+                    date
+                );
+
+            const end =
+                addDays(
+                    start,
+                    6
+                );
+
+
+            if (
+                start.getMonth() ===
+                end.getMonth()
+            ) {
+
+                title.textContent =
+                    start.toLocaleDateString(
+                        undefined,
+                        {
+                            month:
+                                "long"
+                        }
+                    ) +
+                    " " +
+                    start.getDate() +
+                    "–" +
+                    end.getDate() +
+                    ", " +
+                    start.getFullYear();
+
+            } else {
+
+                title.textContent =
+                    start.toLocaleDateString(
+                        undefined,
+                        {
+                            month:
+                                "short",
+                            day:
+                                "numeric"
+                        }
+                    ) +
+                    " – " +
+                    end.toLocaleDateString(
+                        undefined,
+                        {
+                            month:
+                                "short",
+                            day:
+                                "numeric",
+                            year:
+                                "numeric"
+                        }
+                    );
+
+            }
+
+            return;
+
+        }
+
+
+        title.textContent =
+            date.toLocaleDateString(
+                undefined,
+                {
+                    month:
+                        "long",
+                    year:
+                        "numeric"
+                }
+            );
+
+    }
+
+
+    /* =========================================================
+       VIEW BUTTONS
+    ========================================================= */
+
+    function updateViewButtons() {
+
+        document
+            .querySelectorAll(
+                "[data-planner-view]"
+            )
+            .forEach(
+                button => {
+
+                    button.classList.toggle(
+                        "active",
+                        button.dataset
+                            .plannerView ===
+                            state.view
+                    );
+
+                }
+            );
+
+    }
+
+
+    document
+        .querySelectorAll(
+            "[data-planner-view]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        state.view =
+                            button.dataset
+                                .plannerView;
+
+                        saveState();
+
+                        render();
+
+                        autoScrollToCurrentTime();
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* =========================================================
+       NAVIGATION
+    ========================================================= */
+
+    document
+        .getElementById(
+            "rpzPlannerPrev"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                if (
+                    state.view ===
+                    "day"
+                ) {
+
+                    state.currentDate =
+                        addDays(
+                            state.currentDate,
+                            -1
+                        );
+
+                } else if (
+                    state.view ===
+                    "week"
+                ) {
+
+                    state.currentDate =
+                        addDays(
+                            state.currentDate,
+                            -7
+                        );
+
+                } else {
+
+                    state.currentDate =
+                        new Date(
+                            state.currentDate
+                                .getFullYear(),
+                            state.currentDate
+                                .getMonth() - 1,
+                            1
+                        );
+
+                }
+
+
+                saveState();
+
+                render();
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "rpzPlannerNext"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                if (
+                    state.view ===
+                    "day"
+                ) {
+
+                    state.currentDate =
+                        addDays(
+                            state.currentDate,
+                            1
+                        );
+
+                } else if (
+                    state.view ===
+                    "week"
+                ) {
+
+                    state.currentDate =
+                        addDays(
+                            state.currentDate,
+                            7
+                        );
+
+                } else {
+
+                    state.currentDate =
+                        new Date(
+                            state.currentDate
+                                .getFullYear(),
+                            state.currentDate
+                                .getMonth() + 1,
+                            1
+                        );
+
+                }
+
+
+                saveState();
+
+                render();
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "rpzPlannerToday"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                state.currentDate =
+                    new Date();
+
+                saveState();
+
+                render();
+
+                autoScrollToCurrentTime();
+
+            }
+        );
+
+
+    /* =========================================================
+       AUTO SCROLL
+    ========================================================= */
+
+    function autoScrollToCurrentTime() {
+
+        if (
+            state.view ===
+            "month"
+        ) {
+
+            return;
+
+        }
+
+
+        const now =
+            new Date();
+
+
+        const target =
+            (
+                now.getHours() -
+                2
+            ) *
+            HOUR_HEIGHT +
+            (
+                now.getMinutes() /
+                60 *
+                HOUR_HEIGHT
+            );
+
+
+        setTimeout(
+            () => {
+
+                scroll.scrollTo({
+                    top:
+                        Math.max(
+                            0,
+                            target
+                        ),
+                    behavior:
+                        "smooth"
+                });
+
+            },
+            60
+        );
+
+    }
+
+
+    /* =========================================================
+       MODAL STATE
+    ========================================================= */
+
+    let editingEventId =
+        null;
+
+
+    const modal =
+        document.getElementById(
+            "rpzPlannerEventModal"
+        );
+
+
+    function openNewEventModal(
+        day,
+        start = 9 * 60,
+        end = 10 * 60
+    ) {
+
+        editingEventId =
+            null;
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventTitle"
+            )
+            .value =
+            "";
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventDate"
+            )
+            .value =
+            formatDateInput(day);
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventStart"
+            )
+            .value =
+            timeFromMinutes(
+                start
+            );
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventEnd"
+            )
+            .value =
+            timeFromMinutes(
+                end
+            );
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventDescription"
+            )
+            .value =
+            "";
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventRepeat"
+            )
+            .value =
+            "none";
+
+
+        document
+            .getElementById(
+                "rpzPlannerAllDay"
+            )
+            .checked =
+            false;
+
+
+        document
+            .getElementById(
+                "rpzPlannerDelete"
+            )
+            .style.display =
+            "none";
+
+
+        setColor(
+            "#4285f4"
+        );
+
+        updateTimedFields();
+
+        modal.classList.add(
+            "show"
+        );
+
+
+        setTimeout(
+            () =>
+                document
+                    .getElementById(
+                        "rpzPlannerEventTitle"
+                    )
+                    .focus(),
+            30
+        );
+
+    }
+
+
+    function openEventModal(
+        event
+    ) {
+
+        editingEventId =
+            event.id;
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventTitle"
+            )
+            .value =
+            event.title;
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventDate"
+            )
+            .value =
+            event.date;
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventStart"
+            )
+            .value =
+            event.start;
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventEnd"
+            )
+            .value =
+            event.end;
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventDescription"
+            )
+            .value =
+            event.description ||
+            "";
+
+
+        document
+            .getElementById(
+                "rpzPlannerEventRepeat"
+            )
+            .value =
+            event.repeat ||
+            "none";
+
+
+        document
+            .getElementById(
+                "rpzPlannerAllDay"
+            )
+            .checked =
+            Boolean(
+                event.allDay
+            );
+
+
+        document
+            .querySelectorAll(
+                "[data-repeat-day]"
+            )
+            .forEach(
+                checkbox => {
+
+                    checkbox.checked =
+                        event.repeatDays
+                            ?.includes(
+                                Number(
+                                    checkbox.value
+                                )
+                            ) ||
+                        false;
+
+                }
+            );
+
+
+        setColor(
+            event.color ||
+            "#4285f4"
+        );
+
+
+        document
+            .getElementById(
+                "rpzPlannerDelete"
+            )
+            .style.display =
+            "block";
+
+
+        updateTimedFields();
+
+        modal.classList.add(
+            "show"
+        );
+
+    }
+
+
+    function closeModal() {
+
+        modal.classList.remove(
+            "show"
+        );
+
+        editingEventId =
+            null;
+
+    }
+
+
+    function setColor(
+        color
+    ) {
+
+        document
+            .querySelectorAll(
+                ".rpz-event-color"
+            )
+            .forEach(
+                button => {
+
+                    button.classList.toggle(
+                        "selected",
+                        button.dataset.color ===
+                            color
+                    );
+
+                }
+            );
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".rpz-event-color"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        setColor(
+                            button.dataset.color
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* =========================================================
+       ALL DAY TOGGLE
+    ========================================================= */
+
+    function updateTimedFields() {
+
+        const allDay =
+            document
+                .getElementById(
+                    "rpzPlannerAllDay"
+                )
+                .checked;
+
+
+        document
+            .getElementById(
+                "rpzPlannerTimedFields"
+            )
+            .style.display =
+            allDay
+                ? "none"
+                : "block";
+
+    }
+
+
+    document
+        .getElementById(
+            "rpzPlannerAllDay"
+        )
+        .addEventListener(
+            "change",
+            updateTimedFields
+        );
+
+
+    /* =========================================================
+       CUSTOM REPEAT
+    ========================================================= */
+
+    document
+        .getElementById(
+            "rpzPlannerEventRepeat"
+        )
+        .addEventListener(
+            "change",
+            event => {
+
+                document
+                    .getElementById(
+                        "rpzPlannerCustomDays"
+                    )
+                    .style.display =
+                    event.target.value ===
+                        "custom"
+                        ? "block"
+                        : "none";
+
+            }
+        );
+
+
+    /* =========================================================
+       SAVE EVENT
+    ========================================================= */
+
+    document
+        .getElementById(
+            "rpzPlannerSave"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                const eventTitle =
+                    document
+                        .getElementById(
+                            "rpzPlannerEventTitle"
+                        )
+                        .value
+                        .trim();
+
+
+                if (!eventTitle) {
+
+                    document
+                        .getElementById(
+                            "rpzPlannerEventTitle"
+                        )
+                        .focus();
+
+                    return;
+
+                }
+
+
+                const date =
+                    document
+                        .getElementById(
+                            "rpzPlannerEventDate"
+                        )
+                        .value;
+
+
+                const allDay =
+                    document
+                        .getElementById(
+                            "rpzPlannerAllDay"
+                        )
+                        .checked;
+
+
+                let start =
+                    document
+                        .getElementById(
+                            "rpzPlannerEventStart"
+                        )
+                        .value ||
+                    "09:00";
+
+
+                let end =
+                    document
+                        .getElementById(
+                            "rpzPlannerEventEnd"
+                        )
+                        .value ||
+                    "10:00";
+
+
+                if (
+                    !allDay &&
+                    minutesFromTime(end) <=
+                        minutesFromTime(start)
+                ) {
+
+                    end =
+                        timeFromMinutes(
+                            Math.min(
+                                1439,
+                                minutesFromTime(
+                                    start
+                                ) +
+                                60
+                            )
+                        );
+
+                }
+
+
+                const repeat =
+                    document
+                        .getElementById(
+                            "rpzPlannerEventRepeat"
+                        )
+                        .value;
+
+
+                const repeatDays =
+                    Array.from(
+                        document
+                            .querySelectorAll(
+                                "[data-repeat-day]:checked"
+                            )
+                    )
+                    .map(
+                        checkbox =>
+                            Number(
+                                checkbox.value
+                            )
+                    );
+
+
+                const color =
+                    document
+                        .querySelector(
+                            ".rpz-event-color.selected"
+                        )
+                        ?.dataset
+                        .color ||
+                    "#4285f4";
+
+
+                const data = {
+
+                    title:
+                        eventTitle,
+
+                    date,
+
+                    start:
+                        allDay
+                            ? "00:00"
+                            : start,
+
+                    end:
+                        allDay
+                            ? "23:59"
+                            : end,
+
+                    allDay,
+
+                    description:
+                        document
+                            .getElementById(
+                                "rpzPlannerEventDescription"
+                            )
+                            .value
+                            .trim(),
+
+                    color,
+
+                    repeat,
+
+                    repeatDays
+
+                };
+
+
+                if (
+                    editingEventId
+                ) {
+
+                    const index =
+                        state.events.findIndex(
+                            event =>
+                                event.id ===
+                                editingEventId
+                        );
+
+
+                    if (
+                        index !==
+                        -1
+                    ) {
+
+                        state.events[index] = {
+
+                            ...state.events[
+                                index
+                            ],
+
+                            ...data
+
+                        };
+
+                    }
+
+                } else {
+
+                    state.events.push({
+
+                        id:
+                            "event_" +
+                            Date.now() +
+                            "_" +
+                            Math.random()
+                                .toString(36)
+                                .slice(2),
+
+                        ...data
+
+                    });
+
+                }
+
+
+                saveState();
+
+                closeModal();
+
+                render();
+
+            }
+        );
+
+
+    /* =========================================================
+       DELETE
+    ========================================================= */
+
+    document
+        .getElementById(
+            "rpzPlannerDelete"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                if (
+                    !editingEventId
+                ) return;
+
+
+                const index =
+                    state.events.findIndex(
+                        event =>
+                            event.id ===
+                            editingEventId
+                    );
+
+
+                if (
+                    index !==
+                    -1
+                ) {
+
+                    state.events.splice(
+                        index,
+                        1
+                    );
+
+                }
+
+
+                saveState();
+
+                closeModal();
+
+                render();
+
+            }
+        );
+
+
+    /* =========================================================
+       MODAL BUTTONS
+    ========================================================= */
+
+    document
+        .getElementById(
+            "rpzPlannerCreate"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                openNewEventModal(
+                    state.currentDate
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "rpzPlannerCancel"
+        )
+        .addEventListener(
+            "click",
+            closeModal
+        );
+
+
+    document
+        .getElementById(
+            "rpzPlannerModalClose"
+        )
+        .addEventListener(
+            "click",
+            closeModal
+        );
+
+
+    modal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                modal
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       ESC
+    ========================================================= */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       ESCAPE HTML
+    ========================================================= */
+
+    function escapeHTML(
+        value
+    ) {
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /* =========================================================
+       WATER REMINDER
+    ========================================================= */
+
+    const waterToggle =
+        document.getElementById(
+            "rpzWaterToggle"
+        );
+
+    const waterInterval =
+        document.getElementById(
+            "rpzWaterInterval"
+        );
+
+    const waterStatus =
+        document.getElementById(
+            "rpzWaterStatus"
+        );
+
+
+    let waterTimer =
+        null;
+
+
+    let waterState = {
+
+        enabled:
+            false,
+
+        interval:
+            10
+
+    };
+
+
+    function loadWaterState() {
+
+        try {
+
+            const raw =
+                localStorage.getItem(
+                    WATER_STORAGE_KEY
+                );
+
+            if (!raw) return;
+
+            const parsed =
+                JSON.parse(raw);
+
+            waterState = {
+
+                ...waterState,
+                ...parsed
+
+            };
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ Water:",
+                error
+            );
+
+        }
+
+    }
+
+
+    function saveWaterState() {
+
+        localStorage.setItem(
+            WATER_STORAGE_KEY,
+            JSON.stringify(
+                waterState
+            )
+        );
+
+    }
+
+
+    function stopWaterTimer() {
+
+        if (
+            waterTimer
+        ) {
+
+            clearTimeout(
+                waterTimer
+            );
+
+            waterTimer =
+                null;
+
+        }
+
+    }
+
+
+    function requestNotificationPermission() {
+
+        if (
+            !("Notification" in window)
+        ) {
+
+            return Promise.resolve(
+                "unsupported"
+            );
+
+        }
+
+
+        if (
+            Notification.permission ===
+            "granted"
+        ) {
+
+            return Promise.resolve(
+                "granted"
+            );
+
+        }
+
+
+        if (
+            Notification.permission ===
+            "denied"
+        ) {
+
+            return Promise.resolve(
+                "denied"
+            );
+
+        }
+
+
+        return Notification.requestPermission();
+
+    }
+
+
+    function playWaterSound() {
+
+        /*
+         * Short synthesized water-drop sound.
+         *
+         * No audio file.
+         * No network.
+         * No loop.
+         */
+
+        try {
+
+            const AudioContext =
+                window.AudioContext ||
+                window.webkitAudioContext;
+
+            if (!AudioContext) return;
+
+
+            const ctx =
+                new AudioContext();
+
+
+            const oscillator =
+                ctx.createOscillator();
+
+            const gain =
+                ctx.createGain();
+
+
+            oscillator.type =
+                "sine";
+
+
+            oscillator.frequency.setValueAtTime(
+                850,
+                ctx.currentTime
+            );
+
+            oscillator.frequency.exponentialRampToValueAtTime(
+                420,
+                ctx.currentTime +
+                0.18
+            );
+
+
+            gain.gain.setValueAtTime(
+                0.0001,
+                ctx.currentTime
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.045,
+                ctx.currentTime +
+                0.012
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.0001,
+                ctx.currentTime +
+                0.22
+            );
+
+
+            oscillator.connect(
+                gain
+            );
+
+            gain.connect(
+                ctx.destination
+            );
+
+
+            oscillator.start();
+
+            oscillator.stop(
+                ctx.currentTime +
+                0.23
+            );
+
+
+            setTimeout(
+                () => {
+
+                    try {
+
+                        ctx.close();
+
+                    } catch (_) {}
+
+                },
+                400
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ Water Sound:",
+                error
+            );
+
+        }
+
+    }
+
+
+    function waterNotification() {
+
+        if (
+            !waterState.enabled
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            "Notification" in window &&
+            Notification.permission ===
+                "granted"
+        ) {
+
+            try {
+
+                new Notification(
+                    "💧 Time to drink water",
+                    {
+
+                        body:
+                            "Take a quick water break.",
+
+                        silent:
+                            true
+
+                    }
+                );
+
+            } catch (error) {
+
+                console.warn(
+                    "RakkeZ Water Notification:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        playWaterSound();
+
+    }
+
+
+    function scheduleWaterTimer() {
+
+        stopWaterTimer();
+
+
+        if (
+            !waterState.enabled
+        ) {
+
+            return;
+
+        }
+
+
+        const intervalMs =
+            Math.max(
+                1,
+                Number(
+                    waterState.interval
+                )
+            ) *
+            60 *
+            1000;
+
+
+        waterTimer =
+            setTimeout(
+                () => {
+
+                    waterNotification();
+
+                    scheduleWaterTimer();
+
+                },
+                intervalMs
+            );
+
+    }
+
+
+    function updateWaterUI() {
+
+        waterToggle.classList.toggle(
+            "on",
+            waterState.enabled
+        );
+
+
+        waterInterval.value =
+            String(
+                waterState.interval
+            );
+
+
+        waterStatus.textContent =
+            waterState.enabled
+                ? "On"
+                : "Off";
+
+    }
+
+
+    waterToggle.addEventListener(
+        "click",
+        async () => {
+
+            const next =
+                !waterState.enabled;
+
+
+            if (next) {
+
+                const permission =
+                    await requestNotificationPermission();
+
+
+                /*
+                 * The reminder itself can still
+                 * run if Notification is unsupported,
+                 * but browser notifications only
+                 * appear when permission exists.
+                 */
+
+                if (
+                    permission ===
+                    "denied"
+                ) {
+
+                    /*
+                     * Keep enabled because the
+                     * short sound can still work
+                     * when the page is active.
+                     */
+
+                }
+
+            }
+
+
+            waterState.enabled =
+                next;
+
+
+            saveWaterState();
+
+            updateWaterUI();
+
+            scheduleWaterTimer();
+
+        }
+    );
+
+
+    waterInterval.addEventListener(
+        "change",
+        () => {
+
+            const value =
+                Number(
+                    waterInterval.value
+                );
+
+
+            waterState.interval =
+                Math.max(
+                    1,
+                    value
+                );
+
+
+            saveWaterState();
+
+
+            if (
+                waterState.enabled
+            ) {
+
+                scheduleWaterTimer();
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       WATER VISIBILITY
+    ========================================================= */
+
+    document.addEventListener(
+        "visibilitychange",
+        () => {
+
+            if (
+                waterState.enabled
+            ) {
+
+                /*
+                 * Keep only one timeout.
+                 *
+                 * We do not create intervals
+                 * on every visibility event.
+                 */
+
+                scheduleWaterTimer();
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       CURRENT TIME UPDATE
+       
+       One lightweight timer.
+       It only moves the red line.
+       It does NOT render the calendar.
+    ========================================================= */
+
+    let currentTimeTimer =
+        null;
+
+
+    function updateCurrentTimeLine() {
+
+        if (
+            state.view ===
+            "month"
+        ) {
+
+            return;
+
+        }
+
+
+        const line =
+            grid.querySelector(
+                ".rpz-current-time"
+            );
+
+
+        if (!line) return;
+
+
+        const now =
+            new Date();
+
+
+        const minutes =
+            now.getHours() *
+            60 +
+            now.getMinutes() +
+            now.getSeconds() /
+            60;
+
+
+        line.style.top =
+            (
+                minutes /
+                60 *
+                HOUR_HEIGHT
+            ) +
+            "px";
+
+
+        const label =
+            line.querySelector(
+                ".rpz-current-time-label"
+            );
+
+
+        if (label) {
+
+            label.textContent =
+                formatTime(
+                    Math.floor(
+                        minutes
+                    )
+                );
+
+        }
+
+    }
+
+
+    currentTimeTimer =
+        setInterval(
+            updateCurrentTimeLine,
+            30000
+        );
+
+
+    /* =========================================================
+       PUBLIC API
+    ========================================================= */
+
+    window.RakkeZDayPlanner = {
+
+        state:
+            () =>
+                state,
+
+        refresh:
+            () =>
+                render(),
+
+        addEvent:
+            event => {
+
+                state.events.push(
+                    normalizeEvent(
+                        event
+                    )
+                );
+
+                saveState();
+
+                render();
+
+            },
+
+        deleteEvent:
+            id => {
+
+                state.events =
+                    state.events.filter(
+                        event =>
+                            event.id !==
+                            id
+                    );
+
+                saveState();
+
+                render();
+
+            },
+
+        openCreate:
+            () =>
+                openNewEventModal(
+                    state.currentDate
+                )
+
+    };
+
+
+    /* =========================================================
+       INITIALIZE
+    ========================================================= */
+
+    loadWaterState();
+
+    updateWaterUI();
+
+    scheduleWaterTimer();
+
+    render();
+
+    autoScrollToCurrentTime();
+
+
+    /*
+     * Keep the current-time line
+     * accurate after minute changes.
+     */
+
+    setTimeout(
+        updateCurrentTimeLine,
+        500
+    );
+
+
+})();
+</script>
 
 
 </body>
