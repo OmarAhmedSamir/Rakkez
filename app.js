@@ -11,6 +11,19 @@
 
 const $ = id => document.getElementById(id);
 
+function updateTabTitle(secondsLeft, isRunning) {
+    if (!isRunning) {
+        document.title = "RakkeZ";
+        return;
+    }
+
+    const minutes = Math.floor(secondsLeft / 60);
+    const seconds = secondsLeft % 60;
+
+    document.title =
+        `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")} • RakkeZ`;
+}
+
 
 /* =========================================================
    STORAGE
