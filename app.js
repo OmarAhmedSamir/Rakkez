@@ -447,6 +447,8 @@ function updateTimerUI() {
     const lang =
         getCurrentLanguage();
 
+    updateTabTitle(timerState.remaining, timerState.running);
+
 
     /* =====================================================
        TIMER NUMBER
