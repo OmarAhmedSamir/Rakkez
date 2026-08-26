@@ -16474,66 +16474,191 @@ setInterval(
 
 
 
-<!-- =========================================================
- RAKKEZ — NEW ISOLATED DAY PLANNER
- SAFE TO PASTE AT THE VERY END OF HTML
- Does NOT use old planner IDs/classes
-========================================================= -->
+<!-- ============================================================
+     RAKKEZ DAY PLANNER V2
+     FULLY ISOLATED POPUP VERSION
+     
+     IMPORTANT:
+     - Paste this entire block before </body>
+     - Does NOT use the old planner IDs
+     - Does NOT replace the old planner
+     - Creates its own launcher button
+     - Uses Shadow DOM to isolate CSS
+============================================================ -->
+
+<script>
+(function () {
+    "use strict";
+
+    /* ============================================================
+       PREVENT DOUBLE INITIALIZATION
+    ============================================================ */
+
+    if (window.__RAKKEZ_DAY_PLANNER_V2__) return;
+    window.__RAKKEZ_DAY_PLANNER_V2__ = true;
+
+
+    /* ============================================================
+       STORAGE
+    ============================================================ */
+
+    const STORAGE_KEY = "rakkez_day_planner_v2_events";
+    const SETTINGS_KEY = "rakkez_day_planner_v2_settings";
+
+
+    /* ============================================================
+       ROOT
+    ============================================================ */
+
+    const host = document.createElement("div");
+
+    host.id = "rakkezDayPlannerV2Host";
+
+    host.style.position = "relative";
+    host.style.zIndex = "2147483000";
+
+    document.body.appendChild(host);
+
+    const shadow = host.attachShadow
+        ? host.attachShadow({ mode: "open" })
+        : host;
+
+
+    /* ============================================================
+       HTML
+    ============================================================ */
+
+    shadow.innerHTML = `
 
 <style>
-/* =========================================================
-   ISOLATED ROOT
-========================================================= */
 
-#rkNewPlanner {
-    --rk-blue: #4285f4;
-    --rk-bg: #111;
-    --rk-panel: #181818;
-    --rk-panel-2: #202124;
-    --rk-border: rgba(255,255,255,.10);
-    --rk-border-soft: rgba(255,255,255,.055);
-    --rk-text: rgba(255,255,255,.92);
-    --rk-soft: rgba(255,255,255,.55);
-    --rk-muted: rgba(255,255,255,.30);
-    --rk-hour: 64px;
+* {
+    box-sizing: border-box;
+}
 
-    width: 100%;
-    height: 760px;
+:host {
+    all: initial;
+}
+
+.rk2-launcher {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+
+    height: 46px;
+    padding: 0 18px;
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 13px;
+
+    background: #ffffff;
+    color: #151515;
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 13px;
+    font-weight: 650;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.35);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.rk2-launcher:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.45);
+}
+
+.rk2-launcher-icon {
+    font-size: 17px;
+}
+
+
+.rk2-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    background:
+        rgba(0,0,0,.70);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+.rk2-overlay.open {
+    display: flex;
+}
+
+
+.rk2-window {
+
+    width: min(1450px, 96vw);
+    height: min(850px, 94vh);
+
+    min-height: 500px;
 
     display: flex;
     flex-direction: column;
 
     overflow: hidden;
 
-    background: var(--rk-bg);
-    color: var(--rk-text);
+    background: #111111;
 
-    border: 1px solid var(--rk-border);
-    border-radius: 18px;
+    color: #ffffff;
 
-    font-family:
-        "Google Sans",
-        Inter,
-        Arial,
-        system-ui,
-        sans-serif;
+    border:
+        1px solid rgba(255,255,255,.10);
 
-    position: relative;
-    box-sizing: border-box;
+    border-radius: 22px;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.65);
 }
 
-#rkNewPlanner *,
-#rkNewPlanner *::before,
-#rkNewPlanner *::after {
-    box-sizing: border-box;
-}
 
-/* =========================================================
-   HEADER
-========================================================= */
+/* ============================================================
+   TOP BAR
+============================================================ */
 
-.rk-new-header {
-    min-height: 64px;
+.rk2-topbar {
+
+    min-height: 68px;
+
+    padding:
+        10px 16px;
 
     display: flex;
     align-items: center;
@@ -16541,16 +16666,16 @@ setInterval(
 
     gap: 15px;
 
-    padding: 10px 16px;
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
 
-    background: #151515;
-
-    border-bottom: 1px solid var(--rk-border);
-
-    flex-shrink: 0;
+    background:
+        #181818;
 }
 
-.rk-new-left {
+
+.rk2-left {
+
     display: flex;
     align-items: center;
 
@@ -16559,167 +16684,210 @@ setInterval(
     min-width: 0;
 }
 
-.rk-new-create {
+
+.rk2-create {
+
     height: 40px;
 
-    padding: 0 17px;
+    padding:
+        0 17px;
 
     border: 0;
+
     border-radius: 10px;
 
-    background: #fff;
-    color: #202124;
+    background: #ffffff;
+
+    color: #181818;
+
+    font-size: 13px;
+
+    font-weight: 650;
 
     cursor: pointer;
 
-    font-size: 13px;
-    font-weight: 600;
-
     display: flex;
     align-items: center;
+
     gap: 7px;
 
     transition:
-        transform .15s ease,
-        box-shadow .15s ease;
+        transform .15s ease;
 }
 
-.rk-new-create:hover {
+.rk2-create:hover {
     transform: translateY(-1px);
-
-    box-shadow:
-        0 5px 16px rgba(0,0,0,.28);
 }
 
-.rk-new-plus {
-    font-size: 18px;
-    line-height: 1;
+
+.rk2-plus {
+    font-size: 19px;
+    font-weight: 400;
 }
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
 
-.rk-new-nav {
+.rk2-nav {
+
     display: flex;
     align-items: center;
-    gap: 4px;
+
+    gap: 3px;
 }
 
-.rk-new-nav-btn {
-    width: 34px;
-    height: 34px;
+
+.rk2-nav button {
 
     border: 0;
-    border-radius: 50%;
 
     background: transparent;
-    color: rgba(255,255,255,.70);
+
+    color:
+        rgba(255,255,255,.72);
 
     cursor: pointer;
 
-    font-size: 21px;
+    font-size: 20px;
+}
+
+
+.rk2-nav-arrow {
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50% !important;
 
     display: grid;
     place-items: center;
 }
 
-.rk-new-nav-btn:hover {
-    background: rgba(255,255,255,.08);
-    color: #fff;
+
+.rk2-nav-arrow:hover {
+
+    background:
+        rgba(255,255,255,.08);
 }
 
-.rk-new-today {
+
+.rk2-today {
+
     height: 34px;
 
-    padding: 0 13px;
+    padding:
+        0 13px;
 
     border:
-        1px solid var(--rk-border);
+        1px solid rgba(255,255,255,.10) !important;
 
-    border-radius: 8px;
+    border-radius: 8px !important;
 
-    background: transparent;
-
-    color: rgba(255,255,255,.80);
-
-    cursor: pointer;
-
-    font-size: 12px;
+    font-size: 12px !important;
 }
 
-.rk-new-today:hover {
-    background: rgba(255,255,255,.07);
-}
 
-/* =========================================================
-   TITLE
-========================================================= */
+.rk2-title {
 
-.rk-new-title {
-    min-width: 180px;
+    margin-left: 8px;
 
-    color: #fff;
+    color: #ffffff;
 
     font-size: 18px;
+
     font-weight: 500;
 
     white-space: nowrap;
 }
 
-/* =========================================================
-   VIEWS
-========================================================= */
 
-.rk-new-right {
+.rk2-right {
+
     display: flex;
     align-items: center;
+
+    gap: 9px;
 }
 
-.rk-new-views {
+
+.rk2-views {
+
     display: flex;
 
     padding: 3px;
 
     border:
-        1px solid var(--rk-border);
+        1px solid rgba(255,255,255,.10);
 
     border-radius: 9px;
 
-    background: rgba(255,255,255,.025);
+    background:
+        rgba(255,255,255,.025);
 }
 
-.rk-new-view {
+
+.rk2-view {
+
     height: 30px;
 
-    padding: 0 11px;
+    padding:
+        0 12px;
 
     border: 0;
+
     border-radius: 7px;
 
     background: transparent;
 
-    color: rgba(255,255,255,.42);
+    color:
+        rgba(255,255,255,.40);
 
     cursor: pointer;
 
     font-size: 10px;
 }
 
-.rk-new-view:hover {
-    color: #fff;
+
+.rk2-view.active {
+
+    background:
+        rgba(255,255,255,.10);
+
+    color: #ffffff;
 }
 
-.rk-new-view.active {
-    background: rgba(255,255,255,.11);
-    color: #fff;
+
+.rk2-close {
+
+    width: 38px;
+    height: 38px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: transparent;
+
+    color:
+        rgba(255,255,255,.60);
+
+    font-size: 25px;
+
+    cursor: pointer;
 }
 
-/* =========================================================
-   BODY
-========================================================= */
+.rk2-close:hover {
 
-.rk-new-body {
+    background:
+        rgba(255,255,255,.08);
+
+    color: white;
+}
+
+
+/* ========================================================= BODY
+============================================================ */
+
+.rk2-body {
+
     flex: 1;
 
     min-height: 0;
@@ -16730,87 +16898,108 @@ setInterval(
     overflow: hidden;
 }
 
-/* =========================================================
-   WEEK HEADER
-========================================================= */
 
-.rk-new-calendar-header {
+/* ========================================================= WEEK HEADER
+============================================================ */
+
+.rk2-header {
+
     display: grid;
+
+    grid-template-columns:
+        58px repeat(7, minmax(110px,1fr));
 
     min-height: 58px;
 
     border-bottom:
-        1px solid var(--rk-border);
+        1px solid rgba(255,255,255,.08);
 
     flex-shrink: 0;
 }
 
-.rk-new-time-head {
-    background: #111;
+
+.rk2-header-time {
+
+    background: #111111;
 
     border-right:
-        1px solid var(--rk-border);
+        1px solid rgba(255,255,255,.08);
 }
 
-.rk-new-day-head {
+
+.rk2-day-header {
+
     display: flex;
+
     flex-direction: column;
 
     align-items: center;
+
     justify-content: center;
 
     gap: 3px;
 
     border-right:
-        1px solid var(--rk-border);
+        1px solid rgba(255,255,255,.07);
 
     color:
-        rgba(255,255,255,.42);
+        rgba(255,255,255,.40);
 
     font-size: 10px;
 }
 
-.rk-new-day-number {
+
+.rk2-day-number {
+
     width: 30px;
     height: 30px;
 
     display: grid;
+
     place-items: center;
 
     border-radius: 50%;
 
     color:
-        rgba(255,255,255,.82);
+        rgba(255,255,255,.80);
 
     font-size: 15px;
 }
 
-.rk-new-day-head.today
-.rk-new-day-number {
-    background: var(--rk-blue);
-    color: #fff;
+
+.rk2-day-header.today .rk2-day-number {
+
+    background: #4285f4;
+
+    color: white;
 }
 
-/* =========================================================
-   ALL DAY
-========================================================= */
 
-.rk-new-all-day {
+/* ========================================================= ALL DAY
+============================================================ */
+
+.rk2-all-day {
+
     display: grid;
+
+    grid-template-columns:
+        58px repeat(7, minmax(110px,1fr));
 
     min-height: 38px;
 
-    max-height: 110px;
+    max-height: 100px;
 
     overflow-y: auto;
 
     border-bottom:
-        1px solid var(--rk-border);
+        1px solid rgba(255,255,255,.08);
 
     flex-shrink: 0;
 }
 
-.rk-new-all-label {
+
+.rk2-all-label {
+
     display: flex;
 
     justify-content: center;
@@ -16818,28 +17007,31 @@ setInterval(
     padding-top: 10px;
 
     color:
-        var(--rk-muted);
+        rgba(255,255,255,.28);
 
     font-size: 8px;
 }
 
-.rk-new-all-cell {
-    position: relative;
 
-    min-width: 0;
+.rk2-all-cell {
 
     padding: 4px;
 
     border-right:
-        1px solid var(--rk-border-soft);
+        1px solid rgba(255,255,255,.06);
+
+    min-width: 0;
 }
 
-.rk-new-all-event {
+
+.rk2-all-event {
+
     height: 25px;
 
     margin-bottom: 3px;
 
-    padding: 4px 8px;
+    padding:
+        4px 8px;
 
     border-radius: 5px;
 
@@ -16850,16 +17042,16 @@ setInterval(
     text-overflow: ellipsis;
 
     font-size: 10px;
-    font-weight: 500;
 
     cursor: pointer;
 }
 
-/* =========================================================
-   SCROLL
-========================================================= */
 
-.rk-new-scroll {
+/* ========================================================= SCROLL
+============================================================ */
+
+.rk2-scroll {
+
     flex: 1;
 
     min-height: 0;
@@ -16869,50 +17061,83 @@ setInterval(
     position: relative;
 }
 
-/* =========================================================
-   GRID
-========================================================= */
 
-.rk-new-grid {
+/* ========================================================= GRID
+============================================================ */
+
+.rk2-grid {
+
     display: grid;
+
+    grid-template-columns:
+        58px repeat(7, minmax(110px,1fr));
 
     position: relative;
 
     min-height:
-        calc(24 * var(--rk-hour));
+        1536px;
 }
 
-.rk-new-time-column {
+
+.rk2-time-column {
+
     position: relative;
 
-    height:
-        calc(24 * var(--rk-hour));
+    height: 1536px;
 
-    background: #111;
+    background: #111111;
 
     border-right:
-        1px solid var(--rk-border);
+        1px solid rgba(255,255,255,.08);
 }
 
-.rk-new-day-column {
+
+.rk2-day-column {
+
     position: relative;
 
-    height:
-        calc(24 * var(--rk-hour));
+    height: 1536px;
 
-    min-width: 100px;
+    min-width: 110px;
 
-    background: #111;
+    background: #111111;
 
     border-right:
-        1px solid var(--rk-border-soft);
+        1px solid rgba(255,255,255,.065);
 }
 
-/* =========================================================
-   TIME LABELS
-========================================================= */
 
-.rk-new-time-label {
+/* ========================================================= LINES
+============================================================ */
+
+.rk2-hour-line,
+.rk2-quarter-line {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    pointer-events: none;
+}
+
+
+.rk2-hour-line {
+
+    border-top:
+        1px solid rgba(255,255,255,.085);
+}
+
+
+.rk2-quarter-line {
+
+    border-top:
+        1px solid rgba(255,255,255,.028);
+}
+
+
+.rk2-time-label {
+
     position: absolute;
 
     right: 8px;
@@ -16921,46 +17146,19 @@ setInterval(
         translateY(-50%);
 
     color:
-        rgba(255,255,255,.31);
+        rgba(255,255,255,.28);
 
     font-size: 9px;
 
     white-space: nowrap;
 }
 
-/* =========================================================
-   GRID LINES
-========================================================= */
 
-.rk-new-hour-line {
-    position: absolute;
+/* ========================================================= EVENTS
+============================================================ */
 
-    left: 0;
-    right: 0;
+.rk2-events-layer {
 
-    border-top:
-        1px solid rgba(255,255,255,.085);
-
-    pointer-events: none;
-}
-
-.rk-new-quarter-line {
-    position: absolute;
-
-    left: 0;
-    right: 0;
-
-    border-top:
-        1px solid rgba(255,255,255,.032);
-
-    pointer-events: none;
-}
-
-/* =========================================================
-   EVENTS
-========================================================= */
-
-.rk-new-events-layer {
     position: absolute;
 
     inset: 0;
@@ -16970,121 +17168,91 @@ setInterval(
     pointer-events: none;
 }
 
-.rk-new-event {
+
+.rk2-event {
+
     position: absolute;
 
-    padding: 5px 8px;
+    pointer-events: auto;
+
+    padding:
+        5px 8px;
 
     border-radius: 6px;
 
+    color: white;
+
     overflow: hidden;
 
-    color: #fff;
+    cursor: grab;
+
+    user-select: none;
 
     font-size: 10px;
 
     line-height: 1.35;
 
-    cursor: grab;
-
-    pointer-events: auto;
-
-    user-select: none;
-
     border-left:
-        3px solid rgba(255,255,255,.38);
+        3px solid rgba(255,255,255,.40);
 
     box-shadow:
-        0 2px 5px rgba(0,0,0,.18);
+        0 2px 6px rgba(0,0,0,.20);
+
+    transition:
+        box-shadow .12s ease;
 }
 
-.rk-new-event:hover {
+
+.rk2-event:hover {
+
     box-shadow:
-        0 5px 15px rgba(0,0,0,.30);
+        0 5px 16px rgba(0,0,0,.35);
 
-    z-index: 30;
+    z-index: 20;
 }
 
-.rk-new-event.dragging {
+
+.rk2-event.dragging {
+
     cursor: grabbing;
 
     z-index: 100;
 
     box-shadow:
-        0 12px 30px rgba(0,0,0,.45);
+        0 12px 35px rgba(0,0,0,.45);
 }
 
-.rk-new-event-title {
-    font-weight: 600;
 
-    overflow: hidden;
+.rk2-event-title {
+
+    font-weight: 650;
 
     white-space: nowrap;
+
+    overflow: hidden;
 
     text-overflow: ellipsis;
 }
 
-.rk-new-event-time {
+
+.rk2-event-time {
+
     margin-top: 2px;
 
     color:
-        rgba(255,255,255,.72);
+        rgba(255,255,255,.70);
 
     font-size: 8px;
 }
 
-/* =========================================================
-   EDIT BUTTON
-========================================================= */
 
-.rk-new-edit {
-    position: absolute;
+.rk2-resize {
 
-    right: 5px;
-    top: 5px;
-
-    width: 22px;
-    height: 22px;
-
-    border: 0;
-
-    border-radius: 6px;
-
-    background:
-        rgba(0,0,0,.22);
-
-    color: #fff;
-
-    cursor: pointer;
-
-    font-size: 10px;
-
-    opacity: 0;
-
-    transition:
-        opacity .15s ease,
-        background .15s ease;
-}
-
-.rk-new-event:hover
-.rk-new-edit {
-    opacity: 1;
-}
-
-.rk-new-edit:hover {
-    background:
-        rgba(0,0,0,.45);
-}
-
-/* =========================================================
-   RESIZE
-========================================================= */
-
-.rk-new-resize {
     position: absolute;
 
     left: 0;
     right: 0;
+
     bottom: 0;
 
     height: 9px;
@@ -17092,7 +17260,9 @@ setInterval(
     cursor: ns-resize;
 }
 
-.rk-new-resize::after {
+
+.rk2-resize::after {
+
     content: "";
 
     position: absolute;
@@ -17110,11 +17280,12 @@ setInterval(
         rgba(255,255,255,.45);
 }
 
-/* =========================================================
-   CREATE PREVIEW
-========================================================= */
 
-.rk-new-preview {
+/* ========================================================= CREATE PREVIEW
+============================================================ */
+
+.rk2-preview {
+
     position: absolute;
 
     z-index: 200;
@@ -17122,32 +17293,38 @@ setInterval(
     pointer-events: none;
 
     border:
-        1px solid rgba(66,133,244,.8);
+        1px solid rgba(66,133,244,.85);
 
     border-radius: 6px;
 
     background:
-        rgba(66,133,244,.23);
+        rgba(66,133,244,.22);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.05);
 }
 
-.rk-new-preview-label {
+
+.rk2-preview-label {
+
     position: absolute;
 
     top: 5px;
     left: 7px;
 
-    color: #fff;
+    color: white;
 
     font-size: 9px;
 
-    font-weight: 600;
+    font-weight: 650;
 }
 
-/* =========================================================
-   CURRENT TIME
-========================================================= */
 
-.rk-new-current-time {
+/* ========================================================= CURRENT TIME
+============================================================ */
+
+.rk2-now {
+
     position: absolute;
 
     left: 0;
@@ -17160,9 +17337,14 @@ setInterval(
     z-index: 150;
 
     pointer-events: none;
+
+    box-shadow:
+        0 0 5px rgba(234,67,53,.5);
 }
 
-.rk-new-current-dot {
+
+.rk2-now-dot {
+
     position: absolute;
 
     left: -4px;
@@ -17176,90 +17358,105 @@ setInterval(
     background: #ea4335;
 }
 
-.rk-new-current-label {
+
+.rk2-now-label {
+
     position: absolute;
 
-    top: -10px;
     left: 7px;
+    top: -10px;
 
-    padding: 3px 5px;
+    padding:
+        3px 5px;
 
     border-radius: 4px;
 
     background: #ea4335;
 
-    color: #fff;
+    color: white;
 
     font-size: 8px;
 
-    font-weight: 600;
+    font-weight: 650;
 }
 
-/* =========================================================
-   MONTH
-========================================================= */
 
-.rk-new-month {
+/* ========================================================= MONTH
+============================================================ */
+
+.rk2-month {
+
+    height: 100%;
+
     display: grid;
 
     grid-template-columns:
-        repeat(7, minmax(100px, 1fr));
+        repeat(7,1fr);
 
     grid-template-rows:
-        auto repeat(6, minmax(90px, 1fr));
+        auto repeat(6,minmax(90px,1fr));
 
-    min-width: 700px;
-
-    height: 100%;
+    overflow: auto;
 }
 
-.rk-new-month-weekday {
+
+.rk2-month-weekday {
+
     padding: 10px;
 
     border-right:
-        1px solid var(--rk-border-soft);
+        1px solid rgba(255,255,255,.06);
 
     border-bottom:
-        1px solid var(--rk-border);
+        1px solid rgba(255,255,255,.08);
+
+    text-align: center;
 
     color:
         rgba(255,255,255,.38);
 
     font-size: 9px;
-
-    text-align: center;
 }
 
-.rk-new-month-cell {
+
+.rk2-month-cell {
+
     min-height: 90px;
 
     padding: 7px;
 
+    overflow: hidden;
+
     border-right:
-        1px solid var(--rk-border-soft);
+        1px solid rgba(255,255,255,.06);
 
     border-bottom:
-        1px solid var(--rk-border-soft);
-
-    overflow: hidden;
+        1px solid rgba(255,255,255,.06);
 
     cursor: pointer;
 }
 
-.rk-new-month-cell:hover {
+
+.rk2-month-cell:hover {
+
     background:
         rgba(255,255,255,.025);
 }
 
-.rk-new-month-cell.other {
+
+.rk2-month-cell.other {
+
     opacity: .35;
 }
 
-.rk-new-month-number {
+
+.rk2-month-number {
+
     width: 24px;
     height: 24px;
 
     display: grid;
+
     place-items: center;
 
     margin-bottom: 4px;
@@ -17267,23 +17464,28 @@ setInterval(
     border-radius: 50%;
 
     color:
-        rgba(255,255,255,.68);
+        rgba(255,255,255,.70);
 
     font-size: 10px;
 }
 
-.rk-new-month-cell.today
-.rk-new-month-number {
-    background: var(--rk-blue);
-    color: #fff;
+
+.rk2-month-cell.today .rk2-month-number {
+
+    background: #4285f4;
+
+    color: white;
 }
 
-.rk-new-month-event {
+
+.rk2-month-event {
+
     height: 20px;
 
     margin-bottom: 2px;
 
-    padding: 3px 5px;
+    padding:
+        3px 5px;
 
     border-radius: 4px;
 
@@ -17293,69 +17495,57 @@ setInterval(
 
     text-overflow: ellipsis;
 
-    color: #fff;
+    color: white;
 
     font-size: 8px;
-
-    cursor: pointer;
 }
 
-/* =========================================================
-   MODAL
-========================================================= */
 
-#rkNewPlannerModal {
+/* ========================================================= MODAL
+============================================================ */
+
+.rk2-modal {
+
     position: fixed;
 
     inset: 0;
 
-    z-index: 2147483640;
+    z-index: 2147483647;
 
-    display: flex;
+    display: none;
 
     align-items: center;
+
     justify-content: center;
 
     padding: 20px;
 
     background:
-        rgba(0,0,0,.65);
+        rgba(0,0,0,.68);
 
-    backdrop-filter:
-        blur(12px);
-
-    -webkit-backdrop-filter:
-        blur(12px);
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    pointer-events: none;
-
-    transition:
-        opacity .18s ease;
+    backdrop-filter: blur(10px);
 }
 
-#rkNewPlannerModal.show {
-    opacity: 1;
 
-    visibility: visible;
+.rk2-modal.open {
 
-    pointer-events: auto;
+    display: flex;
 }
 
-.rk-new-modal-box {
+
+.rk2-box {
+
     width:
-        min(540px, 100%);
+        min(560px,95vw);
 
-    max-height: 90vh;
+    max-height:
+        90vh;
 
     overflow: auto;
 
     padding: 24px;
 
-    border-radius: 22px;
+    border-radius: 20px;
 
     background: #202124;
 
@@ -17363,22 +17553,34 @@ setInterval(
         1px solid rgba(255,255,255,.10);
 
     box-shadow:
-        0 25px 90px rgba(0,0,0,.55);
+        0 30px 100px rgba(0,0,0,.65);
 }
 
-/* =========================================================
-   MODAL
-========================================================= */
 
-.rk-new-modal-top {
+.rk2-modal-head {
+
     display: flex;
 
-    justify-content: flex-end;
+    justify-content: space-between;
 
-    margin-bottom: 10px;
+    align-items: center;
+
+    margin-bottom: 15px;
 }
 
-.rk-new-close {
+
+.rk2-modal-head h2 {
+
+    margin: 0;
+
+    font-size: 16px;
+
+    font-weight: 600;
+}
+
+
+.rk2-modal-close {
+
     width: 34px;
     height: 34px;
 
@@ -17391,47 +17593,46 @@ setInterval(
     color:
         rgba(255,255,255,.65);
 
-    font-size: 23px;
+    font-size: 22px;
 
     cursor: pointer;
 }
 
-.rk-new-close:hover {
-    background:
-        rgba(255,255,255,.08);
 
-    color: #fff;
-}
+.rk2-title-input {
 
-.rk-new-title-input {
     width: 100%;
 
     height: 48px;
 
-    margin-bottom: 16px;
+    margin-bottom: 15px;
 
-    padding: 0 3px;
+    padding: 0 4px;
 
     border: 0;
 
     border-bottom:
-        1px solid rgba(255,255,255,.20);
+        1px solid rgba(255,255,255,.18);
 
     outline: none;
 
     background: transparent;
 
-    color: #fff;
+    color: white;
 
     font-size: 21px;
 }
 
-.rk-new-title-input:focus {
+
+.rk2-title-input:focus {
+
     border-bottom-color:
-        var(--rk-blue);
+        #4285f4;
 }
 
-.rk-new-form-row {
+
+.rk2-row {
+
     display: grid;
 
     grid-template-columns:
@@ -17442,7 +17643,9 @@ setInterval(
     margin-bottom: 10px;
 }
 
-.rk-new-field {
+
+.rk2-field {
+
     display: flex;
 
     flex-direction: column;
@@ -17450,22 +17653,26 @@ setInterval(
     gap: 5px;
 }
 
-.rk-new-field label {
+
+.rk2-field label {
+
     color:
-        rgba(255,255,255,.40);
+        rgba(255,255,255,.38);
 
     font-size: 9px;
 
-    font-weight: 600;
+    font-weight: 650;
 
     text-transform: uppercase;
 
-    letter-spacing: .7px;
+    letter-spacing: .6px;
 }
 
-.rk-new-input,
-.rk-new-select,
-.rk-new-textarea {
+
+.rk2-input,
+.rk2-select,
+.rk2-textarea {
+
     width: 100%;
 
     border:
@@ -17478,45 +17685,50 @@ setInterval(
     background:
         rgba(255,255,255,.045);
 
-    color: #fff;
+    color: white;
 
     font-size: 11px;
 }
 
-.rk-new-input,
-.rk-new-select {
+
+.rk2-input,
+.rk2-select {
+
     height: 42px;
 
     padding: 0 11px;
 }
 
-.rk-new-textarea {
-    min-height: 95px;
+
+.rk2-textarea {
+
+    min-height: 90px;
 
     padding: 10px;
 
     resize: vertical;
 }
 
-.rk-new-input:focus,
-.rk-new-select:focus,
-.rk-new-textarea:focus {
+
+.rk2-input:focus,
+.rk2-select:focus,
+.rk2-textarea:focus {
+
     border-color:
-        rgba(66,133,244,.65);
+        rgba(66,133,244,.70);
 }
 
-/* =========================================================
-   CHECKBOX
-========================================================= */
 
-.rk-new-checkbox {
+.rk2-checkbox {
+
     display: flex;
 
     align-items: center;
 
     gap: 8px;
 
-    margin: 7px 0 14px;
+    margin:
+        7px 0 14px;
 
     color:
         rgba(255,255,255,.72);
@@ -17526,58 +17738,55 @@ setInterval(
     cursor: pointer;
 }
 
-.rk-new-checkbox input {
-    accent-color:
-        var(--rk-blue);
-}
 
-/* =========================================================
-   COLORS
-========================================================= */
+.rk2-colors {
 
-.rk-new-colors {
     display: flex;
 
     gap: 8px;
 
     flex-wrap: wrap;
+
+    margin-top: 3px;
 }
 
-.rk-new-color {
-    width: 23px;
-    height: 23px;
+
+.rk2-color {
+
+    width: 24px;
+    height: 24px;
 
     border-radius: 50%;
 
-    border:
-        2px solid transparent;
+    border: 2px solid transparent;
 
     cursor: pointer;
 }
 
-.rk-new-color.selected {
-    border-color: #fff;
+
+.rk2-color.selected {
+
+    border-color: white;
 
     box-shadow:
-        0 0 0 2px
-        rgba(255,255,255,.18);
+        0 0 0 2px rgba(255,255,255,.18);
 }
 
-/* =========================================================
-   MODAL FOOTER
-========================================================= */
 
-.rk-new-modal-footer {
+.rk2-footer {
+
+    margin-top: 20px;
+
     display: flex;
-
-    align-items: center;
 
     justify-content: space-between;
 
-    margin-top: 20px;
+    align-items: center;
 }
 
-.rk-new-delete {
+
+.rk2-delete {
+
     height: 38px;
 
     padding: 0 13px;
@@ -17591,23 +17800,20 @@ setInterval(
     color: #ea4335;
 
     cursor: pointer;
-
-    font-size: 11px;
 }
 
-.rk-new-delete:hover {
-    background:
-        rgba(234,67,53,.10);
-}
 
-.rk-new-actions {
+.rk2-actions {
+
     display: flex;
 
     gap: 7px;
 }
 
-.rk-new-cancel,
-.rk-new-save {
+
+.rk2-cancel,
+.rk2-save {
+
     height: 38px;
 
     padding: 0 17px;
@@ -17620,10 +17826,12 @@ setInterval(
 
     font-size: 11px;
 
-    font-weight: 600;
+    font-weight: 650;
 }
 
-.rk-new-cancel {
+
+.rk2-cancel {
+
     background:
         rgba(255,255,255,.07);
 
@@ -17631,7 +17839,9 @@ setInterval(
         rgba(255,255,255,.70);
 }
 
-.rk-new-save {
+
+.rk2-save {
+
     background:
         #a8c7fa;
 
@@ -17639,64 +17849,48 @@ setInterval(
         #17213a;
 }
 
-/* =========================================================
-   WATER
-========================================================= */
 
-#rkNewWater {
-    width: 100%;
+/* ========================================================= WATER
+============================================================ */
 
-    margin-top: 12px;
+.rk2-water {
 
-    padding: 15px;
+    margin-top: 15px;
+
+    padding: 14px;
 
     border:
-        1px solid rgba(255,255,255,.10);
+        1px solid rgba(255,255,255,.08);
 
-    border-radius: 13px;
+    border-radius: 12px;
 
     background:
         rgba(255,255,255,.025);
-
-    color: #fff;
-
-    font-family:
-        Inter,
-        Arial,
-        system-ui,
-        sans-serif;
 }
 
-.rk-water-head {
+
+.rk2-water-head {
+
     display: flex;
 
     justify-content: space-between;
 
     align-items: center;
-
-    margin-bottom: 12px;
 }
 
-.rk-water-title {
+
+.rk2-water-title {
+
     font-size: 12px;
 
-    font-weight: 600;
+    font-weight: 650;
 }
 
-.rk-water-sub {
-    margin-top: 3px;
 
-    color:
-        rgba(255,255,255,.32);
+.rk2-water-toggle {
 
-    font-size: 9px;
-}
-
-.rk-water-toggle {
     width: 38px;
     height: 21px;
-
-    position: relative;
 
     border: 0;
 
@@ -17706,14 +17900,13 @@ setInterval(
         rgba(255,255,255,.18);
 
     cursor: pointer;
+
+    position: relative;
 }
 
-.rk-water-toggle.on {
-    background:
-        var(--rk-blue);
-}
 
-.rk-water-toggle::after {
+.rk2-water-toggle::after {
+
     content: "";
 
     position: absolute;
@@ -17721,41 +17914,46 @@ setInterval(
     width: 15px;
     height: 15px;
 
-    top: 3px;
     left: 3px;
+    top: 3px;
 
     border-radius: 50%;
 
-    background: #fff;
+    background: white;
 
     transition:
         transform .2s ease;
 }
 
-.rk-water-toggle.on::after {
+
+.rk2-water-toggle.on {
+
+    background: #4285f4;
+}
+
+
+.rk2-water-toggle.on::after {
+
     transform:
         translateX(17px);
 }
 
-.rk-water-controls {
+
+.rk2-water-controls {
+
     display: grid;
 
     grid-template-columns:
         1fr 1fr;
 
     gap: 8px;
+
+    margin-top: 12px;
 }
 
-.rk-water-label {
-    margin-bottom: 5px;
 
-    color:
-        rgba(255,255,255,.38);
+.rk2-water-select {
 
-    font-size: 9px;
-}
-
-.rk-water-select {
     width: 100%;
 
     height: 38px;
@@ -17770,176 +17968,230 @@ setInterval(
     background:
         rgba(255,255,255,.045);
 
-    color: #fff;
+    color: white;
 
     outline: none;
 
     font-size: 10px;
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
 
-@media (max-width: 850px) {
+.rk2-water-status {
 
-    #rkNewPlanner {
-        height: 720px;
-    }
+    height: 38px;
 
-    .rk-new-title {
-        min-width: 100px;
-        font-size: 15px;
-    }
+    display: flex;
 
-    .rk-new-form-row {
-        grid-template-columns: 1fr;
-    }
+    align-items: center;
 
+    color:
+        rgba(255,255,255,.40);
+
+    font-size: 10px;
 }
 
-@media (max-width: 600px) {
 
-    .rk-new-header {
+/* ========================================================= MOBILE
+============================================================ */
+
+@media(max-width:800px) {
+
+    .rk2-window {
+
+        width: 100vw;
+        height: 100vh;
+
+        border-radius: 0;
+    }
+
+    .rk2-overlay {
+
+        padding: 0;
+    }
+
+    .rk2-topbar {
+
         flex-wrap: wrap;
     }
 
-    .rk-new-left {
+    .rk2-right {
+
         width: 100%;
+
+        justify-content: space-between;
     }
 
-    .rk-new-right {
-        width: 100%;
-        justify-content: flex-end;
+    .rk2-row {
+
+        grid-template-columns: 1fr;
     }
 
-    .rk-new-title {
-        flex: 1;
-        min-width: 0;
-    }
+    .rk2-title {
 
-    .rk-new-modal-box {
-        padding: 18px;
-        border-radius: 17px;
+        font-size: 14px;
     }
 
 }
+
 </style>
 
 
 <!-- =========================================================
-   NEW PLANNER
+     LAUNCHER
 ========================================================= -->
 
-<div id="rkNewPlanner">
+<button
+    class="rk2-launcher"
+    id="rk2Launcher"
+    type="button"
+>
+    <span class="rk2-launcher-icon">📅</span>
+    <span>Day Planner</span>
+</button>
 
-    <div class="rk-new-header">
 
-        <div class="rk-new-left">
+<!-- =========================================================
+     OVERLAY
+========================================================= -->
 
-            <button
-                class="rk-new-create"
-                id="rkNewCreate"
-                type="button"
-            >
-                <span class="rk-new-plus">+</span>
-                <span>Create</span>
-            </button>
+<div
+    class="rk2-overlay"
+    id="rk2Overlay"
+>
 
-            <div class="rk-new-nav">
+    <div class="rk2-window">
+
+
+        <!-- =====================================================
+             TOP BAR
+        ====================================================== -->
+
+        <div class="rk2-topbar">
+
+            <div class="rk2-left">
 
                 <button
-                    class="rk-new-nav-btn"
-                    id="rkNewPrev"
+                    class="rk2-create"
+                    id="rk2Create"
                     type="button"
                 >
-                    ‹
+                    <span class="rk2-plus">+</span>
+                    <span>Create</span>
                 </button>
 
-                <button
-                    class="rk-new-today"
-                    id="rkNewToday"
-                    type="button"
+
+                <div class="rk2-nav">
+
+                    <button
+                        class="rk2-nav-arrow"
+                        id="rk2Prev"
+                        type="button"
+                    >
+                        ‹
+                    </button>
+
+                    <button
+                        class="rk2-today"
+                        id="rk2Today"
+                        type="button"
+                    >
+                        Today
+                    </button>
+
+                    <button
+                        class="rk2-nav-arrow"
+                        id="rk2Next"
+                        type="button"
+                    >
+                        ›
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="rk2-title"
+                    id="rk2Title"
                 >
                     Today
-                </button>
-
-                <button
-                    class="rk-new-nav-btn"
-                    id="rkNewNext"
-                    type="button"
-                >
-                    ›
-                </button>
+                </div>
 
             </div>
 
-            <div
-                class="rk-new-title"
-                id="rkNewTitle"
-            >
-                Today
-            </div>
 
-        </div>
+            <div class="rk2-right">
 
+                <div class="rk2-views">
 
-        <div class="rk-new-right">
+                    <button
+                        class="rk2-view"
+                        data-rk2-view="day"
+                        type="button"
+                    >
+                        Day
+                    </button>
 
-            <div class="rk-new-views">
+                    <button
+                        class="rk2-view active"
+                        data-rk2-view="week"
+                        type="button"
+                    >
+                        Week
+                    </button>
+
+                    <button
+                        class="rk2-view"
+                        data-rk2-view="month"
+                        type="button"
+                    >
+                        Month
+                    </button>
+
+                </div>
+
 
                 <button
-                    class="rk-new-view"
-                    data-rk-view="day"
+                    class="rk2-close"
+                    id="rk2Close"
                     type="button"
                 >
-                    Day
-                </button>
-
-                <button
-                    class="rk-new-view active"
-                    data-rk-view="week"
-                    type="button"
-                >
-                    Week
-                </button>
-
-                <button
-                    class="rk-new-view"
-                    data-rk-view="month"
-                    type="button"
-                >
-                    Month
+                    ×
                 </button>
 
             </div>
 
         </div>
 
-    </div>
 
+        <!-- =====================================================
+             BODY
+        ====================================================== -->
 
-    <div class="rk-new-body">
-
-        <div
-            class="rk-new-calendar-header"
-            id="rkNewCalendarHeader"
-        ></div>
-
-        <div
-            class="rk-new-all-day"
-            id="rkNewAllDay"
-        ></div>
-
-        <div
-            class="rk-new-scroll"
-            id="rkNewScroll"
-        >
+        <div class="rk2-body">
 
             <div
-                class="rk-new-grid"
-                id="rkNewGrid"
+                class="rk2-header"
+                id="rk2Header"
             ></div>
+
+
+            <div
+                class="rk2-all-day"
+                id="rk2AllDay"
+            ></div>
+
+
+            <div
+                class="rk2-scroll"
+                id="rk2Scroll"
+            >
+
+                <div
+                    class="rk2-grid"
+                    id="rk2Grid"
+                ></div>
+
+            </div>
 
         </div>
 
@@ -17949,20 +18201,25 @@ setInterval(
 
 
 <!-- =========================================================
-   MODAL
+     EVENT MODAL
 ========================================================= -->
 
 <div
-    id="rkNewPlannerModal"
+    class="rk2-modal"
+    id="rk2Modal"
 >
 
-    <div class="rk-new-modal-box">
+    <div class="rk2-box">
 
-        <div class="rk-new-modal-top">
+        <div class="rk2-modal-head">
+
+            <h2 id="rk2ModalHeading">
+                Create event
+            </h2>
 
             <button
-                class="rk-new-close"
-                id="rkNewClose"
+                class="rk2-modal-close"
+                id="rk2ModalClose"
                 type="button"
             >
                 ×
@@ -17972,36 +18229,37 @@ setInterval(
 
 
         <input
-            class="rk-new-title-input"
-            id="rkNewEventTitle"
+            class="rk2-title-input"
+            id="rk2EventTitle"
+            type="text"
             placeholder="Add title"
             maxlength="120"
             autocomplete="off"
         >
 
 
-        <div class="rk-new-form-row">
+        <div class="rk2-row">
 
-            <div class="rk-new-field">
+            <div class="rk2-field">
 
                 <label>Date</label>
 
                 <input
-                    class="rk-new-input"
-                    id="rkNewEventDate"
+                    class="rk2-input"
+                    id="rk2EventDate"
                     type="date"
                 >
 
             </div>
 
 
-            <div class="rk-new-field">
+            <div class="rk2-field">
 
                 <label>Repeat</label>
 
                 <select
-                    class="rk-new-select"
-                    id="rkNewRepeat"
+                    class="rk2-select"
+                    id="rk2Repeat"
                 >
 
                     <option value="none">
@@ -18020,10 +18278,6 @@ setInterval(
                         Monthly
                     </option>
 
-                    <option value="custom">
-                        Custom days
-                    </option>
-
                 </select>
 
             </div>
@@ -18031,10 +18285,10 @@ setInterval(
         </div>
 
 
-        <label class="rk-new-checkbox">
+        <label class="rk2-checkbox">
 
             <input
-                id="rkNewAllDay"
+                id="rk2AllDayCheck"
                 type="checkbox"
             >
 
@@ -18045,17 +18299,17 @@ setInterval(
         </label>
 
 
-        <div id="rkNewTimedFields">
+        <div id="rk2TimedFields">
 
-            <div class="rk-new-form-row">
+            <div class="rk2-row">
 
-                <div class="rk-new-field">
+                <div class="rk2-field">
 
                     <label>Start</label>
 
                     <input
-                        class="rk-new-input"
-                        id="rkNewStart"
+                        class="rk2-input"
+                        id="rk2Start"
                         type="time"
                         step="900"
                     >
@@ -18063,13 +18317,13 @@ setInterval(
                 </div>
 
 
-                <div class="rk-new-field">
+                <div class="rk2-field">
 
                     <label>End</label>
 
                     <input
-                        class="rk-new-input"
-                        id="rkNewEnd"
+                        class="rk2-input"
+                        id="rk2End"
                         type="time"
                         step="900"
                     >
@@ -18081,163 +18335,71 @@ setInterval(
         </div>
 
 
-        <div
-            id="rkNewCustomDays"
-            style="display:none;margin-bottom:12px;"
-        >
+        <div class="rk2-field">
 
-            <div class="rk-new-field">
-
-                <label>
-                    Repeat on
-                </label>
-
-                <div
-                    style="
-                        display:flex;
-                        gap:6px;
-                        flex-wrap:wrap;
-                        margin-top:3px;
-                    "
-                >
-
-                    <label class="rk-new-checkbox">
-                        <input
-                            type="checkbox"
-                            value="0"
-                            data-rk-repeat-day
-                        >
-                        Sun
-                    </label>
-
-                    <label class="rk-new-checkbox">
-                        <input
-                            type="checkbox"
-                            value="1"
-                            data-rk-repeat-day
-                        >
-                        Mon
-                    </label>
-
-                    <label class="rk-new-checkbox">
-                        <input
-                            type="checkbox"
-                            value="2"
-                            data-rk-repeat-day
-                        >
-                        Tue
-                    </label>
-
-                    <label class="rk-new-checkbox">
-                        <input
-                            type="checkbox"
-                            value="3"
-                            data-rk-repeat-day
-                        >
-                        Wed
-                    </label>
-
-                    <label class="rk-new-checkbox">
-                        <input
-                            type="checkbox"
-                            value="4"
-                            data-rk-repeat-day
-                        >
-                        Thu
-                    </label>
-
-                    <label class="rk-new-checkbox">
-                        <input
-                            type="checkbox"
-                            value="5"
-                            data-rk-repeat-day
-                        >
-                        Fri
-                    </label>
-
-                    <label class="rk-new-checkbox">
-                        <input
-                            type="checkbox"
-                            value="6"
-                            data-rk-repeat-day
-                        >
-                        Sat
-                    </label>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div
-            class="rk-new-field"
-            style="margin-bottom:10px;"
-        >
-
-            <label>
-                Description
-            </label>
+            <label>Description</label>
 
             <textarea
-                class="rk-new-textarea"
-                id="rkNewDescription"
+                class="rk2-textarea"
+                id="rk2Description"
                 placeholder="Add description"
             ></textarea>
 
         </div>
 
 
-        <div class="rk-new-field">
+        <div
+            class="rk2-field"
+            style="margin-top:12px;"
+        >
 
             <label>
                 Color
             </label>
 
             <div
-                class="rk-new-colors"
-                id="rkNewColors"
+                class="rk2-colors"
+                id="rk2Colors"
             >
 
                 <button
-                    class="rk-new-color selected"
-                    data-rk-color="#4285f4"
+                    class="rk2-color selected"
+                    data-color="#4285f4"
                     style="background:#4285f4"
                     type="button"
                 ></button>
 
                 <button
-                    class="rk-new-color"
-                    data-rk-color="#34a853"
+                    class="rk2-color"
+                    data-color="#34a853"
                     style="background:#34a853"
                     type="button"
                 ></button>
 
                 <button
-                    class="rk-new-color"
-                    data-rk-color="#fbbc04"
+                    class="rk2-color"
+                    data-color="#fbbc04"
                     style="background:#fbbc04"
                     type="button"
                 ></button>
 
                 <button
-                    class="rk-new-color"
-                    data-rk-color="#ea4335"
+                    class="rk2-color"
+                    data-color="#ea4335"
                     style="background:#ea4335"
                     type="button"
                 ></button>
 
                 <button
-                    class="rk-new-color"
-                    data-rk-color="#a142f4"
+                    class="rk2-color"
+                    data-color="#a142f4"
                     style="background:#a142f4"
                     type="button"
                 ></button>
 
                 <button
-                    class="rk-new-color"
-                    data-rk-color="#00acc1"
+                    class="rk2-color"
+                    data-color="#00acc1"
                     style="background:#00acc1"
                     type="button"
                 ></button>
@@ -18247,11 +18409,128 @@ setInterval(
         </div>
 
 
-        <div class="rk-new-modal-footer">
+        <!-- =====================================================
+             WATER
+        ====================================================== -->
+
+        <div class="rk2-water">
+
+            <div class="rk2-water-head">
+
+                <div>
+
+                    <div class="rk2-water-title">
+                        💧 Water Reminder
+                    </div>
+
+                    <div
+                        style="
+                            margin-top:3px;
+                            color:rgba(255,255,255,.32);
+                            font-size:9px;
+                        "
+                    >
+                        Quiet hydration reminders.
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="rk2-water-toggle"
+                    id="rk2WaterToggle"
+                    type="button"
+                ></button>
+
+            </div>
+
+
+            <div class="rk2-water-controls">
+
+                <div>
+
+                    <div
+                        style="
+                            margin-bottom:5px;
+                            color:rgba(255,255,255,.38);
+                            font-size:9px;
+                        "
+                    >
+                        Interval
+                    </div>
+
+                    <select
+                        class="rk2-water-select"
+                        id="rk2WaterInterval"
+                    >
+
+                        <option value="5">
+                            Every 5 minutes
+                        </option>
+
+                        <option
+                            value="10"
+                            selected
+                        >
+                            Every 10 minutes
+                        </option>
+
+                        <option value="15">
+                            Every 15 minutes
+                        </option>
+
+                        <option value="20">
+                            Every 20 minutes
+                        </option>
+
+                        <option value="30">
+                            Every 30 minutes
+                        </option>
+
+                        <option value="60">
+                            Every 60 minutes
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <div
+                        style="
+                            margin-bottom:5px;
+                            color:rgba(255,255,255,.38);
+                            font-size:9px;
+                        "
+                    >
+                        Status
+                    </div>
+
+                    <div
+                        class="rk2-water-status"
+                        id="rk2WaterStatus"
+                    >
+                        Off
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
+
+        <div class="rk2-footer">
 
             <button
-                class="rk-new-delete"
-                id="rkNewDelete"
+                class="rk2-delete"
+                id="rk2Delete"
                 type="button"
                 style="display:none;"
             >
@@ -18259,125 +18538,24 @@ setInterval(
             </button>
 
 
-            <div class="rk-new-actions">
+            <div class="rk2-actions">
 
                 <button
-                    class="rk-new-cancel"
-                    id="rkNewCancel"
+                    class="rk2-cancel"
+                    id="rk2Cancel"
                     type="button"
                 >
                     Cancel
                 </button>
 
                 <button
-                    class="rk-new-save"
-                    id="rkNewSave"
+                    class="rk2-save"
+                    id="rk2Save"
                     type="button"
                 >
                     Save
                 </button>
 
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-   WATER REMINDER
-========================================================= -->
-
-<div id="rkNewWater">
-
-    <div class="rk-water-head">
-
-        <div>
-
-            <div class="rk-water-title">
-                💧 Water Reminder
-            </div>
-
-            <div class="rk-water-sub">
-                A quiet reminder to stay hydrated.
-            </div>
-
-        </div>
-
-
-        <button
-            class="rk-water-toggle"
-            id="rkWaterToggle"
-            type="button"
-        ></button>
-
-    </div>
-
-
-    <div class="rk-water-controls">
-
-        <div>
-
-            <div class="rk-water-label">
-                Interval
-            </div>
-
-            <select
-                class="rk-water-select"
-                id="rkWaterInterval"
-            >
-
-                <option value="5">
-                    Every 5 minutes
-                </option>
-
-                <option
-                    value="10"
-                    selected
-                >
-                    Every 10 minutes
-                </option>
-
-                <option value="15">
-                    Every 15 minutes
-                </option>
-
-                <option value="20">
-                    Every 20 minutes
-                </option>
-
-                <option value="30">
-                    Every 30 minutes
-                </option>
-
-                <option value="60">
-                    Every 60 minutes
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div>
-
-            <div class="rk-water-label">
-                Status
-            </div>
-
-            <div
-                id="rkWaterStatus"
-                style="
-                    height:38px;
-                    display:flex;
-                    align-items:center;
-                    color:rgba(255,255,255,.40);
-                    font-size:10px;
-                "
-            >
-                Off
             </div>
 
         </div>
@@ -18393,187 +18571,138 @@ setInterval(
 
 "use strict";
 
-/* =========================================================
-   CONFIG
-========================================================= */
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+const $ = id => shadow.getElementById(id);
+
+
+const SNAP = 15;
+
+const HOUR = 64;
+
 
 const STORAGE =
-    "rakkez_NEW_isolated_planner_v1";
+    "rakkez_day_planner_v2_events";
+
 
 const WATER_STORAGE =
-    "rakkez_NEW_water_v1";
-
-const SNAP =
-    15;
-
-const HOUR_HEIGHT =
-    64;
+    "rakkez_day_planner_v2_water";
 
 
-/* =========================================================
-   DOM
-========================================================= */
-
-const planner =
-    document.getElementById("rkNewPlanner");
-
-if (!planner) return;
-
-const header =
-    document.getElementById(
-        "rkNewCalendarHeader"
-    );
-
-const allDay =
-    document.getElementById(
-        "rkNewAllDay"
-    );
-
-const scroll =
-    document.getElementById(
-        "rkNewScroll"
-    );
-
-const grid =
-    document.getElementById(
-        "rkNewGrid"
-    );
-
-const title =
-    document.getElementById(
-        "rkNewTitle"
-    );
-
-const modal =
-    document.getElementById(
-        "rkNewPlannerModal"
-    );
-
-
-/* =========================================================
+/* ============================================================
    STATE
-========================================================= */
+============================================================ */
 
-const defaultState = {
+let state = {
 
     events: [],
 
     view: "week",
 
-    currentDate:
-        new Date().toISOString()
+    date: new Date()
 
 };
 
 
-function loadState() {
+let editingId = null;
 
-    try {
 
-        const raw =
-            localStorage.getItem(STORAGE);
+let water = {
 
-        if (!raw) {
+    enabled: false,
 
-            return {
-                ...defaultState
-            };
+    interval: 10
 
-        }
+};
 
-        const parsed =
-            JSON.parse(raw);
 
-        return {
+let waterTimer = null;
 
-            ...defaultState,
 
-            ...parsed,
+/* ============================================================
+   LOAD
+============================================================ */
 
-            events:
-                Array.isArray(parsed.events)
-                    ? parsed.events
-                    : []
+try {
 
-        };
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "RakkeZ New Planner:",
-            error
+    const saved =
+        JSON.parse(
+            localStorage.getItem(STORAGE)
         );
 
-        return {
-            ...defaultState
+    if (Array.isArray(saved)) {
+
+        state.events = saved;
+
+    }
+
+} catch (_) {}
+
+
+try {
+
+    const savedWater =
+        JSON.parse(
+            localStorage.getItem(WATER_STORAGE)
+        );
+
+    if (savedWater) {
+
+        water = {
+            ...water,
+            ...savedWater
         };
 
     }
 
-}
+} catch (_) {}
 
 
-let state =
-    loadState();
+/* ============================================================
+   SAVE
+============================================================ */
 
-
-state.currentDate =
-    new Date(
-        state.currentDate
-    );
-
-
-function saveState() {
+function save() {
 
     localStorage.setItem(
-
         STORAGE,
-
-        JSON.stringify({
-
-            ...state,
-
-            currentDate:
-                state.currentDate
-                .toISOString()
-
-        })
-
+        JSON.stringify(state.events)
     );
 
 }
 
 
-/* =========================================================
-   DATE
-========================================================= */
+function saveWater() {
 
-function startOfDay(date) {
-
-    const d =
-        new Date(date);
-
-    d.setHours(
-        0,
-        0,
-        0,
-        0
+    localStorage.setItem(
+        WATER_STORAGE,
+        JSON.stringify(water)
     );
+
+}
+
+
+/* ============================================================
+   DATES
+============================================================ */
+
+function startDay(date) {
+
+    const d = new Date(date);
+
+    d.setHours(0,0,0,0);
 
     return d;
 
 }
 
 
-function addDays(
-    date,
-    amount
-) {
+function addDays(date, amount) {
 
-    const d =
-        new Date(date);
+    const d = new Date(date);
 
     d.setDate(
         d.getDate() + amount
@@ -18586,45 +18715,38 @@ function addDays(
 
 function dateKey(date) {
 
-    return (
+    const d = new Date(date);
 
-        date.getFullYear() +
+    return [
 
-        "-" +
-
-        String(
-            date.getMonth() + 1
-        ).padStart(2,"0") +
-
-        "-" +
+        d.getFullYear(),
 
         String(
-            date.getDate()
+            d.getMonth()+1
+        ).padStart(2,"0"),
+
+        String(
+            d.getDate()
         ).padStart(2,"0")
 
-    );
+    ].join("-");
 
 }
 
 
 function sameDay(a,b) {
 
-    return (
-        dateKey(a) ===
-        dateKey(b)
-    );
+    return dateKey(a) === dateKey(b);
 
 }
 
 
-function startOfWeek(date) {
+function startWeek(date) {
 
-    const d =
-        startOfDay(date);
+    const d = startDay(date);
 
     d.setDate(
-        d.getDate() -
-        d.getDay()
+        d.getDate() - d.getDay()
     );
 
     return d;
@@ -18632,229 +18754,107 @@ function startOfWeek(date) {
 }
 
 
-function daysForView() {
-
-    if (
-        state.view === "day"
-    ) {
-
-        return [
-            startOfDay(
-                state.currentDate
-            )
-        ];
-
-    }
-
-    const week =
-        startOfWeek(
-            state.currentDate
-        );
-
-    return Array.from(
-        {length:7},
-        (_,i) =>
-            addDays(week,i)
-    );
-
-}
-
-
-/* =========================================================
+/* ============================================================
    TIME
-========================================================= */
+============================================================ */
 
-function minutesFromTime(value) {
+function minutes(value) {
 
-    const parts =
-        String(value)
-        .split(":")
-        .map(Number);
+    if (!value) return 0;
+
+    const p =
+        value.split(":").map(Number);
 
     return (
-        (parts[0] || 0) * 60 +
-        (parts[1] || 0)
+        (p[0] || 0) * 60 +
+        (p[1] || 0)
     );
 
 }
 
 
-function timeFromMinutes(minutes) {
+function time(value) {
 
-    minutes =
-        Math.max(
-            0,
-            Math.min(
-                1439,
-                minutes
-            )
-        );
+    value = Math.max(
+        0,
+        Math.min(1439, value)
+    );
 
     const h =
-        Math.floor(
-            minutes / 60
-        );
+        Math.floor(value / 60);
 
     const m =
-        minutes % 60;
+        value % 60;
 
     return (
-
-        String(h)
-        .padStart(2,"0") +
-
+        String(h).padStart(2,"0") +
         ":" +
-
-        String(m)
-        .padStart(2,"0")
-
+        String(m).padStart(2,"0")
     );
 
 }
 
 
-function snapMinutes(minutes) {
+function snap(value) {
 
-    return (
-        Math.round(
-            minutes / SNAP
-        ) * SNAP
-    );
+    return Math.round(
+        value / SNAP
+    ) * SNAP;
 
 }
 
 
-function formatTime(minutes) {
+function formatTime(value) {
 
     const h =
-        Math.floor(
-            minutes / 60
-        );
+        Math.floor(value / 60);
 
     const m =
-        minutes % 60;
+        value % 60;
 
     const suffix =
-        h >= 12
-            ? "PM"
-            : "AM";
+        h >= 12 ? "PM" : "AM";
 
     const hour =
         h % 12 || 12;
 
     return (
-
         hour +
-
         ":" +
-
-        String(m)
-        .padStart(2,"0") +
-
+        String(m).padStart(2,"0") +
         " " +
-
         suffix
-
     );
 
 }
 
 
 /* =========================================================
-   EVENTS
+   RECURRING
 ========================================================= */
 
-function normalizeEvent(event) {
-
-    return {
-
-        id:
-            event.id ||
-
-            (
-                "rk_event_" +
-
-                Date.now() +
-
-                "_" +
-
-                Math.random()
-                .toString(36)
-                .slice(2)
-            ),
-
-        title:
-            event.title ||
-            "(No title)",
-
-        date:
-            event.date ||
-            dateKey(
-                state.currentDate
-            ),
-
-        start:
-            event.start ||
-            "09:00",
-
-        end:
-            event.end ||
-            "10:00",
-
-        allDay:
-            Boolean(event.allDay),
-
-        description:
-            event.description ||
-            "",
-
-        color:
-            event.color ||
-            "#4285f4",
-
-        repeat:
-            event.repeat ||
-            "none",
-
-        repeatDays:
-            Array.isArray(
-                event.repeatDays
-            )
-                ? event.repeatDays
-                : []
-
-    };
-
-}
-
-
-function eventOccursOn(
-    event,
-    date
-) {
+function occurs(event,date) {
 
     const original =
-        new Date(
-            event.date +
-            "T00:00:00"
+        startDay(
+            new Date(
+                event.date +
+                "T00:00:00"
+            )
         );
 
     const target =
-        startOfDay(date);
+        startDay(date);
 
-    if (
-        target < original
-    ) {
+
+    if (target < original) {
 
         return false;
 
     }
 
 
-    if (
-        event.repeat ===
-        "none"
-    ) {
+    if (event.repeat === "none") {
 
         return (
             dateKey(target) ===
@@ -18864,20 +18864,14 @@ function eventOccursOn(
     }
 
 
-    if (
-        event.repeat ===
-        "daily"
-    ) {
+    if (event.repeat === "daily") {
 
         return true;
 
     }
 
 
-    if (
-        event.repeat ===
-        "weekly"
-    ) {
+    if (event.repeat === "weekly") {
 
         return (
             target.getDay() ===
@@ -18887,28 +18881,12 @@ function eventOccursOn(
     }
 
 
-    if (
-        event.repeat ===
-        "monthly"
-    ) {
+    if (event.repeat === "monthly") {
 
         return (
             target.getDate() ===
             original.getDate()
         );
-
-    }
-
-
-    if (
-        event.repeat ===
-        "custom"
-    ) {
-
-        return event.repeatDays
-            .includes(
-                target.getDay()
-            );
 
     }
 
@@ -18921,16 +18899,37 @@ function eventOccursOn(
 function eventsForDate(date) {
 
     return state.events
-
-        .map(normalizeEvent)
-
         .filter(
             event =>
-                eventOccursOn(
-                    event,
-                    date
-                )
+                occurs(event,date)
         );
+
+}
+
+
+/* =========================================================
+   DAYS
+========================================================= */
+
+function days() {
+
+    if (state.view === "day") {
+
+        return [
+            startDay(state.date)
+        ];
+
+    }
+
+
+    const start =
+        startWeek(state.date);
+
+    return Array.from(
+        {length:7},
+        (_,i) =>
+            addDays(start,i)
+    );
 
 }
 
@@ -18939,32 +18938,34 @@ function eventsForDate(date) {
    HEADER
 ========================================================= */
 
-function renderHeader(days) {
+function renderHeader(list) {
+
+    const header = $("rk2Header");
 
     header.innerHTML = "";
 
     header.style.gridTemplateColumns =
         "58px repeat(" +
-        days.length +
-        ", minmax(100px,1fr))";
+        list.length +
+        ", minmax(110px,1fr))";
 
 
-    const time =
+    const blank =
         document.createElement("div");
 
-    time.className =
-        "rk-new-time-head";
+    blank.className =
+        "rk2-header-time";
 
-    header.appendChild(time);
+    header.appendChild(blank);
 
 
-    days.forEach(day => {
+    list.forEach(day => {
 
         const cell =
             document.createElement("div");
 
         cell.className =
-            "rk-new-day-head";
+            "rk2-day-header";
 
 
         if (
@@ -18974,9 +18975,7 @@ function renderHeader(days) {
             )
         ) {
 
-            cell.classList.add(
-                "today"
-            );
+            cell.classList.add("today");
 
         }
 
@@ -18984,21 +18983,19 @@ function renderHeader(days) {
         const weekday =
             day.toLocaleDateString(
                 undefined,
-                {
-                    weekday:"short"
-                }
+                {weekday:"short"}
             );
 
 
-        cell.innerHTML =
+        cell.innerHTML = `
 
-            "<div>" +
-            weekday +
-            "</div>" +
+            <div>${weekday}</div>
 
-            '<div class="rk-new-day-number">' +
-            day.getDate() +
-            "</div>";
+            <div class="rk2-day-number">
+                ${day.getDate()}
+            </div>
+
+        `;
 
 
         header.appendChild(cell);
@@ -19012,82 +19009,74 @@ function renderHeader(days) {
    ALL DAY
 ========================================================= */
 
-function renderAllDay(days) {
+function renderAllDay(list) {
 
-    allDay.innerHTML = "";
+    const row = $("rk2AllDay");
 
-    allDay.style.gridTemplateColumns =
+    row.innerHTML = "";
+
+    row.style.gridTemplateColumns =
         "58px repeat(" +
-        days.length +
-        ", minmax(100px,1fr))";
+        list.length +
+        ", minmax(110px,1fr))";
 
 
     const label =
         document.createElement("div");
 
     label.className =
-        "rk-new-all-label";
+        "rk2-all-label";
 
     label.textContent =
         "ALL DAY";
 
-    allDay.appendChild(label);
+    row.appendChild(label);
 
 
-    days.forEach(day => {
+    list.forEach(day => {
 
         const cell =
             document.createElement("div");
 
         cell.className =
-            "rk-new-all-cell";
+            "rk2-all-cell";
 
 
-        const events =
-            eventsForDate(day)
-            .filter(
-                event =>
-                    event.allDay
-            );
+        eventsForDate(day)
+            .filter(e => e.allDay)
+            .forEach(event => {
 
+                const item =
+                    document.createElement("div");
 
-        events.forEach(event => {
+                item.className =
+                    "rk2-all-event";
 
-            const item =
-                document.createElement("div");
+                item.textContent =
+                    event.title;
 
-            item.className =
-                "rk-new-all-event";
+                item.style.background =
+                    event.color;
 
-            item.textContent =
-                event.title;
+                item.addEventListener(
+                    "dblclick",
+                    () =>
+                        openEdit(event)
+                );
 
-            item.style.background =
-                event.color;
+                cell.appendChild(item);
 
-
-            item.addEventListener(
-                "click",
-                () =>
-                    openEventModal(event)
-            );
-
-
-            cell.appendChild(item);
-
-        });
+            });
 
 
         cell.addEventListener(
             "dblclick",
             () =>
-                openNewEventModal(
-                    day
-                )
+                openCreate(day,540,600)
         );
 
 
-        allDay.appendChild(cell);
+        row.appendChild(cell);
 
     });
 
@@ -19095,10 +19084,10 @@ function renderAllDay(days) {
 
 
 /* =========================================================
-   GRID LINES
+   LINES
 ========================================================= */
 
-function createTimeLines(column) {
+function lines(column) {
 
     for (
         let hour = 0;
@@ -19110,25 +19099,19 @@ function createTimeLines(column) {
             document.createElement("div");
 
         line.className =
-            "rk-new-hour-line";
+            "rk2-hour-line";
 
         line.style.top =
-            (
-                hour *
-                HOUR_HEIGHT
-            ) +
-            "px";
+            hour * HOUR + "px";
 
         column.appendChild(line);
 
 
-        if (
-            hour < 24
-        ) {
+        if (hour < 24) {
 
             for (
-                let q = 1;
-                q < 4;
+                let q=1;
+                q<4;
                 q++
             ) {
 
@@ -19136,21 +19119,15 @@ function createTimeLines(column) {
                     document.createElement("div");
 
                 quarter.className =
-                    "rk-new-quarter-line";
+                    "rk2-quarter-line";
 
                 quarter.style.top =
                     (
-                        (
-                            hour +
-                            q / 4
-                        ) *
-                        HOUR_HEIGHT
-                    ) +
-                    "px";
+                        hour +
+                        q / 4
+                    ) * HOUR + "px";
 
-                column.appendChild(
-                    quarter
-                );
+                column.appendChild(quarter);
 
             }
 
@@ -19161,11 +19138,11 @@ function createTimeLines(column) {
 }
 
 
-function createTimeLabels(column) {
+function labels(column) {
 
     for (
-        let hour = 0;
-        hour <= 24;
+        let hour=0;
+        hour<24;
         hour++
     ) {
 
@@ -19173,29 +19150,302 @@ function createTimeLabels(column) {
             document.createElement("div");
 
         label.className =
-            "rk-new-time-label";
+            "rk2-time-label";
 
         label.style.top =
-            (
-                hour *
-                HOUR_HEIGHT
-            ) +
-            "px";
+            hour * HOUR + "px";
 
-        if (
-            hour < 24
-        ) {
-
-            label.textContent =
-                formatTime(
-                    hour * 60
-                );
-
-        }
+        label.textContent =
+            formatTime(hour * 60);
 
         column.appendChild(label);
 
     }
+
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+function renderGrid(list) {
+
+    const grid =
+        $("rk2Grid");
+
+    grid.innerHTML = "";
+
+    grid.style.gridTemplateColumns =
+        "58px repeat(" +
+        list.length +
+        ", minmax(110px,1fr))";
+
+
+    const timeColumn =
+        document.createElement("div");
+
+    timeColumn.className =
+        "rk2-time-column";
+
+    lines(timeColumn);
+
+    labels(timeColumn);
+
+    grid.appendChild(timeColumn);
+
+
+    list.forEach(day => {
+
+        const column =
+            document.createElement("div");
+
+        column.className =
+            "rk2-day-column";
+
+        column.dataset.date =
+            dateKey(day);
+
+
+        lines(column);
+
+
+        const layer =
+            document.createElement("div");
+
+        layer.className =
+            "rk2-events-layer";
+
+
+        column.appendChild(layer);
+
+
+        setupCreateDrag(
+            column,
+            day,
+            layer
+        );
+
+
+        renderEvents(
+            layer,
+            eventsForDate(day)
+                .filter(e => !e.allDay),
+            day
+        );
+
+
+        grid.appendChild(column);
+
+    });
+
+
+    addNow(list);
+
+}
+
+
+/* =========================================================
+   RENDER EVENTS
+========================================================= */
+
+function renderEvents(
+    layer,
+    events,
+    day
+) {
+
+    const list =
+        events.map(event => {
+
+            const start =
+                minutes(event.start);
+
+            const end =
+                Math.max(
+                    start + SNAP,
+                    minutes(event.end)
+                );
+
+            return {
+                event,
+                start,
+                end
+            };
+
+        }).sort(
+            (a,b) =>
+                a.start-b.start
+        );
+
+
+    const groups = [];
+
+
+    list.forEach(item => {
+
+        let placed = false;
+
+
+        for (
+            const group of groups
+        ) {
+
+            if (
+                !group.some(
+                    other =>
+                        item.start <
+                        other.end &&
+                        item.end >
+                        other.start
+                )
+            ) {
+
+                group.push(item);
+
+                item.group = group;
+
+                placed = true;
+
+                break;
+
+            }
+
+        }
+
+
+        if (!placed) {
+
+            const group = [item];
+
+            groups.push(group);
+
+            item.group = group;
+
+        }
+
+    });
+
+
+    list.forEach(item => {
+
+        const event =
+            item.event;
+
+        const start =
+            item.start;
+
+        const end =
+            item.end;
+
+
+        const top =
+            start / 60 * HOUR;
+
+
+        const height =
+            Math.max(
+                18,
+                (end-start) /
+                60 *
+                HOUR
+            );
+
+
+        const group =
+            item.group;
+
+
+        const index =
+            group.indexOf(item);
+
+
+        const width =
+            100 / group.length;
+
+
+        const left =
+            width * index;
+
+
+        const el =
+            document.createElement("div");
+
+        el.className =
+            "rk2-event";
+
+
+        el.style.top =
+            top + "px";
+
+        el.style.height =
+            height + "px";
+
+        el.style.left =
+            left + "%";
+
+        el.style.width =
+            "calc(" +
+            width +
+            "% - 3px)";
+
+
+        el.style.background =
+            event.color;
+
+
+        el.innerHTML = `
+
+            <div class="rk2-event-title">
+                ${escapeHTML(event.title)}
+            </div>
+
+            ${
+                height >= 32
+                ?
+                `<div class="rk2-event-time">
+                    ${formatTime(start)}
+                    –
+                    ${formatTime(end)}
+                </div>`
+                :
+                ""
+            }
+
+            <div class="rk2-resize"></div>
+
+        `;
+
+
+        setupDrag(
+            el,
+            event,
+            day
+        );
+
+
+        setupResize(
+            el.querySelector(".rk2-resize"),
+            el,
+            event
+        );
+
+
+        el.addEventListener(
+            "dblclick",
+            e => {
+
+                e.stopPropagation();
+
+                openEdit(event);
+
+            }
+        );
+
+
+        layer.appendChild(el);
+
+    });
 
 }
 
@@ -19207,7 +19457,7 @@ function createTimeLabels(column) {
 let createDrag = null;
 
 
-function getMinutesFromPointer(
+function pointerMinutes(
     column,
     clientY
 ) {
@@ -19215,22 +19465,18 @@ function getMinutesFromPointer(
     const rect =
         column.getBoundingClientRect();
 
-    const y =
-        clientY -
-        rect.top;
 
-    const raw =
-        (
-            y /
-            HOUR_HEIGHT
-        ) *
-        60;
+    const y =
+        clientY - rect.top;
+
 
     return Math.max(
         0,
         Math.min(
             1439,
-            snapMinutes(raw)
+            snap(
+                y / HOUR * 60
+            )
         )
     );
 
@@ -19249,20 +19495,41 @@ function setupCreateDrag(
 
             if (
                 e.target.closest(
-                    ".rk-new-event"
+                    ".rk2-event"
                 )
-            ) return;
+            ) {
+                return;
+            }
 
-            if (
-                e.button !== 0
-            ) return;
+
+            if (e.button !== 0) {
+                return;
+            }
 
 
             const start =
-                getMinutesFromPointer(
+                pointerMinutes(
                     column,
                     e.clientY
                 );
+
+
+            const preview =
+                document.createElement("div");
+
+            preview.className =
+                "rk2-preview";
+
+
+            const label =
+                document.createElement("div");
+
+            label.className =
+                "rk2-preview-label";
+
+            preview.appendChild(label);
+
+            layer.appendChild(preview);
 
 
             createDrag = {
@@ -19275,12 +19542,9 @@ function setupCreateDrag(
 
                 current:start,
 
-                layer,
+                preview,
 
-                pointerId:
-                    e.pointerId,
-
-                preview:null
+                pointerId:e.pointerId
 
             };
 
@@ -19290,29 +19554,7 @@ function setupCreateDrag(
             );
 
 
-            const preview =
-                document.createElement("div");
-
-            preview.className =
-                "rk-new-preview";
-
-
-            const label =
-                document.createElement("div");
-
-            label.className =
-                "rk-new-preview-label";
-
-            preview.appendChild(label);
-
-            layer.appendChild(preview);
-
-
-            createDrag.preview =
-                preview;
-
-
-            updateCreatePreview(
+            updateCreate(
                 e.clientY
             );
 
@@ -19329,11 +19571,13 @@ function setupCreateDrag(
 
             if (
                 !createDrag ||
-                createDrag.column !==
-                column
-            ) return;
+                createDrag.column !== column
+            ) {
+                return;
+            }
 
-            updateCreatePreview(
+
+            updateCreate(
                 e.clientY
             );
 
@@ -19347,12 +19591,13 @@ function setupCreateDrag(
 
             if (
                 !createDrag ||
-                createDrag.column !==
-                column
-            ) return;
+                createDrag.column !== column
+            ) {
+                return;
+            }
 
 
-            updateCreatePreview(
+            updateCreate(
                 e.clientY
             );
 
@@ -19376,10 +19621,10 @@ function setupCreateDrag(
 
 
             if (
-                end - start >= SNAP
+                end-start >= SNAP
             ) {
 
-                openNewEventModal(
+                openCreate(
                     data.day,
                     start,
                     end
@@ -19388,9 +19633,7 @@ function setupCreateDrag(
             }
 
 
-            if (
-                data.preview
-            ) {
+            if (data.preview) {
 
                 data.preview.remove();
 
@@ -19405,36 +19648,33 @@ function setupCreateDrag(
 }
 
 
-function updateCreatePreview(
-    clientY
-) {
+function updateCreate(y) {
 
-    if (!createDrag)
-        return;
+    if (!createDrag) return;
 
 
-    const minutes =
-        getMinutesFromPointer(
+    const current =
+        pointerMinutes(
             createDrag.column,
-            clientY
+            y
         );
 
 
     createDrag.current =
-        minutes;
+        current;
 
 
     const start =
         Math.min(
             createDrag.start,
-            minutes
+            current
         );
 
 
     const end =
         Math.max(
             createDrag.start,
-            minutes
+            current
         );
 
 
@@ -19443,36 +19683,26 @@ function updateCreatePreview(
 
 
     preview.style.top =
-        (
-            start /
-            60 *
-            HOUR_HEIGHT
-        ) +
-        "px";
+        start / 60 * HOUR + "px";
 
 
     preview.style.height =
         Math.max(
-            (
-                (end - start) /
-                60 *
-                HOUR_HEIGHT
-            ),
-            4
-        ) +
-        "px";
+            4,
+            (end-start) /
+            60 *
+            HOUR
+        ) + "px";
 
 
-    preview.style.left =
-        "0";
+    preview.style.left = "0";
 
-    preview.style.right =
-        "0";
+    preview.style.right = "0";
 
 
     const label =
         preview.querySelector(
-            ".rk-new-preview-label"
+            ".rk2-preview-label"
         );
 
 
@@ -19483,8 +19713,8 @@ function updateCreatePreview(
             " – " +
             formatTime(
                 Math.max(
-                    end,
-                    start + SNAP
+                    start+SNAP,
+                    end
                 )
             );
 
@@ -19497,7 +19727,7 @@ function updateCreatePreview(
    EVENT DRAG
 ========================================================= */
 
-function setupEventDrag(
+function setupDrag(
     element,
     event,
     originalDay
@@ -19512,59 +19742,44 @@ function setupEventDrag(
 
             if (
                 e.target.closest(
-                    ".rk-new-resize"
+                    ".rk2-resize"
                 )
-            ) return;
+            ) {
+                return;
+            }
 
 
-            if (
-                e.target.closest(
-                    ".rk-new-edit"
-                )
-            ) return;
-
-
-            if (
-                e.button !== 0
-            ) return;
+            if (e.button !== 0) {
+                return;
+            }
 
 
             const start =
-                minutesFromTime(
-                    event.start
-                );
+                minutes(event.start);
 
 
             const end =
-                minutesFromTime(
-                    event.end
-                );
-
-
-            const duration =
-                Math.max(
-                    SNAP,
-                    end - start
-                );
+                minutes(event.end);
 
 
             drag = {
 
                 start,
 
-                duration,
+                duration:
+                    Math.max(
+                        SNAP,
+                        end-start
+                    ),
 
                 startX:e.clientX,
 
                 startY:e.clientY,
 
-                currentDay:
-                    new Date(
-                        originalDay
-                    ),
+                day:
+                    new Date(originalDay),
 
-                currentMinutes:
-                    start
+                minutes:start
 
             };
 
@@ -19589,13 +19804,7 @@ function setupEventDrag(
         "pointermove",
         e => {
 
-            if (!drag)
-                return;
-
-
-            const dx =
-                e.clientX -
-                drag.startX;
+            if (!drag) return;
 
 
             const dy =
@@ -19603,32 +19812,34 @@ function setupEventDrag(
                 drag.startY;
 
 
-            const days =
-                daysForView();
+            const dx =
+                e.clientX -
+                drag.startX;
 
 
-            const gridWidth =
-                grid.getBoundingClientRect()
-                .width;
+            const list =
+                days();
+
+
+            const gridRect =
+                $("rk2Grid")
+                    .getBoundingClientRect();
 
 
             const dayWidth =
                 (
-                    gridWidth -
-                    58
-                ) /
-                days.length;
+                    gridRect.width - 58
+                ) / list.length;
 
 
-            const dayOffset =
+            const offset =
                 Math.round(
-                    dx /
-                    dayWidth
+                    dx / dayWidth
                 );
 
 
-            const targetIndex =
-                days.findIndex(
+            const originalIndex =
+                list.findIndex(
                     d =>
                         sameDay(
                             d,
@@ -19637,51 +19848,41 @@ function setupEventDrag(
                 );
 
 
-            const nextIndex =
+            const index =
                 Math.max(
                     0,
                     Math.min(
-                        days.length - 1,
-                        targetIndex +
-                        dayOffset
+                        list.length-1,
+                        originalIndex +
+                        offset
                     )
                 );
 
 
-            drag.currentDay =
+            drag.day =
                 new Date(
-                    days[nextIndex]
+                    list[index]
                 );
 
 
-            const delta =
-                (
-                    dy /
-                    HOUR_HEIGHT
-                ) *
-                60;
-
-
-            drag.currentMinutes =
+            drag.minutes =
                 Math.max(
                     0,
                     Math.min(
                         1439 -
                         drag.duration,
-                        snapMinutes(
+                        snap(
                             drag.start +
-                            delta
+                            dy / HOUR * 60
                         )
                     )
                 );
 
 
             element.style.top =
-                (
-                    drag.currentMinutes /
-                    60 *
-                    HOUR_HEIGHT
-                ) +
+                drag.minutes /
+                60 *
+                HOUR +
                 "px";
 
         }
@@ -19692,48 +19893,22 @@ function setupEventDrag(
         "pointerup",
         () => {
 
-            if (!drag)
-                return;
+            if (!drag) return;
 
 
             event.date =
-                dateKey(
-                    drag.currentDay
-                );
+                dateKey(drag.day);
 
 
             event.start =
-                timeFromMinutes(
-                    drag.currentMinutes
-                );
+                time(drag.minutes);
 
 
             event.end =
-                timeFromMinutes(
-                    Math.min(
-                        1439,
-                        drag.currentMinutes +
-                        drag.duration
-                    )
+                time(
+                    drag.minutes +
+                    drag.duration
                 );
-
-
-            const index =
-                state.events.findIndex(
-                    item =>
-                        item.id ===
-                        event.id
-                );
-
-
-            if (
-                index !== -1
-            ) {
-
-                state.events[index] =
-                    event;
-
-            }
 
 
             element.classList.remove(
@@ -19743,8 +19918,7 @@ function setupEventDrag(
 
             drag = null;
 
-
-            saveState();
+            save();
 
             render();
 
@@ -19764,7 +19938,7 @@ function setupResize(
     event
 ) {
 
-    let resize = null;
+    let resizing = null;
 
 
     handle.addEventListener(
@@ -19774,20 +19948,16 @@ function setupResize(
             e.stopPropagation();
 
 
-            resize = {
+            resizing = {
 
                 start:
-                    minutesFromTime(
-                        event.start
-                    ),
-
-                originalEnd:
-                    minutesFromTime(
-                        event.end
-                    ),
+                    minutes(event.start),
 
                 startY:
-                    e.clientY
+                    e.clientY,
+
+                originalEnd:
+                    minutes(event.end)
 
             };
 
@@ -19807,64 +19977,52 @@ function setupResize(
         "pointermove",
         e => {
 
-            if (!resize)
-                return;
+            if (!resizing) return;
 
 
             const dy =
                 e.clientY -
-                resize.startY;
+                resizing.startY;
 
 
             const delta =
-                (
-                    dy /
-                    HOUR_HEIGHT
-                ) *
-                60;
+                dy / HOUR * 60;
 
 
-            let newEnd =
-                snapMinutes(
-                    resize.originalEnd +
+            let end =
+                snap(
+                    resizing.originalEnd +
                     delta
                 );
 
 
-            newEnd =
+            end =
                 Math.max(
-                    resize.start +
-                    SNAP,
+                    resizing.start + SNAP,
                     Math.min(
                         1439,
-                        newEnd
+                        end
                     )
                 );
 
 
             event.end =
-                timeFromMinutes(
-                    newEnd
-                );
+                time(end);
 
 
             const height =
                 (
-                    (
-                        newEnd -
-                        resize.start
-                    ) /
-                    60
-                ) *
-                HOUR_HEIGHT;
+                    end -
+                    resizing.start
+                ) / 60 *
+                HOUR;
 
 
             element.style.height =
                 Math.max(
                     18,
                     height
-                ) +
-                "px";
+                ) + "px";
 
         }
     );
@@ -19874,32 +20032,12 @@ function setupResize(
         "pointerup",
         () => {
 
-            if (!resize)
-                return;
+            if (!resizing) return;
 
 
-            const index =
-                state.events.findIndex(
-                    item =>
-                        item.id ===
-                        event.id
-                );
+            resizing = null;
 
-
-            if (
-                index !== -1
-            ) {
-
-                state.events[index] =
-                    event;
-
-            }
-
-
-            resize = null;
-
-
-            saveState();
+            save();
 
             render();
 
@@ -19910,290 +20048,14 @@ function setupResize(
 
 
 /* =========================================================
-   RENDER EVENTS
-========================================================= */
-
-function renderEvents(
-    layer,
-    events,
-    day
-) {
-
-    const timed =
-        events
-
-        .map(event => {
-
-            const start =
-                minutesFromTime(
-                    event.start
-                );
-
-            const end =
-                Math.max(
-                    start + SNAP,
-                    minutesFromTime(
-                        event.end
-                    )
-                );
-
-            return {
-                event,
-                start,
-                end
-            };
-
-        })
-
-        .sort(
-            (a,b) =>
-                a.start -
-                b.start
-        );
-
-
-    const groups = [];
-
-
-    timed.forEach(item => {
-
-        let placed = false;
-
-
-        for (
-            const group
-            of groups
-        ) {
-
-            const overlaps =
-                group.some(
-                    other =>
-                        item.start <
-                        other.end &&
-                        item.end >
-                        other.start
-                );
-
-
-            if (!overlaps) {
-
-                group.push(item);
-
-                item.group =
-                    group;
-
-                placed = true;
-
-                break;
-
-            }
-
-        }
-
-
-        if (!placed) {
-
-            const group =
-                [item];
-
-            groups.push(group);
-
-            item.group =
-                group;
-
-        }
-
-    });
-
-
-    timed.forEach(item => {
-
-        const event =
-            item.event;
-
-
-        const top =
-            (
-                item.start /
-                60
-            ) *
-            HOUR_HEIGHT;
-
-
-        const height =
-            Math.max(
-                (
-                    (
-                        item.end -
-                        item.start
-                    ) /
-                    60
-                ) *
-                HOUR_HEIGHT,
-                18
-            );
-
-
-        const group =
-            item.group;
-
-
-        const index =
-            group.indexOf(item);
-
-
-        const width =
-            100 /
-            group.length;
-
-
-        const left =
-            width *
-            index;
-
-
-        const element =
-            document.createElement("div");
-
-
-        element.className =
-            "rk-new-event";
-
-
-        element.style.top =
-            top + "px";
-
-
-        element.style.height =
-            height + "px";
-
-
-        element.style.left =
-            left + "%";
-
-
-        element.style.width =
-            "calc(" +
-            width +
-            "% - 3px)";
-
-
-        element.style.background =
-            event.color;
-
-
-        element.innerHTML =
-
-            '<div class="rk-new-event-title">' +
-
-            escapeHTML(
-                event.title
-            ) +
-
-            "</div>" +
-
-            (
-                height >= 32
-
-                ?
-
-                '<div class="rk-new-event-time">' +
-
-                formatTime(
-                    item.start
-                ) +
-
-                " – " +
-
-                formatTime(
-                    item.end
-                ) +
-
-                "</div>"
-
-                :
-
-                ""
-            ) +
-
-            '<button class="rk-new-edit" type="button">✎</button>' +
-
-            '<div class="rk-new-resize"></div>';
-
-
-        const edit =
-            element.querySelector(
-                ".rk-new-edit"
-            );
-
-
-        edit.addEventListener(
-            "click",
-            e => {
-
-                e.stopPropagation();
-
-                openEventModal(
-                    event
-                );
-
-            }
-        );
-
-
-        setupEventDrag(
-            element,
-            event,
-            day
-        );
-
-
-        const resize =
-            element.querySelector(
-                ".rk-new-resize"
-            );
-
-
-        setupResize(
-            resize,
-            element,
-            event
-        );
-
-
-        element.addEventListener(
-            "dblclick",
-            e => {
-
-                e.stopPropagation();
-
-                openEventModal(
-                    event
-                );
-
-            }
-        );
-
-
-        layer.appendChild(
-            element
-        );
-
-    });
-
-}
-
-
-/* =========================================================
    CURRENT TIME
 ========================================================= */
 
-function addCurrentTime(days) {
+function addNow(list) {
 
-    if (
-        state.view === "month"
-    )
+    if (state.view === "month") {
         return;
+    }
 
 
     const now =
@@ -20201,59 +20063,47 @@ function addCurrentTime(days) {
 
 
     const index =
-        days.findIndex(
-            day =>
-                sameDay(
-                    day,
-                    now
-                )
+        list.findIndex(
+            d =>
+                sameDay(d,now)
         );
 
 
-    if (
-        index === -1
-    )
+    if (index === -1) {
         return;
+    }
 
 
     const columns =
-        grid.querySelectorAll(
-            ".rk-new-day-column"
-        );
+        $("rk2Grid")
+            .querySelectorAll(
+                ".rk2-day-column"
+            );
 
 
     const column =
         columns[index];
 
 
-    if (!column)
-        return;
+    if (!column) return;
 
 
     const line =
         document.createElement("div");
 
-
     line.className =
-        "rk-new-current-time";
+        "rk2-now";
 
 
-    const minutes =
-        now.getHours() *
-        60 +
-
+    const value =
+        now.getHours()*60 +
         now.getMinutes() +
-
-        now.getSeconds() /
-        60;
+        now.getSeconds()/60;
 
 
     line.style.top =
-        (
-            minutes /
-            60 *
-            HOUR_HEIGHT
-        ) +
+        value / 60 *
+        HOUR +
         "px";
 
 
@@ -20261,18 +20111,18 @@ function addCurrentTime(days) {
         document.createElement("div");
 
     dot.className =
-        "rk-new-current-dot";
+        "rk2-now-dot";
 
 
     const label =
         document.createElement("div");
 
     label.className =
-        "rk-new-current-label";
+        "rk2-now-label";
 
     label.textContent =
         formatTime(
-            Math.floor(minutes)
+            Math.floor(value)
         );
 
 
@@ -20286,115 +20136,28 @@ function addCurrentTime(days) {
 
 
 /* =========================================================
-   GRID
-========================================================= */
-
-function renderGrid(days) {
-
-    grid.innerHTML = "";
-
-
-    grid.style.gridTemplateColumns =
-        "58px repeat(" +
-        days.length +
-        ", minmax(100px,1fr))";
-
-
-    const time =
-        document.createElement("div");
-
-    time.className =
-        "rk-new-time-column";
-
-
-    createTimeLabels(time);
-
-    createTimeLines(time);
-
-    grid.appendChild(time);
-
-
-    days.forEach(day => {
-
-        const column =
-            document.createElement("div");
-
-        column.className =
-            "rk-new-day-column";
-
-
-        column.dataset.date =
-            dateKey(day);
-
-
-        createTimeLines(
-            column
-        );
-
-
-        const layer =
-            document.createElement("div");
-
-        layer.className =
-            "rk-new-events-layer";
-
-
-        column.appendChild(layer);
-
-
-        setupCreateDrag(
-            column,
-            day,
-            layer
-        );
-
-
-        const events =
-            eventsForDate(day)
-            .filter(
-                event =>
-                    !event.allDay
-            );
-
-
-        renderEvents(
-            layer,
-            events,
-            day
-        );
-
-
-        grid.appendChild(
-            column
-        );
-
-    });
-
-
-    addCurrentTime(days);
-
-}
-
-
-/* =========================================================
    MONTH
 ========================================================= */
 
 function renderMonth() {
 
-    header.innerHTML = "";
-
-    allDay.style.display =
+    $("rk2AllDay").style.display =
         "none";
+
+
+    $("rk2Header").innerHTML =
+        "";
+
+
+    const scroll =
+        $("rk2Scroll");
 
 
     scroll.innerHTML = "";
 
 
     const month =
-        new Date(
-            state.currentDate
-        );
+        new Date(state.date);
 
 
     const first =
@@ -20406,7 +20169,7 @@ function renderMonth() {
 
 
     const start =
-        startOfWeek(first);
+        startWeek(first);
 
 
     const container =
@@ -20414,62 +20177,51 @@ function renderMonth() {
 
 
     container.className =
-        "rk-new-month";
+        "rk2-month";
 
 
-    const weekdays =
-        Array.from(
-            {length:7},
-            (_,i) =>
-                addDays(
-                    start,
-                    i
-                ).toLocaleDateString(
-                    undefined,
-                    {
-                        weekday:"short"
-                    }
-                )
-        );
+    for (
+        let i=0;
+        i<7;
+        i++
+    ) {
 
+        const d =
+            addDays(start,i);
 
-    weekdays.forEach(name => {
 
         const cell =
             document.createElement("div");
 
         cell.className =
-            "rk-new-month-weekday";
+            "rk2-month-weekday";
 
         cell.textContent =
-            name;
+            d.toLocaleDateString(
+                undefined,
+                {weekday:"short"}
+            );
 
-        container.appendChild(
-            cell
-        );
+        container.appendChild(cell);
 
-    });
+    }
 
 
     for (
-        let i = 0;
-        i < 42;
+        let i=0;
+        i<42;
         i++
     ) {
 
         const date =
-            addDays(
-                start,
-                i
-            );
+            addDays(start,i);
 
 
         const cell =
             document.createElement("div");
 
-
         cell.className =
-            "rk-new-month-cell";
+            "rk2-month-cell";
 
 
         if (
@@ -20501,118 +20253,67 @@ function renderMonth() {
         const number =
             document.createElement("div");
 
-
         number.className =
-            "rk-new-month-number";
-
+            "rk2-month-number";
 
         number.textContent =
             date.getDate();
 
-
         cell.appendChild(number);
 
 
-        const events =
-            eventsForDate(date);
+        eventsForDate(date)
+            .slice(0,5)
+            .forEach(event => {
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "rk2-month-event";
+
+                item.style.background =
+                    event.color;
+
+                item.textContent =
+                    (
+                        event.allDay
+                        ? ""
+                        :
+                        formatTime(
+                            minutes(
+                                event.start
+                            )
+                        ) + " "
+                    ) +
+                    event.title;
 
 
-        events
-        .slice(0,5)
-        .forEach(event => {
+                item.addEventListener(
+                    "dblclick",
+                    e => {
 
-            const item =
-                document.createElement("div");
+                        e.stopPropagation();
 
+                        openEdit(event);
 
-            item.className =
-                "rk-new-month-event";
-
-
-            item.textContent =
-
-                (
-                    event.allDay
-                    ? ""
-                    :
-                    formatTime(
-                        minutesFromTime(
-                            event.start
-                        )
-                    ) + " "
-                ) +
-
-                event.title;
+                    }
+                );
 
 
-            item.style.background =
-                event.color;
+                cell.appendChild(item);
 
-
-            item.addEventListener(
-                "click",
-                e => {
-
-                    e.stopPropagation();
-
-                    openEventModal(
-                        event
-                    );
-
-                }
-            );
-
-
-            cell.appendChild(item);
-
-        });
-
-
-        if (
-            events.length > 5
-        ) {
-
-            const more =
-                document.createElement("div");
-
-
-            more.textContent =
-                "+" +
-                (
-                    events.length -
-                    5
-                ) +
-                " more";
-
-
-            more.style.cssText =
-                `
-                color:rgba(255,255,255,.38);
-                font-size:8px;
-                padding:2px 4px;
-                `;
-
-
-            cell.appendChild(more);
-
-        }
+            });
 
 
         cell.addEventListener(
             "dblclick",
-            () => {
-
-                state.currentDate =
-                    new Date(date);
-
-                state.view =
-                    "day";
-
-                saveState();
-
-                render();
-
-            }
+            () =>
+                openCreate(
+                    date,
+                    540,
+                    600
+                )
         );
 
 
@@ -20621,58 +20322,7 @@ function renderMonth() {
     }
 
 
-    scroll.appendChild(
-        container
-    );
-
-}
-
-
-/* =========================================================
-   MAIN RENDER
-========================================================= */
-
-function render() {
-
-    if (
-        state.view === "month"
-    ) {
-
-        renderMonth();
-
-        updateTitle();
-
-        updateViews();
-
-        return;
-
-    }
-
-
-    allDay.style.display =
-        "grid";
-
-
-    scroll.innerHTML = "";
-
-    scroll.appendChild(
-        grid
-    );
-
-
-    const days =
-        daysForView();
-
-
-    renderHeader(days);
-
-    renderAllDay(days);
-
-    renderGrid(days);
-
-    updateTitle();
-
-    updateViews();
+    scroll.appendChild(container);
 
 }
 
@@ -20683,16 +20333,14 @@ function render() {
 
 function updateTitle() {
 
-    const date =
-        state.currentDate;
+    const d =
+        state.date;
 
 
-    if (
-        state.view === "day"
-    ) {
+    if (state.view === "day") {
 
-        title.textContent =
-            date.toLocaleDateString(
+        $("rk2Title").textContent =
+            d.toLocaleDateString(
                 undefined,
                 {
                     weekday:"long",
@@ -20707,38 +20355,13 @@ function updateTitle() {
     }
 
 
-    if (
-        state.view === "week"
-    ) {
+    if (state.view === "month") {
 
-        const start =
-            startOfWeek(date);
-
-
-        const end =
-            addDays(
-                start,
-                6
-            );
-
-
-        title.textContent =
-
-            start.toLocaleDateString(
+        $("rk2Title").textContent =
+            d.toLocaleDateString(
                 undefined,
                 {
-                    month:"short",
-                    day:"numeric"
-                }
-            ) +
-
-            " – " +
-
-            end.toLocaleDateString(
-                undefined,
-                {
-                    month:"short",
-                    day:"numeric",
+                    month:"long",
                     year:"numeric"
                 }
             );
@@ -20748,11 +20371,25 @@ function updateTitle() {
     }
 
 
-    title.textContent =
-        date.toLocaleDateString(
+    const start =
+        startWeek(d);
+
+
+    const end =
+        addDays(start,6);
+
+
+    $("rk2Title").textContent =
+        start.toLocaleDateString(
+            undefined,
+            {month:"short",day:"numeric"}
+        ) +
+        " – " +
+        end.toLocaleDateString(
             undefined,
             {
-                month:"long",
+                month:"short",
+                day:"numeric",
                 year:"numeric"
             }
         );
@@ -20761,43 +20398,592 @@ function updateTitle() {
 
 
 /* =========================================================
-   VIEWS
+   MAIN RENDER
 ========================================================= */
 
-function updateViews() {
+function render() {
 
-    document
-    .querySelectorAll(
-        "#rkNewPlanner [data-rk-view]"
-    )
-    .forEach(button => {
+    updateTitle();
 
-        button.classList.toggle(
-            "active",
 
-            button.dataset.rkView ===
-            state.view
-        );
+    shadow
+        .querySelectorAll(
+            "[data-rk2-view]"
+        )
+        .forEach(button => {
 
-    });
+            button.classList.toggle(
+                "active",
+                button.dataset.rk2View ===
+                state.view
+            );
+
+        });
+
+
+    if (
+        state.view === "month"
+    ) {
+
+        renderMonth();
+
+        return;
+
+    }
+
+
+    $("rk2AllDay").style.display =
+        "grid";
+
+
+    $("rk2Scroll").innerHTML = "";
+
+
+    $("rk2Scroll").appendChild(
+        $("rk2Grid")
+    );
+
+
+    const list =
+        days();
+
+
+    renderHeader(list);
+
+    renderAllDay(list);
+
+    renderGrid(list);
 
 }
 
 
-document
-.querySelectorAll(
-    "#rkNewPlanner [data-rk-view]"
-)
-.forEach(button => {
+/* =========================================================
+   MODAL
+========================================================= */
 
-    button.addEventListener(
+function openCreate(
+    day,
+    start=540,
+    end=600
+) {
+
+    editingId = null;
+
+
+    $("rk2ModalHeading")
+        .textContent =
+        "Create event";
+
+
+    $("rk2EventTitle").value =
+        "";
+
+
+    $("rk2EventDate").value =
+        dateKey(day);
+
+
+    $("rk2Start").value =
+        time(start);
+
+
+    $("rk2End").value =
+        time(end);
+
+
+    $("rk2Description").value =
+        "";
+
+
+    $("rk2Repeat").value =
+        "none";
+
+
+    $("rk2AllDayCheck").checked =
+        false;
+
+
+    $("rk2Delete").style.display =
+        "none";
+
+
+    setColor("#4285f4");
+
+    updateTimedFields();
+
+
+    $("rk2Modal")
+        .classList.add("open");
+
+
+    setTimeout(
+        () =>
+            $("rk2EventTitle")
+                .focus(),
+        50
+    );
+
+}
+
+
+function openEdit(event) {
+
+    editingId =
+        event.id;
+
+
+    $("rk2ModalHeading")
+        .textContent =
+        "Edit event";
+
+
+    $("rk2EventTitle").value =
+        event.title;
+
+
+    $("rk2EventDate").value =
+        event.date;
+
+
+    $("rk2Start").value =
+        event.start;
+
+
+    $("rk2End").value =
+        event.end;
+
+
+    $("rk2Description").value =
+        event.description || "";
+
+
+    $("rk2Repeat").value =
+        event.repeat || "none";
+
+
+    $("rk2AllDayCheck").checked =
+        Boolean(event.allDay);
+
+
+    $("rk2Delete").style.display =
+        "block";
+
+
+    setColor(
+        event.color ||
+        "#4285f4"
+    );
+
+
+    updateTimedFields();
+
+
+    $("rk2Modal")
+        .classList.add("open");
+
+}
+
+
+function closeModal() {
+
+    $("rk2Modal")
+        .classList.remove("open");
+
+    editingId = null;
+
+}
+
+
+function setColor(color) {
+
+    shadow
+        .querySelectorAll(
+            ".rk2-color"
+        )
+        .forEach(button => {
+
+            button.classList.toggle(
+                "selected",
+                button.dataset.color === color
+            );
+
+        });
+
+}
+
+
+function updateTimedFields() {
+
+    $("rk2TimedFields").style.display =
+        $("rk2AllDayCheck").checked
+        ? "none"
+        : "block";
+
+}
+
+
+/* =========================================================
+   MODAL EVENTS
+========================================================= */
+
+$("rk2AllDayCheck")
+    .addEventListener(
+        "change",
+        updateTimedFields
+    );
+
+
+shadow
+    .querySelectorAll(
+        ".rk2-color"
+    )
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () =>
+                setColor(
+                    button.dataset.color
+                )
+        );
+
+    });
+
+
+$("rk2Save")
+    .addEventListener(
         "click",
         () => {
 
-            state.view =
-                button.dataset.rkView;
+            const title =
+                $("rk2EventTitle")
+                    .value
+                    .trim();
 
-            saveState();
+
+            if (!title) {
+
+                $("rk2EventTitle")
+                    .focus();
+
+                return;
+
+            }
+
+
+            const date =
+                $("rk2EventDate")
+                    .value;
+
+
+            const allDay =
+                $("rk2AllDayCheck")
+                    .checked;
+
+
+            let start =
+                $("rk2Start").value ||
+                "09:00";
+
+
+            let end =
+                $("rk2End").value ||
+                "10:00";
+
+
+            if (
+                !allDay &&
+                minutes(end) <=
+                minutes(start)
+            ) {
+
+                end =
+                    time(
+                        Math.min(
+                            1439,
+                            minutes(start)+60
+                        )
+                    );
+
+            }
+
+
+            const color =
+                shadow
+                    .querySelector(
+                        ".rk2-color.selected"
+                    )
+                    ?.dataset.color ||
+                "#4285f4";
+
+
+            const data = {
+
+                title,
+
+                date,
+
+                start:
+                    allDay
+                    ? "00:00"
+                    : start,
+
+                end:
+                    allDay
+                    ? "23:59"
+                    : end,
+
+                allDay,
+
+                description:
+                    $("rk2Description")
+                        .value
+                        .trim(),
+
+                color,
+
+                repeat:
+                    $("rk2Repeat")
+                        .value
+
+            };
+
+
+            if (editingId) {
+
+                const index =
+                    state.events.findIndex(
+                        e =>
+                            e.id ===
+                            editingId
+                    );
+
+
+                if (index !== -1) {
+
+                    state.events[index] = {
+
+                        ...state.events[index],
+
+                        ...data
+
+                    };
+
+                }
+
+            } else {
+
+                state.events.push({
+
+                    id:
+                        "rk2_" +
+                        Date.now() +
+                        "_" +
+                        Math.random()
+                            .toString(36)
+                            .slice(2),
+
+                    ...data
+
+                });
+
+            }
+
+
+            save();
+
+            closeModal();
+
+            render();
+
+        }
+    );
+
+
+$("rk2Delete")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (!editingId) return;
+
+
+            state.events =
+                state.events.filter(
+                    e =>
+                        e.id !==
+                        editingId
+                );
+
+
+            save();
+
+            closeModal();
+
+            render();
+
+        }
+    );
+
+
+$("rk2Cancel")
+    .addEventListener(
+        "click",
+        closeModal
+    );
+
+
+$("rk2ModalClose")
+    .addEventListener(
+        "click",
+        closeModal
+    );
+
+
+$("rk2Modal")
+    .addEventListener(
+        "click",
+        e => {
+
+            if (
+                e.target ===
+                $("rk2Modal")
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   VIEW BUTTONS
+========================================================= */
+
+shadow
+    .querySelectorAll(
+        "[data-rk2-view]"
+    )
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                state.view =
+                    button.dataset.rk2View;
+
+                render();
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+$("rk2Prev")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                state.view === "day"
+            ) {
+
+                state.date =
+                    addDays(
+                        state.date,
+                        -1
+                    );
+
+            } else if (
+                state.view === "week"
+            ) {
+
+                state.date =
+                    addDays(
+                        state.date,
+                        -7
+                    );
+
+            } else {
+
+                state.date =
+                    new Date(
+                        state.date
+                            .getFullYear(),
+                        state.date
+                            .getMonth()-1,
+                        1
+                    );
+
+            }
+
+
+            render();
+
+        }
+    );
+
+
+$("rk2Next")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                state.view === "day"
+            ) {
+
+                state.date =
+                    addDays(
+                        state.date,
+                        1
+                    );
+
+            } else if (
+                state.view === "week"
+            ) {
+
+                state.date =
+                    addDays(
+                        state.date,
+                        7
+                    );
+
+            } else {
+
+                state.date =
+                    new Date(
+                        state.date
+                            .getFullYear(),
+                        state.date
+                            .getMonth()+1,
+                        1
+                    );
+
+            }
+
+
+            render();
+
+        }
+    );
+
+
+$("rk2Today")
+    .addEventListener(
+        "click",
+        () => {
+
+            state.date =
+                new Date();
 
             render();
 
@@ -20806,139 +20992,86 @@ document
         }
     );
 
-});
+
+$("rk2Create")
+    .addEventListener(
+        "click",
+        () => {
+
+            openCreate(
+                state.date
+            );
+
+        }
+    );
 
 
 /* =========================================================
-   NAVIGATION
+   OPEN / CLOSE PLANNER
 ========================================================= */
 
-document
-.getElementById("rkNewPrev")
-.addEventListener(
-    "click",
-    () => {
+$("rk2Launcher")
+    .addEventListener(
+        "click",
+        () => {
+
+            $("rk2Overlay")
+                .classList.add("open");
+
+            render();
+
+            autoScroll();
+
+        }
+    );
+
+
+$("rk2Close")
+    .addEventListener(
+        "click",
+        () => {
+
+            $("rk2Overlay")
+                .classList.remove("open");
+
+        }
+    );
+
+
+$("rk2Overlay")
+    .addEventListener(
+        "click",
+        e => {
+
+            if (
+                e.target ===
+                $("rk2Overlay")
+            ) {
+
+                $("rk2Overlay")
+                    .classList.remove("open");
+
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    e => {
 
         if (
-            state.view ===
-            "day"
+            e.key === "Escape"
         ) {
 
-            state.currentDate =
-                addDays(
-                    state.currentDate,
-                    -1
-                );
+            $("rk2Modal")
+                .classList.remove("open");
+
+            $("rk2Overlay")
+                .classList.remove("open");
 
         }
-
-        else if (
-            state.view ===
-            "week"
-        ) {
-
-            state.currentDate =
-                addDays(
-                    state.currentDate,
-                    -7
-                );
-
-        }
-
-        else {
-
-            state.currentDate =
-                new Date(
-                    state.currentDate
-                    .getFullYear(),
-
-                    state.currentDate
-                    .getMonth() - 1,
-
-                    1
-                );
-
-        }
-
-
-        saveState();
-
-        render();
-
-    }
-);
-
-
-document
-.getElementById("rkNewNext")
-.addEventListener(
-    "click",
-    () => {
-
-        if (
-            state.view ===
-            "day"
-        ) {
-
-            state.currentDate =
-                addDays(
-                    state.currentDate,
-                    1
-                );
-
-        }
-
-        else if (
-            state.view ===
-            "week"
-        ) {
-
-            state.currentDate =
-                addDays(
-                    state.currentDate,
-                    7
-                );
-
-        }
-
-        else {
-
-            state.currentDate =
-                new Date(
-                    state.currentDate
-                    .getFullYear(),
-
-                    state.currentDate
-                    .getMonth() + 1,
-
-                    1
-                );
-
-        }
-
-
-        saveState();
-
-        render();
-
-    }
-);
-
-
-document
-.getElementById("rkNewToday")
-.addEventListener(
-    "click",
-    () => {
-
-        state.currentDate =
-            new Date();
-
-        saveState();
-
-        render();
-
-        autoScroll();
 
     }
 );
@@ -20951,44 +21084,38 @@ document
 function autoScroll() {
 
     if (
-        state.view ===
-        "month"
-    )
+        state.view === "month"
+    ) {
+
         return;
+
+    }
 
 
     const now =
         new Date();
 
 
-    const target =
-        (
-            now.getHours() -
-            2
-        ) *
-        HOUR_HEIGHT +
-
-        (
+    const top =
+        Math.max(
+            0,
+            (
+                now.getHours() - 2
+            ) * HOUR +
             now.getMinutes() /
             60 *
-            HOUR_HEIGHT
+            HOUR
         );
 
 
     setTimeout(
         () => {
 
-            scroll.scrollTo({
-
-                top:
-                    Math.max(
-                        0,
-                        target
-                    ),
-
-                behavior:"smooth"
-
-            });
+            $("rk2Scroll")
+                .scrollTo({
+                    top,
+                    behavior:"smooth"
+                });
 
         },
         80
@@ -20998,757 +21125,40 @@ function autoScroll() {
 
 
 /* =========================================================
-   MODAL
+   WATER
 ========================================================= */
 
-let editingId =
-    null;
+function updateWaterUI() {
 
-
-function setColor(color) {
-
-    document
-    .querySelectorAll(
-        "#rkNewPlannerModal [data-rk-color]"
-    )
-    .forEach(button => {
-
-        button.classList.toggle(
-            "selected",
-
-            button.dataset.rkColor ===
-            color
-        );
-
-    });
-
-}
-
-
-function openNewEventModal(
-    day,
-    start = 540,
-    end = 600
-) {
-
-    editingId = null;
-
-
-    document
-    .getElementById("rkNewEventTitle")
-    .value = "";
-
-
-    document
-    .getElementById("rkNewEventDate")
-    .value =
-        dateKey(day);
-
-
-    document
-    .getElementById("rkNewStart")
-    .value =
-        timeFromMinutes(start);
-
-
-    document
-    .getElementById("rkNewEnd")
-    .value =
-        timeFromMinutes(end);
-
-
-    document
-    .getElementById("rkNewDescription")
-    .value = "";
-
-
-    document
-    .getElementById("rkNewRepeat")
-    .value =
-        "none";
-
-
-    document
-    .getElementById("rkNewAllDay")
-    .checked =
-        false;
-
-
-    document
-    .querySelectorAll(
-        "[data-rk-repeat-day]"
-    )
-    .forEach(
-        checkbox =>
-            checkbox.checked =
-                false
-    );
-
-
-    document
-    .getElementById("rkNewDelete")
-    .style.display =
-        "none";
-
-
-    setColor(
-        "#4285f4"
-    );
-
-
-    updateTimedFields();
-
-
-    document
-    .getElementById("rkNewCustomDays")
-    .style.display =
-        "none";
-
-
-    modal.classList.add(
-        "show"
-    );
-
-
-    setTimeout(
-        () =>
-            document
-            .getElementById(
-                "rkNewEventTitle"
-            )
-            .focus(),
-        40
-    );
-
-}
-
-
-function openEventModal(event) {
-
-    editingId =
-        event.id;
-
-
-    document
-    .getElementById("rkNewEventTitle")
-    .value =
-        event.title;
-
-
-    document
-    .getElementById("rkNewEventDate")
-    .value =
-        event.date;
-
-
-    document
-    .getElementById("rkNewStart")
-    .value =
-        event.start;
-
-
-    document
-    .getElementById("rkNewEnd")
-    .value =
-        event.end;
-
-
-    document
-    .getElementById("rkNewDescription")
-    .value =
-        event.description ||
-        "";
-
-
-    document
-    .getElementById("rkNewRepeat")
-    .value =
-        event.repeat ||
-        "none";
-
-
-    document
-    .getElementById("rkNewAllDay")
-    .checked =
-        Boolean(
-            event.allDay
+    $("rk2WaterToggle")
+        .classList.toggle(
+            "on",
+            water.enabled
         );
 
 
-    document
-    .querySelectorAll(
-        "[data-rk-repeat-day]"
-    )
-    .forEach(
-        checkbox => {
-
-            checkbox.checked =
-                event.repeatDays
-                ?.includes(
-                    Number(
-                        checkbox.value
-                    )
-                ) ||
-                false;
-
-        }
-    );
-
-
-    setColor(
-        event.color ||
-        "#4285f4"
-    );
-
-
-    document
-    .getElementById("rkNewDelete")
-    .style.display =
-        "block";
-
-
-    document
-    .getElementById("rkNewCustomDays")
-    .style.display =
-        event.repeat ===
-        "custom"
-            ? "block"
-            : "none";
-
-
-    updateTimedFields();
-
-
-    modal.classList.add(
-        "show"
-    );
-
-}
-
-
-function closeModal() {
-
-    modal.classList.remove(
-        "show"
-    );
-
-    editingId =
-        null;
-
-}
-
-
-/* =========================================================
-   FORM
-========================================================= */
-
-document
-.getElementById("rkNewAllDay")
-.addEventListener(
-    "change",
-    updateTimedFields
-);
-
-
-function updateTimedFields() {
-
-    const allDay =
-        document
-        .getElementById(
-            "rkNewAllDay"
-        )
-        .checked;
-
-
-    document
-    .getElementById(
-        "rkNewTimedFields"
-    )
-    .style.display =
-        allDay
-            ? "none"
-            : "block";
-
-}
-
-
-document
-.getElementById("rkNewRepeat")
-.addEventListener(
-    "change",
-    e => {
-
-        document
-        .getElementById(
-            "rkNewCustomDays"
-        )
-        .style.display =
-            e.target.value ===
-            "custom"
-                ? "block"
-                : "none";
-
-    }
-);
-
-
-/* =========================================================
-   COLORS
-========================================================= */
-
-document
-.querySelectorAll(
-    "#rkNewPlannerModal [data-rk-color]"
-)
-.forEach(button => {
-
-    button.addEventListener(
-        "click",
-        () =>
-            setColor(
-                button.dataset.rkColor
-            )
-    );
-
-});
-
-
-/* =========================================================
-   SAVE
-========================================================= */
-
-document
-.getElementById("rkNewSave")
-.addEventListener(
-    "click",
-    () => {
-
-        const eventTitle =
-            document
-            .getElementById(
-                "rkNewEventTitle"
-            )
-            .value
-            .trim();
-
-
-        if (!eventTitle) {
-
-            document
-            .getElementById(
-                "rkNewEventTitle"
-            )
-            .focus();
-
-            return;
-
-        }
-
-
-        const date =
-            document
-            .getElementById(
-                "rkNewEventDate"
-            )
-            .value;
-
-
-        const allDay =
-            document
-            .getElementById(
-                "rkNewAllDay"
-            )
-            .checked;
-
-
-        let start =
-            document
-            .getElementById(
-                "rkNewStart"
-            )
-            .value ||
-            "09:00";
-
-
-        let end =
-            document
-            .getElementById(
-                "rkNewEnd"
-            )
-            .value ||
-            "10:00";
-
-
-        if (
-            !allDay &&
-            minutesFromTime(end) <=
-            minutesFromTime(start)
-        ) {
-
-            end =
-                timeFromMinutes(
-                    Math.min(
-                        1439,
-
-                        minutesFromTime(
-                            start
-                        ) + 60
-                    )
-                );
-
-        }
-
-
-        const repeat =
-            document
-            .getElementById(
-                "rkNewRepeat"
-            )
-            .value;
-
-
-        const repeatDays =
-            Array.from(
-                document.querySelectorAll(
-                    "[data-rk-repeat-day]:checked"
-                )
-            )
-            .map(
-                checkbox =>
-                    Number(
-                        checkbox.value
-                    )
-            );
-
-
-        const selected =
-            document.querySelector(
-                "#rkNewPlannerModal [data-rk-color].selected"
-            );
-
-
-        const color =
-            selected?.dataset.rkColor ||
-            "#4285f4";
-
-
-        const data = {
-
-            title:
-                eventTitle,
-
-            date,
-
-            start:
-                allDay
-                    ? "00:00"
-                    : start,
-
-            end:
-                allDay
-                    ? "23:59"
-                    : end,
-
-            allDay,
-
-            description:
-                document
-                .getElementById(
-                    "rkNewDescription"
-                )
-                .value
-                .trim(),
-
-            color,
-
-            repeat,
-
-            repeatDays
-
-        };
-
-
-        if (editingId) {
-
-            const index =
-                state.events.findIndex(
-                    event =>
-                        event.id ===
-                        editingId
-                );
-
-
-            if (
-                index !== -1
-            ) {
-
-                state.events[index] =
-                    {
-                        ...state.events[index],
-                        ...data
-                    };
-
-            }
-
-        }
-
-        else {
-
-            state.events.push({
-
-                id:
-                    "rk_event_" +
-
-                    Date.now() +
-
-                    "_" +
-
-                    Math.random()
-                    .toString(36)
-                    .slice(2),
-
-                ...data
-
-            });
-
-        }
-
-
-        saveState();
-
-        closeModal();
-
-        render();
-
-    }
-);
-
-
-/* =========================================================
-   DELETE
-========================================================= */
-
-document
-.getElementById("rkNewDelete")
-.addEventListener(
-    "click",
-    () => {
-
-        if (!editingId)
-            return;
-
-
-        state.events =
-            state.events.filter(
-                event =>
-                    event.id !==
-                    editingId
-            );
-
-
-        saveState();
-
-        closeModal();
-
-        render();
-
-    }
-);
-
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-document
-.getElementById("rkNewCreate")
-.addEventListener(
-    "click",
-    () =>
-        openNewEventModal(
-            state.currentDate
-        )
-);
-
-
-document
-.getElementById("rkNewCancel")
-.addEventListener(
-    "click",
-    closeModal
-);
-
-
-document
-.getElementById("rkNewClose")
-.addEventListener(
-    "click",
-    closeModal
-);
-
-
-modal.addEventListener(
-    "click",
-    e => {
-
-        if (
-            e.target === modal
-        ) {
-
-            closeModal();
-
-        }
-
-    }
-);
-
-
-document.addEventListener(
-    "keydown",
-    e => {
-
-        if (
-            e.key === "Escape"
-        ) {
-
-            closeModal();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(value) {
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =========================================================
-   WATER REMINDER
-========================================================= */
-
-const waterToggle =
-    document.getElementById(
-        "rkWaterToggle"
-    );
-
-const waterInterval =
-    document.getElementById(
-        "rkWaterInterval"
-    );
-
-const waterStatus =
-    document.getElementById(
-        "rkWaterStatus"
-    );
-
-
-let waterTimer =
-    null;
-
-
-let waterState = {
-
-    enabled:false,
-
-    interval:10
-
-};
-
-
-function loadWater() {
-
-    try {
-
-        const raw =
-            localStorage.getItem(
-                WATER_STORAGE
-            );
-
-        if (!raw)
-            return;
-
-
-        const parsed =
-            JSON.parse(raw);
-
-
-        waterState =
-            {
-                ...waterState,
-                ...parsed
-            };
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "RakkeZ Water:",
-            error
-        );
-
-    }
-
-}
-
-
-function saveWater() {
-
-    localStorage.setItem(
-        WATER_STORAGE,
-        JSON.stringify(
-            waterState
-        )
-    );
+    $("rk2WaterInterval").value =
+        String(water.interval);
+
+
+    $("rk2WaterStatus")
+        .textContent =
+        water.enabled
+        ? "On"
+        : "Off";
 
 }
 
 
 function stopWater() {
 
-    if (
-        waterTimer
-    ) {
+    if (waterTimer) {
 
         clearTimeout(
             waterTimer
         );
 
-        waterTimer =
-            null;
+        waterTimer = null;
 
     }
 
@@ -21798,21 +21208,20 @@ function requestNotification() {
 }
 
 
-function playWaterSound() {
+function waterSound() {
 
     try {
 
-        const AudioContext =
+        const Audio =
             window.AudioContext ||
             window.webkitAudioContext;
 
 
-        if (!AudioContext)
-            return;
+        if (!Audio) return;
 
 
         const ctx =
-            new AudioContext();
+            new Audio();
 
 
         const oscillator =
@@ -21827,43 +21236,42 @@ function playWaterSound() {
             "sine";
 
 
-        oscillator.frequency.setValueAtTime(
-            850,
-            ctx.currentTime
-        );
+        oscillator.frequency
+            .setValueAtTime(
+                850,
+                ctx.currentTime
+            );
 
 
-        oscillator.frequency.exponentialRampToValueAtTime(
-            420,
-            ctx.currentTime +
-            .18
-        );
+        oscillator.frequency
+            .exponentialRampToValueAtTime(
+                420,
+                ctx.currentTime + .18
+            );
 
 
-        gain.gain.setValueAtTime(
-            .0001,
-            ctx.currentTime
-        );
+        gain.gain
+            .setValueAtTime(
+                .0001,
+                ctx.currentTime
+            );
 
 
-        gain.gain.exponentialRampToValueAtTime(
-            .045,
-            ctx.currentTime +
-            .012
-        );
+        gain.gain
+            .exponentialRampToValueAtTime(
+                .045,
+                ctx.currentTime + .012
+            );
 
 
-        gain.gain.exponentialRampToValueAtTime(
-            .0001,
-            ctx.currentTime +
-            .22
-        );
+        gain.gain
+            .exponentialRampToValueAtTime(
+                .0001,
+                ctx.currentTime + .22
+            );
 
 
-        oscillator.connect(
-            gain
-        );
-
+        oscillator.connect(gain);
 
         gain.connect(
             ctx.destination
@@ -21873,8 +21281,7 @@ function playWaterSound() {
         oscillator.start();
 
         oscillator.stop(
-            ctx.currentTime +
-            .23
+            ctx.currentTime + .23
         );
 
 
@@ -21882,37 +21289,23 @@ function playWaterSound() {
             () => {
 
                 try {
-
                     ctx.close();
-
-                }
-
-                catch (_) {}
+                } catch (_) {}
 
             },
-            400
+            500
         );
 
-    }
-
-    catch (error) {
-
-        console.warn(
-            "RakkeZ Water Sound:",
-            error
-        );
-
-    }
+    } catch (_) {}
 
 }
 
 
 function waterNotification() {
 
-    if (
-        !waterState.enabled
-    )
+    if (!water.enabled) {
         return;
+    }
 
 
     if (
@@ -21932,21 +21325,12 @@ function waterNotification() {
                 }
             );
 
-        }
-
-        catch (error) {
-
-            console.warn(
-                "RakkeZ Water:",
-                error
-            );
-
-        }
+        } catch (_) {}
 
     }
 
 
-    playWaterSound();
+    waterSound();
 
 }
 
@@ -21956,21 +21340,9 @@ function scheduleWater() {
     stopWater();
 
 
-    if (
-        !waterState.enabled
-    )
+    if (!water.enabled) {
         return;
-
-
-    const ms =
-        Math.max(
-            1,
-            Number(
-                waterState.interval
-            )
-        ) *
-        60 *
-        1000;
+    }
 
 
     waterTimer =
@@ -21982,89 +21354,70 @@ function scheduleWater() {
                 scheduleWater();
 
             },
-            ms
-        );
-
-}
-
-
-function updateWaterUI() {
-
-    waterToggle.classList.toggle(
-        "on",
-        waterState.enabled
-    );
-
-
-    waterInterval.value =
-        String(
-            waterState.interval
-        );
-
-
-    waterStatus.textContent =
-        waterState.enabled
-            ? "On"
-            : "Off";
-
-}
-
-
-waterToggle.addEventListener(
-    "click",
-    async () => {
-
-        const next =
-            !waterState.enabled;
-
-
-        if (next) {
-
-            await requestNotification();
-
-        }
-
-
-        waterState.enabled =
-            next;
-
-
-        saveWater();
-
-        updateWaterUI();
-
-        scheduleWater();
-
-    }
-);
-
-
-waterInterval.addEventListener(
-    "change",
-    () => {
-
-        waterState.interval =
             Math.max(
                 1,
-                Number(
-                    waterInterval.value
-                )
-            );
+                Number(water.interval)
+            ) *
+            60 *
+            1000
+        );
+
+}
 
 
-        saveWater();
+$("rk2WaterToggle")
+    .addEventListener(
+        "click",
+        async () => {
+
+            const next =
+                !water.enabled;
 
 
-        if (
-            waterState.enabled
-        ) {
+            if (next) {
+
+                await requestNotification();
+
+            }
+
+
+            water.enabled =
+                next;
+
+
+            saveWater();
+
+            updateWaterUI();
 
             scheduleWater();
 
         }
+    );
 
-    }
-);
+
+$("rk2WaterInterval")
+    .addEventListener(
+        "change",
+        () => {
+
+            water.interval =
+                Number(
+                    $("rk2WaterInterval")
+                        .value
+                );
+
+
+            saveWater();
+
+
+            if (water.enabled) {
+
+                scheduleWater();
+
+            }
+
+        }
+    );
 
 
 /* =========================================================
@@ -22075,48 +21428,41 @@ setInterval(
     () => {
 
         if (
-            state.view ===
-            "month"
-        )
+            state.view === "month"
+        ) {
             return;
+        }
 
 
         const line =
-            grid.querySelector(
-                ".rk-new-current-time"
-            );
+            $("rk2Grid")
+                .querySelector(
+                    ".rk2-now"
+                );
 
 
-        if (!line)
-            return;
+        if (!line) return;
 
 
         const now =
             new Date();
 
 
-        const minutes =
-            now.getHours() *
-            60 +
-
+        const value =
+            now.getHours()*60 +
             now.getMinutes() +
-
-            now.getSeconds() /
-            60;
+            now.getSeconds()/60;
 
 
         line.style.top =
-            (
-                minutes /
-                60 *
-                HOUR_HEIGHT
-            ) +
+            value / 60 *
+            HOUR +
             "px";
 
 
         const label =
             line.querySelector(
-                ".rk-new-current-label"
+                ".rk2-now-label"
             );
 
 
@@ -22124,9 +21470,7 @@ setInterval(
 
             label.textContent =
                 formatTime(
-                    Math.floor(
-                        minutes
-                    )
+                    Math.floor(value)
                 );
 
         }
@@ -22137,59 +21481,44 @@ setInterval(
 
 
 /* =========================================================
-   PUBLIC API
+   ESCAPE HTML
 ========================================================= */
 
-window.RakkeZNewDayPlanner = {
+function escapeHTML(value) {
 
-    refresh:
-        () => render(),
+    return String(value)
 
-    addEvent:
-        event => {
+        .replace(
+            /&/g,
+            "&amp;"
+        )
 
-            state.events.push(
-                normalizeEvent(
-                    event
-                )
-            );
+        .replace(
+            /</g,
+            "&lt;"
+        )
 
-            saveState();
+        .replace(
+            />/g,
+            "&gt;"
+        )
 
-            render();
+        .replace(
+            /"/g,
+            "&quot;"
+        )
 
-        },
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
-    deleteEvent:
-        id => {
-
-            state.events =
-                state.events.filter(
-                    event =>
-                        event.id !==
-                        id
-                );
-
-            saveState();
-
-            render();
-
-        },
-
-    openCreate:
-        () =>
-            openNewEventModal(
-                state.currentDate
-            )
-
-};
+}
 
 
 /* =========================================================
-   INIT
+   INITIALIZE
 ========================================================= */
-
-loadWater();
 
 updateWaterUI();
 
@@ -22197,19 +21526,45 @@ scheduleWater();
 
 render();
 
-autoScroll();
 
-setTimeout(
-    autoScroll,
-    500
-);
+/* =========================================================
+   PUBLIC API
+========================================================= */
+
+window.RakkeZDayPlannerV2 = {
+
+    open: function () {
+
+        $("rk2Overlay")
+            .classList.add("open");
+
+        render();
+
+        autoScroll();
+
+    },
+
+    close: function () {
+
+        $("rk2Overlay")
+            .classList.remove("open");
+
+    },
+
+    refresh: function () {
+
+        render();
+
+    }
+
+};
+
 
 })();
 
+})();
 </script>
 
-
-    
 </body>
 
 </html>
