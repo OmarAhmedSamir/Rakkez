@@ -278,10 +278,30 @@
         {
             id: "anime-girl",
 
-            name: "✨ NEW ✨ Anime Girl",
+            name: "Anime Girl",
 
             url:
                 "https://image.cdn2.seaart.ai/2024-03-02/cnhb3jde878c73a9lp80/0c7c4c2054c4dd5d4dce8769ef3e4fdc02c9f2d6_high.webp"
+        },
+
+
+        {
+            id: "Lofi-girl",
+
+            name: "Lofi Girl",
+
+            url:
+                "https://wallpaperbat.com/img/147936299-balcony-4k-lo-fi-wallpaper.jpg"
+        },
+
+
+        {
+            id: "Chilling",
+
+            name: "Chilling",
+
+            url:
+                "https://i.ytimg.com/vi/DplXSFdEs2M/maxresdefault.jpg"
         },
 
 
