@@ -4430,9 +4430,12 @@ body.light .rakkez-mini-close,
 
 <!-- =====================================================
      RAKKEZ TIMER ENHANCEMENTS
-     FOCUS / SHORT BREAK / LONG BREAK
-     RESET TIMER
-     MINI TIMER
+     - Focus / Short Break / Long Break tabs
+     - Reset Current Segment
+     - Reset Full Session
+     - Persistent Document Picture-in-Picture Mini Timer
+     - Floating fallback
+     - Safe synchronization with existing RakkeZ timer
 ===================================================== -->
 
 <style>
@@ -4485,15 +4488,6 @@ body.light .rakkez-mini-close,
 
 .rakkez-timer-tab:active {
     transform: scale(.98);
-}
-
-
-/* =====================================================
-   MINI TIMER BUTTON
-===================================================== */
-
-.rakkez-mini-open-btn {
-    font-size: 15px;
 }
 
 
@@ -4603,6 +4597,7 @@ body.light .rakkez-mini-close,
             rgba(80,100,180,.14),
             transparent 40%
         );
+    pointer-events: none;
 }
 
 .rakkez-mini-content {
@@ -4649,10 +4644,15 @@ body.light .rakkez-mini-close,
     color: #fff;
     font-size: 12px;
     cursor: pointer;
+    transition: background .2s ease, transform .15s ease;
 }
 
 .rakkez-mini-buttons button:hover {
     background: rgba(255,255,255,.12);
+}
+
+.rakkez-mini-buttons button:active {
+    transform: scale(.96);
 }
 
 .rakkez-mini-start {
@@ -4665,7 +4665,7 @@ body.light .rakkez-mini-close,
 
 
 /* =====================================================
-   MINI TIMER FALLBACK WINDOW
+   FLOATING FALLBACK
 ===================================================== */
 
 #rakkezMiniFloating {
@@ -4673,7 +4673,7 @@ body.light .rakkez-mini-close,
     right: 20px;
     bottom: 20px;
     width: 280px;
-    min-height: 150px;
+    height: 175px;
     z-index: 2147483000;
     display: none;
     overflow: hidden;
@@ -4685,6 +4685,10 @@ body.light .rakkez-mini-close,
 
 #rakkezMiniFloating.show {
     display: flex;
+}
+
+#rakkezMiniFloating .rakkez-mini-timer {
+    min-height: 100%;
 }
 
 
@@ -4739,7 +4743,6 @@ body.light .rakkez-mini-close,
                 class="rakkez-reset-option"
                 type="button"
             >
-
                 <div class="rakkez-reset-option-text">
 
                     <div class="rakkez-reset-option-title">
@@ -4755,7 +4758,6 @@ body.light .rakkez-mini-close,
                 <div class="rakkez-reset-option-icon">
                     ↻
                 </div>
-
             </button>
 
 
@@ -4764,7 +4766,6 @@ body.light .rakkez-mini-close,
                 class="rakkez-reset-option"
                 type="button"
             >
-
                 <div class="rakkez-reset-option-text">
 
                     <div class="rakkez-reset-option-title">
@@ -4780,7 +4781,6 @@ body.light .rakkez-mini-close,
                 <div class="rakkez-reset-option-icon">
                     ⟳
                 </div>
-
             </button>
 
 
@@ -4800,7 +4800,7 @@ body.light .rakkez-mini-close,
 
 
 <!-- =====================================================
-     MINI TIMER FLOATING FALLBACK
+     MINI TIMER FALLBACK
 ===================================================== -->
 
 <div
@@ -4881,26 +4881,285 @@ body.light .rakkez-mini-close,
     };
 
 
-    const timerElement =
-        $("timer");
-
-    const modeElement =
-        $("modeText");
-
-    const startButton =
-        $("startBtn");
-
-    const resetButton =
-        $("resetBtn");
-
-    const timerCard =
-        document.querySelector(".timer-card");
+    const timerElement = $("timer");
+    const modeElement = $("modeText");
+    const startButton = $("startBtn");
+    const resetButton = $("resetBtn");
+    const timerCard = document.querySelector(".timer-card");
 
 
     /* =================================================
-       CREATE TIMER TABS
-       This allows us to avoid manually modifying the
-       existing timer HTML.
+       SETTINGS
+    ================================================= */
+
+    function getSettings() {
+
+        try {
+
+            return JSON.parse(
+                localStorage.getItem("rakkez_settings") || "{}"
+            );
+
+        } catch (error) {
+
+            return {};
+
+        }
+
+    }
+
+
+    function getModeMinutes(mode) {
+
+        const settings = getSettings();
+
+        if (mode === "short") {
+
+            return Math.max(
+                1,
+                Number(settings.shortBreak || 5)
+            );
+
+        }
+
+        if (mode === "long") {
+
+            return Math.max(
+                1,
+                Number(settings.longBreak || 15)
+            );
+
+        }
+
+        return Math.max(
+            1,
+            Number(settings.focus || 25)
+        );
+
+    }
+
+
+    function modeLabel(mode) {
+
+        if (mode === "short") {
+            return "SHORT BREAK";
+        }
+
+        if (mode === "long") {
+            return "LONG BREAK";
+        }
+
+        return "FOCUS";
+
+    }
+
+
+    function formatTime(seconds) {
+
+        seconds = Math.max(
+            0,
+            Math.floor(Number(seconds) || 0)
+        );
+
+        const minutes =
+            Math.floor(seconds / 60);
+
+        const remaining =
+            seconds % 60;
+
+        return (
+            String(minutes).padStart(2, "0")
+            +
+            ":"
+            +
+            String(remaining).padStart(2, "0")
+        );
+
+    }
+
+
+    function readDisplayedSeconds() {
+
+        if (!timerElement) {
+            return 0;
+        }
+
+        const value =
+            timerElement.textContent
+                .trim()
+                .replace(/[^\d:]/g, "");
+
+        const parts = value.split(":");
+
+        if (parts.length !== 2) {
+            return 0;
+        }
+
+        const minutes =
+            Number(parts[0]);
+
+        const seconds =
+            Number(parts[1]);
+
+        if (
+            !Number.isFinite(minutes) ||
+            !Number.isFinite(seconds)
+        ) {
+            return 0;
+        }
+
+        return (
+            minutes * 60 +
+            seconds
+        );
+
+    }
+
+
+    /* =================================================
+       TIMER STATE
+    ================================================= */
+
+    function readTimerState() {
+
+        try {
+
+            const raw =
+                localStorage.getItem(
+                    "rakkez_timer_state"
+                );
+
+            if (!raw) {
+                return null;
+            }
+
+            return JSON.parse(raw);
+
+        } catch (error) {
+
+            return null;
+
+        }
+
+    }
+
+
+    function writeTimerState(state) {
+
+        try {
+
+            localStorage.setItem(
+                "rakkez_timer_state",
+                JSON.stringify(state)
+            );
+
+            return true;
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ: unable to save timer state",
+                error
+            );
+
+            return false;
+
+        }
+
+    }
+
+
+    function detectMode() {
+
+        const state =
+            readTimerState();
+
+        if (state && state.mode) {
+
+            const mode =
+                String(state.mode).toLowerCase();
+
+            if (
+                mode === "short" ||
+                mode === "shortbreak" ||
+                mode === "short_break"
+            ) {
+                return "short";
+            }
+
+            if (
+                mode === "long" ||
+                mode === "longbreak" ||
+                mode === "long_break"
+            ) {
+                return "long";
+            }
+
+            if (mode === "focus") {
+                return "focus";
+            }
+
+        }
+
+
+        const text =
+            modeElement
+                ? modeElement.textContent
+                    .trim()
+                    .toUpperCase()
+                : "FOCUS";
+
+        if (text.includes("SHORT")) {
+            return "short";
+        }
+
+        if (text.includes("LONG")) {
+            return "long";
+        }
+
+        return "focus";
+
+    }
+
+
+    function isTimerRunning() {
+
+        const state =
+            readTimerState();
+
+        if (state) {
+
+            if (typeof state.running === "boolean") {
+                return state.running;
+            }
+
+            if (typeof state.isRunning === "boolean") {
+                return state.isRunning;
+            }
+
+        }
+
+        if (startButton) {
+
+            const text =
+                startButton.textContent
+                    .trim()
+                    .toUpperCase();
+
+            return (
+                text.includes("PAUSE") ||
+                text.includes("STOP")
+            );
+
+        }
+
+        return false;
+
+    }
+
+
+    /* =================================================
+       TIMER TABS
     ================================================= */
 
     if (
@@ -4917,7 +5176,7 @@ body.light .rakkez-mini-close,
         tabs.innerHTML = `
 
             <button
-                class="rakkez-timer-tab active"
+                class="rakkez-timer-tab"
                 data-rakkez-timer-mode="focus"
                 type="button"
             >
@@ -4942,16 +5201,11 @@ body.light .rakkez-mini-close,
 
         `;
 
-
-        const mode =
-            modeElement;
-
-
-        if (mode) {
+        if (modeElement) {
 
             timerCard.insertBefore(
                 tabs,
-                mode
+                modeElement
             );
 
         } else {
@@ -4963,113 +5217,13 @@ body.light .rakkez-mini-close,
     }
 
 
-    /* =================================================
-       TIMER STATE DETECTION
-    ================================================= */
-
-    function getMode() {
-
-        const text =
-            modeElement
-                ? modeElement.textContent
-                    .trim()
-                    .toUpperCase()
-                : "FOCUS";
-
-
-        if (
-            text.includes("SHORT")
-        ) {
-
-            return "short";
-
-        }
-
-
-        if (
-            text.includes("LONG")
-        ) {
-
-            return "long";
-
-        }
-
-
-        return "focus";
-
-    }
-
-
-    function getSeconds() {
-
-        if (!timerElement) {
-            return 0;
-        }
-
-
-        const value =
-            timerElement.textContent
-                .trim()
-                .split(":");
-
-
-        if (value.length !== 2) {
-            return 0;
-        }
-
-
-        return (
-            Number(value[0]) * 60
-            +
-            Number(value[1])
-        );
-
-    }
-
-
-    function formatTime(seconds) {
-
-        seconds =
-            Math.max(
-                0,
-                Math.floor(
-                    Number(seconds) || 0
-                )
-            );
-
-
-        const minutes =
-            Math.floor(seconds / 60);
-
-        const remaining =
-            seconds % 60;
-
-
-        return (
-            String(minutes).padStart(2, "0")
-            +
-            ":"
-            +
-            String(remaining).padStart(2, "0")
-        );
-
-    }
-
-
-    /* =================================================
-       UPDATE TAB
-    ================================================= */
-
     function updateTabs() {
 
         const current =
-            getMode();
-
+            detectMode();
 
         document
-            .querySelectorAll(
-                ".rakkez-timer-tab"
-            )
+            .querySelectorAll(".rakkez-timer-tab")
             .forEach(function (tab) {
 
                 tab.classList.toggle(
@@ -5083,53 +5237,58 @@ body.light .rakkez-mini-close,
 
 
     /* =================================================
-       CHANGE MODE
+       CHANGE TIMER MODE
     ================================================= */
 
     function changeMode(mode) {
 
-        /*
-         * First try the functions that a normal
-         * RakkeZ timer implementation commonly exposes.
-         */
+        if (
+            mode !== "focus" &&
+            mode !== "short" &&
+            mode !== "long"
+        ) {
+            return false;
+        }
 
-        const candidates = [
+
+        const functions = [
             "setTimerMode",
             "switchTimerMode",
             "changeTimerMode",
             "setMode",
-            "switchMode",
-            "changeMode"
+            "switchMode"
         ];
 
 
         for (
             let i = 0;
-            i < candidates.length;
+            i < functions.length;
             i++
         ) {
 
-            const name =
-                candidates[i];
-
+            const fn =
+                functions[i];
 
             if (
-                typeof window[name] === "function"
+                typeof window[fn] === "function"
             ) {
 
                 try {
 
-                    window[name](mode);
+                    window[fn](mode);
 
-                    updateTabs();
+                    setTimeout(
+                        updateTabs,
+                        50
+                    );
 
                     return true;
 
                 } catch (error) {
 
                     console.warn(
-                        "RakkeZ timer mode:",
-                        name,
+                        "RakkeZ mode function failed:",
+                        fn,
                         error
                     );
 
@@ -5140,40 +5299,35 @@ body.light .rakkez-mini-close,
         }
 
 
-        /*
-         * Fallback:
-         * trigger existing UI buttons if the
-         * application exposes them.
-         */
-
-        const possibleButtons = [
+        const selectors = [
 
             `[data-mode="${mode}"]`,
-
             `[data-timer-mode="${mode}"]`,
-
-            `[data-mode-switch="${mode}"]`
+            `[data-mode-switch="${mode}"]`,
+            `[data-pomodoro-mode="${mode}"]`
 
         ];
 
 
         for (
             let i = 0;
-            i < possibleButtons.length;
+            i < selectors.length;
             i++
         ) {
 
             const button =
                 document.querySelector(
-                    possibleButtons[i]
+                    selectors[i]
                 );
-
 
             if (button) {
 
                 button.click();
 
-                updateTabs();
+                setTimeout(
+                    updateTabs,
+                    50
+                );
 
                 return true;
 
@@ -5183,132 +5337,94 @@ body.light .rakkez-mini-close,
 
 
         /*
-         * If the existing timer stores settings in
-         * localStorage, update the timer visually
-         * without touching statistics.
+         * Safe fallback.
+         *
+         * This changes ONLY timer state.
+         * Statistics are deliberately untouched.
          */
 
-        try {
+        const state =
+            readTimerState();
 
-            const settings =
-                JSON.parse(
-                    localStorage.getItem(
-                        "rakkez_settings"
-                    ) || "{}"
-                );
+        if (state) {
 
+            const seconds =
+                getModeMinutes(mode) * 60;
 
-            let minutes;
+            state.mode =
+                mode;
 
+            state.remaining =
+                seconds;
 
-            if (mode === "focus") {
+            state.total =
+                seconds;
 
-                minutes =
-                    Number(settings.focus || 25);
-
+            if ("running" in state) {
+                state.running = false;
             }
 
-            else if (mode === "short") {
-
-                minutes =
-                    Number(
-                        settings.shortBreak || 5
-                    );
-
+            if ("isRunning" in state) {
+                state.isRunning = false;
             }
 
-            else {
+            writeTimerState(state);
 
-                minutes =
-                    Number(
-                        settings.longBreak || 15
-                    );
-
-            }
-
-
-            /*
-             * Only modify the timer if we can identify
-             * the current timer state object.
-             */
-
-            const stateRaw =
-                localStorage.getItem(
-                    "rakkez_timer_state"
-                );
-
-
-            if (stateRaw) {
-
-                const state =
-                    JSON.parse(stateRaw);
-
-
-                state.mode =
-                    mode;
-
-                state.remaining =
-                    minutes * 60;
-
-                state.total =
-                    minutes * 60;
-
-                state.running =
-                    false;
-
-
-                localStorage.setItem(
-                    "rakkez_timer_state",
-                    JSON.stringify(state)
-                );
-
-
-                if (timerElement) {
-
-                    timerElement.textContent =
-                        formatTime(
-                            minutes * 60
-                        );
-
-                }
-
-
-                if (modeElement) {
-
-                    modeElement.textContent =
-                        mode === "focus"
-                            ? "FOCUS"
-                            : mode === "short"
-                                ? "SHORT BREAK"
-                                : "LONG BREAK";
-
-                }
-
-
-                updateTabs();
-
-                return true;
-
-            }
-
-        } catch (error) {
-
-            console.warn(
-                "RakkeZ timer fallback failed:",
-                error
+            updateVisibleTimer(
+                seconds,
+                mode
             );
+
+            updateTabs();
+
+            return true;
 
         }
 
 
-        return false;
+        /*
+         * If there is no state object,
+         * update only the visual timer.
+         */
+
+        updateVisibleTimer(
+            getModeMinutes(mode) * 60,
+            mode
+        );
+
+        updateTabs();
+
+        return true;
 
     }
 
 
-    /* =================================================
-       TAB EVENTS
-    ================================================= */
+    function updateVisibleTimer(
+        seconds,
+        mode
+    ) {
+
+        if (timerElement) {
+
+            timerElement.textContent =
+                formatTime(seconds);
+
+        }
+
+        if (modeElement) {
+
+            modeElement.textContent =
+                modeLabel(mode);
+
+        }
+
+        updateTabTitle(
+            seconds,
+            false
+        );
+
+    }
+
 
     document.addEventListener(
         "click",
@@ -5319,20 +5435,12 @@ body.light .rakkez-mini-close,
                     ".rakkez-timer-tab"
                 );
 
-
             if (!tab) {
                 return;
             }
 
-
             const mode =
                 tab.dataset.rakkezTimerMode;
-
-
-            if (!mode) {
-                return;
-            }
-
 
             changeMode(mode);
 
@@ -5359,34 +5467,25 @@ body.light .rakkez-mini-close,
 
     function openReset() {
 
-        if (resetOverlay) {
-
-            resetOverlay.classList.add(
-                "show"
-            );
-
+        if (!resetOverlay) {
+            return;
         }
+
+        resetOverlay.classList.add("show");
 
     }
 
 
     function closeReset() {
 
-        if (resetOverlay) {
-
-            resetOverlay.classList.remove(
-                "show"
-            );
-
+        if (!resetOverlay) {
+            return;
         }
+
+        resetOverlay.classList.remove("show");
 
     }
 
-
-    /*
-     * Capture reset click before the old
-     * reset handler can execute.
-     */
 
     if (resetButton) {
 
@@ -5418,62 +5517,107 @@ body.light .rakkez-mini-close,
 
                 closeReset();
 
-
-                /*
-                 * Try existing timer reset functions.
-                 */
-
-                const functions = [
-                    "resetTimer",
-                    "resetCurrentTimer",
-                    "resetCurrentSegment"
-                ];
-
-
-                for (
-                    let i = 0;
-                    i < functions.length;
-                    i++
-                ) {
-
-                    const fn =
-                        functions[i];
-
-
-                    if (
-                        typeof window[fn] === "function"
-                    ) {
-
-                        try {
-
-                            window[fn]();
-
-                            return;
-
-                        } catch (error) {
-
-                            console.warn(
-                                fn,
-                                error
-                            );
-
-                        }
-
-                    }
-
-                }
-
-
-                /*
-                 * Fallback using saved state.
-                 */
-
-                resetFromStorage(
-                    getMode()
-                );
+                resetCurrentSegment();
 
             }
         );
+
+    }
+
+
+    function resetCurrentSegment() {
+
+        const mode =
+            detectMode();
+
+        /*
+         * Try the original application's reset
+         * functions first.
+         */
+
+        const functions = [
+            "resetCurrentSegment",
+            "resetCurrentTimer"
+        ];
+
+
+        for (
+            let i = 0;
+            i < functions.length;
+            i++
+        ) {
+
+            const fn =
+                functions[i];
+
+            if (
+                typeof window[fn] === "function"
+            ) {
+
+                try {
+
+                    window[fn]();
+
+                    setTimeout(
+                        syncEverything,
+                        50
+                    );
+
+                    return;
+
+                } catch (error) {
+
+                    console.warn(
+                        "RakkeZ reset failed:",
+                        fn,
+                        error
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        /*
+         * Direct state reset.
+         *
+         * IMPORTANT:
+         * No statistics are modified here.
+         */
+
+        const seconds =
+            getModeMinutes(mode) * 60;
+
+        const state =
+            readTimerState() || {};
+
+        state.mode =
+            mode;
+
+        state.remaining =
+            seconds;
+
+        state.total =
+            seconds;
+
+        if ("running" in state) {
+            state.running = false;
+        }
+
+        if ("isRunning" in state) {
+            state.isRunning = false;
+        }
+
+        writeTimerState(state);
+
+        updateVisibleTimer(
+            seconds,
+            mode
+        );
+
+        syncEverything();
 
     }
 
@@ -5490,59 +5634,117 @@ body.light .rakkez-mini-close,
 
                 closeReset();
 
-
-                const functions = [
-                    "resetSession",
-                    "resetFullSession",
-                    "resetPomodoroSession"
-                ];
-
-
-                for (
-                    let i = 0;
-                    i < functions.length;
-                    i++
-                ) {
-
-                    const fn =
-                        functions[i];
-
-
-                    if (
-                        typeof window[fn] === "function"
-                    ) {
-
-                        try {
-
-                            window[fn]();
-
-                            return;
-
-                        } catch (error) {
-
-                            console.warn(
-                                fn,
-                                error
-                            );
-
-                        }
-
-                    }
-
-                }
-
-
-                /*
-                 * Fallback:
-                 * Full session always returns to Focus.
-                 */
-
-                resetFromStorage(
-                    "focus"
-                );
+                resetFullSession();
 
             }
         );
+
+    }
+
+
+    function resetFullSession() {
+
+        const functions = [
+            "resetFullSession",
+            "resetSession",
+            "resetPomodoroSession"
+        ];
+
+
+        for (
+            let i = 0;
+            i < functions.length;
+            i++
+        ) {
+
+            const fn =
+                functions[i];
+
+            if (
+                typeof window[fn] === "function"
+            ) {
+
+                try {
+
+                    window[fn]();
+
+                    setTimeout(
+                        syncEverything,
+                        50
+                    );
+
+                    return;
+
+                } catch (error) {
+
+                    console.warn(
+                        "RakkeZ full reset failed:",
+                        fn,
+                        error
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        /*
+         * Full reset:
+         *
+         * Focus
+         * current cycle -> 0
+         * timer stopped
+         *
+         * Statistics remain untouched.
+         */
+
+        const seconds =
+            getModeMinutes("focus") * 60;
+
+        const state =
+            readTimerState() || {};
+
+        state.mode =
+            "focus";
+
+        state.remaining =
+            seconds;
+
+        state.total =
+            seconds;
+
+        state.currentSession =
+            0;
+
+        state.session =
+            0;
+
+        state.cycle =
+            0;
+
+        state.currentCycle =
+            0;
+
+        if ("running" in state) {
+            state.running = false;
+        }
+
+        if ("isRunning" in state) {
+            state.isRunning = false;
+        }
+
+        writeTimerState(state);
+
+        updateVisibleTimer(
+            seconds,
+            "focus"
+        );
+
+        updateTabs();
+
+        syncEverything();
 
     }
 
@@ -5557,116 +5759,42 @@ body.light .rakkez-mini-close,
     }
 
 
-    /* =================================================
-       RESET FROM STORAGE
-    ================================================= */
+    if (resetOverlay) {
 
-    function resetFromStorage(mode) {
+        resetOverlay.addEventListener(
+            "click",
+            function (event) {
 
-        try {
+                if (
+                    event.target === resetOverlay
+                ) {
 
-            const settings =
-                JSON.parse(
-                    localStorage.getItem(
-                        "rakkez_settings"
-                    ) || "{}"
-                );
+                    closeReset();
 
-
-            let minutes =
-                Number(
-                    settings.focus || 25
-                );
-
-
-            if (mode === "short") {
-
-                minutes =
-                    Number(
-                        settings.shortBreak || 5
-                    );
+                }
 
             }
-
-
-            if (mode === "long") {
-
-                minutes =
-                    Number(
-                        settings.longBreak || 15
-                    );
-
-            }
-
-
-            const raw =
-                localStorage.getItem(
-                    "rakkez_timer_state"
-                );
-
-
-            if (!raw) {
-                return;
-            }
-
-
-            const state =
-                JSON.parse(raw);
-
-
-            state.mode =
-                mode;
-
-            state.remaining =
-                minutes * 60;
-
-            state.total =
-                minutes * 60;
-
-            state.running =
-                false;
-
-
-            localStorage.setItem(
-                "rakkez_timer_state",
-                JSON.stringify(state)
-            );
-
-
-            if (timerElement) {
-
-                timerElement.textContent =
-                    formatTime(
-                        minutes * 60
-                    );
-
-            }
-
-
-            if (modeElement) {
-
-                modeElement.textContent =
-                    mode === "focus"
-                        ? "FOCUS"
-                        : mode === "short"
-                            ? "SHORT BREAK"
-                            : "LONG BREAK";
-
-            }
-
-
-            updateTabs();
-
-        } catch (error) {
-
-            console.warn(
-                "RakkeZ reset fallback:",
-                error
-            );
-
-        }
+        );
 
     }
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                resetOverlay &&
+                resetOverlay.classList.contains("show")
+            ) {
+
+                closeReset();
+
+            }
+
+        }
+    );
 
 
     /* =================================================
@@ -5695,41 +5823,41 @@ body.light .rakkez-mini-close,
         $("rakkezMiniClose");
 
 
-    let miniInterval =
+    let floatingInterval =
+        null;
+
+    let pipWindow =
+        null;
+
+    let pipInterval =
         null;
 
 
-    function updateMini() {
+    /* =================================================
+       MINI UPDATE
+    ================================================= */
+
+    function updateMiniFallback() {
 
         if (!miniTime) {
             return;
         }
 
+        const seconds =
+            getCurrentSeconds();
 
         miniTime.textContent =
-            timerElement
-                ? timerElement.textContent.trim()
-                : "--:--";
-
+            formatTime(seconds);
 
         miniMode.textContent =
-            getMode() === "focus"
-                ? "FOCUS"
-                : getMode() === "short"
-                    ? "SHORT BREAK"
-                    : "LONG BREAK";
+            modeLabel(
+                detectMode()
+            );
 
-
-        if (startButton) {
-
-            const text =
-                startButton.textContent
-                    .trim()
-                    .toUpperCase();
-
+        if (miniStart) {
 
             miniStart.textContent =
-                text.includes("PAUSE")
+                isTimerRunning()
                     ? "PAUSE"
                     : "START";
 
@@ -5738,39 +5866,83 @@ body.light .rakkez-mini-close,
     }
 
 
-    function startMiniSync() {
+    function getCurrentSeconds() {
 
-        clearInterval(
-            miniInterval
-        );
+        const state =
+            readTimerState();
+
+        if (state) {
+
+            if (
+                Number.isFinite(
+                    Number(state.remaining)
+                )
+            ) {
+
+                return Math.max(
+                    0,
+                    Math.floor(
+                        Number(state.remaining)
+                    )
+                );
+
+            }
+
+            if (
+                Number.isFinite(
+                    Number(state.remainingSeconds)
+                )
+            ) {
+
+                return Math.max(
+                    0,
+                    Math.floor(
+                        Number(state.remainingSeconds)
+                    )
+                );
+
+            }
+
+        }
+
+        return readDisplayedSeconds();
+
+    }
 
 
-        updateMini();
+    function startFloatingSync() {
 
+        stopFloatingSync();
 
-        miniInterval =
+        updateMiniFallback();
+
+        floatingInterval =
             setInterval(
-                updateMini,
-                250
+                updateMiniFallback,
+                200
             );
 
     }
 
 
-    function stopMiniSync() {
+    function stopFloatingSync() {
 
-        clearInterval(
-            miniInterval
-        );
+        if (floatingInterval) {
 
-        miniInterval =
-            null;
+            clearInterval(
+                floatingInterval
+            );
+
+            floatingInterval =
+                null;
+
+        }
 
     }
 
 
     /* =================================================
-       MINI BUTTON
+       OPEN MINI TIMER
     ================================================= */
 
     if (miniButton) {
@@ -5787,18 +5959,23 @@ body.light .rakkez-mini-close,
     }
 
 
-    function openMiniTimer() {
+    async function openMiniTimer() {
 
         /*
-         * Modern Chrome / Edge:
-         * Document Picture-in-Picture.
+         * Do NOT create another PiP window if one
+         * already exists.
          */
 
         if (
-            "documentPictureInPicture" in window
+            pipWindow &&
+            !pipWindow.closed
         ) {
 
-            openPictureInPicture();
+            try {
+
+                pipWindow.focus();
+
+            } catch (error) {}
 
             return;
 
@@ -5806,32 +5983,49 @@ body.light .rakkez-mini-close,
 
 
         /*
-         * Fallback inside the current page.
+         * Document Picture-in-Picture
+         *
+         * This is the correct browser-level solution
+         * for keeping the mini timer visible while
+         * switching tabs/windows.
          */
 
-        if (floating) {
+        if (
+            "documentPictureInPicture" in window &&
+            typeof document
+                .documentPictureInPicture
+                .requestWindow === "function"
+        ) {
 
-            floating.classList.add(
-                "show"
-            );
+            const success =
+                await openDocumentPiP();
 
-            floating.setAttribute(
-                "aria-hidden",
-                "false"
-            );
-
-            startMiniSync();
+            if (success) {
+                return;
+            }
 
         }
+
+
+        /*
+         * Browser does not support Document PiP.
+         * Use the in-page fallback.
+         */
+
+        openFloatingFallback();
 
     }
 
 
-    async function openPictureInPicture() {
+    /* =================================================
+       DOCUMENT PICTURE-IN-PICTURE
+    ================================================= */
+
+    async function openDocumentPiP() {
 
         try {
 
-            const pipWindow =
+            pipWindow =
                 await document
                     .documentPictureInPicture
                     .requestWindow({
@@ -5840,11 +6034,23 @@ body.light .rakkez-mini-close,
                     });
 
 
-            const style =
-                document.createElement(
-                    "style"
-                );
+            if (!pipWindow) {
 
+                return false;
+
+            }
+
+
+            const doc =
+                pipWindow.document;
+
+
+            /*
+             * Full PiP document styling.
+             */
+
+            const style =
+                doc.createElement("style");
 
             style.textContent = `
 
@@ -5857,23 +6063,125 @@ body.light .rakkez-mini-close,
                     width: 100%;
                     height: 100%;
                     margin: 0;
+                    padding: 0;
                     overflow: hidden;
                     background: #03050a;
+                }
+
+                body {
+                    font-family:
+                        "DM Sans",
+                        Arial,
+                        sans-serif;
+                }
+
+                .rakkez-mini-timer {
+                    width: 100%;
+                    height: 100%;
+                    min-height: 100%;
+                    position: relative;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background:
+                        radial-gradient(
+                            circle at 50% 25%,
+                            rgba(22,131,255,.22),
+                            transparent 48%
+                        ),
+                        #03050a;
+                    color: #fff;
+                }
+
+                .rakkez-mini-bg {
+                    position: absolute;
+                    inset: 0;
+                    pointer-events: none;
+                    background:
+                        radial-gradient(
+                            circle at 15% 20%,
+                            rgba(22,131,255,.18),
+                            transparent 35%
+                        ),
+                        radial-gradient(
+                            circle at 85% 80%,
+                            rgba(80,100,180,.14),
+                            transparent 40%
+                        );
+                }
+
+                .rakkez-mini-content {
+                    position: relative;
+                    z-index: 2;
+                    width: 100%;
+                    padding: 18px;
+                    text-align: center;
+                }
+
+                .rakkez-mini-mode {
+                    margin-bottom: 8px;
+                    color: rgba(255,255,255,.42);
+                    font-size: 10px;
+                    font-weight: 800;
+                    letter-spacing: 2px;
+                }
+
+                .rakkez-mini-time {
+                    color: #fff;
+                    font-family:
+                        "Space Grotesk",
+                        Arial,
+                        sans-serif;
+                    font-size: 58px;
+                    font-weight: 600;
+                    line-height: 1;
+                    letter-spacing: -3px;
+                    font-variant-numeric:
+                        tabular-nums;
+                }
+
+                .rakkez-mini-buttons {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    margin-top: 18px;
+                }
+
+                .rakkez-mini-buttons button {
+                    height: 34px;
+                    min-width: 42px;
+                    padding: 0 12px;
+                    border: 1px solid
+                        rgba(255,255,255,.10);
+                    border-radius: 10px;
+                    background:
+                        rgba(255,255,255,.07);
+                    color: #fff;
+                    font-size: 11px;
+                    cursor: pointer;
+                }
+
+                .rakkez-mini-start {
+                    min-width: 78px !important;
+                    background: #fff !important;
+                    color: #05070b !important;
+                    border-color:
+                        transparent !important;
+                    font-weight: 700;
                 }
 
             `;
 
 
-            pipWindow.document.head.appendChild(
+            doc.head.appendChild(
                 style
             );
 
 
             const mini =
-                document.createElement(
-                    "div"
-                );
-
+                doc.createElement("div");
 
             mini.className =
                 "rakkez-mini-timer";
@@ -5887,14 +6195,14 @@ body.light .rakkez-mini-close,
 
                     <div
                         class="rakkez-mini-mode"
-                        data-mini-mode
+                        data-rakkez-pip-mode
                     >
                         FOCUS
                     </div>
 
                     <div
                         class="rakkez-mini-time"
-                        data-mini-time
+                        data-rakkez-pip-time
                     >
                         25:00
                     </div>
@@ -5902,7 +6210,7 @@ body.light .rakkez-mini-close,
                     <div class="rakkez-mini-buttons">
 
                         <button
-                            data-mini-start
+                            data-rakkez-pip-start
                             class="rakkez-mini-start"
                             type="button"
                         >
@@ -5910,7 +6218,7 @@ body.light .rakkez-mini-close,
                         </button>
 
                         <button
-                            data-mini-reset
+                            data-rakkez-pip-reset
                             type="button"
                         >
                             ↻
@@ -5923,31 +6231,74 @@ body.light .rakkez-mini-close,
             `;
 
 
-            pipWindow.document.body.appendChild(
+            doc.body.appendChild(
                 mini
             );
 
 
             const pipTime =
                 mini.querySelector(
-                    "[data-mini-time]"
+                    "[data-rakkez-pip-time]"
                 );
 
             const pipMode =
                 mini.querySelector(
-                    "[data-mini-mode]"
+                    "[data-rakkez-pip-mode]"
                 );
 
             const pipStart =
                 mini.querySelector(
-                    "[data-mini-start]"
+                    "[data-rakkez-pip-start]"
                 );
 
             const pipReset =
                 mini.querySelector(
-                    "[data-mini-reset]"
+                    "[data-rakkez-pip-reset]"
                 );
 
+
+            /* =========================================
+               PiP -> MAIN TIMER
+            ========================================= */
+
+            pipStart.addEventListener(
+                "click",
+                function () {
+
+                    if (startButton) {
+
+                        startButton.click();
+
+                    }
+
+                    setTimeout(
+                        syncPiP,
+                        50
+                    );
+
+                }
+            );
+
+
+            pipReset.addEventListener(
+                "click",
+                function () {
+
+                    /*
+                     * The reset modal is opened in the
+                     * MAIN WINDOW instead of attempting
+                     * to inject the modal into PiP.
+                     */
+
+                    openReset();
+
+                }
+            );
+
+
+            /* =========================================
+               SYNC PiP
+            ========================================= */
 
             function syncPiP() {
 
@@ -5961,105 +6312,117 @@ body.light .rakkez-mini-close,
                 }
 
 
-                pipTime.textContent =
-                    timerElement
-                        ? timerElement.textContent.trim()
-                        : "--:--";
-
+                const seconds =
+                    getCurrentSeconds();
 
                 const mode =
-                    getMode();
+                    detectMode();
 
+
+                pipTime.textContent =
+                    formatTime(seconds);
 
                 pipMode.textContent =
-                    mode === "focus"
-                        ? "FOCUS"
-                        : mode === "short"
-                            ? "SHORT BREAK"
-                            : "LONG BREAK";
+                    modeLabel(mode);
 
 
-                if (startButton) {
-
-                    const text =
-                        startButton.textContent
-                            .trim()
-                            .toUpperCase();
-
-
-                    pipStart.textContent =
-                        text.includes("PAUSE")
-                            ? "PAUSE"
-                            : "START";
-
-                }
+                pipStart.textContent =
+                    isTimerRunning()
+                        ? "PAUSE"
+                        : "START";
 
             }
 
 
-            pipStart.addEventListener(
-                "click",
-                function () {
-
-                    if (startButton) {
-
-                        startButton.click();
-
-                    }
-
-                }
-            );
+            syncPiP();
 
 
-            pipReset.addEventListener(
-                "click",
-                function () {
-
-                    openReset();
-
-                }
-            );
-
-
-            const interval =
+            pipInterval =
                 setInterval(
                     syncPiP,
                     200
                 );
 
 
+            /* =========================================
+               PiP CLOSED
+            ========================================= */
+
             pipWindow.addEventListener(
                 "pagehide",
                 function () {
 
-                    clearInterval(
-                        interval
-                    );
+                    if (pipInterval) {
+
+                        clearInterval(
+                            pipInterval
+                        );
+
+                        pipInterval =
+                            null;
+
+                    }
+
+                    pipWindow =
+                        null;
 
                 }
             );
 
 
-            syncPiP();
+            /*
+             * Some Chromium versions can fire
+             * pagehide/visibility transitions differently.
+             * Keep the reference synchronized.
+             */
 
+            window.addEventListener(
+                "beforeunload",
+                function () {
+
+                    if (
+                        pipWindow &&
+                        !pipWindow.closed
+                    ) {
+
+                        try {
+
+                            pipWindow.close();
+
+                        } catch (error) {}
+
+                    }
+
+                },
+                { once: true }
+            );
+
+
+            return true;
 
         } catch (error) {
 
             console.warn(
-                "Picture-in-Picture unavailable:",
+                "RakkeZ Document PiP unavailable:",
                 error
             );
 
 
-            if (floating) {
+            pipWindow =
+                null;
 
-                floating.classList.add(
-                    "show"
+            if (pipInterval) {
+
+                clearInterval(
+                    pipInterval
                 );
 
-                startMiniSync();
+                pipInterval =
+                    null;
 
             }
+
+            return false;
 
         }
 
@@ -6067,8 +6430,44 @@ body.light .rakkez-mini-close,
 
 
     /* =================================================
-       MINI FALLBACK CONTROLS
+       FLOATING FALLBACK
     ================================================= */
+
+    function openFloatingFallback() {
+
+        if (!floating) {
+            return;
+        }
+
+        floating.classList.add("show");
+
+        floating.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        startFloatingSync();
+
+    }
+
+
+    function closeFloatingFallback() {
+
+        if (!floating) {
+            return;
+        }
+
+        floating.classList.remove("show");
+
+        floating.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        stopFloatingSync();
+
+    }
+
 
     if (miniStart) {
 
@@ -6081,7 +6480,7 @@ body.light .rakkez-mini-close,
                     startButton.click();
 
                     setTimeout(
-                        updateMini,
+                        updateMiniFallback,
                         50
                     );
 
@@ -6113,20 +6512,7 @@ body.light .rakkez-mini-close,
             "click",
             function () {
 
-                if (floating) {
-
-                    floating.classList.remove(
-                        "show"
-                    );
-
-                    floating.setAttribute(
-                        "aria-hidden",
-                        "true"
-                    );
-
-                }
-
-                stopMiniSync();
+                closeFloatingFallback();
 
             }
         );
@@ -6135,18 +6521,99 @@ body.light .rakkez-mini-close,
 
 
     /* =================================================
-       SYNC
+       TAB TITLE
     ================================================= */
 
+    function updateTabTitle(
+        seconds,
+        running
+    ) {
+
+        /*
+         * Do not permanently destroy the application's
+         * normal title. Only update it while running.
+         */
+
+        if (
+            typeof window.updateTabTitle === "function" &&
+            window.updateTabTitle !== updateTabTitle
+        ) {
+
+            try {
+
+                window.updateTabTitle(
+                    seconds,
+                    running
+                );
+
+                return;
+
+            } catch (error) {}
+
+        }
+
+    }
+
+
+    /* =================================================
+       GLOBAL SYNCHRONIZATION
+    ================================================= */
+
+    function syncEverything() {
+
+        updateTabs();
+
+        updateMiniFallback();
+
+    }
+
+
     setInterval(
-        function () {
+        syncEverything,
+        250
+    );
 
-            updateTabs();
 
-            updateMini();
+    /* =================================================
+       CROSS-TAB STORAGE SYNC
+    ================================================= */
 
-        },
+    window.addEventListener(
+        "storage",
+        function (event) {
+
+            if (
+                event.key ===
+                "rakkez_timer_state"
+            ) {
+
+                syncEverything();
+
+            }
+
+        }
+    );
+
+
+    /* =================================================
+       INITIALIZATION
+    ================================================= */
+
+    setTimeout(
+        syncEverything,
+        100
+    );
+
+
+    setTimeout(
+        syncEverything,
         500
+    );
+
+
+    setTimeout(
+        syncEverything,
+        1000
     );
 
 
