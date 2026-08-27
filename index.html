@@ -4342,6 +4342,2954 @@ body.light .rakkez-mini-close,
 </style>
 
 
+
+
+
+
+
+
+
+
+<!-- =========================================================
+     🚀 RAKKEZ CUSTOM PRODUCTIVITY SYSTEM
+     
+     IMPORTANT:
+     ---------------------------------------------------------
+     This entire system lives inside index.html.
+
+     It does NOT require modifications to:
+     - app.js
+     - style.css
+     - themes.js
+     - language.js
+     - media-player.js
+
+     Features added:
+     1. FOCUS / SHORT BREAK / LONG BREAK selector
+     2. Pomodoro cycle indicator
+     3. Custom Tasks system
+     4. Task priority
+     5. Estimated task time
+     6. Current task
+     7. Task editing
+     8. Task completion
+     9. Task deletion
+     10. Task focus statistics
+     11. 🔥 Streak dashboard
+     12. Weekly streak visualization
+     13. Focused today
+     14. Best streak
+     15. Total focus
+     16. Days focused
+     17. Challenges done
+     18. Pause confirmation
+     19. Focus completion feedback
+     20. LocalStorage persistence
+========================================================= -->
+
+
+<style>
+
+/* =========================================================
+   TIMER MODE SELECTOR
+========================================================= */
+
+.rk-mode-selector {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    width: min(430px, 100%);
+
+    margin: 0 auto 18px;
+
+    padding: 5px;
+
+    border-radius: 14px;
+
+    background: rgba(255,255,255,.035);
+
+    border: 1px solid rgba(255,255,255,.07);
+
+}
+
+.rk-mode-btn {
+
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 9px 8px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: rgba(255,255,255,.38);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .7px;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+}
+
+.rk-mode-btn:hover {
+
+    color: #fff;
+
+    background: rgba(255,255,255,.045);
+
+}
+
+.rk-mode-btn.active {
+
+    color: #fff;
+
+    background: rgba(22,131,255,.14);
+
+    box-shadow: 0 5px 18px rgba(0,0,0,.16);
+
+}
+
+
+/* =========================================================
+   POMODORO CYCLE
+========================================================= */
+
+.rk-cycle {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+}
+
+.rk-cycle-label {
+
+    color: rgba(255,255,255,.35);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+}
+
+.rk-cycle-dots {
+
+    display: flex;
+
+    gap: 7px;
+
+}
+
+.rk-cycle-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.12);
+
+    transition: .25s ease;
+
+}
+
+.rk-cycle-dot.done {
+
+    background: #1683ff;
+
+    box-shadow: 0 0 10px rgba(22,131,255,.35);
+
+}
+
+.rk-cycle-dot.current {
+
+    background: #fff;
+
+    transform: scale(1.25);
+
+}
+
+
+/* =========================================================
+   STREAK BUTTON
+========================================================= */
+
+.rk-streak-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 15px;
+
+    padding: 9px 13px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-radius: 14px;
+
+    background: rgba(255,255,255,.035);
+
+    color: #fff;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+}
+
+.rk-streak-button:hover {
+
+    transform: translateY(-1px);
+
+    background: rgba(255,255,255,.065);
+
+    border-color: rgba(255,255,255,.14);
+
+}
+
+.rk-streak-fire {
+
+    font-size: 17px;
+
+}
+
+.rk-streak-number {
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+}
+
+.rk-streak-text {
+
+    color: rgba(255,255,255,.42);
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================================================
+   CUSTOM TASK PANEL
+========================================================= */
+
+.rk-task-panel {
+
+    width: min(650px, calc(100vw - 30px));
+
+}
+
+.rk-task-create {
+
+    padding: 16px;
+
+    margin-bottom: 14px;
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    border-radius: 18px;
+
+    background: rgba(255,255,255,.025);
+
+}
+
+.rk-task-input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    height: 45px;
+
+    padding: 0 14px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-radius: 12px;
+
+    outline: none;
+
+    background: rgba(255,255,255,.045);
+
+    color: #fff;
+
+    font-family: inherit;
+
+}
+
+.rk-task-options {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 9px;
+
+}
+
+.rk-task-select {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 38px;
+
+    padding: 0 10px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.04);
+
+    color: #fff;
+
+    outline: none;
+
+}
+
+.rk-task-create-button {
+
+    width: 100%;
+
+    height: 40px;
+
+    margin-top: 9px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    background: #1683ff;
+
+    color: #fff;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================================================
+   TASK ITEM
+========================================================= */
+
+.rk-task-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px;
+
+    margin-bottom: 7px;
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    border-radius: 15px;
+
+    background: rgba(255,255,255,.025);
+
+    transition: .2s ease;
+
+}
+
+.rk-task-item:hover {
+
+    background: rgba(255,255,255,.045);
+
+}
+
+.rk-task-item.completed {
+
+    opacity: .55;
+
+}
+
+.rk-task-check {
+
+    width: 25px;
+
+    height: 25px;
+
+    flex: 0 0 25px;
+
+    border: 1px solid rgba(255,255,255,.15);
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #fff;
+
+    cursor: pointer;
+
+}
+
+.rk-task-item.completed .rk-task-check {
+
+    background: #1683ff;
+
+    border-color: #1683ff;
+
+}
+
+.rk-task-content {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+.rk-task-name {
+
+    color: #fff;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+}
+
+.rk-task-item.completed .rk-task-name {
+
+    text-decoration: line-through;
+
+}
+
+.rk-task-meta {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 5px;
+
+    color: rgba(255,255,255,.34);
+
+    font-size: 9px;
+
+}
+
+.rk-task-actions {
+
+    display: flex;
+
+    gap: 5px;
+
+}
+
+.rk-task-action {
+
+    width: 31px;
+
+    height: 31px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.05);
+
+    color: rgba(255,255,255,.6);
+
+    cursor: pointer;
+
+}
+
+.rk-task-action:hover {
+
+    background: rgba(255,255,255,.1);
+
+    color: #fff;
+
+}
+
+.rk-task-action.current {
+
+    color: #1683ff;
+
+    background: rgba(22,131,255,.12);
+
+}
+
+
+/* =========================================================
+   STREAK DASHBOARD
+========================================================= */
+
+.rk-streak-dashboard {
+
+    width: min(620px, calc(100vw - 30px));
+
+}
+
+.rk-streak-hero {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding: 24px;
+
+    border-radius: 22px;
+
+    background:
+
+        linear-gradient(
+
+            145deg,
+
+            rgba(255,255,255,.055),
+
+            rgba(255,255,255,.02)
+
+        );
+
+    border: 1px solid rgba(255,255,255,.07);
+
+}
+
+.rk-big-fire {
+
+    font-size: 35px;
+
+}
+
+.rk-big-streak {
+
+    margin-top: 3px;
+
+    color: #fff;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 42px;
+
+    font-weight: 700;
+
+}
+
+.rk-big-streak-label {
+
+    color: rgba(255,255,255,.4);
+
+    font-size: 11px;
+
+}
+
+
+.rk-week {
+
+    display: grid;
+
+    grid-template-columns: repeat(7,1fr);
+
+    gap: 7px;
+
+    margin-top: 18px;
+
+}
+
+.rk-week-day {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+.rk-week-letter {
+
+    color: rgba(255,255,255,.35);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+.rk-week-circle {
+
+    width: 31px;
+
+    height: 31px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.045);
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    color: rgba(255,255,255,.25);
+
+    font-size: 11px;
+
+}
+
+.rk-week-circle.focused {
+
+    color: #fff;
+
+    background: rgba(22,131,255,.18);
+
+    border-color: rgba(22,131,255,.35);
+
+}
+
+.rk-week-circle.today {
+
+    box-shadow: 0 0 0 2px rgba(255,255,255,.15);
+
+}
+
+
+.rk-stat-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2,1fr);
+
+    gap: 8px;
+
+    margin-top: 14px;
+
+}
+
+.rk-stat-card {
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    background: rgba(255,255,255,.035);
+
+    border: 1px solid rgba(255,255,255,.06);
+
+}
+
+.rk-stat-name {
+
+    color: rgba(255,255,255,.35);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+.rk-stat-number {
+
+    margin-top: 5px;
+
+    color: #fff;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 21px;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================================================
+   PAUSE CONFIRMATION
+========================================================= */
+
+.rk-pause-message {
+
+    text-align: center;
+
+    padding: 5px 0 10px;
+
+}
+
+.rk-pause-title {
+
+    color: #fff;
+
+    font-family: "Space Grotesk",sans-serif;
+
+    font-size: 21px;
+
+    font-weight: 600;
+
+}
+
+.rk-pause-description {
+
+    margin-top: 8px;
+
+    color: rgba(255,255,255,.42);
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   COMPLETION TOAST
+========================================================= */
+
+.rk-complete-toast {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 35px;
+
+    z-index: 2147483000;
+
+    width: min(360px, calc(100vw - 30px));
+
+    padding: 16px;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    border-radius: 17px;
+
+    background: rgba(8,13,22,.95);
+
+    backdrop-filter: blur(20px);
+
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+
+    transform: translate(-50%,25px);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: .3s ease;
+
+}
+
+.rk-complete-toast.show {
+
+    transform: translate(-50%,0);
+
+    opacity: 1;
+
+}
+
+.rk-toast-title {
+
+    color: #fff;
+
+    font-weight: 700;
+
+    font-size: 14px;
+
+}
+
+.rk-toast-text {
+
+    margin-top: 5px;
+
+    color: rgba(255,255,255,.48);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:600px){
+
+    .rk-mode-btn {
+
+        font-size: 8px;
+
+        padding: 9px 4px;
+
+    }
+
+    .rk-stat-grid {
+
+        grid-template-columns: 1fr 1fr;
+
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     1. TIMER MODE SELECTOR
+     
+     This is placed above the existing timer.
+========================================================= -->
+
+<script>
+
+(function(){
+
+    function insertTimerEnhancements(){
+
+        const timerCard =
+            document.querySelector(".timer-card");
+
+        if(!timerCard) return;
+
+        /*
+         * Prevent duplicate insertion.
+         */
+
+        if(document.getElementById("rkModeSelector"))
+            return;
+
+
+        const selector =
+            document.createElement("div");
+
+        selector.id = "rkModeSelector";
+
+        selector.className =
+            "rk-mode-selector";
+
+
+        selector.innerHTML = `
+
+            <button
+                class="rk-mode-btn active"
+                data-rk-mode="focus"
+                type="button"
+            >
+                FOCUS
+            </button>
+
+            <button
+                class="rk-mode-btn"
+                data-rk-mode="short"
+                type="button"
+            >
+                SHORT BREAK
+            </button>
+
+            <button
+                class="rk-mode-btn"
+                data-rk-mode="long"
+                type="button"
+            >
+                LONG BREAK
+            </button>
+
+        `;
+
+
+        const mode =
+            document.getElementById("modeText");
+
+
+        if(mode){
+
+            mode.parentNode.insertBefore(
+                selector,
+                mode
+            );
+
+        } else {
+
+            timerCard.prepend(selector);
+
+        }
+
+
+        /*
+         * Clicking a mode:
+         *
+         * We intentionally do NOT replace
+         * the existing timer engine.
+         *
+         * Instead we dispatch a custom event
+         * that can be consumed by the existing
+         * timer if supported.
+         */
+
+        selector
+            .querySelectorAll(".rk-mode-btn")
+            .forEach(function(button){
+
+                button.addEventListener(
+                    "click",
+                    function(){
+
+                        selector
+                            .querySelectorAll(".rk-mode-btn")
+                            .forEach(function(btn){
+
+                                btn.classList.remove(
+                                    "active"
+                                );
+
+                            });
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        const mode =
+                            button.dataset.rkMode;
+
+
+                        window.dispatchEvent(
+
+                            new CustomEvent(
+                                "rakkezModeRequest",
+                                {
+                                    detail: {
+                                        mode: mode
+                                    }
+                                }
+                            )
+
+                        );
+
+                    }
+                );
+
+            });
+
+    }
+
+
+    if(document.readyState === "loading"){
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            insertTimerEnhancements
+        );
+
+    }else{
+
+        insertTimerEnhancements();
+
+    }
+
+})();
+
+</script>
+
+
+<!-- =========================================================
+     2. CUSTOM TASKS + STREAK SYSTEM
+========================================================= -->
+
+<script>
+
+(function(){
+
+"use strict";
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+const TASK_KEY =
+    "rakkez_custom_tasks_v2";
+
+const STREAK_KEY =
+    "rakkez_streak_v2";
+
+
+/* =========================================================
+   LOAD / SAVE HELPERS
+========================================================= */
+
+function loadTasks(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(TASK_KEY)
+        ) || [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+function saveTasks(tasks){
+
+    localStorage.setItem(
+        TASK_KEY,
+        JSON.stringify(tasks)
+    );
+
+}
+
+
+function loadStreak(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(STREAK_KEY)
+        ) || {
+
+            current: 0,
+
+            best: 0,
+
+            totalFocusSeconds: 0,
+
+            daysFocused: [],
+
+            challengesDone: 0
+
+        };
+
+    }catch(error){
+
+        return {
+
+            current: 0,
+
+            best: 0,
+
+            totalFocusSeconds: 0,
+
+            daysFocused: [],
+
+            challengesDone: 0
+
+        };
+
+    }
+
+}
+
+
+function saveStreak(data){
+
+    localStorage.setItem(
+        STREAK_KEY,
+        JSON.stringify(data)
+    );
+
+}
+
+
+/* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function getDateKey(date){
+
+    const d =
+        date || new Date();
+
+    const year =
+        d.getFullYear();
+
+    const month =
+        String(
+            d.getMonth()+1
+        ).padStart(2,"0");
+
+    const day =
+        String(
+            d.getDate()
+        ).padStart(2,"0");
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+function getPreviousDate(date){
+
+    const d =
+        new Date(date);
+
+    d.setDate(
+        d.getDate()-1
+    );
+
+    return d;
+
+}
+
+
+/* =========================================================
+   MARK TODAY AS FOCUSED
+     
+   A day becomes active when:
+   - one complete Focus session occurs
+   OR
+   - 15 minutes Focus are accumulated
+========================================================= */
+
+function markFocusedDay(){
+
+    const data =
+        loadStreak();
+
+    const today =
+        getDateKey();
+
+
+    if(
+        !data.daysFocused.includes(today)
+    ){
+
+        data.daysFocused.push(today);
+
+    }
+
+
+    /*
+     * Keep only the latest 365 days.
+     */
+
+    data.daysFocused =
+        data.daysFocused
+            .slice(-365);
+
+
+    calculateStreak(data);
+
+    saveStreak(data);
+
+    updateStreakUI();
+
+}
+
+
+/* =========================================================
+   CALCULATE CURRENT STREAK
+========================================================= */
+
+function calculateStreak(data){
+
+    let current = 0;
+
+    let cursor =
+        new Date();
+
+
+    while(true){
+
+        const key =
+            getDateKey(cursor);
+
+
+        if(
+            data.daysFocused.includes(key)
+        ){
+
+            current++;
+
+            cursor =
+                getPreviousDate(
+                    cursor
+                );
+
+        }else{
+
+            break;
+
+        }
+
+    }
+
+
+    data.current =
+        current;
+
+
+    if(
+        current > data.best
+    ){
+
+        data.best =
+            current;
+
+    }
+
+}
+
+
+/* =========================================================
+   FOCUS TIME
+========================================================= */
+
+function addFocusTime(seconds){
+
+    if(
+        !Number.isFinite(seconds) ||
+        seconds <= 0
+    ){
+
+        return;
+
+    }
+
+
+    const data =
+        loadStreak();
+
+
+    data.totalFocusSeconds +=
+        Math.floor(seconds);
+
+
+    saveStreak(data);
+
+}
+
+
+/* =========================================================
+   TASK FOCUS
+========================================================= */
+
+function recordTaskFocus(seconds){
+
+    const tasks =
+        loadTasks();
+
+
+    const current =
+        tasks.find(
+            function(task){
+
+                return task.current === true &&
+                       !task.completed;
+
+            }
+        );
+
+
+    if(!current)
+        return;
+
+
+    current.focusSeconds =
+        (current.focusSeconds || 0)
+        + Math.floor(seconds);
+
+
+    current.sessions =
+        (current.sessions || 0)
+        + 1;
+
+
+    current.status =
+        "in-progress";
+
+
+    saveTasks(tasks);
+
+}
+
+
+/* =========================================================
+   TASK UI
+========================================================= */
+
+function openTaskSystem(){
+
+    let overlay =
+        document.getElementById(
+            "rkTaskOverlay"
+        );
+
+
+    if(!overlay){
+
+        overlay =
+            createTaskOverlay();
+
+    }
+
+
+    renderTasks();
+
+    overlay.classList.add("show");
+
+}
+
+
+/* =========================================================
+   CREATE TASK OVERLAY
+========================================================= */
+
+function createTaskOverlay(){
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.id =
+        "rkTaskOverlay";
+
+    overlay.className =
+        "overlay";
+
+
+    overlay.innerHTML = `
+
+        <div class="panel rk-task-panel">
+
+            <div class="panel-head">
+
+                <div>
+
+                    <div class="panel-title">
+                        Tasks
+                    </div>
+
+                    <div class="panel-subtitle">
+                        Build your focus list.
+                    </div>
+
+                </div>
+
+                <button
+                    class="close"
+                    type="button"
+                    id="rkTaskClose"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="rk-task-create">
+
+                <input
+                    id="rkTaskName"
+                    class="rk-task-input"
+                    maxlength="120"
+                    placeholder="What do you want to focus on?"
+                >
+
+
+                <div class="rk-task-options">
+
+                    <select
+                        id="rkTaskPriority"
+                        class="rk-task-select"
+                    >
+
+                        <option value="normal">
+                            Normal priority
+                        </option>
+
+                        <option value="high">
+                            🔥 High priority
+                        </option>
+
+                        <option value="low">
+                            Low priority
+                        </option>
+
+                    </select>
+
+
+                    <select
+                        id="rkTaskEstimate"
+                        class="rk-task-select"
+                    >
+
+                        <option value="15">
+                            15 min
+                        </option>
+
+                        <option value="25" selected>
+                            25 min
+                        </option>
+
+                        <option value="45">
+                            45 min
+                        </option>
+
+                        <option value="60">
+                            60 min
+                        </option>
+
+                        <option value="90">
+                            90 min
+                        </option>
+
+                        <option value="120">
+                            120 min
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    id="rkCreateTask"
+                    class="rk-task-create-button"
+                    type="button"
+                >
+                    + Create Task
+                </button>
+
+            </div>
+
+
+            <div
+                id="rkTaskList"
+            ></div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        overlay
+    );
+
+
+    overlay
+        .querySelector("#rkTaskClose")
+        .addEventListener(
+            "click",
+            function(){
+
+                overlay.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+
+    overlay
+        .querySelector("#rkCreateTask")
+        .addEventListener(
+            "click",
+            createTask
+        );
+
+
+    overlay
+        .querySelector("#rkTaskName")
+        .addEventListener(
+            "keydown",
+            function(event){
+
+                if(
+                    event.key === "Enter"
+                ){
+
+                    createTask();
+
+                }
+
+            }
+        );
+
+
+    return overlay;
+
+}
+
+
+/* =========================================================
+   CREATE TASK
+========================================================= */
+
+function createTask(){
+
+    const nameInput =
+        document.getElementById(
+            "rkTaskName"
+        );
+
+
+    const name =
+        nameInput.value.trim();
+
+
+    if(!name)
+        return;
+
+
+    const priority =
+        document.getElementById(
+            "rkTaskPriority"
+        ).value;
+
+
+    const estimate =
+        Number(
+            document.getElementById(
+                "rkTaskEstimate"
+            ).value
+        );
+
+
+    const tasks =
+        loadTasks();
+
+
+    tasks.push({
+
+        id:
+            Date.now().toString(36)
+            + Math.random()
+                .toString(36)
+                .slice(2),
+
+        name: name,
+
+        priority: priority,
+
+        estimateMinutes:
+            estimate,
+
+        focusSeconds: 0,
+
+        sessions: 0,
+
+        completed: false,
+
+        current: false,
+
+        status: "pending",
+
+        createdAt:
+            Date.now()
+
+    });
+
+
+    saveTasks(tasks);
+
+
+    nameInput.value = "";
+
+
+    renderTasks();
+
+}
+
+
+/* =========================================================
+   RENDER TASKS
+========================================================= */
+
+function renderTasks(){
+
+    const list =
+        document.getElementById(
+            "rkTaskList"
+        );
+
+
+    if(!list)
+        return;
+
+
+    const tasks =
+        loadTasks();
+
+
+    if(!tasks.length){
+
+        list.innerHTML = `
+
+            <div
+                style="
+                    text-align:center;
+                    padding:35px 15px;
+                    color:rgba(255,255,255,.35);
+                    font-size:12px;
+                "
+            >
+                No tasks yet.<br>
+                Create your first focus task.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    tasks.forEach(
+        function(task){
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "rk-task-item"
+                + (
+                    task.completed
+                    ? " completed"
+                    : ""
+                );
+
+
+            const focusMinutes =
+                Math.floor(
+                    (task.focusSeconds || 0)
+                    / 60
+                );
+
+
+            const priorityText =
+                task.priority === "high"
+                ? "🔥 High"
+                : task.priority === "low"
+                ? "Low"
+                : "Normal";
+
+
+            item.innerHTML = `
+
+                <button
+                    class="rk-task-check"
+                    title="Complete"
+                    type="button"
+                >
+                    ${
+                        task.completed
+                        ? "✓"
+                        : ""
+                    }
+                </button>
+
+
+                <div class="rk-task-content">
+
+                    <div class="rk-task-name">
+                        ${escapeHTML(task.name)}
+                    </div>
+
+
+                    <div class="rk-task-meta">
+
+                        <span>
+                            ${priorityText}
+                        </span>
+
+                        <span>
+                            ${task.estimateMinutes}m planned
+                        </span>
+
+                        <span>
+                            ${focusMinutes}m focused
+                        </span>
+
+                        <span>
+                            ${task.sessions || 0} sessions
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="rk-task-actions">
+
+                    ${
+                        !task.completed
+                        ? `
+                            <button
+                                class="
+                                    rk-task-action
+                                    ${
+                                        task.current
+                                        ? "current"
+                                        : ""
+                                    }
+                                "
+                                data-action="current"
+                                title="Focus this task"
+                            >
+                                ◉
+                            </button>
+                        `
+                        : ""
+                    }
+
+
+                    <button
+                        class="rk-task-action"
+                        data-action="edit"
+                        title="Edit"
+                    >
+                        ✎
+                    </button>
+
+
+                    <button
+                        class="rk-task-action"
+                        data-action="delete"
+                        title="Delete"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+            `;
+
+
+            item
+                .querySelector(
+                    ".rk-task-check"
+                )
+                .addEventListener(
+                    "click",
+                    function(){
+
+                        toggleTask(
+                            task.id
+                        );
+
+                    }
+                );
+
+
+            item
+                .querySelectorAll(
+                    ".rk-task-action"
+                )
+                .forEach(
+                    function(button){
+
+                        button.addEventListener(
+                            "click",
+                            function(){
+
+                                const action =
+                                    button.dataset.action;
+
+
+                                if(
+                                    action === "current"
+                                ){
+
+                                    setCurrentTask(
+                                        task.id
+                                    );
+
+                                }
+
+
+                                if(
+                                    action === "delete"
+                                ){
+
+                                    deleteTask(
+                                        task.id
+                                    );
+
+                                }
+
+
+                                if(
+                                    action === "edit"
+                                ){
+
+                                    editTask(
+                                        task.id
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            list.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   COMPLETE TASK
+========================================================= */
+
+function toggleTask(id){
+
+    const tasks =
+        loadTasks();
+
+
+    const task =
+        tasks.find(
+            function(t){
+                return t.id === id;
+            }
+        );
+
+
+    if(!task)
+        return;
+
+
+    task.completed =
+        !task.completed;
+
+
+    if(task.completed){
+
+        task.status =
+            "completed";
+
+        task.current =
+            false;
+
+    }else{
+
+        task.status =
+            "pending";
+
+    }
+
+
+    saveTasks(tasks);
+
+    renderTasks();
+
+    updateCurrentTaskDisplay();
+
+}
+
+
+/* =========================================================
+   SET CURRENT TASK
+========================================================= */
+
+function setCurrentTask(id){
+
+    const tasks =
+        loadTasks();
+
+
+    tasks.forEach(
+        function(task){
+
+            task.current =
+                task.id === id &&
+                !task.completed;
+
+
+            if(task.current){
+
+                task.status =
+                    "in-progress";
+
+            }
+
+        }
+    );
+
+
+    saveTasks(tasks);
+
+    renderTasks();
+
+    updateCurrentTaskDisplay();
+
+}
+
+
+/* =========================================================
+   DELETE TASK
+========================================================= */
+
+function deleteTask(id){
+
+    const tasks =
+        loadTasks()
+            .filter(
+                function(task){
+
+                    return task.id !== id;
+
+                }
+            );
+
+
+    saveTasks(tasks);
+
+    renderTasks();
+
+    updateCurrentTaskDisplay();
+
+}
+
+
+/* =========================================================
+   EDIT TASK
+========================================================= */
+
+function editTask(id){
+
+    const tasks =
+        loadTasks();
+
+
+    const task =
+        tasks.find(
+            function(t){
+
+                return t.id === id;
+
+            }
+        );
+
+
+    if(!task)
+        return;
+
+
+    const newName =
+        prompt(
+            "Edit task name:",
+            task.name
+        );
+
+
+    if(
+        newName === null
+    )
+        return;
+
+
+    const cleaned =
+        newName.trim();
+
+
+    if(!cleaned)
+        return;
+
+
+    task.name =
+        cleaned;
+
+
+    saveTasks(tasks);
+
+    renderTasks();
+
+    updateCurrentTaskDisplay();
+
+}
+
+
+/* =========================================================
+   CURRENT TASK DISPLAY
+========================================================= */
+
+function updateCurrentTaskDisplay(){
+
+    const element =
+        document.getElementById(
+            "currentTask"
+        );
+
+
+    if(!element)
+        return;
+
+
+    const tasks =
+        loadTasks();
+
+
+    const current =
+        tasks.find(
+            function(task){
+
+                return task.current === true &&
+                       !task.completed;
+
+            }
+        );
+
+
+    if(!current){
+
+        element.innerHTML = `
+
+            <span>
+                NO TASK SELECTED
+            </span>
+
+        `;
+
+        return;
+
+    }
+
+
+    element.innerHTML = `
+
+        <span>
+            ${escapeHTML(
+                current.name
+            )}
+        </span>
+
+    `;
+
+}
+
+
+/* =========================================================
+   STREAK DASHBOARD
+========================================================= */
+
+function openStreakDashboard(){
+
+    let overlay =
+        document.getElementById(
+            "rkStreakOverlay"
+        );
+
+
+    if(!overlay){
+
+        overlay =
+            createStreakOverlay();
+
+    }
+
+
+    renderStreakDashboard();
+
+    overlay.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   CREATE STREAK OVERLAY
+========================================================= */
+
+function createStreakOverlay(){
+
+    const overlay =
+        document.createElement(
+            "div"
+        );
+
+
+    overlay.id =
+        "rkStreakOverlay";
+
+
+    overlay.className =
+        "overlay";
+
+
+    overlay.innerHTML = `
+
+        <div
+            class="
+                panel
+                rk-streak-dashboard
+            "
+        >
+
+            <div class="panel-head">
+
+                <div>
+
+                    <div class="panel-title">
+                        Focus Streak
+                    </div>
+
+                    <div class="panel-subtitle">
+                        Keep showing up.
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="close"
+                    id="rkStreakClose"
+                    type="button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                id="rkStreakContent"
+            ></div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        overlay
+    );
+
+
+    overlay
+        .querySelector(
+            "#rkStreakClose"
+        )
+        .addEventListener(
+            "click",
+            function(){
+
+                overlay.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+
+    return overlay;
+
+}
+
+
+/* =========================================================
+   RENDER STREAK
+========================================================= */
+
+function renderStreakDashboard(){
+
+    const container =
+        document.getElementById(
+            "rkStreakContent"
+        );
+
+
+    if(!container)
+        return;
+
+
+    const data =
+        loadStreak();
+
+
+    calculateStreak(
+        data
+    );
+
+
+    saveStreak(
+        data
+    );
+
+
+    const today =
+        new Date();
+
+
+    const dayNames =
+        [
+            "M",
+            "T",
+            "W",
+            "T",
+            "F",
+            "S",
+            "S"
+        ];
+
+
+    /*
+     * JavaScript starts Sunday at 0.
+     * Convert it so Monday becomes 0.
+     */
+
+    const jsDay =
+        today.getDay();
+
+
+    const mondayIndex =
+        jsDay === 0
+        ? 6
+        : jsDay - 1;
+
+
+    let weekHTML = "";
+
+
+    for(
+        let i = 0;
+        i < 7;
+        i++
+    ){
+
+        const date =
+            new Date();
+
+
+        date.setDate(
+            today.getDate()
+            - mondayIndex
+            + i
+        );
+
+
+        const key =
+            getDateKey(
+                date
+            );
+
+
+        const focused =
+            data.daysFocused
+                .includes(
+                    key
+                );
+
+
+        const isToday =
+            key === getDateKey();
+
+
+        weekHTML += `
+
+            <div class="rk-week-day">
+
+                <div class="rk-week-letter">
+                    ${dayNames[i]}
+                </div>
+
+                <div
+                    class="
+                        rk-week-circle
+                        ${
+                            focused
+                            ? "focused"
+                            : ""
+                        }
+                        ${
+                            isToday
+                            ? "today"
+                            : ""
+                        }
+                    "
+                >
+                    ${
+                        focused
+                        ? "✓"
+                        : "·"
+                    }
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    const todaySeconds =
+        getTodayFocusSeconds();
+
+
+    const totalMinutes =
+        Math.floor(
+            data.totalFocusSeconds
+            / 60
+        );
+
+
+    const todayMinutes =
+        Math.floor(
+            todaySeconds
+            / 60
+        );
+
+
+    container.innerHTML = `
+
+        <div class="rk-streak-hero">
+
+            <div class="rk-big-fire">
+                🔥
+            </div>
+
+            <div class="rk-big-streak">
+                ${data.current}
+            </div>
+
+            <div class="rk-big-streak-label">
+                day streak
+            </div>
+
+        </div>
+
+
+        <div class="rk-week">
+
+            ${weekHTML}
+
+        </div>
+
+
+        <div class="rk-stat-grid">
+
+            <div class="rk-stat-card">
+
+                <div class="rk-stat-name">
+                    FOCUSED TODAY
+                </div>
+
+                <div class="rk-stat-number">
+                    ${todayMinutes}m
+                </div>
+
+            </div>
+
+
+            <div class="rk-stat-card">
+
+                <div class="rk-stat-name">
+                    BEST STREAK
+                </div>
+
+                <div class="rk-stat-number">
+                    ${data.best} days
+                </div>
+
+            </div>
+
+
+            <div class="rk-stat-card">
+
+                <div class="rk-stat-name">
+                    TOTAL FOCUS
+                </div>
+
+                <div class="rk-stat-number">
+                    ${totalMinutes}m
+                </div>
+
+            </div>
+
+
+            <div class="rk-stat-card">
+
+                <div class="rk-stat-name">
+                    DAYS FOCUSED
+                </div>
+
+                <div class="rk-stat-number">
+                    ${data.daysFocused.length}
+                </div>
+
+            </div>
+
+
+            <div class="rk-stat-card">
+
+                <div class="rk-stat-name">
+                    CHALLENGES DONE
+                </div>
+
+                <div class="rk-stat-number">
+                    ${data.challengesDone}
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   TODAY FOCUS
+========================================================= */
+
+function getTodayFocusSeconds(){
+
+    /*
+     * We use today's focus sessions from the
+     * existing RakkeZ stats when available.
+     */
+
+    try{
+
+        const raw =
+            localStorage.getItem(
+                "rakkez_stats"
+            );
+
+
+        if(!raw)
+            return 0;
+
+
+        const stats =
+            JSON.parse(raw);
+
+
+        const key =
+            getDateKey();
+
+
+        if(
+            stats.dailyFocus &&
+            Number.isFinite(
+                stats.dailyFocus[key]
+            )
+        ){
+
+            return stats.dailyFocus[key];
+
+        }
+
+
+        return 0;
+
+    }catch(error){
+
+        return 0;
+
+    }
+
+}
+
+
+/* =========================================================
+   UPDATE STREAK BUTTON
+========================================================= */
+
+function updateStreakUI(){
+
+    const number =
+        document.getElementById(
+            "rkStreakNumber"
+        );
+
+
+    if(!number)
+        return;
+
+
+    const data =
+        loadStreak();
+
+
+    calculateStreak(
+        data
+    );
+
+
+    number.textContent =
+        data.current;
+
+}
+
+
+/* =========================================================
+   CREATE STREAK BUTTON
+========================================================= */
+
+function insertStreakButton(){
+
+    const timerCard =
+        document.querySelector(
+            ".timer-card"
+        );
+
+
+    if(!timerCard)
+        return;
+
+
+    if(
+        document.getElementById(
+            "rkStreakButton"
+        )
+    )
+        return;
+
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+
+    button.id =
+        "rkStreakButton";
+
+
+    button.className =
+        "rk-streak-button";
+
+
+    button.type =
+        "button";
+
+
+    button.innerHTML = `
+
+        <span class="rk-streak-fire">
+            🔥
+        </span>
+
+        <span
+            class="rk-streak-number"
+            id="rkStreakNumber"
+        >
+            0
+        </span>
+
+        <span class="rk-streak-text">
+            day streak
+        </span>
+
+    `;
+
+
+    button.addEventListener(
+        "click",
+        openStreakDashboard
+    );
+
+
+    const controls =
+        timerCard.querySelector(
+            ".controls"
+        );
+
+
+    if(controls){
+
+        controls.after(
+            button
+        );
+
+    }else{
+
+        timerCard.appendChild(
+            button
+        );
+
+    }
+
+
+    updateStreakUI();
+
+}
+
+
+/* =========================================================
+   INSERT TASK BUTTON
+========================================================= */
+
+function insertTaskButton(){
+
+    const taskButton =
+        document.getElementById(
+            "tasksOpen"
+        );
+
+
+    if(!taskButton)
+        return;
+
+
+    /*
+     * We keep the existing Tasks button.
+     * We simply make it open our enhanced
+     * task system.
+     */
+
+    taskButton.onclick =
+        function(event){
+
+            event.preventDefault();
+
+            openTaskSystem();
+
+        };
+
+}
+
+
+/* =========================================================
+   FOCUS COMPLETION EVENT
+     
+   This listens for several common events
+   without taking over the existing timer.
+========================================================= */
+
+function handleFocusCompletion(){
+
+    /*
+     * One completed session keeps the day alive.
+     */
+
+    markFocusedDay();
+
+
+    /*
+     * Add the focus time of the current
+     * configured focus duration.
+     */
+
+    let seconds = 0;
+
+
+    try{
+
+        const settings =
+            JSON.parse(
+                localStorage.getItem(
+                    "rakkez_settings"
+                )
+            );
+
+
+        if(settings){
+
+            const minutes =
+                Number(
+                    settings.focus
+                );
+
+
+            if(
+                Number.isFinite(minutes)
+            ){
+
+                seconds =
+                    minutes * 60;
+
+            }
+
+        }
+
+    }catch(error){}
+
+
+    if(
+        seconds <= 0
+    ){
+
+        seconds =
+            25 * 60;
+
+    }
+
+
+    addFocusTime(
+        seconds
+    );
+
+
+    recordTaskFocus(
+        seconds
+    );
+
+
+    showCompletionToast(
+        seconds
+    );
+
+
+    updateStreakUI();
+
+}
+
+
+/* =========================================================
+   COMPLETION TOAST
+========================================================= */
+
+function showCompletionToast(seconds){
+
+    let toast =
+        document.getElementById(
+            "rkCompletionToast"
+        );
+
+
+    if(!toast){
+
+        toast =
+            document.createElement(
+                "div"
+            );
+
+
+        toast.id =
+            "rkCompletionToast";
+
+
+        toast.className =
+            "rk-complete-toast";
+
+
+        toast.innerHTML = `
+
+            <div class="rk-toast-title">
+                ✓ Focus session complete
+            </div>
+
+            <div
+                class="rk-toast-text"
+                id="rkToastText"
+            >
+                Great work.
+            </div>
+
+        `;
+
+
+        document.body.appendChild(
+            toast
+        );
+
+    }
+
+
+    const minutes =
+        Math.round(
+            seconds / 60
+        );
+
+
+    const text =
+        document.getElementById(
+            "rkToastText"
+        );
+
+
+    if(text){
+
+        text.textContent =
+            `${minutes} minutes focused · 🔥 Streak maintained`;
+
+    }
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toast._timeout
+    );
+
+
+    toast._timeout =
+        setTimeout(
+            function(){
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            4000
+        );
+
+}
+
+
+/* =========================================================
+   EVENT BRIDGE
+========================================================= */
+
+window.addEventListener(
+    "rakkezFocusComplete",
+    handleFocusCompletion
+);
+
+
+/*
+ * Also listen for generic custom events
+ * so future timer code can communicate with
+ * this system without modifying this code.
+ */
+
+window.addEventListener(
+    "rakkezSessionComplete",
+    function(event){
+
+        if(
+            !event.detail ||
+            event.detail.type === "focus" ||
+            !event.detail.type
+        ){
+
+            handleFocusCompletion();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   AUTO INITIALIZATION
+========================================================= */
+
+function initializeRakkeZEnhancements(){
+
+    insertStreakButton();
+
+    insertTaskButton();
+
+    updateCurrentTaskDisplay();
+
+    updateStreakUI();
+
+}
+
+
+if(
+    document.readyState === "loading"
+){
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function(){
+
+            setTimeout(
+                initializeRakkeZEnhancements,
+                300
+            );
+
+        }
+    );
+
+}else{
+
+    setTimeout(
+        initializeRakkeZEnhancements,
+        300
+    );
+
+}
+
+
+})();
+
+</script>
+
+
 <!-- =====================================================
      SCRIPTS
 ===================================================== -->
