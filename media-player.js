@@ -26,15 +26,15 @@
 
        IMPORTANT:
        - No Browser tab
-       - Lofi / Local / Effects system preserved
-       - SoundCloud is injected automatically
-       - No HTML/CSS file modification required
+       - No HTML modification required
+       - No CSS file modification required
+       - Existing Header / Tabs design preserved
        ===================================================== */
 
 
     /* =====================================================
        STORAGE
-       ===================================================== */
+    ===================================================== */
 
     const STORAGE = {
         track: "rakkez_media_track",
@@ -48,7 +48,7 @@
 
     /* =====================================================
        MAIN MUSIC PLAYLIST
-       ===================================================== */
+    ===================================================== */
 
     const PLAYLIST = [
 
@@ -113,9 +113,7 @@
 
     /* =====================================================
        EFFECTS
-
-       ADD NEW EFFECTS ONLY HERE.
-       ===================================================== */
+    ===================================================== */
 
     const AMBIENT_EFFECTS = [
 
@@ -174,7 +172,7 @@
 
     /* =====================================================
        LOCAL MUSIC
-       ===================================================== */
+    ===================================================== */
 
     let LOCAL_TRACKS = [];
 
@@ -190,7 +188,7 @@
 
     /* =====================================================
        ELEMENTS
-       ===================================================== */
+    ===================================================== */
 
     const overlay =
         document.getElementById("rakkezMediaOverlay");
@@ -201,13 +199,11 @@
     const mediaButton =
         document.getElementById("mediaOpen");
 
-
     const tabs =
         document.querySelectorAll(".rakkez-media-tab");
 
     const sources =
         document.querySelectorAll(".rakkez-media-source");
-
 
     const artwork =
         document.getElementById("rakkezArtwork");
@@ -223,7 +219,6 @@
 
     const playlistCount =
         document.getElementById("rakkezPlaylistCount");
-
 
     const playButton =
         document.getElementById("rakkezPlay");
@@ -243,7 +238,6 @@
     const autoNextButton =
         document.getElementById("rakkezAutoNext");
 
-
     const progress =
         document.getElementById("rakkezProgress");
 
@@ -253,13 +247,16 @@
     const durationElement =
         document.getElementById("rakkezDuration");
 
-
     const volume =
         document.getElementById("rakkezVolume");
 
     const volumeValue =
         document.getElementById("rakkezVolumeValue");
 
+
+    /* =====================================================
+       YOUTUBE ELEMENTS
+    ===================================================== */
 
     const youtubeInput =
         document.getElementById("rakkezYoutubeInput");
@@ -271,6 +268,10 @@
         document.getElementById("rakkezYoutubeEmbed");
 
 
+    /* =====================================================
+       SPOTIFY ELEMENTS
+    ===================================================== */
+
     const spotifyInput =
         document.getElementById("rakkezSpotifyInput");
 
@@ -280,6 +281,10 @@
     const spotifyEmbed =
         document.getElementById("rakkezSpotifyEmbed");
 
+
+    /* =====================================================
+       LOCAL ELEMENTS
+    ===================================================== */
 
     const localFile =
         document.getElementById("rakkezLocalFile");
@@ -293,7 +298,7 @@
 
     /* =====================================================
        MINI PLAYER
-       ===================================================== */
+    ===================================================== */
 
     const miniPlayer =
         document.getElementById("rakkezMiniPlayer");
@@ -322,7 +327,7 @@
 
     /* =====================================================
        MAIN AUDIO
-       ===================================================== */
+    ===================================================== */
 
     const audio =
         new Audio();
@@ -398,7 +403,7 @@
 
     /* =====================================================
        HELPERS
-       ===================================================== */
+    ===================================================== */
 
     function clamp(
         value,
@@ -627,7 +632,7 @@
 
     /* =====================================================
        MAIN PLAYER
-       ===================================================== */
+    ===================================================== */
 
     function loadTrack(
         index,
@@ -967,7 +972,7 @@
 
     /* =====================================================
        MAIN VOLUME
-       ===================================================== */
+    ===================================================== */
 
     function getSavedMainVolume() {
 
@@ -1039,7 +1044,7 @@
 
     /* =====================================================
        PLAYLIST
-       ===================================================== */
+    ===================================================== */
 
     function updatePlaylistUI() {
 
@@ -1193,7 +1198,7 @@
 
     /* =====================================================
        MINI PLAYER
-       ===================================================== */
+    ===================================================== */
 
     function updateMiniPlayer() {
 
@@ -1318,12 +1323,8 @@
 
 
     /* =====================================================
-       DYNAMIC SOUNDCLOUD UI
-       
-       IMPORTANT:
-       This is intentionally created here so that
-       NO HTML FILE modification is required.
-       ===================================================== */
+       SOUNDCLOUD
+    ===================================================== */
 
     let soundCloudTab = null;
     let soundCloudSource = null;
@@ -1336,13 +1337,15 @@
 
     let soundCloudWidget = null;
 
+    let soundCloudQueue = [];
+    let soundCloudCurrentIndex = 0;
+
+
+    /* =====================================================
+       CREATE SOUNDCLOUD UI
+    ===================================================== */
 
     function createSoundCloudUI() {
-
-        /*
-         * If the existing HTML already contains
-         * SoundCloud elements, use them.
-         */
 
         soundCloudInput =
             document.getElementById(
@@ -1360,10 +1363,6 @@
             );
 
 
-        /*
-         * Find the existing tab/source structure.
-         */
-
         let tabContainer =
             document.querySelector(
                 ".rakkez-media-tabs"
@@ -1372,22 +1371,21 @@
 
         if (!tabContainer) {
 
-            tabContainer =
+            const firstTab =
                 document.querySelector(
                     ".rakkez-media-tab"
                 );
 
-            if (tabContainer) {
+
+            if (firstTab) {
+
                 tabContainer =
-                    tabContainer.parentElement;
+                    firstTab.parentElement;
+
             }
 
         }
 
-
-        /*
-         * Find the parent containing sources.
-         */
 
         let sourceContainer =
             document.querySelector(
@@ -1402,6 +1400,7 @@
                     ".rakkez-media-source"
                 );
 
+
             if (firstSource) {
 
                 sourceContainer =
@@ -1413,8 +1412,10 @@
 
 
         /*
-         * If the source already exists,
-         * don't duplicate anything.
+         * IMPORTANT:
+         *
+         * We ONLY add the SoundCloud tab.
+         * We do not modify the existing tabs.
          */
 
         soundCloudSource =
@@ -1423,7 +1424,10 @@
             );
 
 
-        if (!soundCloudSource && sourceContainer) {
+        if (
+            !soundCloudSource &&
+            sourceContainer
+        ) {
 
             soundCloudSource =
                 document.createElement(
@@ -1446,11 +1450,12 @@
             soundCloudSource.innerHTML = `
 
                 <div
+                    class="rakkez-soundcloud-page"
                     style="
                         width:100%;
                         display:flex;
                         flex-direction:column;
-                        gap:14px;
+                        gap:16px;
                     "
                 >
 
@@ -1489,11 +1494,10 @@
                         style="
                             font-size:12px;
                             line-height:1.5;
-                            color:rgba(255,255,255,.52);
+                            color:rgba(255,255,255,.55);
                         "
                     >
                         Paste a SoundCloud track, set, or playlist URL.
-                        Playlists and sets will show their track list inside the player.
                     </div>
 
 
@@ -1510,9 +1514,11 @@
 
 
                     <div
+                        id="rakkezSoundCloudControls"
                         style="
                             display:flex;
                             justify-content:center;
+                            align-items:center;
                             gap:10px;
                         "
                     >
@@ -1533,6 +1539,17 @@
 
                     </div>
 
+
+                    <div
+                        id="rakkezSoundCloudPlaylist"
+                        style="
+                            width:100%;
+                            display:none;
+                            flex-direction:column;
+                            gap:8px;
+                        "
+                    ></div>
+
                 </div>
 
             `;
@@ -1546,17 +1563,26 @@
 
 
         /*
-         * If no SoundCloud tab exists,
-         * create it automatically.
+         * Find existing SoundCloud tab.
          */
 
         soundCloudTab =
             document.querySelector(
-                '[data-rakkez-source="soundcloud"]'
+                '.rakkez-media-tab[data-rakkez-source="soundcloud"]'
             );
 
 
-        if (!soundCloudTab && tabContainer) {
+        /*
+         * Create only if missing.
+         *
+         * Existing Header tab design is preserved
+         * because we use the exact same class.
+         */
+
+        if (
+            !soundCloudTab &&
+            tabContainer
+        ) {
 
             soundCloudTab =
                 document.createElement(
@@ -1588,7 +1614,7 @@
 
 
         /*
-         * Get dynamically-created elements.
+         * Re-query dynamic elements.
          */
 
         soundCloudInput =
@@ -1621,11 +1647,6 @@
                 "rakkezSoundCloudStatus"
             );
 
-
-        /*
-         * Make the newly-created tab work
-         * with the existing switchTab system.
-         */
 
         if (soundCloudTab) {
 
@@ -1682,15 +1703,7 @@
                 "click",
                 function () {
 
-                    if (
-                        soundCloudWidget &&
-                        typeof soundCloudWidget.prev ===
-                        "function"
-                    ) {
-
-                        soundCloudWidget.prev();
-
-                    }
+                    soundCloudPreviousTrack();
 
                 }
             );
@@ -1704,15 +1717,7 @@
                 "click",
                 function () {
 
-                    if (
-                        soundCloudWidget &&
-                        typeof soundCloudWidget.next ===
-                        "function"
-                    ) {
-
-                        soundCloudWidget.next();
-
-                    }
+                    soundCloudNextTrack();
 
                 }
             );
@@ -1724,7 +1729,7 @@
 
     /* =====================================================
        SOUNDCLOUD URL
-       ===================================================== */
+    ===================================================== */
 
     function getSoundCloudUrl(
         url
@@ -1760,14 +1765,6 @@
             }
 
 
-            /*
-             * We intentionally don't try to
-             * extract IDs from SoundCloud URLs.
-             *
-             * The official SoundCloud widget
-             * accepts the original URL directly.
-             */
-
             if (
                 !parsed.pathname ||
                 parsed.pathname === "/"
@@ -1791,16 +1788,11 @@
 
     /* =====================================================
        SOUNDCLOUD WIDGET API
-       ===================================================== */
+    ===================================================== */
 
     function loadSoundCloudWidgetAPI(
         callback
     ) {
-
-        /*
-         * The official SoundCloud Widget API
-         * is exposed through SC.Widget.
-         */
 
         if (
             window.SC &&
@@ -1915,8 +1907,387 @@
 
 
     /* =====================================================
-       PLAY SOUNDCLOUD
-       ===================================================== */
+       SOUNDCLOUD QUEUE
+    ===================================================== */
+
+    function clearSoundCloudPlaylist() {
+
+        const list =
+            document.getElementById(
+                "rakkezSoundCloudPlaylist"
+            );
+
+
+        if (!list) {
+            return;
+        }
+
+
+        list.innerHTML =
+            "";
+
+
+        list.style.display =
+            "none";
+
+    }
+
+
+    function showSoundCloudPlaylist() {
+
+        const list =
+            document.getElementById(
+                "rakkezSoundCloudPlaylist"
+            );
+
+
+        if (!list) {
+            return;
+        }
+
+
+        list.innerHTML =
+            "";
+
+
+        if (
+            !soundCloudQueue.length
+        ) {
+
+            list.style.display =
+                "none";
+
+            return;
+
+        }
+
+
+        list.style.display =
+            "flex";
+
+
+        soundCloudQueue.forEach(
+            function (
+                item,
+                index
+            ) {
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                button.type =
+                    "button";
+
+
+                button.dataset.soundcloudIndex =
+                    String(index);
+
+
+                button.style.cssText = `
+                    width:100%;
+                    display:flex;
+                    align-items:center;
+                    gap:12px;
+                    padding:11px 12px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,.07);
+                    background:rgba(255,255,255,.035);
+                    color:inherit;
+                    cursor:pointer;
+                    text-align:left;
+                `;
+
+
+                button.innerHTML = `
+
+                    <span
+                        style="
+                            width:28px;
+                            min-width:28px;
+                            height:28px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            border-radius:8px;
+                            background:rgba(255,255,255,.07);
+                            font-size:12px;
+                        "
+                    >
+                        ${index + 1}
+                    </span>
+
+                    <span
+                        style="
+                            min-width:0;
+                            flex:1;
+                            overflow:hidden;
+                            text-overflow:ellipsis;
+                            white-space:nowrap;
+                            font-size:13px;
+                        "
+                    >
+                        ${escapeHTML(
+                            item.title ||
+                            "SoundCloud Track " +
+                            (index + 1)
+                        )}
+                    </span>
+
+                `;
+
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        playSoundCloudQueueItem(
+                            index
+                        );
+
+                    }
+                );
+
+
+                list.appendChild(
+                    button
+                );
+
+            }
+        );
+
+
+        updateSoundCloudPlaylistUI();
+
+    }
+
+
+    function updateSoundCloudPlaylistUI() {
+
+        const list =
+            document.getElementById(
+                "rakkezSoundCloudPlaylist"
+            );
+
+
+        if (!list) {
+            return;
+        }
+
+
+        list
+            .querySelectorAll(
+                "button[data-soundcloud-index]"
+            )
+            .forEach(
+                function (
+                    button,
+                    index
+                ) {
+
+                    const active =
+                        index ===
+                        soundCloudCurrentIndex;
+
+
+                    button.style.background =
+                        active
+                            ? "rgba(255,255,255,.10)"
+                            : "rgba(255,255,255,.035)";
+
+
+                    button.style.borderColor =
+                        active
+                            ? "rgba(255,255,255,.15)"
+                            : "rgba(255,255,255,.07)";
+
+                }
+            );
+
+    }
+
+
+    function playSoundCloudQueueItem(
+        index
+    ) {
+
+        if (
+            !soundCloudQueue.length
+        ) {
+
+            return;
+
+        }
+
+
+        index =
+            clamp(
+                index,
+                0,
+                soundCloudQueue.length - 1
+            );
+
+
+        soundCloudCurrentIndex =
+            index;
+
+
+        const item =
+            soundCloudQueue[index];
+
+
+        if (
+            soundCloudWidget &&
+            item &&
+            item.id &&
+            typeof soundCloudWidget.skip ===
+            "function"
+        ) {
+
+            /*
+             * SoundCloud Widget API uses
+             * skip(index) for playlist items.
+             */
+
+            soundCloudWidget.skip(
+                index
+            );
+
+
+            updateSoundCloudPlaylistUI();
+
+
+            return;
+
+        }
+
+
+        if (
+            soundCloudWidget &&
+            typeof soundCloudWidget.play ===
+            "function"
+        ) {
+
+            soundCloudWidget.play();
+
+        }
+
+
+        updateSoundCloudPlaylistUI();
+
+    }
+
+
+    function soundCloudNextTrack() {
+
+        if (
+            soundCloudWidget &&
+            soundCloudQueue.length
+        ) {
+
+            const next =
+                (
+                    soundCloudCurrentIndex +
+                    1
+                ) %
+                soundCloudQueue.length;
+
+
+            soundCloudCurrentIndex =
+                next;
+
+
+            if (
+                typeof soundCloudWidget.skip ===
+                "function"
+            ) {
+
+                soundCloudWidget.skip(
+                    next
+                );
+
+            }
+
+
+            updateSoundCloudPlaylistUI();
+
+
+            return;
+
+        }
+
+
+        if (
+            soundCloudWidget &&
+            typeof soundCloudWidget.next ===
+            "function"
+        ) {
+
+            soundCloudWidget.next();
+
+        }
+
+    }
+
+
+    function soundCloudPreviousTrack() {
+
+        if (
+            soundCloudWidget &&
+            soundCloudQueue.length
+        ) {
+
+            const previous =
+                (
+                    soundCloudCurrentIndex -
+                    1 +
+                    soundCloudQueue.length
+                ) %
+                soundCloudQueue.length;
+
+
+            soundCloudCurrentIndex =
+                previous;
+
+
+            if (
+                typeof soundCloudWidget.skip ===
+                "function"
+            ) {
+
+                soundCloudWidget.skip(
+                    previous
+                );
+
+            }
+
+
+            updateSoundCloudPlaylistUI();
+
+
+            return;
+
+        }
+
+
+        if (
+            soundCloudWidget &&
+            typeof soundCloudWidget.prev ===
+            "function"
+        ) {
+
+            soundCloudWidget.prev();
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SOUNDCLOUD PLAY
+    ===================================================== */
 
     function playSoundCloud() {
 
@@ -1957,18 +2328,33 @@
             `;
 
 
+            clearSoundCloudPlaylist();
+
+
             return;
 
         }
 
 
-        /*
-         * Stop/replace previous widget.
-         */
-
         soundCloudWidget =
             null;
 
+
+        soundCloudQueue =
+            [];
+
+
+        soundCloudCurrentIndex =
+            0;
+
+
+        clearSoundCloudPlaylist();
+
+
+        /*
+         * The official SoundCloud Widget
+         * is used directly.
+         */
 
         soundCloudEmbed.innerHTML = `
 
@@ -1978,44 +2364,26 @@
                 allow="autoplay"
                 scrolling="no"
                 frameborder="no"
-                src="
-                    https://w.soundcloud.com/player/?
-                    url=${encodeURIComponent(soundCloudUrl)}
-                    &auto_play=true
-                    &hide_related=false
-                    &show_comments=true
-                    &show_user=true
-                    &show_reposts=false
-                    &show_teaser=false
-                    &visual=false
-                    &color=%23000000
-                "
+                src="https://w.soundcloud.com/player/?url=${encodeURIComponent(soundCloudUrl)}&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true&color=%23000000"
                 style="
                     width:100%;
-                    height:450px;
+                    height:166px;
                     border:0;
                     display:block;
                     border-radius:16px;
                 "
             ></iframe>
 
-        `.replace(
-            /\s+/g,
-            " "
-        );
+        `;
 
 
         if (soundCloudStatus) {
 
             soundCloudStatus.textContent =
-                "SoundCloud loaded. Sets and playlists display their track list inside the player.";
+                "SoundCloud loaded.";
 
         }
 
-
-        /*
-         * Load official Widget API.
-         */
 
         loadSoundCloudWidgetAPI(
             function () {
@@ -2049,18 +2417,154 @@
                     function () {
 
                         /*
-                         * Make sure autoplay/playback
-                         * is requested after the widget
-                         * is ready.
+                         * Retrieve playlist / set items.
                          */
 
                         if (
-                            soundCloudWidget &&
+                            typeof soundCloudWidget.getSounds ===
+                            "function"
+                        ) {
+
+                            soundCloudWidget.getSounds(
+                                function (sounds) {
+
+                                    if (
+                                        Array.isArray(
+                                            sounds
+                                        )
+                                    ) {
+
+                                        soundCloudQueue =
+                                            sounds.map(
+                                                function (
+                                                    sound
+                                                ) {
+
+                                                    return {
+
+                                                        id:
+                                                            sound.id,
+
+                                                        title:
+                                                            sound.title ||
+                                                            "SoundCloud Track",
+
+                                                        permalink:
+                                                            sound.permalink_url ||
+                                                            null
+
+                                                    };
+
+                                                }
+                                            );
+
+
+                                        if (
+                                            soundCloudQueue.length
+                                        ) {
+
+                                            showSoundCloudPlaylist();
+
+                                        }
+
+                                    }
+
+                                }
+                            );
+
+                        }
+
+
+                        if (
                             typeof soundCloudWidget.play ===
                             "function"
                         ) {
 
                             soundCloudWidget.play();
+
+                        }
+
+                    }
+                );
+
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.PLAY_PROGRESS,
+                    function () {
+
+                        if (
+                            typeof soundCloudWidget.getCurrentSoundIndex ===
+                            "function"
+                        ) {
+
+                            soundCloudWidget.getCurrentSoundIndex(
+                                function (index) {
+
+                                    if (
+                                        Number.isFinite(
+                                            index
+                                        )
+                                    ) {
+
+                                        soundCloudCurrentIndex =
+                                            index;
+
+                                        updateSoundCloudPlaylistUI();
+
+                                    }
+
+                                }
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.PLAY,
+                    function () {
+
+                        if (
+                            soundCloudStatus
+                        ) {
+
+                            soundCloudStatus.textContent =
+                                "SoundCloud is playing.";
+
+                        }
+
+                    }
+                );
+
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.PAUSE,
+                    function () {
+
+                        if (
+                            soundCloudStatus
+                        ) {
+
+                            soundCloudStatus.textContent =
+                                "SoundCloud paused.";
+
+                        }
+
+                    }
+                );
+
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.FINISH,
+                    function () {
+
+                        if (
+                            soundCloudQueue.length
+                        ) {
+
+                            soundCloudNextTrack();
 
                         }
 
@@ -2075,18 +2579,11 @@
 
     /* =====================================================
        TABS
-       ===================================================== */
+    ===================================================== */
 
     function switchTab(
         name
     ) {
-
-        /*
-         * Re-query every time.
-         *
-         * This is important because SoundCloud
-         * is dynamically inserted.
-         */
 
         const currentTabs =
             document.querySelectorAll(
@@ -2128,10 +2625,6 @@
     }
 
 
-    /*
-     * Original tabs.
-     */
-
     tabs.forEach(
         function (tab) {
 
@@ -2152,7 +2645,7 @@
 
     /* =====================================================
        OVERLAY
-       ===================================================== */
+    ===================================================== */
 
     function openMedia() {
 
@@ -2254,7 +2747,7 @@
 
     /* =====================================================
        MAIN CONTROLS
-       ===================================================== */
+    ===================================================== */
 
     if (playButton) {
 
@@ -2391,7 +2884,7 @@
 
     /* =====================================================
        PROGRESS
-       ===================================================== */
+    ===================================================== */
 
     if (progress) {
 
@@ -2439,7 +2932,7 @@
 
     /* =====================================================
        MAIN VOLUME
-       ===================================================== */
+    ===================================================== */
 
     if (volume) {
 
@@ -2460,7 +2953,7 @@
 
     /* =====================================================
        MAIN AUDIO EVENTS
-       ===================================================== */
+    ===================================================== */
 
     audio.addEventListener(
         "loadstart",
@@ -2658,7 +3151,7 @@
 
     /* =====================================================
        MINI CONTROLS
-       ===================================================== */
+    ===================================================== */
 
     if (miniPlay) {
 
@@ -2692,15 +3185,152 @@
 
     /* =====================================================
        YOUTUBE
-       
-       Supports:
-       - youtube.com/watch?v=VIDEO
-       - youtu.be/VIDEO
-       - youtube.com/playlist?list=PLAYLIST
-       - youtube.com/watch?v=VIDEO&list=PLAYLIST
-       - music.youtube.com/playlist?list=PLAYLIST
-       - YouTube Music album URLs containing list=
-       ===================================================== */
+    ===================================================== */
+
+    let youtubePlayer = null;
+
+    let youtubePlaylist = [];
+
+    let youtubePlaylistIndex = 0;
+
+    let youtubeApiReady = false;
+
+    let youtubeApiCallbacks = [];
+
+
+    /* =====================================================
+       LOAD YOUTUBE IFRAME API
+    ===================================================== */
+
+    function loadYouTubeAPI(
+        callback
+    ) {
+
+        if (
+            window.YT &&
+            typeof window.YT.Player ===
+            "function"
+        ) {
+
+            youtubeApiReady =
+                true;
+
+
+            callback();
+
+            return;
+
+        }
+
+
+        youtubeApiCallbacks.push(
+            callback
+        );
+
+
+        if (
+            document.getElementById(
+                "rakkezYouTubeIframeAPI"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const previousReady =
+            window.onYouTubeIframeAPIReady;
+
+
+        window.onYouTubeIframeAPIReady =
+            function () {
+
+                youtubeApiReady =
+                    true;
+
+
+                if (
+                    typeof previousReady ===
+                    "function"
+                ) {
+
+                    try {
+
+                        previousReady();
+
+                    } catch (error) {
+
+                        console.warn(
+                            "Previous YouTube API callback failed:",
+                            error
+                        );
+
+                    }
+
+                }
+
+
+                const callbacks =
+                    youtubeApiCallbacks.slice();
+
+
+                youtubeApiCallbacks =
+                    [];
+
+
+                callbacks.forEach(
+                    function (
+                        callback
+                    ) {
+
+                        try {
+
+                            callback();
+
+                        } catch (error) {
+
+                            console.error(
+                                "RakkeZ YouTube callback error:",
+                                error
+                            );
+
+                        }
+
+                    }
+                );
+
+            };
+
+
+        const script =
+            document.createElement(
+                "script"
+            );
+
+
+        script.id =
+            "rakkezYouTubeIframeAPI";
+
+
+        script.src =
+            "https://www.youtube.com/iframe_api";
+
+
+        script.async =
+            true;
+
+
+        document.head.appendChild(
+            script
+        );
+
+    }
+
+
+    /* =====================================================
+       YOUTUBE URL PARSER
+    ===================================================== */
 
     function getYouTubeData(
         url
@@ -2727,12 +3357,9 @@
 
 
             const isYouTube =
-                hostname ===
-                    "youtube.com" ||
-                hostname ===
-                    "youtu.be" ||
-                hostname ===
-                    "music.youtube.com";
+                hostname === "youtube.com" ||
+                hostname === "youtu.be" ||
+                hostname === "music.youtube.com";
 
 
             if (!isYouTube) {
@@ -2752,10 +3379,6 @@
                 );
 
 
-            /*
-             * youtu.be/VIDEO
-             */
-
             if (
                 hostname ===
                 "youtu.be"
@@ -2772,15 +3395,9 @@
             }
 
 
-            /*
-             * youtube.com/watch?v=
-             */
-
             if (
-                hostname ===
-                    "youtube.com" ||
-                hostname ===
-                    "music.youtube.com"
+                hostname === "youtube.com" ||
+                hostname === "music.youtube.com"
             ) {
 
                 if (
@@ -2798,10 +3415,6 @@
 
             }
 
-
-            /*
-             * /embed/VIDEO
-             */
 
             const parts =
                 parsed.pathname
@@ -2828,10 +3441,6 @@
             }
 
 
-            /*
-             * /shorts/VIDEO
-             */
-
             const shortsIndex =
                 parts.indexOf(
                     "shorts"
@@ -2851,10 +3460,6 @@
             }
 
 
-            /*
-             * Remove accidental query/hash data.
-             */
-
             if (videoId) {
 
                 videoId =
@@ -2869,8 +3474,7 @@
             if (playlistId) {
 
                 playlistId =
-                    playlistId
-                        .trim();
+                    playlistId.trim();
 
             }
 
@@ -2903,6 +3507,795 @@
 
     }
 
+
+    /* =====================================================
+       YOUTUBE PLAYLIST UI
+    ===================================================== */
+
+    function getYouTubePlaylistContainer() {
+
+        if (!youtubeEmbed) {
+            return null;
+        }
+
+
+        let container =
+            document.getElementById(
+                "rakkezYoutubePlaylistContainer"
+            );
+
+
+        if (!container) {
+
+            container =
+                document.createElement(
+                    "div"
+                );
+
+
+            container.id =
+                "rakkezYoutubePlaylistContainer";
+
+
+            container.style.cssText = `
+                width:100%;
+                margin-top:14px;
+                display:none;
+                flex-direction:column;
+                gap:8px;
+            `;
+
+
+            youtubeEmbed.parentElement
+                ?.appendChild(
+                    container
+                );
+
+        }
+
+
+        return container;
+
+    }
+
+
+    function createYouTubePlaylistUI() {
+
+        const container =
+            getYouTubePlaylistContainer();
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML =
+            "";
+
+
+        if (
+            !youtubePlaylist.length
+        ) {
+
+            container.style.display =
+                "none";
+
+            return;
+
+        }
+
+
+        container.style.display =
+            "flex";
+
+
+        const heading =
+            document.createElement(
+                "div"
+            );
+
+
+        heading.style.cssText = `
+            font-size:12px;
+            color:rgba(255,255,255,.55);
+            padding:4px 2px;
+        `;
+
+
+        heading.textContent =
+            "Playlist";
+
+
+        container.appendChild(
+            heading
+        );
+
+
+        const list =
+            document.createElement(
+                "div"
+            );
+
+
+        list.style.cssText = `
+            width:100%;
+            max-height:260px;
+            overflow-y:auto;
+            display:flex;
+            flex-direction:column;
+            gap:7px;
+        `;
+
+
+        youtubePlaylist.forEach(
+            function (
+                video,
+                index
+            ) {
+
+                const item =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                item.type =
+                    "button";
+
+
+                item.dataset.youtubeIndex =
+                    String(index);
+
+
+                item.style.cssText = `
+                    width:100%;
+                    display:flex;
+                    align-items:center;
+                    gap:10px;
+                    padding:9px 10px;
+                    border-radius:10px;
+                    border:1px solid rgba(255,255,255,.07);
+                    background:rgba(255,255,255,.035);
+                    color:inherit;
+                    cursor:pointer;
+                    text-align:left;
+                `;
+
+
+                const thumbnail =
+                    video.videoId
+                        ? "https://i.ytimg.com/vi/" +
+                          encodeURIComponent(
+                              video.videoId
+                          ) +
+                          "/default.jpg"
+                        : "";
+
+
+                item.innerHTML = `
+
+                    <div
+                        style="
+                            width:70px;
+                            min-width:70px;
+                            height:40px;
+                            border-radius:7px;
+                            overflow:hidden;
+                            background:rgba(255,255,255,.05);
+                        "
+                    >
+                        ${
+                            thumbnail
+                                ? `
+                                    <img
+                                        src="${thumbnail}"
+                                        alt=""
+                                        style="
+                                            width:100%;
+                                            height:100%;
+                                            object-fit:cover;
+                                        "
+                                    >
+                                `
+                                : ""
+                        }
+                    </div>
+
+                    <div
+                        style="
+                            min-width:0;
+                            flex:1;
+                        "
+                    >
+
+                        <div
+                            style="
+                                font-size:12px;
+                                overflow:hidden;
+                                text-overflow:ellipsis;
+                                white-space:nowrap;
+                            "
+                        >
+                            ${escapeHTML(
+                                video.title ||
+                                "Video " +
+                                (index + 1)
+                            )}
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:3px;
+                                font-size:10px;
+                                color:rgba(255,255,255,.42);
+                            "
+                        >
+                            ${index + 1}
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                item.addEventListener(
+                    "click",
+                    function () {
+
+                        playYouTubePlaylistItem(
+                            index
+                        );
+
+                    }
+                );
+
+
+                list.appendChild(
+                    item
+                );
+
+            }
+        );
+
+
+        container.appendChild(
+            list
+        );
+
+
+        updateYouTubePlaylistUI();
+
+    }
+
+
+    function updateYouTubePlaylistUI() {
+
+        const container =
+            document.getElementById(
+                "rakkezYoutubePlaylistContainer"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container
+            .querySelectorAll(
+                "button[data-youtube-index]"
+            )
+            .forEach(
+                function (
+                    button,
+                    index
+                ) {
+
+                    const active =
+                        index ===
+                        youtubePlaylistIndex;
+
+
+                    button.style.background =
+                        active
+                            ? "rgba(255,255,255,.10)"
+                            : "rgba(255,255,255,.035)";
+
+
+                    button.style.borderColor =
+                        active
+                            ? "rgba(255,255,255,.15)"
+                            : "rgba(255,255,255,.07)";
+
+                }
+            );
+
+    }
+
+
+    function playYouTubePlaylistItem(
+        index
+    ) {
+
+        if (
+            !youtubePlaylist.length
+        ) {
+
+            return;
+
+        }
+
+
+        index =
+            clamp(
+                index,
+                0,
+                youtubePlaylist.length - 1
+            );
+
+
+        youtubePlaylistIndex =
+            index;
+
+
+        const video =
+            youtubePlaylist[index];
+
+
+        if (
+            !youtubePlayer ||
+            !video
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            typeof youtubePlayer.loadVideoById ===
+            "function"
+        ) {
+
+            youtubePlayer.loadVideoById(
+                video.videoId
+            );
+
+        }
+
+
+        updateYouTubePlaylistUI();
+
+    }
+
+
+    function youtubeNextTrack() {
+
+        if (
+            youtubePlaylist.length
+        ) {
+
+            const next =
+                (
+                    youtubePlaylistIndex +
+                    1
+                ) %
+                youtubePlaylist.length;
+
+
+            playYouTubePlaylistItem(
+                next
+            );
+
+
+            return;
+
+        }
+
+
+        if (
+            youtubePlayer &&
+            typeof youtubePlayer.nextVideo ===
+            "function"
+        ) {
+
+            youtubePlayer.nextVideo();
+
+        }
+
+    }
+
+
+    function youtubePreviousTrack() {
+
+        if (
+            youtubePlaylist.length
+        ) {
+
+            const previous =
+                (
+                    youtubePlaylistIndex -
+                    1 +
+                    youtubePlaylist.length
+                ) %
+                youtubePlaylist.length;
+
+
+            playYouTubePlaylistItem(
+                previous
+            );
+
+
+            return;
+
+        }
+
+
+        if (
+            youtubePlayer &&
+            typeof youtubePlayer.previousVideo ===
+            "function"
+        ) {
+
+            youtubePlayer.previousVideo();
+
+        }
+
+    }
+
+
+    /* =====================================================
+       YOUTUBE PLAYER CREATION
+    ===================================================== */
+
+    function createYouTubePlayer(
+        data
+    ) {
+
+        if (!youtubeEmbed) {
+            return;
+        }
+
+
+        youtubeEmbed.innerHTML =
+            "";
+
+
+        const playerElement =
+            document.createElement(
+                "div"
+            );
+
+
+        playerElement.id =
+            "rakkezYoutubePlayer";
+
+
+        playerElement.style.cssText = `
+            width:100%;
+            min-height:300px;
+            border-radius:16px;
+            overflow:hidden;
+        `;
+
+
+        youtubeEmbed.appendChild(
+            playerElement
+        );
+
+
+        loadYouTubeAPI(
+            function () {
+
+                if (
+                    youtubePlayer &&
+                    typeof youtubePlayer.destroy ===
+                    "function"
+                ) {
+
+                    try {
+
+                        youtubePlayer.destroy();
+
+                    } catch (error) {}
+
+                }
+
+
+                const playerOptions = {
+
+                    width:
+                        "100%",
+
+                    height:
+                        "420",
+
+                    videoId:
+                        data.videoId || undefined,
+
+                    playerVars: {
+
+                        autoplay:
+                            1,
+
+                        controls:
+                            1,
+
+                        rel:
+                            0,
+
+                        playsinline:
+                            1,
+
+                        modestbranding:
+                            1
+
+                    },
+
+                    events: {
+
+                        onReady:
+                            function (
+                                event
+                            ) {
+
+                                if (
+                                    data.playlistId &&
+                                    typeof event.target.loadPlaylist ===
+                                    "function"
+                                ) {
+
+                                    event.target.loadPlaylist({
+
+                                        list:
+                                            data.playlistId,
+
+                                        index:
+                                            0
+
+                                    });
+
+                                }
+
+                            },
+
+
+                        onStateChange:
+                            function (
+                                event
+                            ) {
+
+                                if (
+                                    window.YT &&
+                                    event.data ===
+                                    window.YT.PlayerState.PLAYING
+                                ) {
+
+                                    syncYouTubePlaylist();
+
+                                }
+
+
+                                if (
+                                    window.YT &&
+                                    event.data ===
+                                    window.YT.PlayerState.ENDED
+                                ) {
+
+                                    youtubeNextTrack();
+
+                                }
+
+                            },
+
+                        onError:
+                            function (
+                                event
+                            ) {
+
+                                console.warn(
+                                    "RakkeZ YouTube error:",
+                                    event.data
+                                );
+
+                            }
+
+                    }
+
+                };
+
+
+                youtubePlayer =
+                    new YT.Player(
+                        playerElement.id,
+                        playerOptions
+                    );
+
+
+                /*
+                 * If playlist-only URL was supplied,
+                 * load it after player creation.
+                 */
+
+                if (
+                    data.playlistId
+                ) {
+
+                    setTimeout(
+                        function () {
+
+                            if (
+                                youtubePlayer &&
+                                typeof youtubePlayer.loadPlaylist ===
+                                "function"
+                            ) {
+
+                                youtubePlayer.loadPlaylist({
+
+                                    list:
+                                        data.playlistId,
+
+                                    index:
+                                        0
+
+                                });
+
+                            }
+
+                        },
+                        700
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       SYNC YOUTUBE PLAYLIST
+    ===================================================== */
+
+    function syncYouTubePlaylist() {
+
+        if (!youtubePlayer) {
+            return;
+        }
+
+
+        if (
+            typeof youtubePlayer.getPlaylist ===
+            "function"
+        ) {
+
+            const ids =
+                youtubePlayer.getPlaylist();
+
+
+            if (
+                Array.isArray(ids) &&
+                ids.length
+            ) {
+
+                const current =
+                    youtubePlayer.getPlaylistIndex();
+
+
+                youtubePlaylist =
+                    ids.map(
+                        function (
+                            id,
+                            index
+                        ) {
+
+                            return {
+
+                                videoId:
+                                    id,
+
+                                title:
+                                    "YouTube Video " +
+                                    (index + 1)
+
+                            };
+
+                        }
+                    );
+
+
+                youtubePlaylistIndex =
+                    Number.isFinite(
+                        current
+                    )
+                        ? current
+                        : 0;
+
+
+                createYouTubePlaylistUI();
+
+
+                /*
+                 * Try to get the current video
+                 * title from the player.
+                 */
+
+                updateYouTubeCurrentTitle();
+
+            }
+
+        }
+
+    }
+
+
+    function updateYouTubeCurrentTitle() {
+
+        if (
+            !youtubePlayer ||
+            !youtubePlaylist.length
+        ) {
+
+            return;
+
+        }
+
+
+        const data =
+            typeof youtubePlayer.getVideoData ===
+            "function"
+                ? youtubePlayer.getVideoData()
+                : null;
+
+
+        if (
+            data &&
+            data.video_id
+        ) {
+
+            const index =
+                youtubePlaylist.findIndex(
+                    function (
+                        item
+                    ) {
+
+                        return (
+                            item.videoId ===
+                            data.video_id
+                        );
+
+                    }
+                );
+
+
+            if (index !== -1) {
+
+                youtubePlaylistIndex =
+                    index;
+
+
+                if (data.title) {
+
+                    youtubePlaylist[index].title =
+                        data.title;
+
+                }
+
+
+                createYouTubePlaylistUI();
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PLAY YOUTUBE
+    ===================================================== */
 
     function playYouTube() {
 
@@ -2943,100 +4336,43 @@
             `;
 
 
+            const playlistContainer =
+                document.getElementById(
+                    "rakkezYoutubePlaylistContainer"
+                );
+
+
+            if (playlistContainer) {
+
+                playlistContainer.style.display =
+                    "none";
+
+            }
+
+
             return;
 
         }
 
 
-        let embedUrl;
+        youtubePlaylist =
+            [];
 
 
-        /*
-         * Playlist only.
-         */
-
-        if (
-            data.playlistId &&
-            !data.videoId
-        ) {
-
-            embedUrl =
-                "https://www.youtube.com/embed/videoseries" +
-                "?list=" +
-                encodeURIComponent(
-                    data.playlistId
-                ) +
-                "&autoplay=1" +
-                "&rel=0";
-
-        }
+        youtubePlaylistIndex =
+            0;
 
 
-        /*
-         * Video + Playlist.
-         */
-
-        else if (
-            data.videoId &&
-            data.playlistId
-        ) {
-
-            embedUrl =
-                "https://www.youtube.com/embed/" +
-                encodeURIComponent(
-                    data.videoId
-                ) +
-                "?list=" +
-                encodeURIComponent(
-                    data.playlistId
-                ) +
-                "&autoplay=1" +
-                "&rel=0";
-
-        }
-
-
-        /*
-         * Video only.
-         */
-
-        else {
-
-            embedUrl =
-                "https://www.youtube.com/embed/" +
-                encodeURIComponent(
-                    data.videoId
-                ) +
-                "?autoplay=1" +
-                "&rel=0";
-
-        }
-
-
-        youtubeEmbed.innerHTML = `
-
-            <iframe
-                src="${embedUrl}"
-                title="YouTube Player"
-                allow="
-                    autoplay;
-                    encrypted-media;
-                    picture-in-picture;
-                    fullscreen
-                "
-                allowfullscreen
-                loading="lazy"
-            ></iframe>
-
-        `;
+        createYouTubePlayer(
+            data
+        );
 
     }
 
 
-    /*
-     * Add the YouTube playlist explanation
-     * WITHOUT requiring HTML modification.
-     */
+    /* =====================================================
+       YOUTUBE HINT
+    ===================================================== */
 
     function addYouTubePlaylistHint() {
 
@@ -3090,6 +4426,7 @@
 
 
         hint.innerHTML = `
+
             <strong
                 style="
                     color:rgba(255,255,255,.78);
@@ -3098,6 +4435,7 @@
             >
                 Tip:
             </strong>
+
             You can paste a YouTube
             <strong
                 style="
@@ -3108,13 +4446,12 @@
                 Playlist
             </strong>
             URL here too.
-            The full playlist will appear in the player and you can browse its tracks.
+
+            The playlist will appear below the player,
+            and you can choose any song directly.
+
         `;
 
-
-        /*
-         * Put it directly after the input/button row.
-         */
 
         const row =
             youtubeInput.parentElement;
@@ -3129,10 +4466,8 @@
 
         } else {
 
-            youtubeSource.insertBefore(
-                hint,
-                youtubeEmbed ||
-                youtubeSource.firstChild
+            youtubeSource.appendChild(
+                hint
             );
 
         }
@@ -3175,7 +4510,7 @@
 
     /* =====================================================
        SPOTIFY
-       ===================================================== */
+    ===================================================== */
 
     function getSpotifyEmbed(
         url
@@ -3358,7 +4693,7 @@
 
     /* =====================================================
        LOCAL MUSIC
-       ===================================================== */
+    ===================================================== */
 
     function saveLocalNames() {
 
@@ -3540,9 +4875,7 @@
 
     /* =====================================================
        EFFECT ENGINE
-
-       ONE AUDIO ELEMENT PER EFFECT.
-       ===================================================== */
+    ===================================================== */
 
     const effectPlayers =
         Object.create(null);
@@ -3687,7 +5020,7 @@
 
     /* =====================================================
        EFFECTS CONTAINER
-       ===================================================== */
+    ===================================================== */
 
     function getEffectsSource() {
 
@@ -3742,8 +5075,8 @@
 
 
     /* =====================================================
-       REMOVE ALL OLD EFFECT CARDS
-       ===================================================== */
+       REMOVE OLD EFFECT CARDS
+    ===================================================== */
 
     function removeOldEffectCards(
         source,
@@ -3835,7 +5168,7 @@
 
     /* =====================================================
        EFFECT UI UPDATE
-       ===================================================== */
+    ===================================================== */
 
     function updateEffectCard(
         effect
@@ -3914,7 +5247,7 @@
 
     /* =====================================================
        CREATE EFFECT CARD
-       ===================================================== */
+    ===================================================== */
 
     function createEffectCard(
         effect,
@@ -4282,7 +5615,7 @@
 
     /* =====================================================
        RENDER EFFECTS
-       ===================================================== */
+    ===================================================== */
 
     function renderEffects() {
 
@@ -4351,7 +5684,7 @@
 
     /* =====================================================
        EFFECT DEBUG
-       ===================================================== */
+    ===================================================== */
 
     window.RakkeZEffects = {
 
@@ -4444,7 +5777,7 @@
 
     /* =====================================================
        KEYBOARD
-       ===================================================== */
+    ===================================================== */
 
     document.addEventListener(
         "keydown",
@@ -4503,7 +5836,7 @@
 
     /* =====================================================
        CLEANUP
-       ===================================================== */
+    ===================================================== */
 
     window.addEventListener(
         "beforeunload",
@@ -4545,45 +5878,79 @@
                 }
             );
 
+
+            if (
+                youtubePlayer &&
+                typeof youtubePlayer.destroy ===
+                "function"
+            ) {
+
+                try {
+
+                    youtubePlayer.destroy();
+
+                } catch (error) {}
+
+            }
+
+
+            if (
+                soundCloudWidget &&
+                typeof soundCloudWidget.pause ===
+                "function"
+            ) {
+
+                try {
+
+                    soundCloudWidget.pause();
+
+                } catch (error) {}
+
+            }
+
         }
     );
 
 
     /* =====================================================
        INITIALIZATION
-       ===================================================== */
+    ===================================================== */
 
     function initialize() {
 
         /*
-         * Create SoundCloud first.
+         * SoundCloud is created automatically.
          *
-         * This automatically adds:
-         * - SoundCloud tab
-         * - SoundCloud source
-         * - Input
-         * - Load button
-         * - Player
-         * - Previous / Next
-         *
-         * No other file is required.
+         * Existing Header / Tab design is untouched.
          */
 
         createSoundCloudUI();
 
 
         /*
-         * Re-add YouTube playlist explanation.
+         * YouTube playlist help.
          */
 
         addYouTubePlaylistHint();
 
 
+        /*
+         * Main playlist.
+         */
+
         renderPlaylist();
 
 
+        /*
+         * Local music.
+         */
+
         renderLocalTracks();
 
+
+        /*
+         * Main volume.
+         */
 
         const savedVolume =
             getSavedMainVolume();
@@ -4604,11 +5971,19 @@
             loop;
 
 
+        /*
+         * Load initial Lofi track.
+         */
+
         loadTrack(
             currentIndex,
             false
         );
 
+
+        /*
+         * Buttons state.
+         */
 
         if (shuffleButton) {
 
@@ -4640,7 +6015,17 @@
         }
 
 
+        /*
+         * Effects.
+         */
+
         renderEffects();
+
+
+        /*
+         * Make sure YouTube API is ready
+         * only when YouTube is actually used.
+         */
 
 
         console.log(
