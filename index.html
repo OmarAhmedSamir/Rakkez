@@ -4349,6 +4349,4029 @@ body.light .rakkez-mini-close,
 
 
 
+
+
+
+
+
+
+
+
+
+<!-- =========================================================
+     RAKKEZ STATISTICS + FOCUS HISTORY
+     
+     IMPORTANT:
+     هذا النظام يعمل داخل index.html فقط.
+
+     لا يحتاج تعديل:
+     - style.css
+     - app.js
+     - themes.js
+     - language.js
+     - media-player.js
+
+     يعتمد على نفس:
+        rakkez_stats
+        rakkez_settings
+        rakkez_timer_state
+
+     الهدف:
+        جعل Statistics متزامنة مع الموقع الحالي.
+========================================================= -->
+
+
+<style>
+
+/* =========================================================
+   STATS OVERLAY
+========================================================= */
+
+.rakkez-stats-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2147482000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0,0,0,.72);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+
+}
+
+
+.rakkez-stats-overlay.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+
+/* =========================================================
+   STATS PANEL
+========================================================= */
+
+.rakkez-stats-panel {
+
+    position: relative;
+
+    width:
+        min(920px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 26px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,22,34,.98),
+            rgba(4,8,15,.98)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    box-shadow:
+        0 35px 120px rgba(0,0,0,.65);
+
+    transform:
+        translateY(20px)
+        scale(.97);
+
+    transition:
+        transform .35s cubic-bezier(.16,1,.3,1);
+
+}
+
+
+.rakkez-stats-overlay.show
+.rakkez-stats-panel {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+.rakkez-stats-panel::-webkit-scrollbar {
+
+    width: 5px;
+
+}
+
+
+.rakkez-stats-panel::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+
+.rakkez-stats-panel::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(255,255,255,.13);
+
+    border-radius: 20px;
+
+}
+
+
+/* =========================================================
+   STATS HEADER
+========================================================= */
+
+.rakkez-stats-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.rakkez-stats-eyebrow {
+
+    margin-bottom: 5px;
+
+    color:
+        rgba(255,255,255,.35);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.rakkez-stats-title {
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 26px;
+
+    font-weight: 600;
+
+}
+
+
+.rakkez-stats-subtitle {
+
+    margin-top: 6px;
+
+    color:
+        rgba(255,255,255,.40);
+
+    font-size: 12px;
+
+}
+
+
+.rakkez-stats-close {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex-shrink: 0;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    color:
+        rgba(255,255,255,.65);
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+}
+
+
+.rakkez-stats-close:hover {
+
+    background:
+        rgba(255,255,255,.11);
+
+    color: #fff;
+
+    transform:
+        rotate(90deg);
+
+}
+
+
+/* =========================================================
+   TOP STAT CARDS
+========================================================= */
+
+.rakkez-stats-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.rakkez-stat-card {
+
+    min-width: 0;
+
+    padding: 17px;
+
+    border:
+        1px solid rgba(255,255,255,.07);
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,.035);
+
+}
+
+
+.rakkez-stat-card-label {
+
+    color:
+        rgba(255,255,255,.38);
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+}
+
+
+.rakkez-stat-card-value {
+
+    margin-top: 7px;
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 23px;
+
+    font-weight: 600;
+
+}
+
+
+.rakkez-stat-card-small {
+
+    margin-top: 3px;
+
+    color:
+        rgba(255,255,255,.30);
+
+    font-size: 9px;
+
+}
+
+
+/* =========================================================
+   STREAK
+========================================================= */
+
+.rakkez-streak-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 20px;
+
+    margin-bottom: 18px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.045),
+            rgba(255,255,255,.018)
+        );
+
+}
+
+
+.rakkez-streak-fire {
+
+    width: 58px;
+
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 17px;
+
+    background:
+        rgba(255,125,22,.10);
+
+    font-size: 29px;
+
+}
+
+
+.rakkez-streak-info {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+
+.rakkez-streak-title {
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+}
+
+
+.rakkez-streak-description {
+
+    margin-top: 4px;
+
+    color:
+        rgba(255,255,255,.38);
+
+    font-size: 10px;
+
+}
+
+
+.rakkez-streak-numbers {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+}
+
+
+.rakkez-streak-number {
+
+    text-align: center;
+
+}
+
+
+.rakkez-streak-number strong {
+
+    display: block;
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 22px;
+
+}
+
+
+.rakkez-streak-number span {
+
+    color:
+        rgba(255,255,255,.32);
+
+    font-size: 9px;
+
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.rakkez-stats-section {
+
+    padding: 20px;
+
+    margin-top: 15px;
+
+    border:
+        1px solid rgba(255,255,255,.07);
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.025);
+
+}
+
+
+.rakkez-stats-section-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.rakkez-stats-section-title {
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+}
+
+
+.rakkez-stats-section-description {
+
+    color:
+        rgba(255,255,255,.30);
+
+    font-size: 9px;
+
+}
+
+
+/* =========================================================
+   WEEKLY CHART
+========================================================= */
+
+.rakkez-week-chart {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 9px;
+
+    height: 220px;
+
+    align-items: end;
+
+}
+
+
+.rakkez-week-day {
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.rakkez-week-hours {
+
+    color:
+        rgba(255,255,255,.45);
+
+    font-size: 9px;
+
+    font-variant-numeric:
+        tabular-nums;
+
+}
+
+
+.rakkez-week-bar-wrap {
+
+    width: 100%;
+
+    height: 165px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+}
+
+
+.rakkez-week-bar {
+
+    width: min(38px, 65%);
+
+    min-height: 3px;
+
+    border-radius:
+        9px 9px 5px 5px;
+
+    background:
+        linear-gradient(
+            to top,
+            #1683ff,
+            rgba(22,131,255,.45)
+        );
+
+    box-shadow:
+        0 8px 25px rgba(22,131,255,.12);
+
+    transition:
+        height .5s cubic-bezier(.16,1,.3,1);
+
+}
+
+
+.rakkez-week-bar.today {
+
+    box-shadow:
+        0 0 25px rgba(22,131,255,.25);
+
+}
+
+
+.rakkez-week-day-name {
+
+    color:
+        rgba(255,255,255,.42);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.rakkez-week-day.today
+.rakkez-week-day-name {
+
+    color: #fff;
+
+}
+
+
+/* =========================================================
+   DAILY ACTIVITY
+========================================================= */
+
+.rakkez-activity-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, 1fr);
+
+    gap: 8px;
+
+}
+
+
+.rakkez-activity-day {
+
+    padding: 12px 7px;
+
+    text-align: center;
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.025);
+
+}
+
+
+.rakkez-activity-day.active {
+
+    background:
+        rgba(22,131,255,.10);
+
+    border-color:
+        rgba(22,131,255,.20);
+
+}
+
+
+.rakkez-activity-letter {
+
+    color:
+        rgba(255,255,255,.40);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.rakkez-activity-check {
+
+    margin-top: 8px;
+
+    color:
+        rgba(255,255,255,.18);
+
+    font-size: 16px;
+
+}
+
+
+.rakkez-activity-day.active
+.rakkez-activity-check {
+
+    color: #1683ff;
+
+}
+
+
+/* =========================================================
+   TODAY SESSION HISTORY
+========================================================= */
+
+.rakkez-session-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    max-height: 330px;
+
+    overflow-y: auto;
+
+}
+
+
+.rakkez-session-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 12px;
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.025);
+
+}
+
+
+.rakkez-session-number {
+
+    width: 31px;
+
+    height: 31px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 9px;
+
+    background:
+        rgba(22,131,255,.10);
+
+    color: #1683ff;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+.rakkez-session-info {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+
+.rakkez-session-name {
+
+    color:
+        rgba(255,255,255,.78);
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+.rakkez-session-time {
+
+    margin-top: 3px;
+
+    color:
+        rgba(255,255,255,.34);
+
+    font-size: 9px;
+
+}
+
+
+.rakkez-session-duration {
+
+    color:
+        rgba(255,255,255,.42);
+
+    font-size: 10px;
+
+    font-variant-numeric:
+        tabular-nums;
+
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.rakkez-stats-empty {
+
+    padding: 25px;
+
+    text-align: center;
+
+    color:
+        rgba(255,255,255,.28);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   GOAL PROGRESS
+========================================================= */
+
+.rakkez-goal-progress {
+
+    margin-top: 15px;
+
+}
+
+
+.rakkez-goal-progress-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    color:
+        rgba(255,255,255,.40);
+
+    font-size: 10px;
+
+}
+
+
+.rakkez-goal-track {
+
+    width: 100%;
+
+    height: 7px;
+
+    margin-top: 8px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.07);
+
+}
+
+
+.rakkez-goal-fill {
+
+    width: 0%;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        #1683ff;
+
+    transition:
+        width .5s ease;
+
+}
+
+
+/* =========================================================
+   PAUSE CONFIRMATION
+========================================================= */
+
+.rakkez-pause-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2147483000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(0,0,0,.68);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .2s ease,
+        visibility .2s ease;
+
+}
+
+
+.rakkez-pause-overlay.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+
+.rakkez-pause-box {
+
+    width:
+        min(380px, 100%);
+
+    padding: 27px;
+
+    text-align: center;
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,22,34,.99),
+            rgba(4,8,15,.99)
+        );
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.55);
+
+    transform:
+        scale(.95)
+        translateY(10px);
+
+    transition:
+        transform .25s ease;
+
+}
+
+
+.rakkez-pause-overlay.show
+.rakkez-pause-box {
+
+    transform:
+        scale(1)
+        translateY(0);
+
+}
+
+
+.rakkez-pause-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    margin: 0 auto 17px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    color: #fff;
+
+    font-size: 20px;
+
+}
+
+
+.rakkez-pause-title {
+
+    color: #fff;
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size: 19px;
+
+    font-weight: 600;
+
+}
+
+
+.rakkez-pause-description {
+
+    margin-top: 8px;
+
+    color:
+        rgba(255,255,255,.40);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+}
+
+
+.rakkez-pause-actions {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 9px;
+
+    margin-top: 22px;
+
+}
+
+
+.rakkez-pause-cancel,
+.rakkez-pause-confirm {
+
+    height: 43px;
+
+    border-radius: 12px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.rakkez-pause-cancel {
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:
+        rgba(255,255,255,.70);
+
+}
+
+
+.rakkez-pause-confirm {
+
+    border:
+        1px solid rgba(22,131,255,.30);
+
+    background:
+        rgba(22,131,255,.14);
+
+    color: #fff;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .rakkez-stats-overlay {
+
+        padding: 10px;
+
+        align-items: flex-end;
+
+    }
+
+
+    .rakkez-stats-panel {
+
+        max-height: 94vh;
+
+        padding: 18px;
+
+        border-radius: 24px;
+
+    }
+
+
+    .rakkez-stats-summary {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .rakkez-streak-card {
+
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .rakkez-streak-numbers {
+
+        width: 100%;
+
+        justify-content: space-around;
+
+        padding-top: 8px;
+
+    }
+
+
+    .rakkez-week-chart {
+
+        height: 180px;
+
+    }
+
+
+    .rakkez-week-bar-wrap {
+
+        height: 130px;
+
+    }
+
+
+    .rakkez-session-item {
+
+        padding: 10px;
+
+    }
+
+}
+
+
+</style>
+
+
+<!-- =========================================================
+     STATS BUTTON
+     
+     يتم إنشاء الزر في الـ Header تلقائياً
+     بجانب Tasks.
+========================================================= -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    /* =====================================================
+       STORAGE KEYS
+    ===================================================== */
+
+    const STATS_KEY =
+        "rakkez_stats";
+
+    const SETTINGS_KEY =
+        "rakkez_settings";
+
+    const TIMER_STATE_KEY =
+        "rakkez_timer_state";
+
+    const HISTORY_KEY =
+        "rakkez_focus_history";
+
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    function safeJSON(
+        key,
+        fallback
+    ) {
+
+        try {
+
+            const value =
+                localStorage.getItem(key);
+
+
+            if (!value) {
+
+                return fallback;
+
+            }
+
+
+            const parsed =
+                JSON.parse(value);
+
+
+            return parsed ?? fallback;
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "RakkeZ Stats: storage error",
+                error
+            );
+
+
+            return fallback;
+
+        }
+
+    }
+
+
+    function getStats() {
+
+        return safeJSON(
+            STATS_KEY,
+            {}
+        );
+
+    }
+
+
+    function getSettings() {
+
+        return safeJSON(
+            SETTINGS_KEY,
+            {
+
+                focus: 25,
+
+                shortBreak: 5,
+
+                longBreak: 15,
+
+                dailyGoal: 240
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       DATE HELPERS
+    ===================================================== */
+
+    function dateKey(
+        date
+    ) {
+
+        const d =
+            date instanceof Date
+                ? date
+                : new Date(date);
+
+
+        const year =
+            d.getFullYear();
+
+
+        const month =
+            String(
+                d.getMonth() + 1
+            ).padStart(2, "0");
+
+
+        const day =
+            String(
+                d.getDate()
+            ).padStart(2, "0");
+
+
+        return (
+            year
+            +
+            "-"
+            +
+            month
+            +
+            "-"
+            +
+            day
+        );
+
+    }
+
+
+    function startOfDay(
+        date
+    ) {
+
+        const d =
+            new Date(date);
+
+
+        d.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        return d;
+
+    }
+
+
+    function getMonday(
+        date
+    ) {
+
+        const d =
+            startOfDay(date);
+
+
+        const day =
+            d.getDay();
+
+
+        const diff =
+            day === 0
+                ? -6
+                : 1 - day;
+
+
+        d.setDate(
+            d.getDate() + diff
+        );
+
+
+        return d;
+
+    }
+
+
+    function formatClock(
+        date
+    ) {
+
+        return new Intl.DateTimeFormat(
+            undefined,
+            {
+                hour: "numeric",
+                minute: "2-digit"
+            }
+        ).format(date);
+
+    }
+
+
+    function formatDuration(
+        minutes
+    ) {
+
+        minutes =
+            Math.max(
+                0,
+                Math.round(
+                    Number(minutes) || 0
+                )
+            );
+
+
+        const hours =
+            Math.floor(
+                minutes / 60
+            );
+
+
+        const mins =
+            minutes % 60;
+
+
+        if (hours > 0) {
+
+            return (
+                hours
+                +
+                "h "
+                +
+                mins
+                +
+                "m"
+            );
+
+        }
+
+
+        return mins + "m";
+
+    }
+
+
+    /* =====================================================
+       GET DAILY FOCUS
+       
+       مهم:
+       نقرأ dailyFocus من rakkez_stats
+       وليس من نظام جديد.
+===================================================== */
+
+    function getDailyFocusMap() {
+
+        const stats =
+            getStats();
+
+
+        return (
+            stats.dailyFocus
+            ||
+            {}
+        );
+
+    }
+
+
+    function getFocusMinutesForDay(
+        key
+    ) {
+
+        const daily =
+            getDailyFocusMap();
+
+
+        const value =
+            Number(
+                daily[key]
+            );
+
+
+        if (
+            Number.isFinite(value)
+        ) {
+
+            /*
+             * أغلب نظام RakkeZ يخزن
+             * dailyFocus بالدقائق أو الثواني
+             * حسب الإصدار.
+             *
+             * نحاول اكتشاف ذلك.
+             */
+
+            if (
+                value > 8640
+            ) {
+
+                return value / 60;
+
+            }
+
+
+            return value;
+
+        }
+
+
+        return 0;
+
+    }
+
+
+    /* =====================================================
+       HISTORY
+       
+       هذا الجزء يسجل أوقات جلسات Focus
+       لكي يظهر:
+       
+       45 min
+       08:10 → 08:55
+       
+       بدون التأثير على stats الحالية.
+===================================================== */
+
+    function getHistory() {
+
+        const history =
+            safeJSON(
+                HISTORY_KEY,
+                []
+            );
+
+
+        return Array.isArray(history)
+            ? history
+            : [];
+
+    }
+
+
+    function saveHistory(
+        history
+    ) {
+
+        try {
+
+            localStorage.setItem(
+                HISTORY_KEY,
+                JSON.stringify(
+                    history
+                )
+            );
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "RakkeZ Stats: history save failed.",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ACTIVE FOCUS TRACKING
+===================================================== */
+
+    let activeFocus = null;
+
+
+    function beginFocusTracking() {
+
+        if (activeFocus) {
+
+            return;
+
+        }
+
+
+        activeFocus = {
+
+            start:
+                new Date(),
+
+            mode:
+                "focus"
+
+        };
+
+    }
+
+
+    function finishFocusTracking(
+        completed
+    ) {
+
+        if (!activeFocus) {
+
+            return;
+
+        }
+
+
+        const end =
+            new Date();
+
+
+        const start =
+            new Date(
+                activeFocus.start
+            );
+
+
+        let minutes =
+            (
+                end.getTime()
+                -
+                start.getTime()
+            )
+            /
+            60000;
+
+
+        /*
+         * لمنع تسجيل جلسة خاطئة
+         * إذا ضغط المستخدم Start ثم Stop
+         * بعد ثواني قليلة.
+         */
+
+        if (
+            minutes < 0.5
+        ) {
+
+            activeFocus =
+                null;
+
+            return;
+
+        }
+
+
+        const history =
+            getHistory();
+
+
+        history.push({
+
+            id:
+                Date.now(),
+
+            date:
+                dateKey(start),
+
+            start:
+                start.toISOString(),
+
+            end:
+                end.toISOString(),
+
+            minutes:
+                Math.round(
+                    minutes * 10
+                ) / 10,
+
+            completed:
+                Boolean(
+                    completed
+                )
+
+        });
+
+
+        /*
+         * نحتفظ بآخر 500 جلسة فقط.
+         */
+
+        const trimmed =
+            history.slice(
+                -500
+            );
+
+
+        saveHistory(
+            trimmed
+        );
+
+
+        activeFocus =
+            null;
+
+    }
+
+
+    /* =====================================================
+       TIMER DETECTION
+===================================================== */
+
+    function getTimerState() {
+
+        return safeJSON(
+            TIMER_STATE_KEY,
+            {}
+        );
+
+    }
+
+
+    function isFocusMode() {
+
+        const state =
+            getTimerState();
+
+
+        const mode =
+            state.mode
+            ||
+            state.phase
+            ||
+            "focus";
+
+
+        return (
+            mode === "focus"
+            ||
+            mode === "FOCUS"
+        );
+
+    }
+
+
+    function isTimerRunning() {
+
+        const state =
+            getTimerState();
+
+
+        return Boolean(
+            state.isRunning
+        );
+
+    }
+
+
+    /* =====================================================
+       STATS OVERLAY HTML
+===================================================== */
+
+    function createStatsUI() {
+
+        if (
+            document.getElementById(
+                "rakkezStatsOverlay"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const overlay =
+            document.createElement(
+                "div"
+            );
+
+
+        overlay.id =
+            "rakkezStatsOverlay";
+
+
+        overlay.className =
+            "rakkez-stats-overlay";
+
+
+        overlay.innerHTML = `
+
+            <div class="rakkez-stats-panel">
+
+                <div class="rakkez-stats-header">
+
+                    <div>
+
+                        <div class="rakkez-stats-eyebrow">
+                            RAKKEZ ANALYTICS
+                        </div>
+
+                        <div class="rakkez-stats-title">
+                            Statistics
+                        </div>
+
+                        <div class="rakkez-stats-subtitle">
+                            Your focus history, streaks and weekly progress.
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="rakkez-stats-close"
+                        id="rakkezStatsClose"
+                        type="button"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+                <!-- SUMMARY -->
+
+                <div class="rakkez-stats-summary">
+
+                    <div class="rakkez-stat-card">
+
+                        <div class="rakkez-stat-card-label">
+                            Focused today
+                        </div>
+
+                        <div
+                            class="rakkez-stat-card-value"
+                            id="rakkezTodayFocus"
+                        >
+                            0m
+                        </div>
+
+                        <div class="rakkez-stat-card-small">
+                            Today's focus
+                        </div>
+
+                    </div>
+
+
+                    <div class="rakkez-stat-card">
+
+                        <div class="rakkez-stat-card-label">
+                            Best streak
+                        </div>
+
+                        <div
+                            class="rakkez-stat-card-value"
+                            id="rakkezBestStreak"
+                        >
+                            0
+                        </div>
+
+                        <div class="rakkez-stat-card-small">
+                            days
+                        </div>
+
+                    </div>
+
+
+                    <div class="rakkez-stat-card">
+
+                        <div class="rakkez-stat-card-label">
+                            Total focus
+                        </div>
+
+                        <div
+                            class="rakkez-stat-card-value"
+                            id="rakkezTotalFocus"
+                        >
+                            0m
+                        </div>
+
+                        <div class="rakkez-stat-card-small">
+                            all time
+                        </div>
+
+                    </div>
+
+
+                    <div class="rakkez-stat-card">
+
+                        <div class="rakkez-stat-card-label">
+                            Days focused
+                        </div>
+
+                        <div
+                            class="rakkez-stat-card-value"
+                            id="rakkezDaysFocused"
+                        >
+                            0
+                        </div>
+
+                        <div class="rakkez-stat-card-small">
+                            active days
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STREAK -->
+
+                <div class="rakkez-streak-card">
+
+                    <div class="rakkez-streak-fire">
+                        🔥
+                    </div>
+
+
+                    <div class="rakkez-streak-info">
+
+                        <div class="rakkez-streak-title">
+                            <span id="rakkezCurrentStreak">
+                                0
+                            </span>
+                            day streak
+                        </div>
+
+                        <div class="rakkez-streak-description">
+                            One session — or 15 focused minutes — keeps your streak alive.
+                        </div>
+
+                    </div>
+
+
+                    <div class="rakkez-streak-numbers">
+
+                        <div class="rakkez-streak-number">
+
+                            <strong id="rakkezStreakCurrent">
+                                0
+                            </strong>
+
+                            <span>
+                                CURRENT
+                            </span>
+
+                        </div>
+
+
+                        <div class="rakkez-streak-number">
+
+                            <strong id="rakkezStreakBest">
+                                0
+                            </strong>
+
+                            <span>
+                                BEST
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WEEKLY -->
+
+                <div class="rakkez-stats-section">
+
+                    <div class="rakkez-stats-section-header">
+
+                        <div>
+
+                            <div class="rakkez-stats-section-title">
+                                Weekly focus
+                            </div>
+
+                            <div class="rakkez-stats-section-description">
+                                Focus time by day
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="rakkez-week-chart"
+                        id="rakkezWeekChart"
+                    ></div>
+
+                </div>
+
+
+                <!-- ACTIVITY -->
+
+                <div class="rakkez-stats-section">
+
+                    <div class="rakkez-stats-section-header">
+
+                        <div>
+
+                            <div class="rakkez-stats-section-title">
+                                Streak tracker
+                            </div>
+
+                            <div class="rakkez-stats-section-description">
+                                Your weekly activity
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="rakkez-activity-grid"
+                        id="rakkezActivityGrid"
+                    ></div>
+
+                </div>
+
+
+                <!-- GOAL -->
+
+                <div class="rakkez-stats-section">
+
+                    <div class="rakkez-stats-section-header">
+
+                        <div>
+
+                            <div class="rakkez-stats-section-title">
+                                Today's goal
+                            </div>
+
+                            <div class="rakkez-stats-section-description">
+                                Daily focus target
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="rakkez-goal-progress">
+
+                        <div class="rakkez-goal-progress-top">
+
+                            <span id="rakkezGoalCurrent">
+                                0m
+                            </span>
+
+                            <span id="rakkezGoalTarget">
+                                4h
+                            </span>
+
+                        </div>
+
+
+                        <div class="rakkez-goal-track">
+
+                            <div
+                                class="rakkez-goal-fill"
+                                id="rakkezGoalFill"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TODAY SESSIONS -->
+
+                <div class="rakkez-stats-section">
+
+                    <div class="rakkez-stats-section-header">
+
+                        <div>
+
+                            <div class="rakkez-stats-section-title">
+                                Today's focus sessions
+                            </div>
+
+                            <div class="rakkez-stats-section-description">
+                                Exact focus periods
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="rakkez-session-list"
+                        id="rakkezSessionList"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        document.body.appendChild(
+            overlay
+        );
+
+
+        document
+            .getElementById(
+                "rakkezStatsClose"
+            )
+            .addEventListener(
+                "click",
+                closeStats
+            );
+
+
+        overlay.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === overlay
+                ) {
+
+                    closeStats();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       ADD STATS BUTTON TO HEADER
+===================================================== */
+
+    function createStatsButton() {
+
+        if (
+            document.getElementById(
+                "statsOpen"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const actions =
+            document.querySelector(
+                ".top-actions"
+            );
+
+
+        if (!actions) {
+
+            return;
+
+        }
+
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.className =
+            "icon-btn";
+
+
+        button.id =
+            "statsOpen";
+
+
+        button.type =
+            "button";
+
+
+        button.title =
+            "Statistics";
+
+
+        button.textContent =
+            "▥";
+
+
+        /*
+         * نضعه بعد Tasks.
+         */
+
+        const tasks =
+            document.getElementById(
+                "tasksOpen"
+            );
+
+
+        if (
+            tasks &&
+            tasks.nextSibling
+        ) {
+
+            actions.insertBefore(
+                button,
+                tasks.nextSibling
+            );
+
+        }
+
+        else {
+
+            actions.appendChild(
+                button
+            );
+
+        }
+
+
+        button.addEventListener(
+            "click",
+            openStats
+        );
+
+    }
+
+
+    /* =====================================================
+       OPEN / CLOSE
+===================================================== */
+
+    function openStats() {
+
+        createStatsUI();
+
+        updateStatsUI();
+
+
+        const overlay =
+            document.getElementById(
+                "rakkezStatsOverlay"
+            );
+
+
+        if (!overlay) return;
+
+
+        overlay.classList.add(
+            "show"
+        );
+
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+    }
+
+
+    function closeStats() {
+
+        const overlay =
+            document.getElementById(
+                "rakkezStatsOverlay"
+            );
+
+
+        if (!overlay) return;
+
+
+        overlay.classList.remove(
+            "show"
+        );
+
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    /* =====================================================
+       CURRENT STREAK
+===================================================== */
+
+    function calculateStreak() {
+
+        const daily =
+            getDailyFocusMap();
+
+
+        const keys =
+            Object.keys(
+                daily
+            );
+
+
+        if (!keys.length) {
+
+            return {
+
+                current: 0,
+
+                best: 0
+
+            };
+
+        }
+
+
+        const focusedDays =
+            new Set();
+
+
+        keys.forEach(
+            function (key) {
+
+                if (
+                    getFocusMinutesForDay(
+                        key
+                    ) > 0
+                ) {
+
+                    focusedDays.add(
+                        key
+                    );
+
+                }
+
+            }
+        );
+
+
+        let best =
+            0;
+
+
+        const sorted =
+            Array.from(
+                focusedDays
+            ).sort();
+
+
+        let run =
+            0;
+
+
+        let previous =
+            null;
+
+
+        sorted.forEach(
+            function (key) {
+
+                const current =
+                    new Date(
+                        key + "T00:00:00"
+                    );
+
+
+                if (
+                    previous
+                    &&
+                    (
+                        (
+                            current
+                            -
+                            previous
+                        )
+                        /
+                        86400000
+                    ) === 1
+                ) {
+
+                    run++;
+
+                }
+
+                else {
+
+                    run = 1;
+
+                }
+
+
+                best =
+                    Math.max(
+                        best,
+                        run
+                    );
+
+
+                previous =
+                    current;
+
+            }
+        );
+
+
+        /*
+         * Current streak يبدأ من اليوم.
+         */
+
+        const today =
+            startOfDay(
+                new Date()
+            );
+
+
+        const todayKey =
+            dateKey(today);
+
+
+        let current =
+            0;
+
+
+        if (
+            focusedDays.has(
+                todayKey
+            )
+        ) {
+
+            current = 1;
+
+
+            let cursor =
+                new Date(today);
+
+
+            while (true) {
+
+                cursor.setDate(
+                    cursor.getDate() - 1
+                );
+
+
+                const key =
+                    dateKey(cursor);
+
+
+                if (
+                    focusedDays.has(key)
+                ) {
+
+                    current++;
+
+                }
+
+                else {
+
+                    break;
+
+                }
+
+            }
+
+        }
+
+
+        return {
+
+            current,
+            best
+
+        };
+
+    }
+
+
+    /* =====================================================
+       WEEKLY CHART
+===================================================== */
+
+    function renderWeeklyChart() {
+
+        const container =
+            document.getElementById(
+                "rakkezWeekChart"
+            );
+
+
+        if (!container) return;
+
+
+        container.innerHTML =
+            "";
+
+
+        const monday =
+            getMonday(
+                new Date()
+            );
+
+
+        const values =
+            [];
+
+
+        for (
+            let i = 0;
+            i < 7;
+            i++
+        ) {
+
+            const day =
+                new Date(
+                    monday
+                );
+
+
+            day.setDate(
+                monday.getDate() + i
+            );
+
+
+            const key =
+                dateKey(day);
+
+
+            values.push({
+
+                date:
+                    day,
+
+                key:
+                    key,
+
+                minutes:
+                    getFocusMinutesForDay(
+                        key
+                    )
+
+            });
+
+        }
+
+
+        const max =
+            Math.max(
+                60,
+                ...values.map(
+                    item =>
+                        item.minutes
+                )
+            );
+
+
+        const dayNames = [
+
+            "M",
+            "T",
+            "W",
+            "T",
+            "F",
+            "S",
+            "S"
+
+        ];
+
+
+        values.forEach(
+            function (item, index) {
+
+                const wrapper =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                wrapper.className =
+                    "rakkez-week-day";
+
+
+                if (
+                    dateKey(
+                        new Date()
+                    )
+                    ===
+                    item.key
+                ) {
+
+                    wrapper.classList.add(
+                        "today"
+                    );
+
+                }
+
+
+                const hours =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                hours.className =
+                    "rakkez-week-hours";
+
+
+                hours.textContent =
+                    formatDuration(
+                        item.minutes
+                    );
+
+
+                const barWrap =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                barWrap.className =
+                    "rakkez-week-bar-wrap";
+
+
+                const bar =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                bar.className =
+                    "rakkez-week-bar";
+
+
+                const height =
+                    item.minutes > 0
+                        ?
+                        Math.max(
+                            5,
+                            (
+                                item.minutes
+                                /
+                                max
+                            )
+                            * 100
+                        )
+                        :
+                        2;
+
+
+                bar.style.height =
+                    height
+                    + "%";
+
+
+                if (
+                    dateKey(
+                        new Date()
+                    )
+                    ===
+                    item.key
+                ) {
+
+                    bar.classList.add(
+                        "today"
+                    );
+
+                }
+
+
+                barWrap.appendChild(
+                    bar
+                );
+
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                name.className =
+                    "rakkez-week-day-name";
+
+
+                name.textContent =
+                    dayNames[index];
+
+
+                wrapper.appendChild(
+                    hours
+                );
+
+
+                wrapper.appendChild(
+                    barWrap
+                );
+
+
+                wrapper.appendChild(
+                    name
+                );
+
+
+                container.appendChild(
+                    wrapper
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       ACTIVITY
+===================================================== */
+
+    function renderActivity() {
+
+        const container =
+            document.getElementById(
+                "rakkezActivityGrid"
+            );
+
+
+        if (!container) return;
+
+
+        container.innerHTML =
+            "";
+
+
+        const monday =
+            getMonday(
+                new Date()
+            );
+
+
+        const letters = [
+
+            "M",
+            "T",
+            "W",
+            "T",
+            "F",
+            "S",
+            "S"
+
+        ];
+
+
+        for (
+            let i = 0;
+            i < 7;
+            i++
+        ) {
+
+            const day =
+                new Date(
+                    monday
+                );
+
+
+            day.setDate(
+                monday.getDate() + i
+            );
+
+
+            const key =
+                dateKey(day);
+
+
+            const minutes =
+                getFocusMinutesForDay(
+                    key
+                );
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "rakkez-activity-day";
+
+
+            if (
+                minutes > 0
+            ) {
+
+                item.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            const letter =
+                document.createElement(
+                    "div"
+                );
+
+
+            letter.className =
+                "rakkez-activity-letter";
+
+
+            letter.textContent =
+                letters[i];
+
+
+            const check =
+                document.createElement(
+                    "div"
+                );
+
+
+            check.className =
+                "rakkez-activity-check";
+
+
+            check.textContent =
+                minutes > 0
+                    ? "✓"
+                    : "·";
+
+
+            item.appendChild(
+                letter
+            );
+
+
+            item.appendChild(
+                check
+            );
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       TODAY SESSIONS
+===================================================== */
+
+    function renderTodaySessions() {
+
+        const container =
+            document.getElementById(
+                "rakkezSessionList"
+            );
+
+
+        if (!container) return;
+
+
+        container.innerHTML =
+            "";
+
+
+        const today =
+            dateKey(
+                new Date()
+            );
+
+
+        const sessions =
+            getHistory()
+                .filter(
+                    session =>
+                        session.date === today
+                );
+
+
+        if (!sessions.length) {
+
+            container.innerHTML = `
+
+                <div class="rakkez-stats-empty">
+
+                    No focus sessions recorded yet today.
+
+                    <br>
+
+                    Start your first Focus session.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        sessions.forEach(
+            function (session, index) {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "rakkez-session-item";
+
+
+                const number =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                number.className =
+                    "rakkez-session-number";
+
+
+                number.textContent =
+                    index + 1;
+
+
+                const info =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                info.className =
+                    "rakkez-session-info";
+
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                name.className =
+                    "rakkez-session-name";
+
+
+                name.textContent =
+                    session.completed
+                        ? "Focus session"
+                        : "Focus period";
+
+
+                const time =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                time.className =
+                    "rakkez-session-time";
+
+
+                time.textContent =
+                    formatClock(
+                        new Date(
+                            session.start
+                        )
+                    )
+                    +
+                    " → "
+                    +
+                    formatClock(
+                        new Date(
+                            session.end
+                        )
+                    );
+
+
+                const duration =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                duration.className =
+                    "rakkez-session-duration";
+
+
+                duration.textContent =
+                    formatDuration(
+                        session.minutes
+                    );
+
+
+                info.appendChild(
+                    name
+                );
+
+
+                info.appendChild(
+                    time
+                );
+
+
+                item.appendChild(
+                    number
+                );
+
+
+                item.appendChild(
+                    info
+                );
+
+
+                item.appendChild(
+                    duration
+                );
+
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       SUMMARY
+===================================================== */
+
+    function updateSummary() {
+
+        const stats =
+            getStats();
+
+
+        const todayKey =
+            dateKey(
+                new Date()
+            );
+
+
+        const todayMinutes =
+            getFocusMinutesForDay(
+                todayKey
+            );
+
+
+        const daily =
+            getDailyFocusMap();
+
+
+        const daysFocused =
+            Object.keys(
+                daily
+            )
+            .filter(
+                key =>
+                    getFocusMinutesForDay(
+                        key
+                    ) > 0
+            )
+            .length;
+
+
+        let totalMinutes =
+            0;
+
+
+        Object.keys(
+            daily
+        ).forEach(
+            function (key) {
+
+                totalMinutes +=
+                    getFocusMinutesForDay(
+                        key
+                    );
+
+            }
+        );
+
+
+        /*
+         * إذا كان stats يحتوي
+         * totalFocusSeconds،
+         * نستخدمه كمرجع إضافي.
+         */
+
+        if (
+            Number(
+                stats.totalFocusSeconds
+            ) > 0
+        ) {
+
+            totalMinutes =
+                Math.max(
+                    totalMinutes,
+                    Number(
+                        stats.totalFocusSeconds
+                    ) / 60
+                );
+
+        }
+
+
+        const streak =
+            calculateStreak();
+
+
+        const today =
+            document.getElementById(
+                "rakkezTodayFocus"
+            );
+
+
+        const best =
+            document.getElementById(
+                "rakkezBestStreak"
+            );
+
+
+        const total =
+            document.getElementById(
+                "rakkezTotalFocus"
+            );
+
+
+        const days =
+            document.getElementById(
+                "rakkezDaysFocused"
+            );
+
+
+        const currentStreak =
+            document.getElementById(
+                "rakkezCurrentStreak"
+            );
+
+
+        const streakCurrent =
+            document.getElementById(
+                "rakkezStreakCurrent"
+            );
+
+
+        const streakBest =
+            document.getElementById(
+                "rakkezStreakBest"
+            );
+
+
+        if (today) {
+
+            today.textContent =
+                formatDuration(
+                    todayMinutes
+                );
+
+        }
+
+
+        if (best) {
+
+            best.textContent =
+                streak.best;
+
+        }
+
+
+        if (total) {
+
+            total.textContent =
+                formatDuration(
+                    totalMinutes
+                );
+
+        }
+
+
+        if (days) {
+
+            days.textContent =
+                daysFocused;
+
+        }
+
+
+        if (currentStreak) {
+
+            currentStreak.textContent =
+                streak.current;
+
+        }
+
+
+        if (streakCurrent) {
+
+            streakCurrent.textContent =
+                streak.current;
+
+        }
+
+
+        if (streakBest) {
+
+            streakBest.textContent =
+                streak.best;
+
+        }
+
+
+        /*
+         * إذا app.js لديه streak خاص به
+         * نستخدمه إذا كان أكبر.
+         */
+
+        const appBest =
+            Number(
+                stats.streak
+            );
+
+
+        if (
+            Number.isFinite(
+                appBest
+            )
+            &&
+            appBest > streak.best
+        ) {
+
+            if (best) {
+
+                best.textContent =
+                    appBest;
+
+            }
+
+
+            if (streakBest) {
+
+                streakBest.textContent =
+                    appBest;
+
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       GOAL
+===================================================== */
+
+    function updateGoal() {
+
+        const settings =
+            getSettings();
+
+
+        const goal =
+            Math.max(
+                1,
+                Number(
+                    settings.dailyGoal
+                )
+                ||
+                240
+            );
+
+
+        const today =
+            getFocusMinutesForDay(
+                dateKey(
+                    new Date()
+                )
+            );
+
+
+        const percentage =
+            Math.min(
+                100,
+                (
+                    today
+                    /
+                    goal
+                )
+                * 100
+            );
+
+
+        const current =
+            document.getElementById(
+                "rakkezGoalCurrent"
+            );
+
+
+        const target =
+            document.getElementById(
+                "rakkezGoalTarget"
+            );
+
+
+        const fill =
+            document.getElementById(
+                "rakkezGoalFill"
+            );
+
+
+        if (current) {
+
+            current.textContent =
+                formatDuration(
+                    today
+                );
+
+        }
+
+
+        if (target) {
+
+            target.textContent =
+                formatDuration(
+                    goal
+                );
+
+        }
+
+
+        if (fill) {
+
+            fill.style.width =
+                percentage
+                +
+                "%";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       UPDATE ALL
+===================================================== */
+
+    function updateStatsUI() {
+
+        updateSummary();
+
+        updateGoal();
+
+        renderWeeklyChart();
+
+        renderActivity();
+
+        renderTodaySessions();
+
+    }
+
+
+    /* =====================================================
+       KEEP STATS SYNCED
+       
+       storage event لا يعمل دائماً
+       داخل نفس الصفحة عندما يقوم app.js
+       بتعديل localStorage.
+
+       لذلك نراقب الصفحة كل ثانيتين.
+===================================================== */
+
+    setInterval(
+        function () {
+
+            const overlay =
+                document.getElementById(
+                    "rakkezStatsOverlay"
+                );
+
+
+            if (
+                overlay &&
+                overlay.classList.contains(
+                    "show"
+                )
+            ) {
+
+                updateStatsUI();
+
+            }
+
+        },
+        2000
+    );
+
+
+    /* =====================================================
+       SYNC WITH LOCAL STORAGE
+===================================================== */
+
+    window.addEventListener(
+        "storage",
+        function (event) {
+
+            if (
+                event.key === STATS_KEY
+                ||
+                event.key === SETTINGS_KEY
+                ||
+                event.key === TIMER_STATE_KEY
+            ) {
+
+                const overlay =
+                    document.getElementById(
+                        "rakkezStatsOverlay"
+                    );
+
+
+                if (
+                    overlay &&
+                    overlay.classList.contains(
+                        "show"
+                    )
+                ) {
+
+                    updateStatsUI();
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       TIMER OBSERVER
+       
+       نراقب startBtn حتى نعرف متى
+       تبدأ Focus session.
+===================================================== */
+
+    function installTimerTracking() {
+
+        const startBtn =
+            document.getElementById(
+                "startBtn"
+            );
+
+
+        if (!startBtn) {
+
+            return false;
+
+        }
+
+
+        /*
+         * لا نضيف listener أكثر من مرة.
+         */
+
+        if (
+            startBtn.dataset
+                .rakkezStatsTracking
+            ===
+            "true"
+        ) {
+
+            return true;
+
+        }
+
+
+        startBtn.dataset
+            .rakkezStatsTracking
+            =
+            "true";
+
+
+        startBtn.addEventListener(
+            "click",
+            function () {
+
+                /*
+                 * ننتظر app.js
+                 * حتى يحدّث state.
+                 */
+
+                setTimeout(
+                    function () {
+
+                        if (
+                            isTimerRunning()
+                            &&
+                            isFocusMode()
+                        ) {
+
+                            beginFocusTracking();
+
+                        }
+
+                    },
+                    100
+                );
+
+            }
+        );
+
+
+        return true;
+
+    }
+
+
+    /* =====================================================
+       TIMER STATE POLLING
+       
+       يساعد على التقاط:
+       
+       Focus START
+       Focus STOP
+       Focus COMPLETE
+===================================================== */
+
+    let lastRunning =
+        false;
+
+    let lastMode =
+        "focus";
+
+
+    setInterval(
+        function () {
+
+            const state =
+                getTimerState();
+
+
+            const mode =
+                state.mode
+                ||
+                state.phase
+                ||
+                "focus";
+
+
+            const running =
+                Boolean(
+                    state.isRunning
+                );
+
+
+            /*
+             * بدأ Focus
+             */
+
+            if (
+                running
+                &&
+                !lastRunning
+                &&
+                (
+                    mode === "focus"
+                    ||
+                    mode === "FOCUS"
+                )
+            ) {
+
+                beginFocusTracking();
+
+            }
+
+
+            /*
+             * انتهى أو توقف Focus
+             */
+
+            if (
+                !running
+                &&
+                lastRunning
+                &&
+                (
+                    lastMode === "focus"
+                    ||
+                    lastMode === "FOCUS"
+                )
+            ) {
+
+                finishFocusTracking(
+                    false
+                );
+
+            }
+
+
+            lastRunning =
+                running;
+
+
+            lastMode =
+                mode;
+
+        },
+        500
+    );
+
+
+    /* =====================================================
+       INITIALIZATION
+===================================================== */
+
+    function initialize() {
+
+        createStatsButton();
+
+        installTimerTracking();
+
+    }
+
+
+    if (
+        document.readyState
+        ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initialize,
+            {
+                once: true
+            }
+        );
+
+    }
+
+    else {
+
+        initialize();
+
+    }
+
+
+    /* =====================================================
+       PUBLIC API
+===================================================== */
+
+    window.rakkezOpenStats =
+        openStats;
+
+
+    window.rakkezRefreshStats =
+        updateStatsUI;
+
+
+})();
+
+</script>
+
+
+<!-- =========================================================
+     PAUSE CONFIRMATION MODAL
+========================================================= -->
+
+<div
+    id="rakkezPauseOverlay"
+    class="rakkez-pause-overlay"
+    aria-hidden="true"
+>
+
+    <div class="rakkez-pause-box">
+
+        <div class="rakkez-pause-icon">
+            ❚❚
+        </div>
+
+
+        <div class="rakkez-pause-title">
+            Pause the timer?
+        </div>
+
+
+        <div class="rakkez-pause-description">
+            A pause breaks your flow.
+        </div>
+
+
+        <div class="rakkez-pause-actions">
+
+            <button
+                id="rakkezPauseCancel"
+                class="rakkez-pause-cancel"
+                type="button"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                id="rakkezPauseConfirm"
+                class="rakkez-pause-confirm"
+                type="button"
+            >
+                Pause
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   RAKKEZ PAUSE CONFIRMATION
+========================================================= */
+
+(function () {
+
+    "use strict";
+
+
+    let pendingPause =
+        false;
+
+
+    function getOverlay() {
+
+        return document.getElementById(
+            "rakkezPauseOverlay"
+        );
+
+    }
+
+
+    function openPauseConfirm() {
+
+        const overlay =
+            getOverlay();
+
+
+        if (!overlay) return;
+
+
+        pendingPause =
+            true;
+
+
+        overlay.classList.add(
+            "show"
+        );
+
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+    }
+
+
+    function closePauseConfirm() {
+
+        const overlay =
+            getOverlay();
+
+
+        if (!overlay) return;
+
+
+        pendingPause =
+            false;
+
+
+        overlay.classList.remove(
+            "show"
+        );
+
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    function actuallyPause() {
+
+        /*
+         * نحاول استخدام pauseTimer
+         * الموجود في app.js.
+         */
+
+        const functions = [
+
+            "pauseTimer",
+
+            "pauseCurrentTimer",
+
+            "stopTimer"
+
+        ];
+
+
+        for (
+            let i = 0;
+            i < functions.length;
+            i++
+        ) {
+
+            const name =
+                functions[i];
+
+
+            try {
+
+                if (
+                    typeof window[name]
+                    ===
+                    "function"
+                ) {
+
+                    window[name]();
+
+                    return;
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.warn(
+                    "RakkeZ pause:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /*
+         * إذا لم نجد API،
+         * لا نضغط Reset أبداً.
+         *
+         * لأن Reset Timer ليس Pause.
+         */
+
+        console.warn(
+            "RakkeZ: No pause function found in app.js."
+        );
+
+    }
+
+
+    function initialize() {
+
+        const cancel =
+            document.getElementById(
+                "rakkezPauseCancel"
+            );
+
+
+        const confirm =
+            document.getElementById(
+                "rakkezPauseConfirm"
+            );
+
+
+        const overlay =
+            getOverlay();
+
+
+        if (
+            !cancel ||
+            !confirm ||
+            !overlay
+        ) {
+
+            return;
+
+        }
+
+
+        cancel.addEventListener(
+            "click",
+            function () {
+
+                closePauseConfirm();
+
+            }
+        );
+
+
+        confirm.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    pendingPause
+                ) {
+
+                    actuallyPause();
+
+                }
+
+
+                closePauseConfirm();
+
+            }
+        );
+
+
+        overlay.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === overlay
+                ) {
+
+                    closePauseConfirm();
+
+                }
+
+            }
+        );
+
+
+        /*
+         * ESC = Cancel
+         */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape"
+                    &&
+                    overlay.classList.contains(
+                        "show"
+                    )
+                ) {
+
+                    closePauseConfirm();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (
+        document.readyState
+        ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initialize,
+            {
+                once: true
+            }
+        );
+
+    }
+
+    else {
+
+        initialize();
+
+    }
+
+
+    window.rakkezAskPause =
+        openPauseConfirm;
+
+
+})();
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- =========================================================
      RAKKEZ TIMER MODE SWITCHER
      
