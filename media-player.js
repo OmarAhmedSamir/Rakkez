@@ -26,15 +26,16 @@
 
        IMPORTANT:
        - No Browser tab
-       - No HTML modification required
-       - No CSS file modification required
-       - Existing Header / Tabs design preserved
+       - Lofi / Local / Effects system preserved
+       - SoundCloud is injected automatically
+       - No HTML/CSS file modification required
+       - Existing Header / Tabs design is preserved
        ===================================================== */
 
 
     /* =====================================================
        STORAGE
-    ===================================================== */
+       ===================================================== */
 
     const STORAGE = {
         track: "rakkez_media_track",
@@ -48,7 +49,7 @@
 
     /* =====================================================
        MAIN MUSIC PLAYLIST
-    ===================================================== */
+       ===================================================== */
 
     const PLAYLIST = [
 
@@ -113,7 +114,7 @@
 
     /* =====================================================
        EFFECTS
-    ===================================================== */
+       ===================================================== */
 
     const AMBIENT_EFFECTS = [
 
@@ -172,7 +173,7 @@
 
     /* =====================================================
        LOCAL MUSIC
-    ===================================================== */
+       ===================================================== */
 
     let LOCAL_TRACKS = [];
 
@@ -188,7 +189,7 @@
 
     /* =====================================================
        ELEMENTS
-    ===================================================== */
+       ===================================================== */
 
     const overlay =
         document.getElementById("rakkezMediaOverlay");
@@ -199,11 +200,13 @@
     const mediaButton =
         document.getElementById("mediaOpen");
 
+
     const tabs =
         document.querySelectorAll(".rakkez-media-tab");
 
     const sources =
         document.querySelectorAll(".rakkez-media-source");
+
 
     const artwork =
         document.getElementById("rakkezArtwork");
@@ -219,6 +222,7 @@
 
     const playlistCount =
         document.getElementById("rakkezPlaylistCount");
+
 
     const playButton =
         document.getElementById("rakkezPlay");
@@ -238,6 +242,7 @@
     const autoNextButton =
         document.getElementById("rakkezAutoNext");
 
+
     const progress =
         document.getElementById("rakkezProgress");
 
@@ -247,16 +252,13 @@
     const durationElement =
         document.getElementById("rakkezDuration");
 
+
     const volume =
         document.getElementById("rakkezVolume");
 
     const volumeValue =
         document.getElementById("rakkezVolumeValue");
 
-
-    /* =====================================================
-       YOUTUBE ELEMENTS
-    ===================================================== */
 
     const youtubeInput =
         document.getElementById("rakkezYoutubeInput");
@@ -268,10 +270,6 @@
         document.getElementById("rakkezYoutubeEmbed");
 
 
-    /* =====================================================
-       SPOTIFY ELEMENTS
-    ===================================================== */
-
     const spotifyInput =
         document.getElementById("rakkezSpotifyInput");
 
@@ -281,10 +279,6 @@
     const spotifyEmbed =
         document.getElementById("rakkezSpotifyEmbed");
 
-
-    /* =====================================================
-       LOCAL ELEMENTS
-    ===================================================== */
 
     const localFile =
         document.getElementById("rakkezLocalFile");
@@ -298,7 +292,7 @@
 
     /* =====================================================
        MINI PLAYER
-    ===================================================== */
+       ===================================================== */
 
     const miniPlayer =
         document.getElementById("rakkezMiniPlayer");
@@ -327,7 +321,7 @@
 
     /* =====================================================
        MAIN AUDIO
-    ===================================================== */
+       ===================================================== */
 
     const audio =
         new Audio();
@@ -403,7 +397,7 @@
 
     /* =====================================================
        HELPERS
-    ===================================================== */
+       ===================================================== */
 
     function clamp(
         value,
@@ -632,7 +626,7 @@
 
     /* =====================================================
        MAIN PLAYER
-    ===================================================== */
+       ===================================================== */
 
     function loadTrack(
         index,
@@ -972,7 +966,7 @@
 
     /* =====================================================
        MAIN VOLUME
-    ===================================================== */
+       ===================================================== */
 
     function getSavedMainVolume() {
 
@@ -1044,7 +1038,7 @@
 
     /* =====================================================
        PLAYLIST
-    ===================================================== */
+       ===================================================== */
 
     function updatePlaylistUI() {
 
@@ -1198,7 +1192,7 @@
 
     /* =====================================================
        MINI PLAYER
-    ===================================================== */
+       ===================================================== */
 
     function updateMiniPlayer() {
 
@@ -1324,7 +1318,7 @@
 
     /* =====================================================
        SOUNDCLOUD
-    ===================================================== */
+       ===================================================== */
 
     let soundCloudTab = null;
     let soundCloudSource = null;
@@ -1334,18 +1328,511 @@
     let soundCloudPrevious = null;
     let soundCloudNext = null;
     let soundCloudStatus = null;
-
+    let soundCloudList = null;
+    let soundCloudTitle = null;
+    let soundCloudArtist = null;
+    let soundCloudArtwork = null;
+    let soundCloudCount = null;
     let soundCloudWidget = null;
-
-    let soundCloudQueue = [];
+    let soundCloudFrame = null;
+    let soundCloudReady = false;
+    let soundCloudTracks = [];
     let soundCloudCurrentIndex = 0;
+    let soundCloudRequestToken = 0;
 
 
     /* =====================================================
-       CREATE SOUNDCLOUD UI
-    ===================================================== */
+       SOUNDCLOUD STYLE
+       ===================================================== */
+
+    function injectSoundCloudStyles() {
+
+        if (
+            document.getElementById(
+                "rakkezSoundCloudStyles"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const style =
+            document.createElement(
+                "style"
+            );
+
+
+        style.id =
+            "rakkezSoundCloudStyles";
+
+
+        style.textContent = `
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-shell {
+
+                width:100%;
+                display:flex;
+                flex-direction:column;
+                gap:18px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-input-row {
+
+                display:flex;
+                gap:10px;
+                align-items:center;
+                width:100%;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-input {
+
+                flex:1;
+                min-width:0;
+                width:100%;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-load {
+
+                flex:0 0 auto;
+                min-width:82px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-status {
+
+                font-size:12px;
+                line-height:1.5;
+                color:rgba(255,255,255,.48);
+                min-height:18px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-player {
+
+                width:100%;
+                overflow:hidden;
+                border-radius:20px;
+                border:1px solid rgba(255,255,255,.07);
+                background:
+                    linear-gradient(
+                        135deg,
+                        rgba(255,255,255,.055),
+                        rgba(255,255,255,.018)
+                    );
+                box-shadow:
+                    0 18px 55px rgba(0,0,0,.18);
+                padding:16px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-now {
+
+                display:flex;
+                align-items:center;
+                gap:13px;
+                margin-bottom:14px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-art {
+
+                width:54px;
+                height:54px;
+                flex:0 0 54px;
+                border-radius:14px;
+                overflow:hidden;
+                background:
+                    linear-gradient(
+                        135deg,
+                        rgba(255,255,255,.10),
+                        rgba(255,255,255,.03)
+                    );
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:rgba(255,255,255,.45);
+                font-size:20px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-art img {
+
+                width:100%;
+                height:100%;
+                display:block;
+                object-fit:cover;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-now-info {
+
+                min-width:0;
+                flex:1;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-now-label {
+
+                font-size:10px;
+                text-transform:uppercase;
+                letter-spacing:.11em;
+                color:rgba(255,255,255,.38);
+                margin-bottom:3px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-now-title {
+
+                font-size:14px;
+                line-height:1.3;
+                font-weight:650;
+                color:rgba(255,255,255,.92);
+                overflow:hidden;
+                white-space:nowrap;
+                text-overflow:ellipsis;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-now-artist {
+
+                font-size:11px;
+                line-height:1.3;
+                color:rgba(255,255,255,.45);
+                overflow:hidden;
+                white-space:nowrap;
+                text-overflow:ellipsis;
+                margin-top:3px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-frame-wrap {
+
+                width:100%;
+                height:166px;
+                overflow:hidden;
+                border-radius:14px;
+                background:rgba(0,0,0,.18);
+                border:1px solid rgba(255,255,255,.045);
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-frame {
+
+                width:100%;
+                height:166px;
+                display:block;
+                border:0;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-list-header {
+
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:12px;
+                margin-top:2px;
+                margin-bottom:4px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-list-title {
+
+                font-size:12px;
+                font-weight:650;
+                color:rgba(255,255,255,.78);
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-list-count {
+
+                font-size:11px;
+                color:rgba(255,255,255,.38);
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-list {
+
+                display:flex;
+                flex-direction:column;
+                gap:6px;
+                max-height:310px;
+                overflow-y:auto;
+                overflow-x:hidden;
+                padding-right:3px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-list::-webkit-scrollbar {
+
+                width:5px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-list::-webkit-scrollbar-track {
+
+                background:transparent;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-list::-webkit-scrollbar-thumb {
+
+                background:rgba(255,255,255,.12);
+                border-radius:99px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-track {
+
+                width:100%;
+                border:1px solid transparent;
+                border-radius:13px;
+                background:rgba(255,255,255,.025);
+                padding:8px;
+                display:flex;
+                align-items:center;
+                gap:10px;
+                text-align:left;
+                cursor:pointer;
+                color:inherit;
+                transition:
+                    background .18s ease,
+                    border-color .18s ease,
+                    transform .18s ease;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-track:hover {
+
+                background:rgba(255,255,255,.055);
+                transform:translateY(-1px);
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-track.active {
+
+                background:rgba(255,255,255,.075);
+                border-color:rgba(255,255,255,.10);
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-track-art {
+
+                width:40px;
+                height:40px;
+                flex:0 0 40px;
+                border-radius:10px;
+                overflow:hidden;
+                background:rgba(255,255,255,.06);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:rgba(255,255,255,.38);
+                font-size:15px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-track-art img {
+
+                width:100%;
+                height:100%;
+                display:block;
+                object-fit:cover;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-track-info {
+
+                min-width:0;
+                flex:1;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-track-name {
+
+                font-size:12px;
+                line-height:1.35;
+                font-weight:600;
+                color:rgba(255,255,255,.82);
+                overflow:hidden;
+                white-space:nowrap;
+                text-overflow:ellipsis;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-track-artist {
+
+                font-size:10px;
+                line-height:1.35;
+                color:rgba(255,255,255,.40);
+                overflow:hidden;
+                white-space:nowrap;
+                text-overflow:ellipsis;
+                margin-top:2px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-track-number {
+
+                width:23px;
+                flex:0 0 23px;
+                text-align:center;
+                font-size:10px;
+                color:rgba(255,255,255,.28);
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-actions {
+
+                display:flex;
+                justify-content:center;
+                gap:8px;
+                margin-top:2px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-action {
+
+                min-width:105px;
+
+            }
+
+
+            #rakkezSoundCloudSource
+            .rakkez-sc-empty {
+
+                padding:20px 12px;
+                text-align:center;
+                color:rgba(255,255,255,.36);
+                font-size:11px;
+
+            }
+
+
+            @media (max-width:640px) {
+
+                #rakkezSoundCloudSource
+                .rakkez-sc-input-row {
+
+                    flex-direction:column;
+                    align-items:stretch;
+
+                }
+
+
+                #rakkezSoundCloudSource
+                .rakkez-sc-load {
+
+                    width:100%;
+
+                }
+
+
+                #rakkezSoundCloudSource
+                .rakkez-sc-player {
+
+                    padding:12px;
+
+                }
+
+
+                #rakkezSoundCloudSource
+                .rakkez-sc-list {
+
+                    max-height:260px;
+
+                }
+
+            }
+
+        `;
+
+
+        document.head.appendChild(
+            style
+        );
+
+    }
+
+
+    /* =====================================================
+       SOUNDCLOUD UI
+       ===================================================== */
 
     function createSoundCloudUI() {
+
+        injectSoundCloudStyles();
+
 
         soundCloudInput =
             document.getElementById(
@@ -1411,13 +1898,6 @@
         }
 
 
-        /*
-         * IMPORTANT:
-         *
-         * We ONLY add the SoundCloud tab.
-         * We do not modify the existing tabs.
-         */
-
         soundCloudSource =
             document.getElementById(
                 "rakkezSoundCloudSource"
@@ -1449,38 +1929,22 @@
 
             soundCloudSource.innerHTML = `
 
-                <div
-                    class="rakkez-soundcloud-page"
-                    style="
-                        width:100%;
-                        display:flex;
-                        flex-direction:column;
-                        gap:16px;
-                    "
-                >
+                <div class="rakkez-sc-shell">
 
-                    <div
-                        style="
-                            width:100%;
-                            display:flex;
-                            gap:10px;
-                            align-items:center;
-                        "
-                    >
+                    <div class="rakkez-sc-input-row">
 
                         <input
                             id="rakkezSoundCloudInput"
+                            class="rakkez-sc-input"
                             type="url"
                             placeholder="Paste a SoundCloud track or playlist URL..."
                             autocomplete="off"
-                            style="
-                                flex:1;
-                                min-width:0;
-                            "
+                            spellcheck="false"
                         >
 
                         <button
                             id="rakkezSoundCloudPlay"
+                            class="rakkez-sc-load"
                             type="button"
                         >
                             Load
@@ -1491,11 +1955,7 @@
 
                     <div
                         id="rakkezSoundCloudStatus"
-                        style="
-                            font-size:12px;
-                            line-height:1.5;
-                            color:rgba(255,255,255,.55);
-                        "
+                        class="rakkez-sc-status"
                     >
                         Paste a SoundCloud track, set, or playlist URL.
                     </div>
@@ -1503,51 +1963,6 @@
 
                     <div
                         id="rakkezSoundCloudEmbed"
-                        style="
-                            width:100%;
-                            min-height:180px;
-                            overflow:hidden;
-                            border-radius:16px;
-                            background:rgba(0,0,0,.16);
-                        "
-                    ></div>
-
-
-                    <div
-                        id="rakkezSoundCloudControls"
-                        style="
-                            display:flex;
-                            justify-content:center;
-                            align-items:center;
-                            gap:10px;
-                        "
-                    >
-
-                        <button
-                            id="rakkezSoundCloudPrevious"
-                            type="button"
-                        >
-                            Previous
-                        </button>
-
-                        <button
-                            id="rakkezSoundCloudNext"
-                            type="button"
-                        >
-                            Next
-                        </button>
-
-                    </div>
-
-
-                    <div
-                        id="rakkezSoundCloudPlaylist"
-                        style="
-                            width:100%;
-                            display:none;
-                            flex-direction:column;
-                            gap:8px;
-                        "
                     ></div>
 
                 </div>
@@ -1562,22 +1977,11 @@
         }
 
 
-        /*
-         * Find existing SoundCloud tab.
-         */
-
         soundCloudTab =
             document.querySelector(
-                '.rakkez-media-tab[data-rakkez-source="soundcloud"]'
+                '[data-rakkez-source="soundcloud"]'
             );
 
-
-        /*
-         * Create only if missing.
-         *
-         * Existing Header tab design is preserved
-         * because we use the exact same class.
-         */
 
         if (
             !soundCloudTab &&
@@ -1613,10 +2017,6 @@
         }
 
 
-        /*
-         * Re-query dynamic elements.
-         */
-
         soundCloudInput =
             document.getElementById(
                 "rakkezSoundCloudInput"
@@ -1632,23 +2032,20 @@
                 "rakkezSoundCloudEmbed"
             );
 
-        soundCloudPrevious =
-            document.getElementById(
-                "rakkezSoundCloudPrevious"
-            );
-
-        soundCloudNext =
-            document.getElementById(
-                "rakkezSoundCloudNext"
-            );
-
         soundCloudStatus =
             document.getElementById(
                 "rakkezSoundCloudStatus"
             );
 
 
-        if (soundCloudTab) {
+        if (
+            soundCloudTab &&
+            !soundCloudTab.dataset.rakkezBound
+        ) {
+
+            soundCloudTab.dataset.rakkezBound =
+                "true";
+
 
             soundCloudTab.addEventListener(
                 "click",
@@ -1664,7 +2061,14 @@
         }
 
 
-        if (soundCloudPlay) {
+        if (
+            soundCloudPlay &&
+            !soundCloudPlay.dataset.rakkezBound
+        ) {
+
+            soundCloudPlay.dataset.rakkezBound =
+                "true";
+
 
             soundCloudPlay.addEventListener(
                 "click",
@@ -1674,7 +2078,14 @@
         }
 
 
-        if (soundCloudInput) {
+        if (
+            soundCloudInput &&
+            !soundCloudInput.dataset.rakkezBound
+        ) {
+
+            soundCloudInput.dataset.rakkezBound =
+                "true";
+
 
             soundCloudInput.addEventListener(
                 "keydown",
@@ -1696,40 +2107,12 @@
 
         }
 
-
-        if (soundCloudPrevious) {
-
-            soundCloudPrevious.addEventListener(
-                "click",
-                function () {
-
-                    soundCloudPreviousTrack();
-
-                }
-            );
-
-        }
-
-
-        if (soundCloudNext) {
-
-            soundCloudNext.addEventListener(
-                "click",
-                function () {
-
-                    soundCloudNextTrack();
-
-                }
-            );
-
-        }
-
     }
 
 
     /* =====================================================
        SOUNDCLOUD URL
-    ===================================================== */
+       ===================================================== */
 
     function getSoundCloudUrl(
         url
@@ -1742,8 +2125,25 @@
 
         try {
 
+            let value =
+                String(url).trim();
+
+
+            if (
+                !/^https?:\/\//i.test(
+                    value
+                )
+            ) {
+
+                value =
+                    "https://" +
+                    value;
+
+            }
+
+
             const parsed =
-                new URL(url);
+                new URL(value);
 
 
             const hostname =
@@ -1757,10 +2157,22 @@
 
             if (
                 hostname !==
-                "soundcloud.com"
+                "soundcloud.com" &&
+                hostname !==
+                "on.soundcloud.com"
             ) {
 
                 return null;
+
+            }
+
+
+            if (
+                hostname ===
+                "on.soundcloud.com"
+            ) {
+
+                return parsed.href;
 
             }
 
@@ -1787,8 +2199,8 @@
 
 
     /* =====================================================
-       SOUNDCLOUD WIDGET API
-    ===================================================== */
+       SOUNDCLOUD API
+       ===================================================== */
 
     function loadSoundCloudWidgetAPI(
         callback
@@ -1815,6 +2227,10 @@
 
         if (existingScript) {
 
+            const started =
+                Date.now();
+
+
             const check =
                 setInterval(
                     function () {
@@ -1829,25 +2245,29 @@
                                 check
                             );
 
+
                             callback();
+
+                            return;
+
+                        }
+
+
+                        if (
+                            Date.now() -
+                            started >
+                            10000
+                        ) {
+
+                            clearInterval(
+                                check
+                            );
 
                         }
 
                     },
                     100
                 );
-
-
-            setTimeout(
-                function () {
-
-                    clearInterval(
-                        check
-                    );
-
-                },
-                10000
-            );
 
 
             return;
@@ -1907,201 +2327,144 @@
 
 
     /* =====================================================
-       SOUNDCLOUD QUEUE
-    ===================================================== */
+       SOUNDCLOUD HELPERS
+       ===================================================== */
 
-    function clearSoundCloudPlaylist() {
+    function getSoundCloudArtwork(
+        track
+    ) {
 
-        const list =
-            document.getElementById(
-                "rakkezSoundCloudPlaylist"
-            );
-
-
-        if (!list) {
-            return;
+        if (!track) {
+            return "";
         }
 
 
-        list.innerHTML =
-            "";
-
-
-        list.style.display =
-            "none";
+        return (
+            track.artwork_url ||
+            track.user &&
+            track.user.avatar_url ||
+            ""
+        );
 
     }
 
 
-    function showSoundCloudPlaylist() {
+    function getSoundCloudArtist(
+        track
+    ) {
 
-        const list =
-            document.getElementById(
-                "rakkezSoundCloudPlaylist"
-            );
+        if (!track) {
+            return "SoundCloud";
 
-
-        if (!list) {
-            return;
         }
-
-
-        list.innerHTML =
-            "";
 
 
         if (
-            !soundCloudQueue.length
+            track.user &&
+            track.user.username
         ) {
 
-            list.style.display =
-                "none";
-
-            return;
+            return track.user.username;
 
         }
 
 
-        list.style.display =
-            "flex";
-
-
-        soundCloudQueue.forEach(
-            function (
-                item,
-                index
-            ) {
-
-                const button =
-                    document.createElement(
-                        "button"
-                    );
-
-
-                button.type =
-                    "button";
-
-
-                button.dataset.soundcloudIndex =
-                    String(index);
-
-
-                button.style.cssText = `
-                    width:100%;
-                    display:flex;
-                    align-items:center;
-                    gap:12px;
-                    padding:11px 12px;
-                    border-radius:12px;
-                    border:1px solid rgba(255,255,255,.07);
-                    background:rgba(255,255,255,.035);
-                    color:inherit;
-                    cursor:pointer;
-                    text-align:left;
-                `;
-
-
-                button.innerHTML = `
-
-                    <span
-                        style="
-                            width:28px;
-                            min-width:28px;
-                            height:28px;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                            border-radius:8px;
-                            background:rgba(255,255,255,.07);
-                            font-size:12px;
-                        "
-                    >
-                        ${index + 1}
-                    </span>
-
-                    <span
-                        style="
-                            min-width:0;
-                            flex:1;
-                            overflow:hidden;
-                            text-overflow:ellipsis;
-                            white-space:nowrap;
-                            font-size:13px;
-                        "
-                    >
-                        ${escapeHTML(
-                            item.title ||
-                            "SoundCloud Track " +
-                            (index + 1)
-                        )}
-                    </span>
-
-                `;
-
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        playSoundCloudQueueItem(
-                            index
-                        );
-
-                    }
-                );
-
-
-                list.appendChild(
-                    button
-                );
-
-            }
-        );
-
-
-        updateSoundCloudPlaylistUI();
+        return "SoundCloud";
 
     }
 
 
-    function updateSoundCloudPlaylistUI() {
+    function updateSoundCloudNowPlaying(
+        track,
+        index
+    ) {
 
-        const list =
-            document.getElementById(
-                "rakkezSoundCloudPlaylist"
-            );
-
-
-        if (!list) {
+        if (!track) {
             return;
         }
 
 
-        list
+        soundCloudCurrentIndex =
+            Number.isFinite(index)
+                ? index
+                : soundCloudCurrentIndex;
+
+
+        if (soundCloudTitle) {
+
+            soundCloudTitle.textContent =
+                track.title ||
+                "SoundCloud Track";
+
+        }
+
+
+        if (soundCloudArtist) {
+
+            soundCloudArtist.textContent =
+                getSoundCloudArtist(
+                    track
+                );
+
+        }
+
+
+        if (soundCloudArtwork) {
+
+            const image =
+                getSoundCloudArtwork(
+                    track
+                );
+
+
+            if (image) {
+
+                soundCloudArtwork.innerHTML = `
+
+                    <img
+                        src="${escapeHTML(image)}"
+                        alt=""
+                    >
+
+                `;
+
+            } else {
+
+                soundCloudArtwork.textContent =
+                    "♪";
+
+            }
+
+        }
+
+
+        updateSoundCloudListUI();
+
+    }
+
+
+    function updateSoundCloudListUI() {
+
+        if (!soundCloudList) {
+            return;
+        }
+
+
+        soundCloudList
             .querySelectorAll(
-                "button[data-soundcloud-index]"
+                ".rakkez-sc-track"
             )
             .forEach(
                 function (
-                    button,
+                    item,
                     index
                 ) {
 
-                    const active =
+                    item.classList.toggle(
+                        "active",
                         index ===
-                        soundCloudCurrentIndex;
-
-
-                    button.style.background =
-                        active
-                            ? "rgba(255,255,255,.10)"
-                            : "rgba(255,255,255,.035)";
-
-
-                    button.style.borderColor =
-                        active
-                            ? "rgba(255,255,255,.15)"
-                            : "rgba(255,255,255,.07)";
+                        soundCloudCurrentIndex
+                    );
 
                 }
             );
@@ -2109,12 +2472,139 @@
     }
 
 
-    function playSoundCloudQueueItem(
+    function renderSoundCloudTracks() {
+
+        if (!soundCloudList) {
+            return;
+        }
+
+
+        soundCloudList.innerHTML =
+            "";
+
+
+        if (!soundCloudTracks.length) {
+
+            soundCloudList.innerHTML = `
+
+                <div class="rakkez-sc-empty">
+                    No track list is available for this SoundCloud source.
+                </div>
+
+            `;
+
+
+            return;
+
+        }
+
+
+        soundCloudTracks.forEach(
+            function (
+                track,
+                index
+            ) {
+
+                const item =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                item.type =
+                    "button";
+
+
+                item.className =
+                    "rakkez-sc-track";
+
+
+                item.dataset.index =
+                    String(index);
+
+
+                const image =
+                    getSoundCloudArtwork(
+                        track
+                    );
+
+
+                item.innerHTML = `
+
+                    <div class="rakkez-sc-track-number">
+                        ${index + 1}
+                    </div>
+
+                    <div class="rakkez-sc-track-art">
+
+                        ${
+                            image
+                                ? `
+                                    <img
+                                        src="${escapeHTML(image)}"
+                                        alt=""
+                                        loading="lazy"
+                                    >
+                                `
+                                : "♪"
+                        }
+
+                    </div>
+
+                    <div class="rakkez-sc-track-info">
+
+                        <div class="rakkez-sc-track-name">
+                            ${escapeHTML(
+                                track.title ||
+                                "Untitled"
+                            )}
+                        </div>
+
+                        <div class="rakkez-sc-track-artist">
+                            ${escapeHTML(
+                                getSoundCloudArtist(
+                                    track
+                                )
+                            )}
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                item.addEventListener(
+                    "click",
+                    function () {
+
+                        playSoundCloudTrack(
+                            index
+                        );
+
+                    }
+                );
+
+
+                soundCloudList.appendChild(
+                    item
+                );
+
+            }
+        );
+
+
+        updateSoundCloudListUI();
+
+    }
+
+
+    function playSoundCloudTrack(
         index
     ) {
 
         if (
-            !soundCloudQueue.length
+            !soundCloudWidget ||
+            !soundCloudReady
         ) {
 
             return;
@@ -2122,172 +2612,725 @@
         }
 
 
-        index =
-            clamp(
-                index,
-                0,
-                soundCloudQueue.length - 1
-            );
+        if (
+            !Number.isFinite(index) ||
+            index < 0 ||
+            index >= soundCloudTracks.length
+        ) {
+
+            return;
+
+        }
 
 
         soundCloudCurrentIndex =
             index;
 
 
-        const item =
-            soundCloudQueue[index];
+        const track =
+            soundCloudTracks[index];
+
+
+        updateSoundCloudNowPlaying(
+            track,
+            index
+        );
 
 
         if (
-            soundCloudWidget &&
-            item &&
-            item.id &&
             typeof soundCloudWidget.skip ===
             "function"
         ) {
 
-            /*
-             * SoundCloud Widget API uses
-             * skip(index) for playlist items.
-             */
+            try {
 
-            soundCloudWidget.skip(
-                index
-            );
+                soundCloudWidget.skip(
+                    index
+                );
 
+            } catch (error) {
 
-            updateSoundCloudPlaylistUI();
+                console.warn(
+                    "RakkeZ SoundCloud skip failed:",
+                    error
+                );
 
-
-            return;
+            }
 
         }
 
 
         if (
-            soundCloudWidget &&
             typeof soundCloudWidget.play ===
             "function"
         ) {
 
-            soundCloudWidget.play();
+            try {
 
-        }
-
-
-        updateSoundCloudPlaylistUI();
-
-    }
+                const promise =
+                    soundCloudWidget.play();
 
 
-    function soundCloudNextTrack() {
+                if (
+                    promise &&
+                    typeof promise.catch ===
+                    "function"
+                ) {
 
-        if (
-            soundCloudWidget &&
-            soundCloudQueue.length
-        ) {
+                    promise.catch(
+                        function (error) {
 
-            const next =
-                (
-                    soundCloudCurrentIndex +
-                    1
-                ) %
-                soundCloudQueue.length;
+                            console.warn(
+                                "RakkeZ SoundCloud play failed:",
+                                error
+                            );
 
+                        }
+                    );
 
-            soundCloudCurrentIndex =
-                next;
+                }
 
+            } catch (error) {
 
-            if (
-                typeof soundCloudWidget.skip ===
-                "function"
-            ) {
-
-                soundCloudWidget.skip(
-                    next
+                console.warn(
+                    "RakkeZ SoundCloud play failed:",
+                    error
                 );
 
             }
-
-
-            updateSoundCloudPlaylistUI();
-
-
-            return;
-
-        }
-
-
-        if (
-            soundCloudWidget &&
-            typeof soundCloudWidget.next ===
-            "function"
-        ) {
-
-            soundCloudWidget.next();
 
         }
 
     }
 
 
-    function soundCloudPreviousTrack() {
+    function clearSoundCloudUI() {
 
-        if (
-            soundCloudWidget &&
-            soundCloudQueue.length
-        ) {
+        if (soundCloudEmbed) {
 
-            const previous =
-                (
-                    soundCloudCurrentIndex -
-                    1 +
-                    soundCloudQueue.length
-                ) %
-                soundCloudQueue.length;
+            soundCloudEmbed.innerHTML =
+                "";
+
+        }
 
 
-            soundCloudCurrentIndex =
-                previous;
+        soundCloudWidget =
+            null;
 
 
-            if (
-                typeof soundCloudWidget.skip ===
-                "function"
-            ) {
+        soundCloudFrame =
+            null;
 
-                soundCloudWidget.skip(
-                    previous
+
+        soundCloudReady =
+            false;
+
+
+        soundCloudTracks =
+            [];
+
+
+        soundCloudCurrentIndex =
+            0;
+
+
+        soundCloudList =
+            null;
+
+
+        soundCloudTitle =
+            null;
+
+
+        soundCloudArtist =
+            null;
+
+
+        soundCloudArtwork =
+            null;
+
+
+        soundCloudCount =
+            null;
+
+
+        soundCloudPrevious =
+            null;
+
+
+        soundCloudNext =
+            null;
+
+    }
+
+
+    function buildSoundCloudPlayerUI() {
+
+        if (!soundCloudEmbed) {
+            return;
+        }
+
+
+        soundCloudEmbed.innerHTML = `
+
+            <div class="rakkez-sc-player">
+
+                <div class="rakkez-sc-now">
+
+                    <div
+                        id="rakkezSoundCloudArtwork"
+                        class="rakkez-sc-art"
+                    >
+                        ♪
+                    </div>
+
+                    <div class="rakkez-sc-now-info">
+
+                        <div class="rakkez-sc-now-label">
+                            Now Playing
+                        </div>
+
+                        <div
+                            id="rakkezSoundCloudTitle"
+                            class="rakkez-sc-now-title"
+                        >
+                            SoundCloud
+                        </div>
+
+                        <div
+                            id="rakkezSoundCloudArtist"
+                            class="rakkez-sc-now-artist"
+                        >
+                            SoundCloud
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="rakkez-sc-frame-wrap">
+
+                    <iframe
+                        id="rakkezSoundCloudFrame"
+                        class="rakkez-sc-frame"
+                        title="SoundCloud Player"
+                        allow="autoplay"
+                        scrolling="no"
+                        frameborder="no"
+                    ></iframe>
+
+                </div>
+
+
+                <div class="rakkez-sc-actions">
+
+                    <button
+                        id="rakkezSoundCloudPrevious"
+                        class="rakkez-sc-action"
+                        type="button"
+                    >
+                        Previous
+                    </button>
+
+                    <button
+                        id="rakkezSoundCloudNext"
+                        class="rakkez-sc-action"
+                        type="button"
+                    >
+                        Next
+                    </button>
+
+                </div>
+
+
+                <div class="rakkez-sc-list-header">
+
+                    <div class="rakkez-sc-list-title">
+                        Tracks
+                    </div>
+
+                    <div
+                        id="rakkezSoundCloudCount"
+                        class="rakkez-sc-list-count"
+                    >
+                        0 tracks
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="rakkezSoundCloudList"
+                    class="rakkez-sc-list"
+                >
+
+                    <div class="rakkez-sc-empty">
+                        Loading tracks...
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        soundCloudFrame =
+            document.getElementById(
+                "rakkezSoundCloudFrame"
+            );
+
+
+        soundCloudPrevious =
+            document.getElementById(
+                "rakkezSoundCloudPrevious"
+            );
+
+
+        soundCloudNext =
+            document.getElementById(
+                "rakkezSoundCloudNext"
+            );
+
+
+        soundCloudList =
+            document.getElementById(
+                "rakkezSoundCloudList"
+            );
+
+
+        soundCloudTitle =
+            document.getElementById(
+                "rakkezSoundCloudTitle"
+            );
+
+
+        soundCloudArtist =
+            document.getElementById(
+                "rakkezSoundCloudArtist"
+            );
+
+
+        soundCloudArtwork =
+            document.getElementById(
+                "rakkezSoundCloudArtwork"
+            );
+
+
+        soundCloudCount =
+            document.getElementById(
+                "rakkezSoundCloudCount"
+            );
+
+
+        if (soundCloudPrevious) {
+
+            soundCloudPrevious.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        !soundCloudWidget ||
+                        !soundCloudReady
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        soundCloudTracks.length <=
+                        1
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        soundCloudCurrentIndex >
+                        0
+                    ) {
+
+                        playSoundCloudTrack(
+                            soundCloudCurrentIndex - 1
+                        );
+
+                    } else {
+
+                        playSoundCloudTrack(
+                            soundCloudTracks.length - 1
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        if (soundCloudNext) {
+
+            soundCloudNext.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        !soundCloudWidget ||
+                        !soundCloudReady
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        soundCloudTracks.length <=
+                        1
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        soundCloudCurrentIndex <
+                        soundCloudTracks.length - 1
+                    ) {
+
+                        playSoundCloudTrack(
+                            soundCloudCurrentIndex + 1
+                        );
+
+                    } else {
+
+                        playSoundCloudTrack(
+                            0
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+
+
+    function getSoundCloudWidgetOptions(
+        soundCloudUrl
+    ) {
+
+        return (
+            "https://w.soundcloud.com/player/?" +
+            "url=" +
+            encodeURIComponent(
+                soundCloudUrl
+            ) +
+            "&auto_play=false" +
+            "&hide_related=true" +
+            "&show_comments=false" +
+            "&show_user=true" +
+            "&show_reposts=false" +
+            "&show_teaser=false" +
+            "&visual=false" +
+            "&color=%23000000"
+        );
+
+    }
+
+
+    function bindSoundCloudWidget(
+        token
+    ) {
+
+        loadSoundCloudWidgetAPI(
+            function () {
+
+                if (
+                    token !==
+                    soundCloudRequestToken
+                ) {
+
+                    return;
+
+                }
+
+
+                const frame =
+                    document.getElementById(
+                        "rakkezSoundCloudFrame"
+                    );
+
+
+                if (
+                    !frame ||
+                    !window.SC ||
+                    typeof window.SC.Widget !==
+                    "function"
+                ) {
+
+                    if (soundCloudStatus) {
+
+                        soundCloudStatus.textContent =
+                            "SoundCloud player could not be initialized.";
+
+                    }
+
+
+                    return;
+
+                }
+
+
+                soundCloudFrame =
+                    frame;
+
+
+                soundCloudWidget =
+                    window.SC.Widget(
+                        frame
+                    );
+
+
+                soundCloudReady =
+                    false;
+
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.READY,
+                    function () {
+
+                        if (
+                            token !==
+                            soundCloudRequestToken
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        soundCloudReady =
+                            true;
+
+
+                        if (
+                            soundCloudStatus
+                        ) {
+
+                            soundCloudStatus.textContent =
+                                "SoundCloud loaded successfully.";
+
+                        }
+
+
+                        /*
+                         * Get the actual playlist/set tracks
+                         * from the official widget API.
+                         */
+
+                        if (
+                            typeof soundCloudWidget.getSounds ===
+                            "function"
+                        ) {
+
+                            soundCloudWidget.getSounds(
+                                function (
+                                    sounds
+                                ) {
+
+                                    if (
+                                        token !==
+                                        soundCloudRequestToken
+                                    ) {
+
+                                        return;
+
+                                    }
+
+
+                                    soundCloudTracks =
+                                        Array.isArray(
+                                            sounds
+                                        )
+                                            ? sounds
+                                            : [];
+
+
+                                    if (
+                                        soundCloudCount
+                                    ) {
+
+                                        soundCloudCount.textContent =
+                                            soundCloudTracks.length +
+                                            (
+                                                soundCloudTracks.length === 1
+                                                    ? " track"
+                                                    : " tracks"
+                                            );
+
+                                    }
+
+
+                                    renderSoundCloudTracks();
+
+
+                                    if (
+                                        soundCloudTracks.length
+                                    ) {
+
+                                        updateSoundCloudNowPlaying(
+                                            soundCloudTracks[0],
+                                            0
+                                        );
+
+                                    }
+
+                                }
+                            );
+
+                        }
+
+                    }
                 );
 
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.PLAY,
+                    function () {
+
+                        if (
+                            soundCloudStatus
+                        ) {
+
+                            soundCloudStatus.textContent =
+                                "Playing on SoundCloud.";
+
+                        }
+
+                    }
+                );
+
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.PAUSE,
+                    function () {
+
+                        if (
+                            soundCloudStatus
+                        ) {
+
+                            soundCloudStatus.textContent =
+                                "SoundCloud paused.";
+
+                        }
+
+                    }
+                );
+
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.PLAY_PROGRESS,
+                    function (data) {
+
+                        if (
+                            !data ||
+                            !soundCloudTracks.length
+                        ) {
+
+                            return;
+
+                        }
+
+                    }
+                );
+
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.FINISH,
+                    function () {
+
+                        if (
+                            !soundCloudTracks.length
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        if (
+                            soundCloudCurrentIndex <
+                            soundCloudTracks.length - 1
+                        ) {
+
+                            playSoundCloudTrack(
+                                soundCloudCurrentIndex + 1
+                            );
+
+                        } else {
+
+                            playSoundCloudTrack(
+                                0
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                soundCloudWidget.bind(
+                    window.SC.Widget.Events.ERROR,
+                    function () {
+
+                        if (
+                            soundCloudStatus
+                        ) {
+
+                            soundCloudStatus.textContent =
+                                "SoundCloud could not play this source.";
+
+                        }
+
+                    }
+                );
+
+
+                /*
+                 * SoundCloud widget exposes CURRENT_SOUND
+                 * for the track that is actually playing.
+                 */
+
+                if (
+                    window.SC.Widget.Events &&
+                    window.SC.Widget.Events.PLAY_PROGRESS
+                ) {
+
+                    /*
+                     * No aggressive polling is used here.
+                     * The list remains controlled by RakkeZ.
+                     */
+
+                }
+
             }
-
-
-            updateSoundCloudPlaylistUI();
-
-
-            return;
-
-        }
-
-
-        if (
-            soundCloudWidget &&
-            typeof soundCloudWidget.prev ===
-            "function"
-        ) {
-
-            soundCloudWidget.prev();
-
-        }
+        );
 
     }
 
 
     /* =====================================================
-       SOUNDCLOUD PLAY
-    ===================================================== */
+       PLAY SOUNDCLOUD
+       ===================================================== */
 
     function playSoundCloud() {
 
@@ -2316,10 +3359,9 @@
             soundCloudEmbed.innerHTML = `
 
                 <div
+                    class="rakkez-sc-empty"
                     style="
                         padding:24px;
-                        text-align:center;
-                        color:rgba(255,255,255,.55);
                     "
                 >
                     Invalid SoundCloud URL
@@ -2328,7 +3370,12 @@
             `;
 
 
-            clearSoundCloudPlaylist();
+            if (soundCloudStatus) {
+
+                soundCloudStatus.textContent =
+                    "Please paste a valid SoundCloud track, set, or playlist URL.";
+
+            }
 
 
             return;
@@ -2336,242 +3383,46 @@
         }
 
 
-        soundCloudWidget =
-            null;
+        soundCloudRequestToken++;
 
 
-        soundCloudQueue =
-            [];
+        const token =
+            soundCloudRequestToken;
 
 
-        soundCloudCurrentIndex =
-            0;
+        clearSoundCloudUI();
 
 
-        clearSoundCloudPlaylist();
-
-
-        /*
-         * The official SoundCloud Widget
-         * is used directly.
-         */
-
-        soundCloudEmbed.innerHTML = `
-
-            <iframe
-                id="rakkezSoundCloudFrame"
-                title="SoundCloud Player"
-                allow="autoplay"
-                scrolling="no"
-                frameborder="no"
-                src="https://w.soundcloud.com/player/?url=${encodeURIComponent(soundCloudUrl)}&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true&color=%23000000"
-                style="
-                    width:100%;
-                    height:166px;
-                    border:0;
-                    display:block;
-                    border-radius:16px;
-                "
-            ></iframe>
-
-        `;
+        buildSoundCloudPlayerUI();
 
 
         if (soundCloudStatus) {
 
             soundCloudStatus.textContent =
-                "SoundCloud loaded.";
+                "Loading SoundCloud...";
 
         }
 
 
-        loadSoundCloudWidgetAPI(
-            function () {
-
-                const frame =
-                    document.getElementById(
-                        "rakkezSoundCloudFrame"
-                    );
+        const frame =
+            document.getElementById(
+                "rakkezSoundCloudFrame"
+            );
 
 
-                if (
-                    !frame ||
-                    !window.SC ||
-                    typeof window.SC.Widget !==
-                    "function"
-                ) {
-
-                    return;
-
-                }
+        if (!frame) {
+            return;
+        }
 
 
-                soundCloudWidget =
-                    window.SC.Widget(
-                        frame
-                    );
+        frame.src =
+            getSoundCloudWidgetOptions(
+                soundCloudUrl
+            );
 
 
-                soundCloudWidget.bind(
-                    window.SC.Widget.Events.READY,
-                    function () {
-
-                        /*
-                         * Retrieve playlist / set items.
-                         */
-
-                        if (
-                            typeof soundCloudWidget.getSounds ===
-                            "function"
-                        ) {
-
-                            soundCloudWidget.getSounds(
-                                function (sounds) {
-
-                                    if (
-                                        Array.isArray(
-                                            sounds
-                                        )
-                                    ) {
-
-                                        soundCloudQueue =
-                                            sounds.map(
-                                                function (
-                                                    sound
-                                                ) {
-
-                                                    return {
-
-                                                        id:
-                                                            sound.id,
-
-                                                        title:
-                                                            sound.title ||
-                                                            "SoundCloud Track",
-
-                                                        permalink:
-                                                            sound.permalink_url ||
-                                                            null
-
-                                                    };
-
-                                                }
-                                            );
-
-
-                                        if (
-                                            soundCloudQueue.length
-                                        ) {
-
-                                            showSoundCloudPlaylist();
-
-                                        }
-
-                                    }
-
-                                }
-                            );
-
-                        }
-
-
-                        if (
-                            typeof soundCloudWidget.play ===
-                            "function"
-                        ) {
-
-                            soundCloudWidget.play();
-
-                        }
-
-                    }
-                );
-
-
-                soundCloudWidget.bind(
-                    window.SC.Widget.Events.PLAY_PROGRESS,
-                    function () {
-
-                        if (
-                            typeof soundCloudWidget.getCurrentSoundIndex ===
-                            "function"
-                        ) {
-
-                            soundCloudWidget.getCurrentSoundIndex(
-                                function (index) {
-
-                                    if (
-                                        Number.isFinite(
-                                            index
-                                        )
-                                    ) {
-
-                                        soundCloudCurrentIndex =
-                                            index;
-
-                                        updateSoundCloudPlaylistUI();
-
-                                    }
-
-                                }
-                            );
-
-                        }
-
-                    }
-                );
-
-
-                soundCloudWidget.bind(
-                    window.SC.Widget.Events.PLAY,
-                    function () {
-
-                        if (
-                            soundCloudStatus
-                        ) {
-
-                            soundCloudStatus.textContent =
-                                "SoundCloud is playing.";
-
-                        }
-
-                    }
-                );
-
-
-                soundCloudWidget.bind(
-                    window.SC.Widget.Events.PAUSE,
-                    function () {
-
-                        if (
-                            soundCloudStatus
-                        ) {
-
-                            soundCloudStatus.textContent =
-                                "SoundCloud paused.";
-
-                        }
-
-                    }
-                );
-
-
-                soundCloudWidget.bind(
-                    window.SC.Widget.Events.FINISH,
-                    function () {
-
-                        if (
-                            soundCloudQueue.length
-                        ) {
-
-                            soundCloudNextTrack();
-
-                        }
-
-                    }
-                );
-
-            }
+        bindSoundCloudWidget(
+            token
         );
 
     }
@@ -2579,7 +3430,7 @@
 
     /* =====================================================
        TABS
-    ===================================================== */
+       ===================================================== */
 
     function switchTab(
         name
@@ -2645,7 +3496,7 @@
 
     /* =====================================================
        OVERLAY
-    ===================================================== */
+       ===================================================== */
 
     function openMedia() {
 
@@ -2747,7 +3598,7 @@
 
     /* =====================================================
        MAIN CONTROLS
-    ===================================================== */
+       ===================================================== */
 
     if (playButton) {
 
@@ -2884,7 +3735,7 @@
 
     /* =====================================================
        PROGRESS
-    ===================================================== */
+       ===================================================== */
 
     if (progress) {
 
@@ -2932,7 +3783,7 @@
 
     /* =====================================================
        MAIN VOLUME
-    ===================================================== */
+       ===================================================== */
 
     if (volume) {
 
@@ -2953,7 +3804,7 @@
 
     /* =====================================================
        MAIN AUDIO EVENTS
-    ===================================================== */
+       ===================================================== */
 
     audio.addEventListener(
         "loadstart",
@@ -3151,7 +4002,7 @@
 
     /* =====================================================
        MINI CONTROLS
-    ===================================================== */
+       ===================================================== */
 
     if (miniPlay) {
 
@@ -3185,152 +4036,7 @@
 
     /* =====================================================
        YOUTUBE
-    ===================================================== */
-
-    let youtubePlayer = null;
-
-    let youtubePlaylist = [];
-
-    let youtubePlaylistIndex = 0;
-
-    let youtubeApiReady = false;
-
-    let youtubeApiCallbacks = [];
-
-
-    /* =====================================================
-       LOAD YOUTUBE IFRAME API
-    ===================================================== */
-
-    function loadYouTubeAPI(
-        callback
-    ) {
-
-        if (
-            window.YT &&
-            typeof window.YT.Player ===
-            "function"
-        ) {
-
-            youtubeApiReady =
-                true;
-
-
-            callback();
-
-            return;
-
-        }
-
-
-        youtubeApiCallbacks.push(
-            callback
-        );
-
-
-        if (
-            document.getElementById(
-                "rakkezYouTubeIframeAPI"
-            )
-        ) {
-
-            return;
-
-        }
-
-
-        const previousReady =
-            window.onYouTubeIframeAPIReady;
-
-
-        window.onYouTubeIframeAPIReady =
-            function () {
-
-                youtubeApiReady =
-                    true;
-
-
-                if (
-                    typeof previousReady ===
-                    "function"
-                ) {
-
-                    try {
-
-                        previousReady();
-
-                    } catch (error) {
-
-                        console.warn(
-                            "Previous YouTube API callback failed:",
-                            error
-                        );
-
-                    }
-
-                }
-
-
-                const callbacks =
-                    youtubeApiCallbacks.slice();
-
-
-                youtubeApiCallbacks =
-                    [];
-
-
-                callbacks.forEach(
-                    function (
-                        callback
-                    ) {
-
-                        try {
-
-                            callback();
-
-                        } catch (error) {
-
-                            console.error(
-                                "RakkeZ YouTube callback error:",
-                                error
-                            );
-
-                        }
-
-                    }
-                );
-
-            };
-
-
-        const script =
-            document.createElement(
-                "script"
-            );
-
-
-        script.id =
-            "rakkezYouTubeIframeAPI";
-
-
-        script.src =
-            "https://www.youtube.com/iframe_api";
-
-
-        script.async =
-            true;
-
-
-        document.head.appendChild(
-            script
-        );
-
-    }
-
-
-    /* =====================================================
-       YOUTUBE URL PARSER
-    ===================================================== */
+       ===================================================== */
 
     function getYouTubeData(
         url
@@ -3343,8 +4049,25 @@
 
         try {
 
+            let value =
+                String(url).trim();
+
+
+            if (
+                !/^https?:\/\//i.test(
+                    value
+                )
+            ) {
+
+                value =
+                    "https://" +
+                    value;
+
+            }
+
+
             const parsed =
-                new URL(url);
+                new URL(value);
 
 
             const hostname =
@@ -3357,9 +4080,12 @@
 
 
             const isYouTube =
-                hostname === "youtube.com" ||
-                hostname === "youtu.be" ||
-                hostname === "music.youtube.com";
+                hostname ===
+                    "youtube.com" ||
+                hostname ===
+                    "youtu.be" ||
+                hostname ===
+                    "music.youtube.com";
 
 
             if (!isYouTube) {
@@ -3396,8 +4122,10 @@
 
 
             if (
-                hostname === "youtube.com" ||
-                hostname === "music.youtube.com"
+                hostname ===
+                    "youtube.com" ||
+                hostname ===
+                    "music.youtube.com"
             ) {
 
                 if (
@@ -3466,7 +4194,8 @@
                     videoId
                         .split("?")[0]
                         .split("&")[0]
-                        .split("#")[0];
+                        .split("#")[0]
+                        .trim();
 
             }
 
@@ -3474,10 +4203,17 @@
             if (playlistId) {
 
                 playlistId =
-                    playlistId.trim();
+                    playlistId
+                        .trim();
 
             }
 
+
+            /*
+             * YouTube playlist IDs normally start with PL,
+             * but we do not enforce that because YouTube
+             * also uses other list formats.
+             */
 
             if (
                 !videoId &&
@@ -3501,6 +4237,12 @@
 
         } catch (error) {
 
+            console.warn(
+                "RakkeZ YouTube URL parsing failed:",
+                error
+            );
+
+
             return null;
 
         }
@@ -3508,794 +4250,178 @@
     }
 
 
-    /* =====================================================
-       YOUTUBE PLAYLIST UI
-    ===================================================== */
+    function getYouTubeOrigin() {
 
-    function getYouTubePlaylistContainer() {
+        try {
 
-        if (!youtubeEmbed) {
-            return null;
-        }
-
-
-        let container =
-            document.getElementById(
-                "rakkezYoutubePlaylistContainer"
-            );
-
-
-        if (!container) {
-
-            container =
-                document.createElement(
-                    "div"
-                );
-
-
-            container.id =
-                "rakkezYoutubePlaylistContainer";
-
-
-            container.style.cssText = `
-                width:100%;
-                margin-top:14px;
-                display:none;
-                flex-direction:column;
-                gap:8px;
-            `;
-
-
-            youtubeEmbed.parentElement
-                ?.appendChild(
-                    container
-                );
-
-        }
-
-
-        return container;
-
-    }
-
-
-    function createYouTubePlaylistUI() {
-
-        const container =
-            getYouTubePlaylistContainer();
-
-
-        if (!container) {
-            return;
-        }
-
-
-        container.innerHTML =
-            "";
-
-
-        if (
-            !youtubePlaylist.length
-        ) {
-
-            container.style.display =
-                "none";
-
-            return;
-
-        }
-
-
-        container.style.display =
-            "flex";
-
-
-        const heading =
-            document.createElement(
-                "div"
-            );
-
-
-        heading.style.cssText = `
-            font-size:12px;
-            color:rgba(255,255,255,.55);
-            padding:4px 2px;
-        `;
-
-
-        heading.textContent =
-            "Playlist";
-
-
-        container.appendChild(
-            heading
-        );
-
-
-        const list =
-            document.createElement(
-                "div"
-            );
-
-
-        list.style.cssText = `
-            width:100%;
-            max-height:260px;
-            overflow-y:auto;
-            display:flex;
-            flex-direction:column;
-            gap:7px;
-        `;
-
-
-        youtubePlaylist.forEach(
-            function (
-                video,
-                index
+            if (
+                window.location.protocol ===
+                "http:" ||
+                window.location.protocol ===
+                "https:"
             ) {
 
-                const item =
-                    document.createElement(
-                        "button"
-                    );
-
-
-                item.type =
-                    "button";
-
-
-                item.dataset.youtubeIndex =
-                    String(index);
-
-
-                item.style.cssText = `
-                    width:100%;
-                    display:flex;
-                    align-items:center;
-                    gap:10px;
-                    padding:9px 10px;
-                    border-radius:10px;
-                    border:1px solid rgba(255,255,255,.07);
-                    background:rgba(255,255,255,.035);
-                    color:inherit;
-                    cursor:pointer;
-                    text-align:left;
-                `;
-
-
-                const thumbnail =
-                    video.videoId
-                        ? "https://i.ytimg.com/vi/" +
-                          encodeURIComponent(
-                              video.videoId
-                          ) +
-                          "/default.jpg"
-                        : "";
-
-
-                item.innerHTML = `
-
-                    <div
-                        style="
-                            width:70px;
-                            min-width:70px;
-                            height:40px;
-                            border-radius:7px;
-                            overflow:hidden;
-                            background:rgba(255,255,255,.05);
-                        "
-                    >
-                        ${
-                            thumbnail
-                                ? `
-                                    <img
-                                        src="${thumbnail}"
-                                        alt=""
-                                        style="
-                                            width:100%;
-                                            height:100%;
-                                            object-fit:cover;
-                                        "
-                                    >
-                                `
-                                : ""
-                        }
-                    </div>
-
-                    <div
-                        style="
-                            min-width:0;
-                            flex:1;
-                        "
-                    >
-
-                        <div
-                            style="
-                                font-size:12px;
-                                overflow:hidden;
-                                text-overflow:ellipsis;
-                                white-space:nowrap;
-                            "
-                        >
-                            ${escapeHTML(
-                                video.title ||
-                                "Video " +
-                                (index + 1)
-                            )}
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:3px;
-                                font-size:10px;
-                                color:rgba(255,255,255,.42);
-                            "
-                        >
-                            ${index + 1}
-                        </div>
-
-                    </div>
-
-                `;
-
-
-                item.addEventListener(
-                    "click",
-                    function () {
-
-                        playYouTubePlaylistItem(
-                            index
-                        );
-
-                    }
-                );
-
-
-                list.appendChild(
-                    item
+                return (
+                    window.location.origin
                 );
 
             }
-        );
+
+        } catch (error) {}
 
 
-        container.appendChild(
-            list
-        );
-
-
-        updateYouTubePlaylistUI();
+        return null;
 
     }
 
 
-    function updateYouTubePlaylistUI() {
-
-        const container =
-            document.getElementById(
-                "rakkezYoutubePlaylistContainer"
-            );
-
-
-        if (!container) {
-            return;
-        }
-
-
-        container
-            .querySelectorAll(
-                "button[data-youtube-index]"
-            )
-            .forEach(
-                function (
-                    button,
-                    index
-                ) {
-
-                    const active =
-                        index ===
-                        youtubePlaylistIndex;
-
-
-                    button.style.background =
-                        active
-                            ? "rgba(255,255,255,.10)"
-                            : "rgba(255,255,255,.035)";
-
-
-                    button.style.borderColor =
-                        active
-                            ? "rgba(255,255,255,.15)"
-                            : "rgba(255,255,255,.07)";
-
-                }
-            );
-
-    }
-
-
-    function playYouTubePlaylistItem(
-        index
-    ) {
-
-        if (
-            !youtubePlaylist.length
-        ) {
-
-            return;
-
-        }
-
-
-        index =
-            clamp(
-                index,
-                0,
-                youtubePlaylist.length - 1
-            );
-
-
-        youtubePlaylistIndex =
-            index;
-
-
-        const video =
-            youtubePlaylist[index];
-
-
-        if (
-            !youtubePlayer ||
-            !video
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            typeof youtubePlayer.loadVideoById ===
-            "function"
-        ) {
-
-            youtubePlayer.loadVideoById(
-                video.videoId
-            );
-
-        }
-
-
-        updateYouTubePlaylistUI();
-
-    }
-
-
-    function youtubeNextTrack() {
-
-        if (
-            youtubePlaylist.length
-        ) {
-
-            const next =
-                (
-                    youtubePlaylistIndex +
-                    1
-                ) %
-                youtubePlaylist.length;
-
-
-            playYouTubePlaylistItem(
-                next
-            );
-
-
-            return;
-
-        }
-
-
-        if (
-            youtubePlayer &&
-            typeof youtubePlayer.nextVideo ===
-            "function"
-        ) {
-
-            youtubePlayer.nextVideo();
-
-        }
-
-    }
-
-
-    function youtubePreviousTrack() {
-
-        if (
-            youtubePlaylist.length
-        ) {
-
-            const previous =
-                (
-                    youtubePlaylistIndex -
-                    1 +
-                    youtubePlaylist.length
-                ) %
-                youtubePlaylist.length;
-
-
-            playYouTubePlaylistItem(
-                previous
-            );
-
-
-            return;
-
-        }
-
-
-        if (
-            youtubePlayer &&
-            typeof youtubePlayer.previousVideo ===
-            "function"
-        ) {
-
-            youtubePlayer.previousVideo();
-
-        }
-
-    }
-
-
-    /* =====================================================
-       YOUTUBE PLAYER CREATION
-    ===================================================== */
-
-    function createYouTubePlayer(
+    function buildYouTubeEmbedUrl(
         data
     ) {
 
-        if (!youtubeEmbed) {
-            return;
+        if (!data) {
+            return null;
         }
 
 
-        youtubeEmbed.innerHTML =
+        let path =
             "";
 
 
-        const playerElement =
-            document.createElement(
-                "div"
+        const params =
+            new URLSearchParams();
+
+
+        /*
+         * IMPORTANT:
+         *
+         * autoplay is intentionally NOT enabled.
+         *
+         * This prevents the iframe from immediately
+         * attempting playback before the user interacts
+         * with the YouTube player.
+         */
+
+        params.set(
+            "rel",
+            "0"
+        );
+
+
+        params.set(
+            "playsinline",
+            "1"
+        );
+
+
+        params.set(
+            "enablejsapi",
+            "1"
+        );
+
+
+        params.set(
+            "modestbranding",
+            "1"
+        );
+
+
+        params.set(
+            "iv_load_policy",
+            "3"
+        );
+
+
+        const origin =
+            getYouTubeOrigin();
+
+
+        if (origin) {
+
+            params.set(
+                "origin",
+                origin
             );
 
-
-        playerElement.id =
-            "rakkezYoutubePlayer";
-
-
-        playerElement.style.cssText = `
-            width:100%;
-            min-height:300px;
-            border-radius:16px;
-            overflow:hidden;
-        `;
-
-
-        youtubeEmbed.appendChild(
-            playerElement
-        );
-
-
-        loadYouTubeAPI(
-            function () {
-
-                if (
-                    youtubePlayer &&
-                    typeof youtubePlayer.destroy ===
-                    "function"
-                ) {
-
-                    try {
-
-                        youtubePlayer.destroy();
-
-                    } catch (error) {}
-
-                }
-
-
-                const playerOptions = {
-
-                    width:
-                        "100%",
-
-                    height:
-                        "420",
-
-                    videoId:
-                        data.videoId || undefined,
-
-                    playerVars: {
-
-                        autoplay:
-                            1,
-
-                        controls:
-                            1,
-
-                        rel:
-                            0,
-
-                        playsinline:
-                            1,
-
-                        modestbranding:
-                            1
-
-                    },
-
-                    events: {
-
-                        onReady:
-                            function (
-                                event
-                            ) {
-
-                                if (
-                                    data.playlistId &&
-                                    typeof event.target.loadPlaylist ===
-                                    "function"
-                                ) {
-
-                                    event.target.loadPlaylist({
-
-                                        list:
-                                            data.playlistId,
-
-                                        index:
-                                            0
-
-                                    });
-
-                                }
-
-                            },
-
-
-                        onStateChange:
-                            function (
-                                event
-                            ) {
-
-                                if (
-                                    window.YT &&
-                                    event.data ===
-                                    window.YT.PlayerState.PLAYING
-                                ) {
-
-                                    syncYouTubePlaylist();
-
-                                }
-
-
-                                if (
-                                    window.YT &&
-                                    event.data ===
-                                    window.YT.PlayerState.ENDED
-                                ) {
-
-                                    youtubeNextTrack();
-
-                                }
-
-                            },
-
-                        onError:
-                            function (
-                                event
-                            ) {
-
-                                console.warn(
-                                    "RakkeZ YouTube error:",
-                                    event.data
-                                );
-
-                            }
-
-                    }
-
-                };
-
-
-                youtubePlayer =
-                    new YT.Player(
-                        playerElement.id,
-                        playerOptions
-                    );
-
-
-                /*
-                 * If playlist-only URL was supplied,
-                 * load it after player creation.
-                 */
-
-                if (
-                    data.playlistId
-                ) {
-
-                    setTimeout(
-                        function () {
-
-                            if (
-                                youtubePlayer &&
-                                typeof youtubePlayer.loadPlaylist ===
-                                "function"
-                            ) {
-
-                                youtubePlayer.loadPlaylist({
-
-                                    list:
-                                        data.playlistId,
-
-                                    index:
-                                        0
-
-                                });
-
-                            }
-
-                        },
-                        700
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       SYNC YOUTUBE PLAYLIST
-    ===================================================== */
-
-    function syncYouTubePlaylist() {
-
-        if (!youtubePlayer) {
-            return;
         }
 
 
-        if (
-            typeof youtubePlayer.getPlaylist ===
-            "function"
-        ) {
-
-            const ids =
-                youtubePlayer.getPlaylist();
-
-
-            if (
-                Array.isArray(ids) &&
-                ids.length
-            ) {
-
-                const current =
-                    youtubePlayer.getPlaylistIndex();
-
-
-                youtubePlaylist =
-                    ids.map(
-                        function (
-                            id,
-                            index
-                        ) {
-
-                            return {
-
-                                videoId:
-                                    id,
-
-                                title:
-                                    "YouTube Video " +
-                                    (index + 1)
-
-                            };
-
-                        }
-                    );
-
-
-                youtubePlaylistIndex =
-                    Number.isFinite(
-                        current
-                    )
-                        ? current
-                        : 0;
-
-
-                createYouTubePlaylistUI();
-
-
-                /*
-                 * Try to get the current video
-                 * title from the player.
-                 */
-
-                updateYouTubeCurrentTitle();
-
-            }
-
-        }
-
-    }
-
-
-    function updateYouTubeCurrentTitle() {
+        /*
+         * Playlist only.
+         */
 
         if (
-            !youtubePlayer ||
-            !youtubePlaylist.length
+            data.playlistId &&
+            !data.videoId
         ) {
 
-            return;
+            path =
+                "https://www.youtube.com/embed/videoseries";
+
+            params.set(
+                "list",
+                data.playlistId
+            );
 
         }
 
 
-        const data =
-            typeof youtubePlayer.getVideoData ===
-            "function"
-                ? youtubePlayer.getVideoData()
-                : null;
+        /*
+         * Video + Playlist.
+         */
 
-
-        if (
-            data &&
-            data.video_id
+        else if (
+            data.videoId &&
+            data.playlistId
         ) {
 
-            const index =
-                youtubePlaylist.findIndex(
-                    function (
-                        item
-                    ) {
-
-                        return (
-                            item.videoId ===
-                            data.video_id
-                        );
-
-                    }
+            path =
+                "https://www.youtube.com/embed/" +
+                encodeURIComponent(
+                    data.videoId
                 );
 
 
-            if (index !== -1) {
-
-                youtubePlaylistIndex =
-                    index;
-
-
-                if (data.title) {
-
-                    youtubePlaylist[index].title =
-                        data.title;
-
-                }
-
-
-                createYouTubePlaylistUI();
-
-            }
+            params.set(
+                "list",
+                data.playlistId
+            );
 
         }
 
+
+        /*
+         * Video only.
+         */
+
+        else if (
+            data.videoId
+        ) {
+
+            path =
+                "https://www.youtube.com/embed/" +
+                encodeURIComponent(
+                    data.videoId
+                );
+
+        }
+
+
+        else {
+
+            return null;
+
+        }
+
+
+        return (
+            path +
+            "?" +
+            params.toString()
+        );
+
     }
 
-
-    /* =====================================================
-       PLAY YOUTUBE
-    ===================================================== */
 
     function playYouTube() {
 
@@ -4336,43 +4462,82 @@
             `;
 
 
-            const playlistContainer =
-                document.getElementById(
-                    "rakkezYoutubePlaylistContainer"
-                );
+            return;
+
+        }
 
 
-            if (playlistContainer) {
+        const embedUrl =
+            buildYouTubeEmbedUrl(
+                data
+            );
 
-                playlistContainer.style.display =
-                    "none";
 
-            }
-
+        if (!embedUrl) {
 
             return;
 
         }
 
 
-        youtubePlaylist =
-            [];
+        /*
+         * Remove previous iframe first.
+         * This prevents old YouTube frames from
+         * continuing to exist underneath the new one.
+         */
+
+        youtubeEmbed.innerHTML =
+            "";
 
 
-        youtubePlaylistIndex =
-            0;
+        const iframe =
+            document.createElement(
+                "iframe"
+            );
 
 
-        createYouTubePlayer(
-            data
+        iframe.src =
+            embedUrl;
+
+
+        iframe.title =
+            "YouTube Player";
+
+
+        iframe.allow =
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+
+
+        iframe.allowFullscreen =
+            true;
+
+
+        iframe.referrerPolicy =
+            "strict-origin-when-cross-origin";
+
+
+        iframe.style.width =
+            "100%";
+
+
+        iframe.style.height =
+            "100%";
+
+
+        iframe.style.border =
+            "0";
+
+
+        iframe.style.display =
+            "block";
+
+
+        youtubeEmbed.appendChild(
+            iframe
         );
 
     }
 
-
-    /* =====================================================
-       YOUTUBE HINT
-    ===================================================== */
 
     function addYouTubePlaylistHint() {
 
@@ -4414,6 +4579,7 @@
 
 
         hint.style.cssText = `
+
             margin-top:10px;
             padding:10px 12px;
             border-radius:10px;
@@ -4422,6 +4588,7 @@
             color:rgba(255,255,255,.55);
             font-size:12px;
             line-height:1.55;
+
         `;
 
 
@@ -4436,19 +4603,8 @@
                 Tip:
             </strong>
 
-            You can paste a YouTube
-            <strong
-                style="
-                    color:rgba(255,255,255,.78);
-                    font-weight:600;
-                "
-            >
-                Playlist
-            </strong>
-            URL here too.
-
-            The playlist will appear below the player,
-            and you can choose any song directly.
+            Paste a YouTube video or playlist URL.
+            The playlist controls are provided by YouTube.
 
         `;
 
@@ -4466,8 +4622,9 @@
 
         } else {
 
-            youtubeSource.appendChild(
-                hint
+            youtubeSource.insertBefore(
+                hint,
+                youtubeSource.firstChild
             );
 
         }
@@ -4510,7 +4667,7 @@
 
     /* =====================================================
        SPOTIFY
-    ===================================================== */
+       ===================================================== */
 
     function getSpotifyEmbed(
         url
@@ -4693,7 +4850,7 @@
 
     /* =====================================================
        LOCAL MUSIC
-    ===================================================== */
+       ===================================================== */
 
     function saveLocalNames() {
 
@@ -4875,7 +5032,7 @@
 
     /* =====================================================
        EFFECT ENGINE
-    ===================================================== */
+       ===================================================== */
 
     const effectPlayers =
         Object.create(null);
@@ -5020,7 +5177,7 @@
 
     /* =====================================================
        EFFECTS CONTAINER
-    ===================================================== */
+       ===================================================== */
 
     function getEffectsSource() {
 
@@ -5075,8 +5232,8 @@
 
 
     /* =====================================================
-       REMOVE OLD EFFECT CARDS
-    ===================================================== */
+       REMOVE ALL OLD EFFECT CARDS
+       ===================================================== */
 
     function removeOldEffectCards(
         source,
@@ -5168,7 +5325,7 @@
 
     /* =====================================================
        EFFECT UI UPDATE
-    ===================================================== */
+       ===================================================== */
 
     function updateEffectCard(
         effect
@@ -5247,7 +5404,7 @@
 
     /* =====================================================
        CREATE EFFECT CARD
-    ===================================================== */
+       ===================================================== */
 
     function createEffectCard(
         effect,
@@ -5615,7 +5772,7 @@
 
     /* =====================================================
        RENDER EFFECTS
-    ===================================================== */
+       ===================================================== */
 
     function renderEffects() {
 
@@ -5684,7 +5841,7 @@
 
     /* =====================================================
        EFFECT DEBUG
-    ===================================================== */
+       ===================================================== */
 
     window.RakkeZEffects = {
 
@@ -5777,7 +5934,7 @@
 
     /* =====================================================
        KEYBOARD
-    ===================================================== */
+       ===================================================== */
 
     document.addEventListener(
         "keydown",
@@ -5836,7 +5993,7 @@
 
     /* =====================================================
        CLEANUP
-    ===================================================== */
+       ===================================================== */
 
     window.addEventListener(
         "beforeunload",
@@ -5879,30 +6036,17 @@
             );
 
 
-            if (
-                youtubePlayer &&
-                typeof youtubePlayer.destroy ===
-                "function"
-            ) {
+            /*
+             * Stop SoundCloud widget communication
+             * by removing its iframe.
+             */
+
+            if (soundCloudFrame) {
 
                 try {
 
-                    youtubePlayer.destroy();
-
-                } catch (error) {}
-
-            }
-
-
-            if (
-                soundCloudWidget &&
-                typeof soundCloudWidget.pause ===
-                "function"
-            ) {
-
-                try {
-
-                    soundCloudWidget.pause();
+                    soundCloudFrame.src =
+                        "about:blank";
 
                 } catch (error) {}
 
@@ -5914,42 +6058,40 @@
 
     /* =====================================================
        INITIALIZATION
-    ===================================================== */
+       ===================================================== */
 
     function initialize() {
 
         /*
-         * SoundCloud is created automatically.
-         *
-         * Existing Header / Tab design is untouched.
+         * Create SoundCloud.
          */
 
         createSoundCloudUI();
 
 
         /*
-         * YouTube playlist help.
+         * Add YouTube hint.
          */
 
         addYouTubePlaylistHint();
 
 
         /*
-         * Main playlist.
+         * Render main playlist.
          */
 
         renderPlaylist();
 
 
         /*
-         * Local music.
+         * Render local music.
          */
 
         renderLocalTracks();
 
 
         /*
-         * Main volume.
+         * Restore main volume.
          */
 
         const savedVolume =
@@ -5972,7 +6114,8 @@
 
 
         /*
-         * Load initial Lofi track.
+         * Load current local/Lofi track
+         * without autoplay.
          */
 
         loadTrack(
@@ -5980,10 +6123,6 @@
             false
         );
 
-
-        /*
-         * Buttons state.
-         */
 
         if (shuffleButton) {
 
@@ -6016,16 +6155,10 @@
 
 
         /*
-         * Effects.
+         * Render effects.
          */
 
         renderEffects();
-
-
-        /*
-         * Make sure YouTube API is ready
-         * only when YouTube is actually used.
-         */
 
 
         console.log(
