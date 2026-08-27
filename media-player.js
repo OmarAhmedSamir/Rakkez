@@ -9,6 +9,13 @@
        MAIN PLAYER:
        - Lofi / Music only
 
+       EXTERNAL SOURCES:
+       - YouTube
+       - YouTube Playlists
+       - SoundCloud
+       - Spotify
+       - Browser
+
        EFFECTS:
        - Rain
        - Airplane
@@ -22,6 +29,11 @@
        - Each effect has its own volume
        - Effects never enter the main playlist
        - Effects are generated from ONE centralized list
+
+       IMPORTANT:
+       - No HTML file modification required
+       - New tabs/sources are generated automatically
+       - New CSS is injected automatically
        ===================================================== */
 
 
@@ -35,7 +47,15 @@
         shuffle: "rakkez_media_shuffle",
         loop: "rakkez_media_loop",
         autoNext: "rakkez_media_auto_next",
-        localTracks: "rakkez_local_music_names"
+        localTracks: "rakkez_local_music_names",
+
+        youtubeUrl: "rakkez_media_youtube_url",
+        soundcloudUrl: "rakkez_media_soundcloud_url",
+        spotifyUrl: "rakkez_media_spotify_url",
+
+        browserUrl: "rakkez_media_browser_url",
+        browserHistory: "rakkez_media_browser_history",
+        browserHistoryIndex: "rakkez_media_browser_history_index"
     };
 
 
@@ -43,7 +63,7 @@
        MAIN MUSIC PLAYLIST
        ===================================================== */
 
-        const PLAYLIST = [
+    const PLAYLIST = [
 
         {
             title: "Lofi Chill Music",
@@ -73,7 +93,7 @@
             title: "Lofi Chill Music 4",
             artist: "RakkeZ",
             src: "Music/lofi (4).mp3",
-            artwork: "assets/blog/effects/3.png", 
+            artwork: "assets/blog/effects/3.png",
             type: "lofi"
         },
 
@@ -93,7 +113,7 @@
             type: "lofi"
         },
 
-         {
+        {
             title: "Lofi Chill Music 7",
             artist: "RakkeZ",
             src: "Music/lofi (7).mp3",
@@ -101,18 +121,11 @@
             type: "lofi"
         }
 
-
-
     ];
 
 
     /* =====================================================
        EFFECTS
-       
-       ADD NEW EFFECTS ONLY HERE.
-       
-       IMPORTANT:
-       src = exact audio file path
        ===================================================== */
 
     const AMBIENT_EFFECTS = [
@@ -200,10 +213,10 @@
         document.getElementById("mediaOpen");
 
 
-    const tabs =
+    let tabs =
         document.querySelectorAll(".rakkez-media-tab");
 
-    const sources =
+    let sources =
         document.querySelectorAll(".rakkez-media-source");
 
 
@@ -485,6 +498,35 @@
     }
 
 
+    function safeUrl(
+        value
+    ) {
+
+        try {
+
+            const url =
+                new URL(
+                    value,
+                    window.location.href
+                );
+
+
+            if (
+                url.protocol === "http:" ||
+                url.protocol === "https:"
+            ) {
+
+                return url.href;
+
+            }
+
+        } catch (error) {}
+
+        return null;
+
+    }
+
+
     function clearLoadingTimer() {
 
         if (!loadingTimer) {
@@ -619,6 +661,618 @@
 
 
         updateMiniPlayer();
+
+    }
+
+
+    /* =====================================================
+       DYNAMIC MEDIA UI CSS
+       ===================================================== */
+
+    function injectDynamicMediaStyles() {
+
+        if (
+            document.getElementById(
+                "rakkezDynamicMediaStyles"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const style =
+            document.createElement(
+                "style"
+            );
+
+
+        style.id =
+            "rakkezDynamicMediaStyles";
+
+
+        style.textContent = `
+
+            /* =================================================
+               DYNAMIC SOURCE COMMON
+               ================================================= */
+
+            .rakkez-dynamic-source {
+                width: 100%;
+                min-height: 100%;
+                box-sizing: border-box;
+                padding: 18px;
+            }
+
+
+            .rakkez-external-panel {
+                width: 100%;
+                max-width: 1100px;
+                margin: 0 auto;
+                box-sizing: border-box;
+            }
+
+
+            .rakkez-external-toolbar {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+                margin-bottom: 14px;
+                box-sizing: border-box;
+            }
+
+
+            .rakkez-external-input {
+                flex: 1;
+                min-width: 0;
+                height: 44px;
+                padding: 0 14px;
+                border-radius: 12px;
+                border: 1px solid rgba(255,255,255,.10);
+                background: rgba(255,255,255,.055);
+                color: inherit;
+                outline: none;
+                box-sizing: border-box;
+            }
+
+
+            .rakkez-external-input:focus {
+                border-color: rgba(80,140,255,.45);
+                background: rgba(255,255,255,.075);
+            }
+
+
+            .rakkez-external-button {
+                height: 44px;
+                padding: 0 16px;
+                border-radius: 12px;
+                border: 1px solid rgba(255,255,255,.10);
+                background: rgba(255,255,255,.07);
+                color: inherit;
+                cursor: pointer;
+                white-space: nowrap;
+                transition:
+                    transform .18s ease,
+                    background .18s ease,
+                    border-color .18s ease;
+            }
+
+
+            .rakkez-external-button:hover {
+                background: rgba(255,255,255,.12);
+                border-color: rgba(255,255,255,.18);
+            }
+
+
+            .rakkez-external-button:active {
+                transform: scale(.97);
+            }
+
+
+            .rakkez-external-button.primary {
+                background: rgba(70,120,255,.22);
+                border-color: rgba(100,150,255,.32);
+            }
+
+
+            .rakkez-external-frame {
+                width: 100%;
+                height: 520px;
+                min-height: 320px;
+                border: 0;
+                border-radius: 16px;
+                display: block;
+                background: #080d16;
+                box-sizing: border-box;
+            }
+
+
+            .rakkez-external-help {
+                margin-top: 10px;
+                font-size: 12px;
+                line-height: 1.5;
+                opacity: .58;
+            }
+
+
+            /* =================================================
+               SOUNDCLOUD
+               ================================================= */
+
+            .rakkez-soundcloud-panel {
+                width: 100%;
+            }
+
+
+            .rakkez-soundcloud-frame {
+                width: 100%;
+                height: 480px;
+                border: 0;
+                border-radius: 16px;
+                display: block;
+                background: #080d16;
+            }
+
+
+            /* =================================================
+               BROWSER
+               ================================================= */
+
+            .rakkez-browser-panel {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+
+            .rakkez-browser-navigation {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                width: 100%;
+            }
+
+
+            .rakkez-browser-nav-button {
+                width: 42px;
+                min-width: 42px;
+                height: 42px;
+                border-radius: 11px;
+                border: 1px solid rgba(255,255,255,.10);
+                background: rgba(255,255,255,.055);
+                color: inherit;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+
+            .rakkez-browser-nav-button:hover {
+                background: rgba(255,255,255,.11);
+            }
+
+
+            .rakkez-browser-address {
+                flex: 1;
+                min-width: 0;
+                height: 42px;
+                border-radius: 11px;
+                border: 1px solid rgba(255,255,255,.10);
+                background: rgba(255,255,255,.055);
+                color: inherit;
+                padding: 0 13px;
+                outline: none;
+                box-sizing: border-box;
+            }
+
+
+            .rakkez-browser-address:focus {
+                border-color: rgba(80,140,255,.45);
+            }
+
+
+            .rakkez-browser-go {
+                height: 42px;
+                padding: 0 15px;
+                border-radius: 11px;
+                border: 1px solid rgba(255,255,255,.12);
+                background: rgba(70,120,255,.22);
+                color: inherit;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+
+            .rakkez-browser-actions {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+
+            .rakkez-browser-status {
+                font-size: 12px;
+                opacity: .55;
+                min-height: 18px;
+            }
+
+
+            .rakkez-browser-frame-wrap {
+                position: relative;
+                width: 100%;
+                height: 560px;
+                min-height: 360px;
+                border-radius: 16px;
+                overflow: hidden;
+                background: #080d16;
+                border: 1px solid rgba(255,255,255,.08);
+            }
+
+
+            .rakkez-browser-frame {
+                width: 100%;
+                height: 100%;
+                border: 0;
+                display: block;
+                background: white;
+            }
+
+
+            .rakkez-browser-overlay {
+                position: absolute;
+                inset: 0;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 30px;
+                box-sizing: border-box;
+                background: rgba(8,13,22,.96);
+                z-index: 5;
+            }
+
+
+            .rakkez-browser-overlay.show {
+                display: flex;
+            }
+
+
+            .rakkez-browser-overlay-content {
+                max-width: 500px;
+            }
+
+
+            .rakkez-browser-overlay-title {
+                font-size: 18px;
+                font-weight: 700;
+                margin-bottom: 8px;
+            }
+
+
+            .rakkez-browser-overlay-text {
+                font-size: 13px;
+                line-height: 1.6;
+                opacity: .62;
+                margin-bottom: 16px;
+            }
+
+
+            /* =================================================
+               RESPONSIVE
+               ================================================= */
+
+            @media (max-width: 700px) {
+
+                .rakkez-external-toolbar {
+                    flex-wrap: wrap;
+                }
+
+                .rakkez-external-input {
+                    flex-basis: 100%;
+                }
+
+                .rakkez-external-frame {
+                    height: 420px;
+                }
+
+                .rakkez-soundcloud-frame {
+                    height: 420px;
+                }
+
+                .rakkez-browser-navigation {
+                    flex-wrap: wrap;
+                }
+
+                .rakkez-browser-address {
+                    order: 10;
+                    flex-basis: 100%;
+                }
+
+                .rakkez-browser-frame-wrap {
+                    height: 460px;
+                }
+
+            }
+
+        `;
+
+
+        document.head.appendChild(
+            style
+        );
+
+    }
+
+
+    /* =====================================================
+       DYNAMIC TABS / SOURCES
+       ===================================================== */
+
+    function refreshMediaCollections() {
+
+        tabs =
+            document.querySelectorAll(
+                ".rakkez-media-tab"
+            );
+
+
+        sources =
+            document.querySelectorAll(
+                ".rakkez-media-source"
+            );
+
+    }
+
+
+    function findTabContainer() {
+
+        const existingTab =
+            document.querySelector(
+                ".rakkez-media-tab"
+            );
+
+
+        if (existingTab) {
+
+            return existingTab.parentElement;
+
+        }
+
+
+        return null;
+
+    }
+
+
+    function findSourceContainer() {
+
+        const existingSource =
+            document.querySelector(
+                ".rakkez-media-source"
+            );
+
+
+        if (existingSource) {
+
+            return existingSource.parentElement;
+
+        }
+
+
+        return null;
+
+    }
+
+
+    function createDynamicTab(
+        name,
+        label,
+        icon
+    ) {
+
+        let tab =
+            document.querySelector(
+                `.rakkez-media-tab[data-rakkez-source="${name}"]`
+            );
+
+
+        if (tab) {
+
+            return tab;
+
+        }
+
+
+        const container =
+            findTabContainer();
+
+
+        if (!container) {
+
+            console.warn(
+                "RakkeZ: Could not find media tab container."
+            );
+
+
+            return null;
+
+        }
+
+
+        tab =
+            document.createElement(
+                "button"
+            );
+
+
+        tab.type =
+            "button";
+
+
+        tab.className =
+            "rakkez-media-tab";
+
+
+        tab.dataset.rakkezSource =
+            name;
+
+
+        tab.innerHTML =
+            icon +
+            " " +
+            escapeHTML(label);
+
+
+        container.appendChild(
+            tab
+        );
+
+
+        return tab;
+
+    }
+
+
+    function createDynamicSource(
+        name
+    ) {
+
+        let source =
+            document.querySelector(
+                `.rakkez-media-source[data-rakkez-source="${name}"]`
+            );
+
+
+        if (source) {
+
+            return source;
+
+        }
+
+
+        const container =
+            findSourceContainer();
+
+
+        if (!container) {
+
+            console.warn(
+                "RakkeZ: Could not find media source container."
+            );
+
+
+            return null;
+
+        }
+
+
+        source =
+            document.createElement(
+                "section"
+            );
+
+
+        source.className =
+            "rakkez-media-source rakkez-dynamic-source";
+
+
+        source.dataset.rakkezSource =
+            name;
+
+
+        source.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+
+        container.appendChild(
+            source
+        );
+
+
+        return source;
+
+    }
+
+
+    function ensureDynamicMediaUI() {
+
+        injectDynamicMediaStyles();
+
+
+        const soundcloudTab =
+            createDynamicTab(
+                "soundcloud",
+                "SoundCloud",
+                "🟠"
+            );
+
+
+        const browserTab =
+            createDynamicTab(
+                "browser",
+                "Browser",
+                "🌐"
+            );
+
+
+        const soundcloudSource =
+            createDynamicSource(
+                "soundcloud"
+            );
+
+
+        const browserSource =
+            createDynamicSource(
+                "browser"
+            );
+
+
+        if (soundcloudTab) {
+
+            soundcloudTab.setAttribute(
+                "aria-label",
+                "SoundCloud"
+            );
+
+        }
+
+
+        if (browserTab) {
+
+            browserTab.setAttribute(
+                "aria-label",
+                "Browser"
+            );
+
+        }
+
+
+        if (soundcloudSource) {
+
+            soundcloudSource.setAttribute(
+                "aria-label",
+                "SoundCloud player"
+            );
+
+        }
+
+
+        if (browserSource) {
+
+            browserSource.setAttribute(
+                "aria-label",
+                "Browser"
+            );
+
+        }
+
+
+        refreshMediaCollections();
 
     }
 
@@ -1323,6 +1977,9 @@
         name
     ) {
 
+        refreshMediaCollections();
+
+
         tabs.forEach(
             function (tab) {
 
@@ -1339,34 +1996,85 @@
         sources.forEach(
             function (source) {
 
+                const active =
+                    source.dataset.rakkezSource ===
+                    name;
+
+
                 source.classList.toggle(
                     "active",
-                    source.dataset.rakkezSource ===
-                    name
+                    active
+                );
+
+
+                source.setAttribute(
+                    "aria-hidden",
+                    active
+                        ? "false"
+                        : "true"
+                );
+
+            }
+        );
+
+
+        if (
+            name === "soundcloud"
+        ) {
+
+            ensureSoundCloudUI();
+
+        }
+
+
+        if (
+            name === "browser"
+        ) {
+
+            ensureBrowserUI();
+
+        }
+
+    }
+
+
+    function bindTabs() {
+
+        refreshMediaCollections();
+
+
+        tabs.forEach(
+            function (tab) {
+
+                if (
+                    tab.dataset.rakkezBound ===
+                    "true"
+                ) {
+
+                    return;
+
+                }
+
+
+                tab.dataset.rakkezBound =
+                    "true";
+
+
+                tab.addEventListener(
+                    "click",
+                    function () {
+
+                        switchTab(
+                            tab.dataset.rakkezSource
+                        );
+
+                    }
                 );
 
             }
         );
 
     }
-
-
-    tabs.forEach(
-        function (tab) {
-
-            tab.addEventListener(
-                "click",
-                function () {
-
-                    switchTab(
-                        tab.dataset.rakkezSource
-                    );
-
-                }
-            );
-
-        }
-    );
 
 
     /* =====================================================
@@ -1913,11 +2621,11 @@
        YOUTUBE
        ===================================================== */
 
-    function getYouTubeId(
-        url
+    function parseYouTubeUrl(
+        value
     ) {
 
-        if (!url) {
+        if (!value) {
             return null;
         }
 
@@ -1925,39 +2633,68 @@
         try {
 
             const parsed =
-                new URL(url);
+                new URL(value.trim());
+
+
+            const hostname =
+                parsed.hostname
+                    .toLowerCase()
+                    .replace(
+                        /^www\./,
+                        ""
+                    );
+
+
+            const result = {
+                videoId: null,
+                playlistId: null,
+                type: "video"
+            };
 
 
             if (
-                parsed.hostname.includes(
-                    "youtu.be"
-                )
+                hostname === "youtu.be"
             ) {
 
-                return parsed.pathname
-                    .replace(
-                        "/",
-                        ""
-                    );
+                result.videoId =
+                    parsed.pathname
+                        .split("/")
+                        .filter(Boolean)[0] ||
+                    null;
 
             }
 
 
             if (
-                parsed.hostname.includes(
-                    "youtube.com"
-                )
+                hostname === "youtube.com" ||
+                hostname === "m.youtube.com" ||
+                hostname === "music.youtube.com"
             ) {
 
-                if (
-                    parsed.searchParams.has(
-                        "v"
-                    )
-                ) {
+                const list =
+                    parsed.searchParams.get(
+                        "list"
+                    );
 
-                    return parsed.searchParams.get(
+
+                const video =
+                    parsed.searchParams.get(
                         "v"
                     );
+
+
+                if (list) {
+
+                    result.playlistId =
+                        list;
+
+                }
+
+
+                if (video) {
+
+                    result.videoId =
+                        video;
 
                 }
 
@@ -1968,24 +2705,73 @@
                         .filter(Boolean);
 
 
-                const embedIndex =
-                    parts.indexOf(
-                        "embed"
-                    );
+                if (
+                    parts[0] === "embed" &&
+                    parts[1]
+                ) {
+
+                    result.videoId =
+                        parts[1];
+
+                }
 
 
                 if (
-                    embedIndex !== -1 &&
-                    parts[embedIndex + 1]
+                    parts[0] === "shorts" &&
+                    parts[1]
                 ) {
 
-                    return parts[
-                        embedIndex + 1
-                    ];
+                    result.videoId =
+                        parts[1];
+
+                }
+
+
+                if (
+                    parts[0] === "live" &&
+                    parts[1]
+                ) {
+
+                    result.videoId =
+                        parts[1];
+
+                }
+
+
+                if (
+                    parts[0] === "playlist" &&
+                    list
+                ) {
+
+                    result.type =
+                        "playlist";
 
                 }
 
             }
+
+
+            if (
+                result.playlistId
+            ) {
+
+                result.type =
+                    "playlist";
+
+            }
+
+
+            if (
+                !result.videoId &&
+                !result.playlistId
+            ) {
+
+                return null;
+
+            }
+
+
+            return result;
 
         } catch (error) {
 
@@ -1993,8 +2779,101 @@
 
         }
 
+    }
 
-        return null;
+
+    function getYouTubeId(
+        url
+    ) {
+
+        const parsed =
+            parseYouTubeUrl(
+                url
+            );
+
+
+        return parsed
+            ? parsed.videoId
+            : null;
+
+    }
+
+
+    function getYouTubeEmbedUrl(
+        data
+    ) {
+
+        if (!data) {
+            return null;
+        }
+
+
+        let base =
+            "https://www.youtube.com/embed/";
+
+
+        if (
+            data.videoId
+        ) {
+
+            base +=
+                encodeURIComponent(
+                    data.videoId
+                );
+
+        } else {
+
+            base +=
+                "videoseries";
+
+        }
+
+
+        const params =
+            new URLSearchParams();
+
+
+        params.set(
+            "autoplay",
+            "1"
+        );
+
+
+        params.set(
+            "rel",
+            "0"
+        );
+
+
+        params.set(
+            "modestbranding",
+            "1"
+        );
+
+
+        params.set(
+            "playsinline",
+            "1"
+        );
+
+
+        if (
+            data.playlistId
+        ) {
+
+            params.set(
+                "list",
+                data.playlistId
+            );
+
+        }
+
+
+        return (
+            base +
+            "?" +
+            params.toString()
+        );
 
     }
 
@@ -2011,15 +2890,20 @@
         }
 
 
-        const id =
-            getYouTubeId(
-                youtubeInput.value.trim()
+        const raw =
+            youtubeInput.value.trim();
+
+
+        const data =
+            parseYouTubeUrl(
+                raw
             );
 
 
-        if (!id) {
+        if (!data) {
 
             youtubeEmbed.innerHTML = `
+
                 <div
                     style="
                         padding:20px;
@@ -2029,6 +2913,7 @@
                 >
                     Invalid YouTube URL
                 </div>
+
             `;
 
 
@@ -2037,16 +2922,38 @@
         }
 
 
+        localStorage.setItem(
+            STORAGE.youtubeUrl,
+            raw
+        );
+
+
+        const embed =
+            getYouTubeEmbedUrl(
+                data
+            );
+
+
         youtubeEmbed.innerHTML = `
 
             <iframe
-                src="https://www.youtube.com/embed/${encodeURIComponent(id)}?autoplay=1"
+                src="${escapeHTML(embed)}"
+                title="YouTube Player"
                 allow="
                     autoplay;
                     encrypted-media;
-                    picture-in-picture
+                    picture-in-picture;
+                    fullscreen
                 "
                 allowfullscreen
+                loading="lazy"
+                style="
+                    width:100%;
+                    height:100%;
+                    min-height:420px;
+                    border:0;
+                    border-radius:16px;
+                "
             ></iframe>
 
         `;
@@ -2081,6 +2988,23 @@
 
             }
         );
+
+
+        const savedYouTube =
+            localStorage.getItem(
+                STORAGE.youtubeUrl
+            );
+
+
+        if (
+            savedYouTube &&
+            !youtubeInput.value
+        ) {
+
+            youtubeInput.value =
+                savedYouTube;
+
+        }
 
     }
 
@@ -2163,7 +3087,7 @@
                 "https://open.spotify.com/embed/" +
                 type +
                 "/" +
-                id +
+                encodeURIComponent(id) +
                 "?utm_source=generator"
             );
 
@@ -2188,15 +3112,20 @@
         }
 
 
+        const raw =
+            spotifyInput.value.trim();
+
+
         const embed =
             getSpotifyEmbed(
-                spotifyInput.value.trim()
+                raw
             );
 
 
         if (!embed) {
 
             spotifyEmbed.innerHTML = `
+
                 <div
                     style="
                         padding:20px;
@@ -2206,6 +3135,7 @@
                 >
                     Invalid Spotify URL
                 </div>
+
             `;
 
 
@@ -2214,10 +3144,16 @@
         }
 
 
+        localStorage.setItem(
+            STORAGE.spotifyUrl,
+            raw
+        );
+
+
         spotifyEmbed.innerHTML = `
 
             <iframe
-                src="${embed}"
+                src="${escapeHTML(embed)}"
                 allow="
                     autoplay;
                     clipboard-write;
@@ -2226,6 +3162,13 @@
                     picture-in-picture
                 "
                 loading="lazy"
+                style="
+                    width:100%;
+                    height:100%;
+                    min-height:420px;
+                    border:0;
+                    border-radius:16px;
+                "
             ></iframe>
 
         `;
@@ -2260,6 +3203,1446 @@
 
             }
         );
+
+
+        const savedSpotify =
+            localStorage.getItem(
+                STORAGE.spotifyUrl
+            );
+
+
+        if (
+            savedSpotify &&
+            !spotifyInput.value
+        ) {
+
+            spotifyInput.value =
+                savedSpotify;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SOUNDCLOUD
+       ===================================================== */
+
+    let soundCloudInput = null;
+    let soundCloudButton = null;
+    let soundCloudEmbed = null;
+    let soundCloudOpenButton = null;
+
+
+    function getSoundCloudSource() {
+
+        return document.querySelector(
+            '.rakkez-media-source[data-rakkez-source="soundcloud"]'
+        );
+
+    }
+
+
+    function getSoundCloudWidgetUrl(
+        sourceUrl
+    ) {
+
+        const safe =
+            safeUrl(
+                sourceUrl
+            );
+
+
+        if (!safe) {
+
+            return null;
+
+        }
+
+
+        return (
+            "https://w.soundcloud.com/player/?" +
+            "url=" +
+            encodeURIComponent(
+                safe
+            ) +
+            "&color=%23000000" +
+            "&auto_play=true" +
+            "&hide_related=false" +
+            "&show_comments=true" +
+            "&show_user=true" +
+            "&show_reposts=false" +
+            "&show_teaser=true" +
+            "&visual=true"
+        );
+
+    }
+
+
+    function isSoundCloudUrl(
+        value
+    ) {
+
+        try {
+
+            const parsed =
+                new URL(
+                    value
+                );
+
+
+            const hostname =
+                parsed.hostname
+                    .toLowerCase()
+                    .replace(
+                        /^www\./,
+                        ""
+                    );
+
+
+            return (
+                hostname ===
+                    "soundcloud.com" ||
+                hostname ===
+                    "on.soundcloud.com"
+            );
+
+        } catch (error) {
+
+            return false;
+
+        }
+
+    }
+
+
+    function ensureSoundCloudUI() {
+
+        const source =
+            getSoundCloudSource();
+
+
+        if (!source) {
+
+            return;
+
+        }
+
+
+        if (
+            source.dataset.rakkezBuilt ===
+            "true"
+        ) {
+
+            return;
+
+        }
+
+
+        source.dataset.rakkezBuilt =
+            "true";
+
+
+        source.innerHTML = `
+
+            <div class="rakkez-external-panel rakkez-soundcloud-panel">
+
+                <div class="rakkez-external-toolbar">
+
+                    <input
+                        type="url"
+                        class="rakkez-external-input"
+                        id="rakkezSoundCloudInput"
+                        placeholder="Paste SoundCloud track or playlist URL..."
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+
+                    <button
+                        type="button"
+                        class="rakkez-external-button primary"
+                        id="rakkezSoundCloudPlay"
+                    >
+                        Play
+                    </button>
+
+                    <button
+                        type="button"
+                        class="rakkez-external-button"
+                        id="rakkezSoundCloudOpen"
+                    >
+                        Open
+                    </button>
+
+                </div>
+
+
+                <iframe
+                    id="rakkezSoundCloudEmbed"
+                    class="rakkez-soundcloud-frame"
+                    title="SoundCloud Player"
+                    allow="
+                        autoplay
+                    "
+                    scrolling="no"
+                    frameborder="no"
+                ></iframe>
+
+
+                <div class="rakkez-external-help">
+                    Supports SoundCloud tracks, sets and playlists.
+                </div>
+
+            </div>
+
+        `;
+
+
+        soundCloudInput =
+            document.getElementById(
+                "rakkezSoundCloudInput"
+            );
+
+
+        soundCloudButton =
+            document.getElementById(
+                "rakkezSoundCloudPlay"
+            );
+
+
+        soundCloudEmbed =
+            document.getElementById(
+                "rakkezSoundCloudEmbed"
+            );
+
+
+        soundCloudOpenButton =
+            document.getElementById(
+                "rakkezSoundCloudOpen"
+            );
+
+
+        const saved =
+            localStorage.getItem(
+                STORAGE.soundcloudUrl
+            );
+
+
+        if (
+            saved &&
+            soundCloudInput
+        ) {
+
+            soundCloudInput.value =
+                saved;
+
+        }
+
+
+        if (soundCloudButton) {
+
+            soundCloudButton.addEventListener(
+                "click",
+                playSoundCloud
+            );
+
+        }
+
+
+        if (soundCloudInput) {
+
+            soundCloudInput.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
+
+                        playSoundCloud();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        if (soundCloudOpenButton) {
+
+            soundCloudOpenButton.addEventListener(
+                "click",
+                openSoundCloudExternally
+            );
+
+        }
+
+    }
+
+
+    function playSoundCloud() {
+
+        ensureSoundCloudUI();
+
+
+        if (
+            !soundCloudInput ||
+            !soundCloudEmbed
+        ) {
+
+            return;
+
+        }
+
+
+        const raw =
+            soundCloudInput.value.trim();
+
+
+        if (
+            !isSoundCloudUrl(
+                raw
+            )
+        ) {
+
+            soundCloudEmbed.removeAttribute(
+                "src"
+            );
+
+
+            soundCloudEmbed.insertAdjacentHTML(
+                "afterend",
+                ""
+            );
+
+
+            return;
+
+        }
+
+
+        const widgetUrl =
+            getSoundCloudWidgetUrl(
+                raw
+            );
+
+
+        if (!widgetUrl) {
+
+            return;
+
+        }
+
+
+        localStorage.setItem(
+            STORAGE.soundcloudUrl,
+            raw
+        );
+
+
+        soundCloudEmbed.src =
+            widgetUrl;
+
+    }
+
+
+    function openSoundCloudExternally() {
+
+        if (
+            !soundCloudInput
+        ) {
+
+            ensureSoundCloudUI();
+
+        }
+
+
+        const raw =
+            soundCloudInput
+                ? soundCloudInput.value.trim()
+                : "";
+
+
+        if (
+            isSoundCloudUrl(
+                raw
+            )
+        ) {
+
+            window.open(
+                raw,
+                "_blank",
+                "noopener,noreferrer"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       BROWSER ENGINE
+       ===================================================== */
+
+    let browserInput = null;
+    let browserFrame = null;
+    let browserBackButton = null;
+    let browserForwardButton = null;
+    let browserReloadButton = null;
+    let browserGoButton = null;
+    let browserOpenButton = null;
+    let browserHomeButton = null;
+    let browserStatus = null;
+    let browserOverlay = null;
+    let browserOverlayOpenButton = null;
+
+
+    let browserHistory = [];
+
+
+    let browserHistoryIndex =
+        -1;
+
+
+    let browserCurrentUrl =
+        "";
+
+
+    let browserLoadTimer =
+        null;
+
+
+    function getBrowserSource() {
+
+        return document.querySelector(
+            '.rakkez-media-source[data-rakkez-source="browser"]'
+        );
+
+    }
+
+
+    function normalizeBrowserInput(
+        value
+    ) {
+
+        if (!value) {
+            return null;
+        }
+
+
+        const raw =
+            value.trim();
+
+
+        if (!raw) {
+            return null;
+        }
+
+
+        /*
+         * Direct URL.
+         */
+
+        if (
+            /^https?:\/\//i.test(
+                raw
+            )
+        ) {
+
+            return safeUrl(
+                raw
+            );
+
+        }
+
+
+        /*
+         * Domain without protocol.
+         */
+
+        if (
+            /^[a-z0-9.-]+\.[a-z]{2,}(\/.*)?$/i.test(
+                raw
+            )
+        ) {
+
+            return safeUrl(
+                "https://" +
+                raw
+            );
+
+        }
+
+
+        /*
+         * Search query.
+         */
+
+        return (
+            "https://www.google.com/search?q=" +
+            encodeURIComponent(
+                raw
+            )
+        );
+
+    }
+
+
+    function updateBrowserButtons() {
+
+        if (browserBackButton) {
+
+            browserBackButton.disabled =
+                browserHistoryIndex <= 0;
+
+        }
+
+
+        if (browserForwardButton) {
+
+            browserForwardButton.disabled =
+                browserHistoryIndex <
+                0 ||
+                browserHistoryIndex >=
+                browserHistory.length - 1;
+
+        }
+
+    }
+
+
+    function saveBrowserState() {
+
+        try {
+
+            localStorage.setItem(
+                STORAGE.browserHistory,
+                JSON.stringify(
+                    browserHistory
+                )
+            );
+
+
+            localStorage.setItem(
+                STORAGE.browserHistoryIndex,
+                String(
+                    browserHistoryIndex
+                )
+            );
+
+
+            if (browserCurrentUrl) {
+
+                localStorage.setItem(
+                    STORAGE.browserUrl,
+                    browserCurrentUrl
+                );
+
+            }
+
+        } catch (error) {}
+
+    }
+
+
+    function loadBrowserState() {
+
+        try {
+
+            const savedHistory =
+                localStorage.getItem(
+                    STORAGE.browserHistory
+                );
+
+
+            const savedIndex =
+                parseInt(
+                    localStorage.getItem(
+                        STORAGE.browserHistoryIndex
+                    ),
+                    10
+                );
+
+
+            if (
+                savedHistory
+            ) {
+
+                const parsed =
+                    JSON.parse(
+                        savedHistory
+                    );
+
+
+                if (
+                    Array.isArray(
+                        parsed
+                    )
+                ) {
+
+                    browserHistory =
+                        parsed.filter(
+                            function (url) {
+
+                                return !!safeUrl(
+                                    url
+                                );
+
+                            }
+                        );
+
+                }
+
+            }
+
+
+            if (
+                Number.isFinite(
+                    savedIndex
+                )
+            ) {
+
+                browserHistoryIndex =
+                    clamp(
+                        savedIndex,
+                        -1,
+                        Math.max(
+                            -1,
+                            browserHistory.length - 1
+                        )
+                    );
+
+            }
+
+
+            if (
+                browserHistoryIndex >= 0 &&
+                browserHistory[
+                    browserHistoryIndex
+                ]
+            ) {
+
+                browserCurrentUrl =
+                    browserHistory[
+                        browserHistoryIndex
+                    ];
+
+            }
+
+        } catch (error) {
+
+            browserHistory = [];
+            browserHistoryIndex = -1;
+
+        }
+
+    }
+
+
+    function setBrowserStatus(
+        message
+    ) {
+
+        if (
+            browserStatus
+        ) {
+
+            browserStatus.textContent =
+                message || "";
+
+        }
+
+    }
+
+
+    function showBrowserOverlay(
+        show
+    ) {
+
+        if (!browserOverlay) {
+            return;
+        }
+
+
+        browserOverlay.classList.toggle(
+            "show",
+            !!show
+        );
+
+    }
+
+
+    function setBrowserAddress(
+        url
+    ) {
+
+        if (
+            browserInput
+        ) {
+
+            browserInput.value =
+                url || "";
+
+        }
+
+    }
+
+
+    function pushBrowserHistory(
+        url
+    ) {
+
+        if (!url) {
+            return;
+        }
+
+
+        if (
+            browserHistoryIndex >= 0 &&
+            browserHistory[
+                browserHistoryIndex
+            ] === url
+        ) {
+
+            return;
+
+        }
+
+
+        browserHistory =
+            browserHistory.slice(
+                0,
+                browserHistoryIndex + 1
+            );
+
+
+        browserHistory.push(
+            url
+        );
+
+
+        browserHistoryIndex =
+            browserHistory.length - 1;
+
+
+        saveBrowserState();
+
+
+        updateBrowserButtons();
+
+    }
+
+
+    function loadBrowserUrl(
+        url,
+        options
+    ) {
+
+        options =
+            options || {};
+
+
+        const normalized =
+            normalizeBrowserInput(
+                url
+            );
+
+
+        if (!normalized) {
+
+            setBrowserStatus(
+                "Enter a valid URL or search term."
+            );
+
+
+            return;
+
+        }
+
+
+        browserCurrentUrl =
+            normalized;
+
+
+        setBrowserAddress(
+            normalized
+        );
+
+
+        if (
+            options.addHistory !== false
+        ) {
+
+            pushBrowserHistory(
+                normalized
+            );
+
+        }
+
+
+        saveBrowserState();
+
+
+        showBrowserOverlay(
+            false
+        );
+
+
+        if (!browserFrame) {
+
+            return;
+
+        }
+
+
+        clearTimeout(
+            browserLoadTimer
+        );
+
+
+        setBrowserStatus(
+            "Loading..."
+        );
+
+
+        browserFrame.src =
+            normalized;
+
+
+        /*
+         * There is no reliable JavaScript API
+         * that allows a parent page to detect
+         * X-Frame-Options/CSP blocking for
+         * cross-origin iframes.
+         *
+         * Therefore we provide an Open button
+         * and a fallback overlay after a delay.
+         */
+
+        browserLoadTimer =
+            setTimeout(
+                function () {
+
+                    if (
+                        browserCurrentUrl ===
+                        normalized
+                    ) {
+
+                        setBrowserStatus(
+                            "If the website does not appear, it may block iframe embedding."
+                        );
+
+                    }
+
+                },
+                5000
+            );
+
+
+        updateBrowserButtons();
+
+    }
+
+
+    function browserGo() {
+
+        if (
+            !browserInput
+        ) {
+
+            return;
+
+        }
+
+
+        loadBrowserUrl(
+            browserInput.value,
+            {
+                addHistory: true
+            }
+        );
+
+    }
+
+
+    function browserBack() {
+
+        if (
+            browserHistoryIndex <= 0
+        ) {
+
+            return;
+
+        }
+
+
+        browserHistoryIndex--;
+
+
+        const url =
+            browserHistory[
+                browserHistoryIndex
+            ];
+
+
+        browserCurrentUrl =
+            url;
+
+
+        setBrowserAddress(
+            url
+        );
+
+
+        if (
+            browserFrame
+        ) {
+
+            browserFrame.src =
+                url;
+
+        }
+
+
+        saveBrowserState();
+
+
+        updateBrowserButtons();
+
+    }
+
+
+    function browserForward() {
+
+        if (
+            browserHistoryIndex < 0 ||
+            browserHistoryIndex >=
+            browserHistory.length - 1
+        ) {
+
+            return;
+
+        }
+
+
+        browserHistoryIndex++;
+
+
+        const url =
+            browserHistory[
+                browserHistoryIndex
+            ];
+
+
+        browserCurrentUrl =
+            url;
+
+
+        setBrowserAddress(
+            url
+        );
+
+
+        if (
+            browserFrame
+        ) {
+
+            browserFrame.src =
+                url;
+
+        }
+
+
+        saveBrowserState();
+
+
+        updateBrowserButtons();
+
+    }
+
+
+    function browserReload() {
+
+        if (
+            !browserFrame
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !browserCurrentUrl
+        ) {
+
+            loadBrowserUrl(
+                "https://www.google.com",
+                {
+                    addHistory: true
+                }
+            );
+
+
+            return;
+
+        }
+
+
+        showBrowserOverlay(
+            false
+        );
+
+
+        setBrowserStatus(
+            "Reloading..."
+        );
+
+
+        try {
+
+            browserFrame.contentWindow.location.reload();
+
+        } catch (error) {
+
+            browserFrame.src =
+                browserCurrentUrl;
+
+        }
+
+    }
+
+
+    function browserOpenExternal() {
+
+        if (
+            !browserCurrentUrl
+        ) {
+
+            return;
+
+        }
+
+
+        window.open(
+            browserCurrentUrl,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+    }
+
+
+    function browserHome() {
+
+        loadBrowserUrl(
+            "https://www.google.com",
+            {
+                addHistory: true
+            }
+        );
+
+    }
+
+
+    function ensureBrowserUI() {
+
+        const source =
+            getBrowserSource();
+
+
+        if (!source) {
+
+            return;
+
+        }
+
+
+        if (
+            source.dataset.rakkezBuilt ===
+            "true"
+        ) {
+
+            updateBrowserButtons();
+
+            return;
+
+        }
+
+
+        source.dataset.rakkezBuilt =
+            "true";
+
+
+        source.innerHTML = `
+
+            <div class="rakkez-external-panel rakkez-browser-panel">
+
+                <div class="rakkez-browser-navigation">
+
+                    <button
+                        type="button"
+                        class="rakkez-browser-nav-button"
+                        id="rakkezBrowserBack"
+                        title="Back"
+                        aria-label="Back"
+                    >
+                        ←
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="rakkez-browser-nav-button"
+                        id="rakkezBrowserForward"
+                        title="Forward"
+                        aria-label="Forward"
+                    >
+                        →
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="rakkez-browser-nav-button"
+                        id="rakkezBrowserReload"
+                        title="Reload"
+                        aria-label="Reload"
+                    >
+                        ↻
+                    </button>
+
+
+                    <input
+                        type="text"
+                        class="rakkez-browser-address"
+                        id="rakkezBrowserAddress"
+                        placeholder="Search or enter website..."
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+
+
+                    <button
+                        type="button"
+                        class="rakkez-browser-go"
+                        id="rakkezBrowserGo"
+                    >
+                        Go
+                    </button>
+
+                </div>
+
+
+                <div class="rakkez-browser-actions">
+
+                    <button
+                        type="button"
+                        class="rakkez-external-button"
+                        id="rakkezBrowserHome"
+                    >
+                        Home
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="rakkez-external-button"
+                        id="rakkezBrowserOpen"
+                    >
+                        Open in New Tab
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="rakkez-browser-status"
+                    id="rakkezBrowserStatus"
+                >
+                </div>
+
+
+                <div class="rakkez-browser-frame-wrap">
+
+                    <iframe
+                        id="rakkezBrowserFrame"
+                        class="rakkez-browser-frame"
+                        title="RakkeZ Browser"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allow="
+                            autoplay;
+                            fullscreen;
+                            picture-in-picture;
+                            encrypted-media
+                        "
+                    ></iframe>
+
+
+                    <div
+                        class="rakkez-browser-overlay"
+                        id="rakkezBrowserOverlay"
+                    >
+
+                        <div class="rakkez-browser-overlay-content">
+
+                            <div class="rakkez-browser-overlay-title">
+                                Website cannot be displayed here
+                            </div>
+
+                            <div class="rakkez-browser-overlay-text">
+                                This website may block iframe embedding.
+                                You can open it normally in a new browser tab.
+                            </div>
+
+                            <button
+                                type="button"
+                                class="rakkez-external-button primary"
+                                id="rakkezBrowserOverlayOpen"
+                            >
+                                Open in New Tab
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        browserInput =
+            document.getElementById(
+                "rakkezBrowserAddress"
+            );
+
+
+        browserFrame =
+            document.getElementById(
+                "rakkezBrowserFrame"
+            );
+
+
+        browserBackButton =
+            document.getElementById(
+                "rakkezBrowserBack"
+            );
+
+
+        browserForwardButton =
+            document.getElementById(
+                "rakkezBrowserForward"
+            );
+
+
+        browserReloadButton =
+            document.getElementById(
+                "rakkezBrowserReload"
+            );
+
+
+        browserGoButton =
+            document.getElementById(
+                "rakkezBrowserGo"
+            );
+
+
+        browserOpenButton =
+            document.getElementById(
+                "rakkezBrowserOpen"
+            );
+
+
+        browserHomeButton =
+            document.getElementById(
+                "rakkezBrowserHome"
+            );
+
+
+        browserStatus =
+            document.getElementById(
+                "rakkezBrowserStatus"
+            );
+
+
+        browserOverlay =
+            document.getElementById(
+                "rakkezBrowserOverlay"
+            );
+
+
+        browserOverlayOpenButton =
+            document.getElementById(
+                "rakkezBrowserOverlayOpen"
+            );
+
+
+        loadBrowserState();
+
+
+        if (
+            browserBackButton
+        ) {
+
+            browserBackButton.addEventListener(
+                "click",
+                browserBack
+            );
+
+        }
+
+
+        if (
+            browserForwardButton
+        ) {
+
+            browserForwardButton.addEventListener(
+                "click",
+                browserForward
+            );
+
+        }
+
+
+        if (
+            browserReloadButton
+        ) {
+
+            browserReloadButton.addEventListener(
+                "click",
+                browserReload
+            );
+
+        }
+
+
+        if (
+            browserGoButton
+        ) {
+
+            browserGoButton.addEventListener(
+                "click",
+                browserGo
+            );
+
+        }
+
+
+        if (
+            browserInput
+        ) {
+
+            browserInput.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
+
+                        browserGo();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        if (
+            browserOpenButton
+        ) {
+
+            browserOpenButton.addEventListener(
+                "click",
+                browserOpenExternal
+            );
+
+        }
+
+
+        if (
+            browserHomeButton
+        ) {
+
+            browserHomeButton.addEventListener(
+                "click",
+                browserHome
+            );
+
+        }
+
+
+        if (
+            browserOverlayOpenButton
+        ) {
+
+            browserOverlayOpenButton.addEventListener(
+                "click",
+                browserOpenExternal
+            );
+
+        }
+
+
+        if (
+            browserFrame
+        ) {
+
+            browserFrame.addEventListener(
+                "load",
+                function () {
+
+                    clearTimeout(
+                        browserLoadTimer
+                    );
+
+
+                    setBrowserStatus(
+                        browserCurrentUrl
+                            ? "Loaded"
+                            : ""
+                    );
+
+                }
+            );
+
+        }
+
+
+        if (
+            browserCurrentUrl
+        ) {
+
+            setBrowserAddress(
+                browserCurrentUrl
+            );
+
+
+            if (
+                browserFrame
+            ) {
+
+                browserFrame.src =
+                    browserCurrentUrl;
+
+            }
+
+        } else {
+
+            browserHome();
+
+        }
+
+
+        updateBrowserButtons();
 
     }
 
@@ -2448,11 +4831,6 @@
 
     /* =====================================================
        EFFECT ENGINE
-       
-       ONE AUDIO ELEMENT PER EFFECT.
-       
-       IMPORTANT:
-       This is NOT connected to the main audio.
        ===================================================== */
 
     const effectPlayers =
@@ -2515,10 +4893,6 @@
         effect
     ) {
 
-        /*
-         * NEVER create the same Audio object twice.
-         */
-
         if (
             effectPlayers[effect.id]
         ) {
@@ -2546,10 +4920,6 @@
         };
 
 
-        /*
-         * Create ONE independent Audio.
-         */
-
         player.audio =
             new Audio();
 
@@ -2566,17 +4936,9 @@
             player.volume;
 
 
-        /*
-         * Set source explicitly.
-         */
-
         player.audio.src =
             effect.src;
 
-
-        /*
-         * Force browser to load the file.
-         */
 
         player.audio.load();
 
@@ -2606,11 +4968,6 @@
 
     }
 
-
-    /*
-     * Create exactly ONE player for
-     * every effect.
-     */
 
     AMBIENT_EFFECTS.forEach(
         createEffectPlayer
@@ -2674,15 +5031,7 @@
 
 
     /* =====================================================
-       REMOVE ALL OLD EFFECT CARDS
-       
-       This is the important fix for:
-       
-       Rain
-       Airplane
-       Rain
-       
-       and other duplicates.
+       REMOVE OLD EFFECT CARDS
        ===================================================== */
 
     function removeOldEffectCards(
@@ -2695,11 +5044,6 @@
         }
 
 
-        /*
-         * Remove cards that were generated
-         * by previous versions.
-         */
-
         source.querySelectorAll(
             ".rakkez-effect-card"
         ).forEach(
@@ -2710,12 +5054,6 @@
             }
         );
 
-
-        /*
-         * Remove old effect elements
-         * that may have different classes
-         * but carry an effect identifier.
-         */
 
         source.querySelectorAll(
             "[data-rakkez-effect]"
@@ -2736,10 +5074,6 @@
             }
         );
 
-
-        /*
-         * Remove old cards using effect IDs.
-         */
 
         AMBIENT_EFFECTS.forEach(
             function (effect) {
@@ -2975,10 +5309,6 @@
         `;
 
 
-        /*
-         * Background image.
-         */
-
         if (effect.image) {
 
             card.style.backgroundImage =
@@ -3021,10 +5351,6 @@
             );
 
 
-        /* =================================================
-           PLAY / STOP EFFECT
-           ================================================= */
-
         toggle.addEventListener(
             "click",
             function () {
@@ -3044,10 +5370,6 @@
                 }
 
 
-                /*
-                 * STOP
-                 */
-
                 if (
                     !player.audio.paused
                 ) {
@@ -3065,18 +5387,9 @@
                 }
 
 
-                /*
-                 * PLAY
-                 */
-
                 player.audio.volume =
                     player.volume;
 
-
-                /*
-                 * Important:
-                 * Reset only if ended.
-                 */
 
                 if (
                     player.audio.ended
@@ -3132,10 +5445,6 @@
         );
 
 
-        /* =================================================
-           EFFECT VOLUME
-           ================================================= */
-
         volumeInput.addEventListener(
             "input",
             function () {
@@ -3180,10 +5489,6 @@
             }
         );
 
-
-        /* =================================================
-           AUDIO EVENTS
-           ================================================= */
 
         player.audio.addEventListener(
             "play",
@@ -3266,8 +5571,6 @@
 
     /* =====================================================
        RENDER EFFECTS
-       
-       EXACTLY ONE CARD PER EFFECT.
        ===================================================== */
 
     function renderEffects() {
@@ -3299,29 +5602,15 @@
         }
 
 
-        /*
-         * First remove EVERY generated
-         * effect card from the source.
-         */
-
         removeOldEffectCards(
             source,
             container
         );
 
 
-        /*
-         * Clear our own container completely.
-         */
-
         container.innerHTML =
             "";
 
-
-        /*
-         * Now create exactly one card
-         * for every effect.
-         */
 
         AMBIENT_EFFECTS.forEach(
             function (effect) {
@@ -3443,6 +5732,67 @@
 
 
     /* =====================================================
+       MEDIA PLAYER DEBUG API
+       ===================================================== */
+
+    window.RakkeZMedia = {
+
+        play:
+            playMain,
+
+        pause:
+            pauseMain,
+
+        next:
+            nextTrack,
+
+        previous:
+            previousTrack,
+
+        load:
+            function (index) {
+
+                loadTrack(
+                    index,
+                    false
+                );
+
+            },
+
+        youtube:
+            playYouTube,
+
+        soundcloud:
+            playSoundCloud,
+
+        spotify:
+            playSpotify,
+
+        browser:
+            function (url) {
+
+                ensureBrowserUI();
+
+
+                if (
+                    url
+                ) {
+
+                    loadBrowserUrl(
+                        url
+                    );
+
+                }
+
+            },
+
+        switchTab:
+            switchTab
+
+    };
+
+
+    /* =====================================================
        KEYBOARD
        ===================================================== */
 
@@ -3555,6 +5905,17 @@
 
     function initialize() {
 
+        /*
+         * Add only the new infrastructure.
+         * Existing HTML remains untouched.
+         */
+
+        ensureDynamicMediaUI();
+
+
+        bindTabs();
+
+
         renderPlaylist();
 
 
@@ -3618,18 +5979,92 @@
 
         /*
          * Render Effects LAST.
-         *
-         * This guarantees that the DOM
-         * is ready and that old cards
-         * are removed before new cards
-         * are created.
          */
 
         renderEffects();
 
 
+        /*
+         * Prepare SoundCloud and Browser
+         * without changing the existing
+         * Lofi / Local / Effects systems.
+         */
+
+        ensureSoundCloudUI();
+
+
+        ensureBrowserUI();
+
+
+        /*
+         * Rebind after dynamic elements
+         * have been created.
+         */
+
+        bindTabs();
+
+
+        /*
+         * Restore YouTube if saved.
+         */
+
+        const savedYouTube =
+            localStorage.getItem(
+                STORAGE.youtubeUrl
+            );
+
+
+        if (
+            savedYouTube &&
+            youtubeInput &&
+            youtubeInput.value
+                .trim() === ""
+        ) {
+
+            youtubeInput.value =
+                savedYouTube;
+
+        }
+
+
+        /*
+         * Restore Spotify if saved.
+         */
+
+        const savedSpotify =
+            localStorage.getItem(
+                STORAGE.spotifyUrl
+            );
+
+
+        if (
+            savedSpotify &&
+            spotifyInput &&
+            spotifyInput.value
+                .trim() === ""
+        ) {
+
+            spotifyInput.value =
+                savedSpotify;
+
+        }
+
+
         console.log(
             "RakkeZ Media Player initialized successfully."
+        );
+
+        console.log(
+            "RakkeZ Media Sources:",
+            [
+                "Lofi",
+                "YouTube",
+                "SoundCloud",
+                "Spotify",
+                "Local",
+                "Browser",
+                "Effects"
+            ]
         );
 
     }
