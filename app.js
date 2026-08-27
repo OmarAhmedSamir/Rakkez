@@ -1,5 +1,6 @@
 /* =========================================================
-   RAKKEZ V2 TIMER + STATS + PERSISTENCE + LANGUAGE SAFE FULL VERSION
+   RAKKEZ V2 TIMER + STATS + PERSISTENCE + LANGUAGE SAFE
+   FULL VERSION
    ========================================================= */
 
 
@@ -12,6 +13,7 @@
 const $ = id => document.getElementById(id);
 
 function updateTabTitle(secondsLeft, isRunning) {
+
     if (!isRunning) {
         document.title = "RakkeZ";
         return;
@@ -34,14 +36,20 @@ function updateTabTitle(secondsLeft, isRunning) {
 const STORAGE = {
 
     settings: "rakkez_settings",
-    stats: "rakkez_stats",
-    tasks: "rakkez_tasks",
-    timer: "rakkez_timer_state",
-    spotify: "rakkez_spotify",
-    google: "rakkez_google",
-    ambient: "rakkez_ambient",
-    alarm: "rakkez_alarm"
 
+    stats: "rakkez_stats",
+
+    tasks: "rakkez_tasks",
+
+    timer: "rakkez_timer_state",
+
+    spotify: "rakkez_spotify",
+
+    google: "rakkez_google",
+
+    ambient: "rakkez_ambient",
+
+    alarm: "rakkez_alarm"
 };
 
 
@@ -52,21 +60,26 @@ const STORAGE = {
 const DEFAULT_SETTINGS = {
 
     focus: 25,
+
     shortBreak: 5,
+
     longBreak: 15,
+
     longBreakAfter: 4,
 
     dailyGoal: 240,
 
     autoStart: false,
+
     smartTimer: true,
 
     sound: true,
+
     alarmVolume: 0.70,
+
     alarmSound: "soft",
 
     theme: "dark"
-
 };
 
 
@@ -87,9 +100,7 @@ function load(key, fallback) {
         console.error("Load error:", error);
 
         return fallback;
-
     }
-
 }
 
 
@@ -105,9 +116,7 @@ function save(key, value) {
     } catch (error) {
 
         console.error("Storage error:", error);
-
     }
-
 }
 
 
@@ -123,7 +132,6 @@ let settings = {
         STORAGE.settings,
         {}
     )
-
 };
 
 
@@ -131,18 +139,11 @@ let settings = {
    STATS
    ---------------------------------------------------------
    IMPORTANT:
-
-   totalFocusSeconds
-   = إجمالي الوقت التاريخي Lifetime.
-
-   dailyFocus
-   = وقت التركيز لكل يوم.
-
-   dailySessions
-   = عدد الجلسات لكل يوم.
-
-   streak
-   = مستقل تمامًا عن Reset.
+   totalFocusSeconds = إجمالي الوقت التاريخي Lifetime.
+   dailyFocus = وقت التركيز لكل يوم.
+   dailySessions = عدد الجلسات لكل يوم.
+   streak = مستقل تمامًا عن Reset.
+   focusPeriods = Exact Focus Periods.
    ========================================================= */
 
 let stats = {
@@ -159,19 +160,19 @@ let stats = {
 
     dailySessions: {},
 
+    focusPeriods: [],
+
     ...load(
         STORAGE.stats,
         {}
     )
-
 };
 
 
 /* =========================================================
    BACKWARD COMPATIBILITY
    ---------------------------------------------------------
-   لو المستخدم عنده نسخة قديمة من RakkeZ
-   بدون dailySessions.
+   لو المستخدم عنده نسخة قديمة من RakkeZ بدون dailySessions.
    ========================================================= */
 
 if (
@@ -180,7 +181,16 @@ if (
 ) {
 
     stats.dailySessions = {};
+}
 
+
+/* =========================================================
+   FOCUS PERIODS BACKWARD COMPATIBILITY
+   ========================================================= */
+
+if (!Array.isArray(stats.focusPeriods)) {
+
+    stats.focusPeriods = [];
 }
 
 
@@ -210,8 +220,20 @@ let timerState = {
 
     running: false,
 
-    interval: null
+    /*
+       وقت بداية المرحلة الحالية.
+       يستخدم لتسجيل Exact Focus Periods.
+    */
 
+    startedAt: null,
+
+    /*
+       آخر وقت تم فيه حفظ حالة التايمر.
+    */
+
+    timestamp: null,
+
+    interval: null
 };
 
 
@@ -238,7 +260,6 @@ function getCurrentLanguage() {
     return language === "ar"
         ? "ar"
         : "en";
-
 }
 
 
@@ -252,7 +273,6 @@ function arabicNumbers(value) {
         /\d/g,
         digit => "٠١٢٣٤٥٦٧٨٩"[digit]
     );
-
 }
 
 
@@ -267,7 +287,6 @@ function englishNumbers(value) {
         digit =>
             "٠١٢٣٤٥٦٧٨٩".indexOf(digit)
     );
-
 }
 
 
@@ -292,7 +311,6 @@ function todayKey() {
         ).padStart(2, "0")
 
     ].join("-");
-
 }
 
 
@@ -328,9 +346,7 @@ function formatTime(seconds) {
 
         String(secs)
             .padStart(2, "0")
-
     );
-
 }
 
 
@@ -350,7 +366,6 @@ function getTimerModeText() {
         ) {
 
             return "استراحة قصيرة";
-
         }
 
         if (
@@ -358,11 +373,9 @@ function getTimerModeText() {
         ) {
 
             return "استراحة طويلة";
-
         }
 
         return "التركيز";
-
     }
 
     if (
@@ -370,7 +383,6 @@ function getTimerModeText() {
     ) {
 
         return "SHORT BREAK";
-
     }
 
     if (
@@ -378,11 +390,9 @@ function getTimerModeText() {
     ) {
 
         return "LONG BREAK";
-
     }
 
     return "FOCUS";
-
 }
 
 
@@ -402,7 +412,6 @@ function getTimerLabel() {
             ? "ركز على شيء واحد فقط."
 
             : "خذ نفسًا. لقد استحققت الراحة.";
-
     }
 
     return timerState.mode === "focus"
@@ -410,7 +419,6 @@ function getTimerLabel() {
         ? "Stay focused. One thing at a time."
 
         : "Take a breath. You earned it.";
-
 }
 
 
@@ -428,13 +436,11 @@ function getStartButtonText() {
         return timerState.running
             ? "إيقاف مؤقت"
             : "ابدأ";
-
     }
 
     return timerState.running
         ? "PAUSE"
         : "START";
-
 }
 
 
@@ -447,7 +453,10 @@ function updateTimerUI() {
     const lang =
         getCurrentLanguage();
 
-    updateTabTitle(timerState.remaining, timerState.running);
+    updateTabTitle(
+        timerState.remaining,
+        timerState.running
+    );
 
 
     /* =====================================================
@@ -467,7 +476,6 @@ function updateTimerUI() {
             lang === "ar"
                 ? arabicNumbers(time)
                 : time;
-
     }
 
 
@@ -485,7 +493,6 @@ function updateTimerUI() {
 
         modeText.textContent =
             getTimerModeText();
-
     }
 
 
@@ -500,8 +507,84 @@ function updateTimerUI() {
 
         timerLabel.textContent =
             getTimerLabel();
-
     }
+
+
+    /* =====================================================
+       MODE BUTTON ACTIVE STATE
+       ===================================================== */
+
+    document
+        .querySelectorAll(
+            "[data-timer-mode]"
+        )
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.timerMode ===
+                    timerState.mode
+            );
+        });
+
+
+    const modeButtonMap = {
+
+        focus: [
+
+            "focusMode",
+
+            "focusBtn",
+
+            "focusModeBtn",
+
+            "focusTab"
+        ],
+
+        short: [
+
+            "shortBreakMode",
+
+            "shortBreakBtn",
+
+            "shortBreakModeBtn",
+
+            "shortBreakTab"
+        ],
+
+        long: [
+
+            "longBreakMode",
+
+            "longBreakBtn",
+
+            "longBreakModeBtn",
+
+            "longBreakTab"
+        ]
+    };
+
+
+    Object.entries(
+        modeButtonMap
+    ).forEach(
+        ([mode, ids]) => {
+
+            ids.forEach(id => {
+
+                const button = $(id);
+
+                if (!button) {
+                    return;
+                }
+
+                button.classList.toggle(
+                    "active",
+                    timerState.mode === mode
+                );
+            });
+        }
+    );
 
 
     /* =====================================================
@@ -535,7 +618,6 @@ function updateTimerUI() {
                     percentage
                 )
             ) + "%";
-
     }
 
 
@@ -550,7 +632,6 @@ function updateTimerUI() {
 
         startButton.textContent =
             getStartButtonText();
-
     }
 
 
@@ -564,9 +645,7 @@ function updateTimerUI() {
     ) {
 
         updateCurrentTask();
-
     }
-
 }
 
 
@@ -581,7 +660,6 @@ function startTimer() {
         pauseTimer();
 
         return;
-
     }
 
 
@@ -591,7 +669,6 @@ function startTimer() {
     ) {
 
         stopAlarm();
-
     }
 
 
@@ -601,7 +678,6 @@ function startTimer() {
     ) {
 
         unlockAudio();
-
     }
 
 
@@ -614,26 +690,40 @@ function startTimer() {
         );
 
         timerState.interval = null;
-
     }
 
 
     if (
         !Number.isFinite(
-            Number(
-                timerState.remaining
-            )
+            Number(timerState.remaining)
         )
+        ||
+        timerState.remaining < 0
     ) {
 
         setMode(
             timerState.mode
         );
+    }
 
+
+    /*
+       إذا كانت بداية مرحلة جديدة
+       نحفظ وقت البداية.
+    */
+
+    if (!timerState.startedAt) {
+
+        timerState.startedAt =
+            Date.now();
     }
 
 
     timerState.running = true;
+
+    timerState.timestamp =
+        Date.now();
+
 
     timerState.interval =
         setInterval(
@@ -645,7 +735,6 @@ function startTimer() {
     saveTimer();
 
     updateTimerUI();
-
 }
 
 
@@ -665,17 +754,18 @@ function pauseTimer() {
         clearInterval(
             timerState.interval
         );
-
     }
 
 
     timerState.interval = null;
 
+    timerState.timestamp =
+        Date.now();
+
 
     saveTimer();
 
     updateTimerUI();
-
 }
 
 
@@ -688,7 +778,6 @@ function tick() {
     if (!timerState.running) {
 
         return;
-
     }
 
 
@@ -699,7 +788,6 @@ function tick() {
         completePhase();
 
         return;
-
     }
 
 
@@ -707,7 +795,6 @@ function tick() {
        FOCUS STATISTICS
        -----------------------------------------------------
        كل ثانية تركيز:
-
        1. تزيد Lifetime
        2. تزيد Daily Focus
        ===================================================== */
@@ -736,11 +823,11 @@ function tick() {
 
         if (
             !stats.dailyFocus ||
-            typeof stats.dailyFocus !== "object"
+            typeof stats.dailyFocus !==
+            "object"
         ) {
 
             stats.dailyFocus = {};
-
         }
 
 
@@ -749,7 +836,6 @@ function tick() {
         ) {
 
             stats.dailyFocus[today] = 0;
-
         }
 
 
@@ -763,7 +849,6 @@ function tick() {
 
 
         updateStats();
-
     }
 
 
@@ -780,6 +865,23 @@ function tick() {
         );
 
 
+    /*
+       Save every tick.
+
+       هذا مهم جدًا حتى لو حصل Refresh
+       بعد آخر tick مباشرة.
+    */
+
+    timerState.timestamp =
+        Date.now();
+
+    saveTimer();
+
+
+    /* =====================================================
+       COMPLETE
+       ===================================================== */
+
     if (
         timerState.remaining <= 0
     ) {
@@ -789,12 +891,10 @@ function tick() {
         completePhase();
 
         return;
-
     }
 
 
     updateTimerUI();
-
 }
 
 
@@ -804,7 +904,25 @@ function tick() {
 
 function completePhase() {
 
-    pauseTimer();
+    /*
+       Stop interval manually.
+       لا نمسح startedAt قبل تسجيل السيشن.
+    */
+
+    timerState.running = false;
+
+
+    if (
+        timerState.interval !== null
+    ) {
+
+        clearInterval(
+            timerState.interval
+        );
+    }
+
+
+    timerState.interval = null;
 
 
     if (
@@ -813,9 +931,12 @@ function completePhase() {
     ) {
 
         playAlarm();
-
     }
 
+
+    /* =====================================================
+       FOCUS COMPLETE
+       ===================================================== */
 
     if (
         timerState.mode === "focus"
@@ -827,8 +948,7 @@ function completePhase() {
         /* =================================================
            SESSIONS
            -------------------------------------------------
-           Lifetime sessions
-           + Daily sessions
+           Lifetime sessions + Daily sessions
            ================================================= */
 
         stats.sessions =
@@ -843,11 +963,11 @@ function completePhase() {
 
         if (
             !stats.dailySessions ||
-            typeof stats.dailySessions !== "object"
+            typeof stats.dailySessions !==
+            "object"
         ) {
 
             stats.dailySessions = {};
-
         }
 
 
@@ -856,7 +976,6 @@ function completePhase() {
         ) {
 
             stats.dailySessions[today] = 0;
-
         }
 
 
@@ -868,6 +987,90 @@ function completePhase() {
 
 
         updateStreakOnFocus();
+
+
+        /* =================================================
+           EXACT FOCUS PERIOD
+           ================================================= */
+
+        if (
+            !Array.isArray(
+                stats.focusPeriods
+            )
+        ) {
+
+            stats.focusPeriods = [];
+        }
+
+
+        const sessionEnd =
+            Date.now();
+
+
+        let sessionStart =
+            Number(
+                timerState.startedAt
+            );
+
+
+        /*
+           Fallback في حالة عدم وجود
+           startedAt من نسخة قديمة.
+        */
+
+        if (
+            !Number.isFinite(
+                sessionStart
+            )
+            ||
+            sessionStart <= 0
+        ) {
+
+            sessionStart =
+                sessionEnd -
+                (
+                    Number(
+                        timerState.total
+                    ) * 1000
+                );
+        }
+
+
+        /*
+           نحسب المدة الحقيقية.
+        */
+
+        const durationSeconds =
+            Math.max(
+                0,
+                Math.floor(
+                    (
+                        sessionEnd -
+                        sessionStart
+                    ) / 1000
+                )
+            );
+
+
+        stats.focusPeriods.push({
+
+            id:
+                crypto.randomUUID
+                    ? crypto.randomUUID()
+                    : (
+                        Date.now().toString() +
+                        Math.random()
+                            .toString(36)
+                    ),
+
+            date: today,
+
+            start: sessionStart,
+
+            end: sessionEnd,
+
+            durationSeconds
+        });
 
 
         /* =================================================
@@ -883,6 +1086,7 @@ function completePhase() {
                         currentTaskId
                 );
 
+
             if (task) {
 
                 task.focusMinutes =
@@ -890,14 +1094,10 @@ function completePhase() {
                         task.focusMinutes ||
                         0
                     ) +
-
                     Math.round(
-                        timerState.total /
-                        60
+                        durationSeconds / 60
                     );
-
             }
-
         }
 
 
@@ -919,14 +1119,27 @@ function completePhase() {
         } else {
 
             setMode("short");
-
         }
+
 
     } else {
 
-        setMode("focus");
+        /*
+           Break finished
+        */
 
+        setMode("focus");
     }
+
+
+    /*
+       Clear session start after completion.
+    */
+
+    timerState.startedAt = null;
+
+    timerState.timestamp =
+        Date.now();
 
 
     save(
@@ -963,21 +1176,17 @@ function completePhase() {
                     ) {
 
                         startTimer();
-
                     }
 
                 } else {
 
                     startTimer();
-
                 }
 
             },
             800
         );
-
     }
-
 }
 
 
@@ -994,12 +1203,22 @@ function setMode(mode) {
     ) {
 
         mode = "focus";
-
     }
 
 
-    timerState.mode =
-        mode;
+    if (
+        timerState.interval !== null
+    ) {
+
+        clearInterval(
+            timerState.interval
+        );
+    }
+
+
+    timerState.interval = null;
+
+    timerState.mode = mode;
 
 
     let minutes;
@@ -1008,26 +1227,19 @@ function setMode(mode) {
     if (mode === "focus") {
 
         minutes =
-            Number(
-                settings.focus
-            );
+            Number(settings.focus);
 
     } else if (
         mode === "short"
     ) {
 
         minutes =
-            Number(
-                settings.shortBreak
-            );
+            Number(settings.shortBreak);
 
     } else {
 
         minutes =
-            Number(
-                settings.longBreak
-            );
-
+            Number(settings.longBreak);
     }
 
 
@@ -1038,7 +1250,6 @@ function setMode(mode) {
 
         minutes =
             DEFAULT_SETTINGS.focus;
-
     }
 
 
@@ -1052,29 +1263,22 @@ function setMode(mode) {
         timerState.total;
 
 
-    timerState.running =
-        false;
+    timerState.running = false;
 
 
-    if (
-        timerState.interval !== null
-    ) {
+    /*
+       New mode = new session.
+    */
 
-        clearInterval(
-            timerState.interval
-        );
+    timerState.startedAt = null;
 
-    }
-
-
-    timerState.interval =
-        null;
+    timerState.timestamp =
+        Date.now();
 
 
     saveTimer();
 
     updateTimerUI();
-
 }
 
 
@@ -1096,7 +1300,6 @@ function resetTimer() {
         clearInterval(
             timerState.interval
         );
-
     }
 
 
@@ -1109,7 +1312,6 @@ function resetTimer() {
     ) {
 
         stopAlarm();
-
     }
 
 
@@ -1119,18 +1321,14 @@ function resetTimer() {
     ) {
 
         stopTestAlarm();
-
     }
 
 
-    timerState.mode =
-        "focus";
+    timerState.mode = "focus";
 
 
     const focusMinutes =
-        Number(
-            settings.focus
-        );
+        Number(settings.focus);
 
 
     const safeFocus =
@@ -1154,12 +1352,14 @@ function resetTimer() {
         timerState.total;
 
 
-    timerState.running =
-        false;
+    timerState.running = false;
 
+    timerState.startedAt = null;
 
-    timerState.interval =
-        null;
+    timerState.timestamp =
+        Date.now();
+
+    timerState.interval = null;
 
 
     saveTimer();
@@ -1167,7 +1367,6 @@ function resetTimer() {
     updateTimerUI();
 
     updateStats();
-
 }
 
 
@@ -1175,7 +1374,6 @@ function resetTimer() {
    STATS
    ---------------------------------------------------------
    IMPORTANT:
-
    الـUI يعرض بيانات اليوم فقط.
 
    Focus Time:
@@ -1212,13 +1410,13 @@ function updateStats() {
     const focusStat =
         $("focusStat");
 
+
     if (focusStat) {
 
         focusStat.textContent =
             formatFocus(
                 todayFocusSeconds
             );
-
     }
 
 
@@ -1236,6 +1434,7 @@ function updateStats() {
     const sessionsStat =
         $("sessionsStat");
 
+
     if (sessionsStat) {
 
         sessionsStat.textContent =
@@ -1246,7 +1445,6 @@ function updateStats() {
                 )
 
                 : todaySessions;
-
     }
 
 
@@ -1264,14 +1462,11 @@ function updateStats() {
     if (streakStat) {
 
         const streak =
-            Number(
-                stats.streak
-            ) || 0;
+            Number(stats.streak) || 0;
 
 
         if (
-            getCurrentLanguage() ===
-            "ar"
+            getCurrentLanguage() === "ar"
         ) {
 
             streakStat.textContent =
@@ -1290,9 +1485,7 @@ function updateStats() {
                         ? ""
                         : "s"
                 );
-
         }
-
     }
 
 
@@ -1301,7 +1494,6 @@ function updateStats() {
        ===================================================== */
 
     updateDailyGoal();
-
 }
 
 
@@ -1329,17 +1521,11 @@ function formatFocus(seconds) {
         if (minutes < 60) {
 
             return (
-
                 arabicNumbers(
                     minutes
-                )
-
-                +
-
+                ) +
                 "د"
-
             );
-
         }
 
 
@@ -1359,46 +1545,31 @@ function formatFocus(seconds) {
 
                 arabicNumbers(
                     hours
-                )
+                ) +
 
-                +
-
-                "س "
-
-                +
+                "س " +
 
                 arabicNumbers(
                     remaining
-                )
-
-                +
+                ) +
 
                 "د"
-
             );
-
         }
 
 
         return (
-
             arabicNumbers(
                 hours
-            )
-
-            +
-
+            ) +
             "س"
-
         );
-
     }
 
 
     if (minutes < 60) {
 
         return minutes + "m";
-
     }
 
 
@@ -1415,19 +1586,15 @@ function formatFocus(seconds) {
     if (remaining > 0) {
 
         return (
-
             hours +
             "h " +
             remaining +
             "m"
-
         );
-
     }
 
 
     return hours + "h";
-
 }
 
 
@@ -1446,7 +1613,6 @@ function updateDailyGoal() {
     if (!goalStat) {
 
         return;
-
     }
 
 
@@ -1497,7 +1663,8 @@ function updateDailyGoal() {
         currentText =
             arabicNumbers(
                 minutes
-            ) + "د";
+            ) +
+            "د";
 
 
         if (goalHours) {
@@ -1505,7 +1672,8 @@ function updateDailyGoal() {
             goalText =
                 arabicNumbers(
                     goalHours
-                ) + "س";
+                ) +
+                "س";
 
 
             if (goalMinutes) {
@@ -1516,7 +1684,6 @@ function updateDailyGoal() {
                         goalMinutes
                     ) +
                     "د";
-
             }
 
         } else {
@@ -1524,20 +1691,22 @@ function updateDailyGoal() {
             goalText =
                 arabicNumbers(
                     goal
-                ) + "د";
-
+                ) +
+                "د";
         }
 
     } else {
 
         currentText =
-            minutes + "m";
+            minutes +
+            "m";
 
 
         if (goalHours) {
 
             goalText =
-                goalHours + "h";
+                goalHours +
+                "h";
 
 
             if (goalMinutes) {
@@ -1546,16 +1715,14 @@ function updateDailyGoal() {
                     " " +
                     goalMinutes +
                     "m";
-
             }
 
         } else {
 
             goalText =
-                goal + "m";
-
+                goal +
+                "m";
         }
-
     }
 
 
@@ -1563,7 +1730,6 @@ function updateDailyGoal() {
         currentText +
         " / " +
         goalText;
-
 }
 
 
@@ -1583,12 +1749,9 @@ function updateStreakOnFocus() {
         );
 
 
-    if (
-        previous === today
-    ) {
+    if (previous === today) {
 
         return;
-
     }
 
 
@@ -1611,7 +1774,8 @@ function updateStreakOnFocus() {
         const diff =
             Math.round(
                 (
-                    current - last
+                    current -
+                    last
                 ) /
                 (
                     1000 *
@@ -1634,13 +1798,11 @@ function updateStreakOnFocus() {
         } else {
 
             stats.streak = 1;
-
         }
 
     } else {
 
         stats.streak = 1;
-
     }
 
 
@@ -1648,7 +1810,6 @@ function updateStreakOnFocus() {
         "rakkez_last_focus_day",
         today
     );
-
 }
 
 
@@ -1658,12 +1819,9 @@ function updateStreakOnFocus() {
 
 function updateStreak() {
 
-    if (
-        !stats.lastFocusDate
-    ) {
+    if (!stats.lastFocusDate) {
 
         return;
-
     }
 
 
@@ -1688,7 +1846,8 @@ function updateStreak() {
     const difference =
         Math.round(
             (
-                current - last
+                current -
+                last
             ) /
             (
                 1000 *
@@ -1707,9 +1866,7 @@ function updateStreak() {
             STORAGE.stats,
             stats
         );
-
     }
-
 }
 
 
@@ -1722,7 +1879,6 @@ function saveTimer() {
     if (!settings.smartTimer) {
 
         return;
-
     }
 
 
@@ -1743,6 +1899,13 @@ function saveTimer() {
                     timerState.total
                 ),
 
+            startedAt:
+                timerState.startedAt
+                    ? Number(
+                        timerState.startedAt
+                    )
+                    : null,
+
             timestamp:
                 Date.now(),
 
@@ -1750,15 +1913,18 @@ function saveTimer() {
                 Boolean(
                     timerState.running
                 )
-
         }
     );
-
 }
 
 
 /* =========================================================
    RESTORE TIMER
+   ---------------------------------------------------------
+   إذا كان التايمر يعمل قبل Refresh:
+   - يحسب الوقت الذي مر أثناء Refresh
+   - يكمل من نفس المكان
+   - لا يرجعه للبداية
    ========================================================= */
 
 function restoreTimer() {
@@ -1766,7 +1932,6 @@ function restoreTimer() {
     if (!settings.smartTimer) {
 
         return;
-
     }
 
 
@@ -1780,7 +1945,6 @@ function restoreTimer() {
     if (!saved) {
 
         return;
-
     }
 
 
@@ -1791,19 +1955,12 @@ function restoreTimer() {
     ) {
 
         return;
-
     }
 
 
-    timerState.mode =
-        saved.mode;
-
-
-    timerState.total =
-        Number(saved.total) ||
-        (
-            Number(settings.focus) *
-            60
+    const savedTotal =
+        Number(
+            saved.total
         );
 
 
@@ -1813,71 +1970,150 @@ function restoreTimer() {
         );
 
 
-    if (
-        saved.running &&
-        Number.isFinite(
-            savedRemaining
-        )
-    ) {
+    const savedTimestamp =
+        Number(
+            saved.timestamp
+        );
 
-        const savedTimestamp =
-            Number(
-                saved.timestamp
+
+    timerState.mode =
+        saved.mode;
+
+
+    timerState.total =
+
+        Number.isFinite(
+            savedTotal
+        ) &&
+        savedTotal > 0
+
+            ? savedTotal
+
+            : (
+                saved.mode === "focus"
+
+                    ? Number(
+                        settings.focus
+                    ) * 60
+
+                    : saved.mode === "short"
+
+                        ? Number(
+                            settings.shortBreak
+                        ) * 60
+
+                        : Number(
+                            settings.longBreak
+                        ) * 60
             );
 
 
-        const elapsed =
-            Number.isFinite(
-                savedTimestamp
-            )
+    let remaining =
 
-                ? Math.floor(
+        Number.isFinite(
+            savedRemaining
+        )
+
+            ? savedRemaining
+
+            : timerState.total;
+
+
+    /*
+       إذا كان Running قبل Refresh
+    */
+
+    if (
+        saved.running &&
+        Number.isFinite(
+            savedTimestamp
+        )
+    ) {
+
+        const elapsedSinceSave =
+            Math.max(
+                0,
+                Math.floor(
                     (
                         Date.now() -
                         savedTimestamp
                     ) / 1000
                 )
-
-                : 0;
-
-
-        timerState.remaining =
-            Math.max(
-                0,
-                savedRemaining -
-                Math.max(
-                    0,
-                    elapsed
-                )
             );
 
-    } else {
 
-        timerState.remaining =
-            Number.isFinite(
-                savedRemaining
-            )
-
-                ? Math.max(
-                    0,
-                    savedRemaining
-                )
-
-                : timerState.total;
-
+        remaining =
+            Math.max(
+                0,
+                remaining -
+                elapsedSinceSave
+            );
     }
 
 
-    timerState.running =
-        false;
+    timerState.remaining =
+        remaining;
 
 
-    timerState.interval =
-        null;
+    /*
+       Restore session start.
+    */
+
+    timerState.startedAt =
+
+        Number.isFinite(
+            Number(
+                saved.startedAt
+            )
+        )
+
+            ? Number(
+                saved.startedAt
+            )
+
+            : null;
+
+
+    /*
+       بعد Refresh:
+       لا نبدأ interval هنا مباشرة.
+    */
+
+    timerState.running = false;
+
+    timerState.timestamp =
+        Date.now();
+
+    timerState.interval = null;
+
+
+    /*
+       لو المرحلة انتهت أثناء الغياب
+    */
+
+    if (
+        saved.running &&
+        timerState.remaining <= 0
+    ) {
+
+        timerState.remaining = 0;
+
+
+        setTimeout(
+            () => {
+
+                completePhase();
+
+            },
+            0
+        );
+
+
+        return;
+    }
 
 
     updateTimerUI();
-
 }
 
 
@@ -1893,7 +2129,6 @@ function unlockAudio() {
     if (audioUnlocked) {
 
         return;
-
     }
 
 
@@ -1907,7 +2142,6 @@ function unlockAudio() {
         if (!AudioContextClass) {
 
             return;
-
         }
 
 
@@ -1921,7 +2155,6 @@ function unlockAudio() {
         ) {
 
             context.resume();
-
         }
 
 
@@ -1963,7 +2196,6 @@ function unlockAudio() {
                 context.close();
 
             } catch {}
-
         };
 
 
@@ -1975,9 +2207,7 @@ function unlockAudio() {
             "Audio unlock failed:",
             error
         );
-
     }
-
 }
 
 
@@ -1991,7 +2221,6 @@ window.refreshTimerLanguage =
         updateTimerUI();
 
         updateStats();
-
     };
 
 
@@ -2005,7 +2234,6 @@ window.updateLanguageNumbers =
         updateTimerUI();
 
         updateStats();
-
     };
 
 
@@ -2024,6 +2252,192 @@ window.resetTimer =
 
 window.setMode =
     setMode;
+
+
+/* =========================================================
+   TIMER MODE BUTTONS
+   ---------------------------------------------------------
+   FOCUS / SHORT BREAK / LONG BREAK
+   ========================================================= */
+
+function initializeTimerModeButtons() {
+
+    const modeButtons = [
+
+        {
+
+            ids: [
+
+                "focusMode",
+
+                "focusBtn",
+
+                "focusModeBtn",
+
+                "focusTab"
+            ],
+
+            mode: "focus"
+        },
+
+        {
+
+            ids: [
+
+                "shortBreakMode",
+
+                "shortBreakBtn",
+
+                "shortBreakModeBtn",
+
+                "shortBreakTab"
+            ],
+
+            mode: "short"
+        },
+
+        {
+
+            ids: [
+
+                "longBreakMode",
+
+                "longBreakBtn",
+
+                "longBreakModeBtn",
+
+                "longBreakTab"
+            ],
+
+            mode: "long"
+        }
+    ];
+
+
+    modeButtons.forEach(
+        item => {
+
+            item.ids.forEach(
+                id => {
+
+                    const button = $(id);
+
+
+                    if (!button) {
+
+                        return;
+                    }
+
+
+                    if (
+                        button.dataset
+                            .rakkezModeBound ===
+                        "true"
+                    ) {
+
+                        return;
+                    }
+
+
+                    button.dataset
+                        .rakkezModeBound =
+                        "true";
+
+
+                    button.addEventListener(
+                        "click",
+                        event => {
+
+                            event.preventDefault();
+
+
+                            /*
+                               لا نسمح بتغيير
+                               الـMode أثناء تشغيل السيشن.
+                            */
+
+                            if (
+                                timerState.running
+                            ) {
+
+                                return;
+                            }
+
+
+                            setMode(
+                                item.mode
+                            );
+                        }
+                    );
+                }
+            );
+        }
+    );
+
+
+    /*
+       دعم:
+
+       data-timer-mode="focus"
+       data-timer-mode="short"
+       data-timer-mode="long"
+    */
+
+    document
+        .querySelectorAll(
+            "[data-timer-mode]"
+        )
+        .forEach(
+            button => {
+
+                if (
+                    button.dataset
+                        .rakkezModeBound ===
+                    "true"
+                ) {
+
+                    return;
+                }
+
+
+                button.dataset
+                    .rakkezModeBound =
+                    "true";
+
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.preventDefault();
+
+
+                        if (
+                            timerState.running
+                        ) {
+
+                            return;
+                        }
+
+
+                        const mode =
+                            button.dataset
+                                .timerMode;
+
+
+                        if (
+                            mode === "focus" ||
+                            mode === "short" ||
+                            mode === "long"
+                        ) {
+
+                            setMode(mode);
+                        }
+                    }
+                );
+            }
+        );
+}
 
 
 /* =========================================================
@@ -2104,7 +2518,6 @@ const ALARM_FREQUENCIES = {
         988,
         1174
     ]
-
 };
 
 
@@ -2121,7 +2534,6 @@ function createAlarmPopup() {
     ) {
 
         return;
-
     }
 
 
@@ -2159,7 +2571,6 @@ function createAlarmPopup() {
             </button>
 
         </div>
-
     `;
 
 
@@ -2195,14 +2606,12 @@ function createAlarmPopup() {
 
             backdrop-filter:
                 blur(14px);
-
         }
 
 
         #rakkezAlarmPopup.show {
 
             display:flex;
-
         }
 
 
@@ -2244,7 +2653,6 @@ function createAlarmPopup() {
                     0,
                     .5
                 );
-
         }
 
 
@@ -2253,7 +2661,6 @@ function createAlarmPopup() {
             font-size:36px;
 
             margin-bottom:12px;
-
         }
 
 
@@ -2270,7 +2677,6 @@ function createAlarmPopup() {
             color:white;
 
             margin-bottom:8px;
-
         }
 
 
@@ -2291,7 +2697,6 @@ function createAlarmPopup() {
                 );
 
             margin-bottom:22px;
-
         }
 
 
@@ -2314,16 +2719,13 @@ function createAlarmPopup() {
             font-weight:700;
 
             letter-spacing:.5px;
-
         }
 
 
         #rakkezStopAlarm:hover {
 
             opacity:.9;
-
         }
-
     `;
 
 
@@ -2340,9 +2742,7 @@ function createAlarmPopup() {
 
         stopButton.onclick =
             stopAlarm;
-
     }
-
 }
 
 
@@ -2353,7 +2753,6 @@ function createAlarmPopup() {
 function isAlarmPlaying() {
 
     return alarmPlaying;
-
 }
 
 
@@ -2373,8 +2772,7 @@ function stopAlarm() {
     );
 
 
-    alarmLoopTimeout =
-        null;
+    alarmLoopTimeout = null;
 
 
     if (alarmAudio) {
@@ -2402,7 +2800,6 @@ function stopAlarm() {
         } catch {}
 
         alarmAudio = null;
-
     }
 
 
@@ -2416,7 +2813,6 @@ function stopAlarm() {
             try {
                 oscillator.disconnect();
             } catch {}
-
         }
     );
 
@@ -2427,14 +2823,10 @@ function stopAlarm() {
     if (alarmAudioContext) {
 
         try {
-
             alarmAudioContext.close();
-
         } catch {}
 
-        alarmAudioContext =
-            null;
-
+        alarmAudioContext = null;
     }
 
 
@@ -2447,9 +2839,7 @@ function stopAlarm() {
         popup.classList.remove(
             "show"
         );
-
     }
-
 }
 
 
@@ -2462,7 +2852,6 @@ function playAlarm() {
     if (!settings.sound) {
 
         return;
-
     }
 
 
@@ -2472,12 +2861,10 @@ function playAlarm() {
     ) {
 
         stopTestAlarm();
-
     }
 
 
     stopAlarm();
-
 
     alarmPlaying = true;
 
@@ -2494,14 +2881,13 @@ function playAlarm() {
         popup.classList.add(
             "show"
         );
-
     }
 
 
     if (
         customAlarmURL &&
         settings.alarmSound ===
-        "custom"
+            "custom"
     ) {
 
         if (
@@ -2510,11 +2896,9 @@ function playAlarm() {
         ) {
 
             playCustomAlarm();
-
         }
 
         return;
-
     }
 
 
@@ -2524,9 +2908,7 @@ function playAlarm() {
     ) {
 
         playGeneratedAlarmLoop();
-
     }
-
 }
 
 
@@ -2537,20 +2919,14 @@ function playAlarm() {
 function playCustomAlarm() {
 
     if (
-
         !alarmPlaying ||
-
         !customAlarmURL ||
-
         settings.alarmSound !==
             "custom" ||
-
         !settings.sound
-
     ) {
 
         return;
-
     }
 
 
@@ -2560,8 +2936,7 @@ function playCustomAlarm() {
             new Audio();
 
 
-        alarmAudio =
-            audio;
+        alarmAudio = audio;
 
 
         audio.src =
@@ -2592,7 +2967,6 @@ function playCustomAlarm() {
                     "Custom alarm error:",
                     error
                 );
-
             }
         );
 
@@ -2604,7 +2978,7 @@ function playCustomAlarm() {
         if (
             playPromise &&
             typeof playPromise.catch ===
-                "function"
+            "function"
         ) {
 
             playPromise.catch(
@@ -2614,10 +2988,8 @@ function playCustomAlarm() {
                         "Custom alarm playback blocked:",
                         error
                     );
-
                 }
             );
-
         }
 
     } catch (error) {
@@ -2626,9 +2998,7 @@ function playCustomAlarm() {
             "Custom alarm error:",
             error
         );
-
     }
-
 }
 
 
@@ -2644,7 +3014,6 @@ function playGeneratedAlarmLoop() {
     ) {
 
         return;
-
     }
 
 
@@ -2669,21 +3038,16 @@ function playGeneratedAlarmLoop() {
         if (!AudioContextClass) {
 
             return;
-
         }
 
 
         if (alarmAudioContext) {
 
             try {
-
                 alarmAudioContext.close();
-
             } catch {}
 
-            alarmAudioContext =
-                null;
-
+            alarmAudioContext = null;
         }
 
 
@@ -2699,7 +3063,6 @@ function playGeneratedAlarmLoop() {
             alarmAudioContext
                 .resume()
                 .catch(() => {});
-
         }
 
 
@@ -2736,8 +3099,7 @@ function playGeneratedAlarmLoop() {
 
                 const start =
                     now +
-                    index *
-                    0.16;
+                    index * 0.16;
 
 
                 const end =
@@ -2775,7 +3137,8 @@ function playGeneratedAlarmLoop() {
 
 
                 gain.connect(
-                    alarmAudioContext.destination
+                    alarmAudioContext
+                        .destination
                 );
 
 
@@ -2792,7 +3155,6 @@ function playGeneratedAlarmLoop() {
                 alarmOscillators.push(
                     oscillator
                 );
-
             }
         );
 
@@ -2815,12 +3177,10 @@ function playGeneratedAlarmLoop() {
                     ) {
 
                         return;
-
                     }
 
 
-                    alarmOscillators =
-                        [];
+                    alarmOscillators = [];
 
 
                     if (
@@ -2828,16 +3188,12 @@ function playGeneratedAlarmLoop() {
                     ) {
 
                         try {
-
                             alarmAudioContext.close();
-
                         } catch {}
 
+                        alarmAudioContext =
+                            null;
                     }
-
-
-                    alarmAudioContext =
-                        null;
 
 
                     playGeneratedAlarmLoop();
@@ -2852,9 +3208,7 @@ function playGeneratedAlarmLoop() {
             "Alarm error:",
             error
         );
-
     }
-
 }
 
 
@@ -2874,8 +3228,7 @@ function stopTestAlarm() {
     );
 
 
-    testTimeout =
-        null;
+    testTimeout = null;
 
 
     if (testAudio) {
@@ -2903,7 +3256,6 @@ function stopTestAlarm() {
         } catch {}
 
         testAudio = null;
-
     }
 
 
@@ -2917,7 +3269,6 @@ function stopTestAlarm() {
             try {
                 oscillator.disconnect();
             } catch {}
-
         }
     );
 
@@ -2928,16 +3279,11 @@ function stopTestAlarm() {
     if (testAudioContext) {
 
         try {
-
             testAudioContext.close();
-
         } catch {}
 
-        testAudioContext =
-            null;
-
+        testAudioContext = null;
     }
-
 }
 
 
@@ -2953,14 +3299,12 @@ function testAlarm() {
     if (!settings.sound) {
 
         return;
-
     }
 
 
     unlockAudio();
 
     stopAlarm();
-
 
     testPlaying = true;
 
@@ -2972,7 +3316,7 @@ function testAlarm() {
     if (
         customAlarmURL &&
         settings.alarmSound ===
-        "custom"
+            "custom"
     ) {
 
         try {
@@ -2983,8 +3327,7 @@ function testAlarm() {
                 );
 
 
-            testAudio =
-                audio;
+            testAudio = audio;
 
 
             audio.volume =
@@ -2997,9 +3340,7 @@ function testAlarm() {
                 );
 
 
-            audio.loop =
-                false;
-
+            audio.loop = false;
 
             audio.preload =
                 "auto";
@@ -3012,14 +3353,10 @@ function testAlarm() {
                     testSequenceId
                 ) {
 
-                    testAudio =
-                        null;
+                    testAudio = null;
 
-                    testPlaying =
-                        false;
-
+                    testPlaying = false;
                 }
-
             };
 
 
@@ -3030,7 +3367,7 @@ function testAlarm() {
             if (
                 promise &&
                 typeof promise.catch ===
-                    "function"
+                "function"
             ) {
 
                 promise.catch(
@@ -3048,12 +3385,9 @@ function testAlarm() {
                         ) {
 
                             stopTestAlarm();
-
                         }
-
                     }
                 );
-
             }
 
         } catch (error) {
@@ -3063,14 +3397,11 @@ function testAlarm() {
                 error
             );
 
-
             stopTestAlarm();
-
         }
 
 
         return;
-
     }
 
 
@@ -3086,7 +3417,6 @@ function testAlarm() {
             stopTestAlarm();
 
             return;
-
         }
 
 
@@ -3102,7 +3432,6 @@ function testAlarm() {
             testAudioContext
                 .resume()
                 .catch(() => {});
-
         }
 
 
@@ -3117,8 +3446,7 @@ function testAlarm() {
             testAudioContext.currentTime;
 
 
-        testOscillators =
-            [];
+        testOscillators = [];
 
 
         frequencies.forEach(
@@ -3147,8 +3475,7 @@ function testAlarm() {
 
                 const start =
                     now +
-                    index *
-                    0.16;
+                    index * 0.16;
 
 
                 const end =
@@ -3186,7 +3513,8 @@ function testAlarm() {
 
 
                 gain.connect(
-                    testAudioContext.destination
+                    testAudioContext
+                        .destination
                 );
 
 
@@ -3203,7 +3531,6 @@ function testAlarm() {
                 testOscillators.push(
                     oscillator
                 );
-
             }
         );
 
@@ -3218,7 +3545,6 @@ function testAlarm() {
                     ) {
 
                         stopTestAlarm();
-
                     }
 
                 },
@@ -3234,11 +3560,8 @@ function testAlarm() {
             error
         );
 
-
         stopTestAlarm();
-
     }
-
 }
 
 
@@ -3254,10 +3577,8 @@ if ($("testAlarmBtn")) {
             () => {
 
                 testAlarm();
-
             }
         );
-
 }
 
 
@@ -3285,7 +3606,6 @@ if (alarmUploadInput) {
             if (!file) {
 
                 return;
-
             }
 
 
@@ -3300,12 +3620,9 @@ if (alarmUploadInput) {
                 );
 
 
-                e.target.value =
-                    "";
-
+                e.target.value = "";
 
                 return;
-
             }
 
 
@@ -3323,7 +3640,6 @@ if (alarmUploadInput) {
                     );
 
                 } catch {}
-
             }
 
 
@@ -3351,7 +3667,6 @@ if (alarmUploadInput) {
 
                 $("alarmSound").value =
                     "custom";
-
             }
 
 
@@ -3364,7 +3679,6 @@ if (alarmUploadInput) {
 
                 $("alarmName").textContent =
                     file.name;
-
             }
 
 
@@ -3372,7 +3686,6 @@ if (alarmUploadInput) {
 
                 $("alarmFileName").textContent =
                     file.name;
-
             }
 
 
@@ -3380,10 +3693,8 @@ if (alarmUploadInput) {
                 "Custom alarm loaded:",
                 file.name
             );
-
         }
     );
-
 }
 
 
@@ -3404,14 +3715,12 @@ function setAlarmUploadStatus(
     if (existing) {
 
         existing.remove();
-
     }
 
 
     if (!fileName) {
 
         return;
-
     }
 
 
@@ -3465,27 +3774,24 @@ function setAlarmUploadStatus(
         font-family:
             "DM Sans",
             sans-serif;
-
     `;
 
 
     feedback.innerHTML = `
 
-        <span
-            style="
-                display:inline-flex;
-                width:18px;
-                height:18px;
-                min-width:18px;
-                align-items:center;
-                justify-content:center;
-                border-radius:50%;
-                background:#22c55e;
-                color:white;
-                font-size:11px;
-                font-weight:700;
-            "
-        >
+        <span style="
+            display:inline-flex;
+            width:18px;
+            height:18px;
+            min-width:18px;
+            align-items:center;
+            justify-content:center;
+            border-radius:50%;
+            background:#22c55e;
+            color:white;
+            font-size:11px;
+            font-weight:700;
+        ">
             ✓
         </span>
 
@@ -3493,7 +3799,6 @@ function setAlarmUploadStatus(
             Uploaded:
             ${escapeHTML(fileName)}
         </span>
-
     `;
 
 
@@ -3511,9 +3816,7 @@ function setAlarmUploadStatus(
         input.parentElement.appendChild(
             feedback
         );
-
     }
-
 }
 
 
@@ -3532,7 +3835,6 @@ function clearAlarmUploadStatus() {
     if (feedback) {
 
         feedback.remove();
-
     }
 
 
@@ -3540,7 +3842,6 @@ function clearAlarmUploadStatus() {
 
         $("alarmName").textContent =
             "";
-
     }
 
 
@@ -3548,9 +3849,7 @@ function clearAlarmUploadStatus() {
 
         $("alarmFileName").textContent =
             "";
-
     }
-
 }
 
 
@@ -3632,7 +3931,6 @@ function syncSettingsUI() {
 
         $("alarmSound").value =
             settings.alarmSound;
-
 }
 
 
@@ -3663,7 +3961,6 @@ if ($("focusInput")) {
                 ) {
 
                     setMode("focus");
-
                 }
 
 
@@ -3671,10 +3968,8 @@ if ($("focusInput")) {
                     STORAGE.settings,
                     settings
                 );
-
             }
         );
-
 }
 
 
@@ -3701,7 +3996,6 @@ if ($("shortBreakInput")) {
                 ) {
 
                     setMode("short");
-
                 }
 
 
@@ -3709,10 +4003,8 @@ if ($("shortBreakInput")) {
                     STORAGE.settings,
                     settings
                 );
-
             }
         );
-
 }
 
 
@@ -3739,7 +4031,6 @@ if ($("longBreakInput")) {
                 ) {
 
                     setMode("long");
-
                 }
 
 
@@ -3747,10 +4038,8 @@ if ($("longBreakInput")) {
                     STORAGE.settings,
                     settings
                 );
-
             }
         );
-
 }
 
 
@@ -3774,10 +4063,8 @@ if ($("longBreakAfterInput")) {
                     STORAGE.settings,
                     settings
                 );
-
             }
         );
-
 }
 
 
@@ -3804,10 +4091,8 @@ if ($("dailyGoalInput")) {
 
 
                 updateDailyGoal();
-
             }
         );
-
 }
 
 
@@ -3827,9 +4112,7 @@ if ($("autoStartToggle")) {
                 STORAGE.settings,
                 settings
             );
-
         };
-
 }
 
 
@@ -3849,9 +4132,7 @@ if ($("smartTimerToggle")) {
                 STORAGE.settings,
                 settings
             );
-
         };
-
 }
 
 
@@ -3869,7 +4150,6 @@ if ($("soundToggle")) {
                 stopAlarm();
 
                 stopTestAlarm();
-
             }
 
 
@@ -3880,9 +4160,7 @@ if ($("soundToggle")) {
                 STORAGE.settings,
                 settings
             );
-
         };
-
 }
 
 
@@ -3907,7 +4185,6 @@ if ($("alarmVolume")) {
                         .textContent =
                             e.target.value +
                             "%";
-
                 }
 
 
@@ -3915,7 +4192,6 @@ if ($("alarmVolume")) {
 
                     alarmAudio.volume =
                         settings.alarmVolume;
-
                 }
 
 
@@ -3923,7 +4199,6 @@ if ($("alarmVolume")) {
 
                     testAudio.volume =
                         settings.alarmVolume;
-
                 }
 
 
@@ -3931,10 +4206,8 @@ if ($("alarmVolume")) {
                     STORAGE.settings,
                     settings
                 );
-
             }
         );
-
 }
 
 
@@ -3958,7 +4231,6 @@ if ($("alarmSound")) {
                 ) {
 
                     clearAlarmUploadStatus();
-
                 }
 
 
@@ -3966,10 +4238,8 @@ if ($("alarmSound")) {
                     STORAGE.settings,
                     settings
                 );
-
             }
         );
-
 }
 
 
@@ -3986,12 +4256,10 @@ function renderTasks() {
     if (!list) {
 
         return;
-
     }
 
 
-    list.innerHTML =
-        "";
+    list.innerHTML = "";
 
 
     if ($("taskEmpty")) {
@@ -4001,7 +4269,6 @@ function renderTasks() {
                 tasks.length
                     ? "none"
                     : "block";
-
     }
 
 
@@ -4052,17 +4319,14 @@ function renderTasks() {
                 >
                     ×
                 </button>
-
             `;
 
 
             list.appendChild(
                 element
             );
-
         }
     );
-
 }
 
 
@@ -4079,7 +4343,6 @@ function addTask() {
     if (!input) {
 
         return;
-
     }
 
 
@@ -4090,7 +4353,6 @@ function addTask() {
     if (!title) {
 
         return;
-
     }
 
 
@@ -4108,7 +4370,6 @@ function addTask() {
         created: Date.now(),
 
         focusMinutes: 0
-
     };
 
 
@@ -4123,12 +4384,10 @@ function addTask() {
     );
 
 
-    input.value =
-        "";
+    input.value = "";
 
 
     renderTasks();
-
 }
 
 
@@ -4149,7 +4408,6 @@ function escapeHTML(value) {
 
 
     return div.innerHTML;
-
 }
 
 
@@ -4168,7 +4426,6 @@ function toggleTask(id) {
     if (!task) {
 
         return;
-
     }
 
 
@@ -4183,7 +4440,6 @@ function toggleTask(id) {
 
 
     renderTasks();
-
 }
 
 
@@ -4203,9 +4459,7 @@ function deleteTask(id) {
         currentTaskId === id
     ) {
 
-        currentTaskId =
-            null;
-
+        currentTaskId = null;
     }
 
 
@@ -4216,7 +4470,6 @@ function deleteTask(id) {
 
 
     renderTasks();
-
 }
 
 
@@ -4226,17 +4479,13 @@ function deleteTask(id) {
 
 function selectTask(id) {
 
-    currentTaskId =
-        id;
-
+    currentTaskId = id;
 
     updateCurrentTask();
-
 
     closeOverlayById(
         "tasksOverlay"
     );
-
 }
 
 
@@ -4253,7 +4502,6 @@ function updateCurrentTask() {
     if (!container) {
 
         return;
-
     }
 
 
@@ -4277,22 +4525,19 @@ function updateCurrentTask() {
                 : "<span>NO TASK SELECTED</span>";
 
         return;
-
     }
 
 
     const task =
         tasks.find(
-            t =>
-                t.id ===
+            t => t.id ===
                 currentTaskId
         );
 
 
     if (!task) {
 
-        currentTaskId =
-            null;
+        currentTaskId = null;
 
 
         container.innerHTML =
@@ -4302,9 +4547,7 @@ function updateCurrentTask() {
 
                 : "<span>NO TASK SELECTED</span>";
 
-
         return;
-
     }
 
 
@@ -4321,9 +4564,7 @@ function updateCurrentTask() {
             ${escapeHTML(task.title)}
 
         </span>
-
     `;
-
 }
 
 
@@ -4335,7 +4576,6 @@ if ($("addTaskBtn")) {
 
     $("addTaskBtn").onclick =
         addTask;
-
 }
 
 
@@ -4351,12 +4591,9 @@ if ($("taskInput")) {
                 ) {
 
                     addTask();
-
                 }
-
             }
         );
-
 }
 
 
@@ -4376,7 +4613,6 @@ if ($("taskList")) {
                 if (!button) {
 
                     return;
-
                 }
 
 
@@ -4394,7 +4630,6 @@ if ($("taskList")) {
                 ) {
 
                     toggleTask(id);
-
                 }
 
 
@@ -4404,9 +4639,7 @@ if ($("taskList")) {
                 ) {
 
                     deleteTask(id);
-
                 }
-
             }
         );
 
@@ -4425,7 +4658,6 @@ if ($("taskList")) {
                 if (!task) {
 
                     return;
-
                 }
 
 
@@ -4440,12 +4672,9 @@ if ($("taskList")) {
                     selectTask(
                         check.dataset.id
                     );
-
                 }
-
             }
         );
-
 }
 
 
@@ -4462,7 +4691,6 @@ function closeOverlayById(id) {
     if (!overlay) {
 
         return;
-
     }
 
 
@@ -4482,14 +4710,11 @@ function closeOverlayById(id) {
         "flex"
     ) {
 
-        overlay.style.display =
-            "";
-
+        overlay.style.display = "";
     }
 
 
     syncBodyScrollLock();
-
 }
 
 
@@ -4510,9 +4735,7 @@ function openOverlayById(id) {
             id
         );
 
-
         return;
-
     }
 
 
@@ -4529,7 +4752,6 @@ function openOverlayById(id) {
 
     document.body.style.overflow =
         "hidden";
-
 }
 
 
@@ -4542,11 +4764,14 @@ function syncBodyScrollLock() {
     const overlays = [
 
         "settingsOverlay",
-        "tasksOverlay",
-        "mediaOverlay",
-        "confirmOverlay",
-        "updatesModal"
 
+        "tasksOverlay",
+
+        "mediaOverlay",
+
+        "confirmOverlay",
+
+        "updatesModal"
     ];
 
 
@@ -4564,9 +4789,7 @@ function syncBodyScrollLock() {
                     element.classList.contains(
                         "show"
                     )
-
                 );
-
             }
         );
 
@@ -4575,7 +4798,6 @@ function syncBodyScrollLock() {
         anyOpen
             ? "hidden"
             : "";
-
 }
 
 
@@ -4588,11 +4810,14 @@ function closeAllOverlays() {
     const overlays = [
 
         "settingsOverlay",
-        "tasksOverlay",
-        "mediaOverlay",
-        "confirmOverlay",
-        "updatesModal"
 
+        "tasksOverlay",
+
+        "mediaOverlay",
+
+        "confirmOverlay",
+
+        "updatesModal"
     ];
 
 
@@ -4606,7 +4831,6 @@ function closeAllOverlays() {
             if (!overlay) {
 
                 return;
-
             }
 
 
@@ -4628,16 +4852,13 @@ function closeAllOverlays() {
 
                 overlay.style.display =
                     "";
-
             }
-
         }
     );
 
 
     document.body.style.overflow =
         "";
-
 }
 
 
@@ -4655,9 +4876,7 @@ if ($("settingsOpen")) {
             openOverlayById(
                 "settingsOverlay"
             );
-
         };
-
 }
 
 
@@ -4675,9 +4894,7 @@ if ($("tasksOpen")) {
             openOverlayById(
                 "tasksOverlay"
             );
-
         };
-
 }
 
 
@@ -4693,9 +4910,7 @@ if ($("mediaOpen")) {
             openOverlayById(
                 "mediaOverlay"
             );
-
         };
-
 }
 
 
@@ -4719,7 +4934,6 @@ const CLOSE_BUTTONS = {
 
     closeUpdates:
         "updatesModal"
-
 };
 
 
@@ -4740,7 +4954,6 @@ Object.entries(
         if (!button) {
 
             return;
-
         }
 
 
@@ -4752,13 +4965,12 @@ Object.entries(
 
                 event.stopPropagation();
 
+
                 closeOverlayById(
                     overlayId
                 );
-
             }
         );
-
     }
 );
 
@@ -4780,7 +4992,6 @@ document.addEventListener(
         if (!button) {
 
             return;
-
         }
 
 
@@ -4791,7 +5002,6 @@ document.addEventListener(
         if (!overlayId) {
 
             return;
-
         }
 
 
@@ -4803,7 +5013,6 @@ document.addEventListener(
         closeOverlayById(
             overlayId
         );
-
     }
 );
 
@@ -4818,7 +5027,6 @@ document.addEventListener(
     "mediaOverlay",
     "confirmOverlay",
     "updatesModal"
-
 ].forEach(
     overlayId => {
 
@@ -4829,7 +5037,6 @@ document.addEventListener(
         if (!overlay) {
 
             return;
-
         }
 
 
@@ -4845,12 +5052,9 @@ document.addEventListener(
                     closeOverlayById(
                         overlayId
                     );
-
                 }
-
             }
         );
-
     }
 );
 
@@ -4869,12 +5073,10 @@ document.addEventListener(
         ) {
 
             return;
-
         }
 
 
         closeAllOverlays();
-
     }
 );
 
@@ -4883,8 +5085,7 @@ document.addEventListener(
    FOCUS ONLY
    ========================================================= */
 
-let focusOnly =
-    false;
+let focusOnly = false;
 
 
 function toggleFocusOnly() {
@@ -4898,7 +5099,6 @@ function toggleFocusOnly() {
             "focus-only",
             focusOnly
         );
-
 }
 
 
@@ -4906,7 +5106,6 @@ if ($("focusOnlyBtn")) {
 
     $("focusOnlyBtn").onclick =
         toggleFocusOnly;
-
 }
 
 
@@ -4914,7 +5113,6 @@ if ($("focusExit")) {
 
     $("focusExit").onclick =
         toggleFocusOnly;
-
 }
 
 
@@ -4922,11 +5120,9 @@ if ($("focusExit")) {
    RESET
    ---------------------------------------------------------
    IMPORTANT:
-
    Reset يمسح بيانات اليوم فقط.
 
    لا يمسح:
-
    - streak
    - lastFocusDate
    - lifetime stats
@@ -4937,7 +5133,6 @@ function openResetConfirmation() {
     openOverlayById(
         "confirmOverlay"
     );
-
 }
 
 
@@ -4945,7 +5140,6 @@ if ($("resetBtn")) {
 
     $("resetBtn").onclick =
         openResetConfirmation;
-
 }
 
 
@@ -4953,7 +5147,6 @@ if ($("resetStatsBtn")) {
 
     $("resetStatsBtn").onclick =
         openResetConfirmation;
-
 }
 
 
@@ -4978,22 +5171,20 @@ if ($("confirmReset")) {
             if (
                 !stats.dailyFocus ||
                 typeof stats.dailyFocus !==
-                    "object"
+                "object"
             ) {
 
                 stats.dailyFocus = {};
-
             }
 
 
             if (
                 !stats.dailySessions ||
                 typeof stats.dailySessions !==
-                    "object"
+                "object"
             ) {
 
                 stats.dailySessions = {};
-
             }
 
 
@@ -5003,6 +5194,13 @@ if ($("confirmReset")) {
 
             stats.dailySessions[today] =
                 0;
+
+
+            /*
+               لا نمسح focusPeriods التاريخية.
+               Reset يعمل كما كان:
+               بيانات اليوم الإحصائية فقط.
+            */
 
 
             /* =============================================
@@ -5036,9 +5234,7 @@ if ($("confirmReset")) {
             closeOverlayById(
                 "confirmOverlay"
             );
-
         };
-
 }
 
 
@@ -5100,12 +5296,9 @@ document
                         content.classList.add(
                             "active"
                         );
-
                     }
-
                 }
             );
-
         }
     );
 
@@ -5135,7 +5328,6 @@ function getYouTubeId(url) {
                 .replace("/", "")
                 .split("/")[0]
                 .split("?")[0];
-
         }
 
 
@@ -5151,7 +5343,6 @@ function getYouTubeId(url) {
             return parsed.searchParams.get(
                 "v"
             );
-
         }
 
 
@@ -5164,7 +5355,6 @@ function getYouTubeId(url) {
             return parsed.pathname
                 .split("/embed/")[1]
                 .split("/")[0];
-
         }
 
 
@@ -5177,7 +5367,6 @@ function getYouTubeId(url) {
             return parsed.pathname
                 .split("/shorts/")[1]
                 .split("/")[0];
-
         }
 
     } catch (error) {
@@ -5186,12 +5375,10 @@ function getYouTubeId(url) {
             "Invalid YouTube URL:",
             error
         );
-
     }
 
 
     return null;
-
 }
 
 
@@ -5212,9 +5399,7 @@ if ($("youtubePlay")) {
                     "Please paste a YouTube URL."
                 );
 
-
                 return;
-
             }
 
 
@@ -5230,9 +5415,7 @@ if ($("youtubePlay")) {
                     "Invalid YouTube URL."
                 );
 
-
                 return;
-
             }
 
 
@@ -5266,7 +5449,6 @@ if ($("youtubePlay")) {
                         "
                         allowfullscreen>
                     </iframe>
-
                 `;
 
 
@@ -5280,9 +5462,7 @@ if ($("youtubePlay")) {
                 "YouTube",
                 "▶"
             );
-
         };
-
 }
 
 
@@ -5309,26 +5489,18 @@ function spotifyEmbedUrl(url) {
         ) {
 
             return (
-
                 "https://open.spotify.com/embed/" +
-
                 parts[0] +
-
                 "/" +
-
                 parts[1] +
-
                 "?utm_source=generator"
-
             );
-
         }
 
     } catch {}
 
 
     return null;
-
 }
 
 
@@ -5355,9 +5527,7 @@ if ($("spotifyPlay")) {
                     "Paste a Spotify track, playlist or album URL."
                 );
 
-
                 return;
-
             }
 
 
@@ -5374,7 +5544,6 @@ if ($("spotifyPlay")) {
                             picture-in-picture
                         ">
                     </iframe>
-
                 `;
 
 
@@ -5388,9 +5557,7 @@ if ($("spotifyPlay")) {
                 "Spotify",
                 "S"
             );
-
         };
-
 }
 
 
@@ -5398,8 +5565,7 @@ if ($("spotifyPlay")) {
    LOCAL MEDIA
    ========================================================= */
 
-let localMediaURL =
-    null;
+let localMediaURL = null;
 
 
 /* =========================================================
@@ -5451,7 +5617,6 @@ function showUploadFeedback(
 
             transition:
                 all .25s ease;
-
         `;
 
 
@@ -5476,9 +5641,7 @@ function showUploadFeedback(
             document.body.appendChild(
                 feedback
             );
-
         }
-
     }
 
 
@@ -5487,72 +5650,71 @@ function showUploadFeedback(
 
             ? `
 
-                <span
-                    style="
-                        display:inline-flex;
-                        width:20px;
-                        height:20px;
-                        align-items:center;
-                        justify-content:center;
-                        border-radius:50%;
-                        background:#22c55e;
-                        color:white;
-                        font-size:12px;
-                        font-weight:700;
-                    "
-                >
+                <span style="
+                    display:inline-flex;
+                    width:20px;
+                    height:20px;
+                    align-items:center;
+                    justify-content:center;
+                    border-radius:50%;
+                    background:#22c55e;
+                    color:white;
+                    font-size:12px;
+                    font-weight:700;
+                ">
                     ✓
                 </span>
 
                 <span>
                     ${escapeHTML(message)}
                 </span>
-
             `
 
             : `
 
-                <span
-                    style="
-                        display:inline-flex;
-                        width:20px;
-                        height:20px;
-                        align-items:center;
-                        justify-content:center;
-                        border-radius:50%;
-                        background:#ef4444;
-                        color:white;
-                        font-size:12px;
-                        font-weight:700;
-                    "
-                >
+                <span style="
+                    display:inline-flex;
+                    width:20px;
+                    height:20px;
+                    align-items:center;
+                    justify-content:center;
+                    border-radius:50%;
+                    background:#ef4444;
+                    color:white;
+                    font-size:12px;
+                    font-weight:700;
+                ">
                     !
                 </span>
 
                 <span>
                     ${escapeHTML(message)}
                 </span>
-
             `;
 
 
     feedback.style.background =
         success
+
             ? "rgba(34,197,94,.10)"
+
             : "rgba(239,68,68,.10)";
 
 
     feedback.style.border =
         success
+
             ? "1px solid rgba(34,197,94,.20)"
+
             : "1px solid rgba(239,68,68,.20)";
 
 
     feedback.style.color =
         success
-            ? "#86efac"
-            : "#fca5a5";
 
+            ? "#86efac"
+
+            : "#fca5a5";
 }
 
 
@@ -5575,7 +5737,6 @@ if ($("mediaFile")) {
                 if (!file) {
 
                     return;
-
                 }
 
 
@@ -5585,10 +5746,7 @@ if ($("mediaFile")) {
                         localMediaURL
                     );
 
-
-                    localMediaURL =
-                        null;
-
+                    localMediaURL = null;
                 }
 
 
@@ -5604,7 +5762,6 @@ if ($("mediaFile")) {
                     $("audioPlayer")
                         .style.display =
                             "none";
-
                 }
 
 
@@ -5620,7 +5777,6 @@ if ($("mediaFile")) {
                     $("videoPlayer")
                         .style.display =
                             "none";
-
                 }
 
 
@@ -5650,9 +5806,7 @@ if ($("mediaFile")) {
                     e.target.value =
                         "";
 
-
                     return;
-
                 }
 
 
@@ -5671,7 +5825,6 @@ if ($("mediaFile")) {
                     if (!player) {
 
                         return;
-
                     }
 
 
@@ -5679,13 +5832,9 @@ if ($("mediaFile")) {
                         localMediaURL;
 
 
-                    player.loop =
-                        true;
+                    player.loop = true;
 
-
-                    player.volume =
-                        1;
-
+                    player.volume = 1;
 
                     player.style.display =
                         "block";
@@ -5701,7 +5850,6 @@ if ($("mediaFile")) {
                                 showUploadFeedback(
                                     "Uploaded • Playing in loop"
                                 );
-
                             }
                         )
                         .catch(
@@ -5716,7 +5864,6 @@ if ($("mediaFile")) {
                                 showUploadFeedback(
                                     "Uploaded • Press play to start"
                                 );
-
                             }
                         );
 
@@ -5726,7 +5873,6 @@ if ($("mediaFile")) {
                         $("mediaName")
                             .textContent =
                                 file.name;
-
                     }
 
 
@@ -5735,7 +5881,6 @@ if ($("mediaFile")) {
                         $("mediaSource")
                             .textContent =
                                 "Local Audio";
-
                     }
 
 
@@ -5744,7 +5889,6 @@ if ($("mediaFile")) {
                         "Local Audio",
                         "♫"
                     );
-
                 }
 
 
@@ -5757,7 +5901,6 @@ if ($("mediaFile")) {
                     if (!player) {
 
                         return;
-
                     }
 
 
@@ -5765,13 +5908,9 @@ if ($("mediaFile")) {
                         localMediaURL;
 
 
-                    player.loop =
-                        true;
+                    player.loop = true;
 
-
-                    player.muted =
-                        false;
-
+                    player.muted = false;
 
                     player.style.display =
                         "block";
@@ -5787,7 +5926,6 @@ if ($("mediaFile")) {
                                 showUploadFeedback(
                                     "Uploaded • Playing in loop"
                                 );
-
                             }
                         )
                         .catch(
@@ -5802,7 +5940,6 @@ if ($("mediaFile")) {
                                 showUploadFeedback(
                                     "Uploaded • Press play to start"
                                 );
-
                             }
                         );
 
@@ -5812,7 +5949,6 @@ if ($("mediaFile")) {
                         $("mediaName")
                             .textContent =
                                 file.name;
-
                     }
 
 
@@ -5821,7 +5957,6 @@ if ($("mediaFile")) {
                         $("mediaSource")
                             .textContent =
                                 "Local Video";
-
                     }
 
 
@@ -5830,12 +5965,9 @@ if ($("mediaFile")) {
                         "Local Video",
                         "▶"
                     );
-
                 }
-
             }
         );
-
 }
 
 
@@ -5854,7 +5986,6 @@ function showNowPlaying(
         $("mediaName")
             .textContent =
                 name;
-
     }
 
 
@@ -5863,7 +5994,6 @@ function showNowPlaying(
         $("mediaSource")
             .textContent =
                 source;
-
     }
 
 
@@ -5872,7 +6002,6 @@ function showNowPlaying(
         $("mediaArtwork")
             .textContent =
                 artwork;
-
     }
 
 
@@ -5881,9 +6010,7 @@ function showNowPlaying(
         $("nowPlaying")
             .classList
             .add("show");
-
     }
-
 }
 
 
@@ -5891,8 +6018,7 @@ function showNowPlaying(
    SPOTIFY OAUTH — PKCE
    ========================================================= */
 
-let spotifyUser =
-    null;
+let spotifyUser = null;
 
 
 function randomString(
@@ -5903,8 +6029,7 @@ function randomString(
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
 
 
-    let result =
-        "";
+    let result = "";
 
 
     const array =
@@ -5926,13 +6051,11 @@ function randomString(
                     value %
                     chars.length
                 ];
-
         }
     );
 
 
     return result;
-
 }
 
 
@@ -5949,7 +6072,6 @@ async function sha256(value) {
         "SHA-256",
         data
     );
-
 }
 
 
@@ -5974,34 +6096,25 @@ function base64url(buffer) {
             /=/g,
             ""
         );
-
 }
 
 
 async function spotifyLogin() {
 
     if (
-
         !window.RAKKEZ_CONFIG ||
-
         !RAKKEZ_CONFIG.spotify ||
-
         !RAKKEZ_CONFIG.spotify.clientId ||
-
         !RAKKEZ_CONFIG.spotify.clientId.trim() ||
-
         RAKKEZ_CONFIG.spotify.clientId ===
             "YOUR_SPOTIFY_CLIENT_ID"
-
     ) {
 
         alert(
             "Add your Spotify Client ID inside config.js first."
         );
 
-
         return;
-
     }
 
 
@@ -6049,14 +6162,12 @@ async function spotifyLogin() {
                 RAKKEZ_CONFIG
                     .spotify
                     .scopes
-
         });
 
 
     window.location.href =
         "https://accounts.spotify.com/authorize?" +
         params.toString();
-
 }
 
 
@@ -6075,7 +6186,6 @@ async function handleSpotifyCallback() {
     if (!code) {
 
         return;
-
     }
 
 
@@ -6088,7 +6198,6 @@ async function handleSpotifyCallback() {
     if (!verifier) {
 
         return;
-
     }
 
 
@@ -6114,7 +6223,6 @@ async function handleSpotifyCallback() {
 
                 code_verifier:
                     verifier
-
             });
 
 
@@ -6123,18 +6231,15 @@ async function handleSpotifyCallback() {
                 "https://accounts.spotify.com/api/token",
                 {
 
-                    method:
-                        "POST",
+                    method: "POST",
 
                     headers: {
 
                         "Content-Type":
                             "application/x-www-form-urlencoded"
-
                     },
 
                     body
-
                 }
             );
 
@@ -6149,9 +6254,7 @@ async function handleSpotifyCallback() {
                 token
             );
 
-
             return;
-
         }
 
 
@@ -6166,7 +6269,6 @@ async function handleSpotifyCallback() {
                     Date.now() +
                     token.expires_in *
                     1000
-
             }
         );
 
@@ -6191,9 +6293,7 @@ async function handleSpotifyCallback() {
             "Spotify OAuth:",
             error
         );
-
     }
-
 }
 
 
@@ -6215,9 +6315,7 @@ async function loadSpotifyUser() {
             null
         );
 
-
         return;
-
     }
 
 
@@ -6233,9 +6331,7 @@ async function loadSpotifyUser() {
                         Authorization:
                             "Bearer " +
                             auth.accessToken
-
                     }
-
                 }
             );
 
@@ -6253,7 +6349,6 @@ async function loadSpotifyUser() {
 
 
             return;
-
         }
 
 
@@ -6270,9 +6365,7 @@ async function loadSpotifyUser() {
         updateSpotifyUI(
             null
         );
-
     }
-
 }
 
 
@@ -6286,7 +6379,6 @@ function updateSpotifyUI(user) {
                 .textContent =
                     user.display_name ||
                     user.id;
-
         }
 
 
@@ -6300,7 +6392,6 @@ function updateSpotifyUI(user) {
             $("spotifyLogin")
                 .classList
                 .add("connected");
-
         }
 
 
@@ -6313,7 +6404,6 @@ function updateSpotifyUI(user) {
                         user.display_name ||
                         user.id
                     );
-
         }
 
     } else {
@@ -6323,7 +6413,6 @@ function updateSpotifyUI(user) {
             $("spotifyStatus")
                 .textContent =
                     "Not connected";
-
         }
 
 
@@ -6339,11 +6428,8 @@ function updateSpotifyUI(user) {
                 .remove(
                     "connected"
                 );
-
         }
-
     }
-
 }
 
 
@@ -6351,7 +6437,6 @@ if ($("spotifyLogin")) {
 
     $("spotifyLogin").onclick =
         spotifyLogin;
-
 }
 
 
@@ -6359,12 +6444,9 @@ if ($("spotifyLogin")) {
    GOOGLE / YOUTUBE OAUTH
    ========================================================= */
 
-let googleUser =
-    null;
+let googleUser = null;
 
-
-let googleTokenClient =
-    null;
+let googleTokenClient = null;
 
 
 function initializeGoogle() {
@@ -6375,26 +6457,19 @@ function initializeGoogle() {
     ) {
 
         return;
-
     }
 
 
     if (
-
         !window.RAKKEZ_CONFIG ||
-
         !RAKKEZ_CONFIG.google ||
-
         !RAKKEZ_CONFIG.google.clientId ||
-
         RAKKEZ_CONFIG.google.clientId.includes(
             "YOUR_GOOGLE"
         )
-
     ) {
 
         return;
-
     }
 
 
@@ -6412,9 +6487,7 @@ function initializeGoogle() {
 
                 callback:
                     handleGoogleToken
-
             });
-
 }
 
 
@@ -6426,15 +6499,12 @@ function googleLogin() {
             "Add your Google Client ID inside config.js first."
         );
 
-
         return;
-
     }
 
 
     googleTokenClient
         .requestAccessToken();
-
 }
 
 
@@ -6448,9 +6518,7 @@ async function handleGoogleToken(
             response
         );
 
-
         return;
-
     }
 
 
@@ -6467,7 +6535,6 @@ async function handleGoogleToken(
 
             created:
                 Date.now()
-
         }
     );
 
@@ -6484,9 +6551,7 @@ async function handleGoogleToken(
                         Authorization:
                             "Bearer " +
                             token
-
                     }
-
                 }
             );
 
@@ -6504,9 +6569,7 @@ async function handleGoogleToken(
         console.error(
             error
         );
-
     }
-
 }
 
 
@@ -6525,7 +6588,6 @@ function updateGoogleUI(user) {
             $("googleStatus")
                 .textContent =
                     name;
-
         }
 
 
@@ -6539,7 +6601,6 @@ function updateGoogleUI(user) {
             $("googleLogin")
                 .classList
                 .add("connected");
-
         }
 
 
@@ -6549,7 +6610,6 @@ function updateGoogleUI(user) {
                 .textContent =
                     "Connected: " +
                     name;
-
         }
 
     } else {
@@ -6559,7 +6619,6 @@ function updateGoogleUI(user) {
             $("googleStatus")
                 .textContent =
                     "Not connected";
-
         }
 
 
@@ -6575,11 +6634,8 @@ function updateGoogleUI(user) {
                 .remove(
                     "connected"
                 );
-
         }
-
     }
-
 }
 
 
@@ -6587,7 +6643,6 @@ if ($("googleLogin")) {
 
     $("googleLogin").onclick =
         googleLogin;
-
 }
 
 
@@ -6606,16 +6661,13 @@ function applyTheme() {
             settings.theme
         );
 
-
         return;
-
     }
 
 
     document.documentElement
         .dataset.theme =
             settings.theme;
-
 }
 
 
@@ -6631,9 +6683,7 @@ function restoreAmbient() {
     ) {
 
         window.restoreRakkeZAmbient();
-
     }
-
 }
 
 
@@ -6645,7 +6695,6 @@ if ($("startBtn")) {
 
     $("startBtn").onclick =
         startTimer;
-
 }
 
 
@@ -6658,31 +6707,24 @@ document.addEventListener(
     e => {
 
         if (
-
             e.target.tagName ===
                 "INPUT" ||
-
             e.target.tagName ===
                 "TEXTAREA" ||
-
             e.target.isContentEditable
-
         ) {
 
             return;
-
         }
 
 
         if (
-            e.code ===
-            "Space"
+            e.code === "Space"
         ) {
 
             e.preventDefault();
 
             startTimer();
-
         }
 
 
@@ -6692,7 +6734,6 @@ document.addEventListener(
         ) {
 
             openResetConfirmation();
-
         }
 
 
@@ -6702,9 +6743,7 @@ document.addEventListener(
         ) {
 
             toggleFocusOnly();
-
         }
-
     }
 );
 
@@ -6736,7 +6775,6 @@ function finishLoadingScreen() {
     if (!loading) {
 
         return;
-
     }
 
 
@@ -6754,11 +6792,9 @@ function finishLoadingScreen() {
                     "none";
 
             } catch {}
-
         },
         500
     );
-
 }
 
 
@@ -6777,7 +6813,7 @@ function safeAsync(fn) {
         if (
             result &&
             typeof result.catch ===
-                "function"
+            "function"
         ) {
 
             result.catch(
@@ -6787,10 +6823,8 @@ function safeAsync(fn) {
                         "Background initialization failed:",
                         error
                     );
-
                 }
             );
-
         }
 
     } catch (error) {
@@ -6799,9 +6833,7 @@ function safeAsync(fn) {
             "Background initialization failed:",
             error
         );
-
     }
-
 }
 
 
@@ -6817,31 +6849,37 @@ const THEME_SELECTORS = {
     dark: [
 
         "darkMode",
-        "nightMode",
-        "nightBtn",
-        "darkBtn",
-        "themeDark"
 
+        "nightMode",
+
+        "nightBtn",
+
+        "darkBtn",
+
+        "themeDark"
     ],
 
     light: [
 
         "lightMode",
-        "sunMode",
-        "sunBtn",
-        "lightBtn",
-        "themeLight"
 
+        "sunMode",
+
+        "sunBtn",
+
+        "lightBtn",
+
+        "themeLight"
     ],
 
     toggle: [
 
         "themeToggle",
+
         "themeBtn",
+
         "themeSwitch"
-
     ]
-
 };
 
 
@@ -6849,7 +6887,9 @@ const THEME_SELECTORS = {
    GET FIRST EXISTING ELEMENT
    ========================================================= */
 
-function getFirstExistingElement(ids) {
+function getFirstExistingElement(
+    ids
+) {
 
     for (const id of ids) {
 
@@ -6860,14 +6900,11 @@ function getFirstExistingElement(ids) {
         if (element) {
 
             return element;
-
         }
-
     }
 
 
     return null;
-
 }
 
 
@@ -6878,8 +6915,11 @@ function getFirstExistingElement(ids) {
 function applyTheme() {
 
     let theme =
-        settings.theme === "light"
+        settings.theme ===
+        "light"
+
             ? "light"
+
             : "dark";
 
 
@@ -6934,7 +6974,6 @@ function applyTheme() {
                 ? "true"
                 : "false"
         );
-
     }
 
 
@@ -6952,7 +6991,6 @@ function applyTheme() {
                 ? "true"
                 : "false"
         );
-
     }
 
 
@@ -6976,7 +7014,6 @@ function applyTheme() {
                 ? "true"
                 : "false"
         );
-
     }
 
 
@@ -6988,7 +7025,6 @@ function applyTheme() {
         STORAGE.settings,
         settings
     );
-
 }
 
 
@@ -7003,9 +7039,7 @@ function setTheme(theme) {
         theme !== "light"
     ) {
 
-        theme =
-            "dark";
-
+        theme = "dark";
     }
 
 
@@ -7020,7 +7054,6 @@ function setTheme(theme) {
 
 
     applyTheme();
-
 }
 
 
@@ -7031,24 +7064,16 @@ function setTheme(theme) {
 function toggleTheme() {
 
     const currentTheme =
-        settings.theme ===
-            "light"
-
+        settings.theme === "light"
             ? "light"
             : "dark";
 
 
     setTheme(
-
-        currentTheme ===
-            "dark"
-
+        currentTheme === "dark"
             ? "light"
-
             : "dark"
-
     );
-
 }
 
 
@@ -7070,13 +7095,9 @@ function initializeThemeEvents() {
             "click",
             function () {
 
-                setTheme(
-                    "dark"
-                );
-
+                setTheme("dark");
             }
         );
-
     }
 
 
@@ -7092,13 +7113,9 @@ function initializeThemeEvents() {
             "click",
             function () {
 
-                setTheme(
-                    "light"
-                );
-
+                setTheme("light");
             }
         );
-
     }
 
 
@@ -7118,9 +7135,7 @@ function initializeThemeEvents() {
             "click",
             toggleTheme
         );
-
     }
-
 }
 
 
@@ -7148,9 +7163,7 @@ window.RakkeZTheme = {
                 ? "light"
 
                 : "dark";
-
         }
-
 };
 
 
@@ -7174,7 +7187,6 @@ async function init() {
             "Alarm popup initialization failed:",
             error
         );
-
     }
 
 
@@ -7198,7 +7210,6 @@ async function init() {
                 STORAGE.settings,
                 settings
             );
-
         }
 
     } catch (error) {
@@ -7207,7 +7218,6 @@ async function init() {
             "Alarm settings initialization failed:",
             error
         );
-
     }
 
 
@@ -7225,7 +7235,6 @@ async function init() {
             "Streak initialization failed:",
             error
         );
-
     }
 
 
@@ -7250,9 +7259,7 @@ async function init() {
 
 
         const focusMinutes =
-            Number(
-                settings.focus
-            );
+            Number(settings.focus);
 
 
         const safeFocus =
@@ -7280,9 +7287,33 @@ async function init() {
             false;
 
 
-        timerState.interval =
+        timerState.startedAt =
             null;
 
+
+        timerState.timestamp =
+            Date.now();
+
+
+        timerState.interval =
+            null;
+    }
+
+
+    /* =====================================================
+       TIMER MODE BUTTONS
+       ===================================================== */
+
+    try {
+
+        initializeTimerModeButtons();
+
+    } catch (error) {
+
+        console.warn(
+            "Timer mode buttons initialization failed:",
+            error
+        );
     }
 
 
@@ -7300,7 +7331,6 @@ async function init() {
             "Timer UI initialization failed:",
             error
         );
-
     }
 
 
@@ -7314,7 +7344,6 @@ async function init() {
             "Stats initialization failed:",
             error
         );
-
     }
 
 
@@ -7328,7 +7357,6 @@ async function init() {
             "Settings UI initialization failed:",
             error
         );
-
     }
 
 
@@ -7342,7 +7370,6 @@ async function init() {
             "Tasks initialization failed:",
             error
         );
-
     }
 
 
@@ -7356,7 +7383,6 @@ async function init() {
             "Theme initialization failed:",
             error
         );
-
     }
 
 
@@ -7370,7 +7396,6 @@ async function init() {
             "Theme events initialization failed:",
             error
         );
-
     }
 
 
@@ -7388,7 +7413,6 @@ async function init() {
             "Ambient initialization failed:",
             error
         );
-
     }
 
 
@@ -7407,7 +7431,6 @@ async function init() {
         async () => {
 
             await handleSpotifyCallback();
-
         }
     );
 
@@ -7416,7 +7439,6 @@ async function init() {
         async () => {
 
             await loadSpotifyUser();
-
         }
     );
 
@@ -7425,10 +7447,8 @@ async function init() {
         async () => {
 
             initializeGoogle();
-
         }
     );
-
 }
 
 
@@ -7460,7 +7480,6 @@ if (
     safeAsync(
         init
     );
-
 }
 
 
@@ -7478,8 +7497,128 @@ window.RakkeZOverlay = {
 
     closeAll:
         closeAllOverlays
-
 };
+
+
+/* =========================================================
+   EXACT FOCUS PERIOD HELPERS
+   ========================================================= */
+
+function formatFocusPeriod(period) {
+
+    if (!period) {
+
+        return "";
+    }
+
+
+    const start =
+        new Date(
+            Number(
+                period.start
+            )
+        );
+
+
+    const end =
+        new Date(
+            Number(
+                period.end
+            )
+        );
+
+
+    const lang =
+        getCurrentLanguage();
+
+
+    const locale =
+        lang === "ar"
+            ? "ar-SA"
+            : "en-US";
+
+
+    const startText =
+        start.toLocaleTimeString(
+            locale,
+            {
+
+                hour: "numeric",
+
+                minute: "2-digit"
+            }
+        );
+
+
+    const endText =
+        end.toLocaleTimeString(
+            locale,
+            {
+
+                hour: "numeric",
+
+                minute: "2-digit"
+            }
+        );
+
+
+    const minutes =
+        Math.floor(
+            Number(
+                period.durationSeconds ||
+                0
+            ) / 60
+        );
+
+
+    return {
+
+        start:
+            startText,
+
+        end:
+            endText,
+
+        duration:
+            minutes
+    };
+}
+
+
+/* =========================================================
+   GET TODAY FOCUS PERIODS
+   ========================================================= */
+
+function getTodayFocusPeriods() {
+
+    const today =
+        todayKey();
+
+
+    if (
+        !Array.isArray(
+            stats.focusPeriods
+        )
+    ) {
+
+        return [];
+    }
+
+
+    return stats.focusPeriods
+
+        .filter(
+            period =>
+                period.date ===
+                today
+        )
+
+        .sort(
+            (a, b) =>
+                Number(a.start) -
+                Number(b.start)
+        );
+}
 
 
 /* =========================================================
