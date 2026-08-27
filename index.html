@@ -1937,24 +1937,35 @@
 
         <div class="controls">
 
-            <button
-                class="primary"
-                id="startBtn"
-                type="button"
-            >
-                START
-            </button>
+    <button
+        class="primary"
+        id="startBtn"
+        type="button"
+    >
+        START
+    </button>
 
 
-            <button
-                class="secondary"
-                id="resetBtn"
-                type="button"
-            >
-                ↻
-            </button>
+    <button
+        class="secondary"
+        id="resetBtn"
+        type="button"
+        title="Reset Timer"
+    >
+        ↻
+    </button>
 
-        </div>
+
+    <button
+        class="secondary rakkez-mini-open-btn"
+        id="miniTimerBtn"
+        type="button"
+        title="Mini Timer"
+    >
+        ⧉
+    </button>
+
+</div>
 
     </section>
 
@@ -4410,6 +4421,1737 @@ body.light .rakkez-mini-close,
     </div>
 
 </div>
+
+
+
+
+
+
+
+<!-- =====================================================
+     RAKKEZ TIMER ENHANCEMENTS
+     FOCUS / SHORT BREAK / LONG BREAK
+     RESET TIMER
+     MINI TIMER
+===================================================== -->
+
+<style>
+
+/* =====================================================
+   TIMER TABS
+===================================================== */
+
+.rakkez-timer-tabs {
+    width: min(430px, 100%);
+    margin: 0 auto 24px;
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.07);
+    box-sizing: border-box;
+}
+
+.rakkez-timer-tab {
+    flex: 1;
+    min-width: 0;
+    height: 38px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: rgba(255,255,255,.38);
+    font-family: "DM Sans", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+.rakkez-timer-tab:hover {
+    color: rgba(255,255,255,.85);
+    background: rgba(255,255,255,.045);
+}
+
+.rakkez-timer-tab.active {
+    color: #fff;
+    background: rgba(255,255,255,.095);
+    box-shadow: 0 4px 15px rgba(0,0,0,.16);
+}
+
+.rakkez-timer-tab:active {
+    transform: scale(.98);
+}
+
+
+/* =====================================================
+   MINI TIMER BUTTON
+===================================================== */
+
+.rakkez-mini-open-btn {
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   RESET TIMER MODAL
+===================================================== */
+
+.rakkez-reset-choice {
+    max-width: 430px;
+}
+
+.rakkez-reset-options {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.rakkez-reset-option {
+    width: 100%;
+    min-height: 58px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 13px;
+    background: rgba(255,255,255,.035);
+    color: #fff;
+    cursor: pointer;
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+.rakkez-reset-option:hover {
+    background: rgba(255,255,255,.07);
+    border-color: rgba(255,255,255,.15);
+    transform: translateY(-1px);
+}
+
+.rakkez-reset-option-text {
+    min-width: 0;
+    text-align: left;
+}
+
+.rakkez-reset-option-title {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.rakkez-reset-option-description {
+    margin-top: 4px;
+    color: rgba(255,255,255,.38);
+    font-size: 10px;
+}
+
+.rakkez-reset-option-icon {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: rgba(255,255,255,.055);
+    color: rgba(255,255,255,.75);
+}
+
+
+/* =====================================================
+   MINI TIMER
+===================================================== */
+
+.rakkez-mini-timer {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(
+            circle at 50% 25%,
+            rgba(22,131,255,.22),
+            transparent 48%
+        ),
+        #03050a;
+    color: #fff;
+    font-family: "DM Sans", sans-serif;
+}
+
+.rakkez-mini-bg {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(22,131,255,.18),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(80,100,180,.14),
+            transparent 40%
+        );
+}
+
+.rakkez-mini-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+.rakkez-mini-mode {
+    margin-bottom: 9px;
+    color: rgba(255,255,255,.42);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.rakkez-mini-time {
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(50px, 14vw, 90px);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -3px;
+    font-variant-numeric: tabular-nums;
+}
+
+.rakkez-mini-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.rakkez-mini-buttons button {
+    height: 38px;
+    min-width: 42px;
+    padding: 0 13px;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 11px;
+    background: rgba(255,255,255,.07);
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.rakkez-mini-buttons button:hover {
+    background: rgba(255,255,255,.12);
+}
+
+.rakkez-mini-start {
+    min-width: 82px !important;
+    background: #fff !important;
+    color: #05070b !important;
+    border-color: transparent !important;
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   MINI TIMER FALLBACK WINDOW
+===================================================== */
+
+#rakkezMiniFloating {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 280px;
+    min-height: 150px;
+    z-index: 2147483000;
+    display: none;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 20px;
+    background: #03050a;
+    box-shadow: 0 25px 80px rgba(0,0,0,.55);
+}
+
+#rakkezMiniFloating.show {
+    display: flex;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .rakkez-timer-tabs {
+        margin-bottom: 18px;
+    }
+
+    .rakkez-timer-tab {
+        height: 36px;
+        padding: 0 5px;
+        font-size: 10px;
+    }
+
+}
+
+</style>
+
+
+<!-- =====================================================
+     RESET TIMER CHOICE
+===================================================== -->
+
+<div
+    class="overlay"
+    id="rakkezResetTimerOverlay"
+>
+
+    <div class="panel rakkez-reset-choice">
+
+        <div class="confirm-icon">
+            ↻
+        </div>
+
+        <div class="panel-title">
+            Reset Timer
+        </div>
+
+        <div class="confirm-description">
+            Would you like to reset your current segment, or your full session?
+        </div>
+
+        <div class="rakkez-reset-options">
+
+            <button
+                id="rakkezResetCurrent"
+                class="rakkez-reset-option"
+                type="button"
+            >
+
+                <div class="rakkez-reset-option-text">
+
+                    <div class="rakkez-reset-option-title">
+                        Reset Current Segment
+                    </div>
+
+                    <div class="rakkez-reset-option-description">
+                        Restart the current Focus or Break timer.
+                    </div>
+
+                </div>
+
+                <div class="rakkez-reset-option-icon">
+                    ↻
+                </div>
+
+            </button>
+
+
+            <button
+                id="rakkezResetFull"
+                class="rakkez-reset-option"
+                type="button"
+            >
+
+                <div class="rakkez-reset-option-text">
+
+                    <div class="rakkez-reset-option-title">
+                        Reset Full Session
+                    </div>
+
+                    <div class="rakkez-reset-option-description">
+                        Return to Focus and reset the current session cycle.
+                    </div>
+
+                </div>
+
+                <div class="rakkez-reset-option-icon">
+                    ⟳
+                </div>
+
+            </button>
+
+
+            <button
+                id="rakkezResetCancel"
+                class="secondary"
+                type="button"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MINI TIMER FLOATING FALLBACK
+===================================================== -->
+
+<div
+    id="rakkezMiniFloating"
+    aria-hidden="true"
+>
+
+    <div class="rakkez-mini-timer">
+
+        <div class="rakkez-mini-bg"></div>
+
+        <div class="rakkez-mini-content">
+
+            <div
+                class="rakkez-mini-mode"
+                id="rakkezMiniMode"
+            >
+                FOCUS
+            </div>
+
+            <div
+                class="rakkez-mini-time"
+                id="rakkezMiniTime"
+            >
+                25:00
+            </div>
+
+            <div class="rakkez-mini-buttons">
+
+                <button
+                    id="rakkezMiniStart"
+                    class="rakkez-mini-start"
+                    type="button"
+                >
+                    START
+                </button>
+
+                <button
+                    id="rakkezMiniReset"
+                    type="button"
+                >
+                    ↻
+                </button>
+
+                <button
+                    id="rakkezMiniClose"
+                    type="button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   RAKKEZ TIMER ENHANCEMENTS
+===================================================== */
+
+(function () {
+
+    "use strict";
+
+
+    /* =================================================
+       HELPERS
+    ================================================= */
+
+    const $ = function (id) {
+        return document.getElementById(id);
+    };
+
+
+    const timerElement =
+        $("timer");
+
+    const modeElement =
+        $("modeText");
+
+    const startButton =
+        $("startBtn");
+
+    const resetButton =
+        $("resetBtn");
+
+    const timerCard =
+        document.querySelector(".timer-card");
+
+
+    /* =================================================
+       CREATE TIMER TABS
+       This allows us to avoid manually modifying the
+       existing timer HTML.
+    ================================================= */
+
+    if (
+        timerCard &&
+        !document.querySelector(".rakkez-timer-tabs")
+    ) {
+
+        const tabs =
+            document.createElement("div");
+
+        tabs.className =
+            "rakkez-timer-tabs";
+
+        tabs.innerHTML = `
+
+            <button
+                class="rakkez-timer-tab active"
+                data-rakkez-timer-mode="focus"
+                type="button"
+            >
+                Focus
+            </button>
+
+            <button
+                class="rakkez-timer-tab"
+                data-rakkez-timer-mode="short"
+                type="button"
+            >
+                Short Break
+            </button>
+
+            <button
+                class="rakkez-timer-tab"
+                data-rakkez-timer-mode="long"
+                type="button"
+            >
+                Long Break
+            </button>
+
+        `;
+
+
+        const mode =
+            modeElement;
+
+
+        if (mode) {
+
+            timerCard.insertBefore(
+                tabs,
+                mode
+            );
+
+        } else {
+
+            timerCard.prepend(tabs);
+
+        }
+
+    }
+
+
+    /* =================================================
+       TIMER STATE DETECTION
+    ================================================= */
+
+    function getMode() {
+
+        const text =
+            modeElement
+                ? modeElement.textContent
+                    .trim()
+                    .toUpperCase()
+                : "FOCUS";
+
+
+        if (
+            text.includes("SHORT")
+        ) {
+
+            return "short";
+
+        }
+
+
+        if (
+            text.includes("LONG")
+        ) {
+
+            return "long";
+
+        }
+
+
+        return "focus";
+
+    }
+
+
+    function getSeconds() {
+
+        if (!timerElement) {
+            return 0;
+        }
+
+
+        const value =
+            timerElement.textContent
+                .trim()
+                .split(":");
+
+
+        if (value.length !== 2) {
+            return 0;
+        }
+
+
+        return (
+            Number(value[0]) * 60
+            +
+            Number(value[1])
+        );
+
+    }
+
+
+    function formatTime(seconds) {
+
+        seconds =
+            Math.max(
+                0,
+                Math.floor(
+                    Number(seconds) || 0
+                )
+            );
+
+
+        const minutes =
+            Math.floor(seconds / 60);
+
+        const remaining =
+            seconds % 60;
+
+
+        return (
+            String(minutes).padStart(2, "0")
+            +
+            ":"
+            +
+            String(remaining).padStart(2, "0")
+        );
+
+    }
+
+
+    /* =================================================
+       UPDATE TAB
+    ================================================= */
+
+    function updateTabs() {
+
+        const current =
+            getMode();
+
+
+        document
+            .querySelectorAll(
+                ".rakkez-timer-tab"
+            )
+            .forEach(function (tab) {
+
+                tab.classList.toggle(
+                    "active",
+                    tab.dataset.rakkezTimerMode === current
+                );
+
+            });
+
+    }
+
+
+    /* =================================================
+       CHANGE MODE
+    ================================================= */
+
+    function changeMode(mode) {
+
+        /*
+         * First try the functions that a normal
+         * RakkeZ timer implementation commonly exposes.
+         */
+
+        const candidates = [
+            "setTimerMode",
+            "switchTimerMode",
+            "changeTimerMode",
+            "setMode",
+            "switchMode",
+            "changeMode"
+        ];
+
+
+        for (
+            let i = 0;
+            i < candidates.length;
+            i++
+        ) {
+
+            const name =
+                candidates[i];
+
+
+            if (
+                typeof window[name] === "function"
+            ) {
+
+                try {
+
+                    window[name](mode);
+
+                    updateTabs();
+
+                    return true;
+
+                } catch (error) {
+
+                    console.warn(
+                        "RakkeZ timer mode:",
+                        name,
+                        error
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        /*
+         * Fallback:
+         * trigger existing UI buttons if the
+         * application exposes them.
+         */
+
+        const possibleButtons = [
+
+            `[data-mode="${mode}"]`,
+
+            `[data-timer-mode="${mode}"]`,
+
+            `[data-mode-switch="${mode}"]`
+
+        ];
+
+
+        for (
+            let i = 0;
+            i < possibleButtons.length;
+            i++
+        ) {
+
+            const button =
+                document.querySelector(
+                    possibleButtons[i]
+                );
+
+
+            if (button) {
+
+                button.click();
+
+                updateTabs();
+
+                return true;
+
+            }
+
+        }
+
+
+        /*
+         * If the existing timer stores settings in
+         * localStorage, update the timer visually
+         * without touching statistics.
+         */
+
+        try {
+
+            const settings =
+                JSON.parse(
+                    localStorage.getItem(
+                        "rakkez_settings"
+                    ) || "{}"
+                );
+
+
+            let minutes;
+
+
+            if (mode === "focus") {
+
+                minutes =
+                    Number(settings.focus || 25);
+
+            }
+
+            else if (mode === "short") {
+
+                minutes =
+                    Number(
+                        settings.shortBreak || 5
+                    );
+
+            }
+
+            else {
+
+                minutes =
+                    Number(
+                        settings.longBreak || 15
+                    );
+
+            }
+
+
+            /*
+             * Only modify the timer if we can identify
+             * the current timer state object.
+             */
+
+            const stateRaw =
+                localStorage.getItem(
+                    "rakkez_timer_state"
+                );
+
+
+            if (stateRaw) {
+
+                const state =
+                    JSON.parse(stateRaw);
+
+
+                state.mode =
+                    mode;
+
+                state.remaining =
+                    minutes * 60;
+
+                state.total =
+                    minutes * 60;
+
+                state.running =
+                    false;
+
+
+                localStorage.setItem(
+                    "rakkez_timer_state",
+                    JSON.stringify(state)
+                );
+
+
+                if (timerElement) {
+
+                    timerElement.textContent =
+                        formatTime(
+                            minutes * 60
+                        );
+
+                }
+
+
+                if (modeElement) {
+
+                    modeElement.textContent =
+                        mode === "focus"
+                            ? "FOCUS"
+                            : mode === "short"
+                                ? "SHORT BREAK"
+                                : "LONG BREAK";
+
+                }
+
+
+                updateTabs();
+
+                return true;
+
+            }
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ timer fallback failed:",
+                error
+            );
+
+        }
+
+
+        return false;
+
+    }
+
+
+    /* =================================================
+       TAB EVENTS
+    ================================================= */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const tab =
+                event.target.closest(
+                    ".rakkez-timer-tab"
+                );
+
+
+            if (!tab) {
+                return;
+            }
+
+
+            const mode =
+                tab.dataset.rakkezTimerMode;
+
+
+            if (!mode) {
+                return;
+            }
+
+
+            changeMode(mode);
+
+        }
+    );
+
+
+    /* =================================================
+       RESET MODAL
+    ================================================= */
+
+    const resetOverlay =
+        $("rakkezResetTimerOverlay");
+
+    const resetCurrent =
+        $("rakkezResetCurrent");
+
+    const resetFull =
+        $("rakkezResetFull");
+
+    const resetCancel =
+        $("rakkezResetCancel");
+
+
+    function openReset() {
+
+        if (resetOverlay) {
+
+            resetOverlay.classList.add(
+                "show"
+            );
+
+        }
+
+    }
+
+
+    function closeReset() {
+
+        if (resetOverlay) {
+
+            resetOverlay.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Capture reset click before the old
+     * reset handler can execute.
+     */
+
+    if (resetButton) {
+
+        resetButton.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                openReset();
+
+            },
+            true
+        );
+
+    }
+
+
+    /* =================================================
+       RESET CURRENT SEGMENT
+    ================================================= */
+
+    if (resetCurrent) {
+
+        resetCurrent.addEventListener(
+            "click",
+            function () {
+
+                closeReset();
+
+
+                /*
+                 * Try existing timer reset functions.
+                 */
+
+                const functions = [
+                    "resetTimer",
+                    "resetCurrentTimer",
+                    "resetCurrentSegment"
+                ];
+
+
+                for (
+                    let i = 0;
+                    i < functions.length;
+                    i++
+                ) {
+
+                    const fn =
+                        functions[i];
+
+
+                    if (
+                        typeof window[fn] === "function"
+                    ) {
+
+                        try {
+
+                            window[fn]();
+
+                            return;
+
+                        } catch (error) {
+
+                            console.warn(
+                                fn,
+                                error
+                            );
+
+                        }
+
+                    }
+
+                }
+
+
+                /*
+                 * Fallback using saved state.
+                 */
+
+                resetFromStorage(
+                    getMode()
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =================================================
+       RESET FULL SESSION
+    ================================================= */
+
+    if (resetFull) {
+
+        resetFull.addEventListener(
+            "click",
+            function () {
+
+                closeReset();
+
+
+                const functions = [
+                    "resetSession",
+                    "resetFullSession",
+                    "resetPomodoroSession"
+                ];
+
+
+                for (
+                    let i = 0;
+                    i < functions.length;
+                    i++
+                ) {
+
+                    const fn =
+                        functions[i];
+
+
+                    if (
+                        typeof window[fn] === "function"
+                    ) {
+
+                        try {
+
+                            window[fn]();
+
+                            return;
+
+                        } catch (error) {
+
+                            console.warn(
+                                fn,
+                                error
+                            );
+
+                        }
+
+                    }
+
+                }
+
+
+                /*
+                 * Fallback:
+                 * Full session always returns to Focus.
+                 */
+
+                resetFromStorage(
+                    "focus"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (resetCancel) {
+
+        resetCancel.addEventListener(
+            "click",
+            closeReset
+        );
+
+    }
+
+
+    /* =================================================
+       RESET FROM STORAGE
+    ================================================= */
+
+    function resetFromStorage(mode) {
+
+        try {
+
+            const settings =
+                JSON.parse(
+                    localStorage.getItem(
+                        "rakkez_settings"
+                    ) || "{}"
+                );
+
+
+            let minutes =
+                Number(
+                    settings.focus || 25
+                );
+
+
+            if (mode === "short") {
+
+                minutes =
+                    Number(
+                        settings.shortBreak || 5
+                    );
+
+            }
+
+
+            if (mode === "long") {
+
+                minutes =
+                    Number(
+                        settings.longBreak || 15
+                    );
+
+            }
+
+
+            const raw =
+                localStorage.getItem(
+                    "rakkez_timer_state"
+                );
+
+
+            if (!raw) {
+                return;
+            }
+
+
+            const state =
+                JSON.parse(raw);
+
+
+            state.mode =
+                mode;
+
+            state.remaining =
+                minutes * 60;
+
+            state.total =
+                minutes * 60;
+
+            state.running =
+                false;
+
+
+            localStorage.setItem(
+                "rakkez_timer_state",
+                JSON.stringify(state)
+            );
+
+
+            if (timerElement) {
+
+                timerElement.textContent =
+                    formatTime(
+                        minutes * 60
+                    );
+
+            }
+
+
+            if (modeElement) {
+
+                modeElement.textContent =
+                    mode === "focus"
+                        ? "FOCUS"
+                        : mode === "short"
+                            ? "SHORT BREAK"
+                            : "LONG BREAK";
+
+            }
+
+
+            updateTabs();
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ reset fallback:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =================================================
+       MINI TIMER
+    ================================================= */
+
+    const miniButton =
+        $("miniTimerBtn");
+
+    const floating =
+        $("rakkezMiniFloating");
+
+    const miniTime =
+        $("rakkezMiniTime");
+
+    const miniMode =
+        $("rakkezMiniMode");
+
+    const miniStart =
+        $("rakkezMiniStart");
+
+    const miniReset =
+        $("rakkezMiniReset");
+
+    const miniClose =
+        $("rakkezMiniClose");
+
+
+    let miniInterval =
+        null;
+
+
+    function updateMini() {
+
+        if (!miniTime) {
+            return;
+        }
+
+
+        miniTime.textContent =
+            timerElement
+                ? timerElement.textContent.trim()
+                : "--:--";
+
+
+        miniMode.textContent =
+            getMode() === "focus"
+                ? "FOCUS"
+                : getMode() === "short"
+                    ? "SHORT BREAK"
+                    : "LONG BREAK";
+
+
+        if (startButton) {
+
+            const text =
+                startButton.textContent
+                    .trim()
+                    .toUpperCase();
+
+
+            miniStart.textContent =
+                text.includes("PAUSE")
+                    ? "PAUSE"
+                    : "START";
+
+        }
+
+    }
+
+
+    function startMiniSync() {
+
+        clearInterval(
+            miniInterval
+        );
+
+
+        updateMini();
+
+
+        miniInterval =
+            setInterval(
+                updateMini,
+                250
+            );
+
+    }
+
+
+    function stopMiniSync() {
+
+        clearInterval(
+            miniInterval
+        );
+
+        miniInterval =
+            null;
+
+    }
+
+
+    /* =================================================
+       MINI BUTTON
+    ================================================= */
+
+    if (miniButton) {
+
+        miniButton.addEventListener(
+            "click",
+            function () {
+
+                openMiniTimer();
+
+            }
+        );
+
+    }
+
+
+    function openMiniTimer() {
+
+        /*
+         * Modern Chrome / Edge:
+         * Document Picture-in-Picture.
+         */
+
+        if (
+            "documentPictureInPicture" in window
+        ) {
+
+            openPictureInPicture();
+
+            return;
+
+        }
+
+
+        /*
+         * Fallback inside the current page.
+         */
+
+        if (floating) {
+
+            floating.classList.add(
+                "show"
+            );
+
+            floating.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+            startMiniSync();
+
+        }
+
+    }
+
+
+    async function openPictureInPicture() {
+
+        try {
+
+            const pipWindow =
+                await document
+                    .documentPictureInPicture
+                    .requestWindow({
+                        width: 360,
+                        height: 220
+                    });
+
+
+            const style =
+                document.createElement(
+                    "style"
+                );
+
+
+            style.textContent = `
+
+                * {
+                    box-sizing: border-box;
+                }
+
+                html,
+                body {
+                    width: 100%;
+                    height: 100%;
+                    margin: 0;
+                    overflow: hidden;
+                    background: #03050a;
+                }
+
+            `;
+
+
+            pipWindow.document.head.appendChild(
+                style
+            );
+
+
+            const mini =
+                document.createElement(
+                    "div"
+                );
+
+
+            mini.className =
+                "rakkez-mini-timer";
+
+
+            mini.innerHTML = `
+
+                <div class="rakkez-mini-bg"></div>
+
+                <div class="rakkez-mini-content">
+
+                    <div
+                        class="rakkez-mini-mode"
+                        data-mini-mode
+                    >
+                        FOCUS
+                    </div>
+
+                    <div
+                        class="rakkez-mini-time"
+                        data-mini-time
+                    >
+                        25:00
+                    </div>
+
+                    <div class="rakkez-mini-buttons">
+
+                        <button
+                            data-mini-start
+                            class="rakkez-mini-start"
+                            type="button"
+                        >
+                            START
+                        </button>
+
+                        <button
+                            data-mini-reset
+                            type="button"
+                        >
+                            ↻
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            pipWindow.document.body.appendChild(
+                mini
+            );
+
+
+            const pipTime =
+                mini.querySelector(
+                    "[data-mini-time]"
+                );
+
+            const pipMode =
+                mini.querySelector(
+                    "[data-mini-mode]"
+                );
+
+            const pipStart =
+                mini.querySelector(
+                    "[data-mini-start]"
+                );
+
+            const pipReset =
+                mini.querySelector(
+                    "[data-mini-reset]"
+                );
+
+
+            function syncPiP() {
+
+                if (
+                    !pipWindow ||
+                    pipWindow.closed
+                ) {
+
+                    return;
+
+                }
+
+
+                pipTime.textContent =
+                    timerElement
+                        ? timerElement.textContent.trim()
+                        : "--:--";
+
+
+                const mode =
+                    getMode();
+
+
+                pipMode.textContent =
+                    mode === "focus"
+                        ? "FOCUS"
+                        : mode === "short"
+                            ? "SHORT BREAK"
+                            : "LONG BREAK";
+
+
+                if (startButton) {
+
+                    const text =
+                        startButton.textContent
+                            .trim()
+                            .toUpperCase();
+
+
+                    pipStart.textContent =
+                        text.includes("PAUSE")
+                            ? "PAUSE"
+                            : "START";
+
+                }
+
+            }
+
+
+            pipStart.addEventListener(
+                "click",
+                function () {
+
+                    if (startButton) {
+
+                        startButton.click();
+
+                    }
+
+                }
+            );
+
+
+            pipReset.addEventListener(
+                "click",
+                function () {
+
+                    openReset();
+
+                }
+            );
+
+
+            const interval =
+                setInterval(
+                    syncPiP,
+                    200
+                );
+
+
+            pipWindow.addEventListener(
+                "pagehide",
+                function () {
+
+                    clearInterval(
+                        interval
+                    );
+
+                }
+            );
+
+
+            syncPiP();
+
+
+        } catch (error) {
+
+            console.warn(
+                "Picture-in-Picture unavailable:",
+                error
+            );
+
+
+            if (floating) {
+
+                floating.classList.add(
+                    "show"
+                );
+
+                startMiniSync();
+
+            }
+
+        }
+
+    }
+
+
+    /* =================================================
+       MINI FALLBACK CONTROLS
+    ================================================= */
+
+    if (miniStart) {
+
+        miniStart.addEventListener(
+            "click",
+            function () {
+
+                if (startButton) {
+
+                    startButton.click();
+
+                    setTimeout(
+                        updateMini,
+                        50
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (miniReset) {
+
+        miniReset.addEventListener(
+            "click",
+            function () {
+
+                openReset();
+
+            }
+        );
+
+    }
+
+
+    if (miniClose) {
+
+        miniClose.addEventListener(
+            "click",
+            function () {
+
+                if (floating) {
+
+                    floating.classList.remove(
+                        "show"
+                    );
+
+                    floating.setAttribute(
+                        "aria-hidden",
+                        "true"
+                    );
+
+                }
+
+                stopMiniSync();
+
+            }
+        );
+
+    }
+
+
+    /* =================================================
+       SYNC
+    ================================================= */
+
+    setInterval(
+        function () {
+
+            updateTabs();
+
+            updateMini();
+
+        },
+        500
+    );
+
+
+})();
+</script>
 
 
 
