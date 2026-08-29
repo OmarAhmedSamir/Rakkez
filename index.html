@@ -6493,8 +6493,10 @@ body.light .rakkez-mini-close,
 
 
 
+```html
 <!-- =========================================================
      RAKKEZ — POMODORO COMPLETION CARD
+     RAKKEZ THEME
      ========================================================= -->
 
 <style>
@@ -6514,7 +6516,8 @@ body.light .rakkez-mini-close,
         padding: 20px;
         box-sizing: border-box;
 
-        background: rgba(255, 255, 255, 0.84);
+        /* Popup background stays WHITE */
+        background: rgba(255, 255, 255, 0.86);
 
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
@@ -6536,7 +6539,7 @@ body.light .rakkez-mini-close,
 
 
     /* =========================================================
-       CARD
+       CARD — RAKKEZ GLASS
        ========================================================= */
 
     .rk-completion-card {
@@ -6547,17 +6550,23 @@ body.light .rakkez-mini-close,
 
         padding: 32px 28px 26px;
 
-        background: #ffffff;
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255, 255, 255, 0.98),
+                rgba(247, 249, 255, 0.98)
+            );
 
-        border: 1px solid rgba(0, 0, 0, 0.07);
+        border: 1px solid rgba(93, 103, 255, 0.14);
 
         border-radius: 28px;
 
         text-align: center;
 
         box-shadow:
-            0 30px 80px rgba(0, 0, 0, 0.12),
-            0 5px 20px rgba(0, 0, 0, 0.05);
+            0 30px 80px rgba(42, 54, 150, 0.14),
+            0 8px 28px rgba(75, 88, 210, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9);
 
         transform:
             translateY(18px)
@@ -6565,6 +6574,26 @@ body.light .rakkez-mini-close,
 
         transition:
             transform 0.35s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    /* Soft RakkeZ glow */
+
+    .rk-completion-card::before {
+        content: "";
+
+        position: absolute;
+        inset: 0;
+
+        border-radius: inherit;
+
+        background:
+            radial-gradient(
+                circle at 50% 0%,
+                rgba(88, 101, 255, 0.10),
+                transparent 48%
+            );
+
+        pointer-events: none;
     }
 
     #rkCompletionOverlay.rk-show .rk-completion-card {
@@ -6607,6 +6636,12 @@ body.light .rakkez-mini-close,
         -webkit-user-drag: none;
 
         transform-origin: center bottom;
+
+        filter:
+            drop-shadow(
+                0 12px 18px
+                rgba(76, 91, 220, 0.12)
+            );
     }
 
     #rkCompletionOverlay.rk-show
@@ -6654,9 +6689,10 @@ body.light .rakkez-mini-close,
     .rk-completion-title {
         margin: 0;
 
-        color: #111111;
+        color: #171a2f;
 
         font-family:
+            "Space Grotesk",
             Inter,
             -apple-system,
             BlinkMacSystemFont,
@@ -6665,7 +6701,7 @@ body.light .rakkez-mini-close,
 
         font-size: 27px;
         line-height: 1.2;
-        font-weight: 750;
+        font-weight: 700;
 
         letter-spacing: -0.7px;
     }
@@ -6680,9 +6716,10 @@ body.light .rakkez-mini-close,
 
         max-width: 300px;
 
-        color: #666666;
+        color: #68708a;
 
         font-family:
+            "DM Sans",
             Inter,
             -apple-system,
             BlinkMacSystemFont,
@@ -6711,13 +6748,23 @@ body.light .rakkez-mini-close,
 
         box-sizing: border-box;
 
-        background: #f5f5f5;
+        background:
+            linear-gradient(
+                135deg,
+                rgba(89, 102, 255, 0.10),
+                rgba(126, 92, 255, 0.08)
+            );
+
+        border:
+            1px solid
+            rgba(89, 102, 255, 0.12);
 
         border-radius: 999px;
 
-        color: #444444;
+        color: #5965c9;
 
         font-family:
+            "DM Sans",
             Inter,
             -apple-system,
             BlinkMacSystemFont,
@@ -6727,11 +6774,15 @@ body.light .rakkez-mini-close,
         font-size: 13px;
         line-height: 1;
         font-weight: 650;
+
+        box-shadow:
+            inset 0 1px 0
+            rgba(255, 255, 255, 0.8);
     }
 
 
     /* =========================================================
-       CONTINUE BUTTON
+       CONTINUE BUTTON — RAKKEZ GRADIENT
        ========================================================= */
 
     .rk-completion-button {
@@ -6746,10 +6797,17 @@ body.light .rakkez-mini-close,
         border: 0;
         border-radius: 15px;
 
-        background: #111111;
+        background:
+            linear-gradient(
+                135deg,
+                #5968ff 0%,
+                #765cff 100%
+            );
+
         color: #ffffff;
 
         font-family:
+            "DM Sans",
             Inter,
             -apple-system,
             BlinkMacSystemFont,
@@ -6762,20 +6820,25 @@ body.light .rakkez-mini-close,
 
         cursor: pointer;
 
+        box-shadow:
+            0 10px 24px
+            rgba(91, 96, 230, 0.20);
+
         transition:
             transform 0.18s ease,
-            background 0.18s ease,
+            filter 0.18s ease,
             box-shadow 0.18s ease;
     }
 
     .rk-completion-button:hover {
-        background: #222222;
+        filter: brightness(1.04);
 
         transform:
             translateY(-1px);
 
         box-shadow:
-            0 8px 20px rgba(0, 0, 0, 0.12);
+            0 13px 28px
+            rgba(91, 96, 230, 0.27);
     }
 
     .rk-completion-button:active {
@@ -6783,12 +6846,15 @@ body.light .rakkez-mini-close,
             translateY(1px)
             scale(0.99);
 
-        box-shadow: none;
+        box-shadow:
+            0 6px 14px
+            rgba(91, 96, 230, 0.15);
     }
 
     .rk-completion-button:focus-visible {
         outline:
-            3px solid rgba(17, 17, 17, 0.18);
+            3px solid
+            rgba(89, 104, 255, 0.20);
 
         outline-offset: 3px;
     }
@@ -6813,11 +6879,16 @@ body.light .rakkez-mini-close,
 
         padding: 0;
 
-        border: 0;
+        border:
+            1px solid
+            rgba(89, 102, 255, 0.08);
+
         border-radius: 50%;
 
-        background: #f5f5f5;
-        color: #555555;
+        background:
+            rgba(89, 102, 255, 0.07);
+
+        color: #69718a;
 
         font-family: Arial, sans-serif;
 
@@ -6828,11 +6899,16 @@ body.light .rakkez-mini-close,
 
         transition:
             background 0.18s ease,
+            color 0.18s ease,
             transform 0.18s ease;
     }
 
     .rk-completion-close:hover {
-        background: #ededed;
+        background:
+            rgba(89, 102, 255, 0.13);
+
+        color: #5968d8;
+
         transform: scale(1.05);
     }
 
@@ -6853,9 +6929,14 @@ body.light .rakkez-mini-close,
 
         border-radius: 50%;
 
-        background: #111111;
+        background:
+            linear-gradient(
+                135deg,
+                #5968ff,
+                #765cff
+            );
 
-        opacity: 0.07;
+        opacity: 0.16;
 
         pointer-events: none;
     }
@@ -6987,11 +7068,7 @@ body.light .rakkez-mini-close,
         </button>
 
 
-        <!-- =====================================================
-             YOUR TROPHY IMAGE
-             
-             CHANGE ONLY THE FILE NAME BELOW
-             ===================================================== -->
+        <!-- Trophy -->
 
         <div class="rk-completion-trophy-wrap">
 
@@ -7006,6 +7083,7 @@ body.light .rakkez-mini-close,
 
 
         <!-- Title -->
+
         <h2
             id="rkCompletionTitle"
             class="rk-completion-title"
@@ -7015,6 +7093,7 @@ body.light .rakkez-mini-close,
 
 
         <!-- Message -->
+
         <p
             id="rkCompletionMessage"
             class="rk-completion-message"
@@ -7024,6 +7103,7 @@ body.light .rakkez-mini-close,
 
 
         <!-- Daily count -->
+
         <div
             id="rkCompletionCount"
             class="rk-completion-count"
@@ -7033,6 +7113,7 @@ body.light .rakkez-mini-close,
 
 
         <!-- Continue -->
+
         <button
             id="rkCompletionButton"
             class="rk-completion-button"
@@ -7045,4 +7126,5 @@ body.light .rakkez-mini-close,
 </div>
 
 </body>
+
 </html>
