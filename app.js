@@ -1795,105 +1795,158 @@ function setMode(mode) {
 
 
 /* =========================================================
-   RESET TIMER
-   ---------------------------------------------------------
-   Timer reset ONLY.
-   Does NOT reset Stats.
-
-   The FULL DAILY RESET is handled by confirmReset below.
+   RESET SYSTEM
    ========================================================= */
 
-function resetTimer() {
+/* =========================================================
+   RESET TIMER ONLY
+   - Resets timer to Focus
+   - Stops alarm
+   - Does NOT touch stats
+   ========================================================= */
+function resetTimerOnly() {
+    stopAlarm();
+    stopTestAlarm();
 
-    timerState.running =
-        false;
+    timerState.running = false;
 
-
-    if (
-        timerState.interval !==
-        null
-    ) {
-
-        clearInterval(
-            timerState.interval
-        );
-
+    if (timerState.interval !== null) {
+        clearInterval(timerState.interval);
     }
 
+    timerState.interval = null;
+    timerState.mode = "focus";
 
-    timerState.interval =
-        null;
-
-
-    if (
-        typeof stopAlarm ===
-        "function"
-    ) {
-
-        stopAlarm();
-
-    }
-
-
-    if (
-        typeof stopTestAlarm ===
-        "function"
-    ) {
-
-        stopTestAlarm();
-
-    }
-
-
-    timerState.mode =
-        "focus";
-
-
-    const focusMinutes =
-        Number(
-            settings.focus
-        );
-
+    const focusMinutes = Number(settings.focus);
 
     const safeFocus =
-        Number.isFinite(
-            focusMinutes
-        ) &&
-        focusMinutes > 0
-
+        Number.isFinite(focusMinutes) && focusMinutes > 0
             ? focusMinutes
             : DEFAULT_SETTINGS.focus;
 
-
-    timerState.total =
-        Math.floor(
-            safeFocus * 60
-        );
-
-
-    timerState.remaining =
-        timerState.total;
-
-    timerState.running =
-        false;
-
-    timerState.startedAt =
-        null;
-
-    timerState.timestamp =
-        Date.now();
-
-    timerState.interval =
-        null;
-
+    timerState.total = Math.floor(safeFocus * 60);
+    timerState.remaining = timerState.total;
+    timerState.startedAt = null;
+    timerState.timestamp = Date.now();
 
     saveTimer();
-
     updateTimerUI();
-
-    updateStats();
-
 }
+
+
+/* =========================================================
+   RESET TODAY ONLY
+   - Resets today's Focus Time
+   - Resets today's Pomodoro count
+   - Resets timer
+   - Keeps Lifetime Stats
+   - Keeps Lifetime Sessions
+   - Keeps Streak
+   - Keeps Focus Period History
+   ========================================================= */
+function resetTodayOnly() {
+    stopAlarm();
+    stopTestAlarm();
+
+    const today = todayKey();
+
+    if (
+        !stats.dailyFocus ||
+        typeof stats.dailyFocus !== "object"
+    ) {
+        stats.dailyFocus = {};
+    }
+
+    if (
+        !stats.dailySessions ||
+        typeof stats.dailySessions !== "object"
+    ) {
+        stats.dailySessions = {};
+    }
+
+    /* Reset today's statistics */
+    stats.dailyFocus[today] = 0;
+    stats.dailySessions[today] = 0;
+
+    /* IMPORTANT:
+       Do NOT reset:
+       stats.totalFocusSeconds
+       stats.sessions
+       stats.streak
+       stats.lastFocusDate
+       stats.focusPeriods
+    */
+
+    save(STORAGE.stats, stats);
+
+    /* Reset timer separately */
+    resetTimerOnly();
+
+    /* Close completion card */
+    hidePomodoroCompletion();
+
+    renderTasks();
+    updateStats();
+}
+
+
+/* =========================================================
+   OLD GLOBAL FUNCTION
+   Keep compatibility with existing code
+   ========================================================= */
+function resetTimer() {
+    resetTimerOnly();
+}
+
+
+/* =========================================================
+   RESET BUTTONS
+   ========================================================= */
+
+/* Main Reset button = TIMER ONLY */
+if ($("resetBtn")) {
+    $("resetBtn").onclick = () => {
+        resetTimerOnly();
+    };
+}
+
+
+/* Stats Reset button = TODAY ONLY */
+if ($("resetStatsBtn")) {
+    $("resetStatsBtn").onclick = () => {
+        openOverlayById("confirmOverlay");
+    };
+}
+
+
+/* =========================================================
+   CONFIRM TODAY RESET
+   ========================================================= */
+if ($("confirmReset")) {
+    $("confirmReset").onclick = () => {
+        resetTodayOnly();
+
+        closeOverlayById("confirmOverlay");
+    };
+}
+
+
+/* =========================================================
+   CANCEL RESET
+   ========================================================= */
+if ($("closeConfirm")) {
+    $("closeConfirm").onclick = () => {
+        closeOverlayById("confirmOverlay");
+    };
+}
+
+
+/* =========================================================
+   OPTIONAL:
+   If your HTML has a cancel button using data-close,
+   it will continue working automatically.
+   ========================================================= */
+
 
 
 /* =========================================================
