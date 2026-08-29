@@ -6484,5 +6484,565 @@ body.light .rakkez-mini-close,
 
 </script>
 
+
+
+
+
+
+
+
+
+
+<!-- =========================================================
+     RAKKEZ — POMODORO COMPLETION CARD
+     ========================================================= -->
+
+<style>
+    /* =========================================================
+       COMPLETION OVERLAY
+       ========================================================= */
+
+    #rkCompletionOverlay {
+        position: fixed;
+        inset: 0;
+        z-index: 100000;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 20px;
+        box-sizing: border-box;
+
+        background: rgba(255, 255, 255, 0.84);
+
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+
+        transition:
+            opacity 0.28s ease,
+            visibility 0.28s ease;
+    }
+
+    #rkCompletionOverlay.rk-show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+
+    /* =========================================================
+       CARD
+       ========================================================= */
+
+    .rk-completion-card {
+        position: relative;
+
+        width: min(390px, 100%);
+        box-sizing: border-box;
+
+        padding: 32px 28px 26px;
+
+        background: #ffffff;
+
+        border: 1px solid rgba(0, 0, 0, 0.07);
+
+        border-radius: 28px;
+
+        text-align: center;
+
+        box-shadow:
+            0 30px 80px rgba(0, 0, 0, 0.12),
+            0 5px 20px rgba(0, 0, 0, 0.05);
+
+        transform:
+            translateY(18px)
+            scale(0.96);
+
+        transition:
+            transform 0.35s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    #rkCompletionOverlay.rk-show .rk-completion-card {
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+
+    /* =========================================================
+       TROPHY IMAGE
+       ========================================================= */
+
+    .rk-completion-trophy-wrap {
+        width: 170px;
+        height: 170px;
+
+        margin: 0 auto 10px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        overflow: visible;
+    }
+
+    .rk-completion-trophy {
+        width: 150px;
+        height: 150px;
+
+        display: block;
+
+        object-fit: contain;
+        object-position: center;
+
+        max-width: 100%;
+        max-height: 100%;
+
+        user-select: none;
+        -webkit-user-drag: none;
+
+        transform-origin: center bottom;
+    }
+
+    #rkCompletionOverlay.rk-show
+    .rk-completion-trophy {
+        animation:
+            rkTrophyBounce
+            0.75s
+            cubic-bezier(.2, .8, .2, 1);
+    }
+
+    @keyframes rkTrophyBounce {
+
+        0% {
+            opacity: 0;
+            transform:
+                translateY(18px)
+                scale(0.82);
+        }
+
+        45% {
+            opacity: 1;
+            transform:
+                translateY(-7px)
+                scale(1.04);
+        }
+
+        70% {
+            transform:
+                translateY(2px)
+                scale(0.98);
+        }
+
+        100% {
+            transform:
+                translateY(0)
+                scale(1);
+        }
+    }
+
+
+    /* =========================================================
+       TITLE
+       ========================================================= */
+
+    .rk-completion-title {
+        margin: 0;
+
+        color: #111111;
+
+        font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+        font-size: 27px;
+        line-height: 1.2;
+        font-weight: 750;
+
+        letter-spacing: -0.7px;
+    }
+
+
+    /* =========================================================
+       MESSAGE
+       ========================================================= */
+
+    .rk-completion-message {
+        margin: 10px auto 0;
+
+        max-width: 300px;
+
+        color: #666666;
+
+        font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+        font-size: 15px;
+        line-height: 1.55;
+        font-weight: 450;
+    }
+
+
+    /* =========================================================
+       DAILY POMODORO NUMBER
+       ========================================================= */
+
+    .rk-completion-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 34px;
+
+        margin-top: 18px;
+        padding: 7px 14px;
+
+        box-sizing: border-box;
+
+        background: #f5f5f5;
+
+        border-radius: 999px;
+
+        color: #444444;
+
+        font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+        font-size: 13px;
+        line-height: 1;
+        font-weight: 650;
+    }
+
+
+    /* =========================================================
+       CONTINUE BUTTON
+       ========================================================= */
+
+    .rk-completion-button {
+        width: 100%;
+
+        margin-top: 24px;
+
+        min-height: 48px;
+
+        padding: 13px 18px;
+
+        border: 0;
+        border-radius: 15px;
+
+        background: #111111;
+        color: #ffffff;
+
+        font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+        font-size: 14px;
+        line-height: 1;
+        font-weight: 650;
+
+        cursor: pointer;
+
+        transition:
+            transform 0.18s ease,
+            background 0.18s ease,
+            box-shadow 0.18s ease;
+    }
+
+    .rk-completion-button:hover {
+        background: #222222;
+
+        transform:
+            translateY(-1px);
+
+        box-shadow:
+            0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .rk-completion-button:active {
+        transform:
+            translateY(1px)
+            scale(0.99);
+
+        box-shadow: none;
+    }
+
+    .rk-completion-button:focus-visible {
+        outline:
+            3px solid rgba(17, 17, 17, 0.18);
+
+        outline-offset: 3px;
+    }
+
+
+    /* =========================================================
+       CLOSE BUTTON
+       ========================================================= */
+
+    .rk-completion-close {
+        position: absolute;
+
+        top: 14px;
+        right: 14px;
+
+        width: 34px;
+        height: 34px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0;
+
+        border: 0;
+        border-radius: 50%;
+
+        background: #f5f5f5;
+        color: #555555;
+
+        font-family: Arial, sans-serif;
+
+        font-size: 20px;
+        line-height: 1;
+
+        cursor: pointer;
+
+        transition:
+            background 0.18s ease,
+            transform 0.18s ease;
+    }
+
+    .rk-completion-close:hover {
+        background: #ededed;
+        transform: scale(1.05);
+    }
+
+    .rk-completion-close:active {
+        transform: scale(0.94);
+    }
+
+
+    /* =========================================================
+       DECORATIVE DOTS
+       ========================================================= */
+
+    .rk-completion-dot {
+        position: absolute;
+
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: #111111;
+
+        opacity: 0.07;
+
+        pointer-events: none;
+    }
+
+    .rk-completion-dot-one {
+        top: 34px;
+        left: 42px;
+    }
+
+    .rk-completion-dot-two {
+        top: 65px;
+        right: 39px;
+
+        width: 5px;
+        height: 5px;
+    }
+
+    .rk-completion-dot-three {
+        bottom: 82px;
+        left: 31px;
+
+        width: 5px;
+        height: 5px;
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 480px) {
+
+        #rkCompletionOverlay {
+            padding: 16px;
+        }
+
+        .rk-completion-card {
+            padding:
+                29px
+                21px
+                22px;
+
+            border-radius: 24px;
+        }
+
+        .rk-completion-trophy-wrap {
+            width: 150px;
+            height: 150px;
+        }
+
+        .rk-completion-trophy {
+            width: 135px;
+            height: 135px;
+        }
+
+        .rk-completion-title {
+            font-size: 24px;
+        }
+
+        .rk-completion-message {
+            font-size: 14px;
+        }
+    }
+
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        #rkCompletionOverlay,
+        .rk-completion-card,
+        .rk-completion-button,
+        .rk-completion-close {
+            transition: none;
+        }
+
+        #rkCompletionOverlay.rk-show
+        .rk-completion-trophy {
+            animation: none;
+        }
+    }
+</style>
+
+
+<!-- =========================================================
+     COMPLETION CARD
+     ========================================================= -->
+
+<div
+    id="rkCompletionOverlay"
+    aria-hidden="true"
+>
+
+    <div
+        class="rk-completion-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="rkCompletionTitle"
+        aria-describedby="rkCompletionMessage"
+    >
+
+        <!-- Decorative -->
+        <span
+            class="rk-completion-dot rk-completion-dot-one"
+            aria-hidden="true"
+        ></span>
+
+        <span
+            class="rk-completion-dot rk-completion-dot-two"
+            aria-hidden="true"
+        ></span>
+
+        <span
+            class="rk-completion-dot rk-completion-dot-three"
+            aria-hidden="true"
+        ></span>
+
+
+        <!-- Close -->
+        <button
+            id="rkCompletionClose"
+            class="rk-completion-close"
+            type="button"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+
+        <!-- =====================================================
+             YOUR TROPHY IMAGE
+             
+             CHANGE ONLY THE FILE NAME BELOW
+             ===================================================== -->
+
+        <div class="rk-completion-trophy-wrap">
+
+            <img
+                id="rkCompletionTrophy"
+                class="rk-completion-trophy"
+                src="win.jpg"
+                alt="Cute trophy"
+            >
+
+        </div>
+
+
+        <!-- Title -->
+        <h2
+            id="rkCompletionTitle"
+            class="rk-completion-title"
+        >
+            Congratulations!
+        </h2>
+
+
+        <!-- Message -->
+        <p
+            id="rkCompletionMessage"
+            class="rk-completion-message"
+        >
+            Another Pomodoro done.
+        </p>
+
+
+        <!-- Daily count -->
+        <div
+            id="rkCompletionCount"
+            class="rk-completion-count"
+        >
+            Pomodoro #1
+        </div>
+
+
+        <!-- Continue -->
+        <button
+            id="rkCompletionButton"
+            class="rk-completion-button"
+            type="button"
+        >
+            Continue
+        </button>
+
+    </div>
+</div>
+
 </body>
 </html>
