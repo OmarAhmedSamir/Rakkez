@@ -6040,166 +6040,157 @@ if ($("focusExit")) {
 
 
 /* =========================================================
-   RESET
-   ---------------------------------------------------------
-   IMPORTANT:
-
-   Confirm Reset means:
-
-   1. Reset today's Focus Time.
-   2. Reset today's Pomodoro count.
-   3. Reset today's Sessions UI.
-   4. Reset Timer.
-   5. Do NOT reset Lifetime Stats.
-   6. Do NOT reset Streak.
-   7. Do NOT reset lastFocusDate.
-   8. Do NOT reset focusPeriods history.
-
-   Therefore:
-
-   Today:
-   Pomodoro #7
-
-   Reset
-
-   Today:
-   Pomodoro #0
-
-   Next completed Focus:
-   Pomodoro #1
+   RESET SYSTEM
    ========================================================= */
 
-function openResetConfirmation() {
+/* =========================================================
+   RESET TIMER ONLY
+   - Resets timer to Focus
+   - Stops alarm
+   - Does NOT touch stats
+   ========================================================= */
+function resetTimerOnly() {
+    stopAlarm();
+    stopTestAlarm();
 
-    openOverlayById(
-        "confirmOverlay"
-    );
+    timerState.running = false;
 
+    if (timerState.interval !== null) {
+        clearInterval(timerState.interval);
+    }
+
+    timerState.interval = null;
+    timerState.mode = "focus";
+
+    const focusMinutes = Number(settings.focus);
+
+    const safeFocus =
+        Number.isFinite(focusMinutes) && focusMinutes > 0
+            ? focusMinutes
+            : DEFAULT_SETTINGS.focus;
+
+    timerState.total = Math.floor(safeFocus * 60);
+    timerState.remaining = timerState.total;
+    timerState.startedAt = null;
+    timerState.timestamp = Date.now();
+
+    saveTimer();
+    updateTimerUI();
 }
 
 
+/* =========================================================
+   RESET TODAY ONLY
+   - Resets today's Focus Time
+   - Resets today's Pomodoro count
+   - Resets timer
+   - Keeps Lifetime Stats
+   - Keeps Lifetime Sessions
+   - Keeps Streak
+   - Keeps Focus Period History
+   ========================================================= */
+function resetTodayOnly() {
+    stopAlarm();
+    stopTestAlarm();
+
+    const today = todayKey();
+
+    if (
+        !stats.dailyFocus ||
+        typeof stats.dailyFocus !== "object"
+    ) {
+        stats.dailyFocus = {};
+    }
+
+    if (
+        !stats.dailySessions ||
+        typeof stats.dailySessions !== "object"
+    ) {
+        stats.dailySessions = {};
+    }
+
+    /* Reset today's statistics */
+    stats.dailyFocus[today] = 0;
+    stats.dailySessions[today] = 0;
+
+    /* IMPORTANT:
+       Do NOT reset:
+       stats.totalFocusSeconds
+       stats.sessions
+       stats.streak
+       stats.lastFocusDate
+       stats.focusPeriods
+    */
+
+    save(STORAGE.stats, stats);
+
+    /* Reset timer separately */
+    resetTimerOnly();
+
+    /* Close completion card */
+    hidePomodoroCompletion();
+
+    renderTasks();
+    updateStats();
+}
+
+
+/* =========================================================
+   OLD GLOBAL FUNCTION
+   Keep compatibility with existing code
+   ========================================================= */
+function resetTimer() {
+    resetTimerOnly();
+}
+
+
+/* =========================================================
+   RESET BUTTONS
+   ========================================================= */
+
+/* Main Reset button = TIMER ONLY */
 if ($("resetBtn")) {
-
-    $("resetBtn").onclick =
-        openResetConfirmation;
-
+    $("resetBtn").onclick = () => {
+        resetTimerOnly();
+    };
 }
 
 
+/* Stats Reset button = TODAY ONLY */
 if ($("resetStatsBtn")) {
-
-    $("resetStatsBtn").onclick =
-        openResetConfirmation;
-
+    $("resetStatsBtn").onclick = () => {
+        openOverlayById("confirmOverlay");
+    };
 }
 
 
+/* =========================================================
+   CONFIRM TODAY RESET
+   ========================================================= */
 if ($("confirmReset")) {
+    $("confirmReset").onclick = () => {
+        resetTodayOnly();
 
-    $("confirmReset").onclick =
-        () => {
-
-            stopAlarm();
-
-            stopTestAlarm();
-
-
-            const today =
-                todayKey();
-
-
-            /* =============================================
-               RESET TODAY ONLY
-               ============================================= */
-
-            if (
-                !stats.dailyFocus ||
-                typeof stats.dailyFocus !==
-                "object"
-            ) {
-
-                stats.dailyFocus =
-                    {};
-
-            }
-
-
-            if (
-                !stats.dailySessions ||
-                typeof stats.dailySessions !==
-                "object"
-            ) {
-
-                stats.dailySessions =
-                    {};
-
-            }
-
-
-            /*
-             * Reset today's Focus Time.
-             */
-
-            stats.dailyFocus[today] =
-                0;
-
-
-            /*
-             * Reset today's Pomodoro count.
-             */
-
-            stats.dailySessions[today] =
-                0;
-
-
-            /*
-             * IMPORTANT:
-             *
-             * We do NOT modify:
-             *
-             * stats.streak
-             * stats.lastFocusDate
-             * stats.totalFocusSeconds
-             * stats.sessions
-             * stats.focusPeriods
-             *
-             */
-
-
-            save(
-                STORAGE.stats,
-                stats
-            );
-
-
-            /* =============================================
-               RESET TIMER
-               ============================================= */
-
-            resetTimer();
-
-
-            /*
-             * Make sure the completion card
-             * is closed too.
-             */
-
-            hidePomodoroCompletion();
-
-
-            renderTasks();
-
-            updateStats();
-
-
-            closeOverlayById(
-                "confirmOverlay"
-            );
-
-        };
-
+        closeOverlayById("confirmOverlay");
+    };
 }
 
+
+/* =========================================================
+   CANCEL RESET
+   ========================================================= */
+if ($("closeConfirm")) {
+    $("closeConfirm").onclick = () => {
+        closeOverlayById("confirmOverlay");
+    };
+}
+
+
+/* =========================================================
+   OPTIONAL:
+   If your HTML has a cancel button using data-close,
+   it will continue working automatically.
+   ========================================================= */
 
 /* =========================================================
    MEDIA TABS
