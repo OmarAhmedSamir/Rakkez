@@ -29,27 +29,19 @@ function updateTabTitle(secondsLeft, isRunning) {
 
 /* =========================================================
    STORAGE
-   ---------------------------------------------------------
-   جميع بيانات RakkeZ المحفوظة في LocalStorage.
    ========================================================= */
 
 const STORAGE = {
 
     settings: "rakkez_settings",
-
     stats: "rakkez_stats",
-
     tasks: "rakkez_tasks",
-
     timer: "rakkez_timer_state",
-
     spotify: "rakkez_spotify",
-
     google: "rakkez_google",
-
     ambient: "rakkez_ambient",
-
     alarm: "rakkez_alarm"
+
 };
 
 
@@ -60,26 +52,21 @@ const STORAGE = {
 const DEFAULT_SETTINGS = {
 
     focus: 25,
-
     shortBreak: 5,
-
     longBreak: 15,
-
     longBreakAfter: 4,
 
     dailyGoal: 240,
 
     autoStart: false,
-
     smartTimer: true,
 
     sound: true,
-
     alarmVolume: 0.70,
-
     alarmSound: "soft",
 
     theme: "dark"
+
 };
 
 
@@ -91,16 +78,24 @@ function load(key, fallback) {
 
     try {
 
-        const value = localStorage.getItem(key);
+        const value =
+            localStorage.getItem(key);
 
-        return value ? JSON.parse(value) : fallback;
+        return value
+            ? JSON.parse(value)
+            : fallback;
 
     } catch (error) {
 
-        console.error("Load error:", error);
+        console.error(
+            "Load error:",
+            error
+        );
 
         return fallback;
+
     }
+
 }
 
 
@@ -115,8 +110,13 @@ function save(key, value) {
 
     } catch (error) {
 
-        console.error("Storage error:", error);
+        console.error(
+            "Storage error:",
+            error
+        );
+
     }
+
 }
 
 
@@ -132,18 +132,39 @@ let settings = {
         STORAGE.settings,
         {}
     )
+
 };
 
 
 /* =========================================================
    STATS
-   ---------------------------------------------------------
+
    IMPORTANT:
-   totalFocusSeconds = إجمالي الوقت التاريخي Lifetime.
-   dailyFocus = وقت التركيز لكل يوم.
-   dailySessions = عدد الجلسات لكل يوم.
-   streak = مستقل تمامًا عن Reset.
-   focusPeriods = Exact Focus Periods.
+
+   totalFocusSeconds
+   = Lifetime Focus Time
+
+   sessions
+   = Lifetime completed Focus sessions
+
+   dailyFocus
+   = Focus time per day
+
+   dailySessions
+   = Completed Pomodoros per day
+
+   IMPORTANT:
+   dailySessions[today] is the DAILY POMODORO NUMBER.
+
+   Example:
+
+   dailySessions["2026-08-29"] = 7
+
+   means today's latest completed Pomodoro is #7.
+
+   Resetting today's stats makes it 0 again.
+
+   The next completed Focus becomes #1.
    ========================================================= */
 
 let stats = {
@@ -166,13 +187,12 @@ let stats = {
         STORAGE.stats,
         {}
     )
+
 };
 
 
 /* =========================================================
    BACKWARD COMPATIBILITY
-   ---------------------------------------------------------
-   لو المستخدم عنده نسخة قديمة من RakkeZ بدون dailySessions.
    ========================================================= */
 
 if (
@@ -181,6 +201,7 @@ if (
 ) {
 
     stats.dailySessions = {};
+
 }
 
 
@@ -188,9 +209,14 @@ if (
    FOCUS PERIODS BACKWARD COMPATIBILITY
    ========================================================= */
 
-if (!Array.isArray(stats.focusPeriods)) {
+if (
+    !Array.isArray(
+        stats.focusPeriods
+    )
+) {
 
     stats.focusPeriods = [];
+
 }
 
 
@@ -198,10 +224,11 @@ if (!Array.isArray(stats.focusPeriods)) {
    TASKS
    ========================================================= */
 
-let tasks = load(
-    STORAGE.tasks,
-    []
-);
+let tasks =
+    load(
+        STORAGE.tasks,
+        []
+    );
 
 
 /* =========================================================
@@ -220,20 +247,12 @@ let timerState = {
 
     running: false,
 
-    /*
-       وقت بداية المرحلة الحالية.
-       يستخدم لتسجيل Exact Focus Periods.
-    */
-
     startedAt: null,
-
-    /*
-       آخر وقت تم فيه حفظ حالة التايمر.
-    */
 
     timestamp: null,
 
     interval: null
+
 };
 
 
@@ -260,6 +279,7 @@ function getCurrentLanguage() {
     return language === "ar"
         ? "ar"
         : "en";
+
 }
 
 
@@ -273,6 +293,7 @@ function arabicNumbers(value) {
         /\d/g,
         digit => "٠١٢٣٤٥٦٧٨٩"[digit]
     );
+
 }
 
 
@@ -287,6 +308,7 @@ function englishNumbers(value) {
         digit =>
             "٠١٢٣٤٥٦٧٨٩".indexOf(digit)
     );
+
 }
 
 
@@ -296,7 +318,8 @@ function englishNumbers(value) {
 
 function todayKey() {
 
-    const d = new Date();
+    const d =
+        new Date();
 
     return [
 
@@ -311,6 +334,30 @@ function todayKey() {
         ).padStart(2, "0")
 
     ].join("-");
+
+}
+
+
+/* =========================================================
+   DAILY POMODORO COUNT
+   ---------------------------------------------------------
+   هذا هو الرقم الحقيقي للـPomodoro اليوم.
+
+   لا يوجد عداد ثاني.
+
+   dailySessions[today] هو المصدر الوحيد.
+   ========================================================= */
+
+function getTodayPomodoroCount() {
+
+    const today =
+        todayKey();
+
+    return Number(
+        stats.dailySessions &&
+        stats.dailySessions[today]
+    ) || 0;
+
 }
 
 
@@ -320,15 +367,18 @@ function todayKey() {
 
 function formatTime(seconds) {
 
-    seconds = Math.max(
-        0,
-        Math.floor(
-            Number(seconds) || 0
-        )
-    );
+    seconds =
+        Math.max(
+            0,
+            Math.floor(
+                Number(seconds) || 0
+            )
+        );
 
     const minutes =
-        Math.floor(seconds / 60);
+        Math.floor(
+            seconds / 60
+        );
 
     const secs =
         seconds % 60;
@@ -338,15 +388,13 @@ function formatTime(seconds) {
         String(minutes)
             .padStart(2, "0")
 
-        +
-
-        ":"
-
-        +
+        + ":" +
 
         String(secs)
             .padStart(2, "0")
+
     );
+
 }
 
 
@@ -366,6 +414,7 @@ function getTimerModeText() {
         ) {
 
             return "استراحة قصيرة";
+
         }
 
         if (
@@ -373,9 +422,11 @@ function getTimerModeText() {
         ) {
 
             return "استراحة طويلة";
+
         }
 
         return "التركيز";
+
     }
 
     if (
@@ -383,6 +434,7 @@ function getTimerModeText() {
     ) {
 
         return "SHORT BREAK";
+
     }
 
     if (
@@ -390,9 +442,11 @@ function getTimerModeText() {
     ) {
 
         return "LONG BREAK";
+
     }
 
     return "FOCUS";
+
 }
 
 
@@ -408,17 +462,15 @@ function getTimerLabel() {
     if (lang === "ar") {
 
         return timerState.mode === "focus"
-
             ? "ركز على شيء واحد فقط."
-
             : "خذ نفسًا. لقد استحققت الراحة.";
+
     }
 
     return timerState.mode === "focus"
-
         ? "Stay focused. One thing at a time."
-
         : "Take a breath. You earned it.";
+
 }
 
 
@@ -436,11 +488,13 @@ function getStartButtonText() {
         return timerState.running
             ? "إيقاف مؤقت"
             : "ابدأ";
+
     }
 
     return timerState.running
         ? "PAUSE"
         : "START";
+
 }
 
 
@@ -453,6 +507,7 @@ function updateTimerUI() {
     const lang =
         getCurrentLanguage();
 
+
     updateTabTitle(
         timerState.remaining,
         timerState.running
@@ -463,7 +518,8 @@ function updateTimerUI() {
        TIMER NUMBER
        ===================================================== */
 
-    const timer = $("timer");
+    const timer =
+        $("timer");
 
     if (timer) {
 
@@ -476,6 +532,7 @@ function updateTimerUI() {
             lang === "ar"
                 ? arabicNumbers(time)
                 : time;
+
     }
 
 
@@ -493,6 +550,7 @@ function updateTimerUI() {
 
         modeText.textContent =
             getTimerModeText();
+
     }
 
 
@@ -507,6 +565,7 @@ function updateTimerUI() {
 
         timerLabel.textContent =
             getTimerLabel();
+
     }
 
 
@@ -523,45 +582,35 @@ function updateTimerUI() {
             button.classList.toggle(
                 "active",
                 button.dataset.timerMode ===
-                    timerState.mode
+                timerState.mode
             );
+
         });
 
 
     const modeButtonMap = {
 
         focus: [
-
             "focusMode",
-
             "focusBtn",
-
             "focusModeBtn",
-
             "focusTab"
         ],
 
         short: [
-
             "shortBreakMode",
-
             "shortBreakBtn",
-
             "shortBreakModeBtn",
-
             "shortBreakTab"
         ],
 
         long: [
-
             "longBreakMode",
-
             "longBreakBtn",
-
             "longBreakModeBtn",
-
             "longBreakTab"
         ]
+
     };
 
 
@@ -572,7 +621,8 @@ function updateTimerUI() {
 
             ids.forEach(id => {
 
-                const button = $(id);
+                const button =
+                    $(id);
 
                 if (!button) {
                     return;
@@ -582,7 +632,9 @@ function updateTimerUI() {
                     "active",
                     timerState.mode === mode
                 );
+
             });
+
         }
     );
 
@@ -605,6 +657,7 @@ function updateTimerUI() {
 
             : 0;
 
+
     const progress =
         $("progress");
 
@@ -618,6 +671,7 @@ function updateTimerUI() {
                     percentage
                 )
             ) + "%";
+
     }
 
 
@@ -632,6 +686,7 @@ function updateTimerUI() {
 
         startButton.textContent =
             getStartButtonText();
+
     }
 
 
@@ -645,8 +700,330 @@ function updateTimerUI() {
     ) {
 
         updateCurrentTask();
+
     }
+
 }
+
+
+/* =========================================================
+   COMPLETION CARD
+   ========================================================= */
+
+function getCompletionElements() {
+
+    return {
+
+        overlay:
+            $("rkCompletionOverlay"),
+
+        title:
+            $("rkCompletionTitle"),
+
+        message:
+            $("rkCompletionMessage"),
+
+        count:
+            $("rkCompletionCount"),
+
+        trophy:
+            $("rkCompletionTrophy"),
+
+        close:
+            $("rkCompletionClose"),
+
+        button:
+            $("rkCompletionButton")
+
+    };
+
+}
+
+
+/* =========================================================
+   SHOW COMPLETION CARD
+   ---------------------------------------------------------
+   pomodoroNumber is passed from dailySessions.
+
+   IMPORTANT:
+   This function DOES NOT increment the counter.
+
+   completePhase() already incremented it.
+
+   This prevents duplicate counting.
+   ========================================================= */
+
+function showPomodoroCompletion(
+    pomodoroNumber
+) {
+
+    const elements =
+        getCompletionElements();
+
+    if (!elements.overlay) {
+        return;
+    }
+
+
+    const number =
+        Math.max(
+            1,
+            Number(pomodoroNumber) || 1
+        );
+
+
+    const lang =
+        getCurrentLanguage();
+
+
+    /* =====================================================
+       FIRST POMODORO
+       ===================================================== */
+
+    if (number === 1) {
+
+        if (elements.title) {
+
+            elements.title.textContent =
+                lang === "ar"
+                    ? "مبروك!"
+                    : "You did it!";
+
+        }
+
+
+        if (elements.message) {
+
+            elements.message.textContent =
+                lang === "ar"
+                    ? "لقد أكملت أول Pomodoro لك."
+                    : "Your first Pomodoro is complete.";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ANOTHER POMODORO
+       ===================================================== */
+
+    else {
+
+        if (elements.title) {
+
+            elements.title.textContent =
+                "Congratulations!";
+
+        }
+
+
+        if (elements.message) {
+
+            elements.message.textContent =
+                lang === "ar"
+                    ? "Pomodoro أخرى اكتملت."
+                    : "Another Pomodoro done.";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       NUMBER
+       ===================================================== */
+
+    if (elements.count) {
+
+        const numberText =
+            lang === "ar"
+                ? arabicNumbers(number)
+                : String(number);
+
+        elements.count.textContent =
+            lang === "ar"
+                ? "Pomodoro رقم " + numberText
+                : "Pomodoro #" + numberText;
+
+    }
+
+
+    /* =====================================================
+       TROPHY ANIMATION RESET
+       ===================================================== */
+
+    if (elements.trophy) {
+
+        elements.trophy.style.animation =
+            "none";
+
+        void elements.trophy.offsetWidth;
+
+        elements.trophy.style.animation =
+            "";
+
+    }
+
+
+    /* =====================================================
+       SHOW
+       ===================================================== */
+
+    elements.overlay.classList.add(
+        "rk-show"
+    );
+
+    elements.overlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    /* =====================================================
+       FOCUS BUTTON
+       ===================================================== */
+
+    setTimeout(
+        () => {
+
+            if (elements.button) {
+
+                try {
+
+                    elements.button.focus();
+
+                } catch {}
+
+            }
+
+        },
+        300
+    );
+
+}
+
+
+/* =========================================================
+   HIDE COMPLETION CARD
+   ========================================================= */
+
+function hidePomodoroCompletion() {
+
+    const elements =
+        getCompletionElements();
+
+    if (!elements.overlay) {
+        return;
+    }
+
+
+    elements.overlay.classList.remove(
+        "rk-show"
+    );
+
+    elements.overlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    /*
+     * Do not blindly clear body overflow.
+     *
+     * Another RakkeZ overlay may be open.
+     */
+
+    if (
+        typeof syncBodyScrollLock ===
+        "function"
+    ) {
+
+        syncBodyScrollLock();
+
+    } else {
+
+        document.body.style.overflow =
+            "";
+
+    }
+
+}
+
+
+/* =========================================================
+   COMPLETION CARD EVENTS
+   ========================================================= */
+
+function initializePomodoroCompletion() {
+
+    const elements =
+        getCompletionElements();
+
+
+    if (!elements.overlay) {
+
+        console.warn(
+            "RakkeZ: Completion card not found in index.html"
+        );
+
+        return;
+
+    }
+
+
+    if (elements.button) {
+
+        elements.button.addEventListener(
+            "click",
+            hidePomodoroCompletion
+        );
+
+    }
+
+
+    if (elements.close) {
+
+        elements.close.addEventListener(
+            "click",
+            hidePomodoroCompletion
+        );
+
+    }
+
+
+    elements.overlay.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                elements.overlay
+            ) {
+
+                hidePomodoroCompletion();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   GLOBAL COMPLETION API
+   ========================================================= */
+
+window.RakkeZShowCompletion =
+    showPomodoroCompletion;
+
+window.RakkeZHideCompletion =
+    hidePomodoroCompletion;
 
 
 /* =========================================================
@@ -660,6 +1037,7 @@ function startTimer() {
         pauseTimer();
 
         return;
+
     }
 
 
@@ -669,6 +1047,7 @@ function startTimer() {
     ) {
 
         stopAlarm();
+
     }
 
 
@@ -678,48 +1057,53 @@ function startTimer() {
     ) {
 
         unlockAudio();
+
     }
 
 
     if (
-        timerState.interval !== null
+        timerState.interval !==
+        null
     ) {
 
         clearInterval(
             timerState.interval
         );
 
-        timerState.interval = null;
+        timerState.interval =
+            null;
+
     }
 
 
     if (
         !Number.isFinite(
             Number(timerState.remaining)
-        )
-        ||
+        ) ||
         timerState.remaining < 0
     ) {
 
         setMode(
             timerState.mode
         );
+
     }
 
 
     /*
-       إذا كانت بداية مرحلة جديدة
-       نحفظ وقت البداية.
-    */
+     * بداية Focus / Break جديدة
+     */
 
     if (!timerState.startedAt) {
 
         timerState.startedAt =
             Date.now();
+
     }
 
 
-    timerState.running = true;
+    timerState.running =
+        true;
 
     timerState.timestamp =
         Date.now();
@@ -735,6 +1119,7 @@ function startTimer() {
     saveTimer();
 
     updateTimerUI();
+
 }
 
 
@@ -744,20 +1129,24 @@ function startTimer() {
 
 function pauseTimer() {
 
-    timerState.running = false;
+    timerState.running =
+        false;
 
 
     if (
-        timerState.interval !== null
+        timerState.interval !==
+        null
     ) {
 
         clearInterval(
             timerState.interval
         );
+
     }
 
 
-    timerState.interval = null;
+    timerState.interval =
+        null;
 
     timerState.timestamp =
         Date.now();
@@ -766,6 +1155,7 @@ function pauseTimer() {
     saveTimer();
 
     updateTimerUI();
+
 }
 
 
@@ -776,7 +1166,6 @@ function pauseTimer() {
 function tick() {
 
     if (!timerState.running) {
-
         return;
     }
 
@@ -788,6 +1177,7 @@ function tick() {
         completePhase();
 
         return;
+
     }
 
 
@@ -795,8 +1185,9 @@ function tick() {
        FOCUS STATISTICS
        -----------------------------------------------------
        كل ثانية تركيز:
-       1. تزيد Lifetime
-       2. تزيد Daily Focus
+
+       1. Lifetime
+       2. Daily Focus
        ===================================================== */
 
     if (
@@ -828,6 +1219,7 @@ function tick() {
         ) {
 
             stats.dailyFocus = {};
+
         }
 
 
@@ -835,7 +1227,9 @@ function tick() {
             !stats.dailyFocus[today]
         ) {
 
-            stats.dailyFocus[today] = 0;
+            stats.dailyFocus[today] =
+                0;
+
         }
 
 
@@ -849,6 +1243,7 @@ function tick() {
 
 
         updateStats();
+
     }
 
 
@@ -866,11 +1261,8 @@ function tick() {
 
 
     /*
-       Save every tick.
-
-       هذا مهم جدًا حتى لو حصل Refresh
-       بعد آخر tick مباشرة.
-    */
+     * Save every tick.
+     */
 
     timerState.timestamp =
         Date.now();
@@ -891,10 +1283,12 @@ function tick() {
         completePhase();
 
         return;
+
     }
 
 
     updateTimerUI();
+
 }
 
 
@@ -905,24 +1299,28 @@ function tick() {
 function completePhase() {
 
     /*
-       Stop interval manually.
-       لا نمسح startedAt قبل تسجيل السيشن.
-    */
+     * Stop interval manually.
+     * Do NOT clear startedAt before recording session.
+     */
 
-    timerState.running = false;
+    timerState.running =
+        false;
 
 
     if (
-        timerState.interval !== null
+        timerState.interval !==
+        null
     ) {
 
         clearInterval(
             timerState.interval
         );
+
     }
 
 
-    timerState.interval = null;
+    timerState.interval =
+        null;
 
 
     if (
@@ -931,6 +1329,7 @@ function completePhase() {
     ) {
 
         playAlarm();
+
     }
 
 
@@ -946,9 +1345,9 @@ function completePhase() {
 
 
         /* =================================================
-           SESSIONS
-           -------------------------------------------------
-           Lifetime sessions + Daily sessions
+           SESSION NUMBER
+
+           Lifetime sessions
            ================================================= */
 
         stats.sessions =
@@ -961,6 +1360,12 @@ function completePhase() {
             todayKey();
 
 
+        /* =================================================
+           DAILY SESSIONS
+
+           This is the DAILY POMODORO COUNT.
+           ================================================= */
+
         if (
             !stats.dailySessions ||
             typeof stats.dailySessions !==
@@ -968,6 +1373,7 @@ function completePhase() {
         ) {
 
             stats.dailySessions = {};
+
         }
 
 
@@ -975,11 +1381,27 @@ function completePhase() {
             !stats.dailySessions[today]
         ) {
 
-            stats.dailySessions[today] = 0;
+            stats.dailySessions[today] =
+                0;
+
         }
 
 
+        /*
+         * Increment exactly once.
+         */
+
         stats.dailySessions[today]++;
+
+
+        /*
+         * This is the real Pomodoro number.
+         */
+
+        const pomodoroNumber =
+            Number(
+                stats.dailySessions[today]
+            );
 
 
         stats.lastFocusDate =
@@ -1000,6 +1422,7 @@ function completePhase() {
         ) {
 
             stats.focusPeriods = [];
+
         }
 
 
@@ -1014,15 +1437,14 @@ function completePhase() {
 
 
         /*
-           Fallback في حالة عدم وجود
-           startedAt من نسخة قديمة.
-        */
+         * Fallback if startedAt
+         * does not exist.
+         */
 
         if (
             !Number.isFinite(
                 sessionStart
-            )
-            ||
+            ) ||
             sessionStart <= 0
         ) {
 
@@ -1033,12 +1455,13 @@ function completePhase() {
                         timerState.total
                     ) * 1000
                 );
+
         }
 
 
         /*
-           نحسب المدة الحقيقية.
-        */
+         * Real duration.
+         */
 
         const durationSeconds =
             Math.max(
@@ -1063,13 +1486,17 @@ function completePhase() {
                             .toString(36)
                     ),
 
-            date: today,
+            date:
+                today,
 
-            start: sessionStart,
+            start:
+                sessionStart,
 
-            end: sessionEnd,
+            end:
+                sessionEnd,
 
             durationSeconds
+
         });
 
 
@@ -1097,7 +1524,9 @@ function completePhase() {
                     Math.round(
                         durationSeconds / 60
                     );
+
             }
+
         }
 
 
@@ -1112,41 +1541,103 @@ function completePhase() {
             )
         ) {
 
-            completedFocusInCycle = 0;
+            completedFocusInCycle =
+                0;
 
-            setMode("long");
+            setMode(
+                "long"
+            );
 
         } else {
 
-            setMode("short");
+            setMode(
+                "short"
+            );
+
         }
 
 
-    } else {
+        /* =================================================
+           SAVE BEFORE SHOWING CARD
+           ================================================= */
+
+        save(
+            STORAGE.stats,
+            stats
+        );
+
+        save(
+            STORAGE.tasks,
+            tasks
+        );
+
+
+        updateStats();
+
 
         /*
-           Break finished
-        */
+         * IMPORTANT:
+         *
+         * The completion card receives the
+         * REAL daily Pomodoro number.
+         *
+         * It does NOT increment anything itself.
+         */
 
-        setMode("focus");
+        if (
+            typeof window.RakkeZShowCompletion ===
+            "function"
+        ) {
+
+            /*
+             * Small delay so the timer has already
+             * switched to the Break state cleanly.
+             */
+
+            setTimeout(
+                () => {
+
+                    window.RakkeZShowCompletion(
+                        pomodoroNumber
+                    );
+
+                },
+                120
+            );
+
+        }
+
+    } else {
+
+        /* =================================================
+           BREAK FINISHED
+           ================================================= */
+
+        setMode(
+            "focus"
+        );
+
     }
 
 
     /*
-       Clear session start after completion.
-    */
+     * Clear session start after completion.
+     */
 
-    timerState.startedAt = null;
+    timerState.startedAt =
+        null;
 
     timerState.timestamp =
         Date.now();
+
+
+    saveTimer();
 
 
     save(
         STORAGE.stats,
         stats
     );
-
 
     save(
         STORAGE.tasks,
@@ -1176,17 +1667,21 @@ function completePhase() {
                     ) {
 
                         startTimer();
+
                     }
 
                 } else {
 
                     startTimer();
+
                 }
 
             },
             800
         );
+
     }
+
 }
 
 
@@ -1202,44 +1697,59 @@ function setMode(mode) {
         mode !== "long"
     ) {
 
-        mode = "focus";
+        mode =
+            "focus";
+
     }
 
 
     if (
-        timerState.interval !== null
+        timerState.interval !==
+        null
     ) {
 
         clearInterval(
             timerState.interval
         );
+
     }
 
 
-    timerState.interval = null;
+    timerState.interval =
+        null;
 
-    timerState.mode = mode;
+    timerState.mode =
+        mode;
 
 
     let minutes;
 
 
-    if (mode === "focus") {
+    if (
+        mode === "focus"
+    ) {
 
         minutes =
-            Number(settings.focus);
+            Number(
+                settings.focus
+            );
 
     } else if (
         mode === "short"
     ) {
 
         minutes =
-            Number(settings.shortBreak);
+            Number(
+                settings.shortBreak
+            );
 
     } else {
 
         minutes =
-            Number(settings.longBreak);
+            Number(
+                settings.longBreak
+            );
+
     }
 
 
@@ -1250,6 +1760,7 @@ function setMode(mode) {
 
         minutes =
             DEFAULT_SETTINGS.focus;
+
     }
 
 
@@ -1258,19 +1769,19 @@ function setMode(mode) {
             minutes * 60
         );
 
-
     timerState.remaining =
         timerState.total;
 
-
-    timerState.running = false;
+    timerState.running =
+        false;
 
 
     /*
-       New mode = new session.
-    */
+     * New mode = new session.
+     */
 
-    timerState.startedAt = null;
+    timerState.startedAt =
+        null;
 
     timerState.timestamp =
         Date.now();
@@ -1279,31 +1790,39 @@ function setMode(mode) {
     saveTimer();
 
     updateTimerUI();
+
 }
 
 
 /* =========================================================
    RESET TIMER
    ---------------------------------------------------------
-   هذا لا يمسح الإحصائيات.
+   Timer reset ONLY.
+   Does NOT reset Stats.
+
+   The FULL DAILY RESET is handled by confirmReset below.
    ========================================================= */
 
 function resetTimer() {
 
-    timerState.running = false;
+    timerState.running =
+        false;
 
 
     if (
-        timerState.interval !== null
+        timerState.interval !==
+        null
     ) {
 
         clearInterval(
             timerState.interval
         );
+
     }
 
 
-    timerState.interval = null;
+    timerState.interval =
+        null;
 
 
     if (
@@ -1312,6 +1831,7 @@ function resetTimer() {
     ) {
 
         stopAlarm();
+
     }
 
 
@@ -1321,14 +1841,18 @@ function resetTimer() {
     ) {
 
         stopTestAlarm();
+
     }
 
 
-    timerState.mode = "focus";
+    timerState.mode =
+        "focus";
 
 
     const focusMinutes =
-        Number(settings.focus);
+        Number(
+            settings.focus
+        );
 
 
     const safeFocus =
@@ -1338,7 +1862,6 @@ function resetTimer() {
         focusMinutes > 0
 
             ? focusMinutes
-
             : DEFAULT_SETTINGS.focus;
 
 
@@ -1351,15 +1874,17 @@ function resetTimer() {
     timerState.remaining =
         timerState.total;
 
+    timerState.running =
+        false;
 
-    timerState.running = false;
-
-    timerState.startedAt = null;
+    timerState.startedAt =
+        null;
 
     timerState.timestamp =
         Date.now();
 
-    timerState.interval = null;
+    timerState.interval =
+        null;
 
 
     saveTimer();
@@ -1367,23 +1892,14 @@ function resetTimer() {
     updateTimerUI();
 
     updateStats();
+
 }
 
 
 /* =========================================================
    STATS
    ---------------------------------------------------------
-   IMPORTANT:
-   الـUI يعرض بيانات اليوم فقط.
-
-   Focus Time:
-   dailyFocus[today]
-
-   Sessions:
-   dailySessions[today]
-
-   Streak:
-   stats.streak
+   UI displays TODAY only.
    ========================================================= */
 
 function updateStats() {
@@ -1417,11 +1933,14 @@ function updateStats() {
             formatFocus(
                 todayFocusSeconds
             );
+
     }
 
 
     /* =====================================================
        TODAY SESSIONS
+       -----------------------------------------------------
+       This is today's Pomodoro count.
        ===================================================== */
 
     const todaySessions =
@@ -1445,6 +1964,7 @@ function updateStats() {
                 )
 
                 : todaySessions;
+
     }
 
 
@@ -1462,11 +1982,14 @@ function updateStats() {
     if (streakStat) {
 
         const streak =
-            Number(stats.streak) || 0;
+            Number(
+                stats.streak
+            ) || 0;
 
 
         if (
-            getCurrentLanguage() === "ar"
+            getCurrentLanguage() ===
+            "ar"
         ) {
 
             streakStat.textContent =
@@ -1485,7 +2008,9 @@ function updateStats() {
                         ? ""
                         : "s"
                 );
+
         }
+
     }
 
 
@@ -1494,6 +2019,7 @@ function updateStats() {
        ===================================================== */
 
     updateDailyGoal();
+
 }
 
 
@@ -1526,6 +2052,7 @@ function formatFocus(seconds) {
                 ) +
                 "د"
             );
+
         }
 
 
@@ -1542,19 +2069,16 @@ function formatFocus(seconds) {
         if (remaining > 0) {
 
             return (
-
                 arabicNumbers(
                     hours
                 ) +
-
                 "س " +
-
                 arabicNumbers(
                     remaining
                 ) +
-
                 "د"
             );
+
         }
 
 
@@ -1564,12 +2088,17 @@ function formatFocus(seconds) {
             ) +
             "س"
         );
+
     }
 
 
     if (minutes < 60) {
 
-        return minutes + "m";
+        return (
+            minutes +
+            "m"
+        );
+
     }
 
 
@@ -1591,17 +2120,20 @@ function formatFocus(seconds) {
             remaining +
             "m"
         );
+
     }
 
 
-    return hours + "h";
+    return (
+        hours +
+        "h"
+    );
+
 }
 
 
 /* =========================================================
    DAILY GOAL
-   ---------------------------------------------------------
-   دائمًا يعتمد على اليوم الحالي فقط.
    ========================================================= */
 
 function updateDailyGoal() {
@@ -1611,7 +2143,6 @@ function updateDailyGoal() {
 
 
     if (!goalStat) {
-
         return;
     }
 
@@ -1684,6 +2215,7 @@ function updateDailyGoal() {
                         goalMinutes
                     ) +
                     "د";
+
             }
 
         } else {
@@ -1693,6 +2225,7 @@ function updateDailyGoal() {
                     goal
                 ) +
                 "د";
+
         }
 
     } else {
@@ -1715,6 +2248,7 @@ function updateDailyGoal() {
                     " " +
                     goalMinutes +
                     "m";
+
             }
 
         } else {
@@ -1722,7 +2256,9 @@ function updateDailyGoal() {
             goalText =
                 goal +
                 "m";
+
         }
+
     }
 
 
@@ -1730,6 +2266,7 @@ function updateDailyGoal() {
         currentText +
         " / " +
         goalText;
+
 }
 
 
@@ -1749,9 +2286,13 @@ function updateStreakOnFocus() {
         );
 
 
-    if (previous === today) {
+    if (
+        previous ===
+        today
+    ) {
 
         return;
+
     }
 
 
@@ -1797,12 +2338,16 @@ function updateStreakOnFocus() {
 
         } else {
 
-            stats.streak = 1;
+            stats.streak =
+                1;
+
         }
 
     } else {
 
-        stats.streak = 1;
+        stats.streak =
+            1;
+
     }
 
 
@@ -1810,6 +2355,7 @@ function updateStreakOnFocus() {
         "rakkez_last_focus_day",
         today
     );
+
 }
 
 
@@ -1819,9 +2365,12 @@ function updateStreakOnFocus() {
 
 function updateStreak() {
 
-    if (!stats.lastFocusDate) {
+    if (
+        !stats.lastFocusDate
+    ) {
 
         return;
+
     }
 
 
@@ -1858,15 +2407,21 @@ function updateStreak() {
         );
 
 
-    if (difference > 1) {
+    if (
+        difference > 1
+    ) {
 
-        stats.streak = 0;
+        stats.streak =
+            0;
+
 
         save(
             STORAGE.stats,
             stats
         );
+
     }
+
 }
 
 
@@ -1876,9 +2431,12 @@ function updateStreak() {
 
 function saveTimer() {
 
-    if (!settings.smartTimer) {
+    if (
+        !settings.smartTimer
+    ) {
 
         return;
+
     }
 
 
@@ -1913,25 +2471,25 @@ function saveTimer() {
                 Boolean(
                     timerState.running
                 )
+
         }
     );
+
 }
 
 
 /* =========================================================
    RESTORE TIMER
-   ---------------------------------------------------------
-   إذا كان التايمر يعمل قبل Refresh:
-   - يحسب الوقت الذي مر أثناء Refresh
-   - يكمل من نفس المكان
-   - لا يرجعه للبداية
    ========================================================= */
 
 function restoreTimer() {
 
-    if (!settings.smartTimer) {
+    if (
+        !settings.smartTimer
+    ) {
 
         return;
+
     }
 
 
@@ -1943,7 +2501,6 @@ function restoreTimer() {
 
 
     if (!saved) {
-
         return;
     }
 
@@ -1955,6 +2512,7 @@ function restoreTimer() {
     ) {
 
         return;
+
     }
 
 
@@ -1981,7 +2539,6 @@ function restoreTimer() {
 
 
     timerState.total =
-
         Number.isFinite(
             savedTotal
         ) &&
@@ -2009,7 +2566,6 @@ function restoreTimer() {
 
 
     let remaining =
-
         Number.isFinite(
             savedRemaining
         )
@@ -2019,9 +2575,9 @@ function restoreTimer() {
             : timerState.total;
 
 
-    /*
-       إذا كان Running قبل Refresh
-    */
+    /* =====================================================
+       RUNNING BEFORE REFRESH
+       ===================================================== */
 
     if (
         saved.running &&
@@ -2048,6 +2604,7 @@ function restoreTimer() {
                 remaining -
                 elapsedSinceSave
             );
+
     }
 
 
@@ -2055,12 +2612,11 @@ function restoreTimer() {
         remaining;
 
 
-    /*
-       Restore session start.
-    */
+    /* =====================================================
+       RESTORE SESSION START
+       ===================================================== */
 
     timerState.startedAt =
-
         Number.isFinite(
             Number(
                 saved.startedAt
@@ -2075,28 +2631,31 @@ function restoreTimer() {
 
 
     /*
-       بعد Refresh:
-       لا نبدأ interval هنا مباشرة.
-    */
+     * After Refresh:
+     * don't start interval immediately.
+     */
 
-    timerState.running = false;
+    timerState.running =
+        false;
 
     timerState.timestamp =
         Date.now();
 
-    timerState.interval = null;
+    timerState.interval =
+        null;
 
 
-    /*
-       لو المرحلة انتهت أثناء الغياب
-    */
+    /* =====================================================
+       PHASE FINISHED WHILE AWAY
+       ===================================================== */
 
     if (
         saved.running &&
         timerState.remaining <= 0
     ) {
 
-        timerState.remaining = 0;
+        timerState.remaining =
+            0;
 
 
         setTimeout(
@@ -2110,10 +2669,12 @@ function restoreTimer() {
 
 
         return;
+
     }
 
 
     updateTimerUI();
+
 }
 
 
@@ -2127,7 +2688,6 @@ let audioUnlocked = false;
 function unlockAudio() {
 
     if (audioUnlocked) {
-
         return;
     }
 
@@ -2140,7 +2700,6 @@ function unlockAudio() {
 
 
         if (!AudioContextClass) {
-
             return;
         }
 
@@ -2155,6 +2714,7 @@ function unlockAudio() {
         ) {
 
             context.resume();
+
         }
 
 
@@ -2182,24 +2742,27 @@ function unlockAudio() {
 
         oscillator.start();
 
-
         oscillator.stop(
             context.currentTime +
             0.01
         );
 
 
-        oscillator.onended = () => {
+        oscillator.onended =
+            () => {
 
-            try {
+                try {
 
-                context.close();
+                    context.close();
 
-            } catch {}
-        };
+                } catch {}
+
+            };
 
 
-        audioUnlocked = true;
+        audioUnlocked =
+            true;
+
 
     } catch (error) {
 
@@ -2207,7 +2770,9 @@ function unlockAudio() {
             "Audio unlock failed:",
             error
         );
+
     }
+
 }
 
 
@@ -2221,6 +2786,7 @@ window.refreshTimerLanguage =
         updateTimerUI();
 
         updateStats();
+
     };
 
 
@@ -2234,6 +2800,7 @@ window.updateLanguageNumbers =
         updateTimerUI();
 
         updateStats();
+
     };
 
 
@@ -2256,8 +2823,6 @@ window.setMode =
 
 /* =========================================================
    TIMER MODE BUTTONS
-   ---------------------------------------------------------
-   FOCUS / SHORT BREAK / LONG BREAK
    ========================================================= */
 
 function initializeTimerModeButtons() {
@@ -2265,52 +2830,35 @@ function initializeTimerModeButtons() {
     const modeButtons = [
 
         {
-
             ids: [
-
                 "focusMode",
-
                 "focusBtn",
-
                 "focusModeBtn",
-
                 "focusTab"
             ],
-
             mode: "focus"
         },
 
         {
-
             ids: [
-
                 "shortBreakMode",
-
                 "shortBreakBtn",
-
                 "shortBreakModeBtn",
-
                 "shortBreakTab"
             ],
-
             mode: "short"
         },
 
         {
-
             ids: [
-
                 "longBreakMode",
-
                 "longBreakBtn",
-
                 "longBreakModeBtn",
-
                 "longBreakTab"
             ],
-
             mode: "long"
         }
+
     ];
 
 
@@ -2320,11 +2868,11 @@ function initializeTimerModeButtons() {
             item.ids.forEach(
                 id => {
 
-                    const button = $(id);
+                    const button =
+                        $(id);
 
 
                     if (!button) {
-
                         return;
                     }
 
@@ -2336,6 +2884,7 @@ function initializeTimerModeButtons() {
                     ) {
 
                         return;
+
                     }
 
 
@@ -2352,36 +2901,36 @@ function initializeTimerModeButtons() {
 
 
                             /*
-                               لا نسمح بتغيير
-                               الـMode أثناء تشغيل السيشن.
-                            */
+                             * Don't change mode
+                             * while running.
+                             */
 
                             if (
                                 timerState.running
                             ) {
 
                                 return;
+
                             }
 
 
                             setMode(
                                 item.mode
                             );
+
                         }
                     );
+
                 }
             );
+
         }
     );
 
 
     /*
-       دعم:
-
-       data-timer-mode="focus"
-       data-timer-mode="short"
-       data-timer-mode="long"
-    */
+     * data-timer-mode support.
+     */
 
     document
         .querySelectorAll(
@@ -2397,6 +2946,7 @@ function initializeTimerModeButtons() {
                 ) {
 
                     return;
+
                 }
 
 
@@ -2417,6 +2967,7 @@ function initializeTimerModeButtons() {
                         ) {
 
                             return;
+
                         }
 
 
@@ -2431,12 +2982,18 @@ function initializeTimerModeButtons() {
                             mode === "long"
                         ) {
 
-                            setMode(mode);
+                            setMode(
+                                mode
+                            );
+
                         }
+
                     }
                 );
+
             }
         );
+
 }
 
 
@@ -2444,38 +3001,52 @@ function initializeTimerModeButtons() {
    ALARM SYSTEM
    ========================================================= */
 
-let customAlarmURL = null;
+let customAlarmURL =
+    null;
 
-let customAlarmName = null;
+let customAlarmName =
+    null;
 
-let alarmAudio = null;
+let alarmAudio =
+    null;
 
-let alarmAudioContext = null;
+let alarmAudioContext =
+    null;
 
-let alarmOscillators = [];
+let alarmOscillators =
+    [];
 
-let alarmLoopTimeout = null;
+let alarmLoopTimeout =
+    null;
 
-let alarmPlaying = false;
+let alarmPlaying =
+    false;
 
-let alarmSequenceId = 0;
+let alarmSequenceId =
+    0;
 
 
 /* =========================================================
    TEST ALARM STATE
    ========================================================= */
 
-let testAudio = null;
+let testAudio =
+    null;
 
-let testAudioContext = null;
+let testAudioContext =
+    null;
 
-let testOscillators = [];
+let testOscillators =
+    [];
 
-let testTimeout = null;
+let testTimeout =
+    null;
 
-let testPlaying = false;
+let testPlaying =
+    false;
 
-let testSequenceId = 0;
+let testSequenceId =
+    0;
 
 
 /* =========================================================
@@ -2518,6 +3089,7 @@ const ALARM_FREQUENCIES = {
         988,
         1174
     ]
+
 };
 
 
@@ -2534,6 +3106,7 @@ function createAlarmPopup() {
     ) {
 
         return;
+
     }
 
 
@@ -2571,6 +3144,7 @@ function createAlarmPopup() {
             </button>
 
         </div>
+
     `;
 
 
@@ -2590,7 +3164,6 @@ function createAlarmPopup() {
         #rakkezAlarmPopup {
 
             position:fixed;
-
             inset:0;
 
             z-index:99999;
@@ -2598,7 +3171,6 @@ function createAlarmPopup() {
             display:none;
 
             align-items:center;
-
             justify-content:center;
 
             background:
@@ -2606,14 +3178,12 @@ function createAlarmPopup() {
 
             backdrop-filter:
                 blur(14px);
-        }
 
+        }
 
         #rakkezAlarmPopup.show {
-
             display:flex;
         }
-
 
         .rakkez-alarm-box {
 
@@ -2653,16 +3223,16 @@ function createAlarmPopup() {
                     0,
                     .5
                 );
-        }
 
+        }
 
         .rakkez-alarm-icon {
 
             font-size:36px;
 
             margin-bottom:12px;
-        }
 
+        }
 
         .rakkez-alarm-title {
 
@@ -2677,8 +3247,8 @@ function createAlarmPopup() {
             color:white;
 
             margin-bottom:8px;
-        }
 
+        }
 
         .rakkez-alarm-text {
 
@@ -2697,8 +3267,8 @@ function createAlarmPopup() {
                 );
 
             margin-bottom:22px;
-        }
 
+        }
 
         #rakkezStopAlarm {
 
@@ -2719,13 +3289,15 @@ function createAlarmPopup() {
             font-weight:700;
 
             letter-spacing:.5px;
-        }
 
+        }
 
         #rakkezStopAlarm:hover {
 
             opacity:.9;
+
         }
+
     `;
 
 
@@ -2742,7 +3314,9 @@ function createAlarmPopup() {
 
         stopButton.onclick =
             stopAlarm;
+
     }
+
 }
 
 
@@ -2753,6 +3327,7 @@ function createAlarmPopup() {
 function isAlarmPlaying() {
 
     return alarmPlaying;
+
 }
 
 
@@ -2764,7 +3339,8 @@ function stopAlarm() {
 
     alarmSequenceId++;
 
-    alarmPlaying = false;
+    alarmPlaying =
+        false;
 
 
     clearTimeout(
@@ -2772,22 +3348,34 @@ function stopAlarm() {
     );
 
 
-    alarmLoopTimeout = null;
+    alarmLoopTimeout =
+        null;
 
 
     if (alarmAudio) {
 
         try {
+
             alarmAudio.pause();
+
         } catch {}
 
-        try {
-            alarmAudio.currentTime = 0;
-        } catch {}
 
         try {
-            alarmAudio.loop = false;
+
+            alarmAudio.currentTime =
+                0;
+
         } catch {}
+
+
+        try {
+
+            alarmAudio.loop =
+                false;
+
+        } catch {}
+
 
         try {
 
@@ -2799,7 +3387,10 @@ function stopAlarm() {
 
         } catch {}
 
-        alarmAudio = null;
+
+        alarmAudio =
+            null;
+
     }
 
 
@@ -2807,26 +3398,38 @@ function stopAlarm() {
         oscillator => {
 
             try {
+
                 oscillator.stop();
+
             } catch {}
 
+
             try {
+
                 oscillator.disconnect();
+
             } catch {}
+
         }
     );
 
 
-    alarmOscillators = [];
+    alarmOscillators =
+        [];
 
 
     if (alarmAudioContext) {
 
         try {
+
             alarmAudioContext.close();
+
         } catch {}
 
-        alarmAudioContext = null;
+
+        alarmAudioContext =
+            null;
+
     }
 
 
@@ -2839,7 +3442,9 @@ function stopAlarm() {
         popup.classList.remove(
             "show"
         );
+
     }
+
 }
 
 
@@ -2852,6 +3457,7 @@ function playAlarm() {
     if (!settings.sound) {
 
         return;
+
     }
 
 
@@ -2861,12 +3467,15 @@ function playAlarm() {
     ) {
 
         stopTestAlarm();
+
     }
 
 
     stopAlarm();
 
-    alarmPlaying = true;
+
+    alarmPlaying =
+        true;
 
 
     createAlarmPopup();
@@ -2881,13 +3490,14 @@ function playAlarm() {
         popup.classList.add(
             "show"
         );
+
     }
 
 
     if (
         customAlarmURL &&
         settings.alarmSound ===
-            "custom"
+        "custom"
     ) {
 
         if (
@@ -2896,9 +3506,11 @@ function playAlarm() {
         ) {
 
             playCustomAlarm();
+
         }
 
         return;
+
     }
 
 
@@ -2908,7 +3520,9 @@ function playAlarm() {
     ) {
 
         playGeneratedAlarmLoop();
+
     }
+
 }
 
 
@@ -2921,12 +3535,12 @@ function playCustomAlarm() {
     if (
         !alarmPlaying ||
         !customAlarmURL ||
-        settings.alarmSound !==
-            "custom" ||
+        settings.alarmSound !== "custom" ||
         !settings.sound
     ) {
 
         return;
+
     }
 
 
@@ -2936,7 +3550,8 @@ function playCustomAlarm() {
             new Audio();
 
 
-        alarmAudio = audio;
+        alarmAudio =
+            audio;
 
 
         audio.src =
@@ -2953,7 +3568,9 @@ function playCustomAlarm() {
             );
 
 
-        audio.loop = true;
+        audio.loop =
+            true;
+
 
         audio.preload =
             "auto";
@@ -2967,6 +3584,7 @@ function playCustomAlarm() {
                     "Custom alarm error:",
                     error
                 );
+
             }
         );
 
@@ -2988,9 +3606,12 @@ function playCustomAlarm() {
                         "Custom alarm playback blocked:",
                         error
                     );
+
                 }
             );
+
         }
+
 
     } catch (error) {
 
@@ -2998,7 +3619,9 @@ function playCustomAlarm() {
             "Custom alarm error:",
             error
         );
+
     }
+
 }
 
 
@@ -3014,6 +3637,7 @@ function playGeneratedAlarmLoop() {
     ) {
 
         return;
+
     }
 
 
@@ -3038,16 +3662,22 @@ function playGeneratedAlarmLoop() {
         if (!AudioContextClass) {
 
             return;
+
         }
 
 
         if (alarmAudioContext) {
 
             try {
+
                 alarmAudioContext.close();
+
             } catch {}
 
-            alarmAudioContext = null;
+
+            alarmAudioContext =
+                null;
+
         }
 
 
@@ -3063,6 +3693,7 @@ function playGeneratedAlarmLoop() {
             alarmAudioContext
                 .resume()
                 .catch(() => {});
+
         }
 
 
@@ -3070,7 +3701,8 @@ function playGeneratedAlarmLoop() {
             alarmAudioContext.currentTime;
 
 
-        alarmOscillators = [];
+        alarmOscillators =
+            [];
 
 
         frequencies.forEach(
@@ -3099,7 +3731,8 @@ function playGeneratedAlarmLoop() {
 
                 const start =
                     now +
-                    index * 0.16;
+                    index *
+                    0.16;
 
 
                 const end =
@@ -3120,7 +3753,8 @@ function playGeneratedAlarmLoop() {
                             0.28 *
                             settings.alarmVolume
                         ),
-                        start + 0.03
+                        start +
+                        0.03
                     );
 
 
@@ -3155,6 +3789,7 @@ function playGeneratedAlarmLoop() {
                 alarmOscillators.push(
                     oscillator
                 );
+
             }
         );
 
@@ -3163,7 +3798,8 @@ function playGeneratedAlarmLoop() {
             (
                 frequencies.length *
                 160
-            ) + 700;
+            ) +
+            700;
 
 
         alarmLoopTimeout =
@@ -3173,26 +3809,30 @@ function playGeneratedAlarmLoop() {
                     if (
                         !alarmPlaying ||
                         sequenceId !==
-                            alarmSequenceId
+                        alarmSequenceId
                     ) {
 
                         return;
+
                     }
 
 
-                    alarmOscillators = [];
+                    alarmOscillators =
+                        [];
 
 
-                    if (
-                        alarmAudioContext
-                    ) {
+                    if (alarmAudioContext) {
 
                         try {
+
                             alarmAudioContext.close();
+
                         } catch {}
+
 
                         alarmAudioContext =
                             null;
+
                     }
 
 
@@ -3202,13 +3842,16 @@ function playGeneratedAlarmLoop() {
                 duration
             );
 
+
     } catch (error) {
 
         console.error(
             "Alarm error:",
             error
         );
+
     }
+
 }
 
 
@@ -3220,7 +3863,8 @@ function stopTestAlarm() {
 
     testSequenceId++;
 
-    testPlaying = false;
+    testPlaying =
+        false;
 
 
     clearTimeout(
@@ -3228,22 +3872,34 @@ function stopTestAlarm() {
     );
 
 
-    testTimeout = null;
+    testTimeout =
+        null;
 
 
     if (testAudio) {
 
         try {
+
             testAudio.pause();
+
         } catch {}
 
-        try {
-            testAudio.currentTime = 0;
-        } catch {}
 
         try {
-            testAudio.loop = false;
+
+            testAudio.currentTime =
+                0;
+
         } catch {}
+
+
+        try {
+
+            testAudio.loop =
+                false;
+
+        } catch {}
+
 
         try {
 
@@ -3255,7 +3911,10 @@ function stopTestAlarm() {
 
         } catch {}
 
-        testAudio = null;
+
+        testAudio =
+            null;
+
     }
 
 
@@ -3263,27 +3922,40 @@ function stopTestAlarm() {
         oscillator => {
 
             try {
+
                 oscillator.stop();
+
             } catch {}
 
+
             try {
+
                 oscillator.disconnect();
+
             } catch {}
+
         }
     );
 
 
-    testOscillators = [];
+    testOscillators =
+        [];
 
 
     if (testAudioContext) {
 
         try {
+
             testAudioContext.close();
+
         } catch {}
 
-        testAudioContext = null;
+
+        testAudioContext =
+            null;
+
     }
+
 }
 
 
@@ -3299,6 +3971,7 @@ function testAlarm() {
     if (!settings.sound) {
 
         return;
+
     }
 
 
@@ -3306,7 +3979,9 @@ function testAlarm() {
 
     stopAlarm();
 
-    testPlaying = true;
+
+    testPlaying =
+        true;
 
 
     const sequenceId =
@@ -3316,7 +3991,7 @@ function testAlarm() {
     if (
         customAlarmURL &&
         settings.alarmSound ===
-            "custom"
+        "custom"
     ) {
 
         try {
@@ -3327,7 +4002,8 @@ function testAlarm() {
                 );
 
 
-            testAudio = audio;
+            testAudio =
+                audio;
 
 
             audio.volume =
@@ -3340,24 +4016,31 @@ function testAlarm() {
                 );
 
 
-            audio.loop = false;
+            audio.loop =
+                false;
+
 
             audio.preload =
                 "auto";
 
 
-            audio.onended = () => {
+            audio.onended =
+                () => {
 
-                if (
-                    sequenceId ===
-                    testSequenceId
-                ) {
+                    if (
+                        sequenceId ===
+                        testSequenceId
+                    ) {
 
-                    testAudio = null;
+                        testAudio =
+                            null;
 
-                    testPlaying = false;
-                }
-            };
+                        testPlaying =
+                            false;
+
+                    }
+
+                };
 
 
             const promise =
@@ -3385,9 +4068,12 @@ function testAlarm() {
                         ) {
 
                             stopTestAlarm();
+
                         }
+
                     }
                 );
+
             }
 
         } catch (error) {
@@ -3397,11 +4083,14 @@ function testAlarm() {
                 error
             );
 
+
             stopTestAlarm();
+
         }
 
 
         return;
+
     }
 
 
@@ -3417,6 +4106,7 @@ function testAlarm() {
             stopTestAlarm();
 
             return;
+
         }
 
 
@@ -3432,6 +4122,7 @@ function testAlarm() {
             testAudioContext
                 .resume()
                 .catch(() => {});
+
         }
 
 
@@ -3446,7 +4137,8 @@ function testAlarm() {
             testAudioContext.currentTime;
 
 
-        testOscillators = [];
+        testOscillators =
+            [];
 
 
         frequencies.forEach(
@@ -3475,7 +4167,8 @@ function testAlarm() {
 
                 const start =
                     now +
-                    index * 0.16;
+                    index *
+                    0.16;
 
 
                 const end =
@@ -3496,7 +4189,8 @@ function testAlarm() {
                             0.28 *
                             settings.alarmVolume
                         ),
-                        start + 0.03
+                        start +
+                        0.03
                     );
 
 
@@ -3531,6 +4225,7 @@ function testAlarm() {
                 testOscillators.push(
                     oscillator
                 );
+
             }
         );
 
@@ -3545,13 +4240,15 @@ function testAlarm() {
                     ) {
 
                         stopTestAlarm();
+
                     }
 
                 },
                 frequencies.length *
-                    160 +
-                    800
+                160 +
+                800
             );
+
 
     } catch (error) {
 
@@ -3560,8 +4257,11 @@ function testAlarm() {
             error
         );
 
+
         stopTestAlarm();
+
     }
+
 }
 
 
@@ -3577,8 +4277,10 @@ if ($("testAlarmBtn")) {
             () => {
 
                 testAlarm();
+
             }
         );
+
 }
 
 
@@ -3606,6 +4308,7 @@ if (alarmUploadInput) {
             if (!file) {
 
                 return;
+
             }
 
 
@@ -3620,9 +4323,12 @@ if (alarmUploadInput) {
                 );
 
 
-                e.target.value = "";
+                e.target.value =
+                    "";
+
 
                 return;
+
             }
 
 
@@ -3640,6 +4346,7 @@ if (alarmUploadInput) {
                     );
 
                 } catch {}
+
             }
 
 
@@ -3667,6 +4374,7 @@ if (alarmUploadInput) {
 
                 $("alarmSound").value =
                     "custom";
+
             }
 
 
@@ -3679,6 +4387,7 @@ if (alarmUploadInput) {
 
                 $("alarmName").textContent =
                     file.name;
+
             }
 
 
@@ -3686,6 +4395,7 @@ if (alarmUploadInput) {
 
                 $("alarmFileName").textContent =
                     file.name;
+
             }
 
 
@@ -3693,8 +4403,10 @@ if (alarmUploadInput) {
                 "Custom alarm loaded:",
                 file.name
             );
+
         }
     );
+
 }
 
 
@@ -3715,12 +4427,14 @@ function setAlarmUploadStatus(
     if (existing) {
 
         existing.remove();
+
     }
 
 
     if (!fileName) {
 
         return;
+
     }
 
 
@@ -3774,24 +4488,27 @@ function setAlarmUploadStatus(
         font-family:
             "DM Sans",
             sans-serif;
+
     `;
 
 
     feedback.innerHTML = `
 
-        <span style="
-            display:inline-flex;
-            width:18px;
-            height:18px;
-            min-width:18px;
-            align-items:center;
-            justify-content:center;
-            border-radius:50%;
-            background:#22c55e;
-            color:white;
-            font-size:11px;
-            font-weight:700;
-        ">
+        <span
+            style="
+                display:inline-flex;
+                width:18px;
+                height:18px;
+                min-width:18px;
+                align-items:center;
+                justify-content:center;
+                border-radius:50%;
+                background:#22c55e;
+                color:white;
+                font-size:11px;
+                font-weight:700;
+            "
+        >
             ✓
         </span>
 
@@ -3799,6 +4516,7 @@ function setAlarmUploadStatus(
             Uploaded:
             ${escapeHTML(fileName)}
         </span>
+
     `;
 
 
@@ -3816,7 +4534,9 @@ function setAlarmUploadStatus(
         input.parentElement.appendChild(
             feedback
         );
+
     }
+
 }
 
 
@@ -3835,6 +4555,7 @@ function clearAlarmUploadStatus() {
     if (feedback) {
 
         feedback.remove();
+
     }
 
 
@@ -3842,6 +4563,7 @@ function clearAlarmUploadStatus() {
 
         $("alarmName").textContent =
             "";
+
     }
 
 
@@ -3849,7 +4571,9 @@ function clearAlarmUploadStatus() {
 
         $("alarmFileName").textContent =
             "";
+
     }
+
 }
 
 
@@ -3921,16 +4645,17 @@ function syncSettingsUI() {
 
         $("alarmVolumeValue")
             .textContent =
-                Math.round(
-                    settings.alarmVolume *
-                    100
-                ) + "%";
+            Math.round(
+                settings.alarmVolume *
+                100
+            ) + "%";
 
 
     if ($("alarmSound"))
 
         $("alarmSound").value =
             settings.alarmSound;
+
 }
 
 
@@ -3957,10 +4682,13 @@ if ($("focusInput")) {
                 if (
                     !timerState.running &&
                     timerState.mode ===
-                        "focus"
+                    "focus"
                 ) {
 
-                    setMode("focus");
+                    setMode(
+                        "focus"
+                    );
+
                 }
 
 
@@ -3968,8 +4696,10 @@ if ($("focusInput")) {
                     STORAGE.settings,
                     settings
                 );
+
             }
         );
+
 }
 
 
@@ -3992,10 +4722,13 @@ if ($("shortBreakInput")) {
                 if (
                     !timerState.running &&
                     timerState.mode ===
-                        "short"
+                    "short"
                 ) {
 
-                    setMode("short");
+                    setMode(
+                        "short"
+                    );
+
                 }
 
 
@@ -4003,8 +4736,10 @@ if ($("shortBreakInput")) {
                     STORAGE.settings,
                     settings
                 );
+
             }
         );
+
 }
 
 
@@ -4027,10 +4762,13 @@ if ($("longBreakInput")) {
                 if (
                     !timerState.running &&
                     timerState.mode ===
-                        "long"
+                    "long"
                 ) {
 
-                    setMode("long");
+                    setMode(
+                        "long"
+                    );
+
                 }
 
 
@@ -4038,8 +4776,10 @@ if ($("longBreakInput")) {
                     STORAGE.settings,
                     settings
                 );
+
             }
         );
+
 }
 
 
@@ -4063,8 +4803,10 @@ if ($("longBreakAfterInput")) {
                     STORAGE.settings,
                     settings
                 );
+
             }
         );
+
 }
 
 
@@ -4091,8 +4833,10 @@ if ($("dailyGoalInput")) {
 
 
                 updateDailyGoal();
+
             }
         );
+
 }
 
 
@@ -4112,7 +4856,9 @@ if ($("autoStartToggle")) {
                 STORAGE.settings,
                 settings
             );
+
         };
+
 }
 
 
@@ -4132,7 +4878,9 @@ if ($("smartTimerToggle")) {
                 STORAGE.settings,
                 settings
             );
+
         };
+
 }
 
 
@@ -4150,6 +4898,7 @@ if ($("soundToggle")) {
                 stopAlarm();
 
                 stopTestAlarm();
+
             }
 
 
@@ -4160,7 +4909,9 @@ if ($("soundToggle")) {
                 STORAGE.settings,
                 settings
             );
+
         };
+
 }
 
 
@@ -4183,8 +4934,9 @@ if ($("alarmVolume")) {
 
                     $("alarmVolumeValue")
                         .textContent =
-                            e.target.value +
-                            "%";
+                        e.target.value +
+                        "%";
+
                 }
 
 
@@ -4192,6 +4944,7 @@ if ($("alarmVolume")) {
 
                     alarmAudio.volume =
                         settings.alarmVolume;
+
                 }
 
 
@@ -4199,6 +4952,7 @@ if ($("alarmVolume")) {
 
                     testAudio.volume =
                         settings.alarmVolume;
+
                 }
 
 
@@ -4206,8 +4960,10 @@ if ($("alarmVolume")) {
                     STORAGE.settings,
                     settings
                 );
+
             }
         );
+
 }
 
 
@@ -4231,6 +4987,7 @@ if ($("alarmSound")) {
                 ) {
 
                     clearAlarmUploadStatus();
+
                 }
 
 
@@ -4238,8 +4995,10 @@ if ($("alarmSound")) {
                     STORAGE.settings,
                     settings
                 );
+
             }
         );
+
 }
 
 
@@ -4256,19 +5015,22 @@ function renderTasks() {
     if (!list) {
 
         return;
+
     }
 
 
-    list.innerHTML = "";
+    list.innerHTML =
+        "";
 
 
     if ($("taskEmpty")) {
 
         $("taskEmpty")
             .style.display =
-                tasks.length
-                    ? "none"
-                    : "block";
+            tasks.length
+                ? "none"
+                : "block";
+
     }
 
 
@@ -4305,11 +5067,16 @@ function renderTasks() {
                 </button>
 
                 <div class="task-text">
-                    ${escapeHTML(task.title)}
+                    ${escapeHTML(
+                        task.title
+                    )}
                 </div>
 
                 <div class="task-focus">
-                    ${task.focusMinutes || 0}m
+                    ${
+                        task.focusMinutes ||
+                        0
+                    }m
                 </div>
 
                 <button
@@ -4319,14 +5086,17 @@ function renderTasks() {
                 >
                     ×
                 </button>
+
             `;
 
 
             list.appendChild(
                 element
             );
+
         }
     );
+
 }
 
 
@@ -4343,6 +5113,7 @@ function addTask() {
     if (!input) {
 
         return;
+
     }
 
 
@@ -4353,6 +5124,7 @@ function addTask() {
     if (!title) {
 
         return;
+
     }
 
 
@@ -4365,11 +5137,15 @@ function addTask() {
 
         title,
 
-        completed: false,
+        completed:
+            false,
 
-        created: Date.now(),
+        created:
+            Date.now(),
 
-        focusMinutes: 0
+        focusMinutes:
+            0
+
     };
 
 
@@ -4384,10 +5160,12 @@ function addTask() {
     );
 
 
-    input.value = "";
+    input.value =
+        "";
 
 
     renderTasks();
+
 }
 
 
@@ -4408,6 +5186,7 @@ function escapeHTML(value) {
 
 
     return div.innerHTML;
+
 }
 
 
@@ -4426,6 +5205,7 @@ function toggleTask(id) {
     if (!task) {
 
         return;
+
     }
 
 
@@ -4440,6 +5220,7 @@ function toggleTask(id) {
 
 
     renderTasks();
+
 }
 
 
@@ -4459,7 +5240,9 @@ function deleteTask(id) {
         currentTaskId === id
     ) {
 
-        currentTaskId = null;
+        currentTaskId =
+            null;
+
     }
 
 
@@ -4470,6 +5253,7 @@ function deleteTask(id) {
 
 
     renderTasks();
+
 }
 
 
@@ -4479,13 +5263,17 @@ function deleteTask(id) {
 
 function selectTask(id) {
 
-    currentTaskId = id;
+    currentTaskId =
+        id;
+
 
     updateCurrentTask();
+
 
     closeOverlayById(
         "tasksOverlay"
     );
+
 }
 
 
@@ -4502,6 +5290,7 @@ function updateCurrentTask() {
     if (!container) {
 
         return;
+
     }
 
 
@@ -4525,19 +5314,22 @@ function updateCurrentTask() {
                 : "<span>NO TASK SELECTED</span>";
 
         return;
+
     }
 
 
     const task =
         tasks.find(
-            t => t.id ===
+            t =>
+                t.id ===
                 currentTaskId
         );
 
 
     if (!task) {
 
-        currentTaskId = null;
+        currentTaskId =
+            null;
 
 
         container.innerHTML =
@@ -4548,6 +5340,7 @@ function updateCurrentTask() {
                 : "<span>NO TASK SELECTED</span>";
 
         return;
+
     }
 
 
@@ -4561,10 +5354,14 @@ function updateCurrentTask() {
                     : "FOCUSING ON:"
             }
 
-            ${escapeHTML(task.title)}
+            ${escapeHTML(
+                task.title
+            )}
 
         </span>
+
     `;
+
 }
 
 
@@ -4576,6 +5373,7 @@ if ($("addTaskBtn")) {
 
     $("addTaskBtn").onclick =
         addTask;
+
 }
 
 
@@ -4587,13 +5385,17 @@ if ($("taskInput")) {
             e => {
 
                 if (
-                    e.key === "Enter"
+                    e.key ===
+                    "Enter"
                 ) {
 
                     addTask();
+
                 }
+
             }
         );
+
 }
 
 
@@ -4613,6 +5415,7 @@ if ($("taskList")) {
                 if (!button) {
 
                     return;
+
                 }
 
 
@@ -4630,6 +5433,7 @@ if ($("taskList")) {
                 ) {
 
                     toggleTask(id);
+
                 }
 
 
@@ -4639,7 +5443,9 @@ if ($("taskList")) {
                 ) {
 
                     deleteTask(id);
+
                 }
+
             }
         );
 
@@ -4658,6 +5464,7 @@ if ($("taskList")) {
                 if (!task) {
 
                     return;
+
                 }
 
 
@@ -4672,9 +5479,12 @@ if ($("taskList")) {
                     selectTask(
                         check.dataset.id
                     );
+
                 }
+
             }
         );
+
 }
 
 
@@ -4691,6 +5501,7 @@ function closeOverlayById(id) {
     if (!overlay) {
 
         return;
+
     }
 
 
@@ -4710,11 +5521,14 @@ function closeOverlayById(id) {
         "flex"
     ) {
 
-        overlay.style.display = "";
+        overlay.style.display =
+            "";
+
     }
 
 
     syncBodyScrollLock();
+
 }
 
 
@@ -4736,6 +5550,7 @@ function openOverlayById(id) {
         );
 
         return;
+
     }
 
 
@@ -4752,6 +5567,7 @@ function openOverlayById(id) {
 
     document.body.style.overflow =
         "hidden";
+
 }
 
 
@@ -4764,14 +5580,11 @@ function syncBodyScrollLock() {
     const overlays = [
 
         "settingsOverlay",
-
         "tasksOverlay",
-
         "mediaOverlay",
-
         "confirmOverlay",
-
         "updatesModal"
+
     ];
 
 
@@ -4784,20 +5597,35 @@ function syncBodyScrollLock() {
 
 
                 return (
-
                     element &&
                     element.classList.contains(
                         "show"
                     )
                 );
+
             }
         );
 
 
+    const completion =
+        $("rkCompletionOverlay");
+
+
+    const completionOpen =
+        completion &&
+        completion.classList.contains(
+            "rk-show"
+        );
+
+
     document.body.style.overflow =
-        anyOpen
+        (
+            anyOpen ||
+            completionOpen
+        )
             ? "hidden"
             : "";
+
 }
 
 
@@ -4810,14 +5638,11 @@ function closeAllOverlays() {
     const overlays = [
 
         "settingsOverlay",
-
         "tasksOverlay",
-
         "mediaOverlay",
-
         "confirmOverlay",
-
         "updatesModal"
+
     ];
 
 
@@ -4831,6 +5656,7 @@ function closeAllOverlays() {
             if (!overlay) {
 
                 return;
+
             }
 
 
@@ -4852,13 +5678,20 @@ function closeAllOverlays() {
 
                 overlay.style.display =
                     "";
+
             }
+
         }
     );
 
 
-    document.body.style.overflow =
-        "";
+    /*
+     * Don't close the completion card here.
+     * It has its own Escape handler.
+     */
+
+    syncBodyScrollLock();
+
 }
 
 
@@ -4876,7 +5709,9 @@ if ($("settingsOpen")) {
             openOverlayById(
                 "settingsOverlay"
             );
+
         };
+
 }
 
 
@@ -4894,7 +5729,9 @@ if ($("tasksOpen")) {
             openOverlayById(
                 "tasksOverlay"
             );
+
         };
+
 }
 
 
@@ -4910,7 +5747,9 @@ if ($("mediaOpen")) {
             openOverlayById(
                 "mediaOverlay"
             );
+
         };
+
 }
 
 
@@ -4934,6 +5773,7 @@ const CLOSE_BUTTONS = {
 
     closeUpdates:
         "updatesModal"
+
 };
 
 
@@ -4941,10 +5781,7 @@ Object.entries(
     CLOSE_BUTTONS
 ).forEach(
     (
-        [
-            buttonId,
-            overlayId
-        ]
+        [buttonId, overlayId]
     ) => {
 
         const button =
@@ -4954,6 +5791,7 @@ Object.entries(
         if (!button) {
 
             return;
+
         }
 
 
@@ -4969,8 +5807,10 @@ Object.entries(
                 closeOverlayById(
                     overlayId
                 );
+
             }
         );
+
     }
 );
 
@@ -4992,6 +5832,7 @@ document.addEventListener(
         if (!button) {
 
             return;
+
         }
 
 
@@ -5002,6 +5843,7 @@ document.addEventListener(
         if (!overlayId) {
 
             return;
+
         }
 
 
@@ -5013,6 +5855,7 @@ document.addEventListener(
         closeOverlayById(
             overlayId
         );
+
     }
 );
 
@@ -5037,6 +5880,7 @@ document.addEventListener(
         if (!overlay) {
 
             return;
+
         }
 
 
@@ -5052,9 +5896,12 @@ document.addEventListener(
                     closeOverlayById(
                         overlayId
                     );
+
                 }
+
             }
         );
+
     }
 );
 
@@ -5073,10 +5920,30 @@ document.addEventListener(
         ) {
 
             return;
+
+        }
+
+
+        const completion =
+            $("rkCompletionOverlay");
+
+
+        if (
+            completion &&
+            completion.classList.contains(
+                "rk-show"
+            )
+        ) {
+
+            hidePomodoroCompletion();
+
+            return;
+
         }
 
 
         closeAllOverlays();
+
     }
 );
 
@@ -5085,7 +5952,8 @@ document.addEventListener(
    FOCUS ONLY
    ========================================================= */
 
-let focusOnly = false;
+let focusOnly =
+    false;
 
 
 function toggleFocusOnly() {
@@ -5099,6 +5967,7 @@ function toggleFocusOnly() {
             "focus-only",
             focusOnly
         );
+
 }
 
 
@@ -5106,6 +5975,7 @@ if ($("focusOnlyBtn")) {
 
     $("focusOnlyBtn").onclick =
         toggleFocusOnly;
+
 }
 
 
@@ -5113,6 +5983,7 @@ if ($("focusExit")) {
 
     $("focusExit").onclick =
         toggleFocusOnly;
+
 }
 
 
@@ -5120,12 +5991,30 @@ if ($("focusExit")) {
    RESET
    ---------------------------------------------------------
    IMPORTANT:
-   Reset يمسح بيانات اليوم فقط.
 
-   لا يمسح:
-   - streak
-   - lastFocusDate
-   - lifetime stats
+   Confirm Reset means:
+
+   1. Reset today's Focus Time.
+   2. Reset today's Pomodoro count.
+   3. Reset today's Sessions UI.
+   4. Reset Timer.
+   5. Do NOT reset Lifetime Stats.
+   6. Do NOT reset Streak.
+   7. Do NOT reset lastFocusDate.
+   8. Do NOT reset focusPeriods history.
+
+   Therefore:
+
+   Today:
+   Pomodoro #7
+
+   Reset
+
+   Today:
+   Pomodoro #0
+
+   Next completed Focus:
+   Pomodoro #1
    ========================================================= */
 
 function openResetConfirmation() {
@@ -5133,6 +6022,7 @@ function openResetConfirmation() {
     openOverlayById(
         "confirmOverlay"
     );
+
 }
 
 
@@ -5140,6 +6030,7 @@ if ($("resetBtn")) {
 
     $("resetBtn").onclick =
         openResetConfirmation;
+
 }
 
 
@@ -5147,6 +6038,7 @@ if ($("resetStatsBtn")) {
 
     $("resetStatsBtn").onclick =
         openResetConfirmation;
+
 }
 
 
@@ -5174,7 +6066,9 @@ if ($("confirmReset")) {
                 "object"
             ) {
 
-                stats.dailyFocus = {};
+                stats.dailyFocus =
+                    {};
+
             }
 
 
@@ -5184,33 +6078,40 @@ if ($("confirmReset")) {
                 "object"
             ) {
 
-                stats.dailySessions = {};
+                stats.dailySessions =
+                    {};
+
             }
 
+
+            /*
+             * Reset today's Focus Time.
+             */
 
             stats.dailyFocus[today] =
                 0;
 
+
+            /*
+             * Reset today's Pomodoro count.
+             */
 
             stats.dailySessions[today] =
                 0;
 
 
             /*
-               لا نمسح focusPeriods التاريخية.
-               Reset يعمل كما كان:
-               بيانات اليوم الإحصائية فقط.
-            */
-
-
-            /* =============================================
-               DO NOT TOUCH:
-
-               stats.streak
-               stats.lastFocusDate
-               stats.totalFocusSeconds
-               stats.sessions
-               ============================================= */
+             * IMPORTANT:
+             *
+             * We do NOT modify:
+             *
+             * stats.streak
+             * stats.lastFocusDate
+             * stats.totalFocusSeconds
+             * stats.sessions
+             * stats.focusPeriods
+             *
+             */
 
 
             save(
@@ -5226,6 +6127,14 @@ if ($("confirmReset")) {
             resetTimer();
 
 
+            /*
+             * Make sure the completion card
+             * is closed too.
+             */
+
+            hidePomodoroCompletion();
+
+
             renderTasks();
 
             updateStats();
@@ -5234,7 +6143,9 @@ if ($("confirmReset")) {
             closeOverlayById(
                 "confirmOverlay"
             );
+
         };
+
 }
 
 
@@ -5296,9 +6207,12 @@ document
                         content.classList.add(
                             "active"
                         );
+
                     }
+
                 }
             );
+
         }
     );
 
@@ -5328,6 +6242,7 @@ function getYouTubeId(url) {
                 .replace("/", "")
                 .split("/")[0]
                 .split("?")[0];
+
         }
 
 
@@ -5343,6 +6258,7 @@ function getYouTubeId(url) {
             return parsed.searchParams.get(
                 "v"
             );
+
         }
 
 
@@ -5355,6 +6271,7 @@ function getYouTubeId(url) {
             return parsed.pathname
                 .split("/embed/")[1]
                 .split("/")[0];
+
         }
 
 
@@ -5367,6 +6284,7 @@ function getYouTubeId(url) {
             return parsed.pathname
                 .split("/shorts/")[1]
                 .split("/")[0];
+
         }
 
     } catch (error) {
@@ -5375,10 +6293,12 @@ function getYouTubeId(url) {
             "Invalid YouTube URL:",
             error
         );
+
     }
 
 
     return null;
+
 }
 
 
@@ -5400,6 +6320,7 @@ if ($("youtubePlay")) {
                 );
 
                 return;
+
             }
 
 
@@ -5416,6 +6337,7 @@ if ($("youtubePlay")) {
                 );
 
                 return;
+
             }
 
 
@@ -5447,8 +6369,9 @@ if ($("youtubePlay")) {
                         referrerpolicy="
                             strict-origin-when-cross-origin
                         "
-                        allowfullscreen>
-                    </iframe>
+                        allowfullscreen
+                    ></iframe>
+
                 `;
 
 
@@ -5462,7 +6385,9 @@ if ($("youtubePlay")) {
                 "YouTube",
                 "▶"
             );
+
         };
+
 }
 
 
@@ -5495,12 +6420,14 @@ function spotifyEmbedUrl(url) {
                 parts[1] +
                 "?utm_source=generator"
             );
+
         }
 
     } catch {}
 
 
     return null;
+
 }
 
 
@@ -5528,6 +6455,7 @@ if ($("spotifyPlay")) {
                 );
 
                 return;
+
             }
 
 
@@ -5542,8 +6470,9 @@ if ($("spotifyPlay")) {
                             encrypted-media;
                             fullscreen;
                             picture-in-picture
-                        ">
-                    </iframe>
+                        "
+                    ></iframe>
+
                 `;
 
 
@@ -5557,7 +6486,9 @@ if ($("spotifyPlay")) {
                 "Spotify",
                 "S"
             );
+
         };
+
 }
 
 
@@ -5565,7 +6496,8 @@ if ($("spotifyPlay")) {
    LOCAL MEDIA
    ========================================================= */
 
-let localMediaURL = null;
+let localMediaURL =
+    null;
 
 
 /* =========================================================
@@ -5617,6 +6549,7 @@ function showUploadFeedback(
 
             transition:
                 all .25s ease;
+
         `;
 
 
@@ -5641,7 +6574,9 @@ function showUploadFeedback(
             document.body.appendChild(
                 feedback
             );
+
         }
+
     }
 
 
@@ -5650,71 +6585,72 @@ function showUploadFeedback(
 
             ? `
 
-                <span style="
-                    display:inline-flex;
-                    width:20px;
-                    height:20px;
-                    align-items:center;
-                    justify-content:center;
-                    border-radius:50%;
-                    background:#22c55e;
-                    color:white;
-                    font-size:12px;
-                    font-weight:700;
-                ">
+                <span
+                    style="
+                        display:inline-flex;
+                        width:20px;
+                        height:20px;
+                        align-items:center;
+                        justify-content:center;
+                        border-radius:50%;
+                        background:#22c55e;
+                        color:white;
+                        font-size:12px;
+                        font-weight:700;
+                    "
+                >
                     ✓
                 </span>
 
                 <span>
                     ${escapeHTML(message)}
                 </span>
+
             `
 
             : `
 
-                <span style="
-                    display:inline-flex;
-                    width:20px;
-                    height:20px;
-                    align-items:center;
-                    justify-content:center;
-                    border-radius:50%;
-                    background:#ef4444;
-                    color:white;
-                    font-size:12px;
-                    font-weight:700;
-                ">
+                <span
+                    style="
+                        display:inline-flex;
+                        width:20px;
+                        height:20px;
+                        align-items:center;
+                        justify-content:center;
+                        border-radius:50%;
+                        background:#ef4444;
+                        color:white;
+                        font-size:12px;
+                        font-weight:700;
+                    "
+                >
                     !
                 </span>
 
                 <span>
                     ${escapeHTML(message)}
                 </span>
+
             `;
 
 
     feedback.style.background =
         success
-
             ? "rgba(34,197,94,.10)"
-
             : "rgba(239,68,68,.10)";
 
 
     feedback.style.border =
         success
-
             ? "1px solid rgba(34,197,94,.20)"
-
             : "1px solid rgba(239,68,68,.20)";
 
 
     feedback.style.color =
         success
-
             ? "#86efac"
-
             : "#fca5a5";
+
 }
 
 
@@ -5737,6 +6673,7 @@ if ($("mediaFile")) {
                 if (!file) {
 
                     return;
+
                 }
 
 
@@ -5746,7 +6683,10 @@ if ($("mediaFile")) {
                         localMediaURL
                     );
 
-                    localMediaURL = null;
+
+                    localMediaURL =
+                        null;
+
                 }
 
 
@@ -5761,7 +6701,8 @@ if ($("mediaFile")) {
 
                     $("audioPlayer")
                         .style.display =
-                            "none";
+                        "none";
+
                 }
 
 
@@ -5776,7 +6717,8 @@ if ($("mediaFile")) {
 
                     $("videoPlayer")
                         .style.display =
-                            "none";
+                        "none";
+
                 }
 
 
@@ -5806,7 +6748,9 @@ if ($("mediaFile")) {
                     e.target.value =
                         "";
 
+
                     return;
+
                 }
 
 
@@ -5825,6 +6769,7 @@ if ($("mediaFile")) {
                     if (!player) {
 
                         return;
+
                     }
 
 
@@ -5832,9 +6777,13 @@ if ($("mediaFile")) {
                         localMediaURL;
 
 
-                    player.loop = true;
+                    player.loop =
+                        true;
 
-                    player.volume = 1;
+
+                    player.volume =
+                        1;
+
 
                     player.style.display =
                         "block";
@@ -5850,6 +6799,7 @@ if ($("mediaFile")) {
                                 showUploadFeedback(
                                     "Uploaded • Playing in loop"
                                 );
+
                             }
                         )
                         .catch(
@@ -5864,6 +6814,7 @@ if ($("mediaFile")) {
                                 showUploadFeedback(
                                     "Uploaded • Press play to start"
                                 );
+
                             }
                         );
 
@@ -5872,7 +6823,8 @@ if ($("mediaFile")) {
 
                         $("mediaName")
                             .textContent =
-                                file.name;
+                            file.name;
+
                     }
 
 
@@ -5880,7 +6832,8 @@ if ($("mediaFile")) {
 
                         $("mediaSource")
                             .textContent =
-                                "Local Audio";
+                            "Local Audio";
+
                     }
 
 
@@ -5889,6 +6842,7 @@ if ($("mediaFile")) {
                         "Local Audio",
                         "♫"
                     );
+
                 }
 
 
@@ -5901,6 +6855,7 @@ if ($("mediaFile")) {
                     if (!player) {
 
                         return;
+
                     }
 
 
@@ -5908,9 +6863,13 @@ if ($("mediaFile")) {
                         localMediaURL;
 
 
-                    player.loop = true;
+                    player.loop =
+                        true;
 
-                    player.muted = false;
+
+                    player.muted =
+                        false;
+
 
                     player.style.display =
                         "block";
@@ -5926,6 +6885,7 @@ if ($("mediaFile")) {
                                 showUploadFeedback(
                                     "Uploaded • Playing in loop"
                                 );
+
                             }
                         )
                         .catch(
@@ -5940,6 +6900,7 @@ if ($("mediaFile")) {
                                 showUploadFeedback(
                                     "Uploaded • Press play to start"
                                 );
+
                             }
                         );
 
@@ -5948,7 +6909,8 @@ if ($("mediaFile")) {
 
                         $("mediaName")
                             .textContent =
-                                file.name;
+                            file.name;
+
                     }
 
 
@@ -5956,7 +6918,8 @@ if ($("mediaFile")) {
 
                         $("mediaSource")
                             .textContent =
-                                "Local Video";
+                            "Local Video";
+
                     }
 
 
@@ -5965,9 +6928,12 @@ if ($("mediaFile")) {
                         "Local Video",
                         "▶"
                     );
+
                 }
+
             }
         );
+
 }
 
 
@@ -5985,7 +6951,8 @@ function showNowPlaying(
 
         $("mediaName")
             .textContent =
-                name;
+            name;
+
     }
 
 
@@ -5993,7 +6960,8 @@ function showNowPlaying(
 
         $("mediaSource")
             .textContent =
-                source;
+            source;
+
     }
 
 
@@ -6001,7 +6969,8 @@ function showNowPlaying(
 
         $("mediaArtwork")
             .textContent =
-                artwork;
+            artwork;
+
     }
 
 
@@ -6010,7 +6979,9 @@ function showNowPlaying(
         $("nowPlaying")
             .classList
             .add("show");
+
     }
+
 }
 
 
@@ -6018,7 +6989,8 @@ function showNowPlaying(
    SPOTIFY OAUTH — PKCE
    ========================================================= */
 
-let spotifyUser = null;
+let spotifyUser =
+    null;
 
 
 function randomString(
@@ -6029,7 +7001,8 @@ function randomString(
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
 
 
-    let result = "";
+    let result =
+        "";
 
 
     const array =
@@ -6051,15 +7024,19 @@ function randomString(
                     value %
                     chars.length
                 ];
+
         }
     );
 
 
     return result;
+
 }
 
 
-async function sha256(value) {
+async function sha256(
+    value
+) {
 
     const data =
         new TextEncoder()
@@ -6072,10 +7049,13 @@ async function sha256(value) {
         "SHA-256",
         data
     );
+
 }
 
 
-function base64url(buffer) {
+function base64url(
+    buffer
+) {
 
     return btoa(
         String.fromCharCode(
@@ -6096,6 +7076,7 @@ function base64url(buffer) {
             /=/g,
             ""
         );
+
 }
 
 
@@ -6115,11 +7096,14 @@ async function spotifyLogin() {
         );
 
         return;
+
     }
 
 
     const verifier =
-        randomString(64);
+        randomString(
+            64
+        );
 
 
     const challenge =
@@ -6162,12 +7146,14 @@ async function spotifyLogin() {
                 RAKKEZ_CONFIG
                     .spotify
                     .scopes
+
         });
 
 
     window.location.href =
         "https://accounts.spotify.com/authorize?" +
         params.toString();
+
 }
 
 
@@ -6180,12 +7166,15 @@ async function handleSpotifyCallback() {
 
 
     const code =
-        params.get("code");
+        params.get(
+            "code"
+        );
 
 
     if (!code) {
 
         return;
+
     }
 
 
@@ -6198,6 +7187,7 @@ async function handleSpotifyCallback() {
     if (!verifier) {
 
         return;
+
     }
 
 
@@ -6223,6 +7213,7 @@ async function handleSpotifyCallback() {
 
                 code_verifier:
                     verifier
+
             });
 
 
@@ -6231,15 +7222,18 @@ async function handleSpotifyCallback() {
                 "https://accounts.spotify.com/api/token",
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
                     headers: {
 
                         "Content-Type":
                             "application/x-www-form-urlencoded"
+
                     },
 
                     body
+
                 }
             );
 
@@ -6255,6 +7249,7 @@ async function handleSpotifyCallback() {
             );
 
             return;
+
         }
 
 
@@ -6269,6 +7264,7 @@ async function handleSpotifyCallback() {
                     Date.now() +
                     token.expires_in *
                     1000
+
             }
         );
 
@@ -6287,13 +7283,16 @@ async function handleSpotifyCallback() {
 
         await loadSpotifyUser();
 
+
     } catch (error) {
 
         console.error(
             "Spotify OAuth:",
             error
         );
+
     }
+
 }
 
 
@@ -6316,6 +7315,7 @@ async function loadSpotifyUser() {
         );
 
         return;
+
     }
 
 
@@ -6331,7 +7331,9 @@ async function loadSpotifyUser() {
                         Authorization:
                             "Bearer " +
                             auth.accessToken
+
                     }
+
                 }
             );
 
@@ -6349,6 +7351,7 @@ async function loadSpotifyUser() {
 
 
             return;
+
         }
 
 
@@ -6360,16 +7363,21 @@ async function loadSpotifyUser() {
             spotifyUser
         );
 
+
     } catch {
 
         updateSpotifyUI(
             null
         );
+
     }
+
 }
 
 
-function updateSpotifyUI(user) {
+function updateSpotifyUI(
+    user
+) {
 
     if (user) {
 
@@ -6377,8 +7385,9 @@ function updateSpotifyUI(user) {
 
             $("spotifyStatus")
                 .textContent =
-                    user.display_name ||
-                    user.id;
+                user.display_name ||
+                user.id;
+
         }
 
 
@@ -6386,12 +7395,13 @@ function updateSpotifyUI(user) {
 
             $("spotifyLogin")
                 .textContent =
-                    "Connected";
+                "Connected";
 
 
             $("spotifyLogin")
                 .classList
                 .add("connected");
+
         }
 
 
@@ -6399,11 +7409,12 @@ function updateSpotifyUI(user) {
 
             $("spotifyUser")
                 .textContent =
-                    "Connected: " +
-                    (
-                        user.display_name ||
-                        user.id
-                    );
+                "Connected: " +
+                (
+                    user.display_name ||
+                    user.id
+                );
+
         }
 
     } else {
@@ -6412,7 +7423,8 @@ function updateSpotifyUI(user) {
 
             $("spotifyStatus")
                 .textContent =
-                    "Not connected";
+                "Not connected";
+
         }
 
 
@@ -6420,7 +7432,7 @@ function updateSpotifyUI(user) {
 
             $("spotifyLogin")
                 .textContent =
-                    "Connect";
+                "Connect";
 
 
             $("spotifyLogin")
@@ -6428,8 +7440,11 @@ function updateSpotifyUI(user) {
                 .remove(
                     "connected"
                 );
+
         }
+
     }
+
 }
 
 
@@ -6437,6 +7452,7 @@ if ($("spotifyLogin")) {
 
     $("spotifyLogin").onclick =
         spotifyLogin;
+
 }
 
 
@@ -6444,9 +7460,11 @@ if ($("spotifyLogin")) {
    GOOGLE / YOUTUBE OAUTH
    ========================================================= */
 
-let googleUser = null;
+let googleUser =
+    null;
 
-let googleTokenClient = null;
+let googleTokenClient =
+    null;
 
 
 function initializeGoogle() {
@@ -6457,6 +7475,7 @@ function initializeGoogle() {
     ) {
 
         return;
+
     }
 
 
@@ -6470,6 +7489,7 @@ function initializeGoogle() {
     ) {
 
         return;
+
     }
 
 
@@ -6487,7 +7507,9 @@ function initializeGoogle() {
 
                 callback:
                     handleGoogleToken
+
             });
+
 }
 
 
@@ -6500,11 +7522,13 @@ function googleLogin() {
         );
 
         return;
+
     }
 
 
     googleTokenClient
         .requestAccessToken();
+
 }
 
 
@@ -6519,6 +7543,7 @@ async function handleGoogleToken(
         );
 
         return;
+
     }
 
 
@@ -6535,6 +7560,7 @@ async function handleGoogleToken(
 
             created:
                 Date.now()
+
         }
     );
 
@@ -6551,7 +7577,9 @@ async function handleGoogleToken(
                         Authorization:
                             "Bearer " +
                             token
+
                     }
+
                 }
             );
 
@@ -6564,16 +7592,21 @@ async function handleGoogleToken(
             googleUser
         );
 
+
     } catch (error) {
 
         console.error(
             error
         );
+
     }
+
 }
 
 
-function updateGoogleUI(user) {
+function updateGoogleUI(
+    user
+) {
 
     if (user) {
 
@@ -6587,7 +7620,8 @@ function updateGoogleUI(user) {
 
             $("googleStatus")
                 .textContent =
-                    name;
+                name;
+
         }
 
 
@@ -6595,12 +7629,13 @@ function updateGoogleUI(user) {
 
             $("googleLogin")
                 .textContent =
-                    "Connected";
+                "Connected";
 
 
             $("googleLogin")
                 .classList
                 .add("connected");
+
         }
 
 
@@ -6608,8 +7643,9 @@ function updateGoogleUI(user) {
 
             $("youtubeUser")
                 .textContent =
-                    "Connected: " +
-                    name;
+                "Connected: " +
+                name;
+
         }
 
     } else {
@@ -6618,7 +7654,8 @@ function updateGoogleUI(user) {
 
             $("googleStatus")
                 .textContent =
-                    "Not connected";
+                "Not connected";
+
         }
 
 
@@ -6626,7 +7663,7 @@ function updateGoogleUI(user) {
 
             $("googleLogin")
                 .textContent =
-                    "Connect";
+                "Connect";
 
 
             $("googleLogin")
@@ -6634,8 +7671,11 @@ function updateGoogleUI(user) {
                 .remove(
                     "connected"
                 );
+
         }
+
     }
+
 }
 
 
@@ -6643,6 +7683,7 @@ if ($("googleLogin")) {
 
     $("googleLogin").onclick =
         googleLogin;
+
 }
 
 
@@ -6662,12 +7703,14 @@ function applyTheme() {
         );
 
         return;
+
     }
 
 
     document.documentElement
         .dataset.theme =
-            settings.theme;
+        settings.theme;
+
 }
 
 
@@ -6683,7 +7726,9 @@ function restoreAmbient() {
     ) {
 
         window.restoreRakkeZAmbient();
+
     }
+
 }
 
 
@@ -6695,6 +7740,7 @@ if ($("startBtn")) {
 
     $("startBtn").onclick =
         startTimer;
+
 }
 
 
@@ -6708,23 +7754,26 @@ document.addEventListener(
 
         if (
             e.target.tagName ===
-                "INPUT" ||
+            "INPUT" ||
             e.target.tagName ===
-                "TEXTAREA" ||
+            "TEXTAREA" ||
             e.target.isContentEditable
         ) {
 
             return;
+
         }
 
 
         if (
-            e.code === "Space"
+            e.code ===
+            "Space"
         ) {
 
             e.preventDefault();
 
             startTimer();
+
         }
 
 
@@ -6734,6 +7783,7 @@ document.addEventListener(
         ) {
 
             openResetConfirmation();
+
         }
 
 
@@ -6743,7 +7793,9 @@ document.addEventListener(
         ) {
 
             toggleFocusOnly();
+
         }
+
     }
 );
 
@@ -6758,15 +7810,12 @@ function finishLoadingScreen() {
         document.getElementById(
             "loadingScreen"
         ) ||
-
         document.getElementById(
             "loader"
         ) ||
-
         document.querySelector(
             ".loading-screen"
         ) ||
-
         document.querySelector(
             ".loader"
         );
@@ -6775,6 +7824,7 @@ function finishLoadingScreen() {
     if (!loading) {
 
         return;
+
     }
 
 
@@ -6792,9 +7842,11 @@ function finishLoadingScreen() {
                     "none";
 
             } catch {}
+
         },
         500
     );
+
 }
 
 
@@ -6823,8 +7875,10 @@ function safeAsync(fn) {
                         "Background initialization failed:",
                         error
                     );
+
                 }
             );
+
         }
 
     } catch (error) {
@@ -6833,7 +7887,9 @@ function safeAsync(fn) {
             "Background initialization failed:",
             error
         );
+
     }
+
 }
 
 
@@ -6847,39 +7903,27 @@ function safeAsync(fn) {
 const THEME_SELECTORS = {
 
     dark: [
-
         "darkMode",
-
         "nightMode",
-
         "nightBtn",
-
         "darkBtn",
-
         "themeDark"
     ],
 
     light: [
-
         "lightMode",
-
         "sunMode",
-
         "sunBtn",
-
         "lightBtn",
-
         "themeLight"
     ],
 
     toggle: [
-
         "themeToggle",
-
         "themeBtn",
-
         "themeSwitch"
     ]
+
 };
 
 
@@ -6900,11 +7944,14 @@ function getFirstExistingElement(
         if (element) {
 
             return element;
+
         }
+
     }
 
 
     return null;
+
 }
 
 
@@ -6919,7 +7966,6 @@ function applyTheme() {
         "light"
 
             ? "light"
-
             : "dark";
 
 
@@ -6930,22 +7976,25 @@ function applyTheme() {
         );
 
 
-    document.body.classList.toggle(
-        "light-mode",
-        theme === "light"
-    );
+    document.body
+        .classList.toggle(
+            "light-mode",
+            theme === "light"
+        );
 
 
-    document.body.classList.toggle(
-        "dark-mode",
-        theme === "dark"
-    );
+    document.body
+        .classList.toggle(
+            "dark-mode",
+            theme === "dark"
+        );
 
 
-    document.body.setAttribute(
-        "data-theme",
-        theme
-    );
+    document.body
+        .setAttribute(
+            "data-theme",
+            theme
+        );
 
 
     const darkButton =
@@ -6974,6 +8023,7 @@ function applyTheme() {
                 ? "true"
                 : "false"
         );
+
     }
 
 
@@ -6991,6 +8041,7 @@ function applyTheme() {
                 ? "true"
                 : "false"
         );
+
     }
 
 
@@ -7014,6 +8065,7 @@ function applyTheme() {
                 ? "true"
                 : "false"
         );
+
     }
 
 
@@ -7025,6 +8077,7 @@ function applyTheme() {
         STORAGE.settings,
         settings
     );
+
 }
 
 
@@ -7032,14 +8085,18 @@ function applyTheme() {
    SET THEME
    ========================================================= */
 
-function setTheme(theme) {
+function setTheme(
+    theme
+) {
 
     if (
         theme !== "dark" &&
         theme !== "light"
     ) {
 
-        theme = "dark";
+        theme =
+            "dark";
+
     }
 
 
@@ -7054,6 +8111,7 @@ function setTheme(theme) {
 
 
     applyTheme();
+
 }
 
 
@@ -7064,16 +8122,20 @@ function setTheme(theme) {
 function toggleTheme() {
 
     const currentTheme =
-        settings.theme === "light"
+        settings.theme ===
+        "light"
+
             ? "light"
             : "dark";
 
 
     setTheme(
-        currentTheme === "dark"
+        currentTheme ===
+            "dark"
             ? "light"
             : "dark"
     );
+
 }
 
 
@@ -7095,9 +8157,13 @@ function initializeThemeEvents() {
             "click",
             function () {
 
-                setTheme("dark");
+                setTheme(
+                    "dark"
+                );
+
             }
         );
+
     }
 
 
@@ -7113,9 +8179,13 @@ function initializeThemeEvents() {
             "click",
             function () {
 
-                setTheme("light");
+                setTheme(
+                    "light"
+                );
+
             }
         );
+
     }
 
 
@@ -7135,7 +8205,9 @@ function initializeThemeEvents() {
             "click",
             toggleTheme
         );
+
     }
+
 }
 
 
@@ -7161,9 +8233,10 @@ window.RakkeZTheme = {
                 "light"
 
                 ? "light"
-
                 : "dark";
+
         }
+
 };
 
 
@@ -7172,6 +8245,24 @@ window.RakkeZTheme = {
    ========================================================= */
 
 async function init() {
+
+    /* =====================================================
+       COMPLETION CARD
+       ===================================================== */
+
+    try {
+
+        initializePomodoroCompletion();
+
+    } catch (error) {
+
+        console.warn(
+            "Pomodoro completion initialization failed:",
+            error
+        );
+
+    }
+
 
     /* =====================================================
        ALARM POPUP
@@ -7187,6 +8278,7 @@ async function init() {
             "Alarm popup initialization failed:",
             error
         );
+
     }
 
 
@@ -7210,6 +8302,7 @@ async function init() {
                 STORAGE.settings,
                 settings
             );
+
         }
 
     } catch (error) {
@@ -7218,6 +8311,7 @@ async function init() {
             "Alarm settings initialization failed:",
             error
         );
+
     }
 
 
@@ -7235,6 +8329,7 @@ async function init() {
             "Streak initialization failed:",
             error
         );
+
     }
 
 
@@ -7259,7 +8354,9 @@ async function init() {
 
 
         const focusMinutes =
-            Number(settings.focus);
+            Number(
+                settings.focus
+            );
 
 
         const safeFocus =
@@ -7269,7 +8366,6 @@ async function init() {
             focusMinutes > 0
 
                 ? focusMinutes
-
                 : DEFAULT_SETTINGS.focus;
 
 
@@ -7297,6 +8393,7 @@ async function init() {
 
         timerState.interval =
             null;
+
     }
 
 
@@ -7314,6 +8411,7 @@ async function init() {
             "Timer mode buttons initialization failed:",
             error
         );
+
     }
 
 
@@ -7331,6 +8429,7 @@ async function init() {
             "Timer UI initialization failed:",
             error
         );
+
     }
 
 
@@ -7344,6 +8443,7 @@ async function init() {
             "Stats initialization failed:",
             error
         );
+
     }
 
 
@@ -7357,6 +8457,7 @@ async function init() {
             "Settings UI initialization failed:",
             error
         );
+
     }
 
 
@@ -7370,6 +8471,7 @@ async function init() {
             "Tasks initialization failed:",
             error
         );
+
     }
 
 
@@ -7383,6 +8485,7 @@ async function init() {
             "Theme initialization failed:",
             error
         );
+
     }
 
 
@@ -7396,6 +8499,7 @@ async function init() {
             "Theme events initialization failed:",
             error
         );
+
     }
 
 
@@ -7413,6 +8517,7 @@ async function init() {
             "Ambient initialization failed:",
             error
         );
+
     }
 
 
@@ -7431,6 +8536,7 @@ async function init() {
         async () => {
 
             await handleSpotifyCallback();
+
         }
     );
 
@@ -7439,6 +8545,7 @@ async function init() {
         async () => {
 
             await loadSpotifyUser();
+
         }
     );
 
@@ -7447,8 +8554,10 @@ async function init() {
         async () => {
 
             initializeGoogle();
+
         }
     );
+
 }
 
 
@@ -7480,6 +8589,7 @@ if (
     safeAsync(
         init
     );
+
 }
 
 
@@ -7497,6 +8607,7 @@ window.RakkeZOverlay = {
 
     closeAll:
         closeAllOverlays
+
 };
 
 
@@ -7504,11 +8615,14 @@ window.RakkeZOverlay = {
    EXACT FOCUS PERIOD HELPERS
    ========================================================= */
 
-function formatFocusPeriod(period) {
+function formatFocusPeriod(
+    period
+) {
 
     if (!period) {
 
         return "";
+
     }
 
 
@@ -7542,9 +8656,7 @@ function formatFocusPeriod(period) {
         start.toLocaleTimeString(
             locale,
             {
-
                 hour: "numeric",
-
                 minute: "2-digit"
             }
         );
@@ -7554,9 +8666,7 @@ function formatFocusPeriod(period) {
         end.toLocaleTimeString(
             locale,
             {
-
                 hour: "numeric",
-
                 minute: "2-digit"
             }
         );
@@ -7581,7 +8691,9 @@ function formatFocusPeriod(period) {
 
         duration:
             minutes
+
     };
+
 }
 
 
@@ -7602,6 +8714,7 @@ function getTodayFocusPeriods() {
     ) {
 
         return [];
+
     }
 
 
@@ -7618,6 +8731,7 @@ function getTodayFocusPeriods() {
                 Number(a.start) -
                 Number(b.start)
         );
+
 }
 
 
