@@ -3552,46 +3552,42 @@ Add something you want to accomplish.
     id="confirmOverlay"
 >
 
-<div class="panel confirm-panel">
+    <div class="panel confirm-panel">
 
-<div class="confirm-icon">
-    ↻
-</div>
+        <div class="confirm-icon">
+            ↻
+        </div>
 
+        <div class="panel-title">
+            Reset everything?
+        </div>
 
-<div class="panel-title">
-    Reset everything?
-</div>
+        <div class="confirm-description">
+            This will remove your sessions, focus time, streak and tasks.
+            This cannot be undone.
+        </div>
 
+        <div class="confirm-actions">
 
-<div class="confirm-description">
-    This will remove your sessions, focus time, streak and tasks.
-    This cannot be undone.
-</div>
+            <button
+                class="secondary"
+                data-close="confirmOverlay"
+                type="button"
+            >
+                Cancel
+            </button>
 
+            <button
+                id="confirmReset"
+                class="danger-confirm"
+                type="button"
+            >
+                Reset
+            </button>
 
-<div class="confirm-actions">
+        </div>
 
-<button
-    class="secondary"
-    data-close="confirmOverlay"
-    type="button"
->
-    Cancel
-</button>
-
-
-<button
-    id="confirmReset"
-    class="danger-confirm"
-    type="button"
->
-    Reset
-</button>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
@@ -3602,196 +3598,100 @@ Add something you want to accomplish.
 
 <style>
 
-
 /* =====================================================
    EFFECTS
 ===================================================== */
 
 .rakkez-effect-card {
-
     width: 100%;
-
     margin-top: 22px;
-
     padding: 16px;
-
     border: 1px solid rgba(255,255,255,.09);
-
     border-radius: 16px;
-
-    background:
-        rgba(255,255,255,.035);
-
+    background: rgba(255,255,255,.035);
     box-sizing: border-box;
-
 }
-
 
 .rakkez-effect-info {
-
     display: flex;
-
     align-items: center;
-
     gap: 12px;
-
 }
-
 
 .rakkez-effect-icon {
-
     width: 46px;
-
     height: 46px;
-
     flex: 0 0 46px;
-
     display: grid;
-
     place-items: center;
-
     border-radius: 13px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(22,131,255,.22),
-            rgba(255,255,255,.05)
-        );
-
+    background: linear-gradient(
+        135deg,
+        rgba(22,131,255,.22),
+        rgba(255,255,255,.05)
+    );
     font-size: 21px;
-
 }
-
 
 .rakkez-effect-title {
-
     color: var(--text, #fff);
-
     font-size: 14px;
-
     font-weight: 700;
-
 }
-
 
 .rakkez-effect-subtitle {
-
     margin-top: 4px;
-
-    color:
-        var(--muted, rgba(255,255,255,.56));
-
+    color: var(--muted, rgba(255,255,255,.56));
     font-size: 11px;
-
 }
 
-
 .rakkez-effect-toggle {
-
     width: 100%;
-
     margin-top: 16px;
-
     height: 42px;
-
     border: 1px solid rgba(22,131,255,.28);
-
     border-radius: 12px;
-
-    background:
-        rgba(22,131,255,.10);
-
+    background: rgba(22,131,255,.10);
     color: #fff;
-
     font-size: 12px;
-
     font-weight: 700;
-
     cursor: pointer;
-
     transition:
         background .18s ease,
         border-color .18s ease,
         transform .18s ease;
-
 }
-
 
 .rakkez-effect-toggle:hover {
-
     transform: translateY(-1px);
-
-    background:
-        rgba(22,131,255,.16);
-
-    border-color:
-        rgba(22,131,255,.45);
-
+    background: rgba(22,131,255,.16);
+    border-color: rgba(22,131,255,.45);
 }
-
 
 .rakkez-effect-toggle.active {
-
-    background:
-        rgba(22,131,255,.22);
-
-    border-color:
-        rgba(22,131,255,.55);
-
+    background: rgba(22,131,255,.22);
+    border-color: rgba(22,131,255,.55);
 }
-
 
 .rakkez-effect-volume {
-
     display: flex;
-
     align-items: center;
-
     gap: 10px;
-
     margin-top: 14px;
-
-    color:
-        var(--muted, rgba(255,255,255,.56));
-
+    color: var(--muted, rgba(255,255,255,.56));
     font-size: 12px;
-
 }
-
 
 .rakkez-effect-volume input {
-
     flex: 1;
-
 }
 
-
-#rakkezRainVolumeValue {
-
-    width: 36px;
-
-    text-align: right;
-
-    color:
-        var(--muted, rgba(255,255,255,.56));
-
-    font-size: 11px;
-
-}
-
-
+#rakkezRainVolumeValue,
 #rakkezAirplaneVolumeValue {
-
     width: 36px;
-
     text-align: right;
-
-    color:
-        var(--muted, rgba(255,255,255,.56));
-
+    color: var(--muted, rgba(255,255,255,.56));
     font-size: 11px;
-
 }
 
 
@@ -3800,49 +3700,33 @@ Add something you want to accomplish.
 ===================================================== */
 
 .rakkez-mini-player {
-
     position: fixed;
-
     right: 22px;
-
     bottom: 22px;
-
-    width:
-        min(380px, calc(100vw - 32px));
-
+    width: min(380px, calc(100vw - 32px));
     min-height: 76px;
-
     z-index: 99998;
 
     display: flex;
-
     align-items: center;
-
     gap: 12px;
 
     padding: 10px 12px;
 
     border: 1px solid rgba(255,255,255,.12);
-
     border-radius: 18px;
 
-    background:
-        rgba(8,13,22,.94);
+    background: rgba(8,13,22,.94);
 
     backdrop-filter: blur(22px);
-
     -webkit-backdrop-filter: blur(22px);
 
-    box-shadow:
-        0 18px 50px rgba(0,0,0,.35);
+    box-shadow: 0 18px 50px rgba(0,0,0,.35);
 
     opacity: 0;
-
     visibility: hidden;
 
-    transform:
-        translateY(18px)
-        scale(.96);
+    transform: translateY(18px) scale(.96);
 
     pointer-events: none;
 
@@ -3850,126 +3734,83 @@ Add something you want to accomplish.
         opacity .25s ease,
         transform .25s ease,
         visibility .25s ease;
-
 }
-
 
 .rakkez-mini-player.show {
-
     opacity: 1;
-
     visibility: visible;
 
-    transform:
-        translateY(0)
-        scale(1);
+    transform: translateY(0) scale(1);
 
     pointer-events: auto;
-
 }
 
-
 .rakkez-mini-artwork {
-
     width: 52px;
-
     height: 52px;
-
     flex: 0 0 52px;
 
     display: grid;
-
     place-items: center;
 
     border-radius: 13px;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(22,131,255,.30),
-            rgba(255,255,255,.06)
-        );
+    background: linear-gradient(
+        135deg,
+        rgba(22,131,255,.30),
+        rgba(255,255,255,.06)
+    );
 
     background-size: cover;
-
     background-position: center;
 
     color: #fff;
-
     font-size: 21px;
 
     overflow: hidden;
-
 }
-
 
 .rakkez-mini-info {
-
     min-width: 0;
-
     flex: 1;
-
 }
 
-
 .rakkez-mini-title {
-
-    color:
-        var(--text, #fff);
-
+    color: var(--text, #fff);
     font-size: 13px;
-
     font-weight: 700;
 
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
-
 }
 
-
 .rakkez-mini-artist {
-
     margin-top: 4px;
 
-    color:
-        var(--muted, rgba(255,255,255,.56));
-
+    color: var(--muted, rgba(255,255,255,.56));
     font-size: 11px;
 
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
-
 }
-
 
 .rakkez-mini-control,
 .rakkez-mini-close {
-
     width: 34px;
-
     height: 34px;
-
     flex: 0 0 34px;
 
     display: grid;
-
     place-items: center;
 
     border: 1px solid rgba(255,255,255,.09);
-
     border-radius: 10px;
 
-    background:
-        rgba(255,255,255,.055);
+    background: rgba(255,255,255,.055);
 
-    color:
-        var(--text, #fff);
+    color: var(--text, #fff);
 
     cursor: pointer;
 
@@ -3977,39 +3818,23 @@ Add something you want to accomplish.
         transform .18s ease,
         background .18s ease,
         border-color .18s ease;
-
 }
-
 
 .rakkez-mini-control:hover,
 .rakkez-mini-close:hover {
-
     transform: translateY(-1px);
-
-    background:
-        rgba(255,255,255,.10);
-
-    border-color:
-        rgba(255,255,255,.18);
-
+    background: rgba(255,255,255,.10);
+    border-color: rgba(255,255,255,.18);
 }
-
 
 .rakkez-mini-close {
-
     font-size: 18px;
-
 }
 
-
 .rakkez-mini-progress {
-
     position: absolute;
-
     left: 12px;
-
     right: 12px;
-
     bottom: 4px;
 
     height: 2px;
@@ -4018,28 +3843,20 @@ Add something you want to accomplish.
 
     border-radius: 99px;
 
-    background:
-        rgba(255,255,255,.08);
-
+    background: rgba(255,255,255,.08);
 }
 
-
 .rakkez-mini-progress span {
-
     display: block;
 
     width: 0%;
-
     height: 100%;
 
     border-radius: inherit;
 
-    background:
-        var(--blue, #1683ff);
+    background: var(--blue, #1683ff);
 
-    transition:
-        width .12s linear;
-
+    transition: width .12s linear;
 }
 
 
@@ -4048,52 +3865,36 @@ Add something you want to accomplish.
 ===================================================== */
 
 .rakkez-local-list {
-
     width: 100%;
-
     margin-top: 18px;
 
     display: flex;
-
     flex-direction: column;
-
     gap: 8px;
 
     max-height: 260px;
-
     overflow-y: auto;
-
 }
-
 
 .rakkez-local-list:empty {
-
     display: none;
-
 }
 
-
 .rakkez-local-track {
-
     width: 100%;
 
     display: flex;
-
     align-items: center;
-
     gap: 10px;
 
     padding: 10px 12px;
 
     border: 1px solid rgba(255,255,255,.08);
-
     border-radius: 12px;
 
-    background:
-        rgba(255,255,255,.035);
+    background: rgba(255,255,255,.035);
 
-    color:
-        var(--text, #fff);
+    color: var(--text, #fff);
 
     text-align: left;
 
@@ -4102,87 +3903,53 @@ Add something you want to accomplish.
     transition:
         background .18s ease,
         border-color .18s ease;
-
 }
-
 
 .rakkez-local-track:hover {
-
-    background:
-        rgba(255,255,255,.065);
-
-    border-color:
-        rgba(255,255,255,.15);
-
+    background: rgba(255,255,255,.065);
+    border-color: rgba(255,255,255,.15);
 }
-
 
 .rakkez-local-track.active {
-
-    border-color:
-        rgba(22,131,255,.45);
-
-    background:
-        rgba(22,131,255,.10);
-
+    border-color: rgba(22,131,255,.45);
+    background: rgba(22,131,255,.10);
 }
 
-
 .rakkez-local-track-icon {
-
     width: 34px;
-
     height: 34px;
-
     flex: 0 0 34px;
 
     display: grid;
-
     place-items: center;
 
     border-radius: 9px;
 
-    background:
-        rgba(255,255,255,.07);
+    background: rgba(255,255,255,.07);
 
     font-size: 14px;
-
 }
-
 
 .rakkez-local-track-info {
-
     min-width: 0;
-
     flex: 1;
-
 }
 
-
 .rakkez-local-track-name {
-
     font-size: 12px;
-
     font-weight: 650;
 
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
-
 }
 
-
 .rakkez-local-track-meta {
-
     margin-top: 3px;
 
     font-size: 10px;
 
-    color:
-        var(--muted, rgba(255,255,255,.5));
-
+    color: var(--muted, rgba(255,255,255,.5));
 }
 
 
@@ -4191,44 +3958,30 @@ Add something you want to accomplish.
 ===================================================== */
 
 #rakkezSpotifyEmbed {
-
     width: 100%;
-
     margin-top: 18px;
 
     overflow: hidden;
-
     border-radius: 14px;
-
 }
 
-
 #rakkezSpotifyEmbed iframe {
-
     display: block;
 
     width: 100% !important;
-
     height: 152px !important;
-
     min-height: 152px !important;
 
     border: 0;
-
     border-radius: 14px;
-
 }
-
 
 #rakkezSpotifyEmbed iframe[src*="/playlist/"],
 #rakkezSpotifyEmbed iframe[src*="/album/"],
 #rakkezSpotifyEmbed iframe[src*="/artist/"],
 #rakkezSpotifyEmbed iframe[src*="/show/"] {
-
     height: 352px !important;
-
     min-height: 352px !important;
-
 }
 
 
@@ -4237,20 +3990,14 @@ Add something you want to accomplish.
 ===================================================== */
 
 #rakkezYoutubeEmbed {
-
     width: 100%;
-
     margin-top: 18px;
 
     overflow: hidden;
-
     border-radius: 14px;
-
 }
 
-
 #rakkezYoutubeEmbed iframe {
-
     display: block;
 
     width: 100%;
@@ -4262,7 +4009,6 @@ Add something you want to accomplish.
     border: 0;
 
     border-radius: 14px;
-
 }
 
 
@@ -4273,18 +4019,10 @@ Add something you want to accomplish.
 html.light .rakkez-mini-player,
 body.light .rakkez-mini-player,
 [data-theme="light"] .rakkez-mini-player {
-
-    background:
-        rgba(255,255,255,.94);
-
-    border-color:
-        rgba(0,0,0,.10);
-
-    box-shadow:
-        0 18px 50px rgba(0,0,0,.14);
-
+    background: rgba(255,255,255,.94);
+    border-color: rgba(0,0,0,.10);
+    box-shadow: 0 18px 50px rgba(0,0,0,.14);
 }
-
 
 html.light .rakkez-mini-control,
 body.light .rakkez-mini-control,
@@ -4292,15 +4030,11 @@ body.light .rakkez-mini-control,
 html.light .rakkez-mini-close,
 body.light .rakkez-mini-close,
 [data-theme="light"] .rakkez-mini-close {
-
     color: #111;
 
-    background:
-        rgba(0,0,0,.045);
+    background: rgba(0,0,0,.045);
 
-    border-color:
-        rgba(0,0,0,.09);
-
+    border-color: rgba(0,0,0,.09);
 }
 
 
@@ -4311,41 +4045,29 @@ body.light .rakkez-mini-close,
 @media (max-width: 600px) {
 
     .rakkez-mini-player {
-
         right: 12px;
-
         bottom: 12px;
 
-        width:
-            calc(100vw - 24px);
+        width: calc(100vw - 24px);
 
         min-height: 70px;
 
         padding: 8px 10px;
-
     }
 
-
     .rakkez-mini-artwork {
-
         width: 46px;
-
         height: 46px;
 
         flex-basis: 46px;
-
     }
-
 
     .rakkez-mini-control,
     .rakkez-mini-close {
-
         width: 32px;
-
         height: 32px;
 
         flex-basis: 32px;
-
     }
 
 }
@@ -4362,6 +4084,7 @@ body.light .rakkez-mini-close,
 <script src="themes.js"></script>
 <script src="language.js"></script>
 <script src="media-player.js"></script>
+
 
 <!-- =====================================================
      RAKKEZ UPDATES MODAL
@@ -4384,7 +4107,6 @@ body.light .rakkez-mini-close,
             ×
         </button>
 
-
         <div class="updates-header">
 
             <span
@@ -4404,11 +4126,9 @@ body.light .rakkez-mini-close,
 
         </div>
 
-
         <div id="updatesList">
             <!-- JavaScript inserts updates here -->
         </div>
-
 
         <button
             id="updatesDone"
@@ -4423,19 +4143,8 @@ body.light .rakkez-mini-close,
 </div>
 
 
-
-
-
-
-
 <!-- =====================================================
      RAKKEZ TIMER ENHANCEMENTS
-     - Focus / Short Break / Long Break tabs
-     - Reset Current Segment
-     - Reset Full Session
-     - Persistent Document Picture-in-Picture Mini Timer
-     - Floating fallback
-     - Safe synchronization with existing RakkeZ timer
 ===================================================== -->
 
 <style>
@@ -4446,29 +4155,49 @@ body.light .rakkez-mini-close,
 
 .rakkez-timer-tabs {
     width: min(430px, 100%);
+
     margin: 0 auto 24px;
+
     padding: 4px;
+
     display: flex;
+
     gap: 4px;
+
     border-radius: 14px;
+
     background: rgba(255,255,255,.035);
+
     border: 1px solid rgba(255,255,255,.07);
+
     box-sizing: border-box;
 }
 
 .rakkez-timer-tab {
     flex: 1;
+
     min-width: 0;
+
     height: 38px;
+
     padding: 0 10px;
+
     border: 0;
+
     border-radius: 10px;
+
     background: transparent;
+
     color: rgba(255,255,255,.38);
+
     font-family: "DM Sans", sans-serif;
+
     font-size: 11px;
+
     font-weight: 700;
+
     cursor: pointer;
+
     transition:
         background .2s ease,
         color .2s ease,
@@ -4477,12 +4206,15 @@ body.light .rakkez-mini-close,
 
 .rakkez-timer-tab:hover {
     color: rgba(255,255,255,.85);
+
     background: rgba(255,255,255,.045);
 }
 
 .rakkez-timer-tab.active {
     color: #fff;
+
     background: rgba(255,255,255,.095);
+
     box-shadow: 0 4px 15px rgba(0,0,0,.16);
 }
 
@@ -4501,23 +4233,37 @@ body.light .rakkez-mini-close,
 
 .rakkez-reset-options {
     display: flex;
+
     flex-direction: column;
+
     gap: 9px;
 }
 
 .rakkez-reset-option {
     width: 100%;
+
     min-height: 58px;
+
     padding: 10px 14px;
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     gap: 15px;
+
     border: 1px solid rgba(255,255,255,.08);
+
     border-radius: 13px;
+
     background: rgba(255,255,255,.035);
+
     color: #fff;
+
     cursor: pointer;
+
     transition:
         background .2s ease,
         border-color .2s ease,
@@ -4526,35 +4272,48 @@ body.light .rakkez-mini-close,
 
 .rakkez-reset-option:hover {
     background: rgba(255,255,255,.07);
+
     border-color: rgba(255,255,255,.15);
+
     transform: translateY(-1px);
 }
 
 .rakkez-reset-option-text {
     min-width: 0;
+
     text-align: left;
 }
 
 .rakkez-reset-option-title {
     color: #fff;
+
     font-size: 12px;
+
     font-weight: 700;
 }
 
 .rakkez-reset-option-description {
     margin-top: 4px;
+
     color: rgba(255,255,255,.38);
+
     font-size: 10px;
 }
 
 .rakkez-reset-option-icon {
     width: 32px;
     height: 32px;
+
     flex: 0 0 32px;
+
     display: grid;
+
     place-items: center;
+
     border-radius: 9px;
+
     background: rgba(255,255,255,.055);
+
     color: rgba(255,255,255,.75);
 }
 
@@ -4566,12 +4325,19 @@ body.light .rakkez-mini-close,
 .rakkez-mini-timer {
     width: 100%;
     height: 100%;
+
     min-height: 100vh;
+
     position: relative;
+
     overflow: hidden;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     background:
         radial-gradient(
             circle at 50% 25%,
@@ -4579,13 +4345,17 @@ body.light .rakkez-mini-close,
             transparent 48%
         ),
         #03050a;
+
     color: #fff;
+
     font-family: "DM Sans", sans-serif;
 }
 
 .rakkez-mini-bg {
     position: absolute;
+
     inset: 0;
+
     background:
         radial-gradient(
             circle at 15% 20%,
@@ -4597,54 +4367,84 @@ body.light .rakkez-mini-close,
             rgba(80,100,180,.14),
             transparent 40%
         );
+
     pointer-events: none;
 }
 
 .rakkez-mini-content {
     position: relative;
+
     z-index: 2;
+
     width: 100%;
+
     padding: 20px;
+
     text-align: center;
 }
 
 .rakkez-mini-mode {
     margin-bottom: 9px;
+
     color: rgba(255,255,255,.42);
+
     font-size: 10px;
+
     font-weight: 800;
+
     letter-spacing: 2px;
 }
 
 .rakkez-mini-time {
     color: #fff;
+
     font-family: "Space Grotesk", sans-serif;
+
     font-size: clamp(50px, 14vw, 90px);
+
     font-weight: 600;
+
     line-height: 1;
+
     letter-spacing: -3px;
+
     font-variant-numeric: tabular-nums;
 }
 
 .rakkez-mini-buttons {
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     gap: 8px;
+
     margin-top: 24px;
 }
 
 .rakkez-mini-buttons button {
     height: 38px;
+
     min-width: 42px;
+
     padding: 0 13px;
+
     border: 1px solid rgba(255,255,255,.10);
+
     border-radius: 11px;
+
     background: rgba(255,255,255,.07);
+
     color: #fff;
+
     font-size: 12px;
+
     cursor: pointer;
-    transition: background .2s ease, transform .15s ease;
+
+    transition:
+        background .2s ease,
+        transform .15s ease;
 }
 
 .rakkez-mini-buttons button:hover {
@@ -4657,9 +4457,13 @@ body.light .rakkez-mini-close,
 
 .rakkez-mini-start {
     min-width: 82px !important;
+
     background: #fff !important;
+
     color: #05070b !important;
+
     border-color: transparent !important;
+
     font-weight: 700;
 }
 
@@ -4670,16 +4474,25 @@ body.light .rakkez-mini-close,
 
 #rakkezMiniFloating {
     position: fixed;
+
     right: 20px;
     bottom: 20px;
+
     width: 280px;
     height: 175px;
+
     z-index: 2147483000;
+
     display: none;
+
     overflow: hidden;
+
     border: 1px solid rgba(255,255,255,.12);
+
     border-radius: 20px;
+
     background: #03050a;
+
     box-shadow: 0 25px 80px rgba(0,0,0,.55);
 }
 
@@ -4704,7 +4517,9 @@ body.light .rakkez-mini-close,
 
     .rakkez-timer-tab {
         height: 36px;
+
         padding: 0 5px;
+
         font-size: 10px;
     }
 
@@ -4733,7 +4548,8 @@ body.light .rakkez-mini-close,
         </div>
 
         <div class="confirm-description">
-            Would you like to reset your current segment, or your full session?
+            Would you like to reset your current segment,
+            or your full session?
         </div>
 
         <div class="rakkez-reset-options">
@@ -4743,6 +4559,7 @@ body.light .rakkez-mini-close,
                 class="rakkez-reset-option"
                 type="button"
             >
+
                 <div class="rakkez-reset-option-text">
 
                     <div class="rakkez-reset-option-title">
@@ -4758,6 +4575,7 @@ body.light .rakkez-mini-close,
                 <div class="rakkez-reset-option-icon">
                     ↻
                 </div>
+
             </button>
 
 
@@ -4766,6 +4584,7 @@ body.light .rakkez-mini-close,
                 class="rakkez-reset-option"
                 type="button"
             >
+
                 <div class="rakkez-reset-option-text">
 
                     <div class="rakkez-reset-option-title">
@@ -4781,6 +4600,7 @@ body.light .rakkez-mini-close,
                 <div class="rakkez-reset-option-icon">
                     ⟳
                 </div>
+
             </button>
 
 
@@ -4861,6 +4681,10 @@ body.light .rakkez-mini-close,
 </div>
 
 
+<!-- =====================================================
+     TIMER + RESET + MINI TIMER JAVASCRIPT
+===================================================== -->
+
 <script>
 
 (function () {
@@ -4936,7 +4760,6 @@ body.light .rakkez-mini-close,
 
         `;
 
-
         if (modeElement) {
 
             timerCard.insertBefore(
@@ -4967,52 +4790,15 @@ body.light .rakkez-mini-close,
                 : "FOCUS";
 
 
-        if (
-            text.includes("SHORT")
-        ) {
-
+        if (text.includes("SHORT")) {
             return "short";
-
         }
 
-
-        if (
-            text.includes("LONG")
-        ) {
-
+        if (text.includes("LONG")) {
             return "long";
-
         }
-
 
         return "focus";
-
-    }
-
-
-    function getSeconds() {
-
-        if (!timerElement) {
-            return 0;
-        }
-
-
-        const value =
-            timerElement.textContent
-                .trim()
-                .split(":");
-
-
-        if (value.length !== 2) {
-            return 0;
-        }
-
-
-        return (
-            Number(value[0]) * 60
-            +
-            Number(value[1])
-        );
 
     }
 
@@ -5031,15 +4817,14 @@ body.light .rakkez-mini-close,
         const minutes =
             Math.floor(seconds / 60);
 
+
         const remaining =
             seconds % 60;
 
 
         return (
-            String(minutes).padStart(2, "0")
-            +
-            ":"
-            +
+            String(minutes).padStart(2, "0") +
+            ":" +
             String(remaining).padStart(2, "0")
         );
 
@@ -5079,11 +4864,13 @@ body.light .rakkez-mini-close,
     function changeMode(mode) {
 
         const candidates = [
+
             "setTimerMode",
             "switchTimerMode",
             "changeTimerMode",
             "setMode",
             "switchMode"
+
         ];
 
 
@@ -5124,42 +4911,6 @@ body.light .rakkez-mini-close,
         }
 
 
-        const possibleButtons = [
-
-            `[data-mode="${mode}"]`,
-
-            `[data-timer-mode="${mode}"]`,
-
-            `[data-mode-switch="${mode}"]`
-
-        ];
-
-
-        for (
-            let i = 0;
-            i < possibleButtons.length;
-            i++
-        ) {
-
-            const button =
-                document.querySelector(
-                    possibleButtons[i]
-                );
-
-
-            if (button) {
-
-                button.click();
-
-                updateTabs();
-
-                return true;
-
-            }
-
-        }
-
-
         try {
 
             const settings =
@@ -5176,20 +4927,18 @@ body.light .rakkez-mini-close,
             if (mode === "focus") {
 
                 minutes =
-                    Number(settings.focus || 25);
+                    Number(
+                        settings.focus || 25
+                    );
 
-            }
-
-            else if (mode === "short") {
+            } else if (mode === "short") {
 
                 minutes =
                     Number(
                         settings.shortBreak || 5
                     );
 
-            }
-
-            else {
+            } else {
 
                 minutes =
                     Number(
@@ -5221,6 +4970,9 @@ body.light .rakkez-mini-close,
                     minutes * 60;
 
                 state.running =
+                    false;
+
+                state.isRunning =
                     false;
 
 
@@ -5326,32 +5078,267 @@ body.light .rakkez-mini-close,
 
     function openReset() {
 
-        if (resetOverlay) {
+        if (!resetOverlay) {
 
-            resetOverlay.classList.add(
-                "show"
+            console.error(
+                "RakkeZ: Reset overlay not found."
             );
 
+            return;
         }
+
+
+        resetOverlay.classList.add(
+            "show"
+        );
 
     }
 
 
     function closeReset() {
 
-        if (resetOverlay) {
-
-            resetOverlay.classList.remove(
-                "show"
-            );
-
+        if (!resetOverlay) {
+            return;
         }
+
+
+        resetOverlay.classList.remove(
+            "show"
+        );
 
     }
 
 
     /* =====================================================
-       RESET BUTTON
+       GET TIMER MINUTES
+    ===================================================== */
+
+    function getTimerMinutes(mode) {
+
+        let settings = {};
+
+
+        try {
+
+            settings =
+                JSON.parse(
+                    localStorage.getItem(
+                        "rakkez_settings"
+                    ) || "{}"
+                );
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ: settings read failed",
+                error
+            );
+
+        }
+
+
+        if (mode === "short") {
+
+            return (
+                Number(
+                    settings.shortBreak
+                ) || 5
+            );
+
+        }
+
+
+        if (mode === "long") {
+
+            return (
+                Number(
+                    settings.longBreak
+                ) || 15
+            );
+
+        }
+
+
+        return (
+            Number(
+                settings.focus
+            ) || 25
+        );
+
+    }
+
+
+    /* =====================================================
+       DIRECT TIMER RESET
+    ===================================================== */
+
+    function directReset(mode) {
+
+        const seconds =
+            getTimerMinutes(mode) * 60;
+
+
+        let state = {};
+
+
+        try {
+
+            state =
+                JSON.parse(
+                    localStorage.getItem(
+                        "rakkez_timer_state"
+                    ) || "{}"
+                );
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ: timer state read failed",
+                error
+            );
+
+        }
+
+
+        /* ---------------------------------------------
+           STOP TIMER
+        --------------------------------------------- */
+
+        state.running =
+            false;
+
+        state.isRunning =
+            false;
+
+
+        /* ---------------------------------------------
+           RESET TIME
+        --------------------------------------------- */
+
+        state.mode =
+            mode;
+
+        state.remaining =
+            seconds;
+
+        state.total =
+            seconds;
+
+
+        /* ---------------------------------------------
+           SAVE STATE
+        --------------------------------------------- */
+
+        localStorage.setItem(
+            "rakkez_timer_state",
+            JSON.stringify(state)
+        );
+
+
+        /* ---------------------------------------------
+           UPDATE TIMER UI
+        --------------------------------------------- */
+
+        if (timerElement) {
+
+            timerElement.textContent =
+                formatTime(seconds);
+
+        }
+
+
+        /* ---------------------------------------------
+           UPDATE MODE UI
+        --------------------------------------------- */
+
+        if (modeElement) {
+
+            modeElement.textContent =
+                mode === "focus"
+                    ? "FOCUS"
+                    : mode === "short"
+                        ? "SHORT BREAK"
+                        : "LONG BREAK";
+
+        }
+
+
+        /* ---------------------------------------------
+           UPDATE START BUTTON
+        --------------------------------------------- */
+
+        if (startButton) {
+
+            startButton.textContent =
+                "START";
+
+        }
+
+
+        /* ---------------------------------------------
+           UPDATE TABS
+        --------------------------------------------- */
+
+        updateTabs();
+
+
+        /* ---------------------------------------------
+           UPDATE TAB TITLE
+        --------------------------------------------- */
+
+        if (
+            typeof window.updateTabTitle ===
+            "function"
+        ) {
+
+            try {
+
+                window.updateTabTitle(
+                    seconds,
+                    false
+                );
+
+            } catch (error) {
+
+                console.warn(
+                    "RakkeZ: tab title update failed",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* ---------------------------------------------
+           FORCE TIMER UPDATE
+        --------------------------------------------- */
+
+        window.dispatchEvent(
+            new CustomEvent(
+                "rakkezTimerReset",
+                {
+                    detail: {
+                        mode: mode,
+                        remaining: seconds,
+                        total: seconds
+                    }
+                }
+            )
+        );
+
+
+        console.log(
+            "RakkeZ: timer reset successfully:",
+            mode,
+            seconds
+        );
+
+    }
+
+
+    /* =====================================================
+       MAIN RESET BUTTON
     ===================================================== */
 
     if (resetButton) {
@@ -5361,6 +5348,9 @@ body.light .rakkez-mini-close,
             function (event) {
 
                 event.preventDefault();
+
+                event.stopPropagation();
+
                 event.stopImmediatePropagation();
 
                 openReset();
@@ -5380,54 +5370,21 @@ body.light .rakkez-mini-close,
 
         resetCurrent.addEventListener(
             "click",
-            function () {
+            function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                const currentMode =
+                    getMode();
+
 
                 closeReset();
 
 
-                const functions = [
-                    "resetTimer",
-                    "resetCurrentTimer",
-                    "resetCurrentSegment"
-                ];
-
-
-                for (
-                    let i = 0;
-                    i < functions.length;
-                    i++
-                ) {
-
-                    const fn =
-                        functions[i];
-
-
-                    if (
-                        typeof window[fn] === "function"
-                    ) {
-
-                        try {
-
-                            window[fn]();
-
-                            return;
-
-                        } catch (error) {
-
-                            console.warn(
-                                fn,
-                                error
-                            );
-
-                        }
-
-                    }
-
-                }
-
-
-                resetFromStorage(
-                    getMode()
+                directReset(
+                    currentMode
                 );
 
             }
@@ -5444,53 +5401,22 @@ body.light .rakkez-mini-close,
 
         resetFull.addEventListener(
             "click",
-            function () {
+            function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
 
                 closeReset();
 
 
-                const functions = [
-                    "resetSession",
-                    "resetFullSession",
-                    "resetPomodoroSession"
-                ];
+                /*
+                 * Full Session:
+                 * Always return to Focus.
+                 */
 
-
-                for (
-                    let i = 0;
-                    i < functions.length;
-                    i++
-                ) {
-
-                    const fn =
-                        functions[i];
-
-
-                    if (
-                        typeof window[fn] === "function"
-                    ) {
-
-                        try {
-
-                            window[fn]();
-
-                            return;
-
-                        } catch (error) {
-
-                            console.warn(
-                                fn,
-                                error
-                            );
-
-                        }
-
-                    }
-
-                }
-
-
-                resetFromStorage(
+                directReset(
                     "focus"
                 );
 
@@ -5508,122 +5434,64 @@ body.light .rakkez-mini-close,
 
         resetCancel.addEventListener(
             "click",
-            closeReset
+            function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                closeReset();
+
+            }
         );
 
     }
 
 
     /* =====================================================
-       RESET FROM STORAGE
+       CLOSE RESET BY OUTSIDE CLICK
     ===================================================== */
 
-    function resetFromStorage(mode) {
+    if (resetOverlay) {
 
-        try {
+        resetOverlay.addEventListener(
+            "click",
+            function (event) {
 
-            const settings =
-                JSON.parse(
-                    localStorage.getItem(
-                        "rakkez_settings"
-                    ) || "{}"
-                );
+                if (
+                    event.target ===
+                    resetOverlay
+                ) {
 
+                    closeReset();
 
-            let minutes =
-                Number(
-                    settings.focus || 25
-                );
-
-
-            if (mode === "short") {
-
-                minutes =
-                    Number(
-                        settings.shortBreak || 5
-                    );
+                }
 
             }
-
-
-            if (mode === "long") {
-
-                minutes =
-                    Number(
-                        settings.longBreak || 15
-                    );
-
-            }
-
-
-            const raw =
-                localStorage.getItem(
-                    "rakkez_timer_state"
-                );
-
-
-            if (!raw) {
-                return;
-            }
-
-
-            const state =
-                JSON.parse(raw);
-
-
-            state.mode =
-                mode;
-
-            state.remaining =
-                minutes * 60;
-
-            state.total =
-                minutes * 60;
-
-            state.running =
-                false;
-
-
-            localStorage.setItem(
-                "rakkez_timer_state",
-                JSON.stringify(state)
-            );
-
-
-            if (timerElement) {
-
-                timerElement.textContent =
-                    formatTime(
-                        minutes * 60
-                    );
-
-            }
-
-
-            if (modeElement) {
-
-                modeElement.textContent =
-                    mode === "focus"
-                        ? "FOCUS"
-                        : mode === "short"
-                            ? "SHORT BREAK"
-                            : "LONG BREAK";
-
-            }
-
-
-            updateTabs();
-
-        } catch (error) {
-
-            console.warn(
-                "RakkeZ reset fallback:",
-                error
-            );
-
-        }
+        );
 
     }
+
+
+    /* =====================================================
+       ESCAPE
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeReset();
+
+            }
+
+        }
+    );
 
 
     /* =====================================================
@@ -5669,7 +5537,9 @@ body.light .rakkez-mini-close,
     function getTimerText() {
 
         if (!timerElement) {
+
             return "--:--";
+
         }
 
 
@@ -5677,7 +5547,10 @@ body.light .rakkez-mini-close,
             timerElement.textContent.trim();
 
 
-        return text || "--:--";
+        return (
+            text ||
+            "--:--"
+        );
 
     }
 
@@ -5689,7 +5562,9 @@ body.light .rakkez-mini-close,
     function isTimerRunning() {
 
         if (!startButton) {
+
             return false;
+
         }
 
 
@@ -5700,10 +5575,8 @@ body.light .rakkez-mini-close,
 
 
         return (
-            text.includes("PAUSE")
-            ||
-            text.includes("إيقاف")
-            ||
+            text.includes("PAUSE") ||
+            text.includes("إيقاف") ||
             text.includes("PAUS")
         );
 
@@ -5721,12 +5594,16 @@ body.light .rakkez-mini-close,
 
 
         if (mode === "short") {
+
             return "SHORT BREAK";
+
         }
 
 
         if (mode === "long") {
+
             return "LONG BREAK";
+
         }
 
 
@@ -5736,7 +5613,7 @@ body.light .rakkez-mini-close,
 
 
     /* =====================================================
-       UPDATE FALLBACK MINI
+       UPDATE FLOATING MINI
     ===================================================== */
 
     function updateFloatingMini() {
@@ -5781,7 +5658,6 @@ body.light .rakkez-mini-close,
     function startFloatingSync() {
 
         stopFloatingSync();
-
 
         updateFloatingMini();
 
@@ -5870,20 +5746,17 @@ body.light .rakkez-mini-close,
 
 
     /* =====================================================
-       CHECK DOCUMENT PICTURE-IN-PICTURE
+       DOCUMENT PICTURE-IN-PICTURE
     ===================================================== */
 
     function canUseDocumentPiP() {
 
         return (
-            "documentPictureInPicture" in window
-            &&
-            window.documentPictureInPicture
-            &&
-            typeof
-                window.documentPictureInPicture
-                    .requestWindow
-            === "function"
+            "documentPictureInPicture" in window &&
+            window.documentPictureInPicture &&
+            typeof window
+                .documentPictureInPicture
+                .requestWindow === "function"
         );
 
     }
@@ -5895,18 +5768,11 @@ body.light .rakkez-mini-close,
 
     async function openMiniTimer() {
 
-        /*
-         * IMPORTANT:
-         * Do not call requestWindow() unless the actual
-         * function exists.
-         */
-
         if (!canUseDocumentPiP()) {
 
             console.warn(
                 "RakkeZ: Document Picture-in-Picture is not supported."
             );
-
 
             showFloatingMini();
 
@@ -5915,13 +5781,8 @@ body.light .rakkez-mini-close,
         }
 
 
-        /*
-         * Don't create duplicate PiP windows.
-         */
-
         if (
-            pipWindow
-            &&
+            pipWindow &&
             !pipWindow.closed
         ) {
 
@@ -5941,10 +5802,12 @@ body.light .rakkez-mini-close,
             pipWindow =
                 await window
                     .documentPictureInPicture
-                    .requestWindow({
-                        width: 360,
-                        height: 220
-                    });
+                    .requestWindow(
+                        {
+                            width: 360,
+                            height: 220
+                        }
+                    );
 
 
             if (!pipWindow) {
@@ -5961,9 +5824,8 @@ body.light .rakkez-mini-close,
             ================================================= */
 
             const style =
-                pipWindow.document.createElement(
-                    "style"
-                );
+                pipWindow.document
+                    .createElement("style");
 
 
             style.textContent = `
@@ -5993,11 +5855,17 @@ body.light .rakkez-mini-close,
                     width: 100%;
                     height: 100%;
                     min-height: 100%;
+
                     position: relative;
+
                     overflow: hidden;
+
                     display: flex;
+
                     align-items: center;
+
                     justify-content: center;
+
                     background:
                         radial-gradient(
                             circle at 50% 25%,
@@ -6005,7 +5873,9 @@ body.light .rakkez-mini-close,
                             transparent 48%
                         ),
                         #03050a;
+
                     color: #fff;
+
                     font-family:
                         "DM Sans",
                         Arial,
@@ -6014,7 +5884,9 @@ body.light .rakkez-mini-close,
 
                 .rakkez-mini-bg {
                     position: absolute;
+
                     inset: 0;
+
                     background:
                         radial-gradient(
                             circle at 15% 20%,
@@ -6026,63 +5898,92 @@ body.light .rakkez-mini-close,
                             rgba(80,100,180,.14),
                             transparent 40%
                         );
+
                     pointer-events: none;
                 }
 
                 .rakkez-mini-content {
                     position: relative;
+
                     z-index: 2;
+
                     width: 100%;
+
                     padding: 18px;
+
                     text-align: center;
                 }
 
                 .rakkez-mini-mode {
                     margin-bottom: 8px;
-                    color: rgba(255,255,255,.42);
+
+                    color:
+                        rgba(255,255,255,.42);
+
                     font-size: 10px;
+
                     font-weight: 800;
+
                     letter-spacing: 2px;
                 }
 
                 .rakkez-mini-time {
                     color: #fff;
+
                     font-family:
                         "Space Grotesk",
                         Arial,
                         sans-serif;
-                    font-size: clamp(
-                        50px,
-                        14vw,
-                        86px
-                    );
+
+                    font-size:
+                        clamp(
+                            50px,
+                            14vw,
+                            86px
+                        );
+
                     font-weight: 600;
+
                     line-height: 1;
+
                     letter-spacing: -3px;
+
                     font-variant-numeric:
                         tabular-nums;
                 }
 
                 .rakkez-mini-buttons {
                     display: flex;
+
                     align-items: center;
+
                     justify-content: center;
+
                     gap: 8px;
+
                     margin-top: 22px;
                 }
 
                 .rakkez-mini-buttons button {
                     height: 36px;
+
                     min-width: 42px;
+
                     padding: 0 12px;
+
                     border:
                         1px solid
                         rgba(255,255,255,.10);
+
                     border-radius: 10px;
+
                     background:
                         rgba(255,255,255,.07);
+
                     color: #fff;
+
                     font-size: 12px;
+
                     cursor: pointer;
                 }
 
@@ -6093,10 +5994,14 @@ body.light .rakkez-mini-close,
 
                 .rakkez-mini-start {
                     min-width: 82px !important;
+
                     background: #fff !important;
+
                     color: #05070b !important;
+
                     border-color:
                         transparent !important;
+
                     font-weight: 700;
                 }
 
@@ -6113,9 +6018,8 @@ body.light .rakkez-mini-close,
             ================================================= */
 
             const mini =
-                pipWindow.document.createElement(
-                    "div"
-                );
+                pipWindow.document
+                    .createElement("div");
 
 
             mini.className =
@@ -6186,18 +6090,15 @@ body.light .rakkez-mini-close,
                     "[data-rakkez-pip-time]"
                 );
 
-
             const pipMode =
                 mini.querySelector(
                     "[data-rakkez-pip-mode]"
                 );
 
-
             const pipStart =
                 mini.querySelector(
                     "[data-rakkez-pip-start]"
                 );
-
 
             const pipReset =
                 mini.querySelector(
@@ -6212,8 +6113,7 @@ body.light .rakkez-mini-close,
             function syncPiP() {
 
                 if (
-                    !pipWindow
-                    ||
+                    !pipWindow ||
                     pipWindow.closed
                 ) {
 
@@ -6346,7 +6246,6 @@ body.light .rakkez-mini-close,
 
             syncPiP();
 
-
         } catch (error) {
 
             console.warn(
@@ -6389,6 +6288,7 @@ body.light .rakkez-mini-close,
             function (event) {
 
                 event.preventDefault();
+
                 event.stopPropagation();
 
                 openMiniTimer();
@@ -6485,569 +6385,674 @@ body.light .rakkez-mini-close,
 </script>
 
 
-
-
-
-
-
-
-
-
-
 <!-- =========================================================
      RAKKEZ — POMODORO COMPLETION CARD
      DARK RAKKEZ THEME
-     ========================================================= -->
+========================================================= -->
 
 <style>
 
-    /* =========================================================
-       COMPLETION OVERLAY
-       ========================================================= */
+/* =========================================================
+   COMPLETION OVERLAY
+========================================================= */
 
-    #rkCompletionOverlay {
-        position: fixed;
-        inset: 0;
-        z-index: 100000;
+#rkCompletionOverlay {
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    position: fixed;
 
-        padding: 16px;
-        box-sizing: border-box;
+    inset: 0;
 
-        /* Very dark grey background */
-        background:
-            rgba(18, 19, 22, 0.82);
+    z-index: 100000;
 
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 16px;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(18, 19, 22, 0.82);
+
+    backdrop-filter: blur(10px);
+
+    -webkit-backdrop-filter: blur(10px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+
+}
+
+#rkCompletionOverlay.rk-show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.rk-completion-card {
+
+    position: relative;
+
+    width: min(330px, 100%);
+
+    box-sizing: border-box;
+
+    padding: 24px 22px 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #25272b 0%,
+            #191a1d 100%
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 22px;
+
+    text-align: center;
+
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.55),
+        0 8px 24px rgba(0, 0, 0, 0.35);
+
+    transform:
+        translateY(14px)
+        scale(0.96);
+
+    transition:
+        transform 0.3s
+        cubic-bezier(.2, .8, .2, 1);
+
+}
+
+#rkCompletionOverlay.rk-show
+.rk-completion-card {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+/* =========================================================
+   SUBTLE TOP GRADIENT
+========================================================= */
+
+.rk-completion-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 12%;
+
+    right: 12%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(45, 108, 255, 0.7),
+            rgba(65, 125, 255, 0.7),
+            transparent
+        );
+
+    opacity: 0.7;
+
+    pointer-events: none;
+
+}
+
+
+/* =========================================================
+   TROPHY
+========================================================= */
+
+.rk-completion-trophy-wrap {
+
+    width: 125px;
+
+    height: 125px;
+
+    margin:
+        0 auto 6px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: visible;
+
+}
+
+.rk-completion-trophy {
+
+    width: 115px;
+
+    height: 115px;
+
+    display: block;
+
+    object-fit: contain;
+
+    object-position: center;
+
+    max-width: 100%;
+
+    max-height: 100%;
+
+    user-select: none;
+
+    -webkit-user-drag: none;
+
+    transform-origin:
+        center bottom;
+
+    filter: none;
+
+}
+
+#rkCompletionOverlay.rk-show
+.rk-completion-trophy {
+
+    animation:
+        rkTrophyBounce
+        0.7s
+        cubic-bezier(.2, .8, .2, 1);
+
+}
+
+@keyframes rkTrophyBounce {
+
+    0% {
 
         opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-
-        transition:
-            opacity 0.25s ease,
-            visibility 0.25s ease;
-    }
-
-    #rkCompletionOverlay.rk-show {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-    }
-
-
-    /* =========================================================
-       CARD
-       ========================================================= */
-
-    .rk-completion-card {
-        position: relative;
-
-        width: min(330px, 100%);
-        box-sizing: border-box;
-
-        padding: 24px 22px 20px;
-
-        /* Very dark grey RakkeZ card */
-        background:
-            linear-gradient(
-                145deg,
-                #25272b 0%,
-                #191a1d 100%
-            );
-
-        border:
-            1px solid
-            rgba(255, 255, 255, 0.08);
-
-        border-radius: 22px;
-
-        text-align: center;
-
-        box-shadow:
-            0 24px 60px rgba(0, 0, 0, 0.55),
-            0 8px 24px rgba(0, 0, 0, 0.35);
 
         transform:
-            translateY(14px)
-            scale(0.96);
+            translateY(12px)
+            scale(0.84);
 
-        transition:
-            transform 0.3s cubic-bezier(.2, .8, .2, 1);
     }
 
-    #rkCompletionOverlay.rk-show .rk-completion-card {
+    45% {
+
+        opacity: 1;
+
+        transform:
+            translateY(-5px)
+            scale(1.04);
+
+    }
+
+    70% {
+
+        transform:
+            translateY(2px)
+            scale(0.98);
+
+    }
+
+    100% {
+
         transform:
             translateY(0)
             scale(1);
+
     }
 
+}
 
-    /* =========================================================
-       SUBTLE TOP GRADIENT
-       ========================================================= */
 
-    .rk-completion-card::before {
-        content: "";
+/* =========================================================
+   TITLE
+========================================================= */
 
-        position: absolute;
+.rk-completion-title {
 
-        top: 0;
-        left: 12%;
-        right: 12%;
+    margin: 0;
 
-        height: 1px;
+    color: #f3f4f6;
 
-        background:
-            linear-gradient(
-                90deg,
-                transparent,
-                rgba(45, 108, 255, 0.7),
-                rgba(65, 125, 255, 0.7),
-                transparent
-            );
+    font-family:
+        "Space Grotesk",
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 
-        opacity: 0.7;
+    font-size: 23px;
 
-        pointer-events: none;
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.rk-completion-message {
+
+    margin:
+        8px auto 0;
+
+    max-width: 270px;
+
+    color:
+        rgba(220, 223, 228, 0.62);
+
+    font-family:
+        "DM Sans",
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    font-weight: 450;
+
+}
+
+
+/* =========================================================
+   DAILY NUMBER
+========================================================= */
+
+.rk-completion-count {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 30px;
+
+    margin-top: 14px;
+
+    padding: 6px 12px;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(35, 95, 210, 0.14);
+
+    border:
+        1px solid
+        rgba(55, 115, 235, 0.25);
+
+    border-radius: 999px;
+
+    color: #78a8ff;
+
+    font-family:
+        "DM Sans",
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 12px;
+
+    line-height: 1;
+
+    font-weight: 650;
+
+}
+
+
+/* =========================================================
+   CONTINUE
+========================================================= */
+
+.rk-completion-button {
+
+    width: 100%;
+
+    margin-top: 17px;
+
+    min-height: 43px;
+
+    padding: 11px 16px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #174ea6 0%,
+            #123b82 100%
+        );
+
+    color: #ffffff;
+
+    font-family:
+        "DM Sans",
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 13px;
+
+    line-height: 1;
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 18px
+        rgba(20, 70, 150, 0.30);
+
+    transition:
+        transform 0.16s ease,
+        filter 0.16s ease,
+        box-shadow 0.16s ease;
+
+}
+
+.rk-completion-button:hover {
+
+    filter: brightness(1.12);
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 22px
+        rgba(20, 70, 150, 0.40);
+
+}
+
+.rk-completion-button:active {
+
+    transform:
+        translateY(1px)
+        scale(0.985);
+
+    box-shadow:
+        0 4px 12px
+        rgba(20, 70, 150, 0.25);
+
+}
+
+.rk-completion-button:focus-visible {
+
+    outline:
+        2px solid
+        rgba(70, 130, 255, 0.70);
+
+    outline-offset: 3px;
+
+}
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+.rk-completion-close {
+
+    position: absolute;
+
+    top: 10px;
+
+    right: 10px;
+
+    width: 29px;
+
+    height: 29px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.06);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    color:
+        rgba(230, 234, 240, 0.55);
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 18px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 0.16s ease,
+        color 0.16s ease,
+        transform 0.16s ease;
+
+}
+
+.rk-completion-close:hover {
+
+    background:
+        rgba(255, 255, 255, 0.09);
+
+    color:
+        rgba(255, 255, 255, 0.85);
+
+    transform:
+        scale(1.05);
+
+}
+
+.rk-completion-close:active {
+
+    transform:
+        scale(0.93);
+
+}
+
+
+/* =========================================================
+   DECORATIVE DOTS
+========================================================= */
+
+.rk-completion-dot {
+
+    position: absolute;
+
+    width: 5px;
+
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #3d7cff;
+
+    opacity: 0.28;
+
+    pointer-events: none;
+
+}
+
+.rk-completion-dot-one {
+
+    top: 31px;
+
+    left: 27px;
+
+}
+
+.rk-completion-dot-two {
+
+    top: 54px;
+
+    right: 25px;
+
+    width: 4px;
+
+    height: 4px;
+
+    opacity: 0.22;
+
+}
+
+.rk-completion-dot-three {
+
+    bottom: 65px;
+
+    left: 20px;
+
+    width: 4px;
+
+    height: 4px;
+
+    opacity: 0.18;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    #rkCompletionOverlay {
+
+        padding: 14px;
+
     }
 
+    .rk-completion-card {
 
-    /* =========================================================
-       TROPHY IMAGE
-       ========================================================= */
+        width: min(320px, 100%);
+
+        padding:
+            22px 18px 18px;
+
+        border-radius: 20px;
+
+    }
 
     .rk-completion-trophy-wrap {
-        width: 125px;
-        height: 125px;
 
-        margin: 0 auto 6px;
+        width: 115px;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 115px;
 
-        overflow: visible;
     }
 
     .rk-completion-trophy {
-        width: 115px;
-        height: 115px;
 
-        display: block;
+        width: 105px;
 
-        object-fit: contain;
-        object-position: center;
+        height: 105px;
 
-        max-width: 100%;
-        max-height: 100%;
+    }
 
-        user-select: none;
-        -webkit-user-drag: none;
+    .rk-completion-title {
 
-        transform-origin: center bottom;
+        font-size: 21px;
 
-        filter: none;
+    }
+
+    .rk-completion-message {
+
+        font-size: 12.5px;
+
+    }
+
+    .rk-completion-button {
+
+        min-height: 41px;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    #rkCompletionOverlay,
+    .rk-completion-card,
+    .rk-completion-button,
+    .rk-completion-close {
+
+        transition: none;
+
     }
 
     #rkCompletionOverlay.rk-show
     .rk-completion-trophy {
-        animation:
-            rkTrophyBounce
-            0.7s
-            cubic-bezier(.2, .8, .2, 1);
+
+        animation: none;
+
     }
 
-    @keyframes rkTrophyBounce {
-
-        0% {
-            opacity: 0;
-
-            transform:
-                translateY(12px)
-                scale(0.84);
-        }
-
-        45% {
-            opacity: 1;
-
-            transform:
-                translateY(-5px)
-                scale(1.04);
-        }
-
-        70% {
-            transform:
-                translateY(2px)
-                scale(0.98);
-        }
-
-        100% {
-            transform:
-                translateY(0)
-                scale(1);
-        }
-    }
-
-
-    /* =========================================================
-       TITLE
-       ========================================================= */
-
-    .rk-completion-title {
-        margin: 0;
-
-        color: #f3f4f6;
-
-        font-family:
-            "Space Grotesk",
-            Inter,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-
-        font-size: 23px;
-        line-height: 1.2;
-        font-weight: 700;
-
-        letter-spacing: -0.5px;
-    }
-
-
-    /* =========================================================
-       MESSAGE
-       ========================================================= */
-
-    .rk-completion-message {
-        margin: 8px auto 0;
-
-        max-width: 270px;
-
-        color:
-            rgba(220, 223, 228, 0.62);
-
-        font-family:
-            "DM Sans",
-            Inter,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-
-        font-size: 13px;
-        line-height: 1.5;
-        font-weight: 450;
-    }
-
-
-    /* =========================================================
-       DAILY POMODORO NUMBER
-       ========================================================= */
-
-    .rk-completion-count {
-        display: inline-flex;
-
-        align-items: center;
-        justify-content: center;
-
-        min-height: 30px;
-
-        margin-top: 14px;
-        padding: 6px 12px;
-
-        box-sizing: border-box;
-
-        background:
-            rgba(35, 95, 210, 0.14);
-
-        border:
-            1px solid
-            rgba(55, 115, 235, 0.25);
-
-        border-radius: 999px;
-
-        color:
-            #78a8ff;
-
-        font-family:
-            "DM Sans",
-            Inter,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-
-        font-size: 12px;
-        line-height: 1;
-        font-weight: 650;
-    }
-
-
-    /* =========================================================
-       CONTINUE BUTTON
-       DARK BLUE — RAKKEZ STYLE
-       ========================================================= */
-
-    .rk-completion-button {
-        width: 100%;
-
-        margin-top: 17px;
-
-        min-height: 43px;
-
-        padding: 11px 16px;
-
-        border: 0;
-
-        border-radius: 12px;
-
-        /* Deep RakkeZ blue */
-        background:
-            linear-gradient(
-                135deg,
-                #174ea6 0%,
-                #123b82 100%
-            );
-
-        color: #ffffff;
-
-        font-family:
-            "DM Sans",
-            Inter,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-
-        font-size: 13px;
-        line-height: 1;
-
-        font-weight: 650;
-
-        cursor: pointer;
-
-        box-shadow:
-            0 6px 18px
-            rgba(20, 70, 150, 0.30);
-
-        transition:
-            transform 0.16s ease,
-            filter 0.16s ease,
-            box-shadow 0.16s ease;
-    }
-
-    .rk-completion-button:hover {
-        filter: brightness(1.12);
-
-        transform:
-            translateY(-1px);
-
-        box-shadow:
-            0 8px 22px
-            rgba(20, 70, 150, 0.40);
-    }
-
-    .rk-completion-button:active {
-        transform:
-            translateY(1px)
-            scale(0.985);
-
-        box-shadow:
-            0 4px 12px
-            rgba(20, 70, 150, 0.25);
-    }
-
-    .rk-completion-button:focus-visible {
-        outline:
-            2px solid
-            rgba(70, 130, 255, 0.70);
-
-        outline-offset: 3px;
-    }
-
-
-    /* =========================================================
-       CLOSE BUTTON
-       ========================================================= */
-
-    .rk-completion-close {
-        position: absolute;
-
-        top: 10px;
-        right: 10px;
-
-        width: 29px;
-        height: 29px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        padding: 0;
-
-        border:
-            1px solid
-            rgba(255, 255, 255, 0.06);
-
-        border-radius: 50%;
-
-        background:
-            rgba(255, 255, 255, 0.045);
-
-        color:
-            rgba(230, 234, 240, 0.55);
-
-        font-family: Arial, sans-serif;
-
-        font-size: 18px;
-        line-height: 1;
-
-        cursor: pointer;
-
-        transition:
-            background 0.16s ease,
-            color 0.16s ease,
-            transform 0.16s ease;
-    }
-
-    .rk-completion-close:hover {
-        background:
-            rgba(255, 255, 255, 0.09);
-
-        color:
-            rgba(255, 255, 255, 255, 0.85);
-
-        transform:
-            scale(1.05);
-    }
-
-    .rk-completion-close:active {
-        transform:
-            scale(0.93);
-    }
-
-
-    /* =========================================================
-       DECORATIVE DOTS
-       ========================================================= */
-
-    .rk-completion-dot {
-        position: absolute;
-
-        width: 5px;
-        height: 5px;
-
-        border-radius: 50%;
-
-        background:
-            #3d7cff;
-
-        opacity: 0.28;
-
-        pointer-events: none;
-    }
-
-    .rk-completion-dot-one {
-        top: 31px;
-        left: 27px;
-    }
-
-    .rk-completion-dot-two {
-        top: 54px;
-        right: 25px;
-
-        width: 4px;
-        height: 4px;
-
-        opacity: 0.22;
-    }
-
-    .rk-completion-dot-three {
-        bottom: 65px;
-        left: 20px;
-
-        width: 4px;
-        height: 4px;
-
-        opacity: 0.18;
-    }
-
-
-    /* =========================================================
-       MOBILE
-       ========================================================= */
-
-    @media (max-width: 480px) {
-
-        #rkCompletionOverlay {
-            padding: 14px;
-        }
-
-        .rk-completion-card {
-            width: min(320px, 100%);
-
-            padding:
-                22px
-                18px
-                18px;
-
-            border-radius: 20px;
-        }
-
-        .rk-completion-trophy-wrap {
-            width: 115px;
-            height: 115px;
-        }
-
-        .rk-completion-trophy {
-            width: 105px;
-            height: 105px;
-        }
-
-        .rk-completion-title {
-            font-size: 21px;
-        }
-
-        .rk-completion-message {
-            font-size: 12.5px;
-        }
-
-        .rk-completion-button {
-            min-height: 41px;
-        }
-    }
-
-
-    /* =========================================================
-       REDUCED MOTION
-       ========================================================= */
-
-    @media (prefers-reduced-motion: reduce) {
-
-        #rkCompletionOverlay,
-        .rk-completion-card,
-        .rk-completion-button,
-        .rk-completion-close {
-            transition: none;
-        }
-
-        #rkCompletionOverlay.rk-show
-        .rk-completion-trophy {
-            animation: none;
-        }
-    }
+}
 
 </style>
 
 
 <!-- =========================================================
      COMPLETION CARD
-     ========================================================= -->
+========================================================= -->
 
 <div
     id="rkCompletionOverlay"
@@ -7065,17 +7070,20 @@ body.light .rakkez-mini-close,
         <!-- Decorative -->
 
         <span
-            class="rk-completion-dot rk-completion-dot-one"
+            class="rk-completion-dot
+                   rk-completion-dot-one"
             aria-hidden="true"
         ></span>
 
         <span
-            class="rk-completion-dot rk-completion-dot-two"
+            class="rk-completion-dot
+                   rk-completion-dot-two"
             aria-hidden="true"
         ></span>
 
         <span
-            class="rk-completion-dot rk-completion-dot-three"
+            class="rk-completion-dot
+                   rk-completion-dot-three"
             aria-hidden="true"
         ></span>
 
@@ -7149,6 +7157,5 @@ body.light .rakkez-mini-close,
     </div>
 
 </div>
-
 </body>
 </html>
