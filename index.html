@@ -6493,13 +6493,14 @@ body.light .rakkez-mini-close,
 
 
 
-```html
+
 <!-- =========================================================
      RAKKEZ — POMODORO COMPLETION CARD
-     RAKKEZ THEME
+     DARK RAKKEZ THEME
      ========================================================= -->
 
 <style>
+
     /* =========================================================
        COMPLETION OVERLAY
        ========================================================= */
@@ -6513,22 +6514,26 @@ body.light .rakkez-mini-close,
         align-items: center;
         justify-content: center;
 
-        padding: 20px;
+        padding: 16px;
         box-sizing: border-box;
 
-        /* Popup background stays WHITE */
-        background: rgba(255, 255, 255, 0.86);
+        /*
+         * RakkeZ dark overlay
+         * NOT white
+         */
+        background:
+            rgba(5, 7, 14, 0.68);
 
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
 
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
 
         transition:
-            opacity 0.28s ease,
-            visibility 0.28s ease;
+            opacity 0.25s ease,
+            visibility 0.25s ease;
     }
 
     #rkCompletionOverlay.rk-show {
@@ -6539,61 +6544,45 @@ body.light .rakkez-mini-close,
 
 
     /* =========================================================
-       CARD — RAKKEZ GLASS
+       CARD
        ========================================================= */
 
     .rk-completion-card {
         position: relative;
 
-        width: min(390px, 100%);
+        width: min(330px, 100%);
         box-sizing: border-box;
 
-        padding: 32px 28px 26px;
+        padding: 24px 22px 20px;
 
+        /*
+         * RakkeZ dark glass
+         */
         background:
             linear-gradient(
                 145deg,
-                rgba(255, 255, 255, 0.98),
-                rgba(247, 249, 255, 0.98)
+                rgba(20, 24, 39, 0.97),
+                rgba(10, 13, 24, 0.98)
             );
 
-        border: 1px solid rgba(93, 103, 255, 0.14);
+        border:
+            1px solid
+            rgba(255, 255, 255, 0.08);
 
-        border-radius: 28px;
+        border-radius: 22px;
 
         text-align: center;
 
         box-shadow:
-            0 30px 80px rgba(42, 54, 150, 0.14),
-            0 8px 28px rgba(75, 88, 210, 0.08),
-            inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            0 24px 60px rgba(0, 0, 0, 0.42),
+            0 8px 24px rgba(0, 0, 0, 0.25);
 
         transform:
-            translateY(18px)
+            translateY(14px)
             scale(0.96);
 
         transition:
-            transform 0.35s cubic-bezier(.2, .8, .2, 1);
-    }
-
-    /* Soft RakkeZ glow */
-
-    .rk-completion-card::before {
-        content: "";
-
-        position: absolute;
-        inset: 0;
-
-        border-radius: inherit;
-
-        background:
-            radial-gradient(
-                circle at 50% 0%,
-                rgba(88, 101, 255, 0.10),
-                transparent 48%
-            );
-
-        pointer-events: none;
+            transform 0.3s cubic-bezier(.2, .8, .2, 1);
     }
 
     #rkCompletionOverlay.rk-show .rk-completion-card {
@@ -6604,14 +6593,44 @@ body.light .rakkez-mini-close,
 
 
     /* =========================================================
+       SUBTLE TOP GRADIENT
+       ========================================================= */
+
+    .rk-completion-card::before {
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+        left: 12%;
+        right: 12%;
+
+        height: 1px;
+
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                rgba(95, 115, 255, 0.65),
+                rgba(130, 91, 255, 0.65),
+                transparent
+            );
+
+        opacity: 0.7;
+
+        pointer-events: none;
+    }
+
+
+    /* =========================================================
        TROPHY IMAGE
        ========================================================= */
 
     .rk-completion-trophy-wrap {
-        width: 170px;
-        height: 170px;
+        width: 125px;
+        height: 125px;
 
-        margin: 0 auto 10px;
+        margin: 0 auto 6px;
 
         display: flex;
         align-items: center;
@@ -6621,8 +6640,8 @@ body.light .rakkez-mini-close,
     }
 
     .rk-completion-trophy {
-        width: 150px;
-        height: 150px;
+        width: 115px;
+        height: 115px;
 
         display: block;
 
@@ -6637,18 +6656,19 @@ body.light .rakkez-mini-close,
 
         transform-origin: center bottom;
 
-        filter:
-            drop-shadow(
-                0 12px 18px
-                rgba(76, 91, 220, 0.12)
-            );
+        /*
+         * NO GLOW
+         * NO DROP SHADOW
+         * NO FILTER
+         */
+        filter: none;
     }
 
     #rkCompletionOverlay.rk-show
     .rk-completion-trophy {
         animation:
             rkTrophyBounce
-            0.75s
+            0.7s
             cubic-bezier(.2, .8, .2, 1);
     }
 
@@ -6656,15 +6676,17 @@ body.light .rakkez-mini-close,
 
         0% {
             opacity: 0;
+
             transform:
-                translateY(18px)
-                scale(0.82);
+                translateY(12px)
+                scale(0.84);
         }
 
         45% {
             opacity: 1;
+
             transform:
-                translateY(-7px)
+                translateY(-5px)
                 scale(1.04);
         }
 
@@ -6689,7 +6711,7 @@ body.light .rakkez-mini-close,
     .rk-completion-title {
         margin: 0;
 
-        color: #171a2f;
+        color: #f5f7ff;
 
         font-family:
             "Space Grotesk",
@@ -6699,11 +6721,11 @@ body.light .rakkez-mini-close,
             "Segoe UI",
             sans-serif;
 
-        font-size: 27px;
+        font-size: 23px;
         line-height: 1.2;
         font-weight: 700;
 
-        letter-spacing: -0.7px;
+        letter-spacing: -0.5px;
     }
 
 
@@ -6712,56 +6734,12 @@ body.light .rakkez-mini-close,
        ========================================================= */
 
     .rk-completion-message {
-        margin: 10px auto 0;
+        margin: 8px auto 0;
 
-        max-width: 300px;
+        max-width: 270px;
 
-        color: #68708a;
-
-        font-family:
-            "DM Sans",
-            Inter,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-
-        font-size: 15px;
-        line-height: 1.55;
-        font-weight: 450;
-    }
-
-
-    /* =========================================================
-       DAILY POMODORO NUMBER
-       ========================================================= */
-
-    .rk-completion-count {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-
-        min-height: 34px;
-
-        margin-top: 18px;
-        padding: 7px 14px;
-
-        box-sizing: border-box;
-
-        background:
-            linear-gradient(
-                135deg,
-                rgba(89, 102, 255, 0.10),
-                rgba(126, 92, 255, 0.08)
-            );
-
-        border:
-            1px solid
-            rgba(89, 102, 255, 0.12);
-
-        border-radius: 999px;
-
-        color: #5965c9;
+        color:
+            rgba(224, 228, 242, 0.62);
 
         font-family:
             "DM Sans",
@@ -6772,36 +6750,76 @@ body.light .rakkez-mini-close,
             sans-serif;
 
         font-size: 13px;
-        line-height: 1;
-        font-weight: 650;
-
-        box-shadow:
-            inset 0 1px 0
-            rgba(255, 255, 255, 0.8);
+        line-height: 1.5;
+        font-weight: 450;
     }
 
 
     /* =========================================================
-       CONTINUE BUTTON — RAKKEZ GRADIENT
+       DAILY POMODORO NUMBER
+       ========================================================= */
+
+    .rk-completion-count {
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        min-height: 30px;
+
+        margin-top: 14px;
+        padding: 6px 12px;
+
+        box-sizing: border-box;
+
+        background:
+            rgba(91, 105, 255, 0.10);
+
+        border:
+            1px solid
+            rgba(105, 119, 255, 0.18);
+
+        border-radius: 999px;
+
+        color:
+            #9da8ff;
+
+        font-family:
+            "DM Sans",
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+        font-size: 12px;
+        line-height: 1;
+        font-weight: 650;
+    }
+
+
+    /* =========================================================
+       CONTINUE BUTTON
        ========================================================= */
 
     .rk-completion-button {
         width: 100%;
 
-        margin-top: 24px;
+        margin-top: 17px;
 
-        min-height: 48px;
+        min-height: 43px;
 
-        padding: 13px 18px;
+        padding: 11px 16px;
 
         border: 0;
-        border-radius: 15px;
+
+        border-radius: 12px;
 
         background:
             linear-gradient(
                 135deg,
-                #5968ff 0%,
-                #765cff 100%
+                #596cff 0%,
+                #705cff 100%
             );
 
         color: #ffffff;
@@ -6814,47 +6832,48 @@ body.light .rakkez-mini-close,
             "Segoe UI",
             sans-serif;
 
-        font-size: 14px;
+        font-size: 13px;
         line-height: 1;
+
         font-weight: 650;
 
         cursor: pointer;
 
         box-shadow:
-            0 10px 24px
-            rgba(91, 96, 230, 0.20);
+            0 6px 18px
+            rgba(83, 93, 230, 0.20);
 
         transition:
-            transform 0.18s ease,
-            filter 0.18s ease,
-            box-shadow 0.18s ease;
+            transform 0.16s ease,
+            filter 0.16s ease,
+            box-shadow 0.16s ease;
     }
 
     .rk-completion-button:hover {
-        filter: brightness(1.04);
+        filter: brightness(1.07);
 
         transform:
             translateY(-1px);
 
         box-shadow:
-            0 13px 28px
-            rgba(91, 96, 230, 0.27);
+            0 8px 22px
+            rgba(83, 93, 230, 0.28);
     }
 
     .rk-completion-button:active {
         transform:
             translateY(1px)
-            scale(0.99);
+            scale(0.985);
 
         box-shadow:
-            0 6px 14px
-            rgba(91, 96, 230, 0.15);
+            0 4px 12px
+            rgba(83, 93, 230, 0.18);
     }
 
     .rk-completion-button:focus-visible {
         outline:
-            3px solid
-            rgba(89, 104, 255, 0.20);
+            2px solid
+            rgba(120, 135, 255, 0.65);
 
         outline-offset: 3px;
     }
@@ -6867,11 +6886,11 @@ body.light .rakkez-mini-close,
     .rk-completion-close {
         position: absolute;
 
-        top: 14px;
-        right: 14px;
+        top: 10px;
+        right: 10px;
 
-        width: 34px;
-        height: 34px;
+        width: 29px;
+        height: 29px;
 
         display: flex;
         align-items: center;
@@ -6881,39 +6900,43 @@ body.light .rakkez-mini-close,
 
         border:
             1px solid
-            rgba(89, 102, 255, 0.08);
+            rgba(255, 255, 255, 0.06);
 
         border-radius: 50%;
 
         background:
-            rgba(89, 102, 255, 0.07);
+            rgba(255, 255, 255, 0.045);
 
-        color: #69718a;
+        color:
+            rgba(230, 234, 247, 0.55);
 
         font-family: Arial, sans-serif;
 
-        font-size: 20px;
+        font-size: 18px;
         line-height: 1;
 
         cursor: pointer;
 
         transition:
-            background 0.18s ease,
-            color 0.18s ease,
-            transform 0.18s ease;
+            background 0.16s ease,
+            color 0.16s ease,
+            transform 0.16s ease;
     }
 
     .rk-completion-close:hover {
         background:
-            rgba(89, 102, 255, 0.13);
+            rgba(255, 255, 255, 0.09);
 
-        color: #5968d8;
+        color:
+            rgba(255, 255, 255, 0.85);
 
-        transform: scale(1.05);
+        transform:
+            scale(1.05);
     }
 
     .rk-completion-close:active {
-        transform: scale(0.94);
+        transform:
+            scale(0.93);
     }
 
 
@@ -6924,42 +6947,42 @@ body.light .rakkez-mini-close,
     .rk-completion-dot {
         position: absolute;
 
-        width: 7px;
-        height: 7px;
+        width: 5px;
+        height: 5px;
 
         border-radius: 50%;
 
         background:
-            linear-gradient(
-                135deg,
-                #5968ff,
-                #765cff
-            );
+            #7180ff;
 
-        opacity: 0.16;
+        opacity: 0.28;
 
         pointer-events: none;
     }
 
     .rk-completion-dot-one {
-        top: 34px;
-        left: 42px;
+        top: 31px;
+        left: 27px;
     }
 
     .rk-completion-dot-two {
-        top: 65px;
-        right: 39px;
+        top: 54px;
+        right: 25px;
 
-        width: 5px;
-        height: 5px;
+        width: 4px;
+        height: 4px;
+
+        opacity: 0.22;
     }
 
     .rk-completion-dot-three {
-        bottom: 82px;
-        left: 31px;
+        bottom: 65px;
+        left: 20px;
 
-        width: 5px;
-        height: 5px;
+        width: 4px;
+        height: 4px;
+
+        opacity: 0.18;
     }
 
 
@@ -6970,34 +6993,40 @@ body.light .rakkez-mini-close,
     @media (max-width: 480px) {
 
         #rkCompletionOverlay {
-            padding: 16px;
+            padding: 14px;
         }
 
         .rk-completion-card {
-            padding:
-                29px
-                21px
-                22px;
+            width: min(320px, 100%);
 
-            border-radius: 24px;
+            padding:
+                22px
+                18px
+                18px;
+
+            border-radius: 20px;
         }
 
         .rk-completion-trophy-wrap {
-            width: 150px;
-            height: 150px;
+            width: 115px;
+            height: 115px;
         }
 
         .rk-completion-trophy {
-            width: 135px;
-            height: 135px;
+            width: 105px;
+            height: 105px;
         }
 
         .rk-completion-title {
-            font-size: 24px;
+            font-size: 21px;
         }
 
         .rk-completion-message {
-            font-size: 14px;
+            font-size: 12.5px;
+        }
+
+        .rk-completion-button {
+            min-height: 41px;
         }
     }
 
@@ -7020,6 +7049,7 @@ body.light .rakkez-mini-close,
             animation: none;
         }
     }
+
 </style>
 
 
@@ -7041,6 +7071,7 @@ body.light .rakkez-mini-close,
     >
 
         <!-- Decorative -->
+
         <span
             class="rk-completion-dot rk-completion-dot-one"
             aria-hidden="true"
@@ -7058,6 +7089,7 @@ body.light .rakkez-mini-close,
 
 
         <!-- Close -->
+
         <button
             id="rkCompletionClose"
             class="rk-completion-close"
@@ -7123,8 +7155,7 @@ body.light .rakkez-mini-close,
         </button>
 
     </div>
+
 </div>
-
 </body>
-
 </html>
