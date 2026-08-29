@@ -6517,12 +6517,9 @@ body.light .rakkez-mini-close,
         padding: 16px;
         box-sizing: border-box;
 
-        /*
-         * RakkeZ dark overlay
-         * NOT white
-         */
+        /* Very dark grey background */
         background:
-            rgba(5, 7, 14, 0.68);
+            rgba(18, 19, 22, 0.82);
 
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
@@ -6555,14 +6552,12 @@ body.light .rakkez-mini-close,
 
         padding: 24px 22px 20px;
 
-        /*
-         * RakkeZ dark glass
-         */
+        /* Very dark grey RakkeZ card */
         background:
             linear-gradient(
                 145deg,
-                rgba(20, 24, 39, 0.97),
-                rgba(10, 13, 24, 0.98)
+                #25272b 0%,
+                #191a1d 100%
             );
 
         border:
@@ -6574,8 +6569,8 @@ body.light .rakkez-mini-close,
         text-align: center;
 
         box-shadow:
-            0 24px 60px rgba(0, 0, 0, 0.42),
-            0 8px 24px rgba(0, 0, 0, 0.25);
+            0 24px 60px rgba(0, 0, 0, 0.55),
+            0 8px 24px rgba(0, 0, 0, 0.35);
 
         transform:
             translateY(14px)
@@ -6611,8 +6606,8 @@ body.light .rakkez-mini-close,
             linear-gradient(
                 90deg,
                 transparent,
-                rgba(95, 115, 255, 0.65),
-                rgba(130, 91, 255, 0.65),
+                rgba(45, 108, 255, 0.7),
+                rgba(65, 125, 255, 0.7),
                 transparent
             );
 
@@ -6656,11 +6651,6 @@ body.light .rakkez-mini-close,
 
         transform-origin: center bottom;
 
-        /*
-         * NO GLOW
-         * NO DROP SHADOW
-         * NO FILTER
-         */
         filter: none;
     }
 
@@ -6711,7 +6701,7 @@ body.light .rakkez-mini-close,
     .rk-completion-title {
         margin: 0;
 
-        color: #f5f7ff;
+        color: #f3f4f6;
 
         font-family:
             "Space Grotesk",
@@ -6739,7 +6729,7 @@ body.light .rakkez-mini-close,
         max-width: 270px;
 
         color:
-            rgba(224, 228, 242, 0.62);
+            rgba(220, 223, 228, 0.62);
 
         font-family:
             "DM Sans",
@@ -6773,16 +6763,16 @@ body.light .rakkez-mini-close,
         box-sizing: border-box;
 
         background:
-            rgba(91, 105, 255, 0.10);
+            rgba(35, 95, 210, 0.14);
 
         border:
             1px solid
-            rgba(105, 119, 255, 0.18);
+            rgba(55, 115, 235, 0.25);
 
         border-radius: 999px;
 
         color:
-            #9da8ff;
+            #78a8ff;
 
         font-family:
             "DM Sans",
@@ -6800,6 +6790,7 @@ body.light .rakkez-mini-close,
 
     /* =========================================================
        CONTINUE BUTTON
+       DARK BLUE — RAKKEZ STYLE
        ========================================================= */
 
     .rk-completion-button {
@@ -6815,11 +6806,12 @@ body.light .rakkez-mini-close,
 
         border-radius: 12px;
 
+        /* Deep RakkeZ blue */
         background:
             linear-gradient(
                 135deg,
-                #596cff 0%,
-                #705cff 100%
+                #174ea6 0%,
+                #123b82 100%
             );
 
         color: #ffffff;
@@ -6841,7 +6833,7 @@ body.light .rakkez-mini-close,
 
         box-shadow:
             0 6px 18px
-            rgba(83, 93, 230, 0.20);
+            rgba(20, 70, 150, 0.30);
 
         transition:
             transform 0.16s ease,
@@ -6850,14 +6842,14 @@ body.light .rakkez-mini-close,
     }
 
     .rk-completion-button:hover {
-        filter: brightness(1.07);
+        filter: brightness(1.12);
 
         transform:
             translateY(-1px);
 
         box-shadow:
             0 8px 22px
-            rgba(83, 93, 230, 0.28);
+            rgba(20, 70, 150, 0.40);
     }
 
     .rk-completion-button:active {
@@ -6867,13 +6859,13 @@ body.light .rakkez-mini-close,
 
         box-shadow:
             0 4px 12px
-            rgba(83, 93, 230, 0.18);
+            rgba(20, 70, 150, 0.25);
     }
 
     .rk-completion-button:focus-visible {
         outline:
             2px solid
-            rgba(120, 135, 255, 0.65);
+            rgba(70, 130, 255, 0.70);
 
         outline-offset: 3px;
     }
@@ -6908,7 +6900,7 @@ body.light .rakkez-mini-close,
             rgba(255, 255, 255, 0.045);
 
         color:
-            rgba(230, 234, 247, 0.55);
+            rgba(230, 234, 240, 0.55);
 
         font-family: Arial, sans-serif;
 
@@ -6928,7 +6920,7 @@ body.light .rakkez-mini-close,
             rgba(255, 255, 255, 0.09);
 
         color:
-            rgba(255, 255, 255, 0.85);
+            rgba(255, 255, 255, 255, 0.85);
 
         transform:
             scale(1.05);
@@ -6953,7 +6945,7 @@ body.light .rakkez-mini-close,
         border-radius: 50%;
 
         background:
-            #7180ff;
+            #3d7cff;
 
         opacity: 0.28;
 
@@ -7107,7 +7099,7 @@ body.light .rakkez-mini-close,
             <img
                 id="rkCompletionTrophy"
                 class="rk-completion-trophy"
-                src="win.jpg"
+                src="win.png"
                 alt="Cute trophy"
             >
 
@@ -7157,5 +7149,6 @@ body.light .rakkez-mini-close,
     </div>
 
 </div>
+
 </body>
 </html>
