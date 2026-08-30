@@ -6661,6 +6661,48 @@ if ($("focusExit")) {
 
 })();
 
+
+/* =========================================================
+   RAKKEZ — RESET GLOBAL COMPATIBILITY
+   ========================================================= */
+
+window.openResetConfirmation = function () {
+    if (
+        window.RakkeZReset &&
+        typeof window.RakkeZReset.open === "function"
+    ) {
+        window.RakkeZReset.open();
+    }
+};
+
+window.closeResetConfirmation = function () {
+    if (
+        window.RakkeZReset &&
+        typeof window.RakkeZReset.close === "function"
+    ) {
+        window.RakkeZReset.close();
+    }
+};
+
+window.resetCurrentSegment = function () {
+    if (
+        window.RakkeZReset &&
+        typeof window.RakkeZReset.currentSegment === "function"
+    ) {
+        window.RakkeZReset.currentSegment();
+    }
+};
+
+window.resetFullSession = function () {
+    if (
+        window.RakkeZReset &&
+        typeof window.RakkeZReset.fullSession === "function"
+    ) {
+        window.RakkeZReset.fullSession();
+    }
+};
+
+
 /* =========================================================
    MEDIA TABS
    ========================================================= */
