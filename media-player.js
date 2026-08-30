@@ -129,6 +129,16 @@
         },
 
         {
+            id: "water",
+            name: "Water",
+            icon: "🌊",
+            description: "Water Sound for focus",
+            image: "Water.jpg",
+            src: "rain.mp3",
+            defaultVolume: 0.50
+        },
+
+        {
             id: "airplane",
             name: "Airplane",
             icon: "✈️",
@@ -154,7 +164,17 @@
             icon: "🔥",
             description: "Warm fireplace ambience",
             image: "assets/blog/effects/Fireplace.jfif",
-            src: "FirePlace.mp3",
+            src: "FirePlace2.mp3",
+            defaultVolume: 0.50
+        },
+
+                {
+            id: "Bubble",
+            name: "Water Bubble",
+            icon: "💧",
+            description: "Water Bubbels Sound for focus",
+            image: "bubble.jpg",
+            src: "bubble.mp3",
             defaultVolume: 0.50
         },
 
