@@ -6663,45 +6663,26 @@ if ($("focusExit")) {
 
 
 /* =========================================================
-   RAKKEZ — RESET GLOBAL COMPATIBILITY
+   RAKKEZ RESET — GLOBAL COMPATIBILITY BRIDGE
+   ---------------------------------------------------------
+   The reset system is inside an IIFE, but older parts of
+   app.js still call these functions globally.
    ========================================================= */
 
-window.openResetConfirmation = function () {
-    if (
-        window.RakkeZReset &&
-        typeof window.RakkeZReset.open === "function"
-    ) {
-        window.RakkeZReset.open();
-    }
-};
+window.resetTimer =
+    window.RakkeZReset.resetTimer;
 
-window.closeResetConfirmation = function () {
-    if (
-        window.RakkeZReset &&
-        typeof window.RakkeZReset.close === "function"
-    ) {
-        window.RakkeZReset.close();
-    }
-};
+window.resetCurrentSegment =
+    window.RakkeZReset.currentSegment;
 
-window.resetCurrentSegment = function () {
-    if (
-        window.RakkeZReset &&
-        typeof window.RakkeZReset.currentSegment === "function"
-    ) {
-        window.RakkeZReset.currentSegment();
-    }
-};
+window.resetFullSession =
+    window.RakkeZReset.fullSession;
 
-window.resetFullSession = function () {
-    if (
-        window.RakkeZReset &&
-        typeof window.RakkeZReset.fullSession === "function"
-    ) {
-        window.RakkeZReset.fullSession();
-    }
-};
+window.openResetConfirmation =
+    window.RakkeZReset.open;
 
+window.closeResetConfirmation =
+    window.RakkeZReset.close;
 
 /* =========================================================
    MEDIA TABS
