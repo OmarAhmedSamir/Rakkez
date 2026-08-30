@@ -134,7 +134,7 @@
             icon: "🌊",
             description: "Water Sound for focus",
             image: "Water.jpg",
-            src: "water.mp3",
+            src: "Water.mp3",
             defaultVolume: 0.50
         },
 
