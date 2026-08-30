@@ -7,35 +7,25 @@
 
 /* =========================================================
    HELPERS
+   ---------------------------------------------------------
+   $() = shortcut للحصول على عنصر من HTML عن طريق ID.
    ========================================================= */
 
 const $ = id => document.getElementById(id);
 
-
 function updateTabTitle(secondsLeft, isRunning) {
 
     if (!isRunning) {
-
         document.title = "RakkeZ";
-
         return;
-
     }
 
-
-    const minutes =
-        Math.floor(secondsLeft / 60);
-
-
-    const seconds =
-        secondsLeft % 60;
-
+    const minutes = Math.floor(secondsLeft / 60);
+    const seconds = secondsLeft % 60;
 
     document.title =
         `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")} • RakkeZ`;
-
 }
-
 
 
 /* =========================================================
@@ -54,7 +44,6 @@ const STORAGE = {
     alarm: "rakkez_alarm"
 
 };
-
 
 
 /* =========================================================
@@ -82,7 +71,6 @@ const DEFAULT_SETTINGS = {
 };
 
 
-
 /* =========================================================
    LOCAL STORAGE HELPERS
    ========================================================= */
@@ -93,7 +81,6 @@ function load(key, fallback) {
 
         const value =
             localStorage.getItem(key);
-
 
         return value
             ? JSON.parse(value)
@@ -111,7 +98,6 @@ function load(key, fallback) {
     }
 
 }
-
 
 
 function save(key, value) {
@@ -135,7 +121,6 @@ function save(key, value) {
 }
 
 
-
 /* =========================================================
    SETTINGS
    ========================================================= */
@@ -152,9 +137,35 @@ let settings = {
 };
 
 
-
 /* =========================================================
    STATS
+
+   IMPORTANT:
+
+   totalFocusSeconds
+   = Lifetime Focus Time
+
+   sessions
+   = Lifetime completed Focus sessions
+
+   dailyFocus
+   = Focus time per day
+
+   dailySessions
+   = Completed Pomodoros per day
+
+   IMPORTANT:
+   dailySessions[today] is the DAILY POMODORO NUMBER.
+
+   Example:
+
+   dailySessions["2026-08-29"] = 7
+
+   means today's latest completed Pomodoro is #7.
+
+   Resetting today's stats makes it 0 again.
+
+   The next completed Focus becomes #1.
    ========================================================= */
 
 let stats = {
@@ -181,7 +192,6 @@ let stats = {
 };
 
 
-
 /* =========================================================
    BACKWARD COMPATIBILITY
    ========================================================= */
@@ -194,18 +204,6 @@ if (
     stats.dailySessions = {};
 
 }
-
-
-
-if (
-    !stats.dailyFocus ||
-    typeof stats.dailyFocus !== "object"
-) {
-
-    stats.dailyFocus = {};
-
-}
-
 
 
 /* =========================================================
@@ -223,7 +221,6 @@ if (
 }
 
 
-
 /* =========================================================
    TASKS
    ========================================================= */
@@ -233,7 +230,6 @@ let tasks =
         STORAGE.tasks,
         []
     );
-
 
 
 /* =========================================================
@@ -261,7 +257,6 @@ let timerState = {
 };
 
 
-
 /* =========================================================
    OTHER STATE
    ========================================================= */
@@ -269,7 +264,6 @@ let timerState = {
 let completedFocusInCycle = 0;
 
 let currentTaskId = null;
-
 
 
 /* =========================================================
@@ -283,13 +277,11 @@ function getCurrentLanguage() {
         localStorage.getItem("rakkez_language") ||
         "en";
 
-
     return language === "ar"
         ? "ar"
         : "en";
 
 }
-
 
 
 /* =========================================================
@@ -304,7 +296,6 @@ function arabicNumbers(value) {
     );
 
 }
-
 
 
 /* =========================================================
@@ -322,7 +313,6 @@ function englishNumbers(value) {
 }
 
 
-
 /* =========================================================
    DATE
    ========================================================= */
@@ -331,7 +321,6 @@ function todayKey() {
 
     const d =
         new Date();
-
 
     return [
 
@@ -350,9 +339,14 @@ function todayKey() {
 }
 
 
-
 /* =========================================================
    DAILY POMODORO COUNT
+   ---------------------------------------------------------
+   هذا هو الرقم الحقيقي للـPomodoro اليوم.
+
+   لا يوجد عداد ثاني.
+
+   dailySessions[today] هو المصدر الوحيد.
    ========================================================= */
 
 function getTodayPomodoroCount() {
@@ -360,14 +354,12 @@ function getTodayPomodoroCount() {
     const today =
         todayKey();
 
-
     return Number(
         stats.dailySessions &&
         stats.dailySessions[today]
     ) || 0;
 
 }
-
 
 
 /* =========================================================
@@ -384,16 +376,13 @@ function formatTime(seconds) {
             )
         );
 
-
     const minutes =
         Math.floor(
             seconds / 60
         );
 
-
     const secs =
         seconds % 60;
-
 
     return (
 
@@ -410,7 +399,6 @@ function formatTime(seconds) {
 }
 
 
-
 /* =========================================================
    TIMER MODE TEXT
    ========================================================= */
@@ -419,7 +407,6 @@ function getTimerModeText() {
 
     const lang =
         getCurrentLanguage();
-
 
     if (lang === "ar") {
 
@@ -431,7 +418,6 @@ function getTimerModeText() {
 
         }
 
-
         if (
             timerState.mode === "long"
         ) {
@@ -440,11 +426,9 @@ function getTimerModeText() {
 
         }
 
-
         return "التركيز";
 
     }
-
 
     if (
         timerState.mode === "short"
@@ -454,7 +438,6 @@ function getTimerModeText() {
 
     }
 
-
     if (
         timerState.mode === "long"
     ) {
@@ -463,11 +446,9 @@ function getTimerModeText() {
 
     }
 
-
     return "FOCUS";
 
 }
-
 
 
 /* =========================================================
@@ -479,26 +460,19 @@ function getTimerLabel() {
     const lang =
         getCurrentLanguage();
 
-
     if (lang === "ar") {
 
         return timerState.mode === "focus"
-
             ? "ركز على شيء واحد فقط."
-
             : "خذ نفسًا. لقد استحققت الراحة.";
 
     }
 
-
     return timerState.mode === "focus"
-
         ? "Stay focused. One thing at a time."
-
         : "Take a breath. You earned it.";
 
 }
-
 
 
 /* =========================================================
@@ -510,7 +484,6 @@ function getStartButtonText() {
     const lang =
         getCurrentLanguage();
 
-
     if (lang === "ar") {
 
         return timerState.running
@@ -519,13 +492,11 @@ function getStartButtonText() {
 
     }
 
-
     return timerState.running
         ? "PAUSE"
         : "START";
 
 }
-
 
 
 /* =========================================================
@@ -544,9 +515,12 @@ function updateTimerUI() {
     );
 
 
+    /* =====================================================
+       TIMER NUMBER
+       ===================================================== */
+
     const timer =
         $("timer");
-
 
     if (timer) {
 
@@ -554,7 +528,6 @@ function updateTimerUI() {
             formatTime(
                 timerState.remaining
             );
-
 
         timer.textContent =
             lang === "ar"
@@ -564,15 +537,17 @@ function updateTimerUI() {
     }
 
 
+    /* =====================================================
+       MODE
+       ===================================================== */
+
     const modeText =
         $("modeText");
-
 
     if (modeText) {
 
         modeText.dataset.mode =
             timerState.mode;
-
 
         modeText.textContent =
             getTimerModeText();
@@ -580,9 +555,12 @@ function updateTimerUI() {
     }
 
 
+    /* =====================================================
+       TIMER LABEL
+       ===================================================== */
+
     const timerLabel =
         $("timerLabel");
-
 
     if (timerLabel) {
 
@@ -591,6 +569,10 @@ function updateTimerUI() {
 
     }
 
+
+    /* =====================================================
+       MODE BUTTON ACTIVE STATE
+       ===================================================== */
 
     document
         .querySelectorAll(
@@ -643,11 +625,9 @@ function updateTimerUI() {
                 const button =
                     $(id);
 
-
                 if (!button) {
                     return;
                 }
-
 
                 button.classList.toggle(
                     "active",
@@ -660,10 +640,13 @@ function updateTimerUI() {
     );
 
 
+    /* =====================================================
+       PROGRESS
+       ===================================================== */
+
     const elapsed =
         timerState.total -
         timerState.remaining;
-
 
     const percentage =
         timerState.total > 0
@@ -679,7 +662,6 @@ function updateTimerUI() {
     const progress =
         $("progress");
 
-
     if (progress) {
 
         progress.style.width =
@@ -694,9 +676,12 @@ function updateTimerUI() {
     }
 
 
+    /* =====================================================
+       START / PAUSE
+       ===================================================== */
+
     const startButton =
         $("startBtn");
-
 
     if (startButton) {
 
@@ -705,6 +690,10 @@ function updateTimerUI() {
 
     }
 
+
+    /* =====================================================
+       CURRENT TASK
+       ===================================================== */
 
     if (
         typeof updateCurrentTask ===
@@ -716,7 +705,6 @@ function updateTimerUI() {
     }
 
 }
-
 
 
 /* =========================================================
@@ -753,6 +741,18 @@ function getCompletionElements() {
 }
 
 
+/* =========================================================
+   SHOW COMPLETION CARD
+   ---------------------------------------------------------
+   pomodoroNumber is passed from dailySessions.
+
+   IMPORTANT:
+   This function DOES NOT increment the counter.
+
+   completePhase() already incremented it.
+
+   This prevents duplicate counting.
+   ========================================================= */
 
 function showPomodoroCompletion(
     pomodoroNumber
@@ -760,7 +760,6 @@ function showPomodoroCompletion(
 
     const elements =
         getCompletionElements();
-
 
     if (!elements.overlay) {
         return;
@@ -777,6 +776,10 @@ function showPomodoroCompletion(
     const lang =
         getCurrentLanguage();
 
+
+    /* =====================================================
+       FIRST POMODORO
+       ===================================================== */
 
     if (number === 1) {
 
@@ -799,7 +802,14 @@ function showPomodoroCompletion(
 
         }
 
-    } else {
+    }
+
+
+    /* =====================================================
+       ANOTHER POMODORO
+       ===================================================== */
+
+    else {
 
         if (elements.title) {
 
@@ -821,13 +831,16 @@ function showPomodoroCompletion(
     }
 
 
+    /* =====================================================
+       NUMBER
+       ===================================================== */
+
     if (elements.count) {
 
         const numberText =
             lang === "ar"
                 ? arabicNumbers(number)
                 : String(number);
-
 
         elements.count.textContent =
             lang === "ar"
@@ -837,14 +850,16 @@ function showPomodoroCompletion(
     }
 
 
+    /* =====================================================
+       TROPHY ANIMATION RESET
+       ===================================================== */
+
     if (elements.trophy) {
 
         elements.trophy.style.animation =
             "none";
 
-
         void elements.trophy.offsetWidth;
-
 
         elements.trophy.style.animation =
             "";
@@ -852,10 +867,13 @@ function showPomodoroCompletion(
     }
 
 
+    /* =====================================================
+       SHOW
+       ===================================================== */
+
     elements.overlay.classList.add(
         "rk-show"
     );
-
 
     elements.overlay.setAttribute(
         "aria-hidden",
@@ -866,6 +884,10 @@ function showPomodoroCompletion(
     document.body.style.overflow =
         "hidden";
 
+
+    /* =====================================================
+       FOCUS BUTTON
+       ===================================================== */
 
     setTimeout(
         () => {
@@ -887,12 +909,14 @@ function showPomodoroCompletion(
 }
 
 
+/* =========================================================
+   HIDE COMPLETION CARD
+   ========================================================= */
 
 function hidePomodoroCompletion() {
 
     const elements =
         getCompletionElements();
-
 
     if (!elements.overlay) {
         return;
@@ -903,12 +927,17 @@ function hidePomodoroCompletion() {
         "rk-show"
     );
 
-
     elements.overlay.setAttribute(
         "aria-hidden",
         "true"
     );
 
+
+    /*
+     * Do not blindly clear body overflow.
+     *
+     * Another RakkeZ overlay may be open.
+     */
 
     if (
         typeof syncBodyScrollLock ===
@@ -927,7 +956,6 @@ function hidePomodoroCompletion() {
 }
 
 
-
 /* =========================================================
    COMPLETION CARD EVENTS
    ========================================================= */
@@ -943,7 +971,6 @@ function initializePomodoroCompletion() {
         console.warn(
             "RakkeZ: Completion card not found in index.html"
         );
-
 
         return;
 
@@ -989,7 +1016,6 @@ function initializePomodoroCompletion() {
 }
 
 
-
 /* =========================================================
    GLOBAL COMPLETION API
    ========================================================= */
@@ -997,10 +1023,8 @@ function initializePomodoroCompletion() {
 window.RakkeZShowCompletion =
     showPomodoroCompletion;
 
-
 window.RakkeZHideCompletion =
     hidePomodoroCompletion;
-
 
 
 /* =========================================================
@@ -1047,7 +1071,6 @@ function startTimer() {
             timerState.interval
         );
 
-
         timerState.interval =
             null;
 
@@ -1068,6 +1091,10 @@ function startTimer() {
     }
 
 
+    /*
+     * بداية Focus / Break جديدة
+     */
+
     if (!timerState.startedAt) {
 
         timerState.startedAt =
@@ -1078,7 +1105,6 @@ function startTimer() {
 
     timerState.running =
         true;
-
 
     timerState.timestamp =
         Date.now();
@@ -1096,7 +1122,6 @@ function startTimer() {
     updateTimerUI();
 
 }
-
 
 
 /* =========================================================
@@ -1124,7 +1149,6 @@ function pauseTimer() {
     timerState.interval =
         null;
 
-
     timerState.timestamp =
         Date.now();
 
@@ -1134,7 +1158,6 @@ function pauseTimer() {
     updateTimerUI();
 
 }
-
 
 
 /* =========================================================
@@ -1159,15 +1182,32 @@ function tick() {
     }
 
 
+    /* =====================================================
+       FOCUS STATISTICS
+       -----------------------------------------------------
+       كل ثانية تركيز:
+
+       1. Lifetime
+       2. Daily Focus
+       ===================================================== */
+
     if (
         timerState.mode === "focus"
     ) {
+
+        /* =================================================
+           LIFETIME
+           ================================================= */
 
         stats.totalFocusSeconds =
             Number(
                 stats.totalFocusSeconds
             ) + 1;
 
+
+        /* =================================================
+           TODAY
+           ================================================= */
 
         const today =
             todayKey();
@@ -1208,6 +1248,10 @@ function tick() {
     }
 
 
+    /* =====================================================
+       DECREASE TIMER
+       ===================================================== */
+
     timerState.remaining =
         Math.max(
             0,
@@ -1217,12 +1261,19 @@ function tick() {
         );
 
 
+    /*
+     * Save every tick.
+     */
+
     timerState.timestamp =
         Date.now();
 
-
     saveTimer();
 
+
+    /* =====================================================
+       COMPLETE
+       ===================================================== */
 
     if (
         timerState.remaining <= 0
@@ -1242,12 +1293,16 @@ function tick() {
 }
 
 
-
 /* =========================================================
    PHASE COMPLETE
    ========================================================= */
 
 function completePhase() {
+
+    /*
+     * Stop interval manually.
+     * Do NOT clear startedAt before recording session.
+     */
 
     timerState.running =
         false;
@@ -1279,12 +1334,22 @@ function completePhase() {
     }
 
 
+    /* =====================================================
+       FOCUS COMPLETE
+       ===================================================== */
+
     if (
         timerState.mode === "focus"
     ) {
 
         completedFocusInCycle++;
 
+
+        /* =================================================
+           SESSION NUMBER
+
+           Lifetime sessions
+           ================================================= */
 
         stats.sessions =
             Number(
@@ -1295,6 +1360,12 @@ function completePhase() {
         const today =
             todayKey();
 
+
+        /* =================================================
+           DAILY SESSIONS
+
+           This is the DAILY POMODORO COUNT.
+           ================================================= */
 
         if (
             !stats.dailySessions ||
@@ -1317,8 +1388,16 @@ function completePhase() {
         }
 
 
+        /*
+         * Increment exactly once.
+         */
+
         stats.dailySessions[today]++;
 
+
+        /*
+         * This is the real Pomodoro number.
+         */
 
         const pomodoroNumber =
             Number(
@@ -1332,6 +1411,10 @@ function completePhase() {
 
         updateStreakOnFocus();
 
+
+        /* =================================================
+           EXACT FOCUS PERIOD
+           ================================================= */
 
         if (
             !Array.isArray(
@@ -1354,6 +1437,11 @@ function completePhase() {
             );
 
 
+        /*
+         * Fallback if startedAt
+         * does not exist.
+         */
+
         if (
             !Number.isFinite(
                 sessionStart
@@ -1371,6 +1459,10 @@ function completePhase() {
 
         }
 
+
+        /*
+         * Real duration.
+         */
 
         const durationSeconds =
             Math.max(
@@ -1409,6 +1501,10 @@ function completePhase() {
         });
 
 
+        /* =================================================
+           TASK FOCUS TIME
+           ================================================= */
+
         if (currentTaskId) {
 
             const task =
@@ -1435,6 +1531,10 @@ function completePhase() {
         }
 
 
+        /* =================================================
+           NEXT MODE
+           ================================================= */
+
         if (
             completedFocusInCycle >=
             Number(
@@ -1444,7 +1544,6 @@ function completePhase() {
 
             completedFocusInCycle =
                 0;
-
 
             setMode(
                 "long"
@@ -1459,11 +1558,14 @@ function completePhase() {
         }
 
 
+        /* =================================================
+           SAVE BEFORE SHOWING CARD
+           ================================================= */
+
         save(
             STORAGE.stats,
             stats
         );
-
 
         save(
             STORAGE.tasks,
@@ -1474,10 +1576,24 @@ function completePhase() {
         updateStats();
 
 
+        /*
+         * IMPORTANT:
+         *
+         * The completion card receives the
+         * REAL daily Pomodoro number.
+         *
+         * It does NOT increment anything itself.
+         */
+
         if (
             typeof window.RakkeZShowCompletion ===
             "function"
         ) {
+
+            /*
+             * Small delay so the timer has already
+             * switched to the Break state cleanly.
+             */
 
             setTimeout(
                 () => {
@@ -1494,6 +1610,10 @@ function completePhase() {
 
     } else {
 
+        /* =================================================
+           BREAK FINISHED
+           ================================================= */
+
         setMode(
             "focus"
         );
@@ -1501,9 +1621,12 @@ function completePhase() {
     }
 
 
+    /*
+     * Clear session start after completion.
+     */
+
     timerState.startedAt =
         null;
-
 
     timerState.timestamp =
         Date.now();
@@ -1517,7 +1640,6 @@ function completePhase() {
         stats
     );
 
-
     save(
         STORAGE.tasks,
         tasks
@@ -1526,6 +1648,10 @@ function completePhase() {
 
     updateStats();
 
+
+    /* =====================================================
+       AUTO START
+       ===================================================== */
 
     if (settings.autoStart) {
 
@@ -1560,7 +1686,6 @@ function completePhase() {
 }
 
 
-
 /* =========================================================
    SET MODE
    ========================================================= */
@@ -1593,7 +1718,6 @@ function setMode(mode) {
 
     timerState.interval =
         null;
-
 
     timerState.mode =
         mode;
@@ -1646,18 +1770,19 @@ function setMode(mode) {
             minutes * 60
         );
 
-
     timerState.remaining =
         timerState.total;
-
 
     timerState.running =
         false;
 
 
+    /*
+     * New mode = new session.
+     */
+
     timerState.startedAt =
         null;
-
 
     timerState.timestamp =
         Date.now();
@@ -1666,266 +1791,6 @@ function setMode(mode) {
     saveTimer();
 
     updateTimerUI();
-
-}
-
-
-
-/* =========================================================
-   RESET FULL SESSION
-   ---------------------------------------------------------
-   IMPORTANT:
-
-   This is the FIXED reset.
-
-   It resets:
-
-   ✓ Current timer
-   ✓ Current Pomodoro cycle
-   ✓ TODAY focus display
-   ✓ TODAY Pomodoro count
-   ✓ Today's focus periods
-
-   It DOES NOT reset:
-
-   ✗ Lifetime focus time
-   ✗ Lifetime completed sessions
-   ✗ Tasks
-   ✗ Settings
-   ✗ Streak history
-   ✗ Other days
-   ========================================================= */
-
-function resetTimer() {
-
-    /* =====================================================
-       STOP TIMER
-       ===================================================== */
-
-    timerState.running =
-        false;
-
-
-    if (
-        timerState.interval !==
-        null
-    ) {
-
-        clearInterval(
-            timerState.interval
-        );
-
-    }
-
-
-    timerState.interval =
-        null;
-
-
-    /* =====================================================
-       STOP ALARMS
-       ===================================================== */
-
-    if (
-        typeof stopAlarm ===
-        "function"
-    ) {
-
-        stopAlarm();
-
-    }
-
-
-    if (
-        typeof stopTestAlarm ===
-        "function"
-    ) {
-
-        stopTestAlarm();
-
-    }
-
-
-    /* =====================================================
-       RESET CURRENT POMODORO CYCLE
-       ===================================================== */
-
-    completedFocusInCycle =
-        0;
-
-
-    /* =====================================================
-       RESET TODAY'S STATS
-       ===================================================== */
-
-    const today =
-        todayKey();
-
-
-    /*
-     * Focus shown in:
-     *
-     * Focus
-     * Daily Goal
-     */
-
-    if (
-        stats.dailyFocus &&
-        typeof stats.dailyFocus ===
-        "object"
-    ) {
-
-        stats.dailyFocus[today] =
-            0;
-
-    } else {
-
-        stats.dailyFocus = {
-
-            [today]: 0
-
-        };
-
-    }
-
-
-    /*
-     * Sessions shown in:
-     *
-     * Sessions
-     */
-
-    if (
-        stats.dailySessions &&
-        typeof stats.dailySessions ===
-        "object"
-    ) {
-
-        stats.dailySessions[today] =
-            0;
-
-    } else {
-
-        stats.dailySessions = {
-
-            [today]: 0
-
-        };
-
-    }
-
-
-    /* =====================================================
-       REMOVE TODAY'S FOCUS PERIODS
-       ===================================================== */
-
-    if (
-        Array.isArray(
-            stats.focusPeriods
-        )
-    ) {
-
-        stats.focusPeriods =
-            stats.focusPeriods.filter(
-                period =>
-                    period.date !== today
-            );
-
-    }
-
-
-    /* =====================================================
-       RESET CURRENT TIMER TO FOCUS
-       ===================================================== */
-
-    timerState.mode =
-        "focus";
-
-
-    const focusMinutes =
-        Number(
-            settings.focus
-        );
-
-
-    const safeFocusMinutes =
-        Number.isFinite(
-            focusMinutes
-        ) &&
-        focusMinutes > 0
-
-            ? focusMinutes
-
-            : DEFAULT_SETTINGS.focus;
-
-
-    timerState.total =
-        Math.floor(
-            safeFocusMinutes * 60
-        );
-
-
-    timerState.remaining =
-        timerState.total;
-
-
-    timerState.startedAt =
-        null;
-
-
-    timerState.timestamp =
-        Date.now();
-
-
-    timerState.running =
-        false;
-
-
-    timerState.interval =
-        null;
-
-
-    /* =====================================================
-       SAVE
-       ===================================================== */
-
-    save(
-        STORAGE.stats,
-        stats
-    );
-
-
-    saveTimer();
-
-
-    /* =====================================================
-       REFRESH UI
-       ===================================================== */
-
-    updateTimerUI();
-
-    updateStats();
-
-    renderTasks();
-
-
-    /* =====================================================
-       CLOSE COMPLETION CARD IF OPEN
-       ===================================================== */
-
-    if (
-        typeof hidePomodoroCompletion ===
-        "function"
-    ) {
-
-        hidePomodoroCompletion();
-
-    }
-
-
-    console.log(
-        "RakkeZ: Full session reset completed."
-    );
 
 }
 
@@ -1933,6 +1798,8 @@ function resetTimer() {
 
 /* =========================================================
    STATS
+   ---------------------------------------------------------
+   UI displays TODAY only.
    ========================================================= */
 
 function updateStats() {
@@ -1941,12 +1808,20 @@ function updateStats() {
         todayKey();
 
 
+    /* =====================================================
+       TODAY FOCUS
+       ===================================================== */
+
     const todayFocusSeconds =
         Number(
             stats.dailyFocus &&
             stats.dailyFocus[today]
         ) || 0;
 
+
+    /* =====================================================
+       FOCUS STAT
+       ===================================================== */
 
     const focusStat =
         $("focusStat");
@@ -1961,6 +1836,12 @@ function updateStats() {
 
     }
 
+
+    /* =====================================================
+       TODAY SESSIONS
+       -----------------------------------------------------
+       This is today's Pomodoro count.
+       ===================================================== */
 
     const todaySessions =
         Number(
@@ -1986,6 +1867,10 @@ function updateStats() {
 
     }
 
+
+    /* =====================================================
+       STREAK
+       ===================================================== */
 
     updateStreak();
 
@@ -2029,10 +1914,13 @@ function updateStats() {
     }
 
 
+    /* =====================================================
+       DAILY GOAL
+       ===================================================== */
+
     updateDailyGoal();
 
 }
-
 
 
 /* =========================================================
@@ -2142,7 +2030,6 @@ function formatFocus(seconds) {
     );
 
 }
-
 
 
 /* =========================================================
@@ -2283,7 +2170,6 @@ function updateDailyGoal() {
 }
 
 
-
 /* =========================================================
    STREAK
    ========================================================= */
@@ -2373,7 +2259,6 @@ function updateStreakOnFocus() {
 }
 
 
-
 /* =========================================================
    CHECK STREAK
    ========================================================= */
@@ -2440,7 +2325,6 @@ function updateStreak() {
 }
 
 
-
 /* =========================================================
    TIMER PERSISTENCE
    ========================================================= */
@@ -2492,7 +2376,6 @@ function saveTimer() {
     );
 
 }
-
 
 
 /* =========================================================
@@ -2592,6 +2475,10 @@ function restoreTimer() {
             : timerState.total;
 
 
+    /* =====================================================
+       RUNNING BEFORE REFRESH
+       ===================================================== */
+
     if (
         saved.running &&
         Number.isFinite(
@@ -2625,6 +2512,10 @@ function restoreTimer() {
         remaining;
 
 
+    /* =====================================================
+       RESTORE SESSION START
+       ===================================================== */
+
     timerState.startedAt =
         Number.isFinite(
             Number(
@@ -2639,17 +2530,24 @@ function restoreTimer() {
             : null;
 
 
+    /*
+     * After Refresh:
+     * don't start interval immediately.
+     */
+
     timerState.running =
         false;
-
 
     timerState.timestamp =
         Date.now();
 
-
     timerState.interval =
         null;
 
+
+    /* =====================================================
+       PHASE FINISHED WHILE AWAY
+       ===================================================== */
 
     if (
         saved.running &&
@@ -2678,7 +2576,6 @@ function restoreTimer() {
     updateTimerUI();
 
 }
-
 
 
 /* =========================================================
@@ -2779,7 +2676,6 @@ function unlockAudio() {
 }
 
 
-
 /* =========================================================
    LANGUAGE REFRESH HOOK
    ========================================================= */
@@ -2794,6 +2690,9 @@ window.refreshTimerLanguage =
     };
 
 
+/* =========================================================
+   SAFE NUMBER UPDATE HOOK
+   ========================================================= */
 
 window.updateLanguageNumbers =
     function () {
@@ -2805,7 +2704,6 @@ window.updateLanguageNumbers =
     };
 
 
-
 /* =========================================================
    GLOBAL TIMER FUNCTIONS
    ========================================================= */
@@ -2813,18 +2711,14 @@ window.updateLanguageNumbers =
 window.startTimer =
     startTimer;
 
-
 window.pauseTimer =
     pauseTimer;
-
 
 window.resetTimer =
     resetTimer;
 
-
 window.setMode =
     setMode;
-
 
 
 /* =========================================================
@@ -2906,6 +2800,11 @@ function initializeTimerModeButtons() {
                             event.preventDefault();
 
 
+                            /*
+                             * Don't change mode
+                             * while running.
+                             */
+
                             if (
                                 timerState.running
                             ) {
@@ -2928,6 +2827,10 @@ function initializeTimerModeButtons() {
         }
     );
 
+
+    /*
+     * data-timer-mode support.
+     */
 
     document
         .querySelectorAll(
@@ -2994,7 +2897,6 @@ function initializeTimerModeButtons() {
 }
 
 
-
 /* =========================================================
    ALARM SYSTEM
    ========================================================= */
@@ -3002,59 +2904,49 @@ function initializeTimerModeButtons() {
 let customAlarmURL =
     null;
 
-
 let customAlarmName =
     null;
-
 
 let alarmAudio =
     null;
 
-
 let alarmAudioContext =
     null;
-
 
 let alarmOscillators =
     [];
 
-
 let alarmLoopTimeout =
     null;
 
-
 let alarmPlaying =
     false;
-
 
 let alarmSequenceId =
     0;
 
 
+/* =========================================================
+   TEST ALARM STATE
+   ========================================================= */
 
 let testAudio =
     null;
 
-
 let testAudioContext =
     null;
-
 
 let testOscillators =
     [];
 
-
 let testTimeout =
     null;
-
 
 let testPlaying =
     false;
 
-
 let testSequenceId =
     0;
-
 
 
 /* =========================================================
@@ -3099,7 +2991,6 @@ const ALARM_FREQUENCIES = {
     ]
 
 };
-
 
 
 /* =========================================================
@@ -3329,7 +3220,6 @@ function createAlarmPopup() {
 }
 
 
-
 /* =========================================================
    IS ALARM PLAYING
    ========================================================= */
@@ -3341,7 +3231,6 @@ function isAlarmPlaying() {
 }
 
 
-
 /* =========================================================
    STOP ALARM
    ========================================================= */
@@ -3349,7 +3238,6 @@ function isAlarmPlaying() {
 function stopAlarm() {
 
     alarmSequenceId++;
-
 
     alarmPlaying =
         false;
@@ -3460,7 +3348,6 @@ function stopAlarm() {
 }
 
 
-
 /* =========================================================
    PLAY REAL ALARM
    ========================================================= */
@@ -3537,7 +3424,6 @@ function playAlarm() {
     }
 
 }
-
 
 
 /* =========================================================
@@ -3637,7 +3523,6 @@ function playCustomAlarm() {
     }
 
 }
-
 
 
 /* =========================================================
@@ -3870,7 +3755,6 @@ function playGeneratedAlarmLoop() {
 }
 
 
-
 /* =========================================================
    STOP TEST ALARM
    ========================================================= */
@@ -3878,7 +3762,6 @@ function playGeneratedAlarmLoop() {
 function stopTestAlarm() {
 
     testSequenceId++;
-
 
     testPlaying =
         false;
@@ -3974,7 +3857,6 @@ function stopTestAlarm() {
     }
 
 }
-
 
 
 /* =========================================================
@@ -4283,7 +4165,6 @@ function testAlarm() {
 }
 
 
-
 /* =========================================================
    TEST ALARM BUTTON
    ========================================================= */
@@ -4301,7 +4182,6 @@ if ($("testAlarmBtn")) {
         );
 
 }
-
 
 
 /* =========================================================
@@ -4428,7 +4308,6 @@ if (alarmUploadInput) {
     );
 
 }
-
 
 
 /* =========================================================
@@ -4561,7 +4440,6 @@ function setAlarmUploadStatus(
 }
 
 
-
 /* =========================================================
    CLEAR ALARM UPLOAD STATUS
    ========================================================= */
@@ -4597,7 +4475,6 @@ function clearAlarmUploadStatus() {
     }
 
 }
-
 
 
 /* =========================================================
@@ -4682,7 +4559,6 @@ function syncSettingsUI() {
 }
 
 
-
 /* =========================================================
    SETTINGS EVENTS
    ========================================================= */
@@ -4727,7 +4603,6 @@ if ($("focusInput")) {
 }
 
 
-
 if ($("shortBreakInput")) {
 
     $("shortBreakInput")
@@ -4766,7 +4641,6 @@ if ($("shortBreakInput")) {
         );
 
 }
-
 
 
 if ($("longBreakInput")) {
@@ -4809,7 +4683,6 @@ if ($("longBreakInput")) {
 }
 
 
-
 if ($("longBreakAfterInput")) {
 
     $("longBreakAfterInput")
@@ -4835,7 +4708,6 @@ if ($("longBreakAfterInput")) {
         );
 
 }
-
 
 
 if ($("dailyGoalInput")) {
@@ -4868,7 +4740,6 @@ if ($("dailyGoalInput")) {
 }
 
 
-
 if ($("autoStartToggle")) {
 
     $("autoStartToggle").onclick =
@@ -4891,7 +4762,6 @@ if ($("autoStartToggle")) {
 }
 
 
-
 if ($("smartTimerToggle")) {
 
     $("smartTimerToggle").onclick =
@@ -4912,7 +4782,6 @@ if ($("smartTimerToggle")) {
         };
 
 }
-
 
 
 if ($("soundToggle")) {
@@ -4944,7 +4813,6 @@ if ($("soundToggle")) {
         };
 
 }
-
 
 
 if ($("alarmVolume")) {
@@ -4999,7 +4867,6 @@ if ($("alarmVolume")) {
 }
 
 
-
 if ($("alarmSound")) {
 
     $("alarmSound")
@@ -5033,7 +4900,6 @@ if ($("alarmSound")) {
         );
 
 }
-
 
 
 /* =========================================================
@@ -5134,7 +5000,6 @@ function renderTasks() {
 }
 
 
-
 /* =========================================================
    ADD TASK
    ========================================================= */
@@ -5204,7 +5069,6 @@ function addTask() {
 }
 
 
-
 /* =========================================================
    ESCAPE HTML
    ========================================================= */
@@ -5224,7 +5088,6 @@ function escapeHTML(value) {
     return div.innerHTML;
 
 }
-
 
 
 /* =========================================================
@@ -5261,7 +5124,6 @@ function toggleTask(id) {
 }
 
 
-
 /* =========================================================
    DELETE TASK
    ========================================================= */
@@ -5295,7 +5157,6 @@ function deleteTask(id) {
 }
 
 
-
 /* =========================================================
    SELECT TASK
    ========================================================= */
@@ -5314,7 +5175,6 @@ function selectTask(id) {
     );
 
 }
-
 
 
 /* =========================================================
@@ -5405,7 +5265,6 @@ function updateCurrentTask() {
 }
 
 
-
 /* =========================================================
    TASK EVENTS
    ========================================================= */
@@ -5416,7 +5275,6 @@ if ($("addTaskBtn")) {
         addTask;
 
 }
-
 
 
 if ($("taskInput")) {
@@ -5439,7 +5297,6 @@ if ($("taskInput")) {
         );
 
 }
-
 
 
 if ($("taskList")) {
@@ -5529,3 +5386,5504 @@ if ($("taskList")) {
         );
 
 }
+
+
+/* =========================================================
+   OVERLAY / PANEL SYSTEM
+   ========================================================= */
+
+function closeOverlayById(id) {
+
+    const overlay =
+        $(id);
+
+
+    if (!overlay) {
+
+        return;
+
+    }
+
+
+    overlay.classList.remove(
+        "show"
+    );
+
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    if (
+        overlay.style.display ===
+        "flex"
+    ) {
+
+        overlay.style.display =
+            "";
+
+    }
+
+
+    syncBodyScrollLock();
+
+}
+
+
+/* =========================================================
+   OPEN OVERLAY BY ID
+   ========================================================= */
+
+function openOverlayById(id) {
+
+    const overlay =
+        $(id);
+
+
+    if (!overlay) {
+
+        console.warn(
+            "RakkeZ: Overlay not found:",
+            id
+        );
+
+        return;
+
+    }
+
+
+    overlay.classList.add(
+        "show"
+    );
+
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   CHECK IF ANY MAIN OVERLAY IS OPEN
+   ========================================================= */
+
+function syncBodyScrollLock() {
+
+    const overlays = [
+
+        "settingsOverlay",
+        "tasksOverlay",
+        "mediaOverlay",
+        "confirmOverlay",
+        "updatesModal"
+
+    ];
+
+
+    const anyOpen =
+        overlays.some(
+            id => {
+
+                const element =
+                    $(id);
+
+
+                return (
+                    element &&
+                    element.classList.contains(
+                        "show"
+                    )
+                );
+
+            }
+        );
+
+
+    const completion =
+        $("rkCompletionOverlay");
+
+
+    const completionOpen =
+        completion &&
+        completion.classList.contains(
+            "rk-show"
+        );
+
+
+    document.body.style.overflow =
+        (
+            anyOpen ||
+            completionOpen
+        )
+            ? "hidden"
+            : "";
+
+}
+
+
+/* =========================================================
+   CLOSE ALL OVERLAYS
+   ========================================================= */
+
+function closeAllOverlays() {
+
+    const overlays = [
+
+        "settingsOverlay",
+        "tasksOverlay",
+        "mediaOverlay",
+        "confirmOverlay",
+        "updatesModal"
+
+    ];
+
+
+    overlays.forEach(
+        id => {
+
+            const overlay =
+                $(id);
+
+
+            if (!overlay) {
+
+                return;
+
+            }
+
+
+            overlay.classList.remove(
+                "show"
+            );
+
+
+            overlay.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+
+            if (
+                overlay.style.display ===
+                "flex"
+            ) {
+
+                overlay.style.display =
+                    "";
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Don't close the completion card here.
+     * It has its own Escape handler.
+     */
+
+    syncBodyScrollLock();
+
+}
+
+
+/* =========================================================
+   OPEN SETTINGS
+   ========================================================= */
+
+if ($("settingsOpen")) {
+
+    $("settingsOpen").onclick =
+        () => {
+
+            syncSettingsUI();
+
+            openOverlayById(
+                "settingsOverlay"
+            );
+
+        };
+
+}
+
+
+/* =========================================================
+   OPEN TASKS
+   ========================================================= */
+
+if ($("tasksOpen")) {
+
+    $("tasksOpen").onclick =
+        () => {
+
+            renderTasks();
+
+            openOverlayById(
+                "tasksOverlay"
+            );
+
+        };
+
+}
+
+
+/* =========================================================
+   OPEN MEDIA
+   ========================================================= */
+
+if ($("mediaOpen")) {
+
+    $("mediaOpen").onclick =
+        () => {
+
+            openOverlayById(
+                "mediaOverlay"
+            );
+
+        };
+
+}
+
+
+/* =========================================================
+   X BUTTONS
+   ========================================================= */
+
+const CLOSE_BUTTONS = {
+
+    closeSettings:
+        "settingsOverlay",
+
+    closeTasks:
+        "tasksOverlay",
+
+    closeMedia:
+        "mediaOverlay",
+
+    closeConfirm:
+        "confirmOverlay",
+
+    closeUpdates:
+        "updatesModal"
+
+};
+
+
+Object.entries(
+    CLOSE_BUTTONS
+).forEach(
+    (
+        [buttonId, overlayId]
+    ) => {
+
+        const button =
+            $(buttonId);
+
+
+        if (!button) {
+
+            return;
+
+        }
+
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+                closeOverlayById(
+                    overlayId
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   UNIVERSAL CLOSE BUTTON
+   ========================================================= */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const button =
+            event.target.closest(
+                "[data-close]"
+            );
+
+
+        if (!button) {
+
+            return;
+
+        }
+
+
+        const overlayId =
+            button.dataset.close;
+
+
+        if (!overlayId) {
+
+            return;
+
+        }
+
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        closeOverlayById(
+            overlayId
+        );
+
+    }
+);
+
+
+/* =========================================================
+   BACKGROUND CLICK
+   ========================================================= */
+
+[
+    "settingsOverlay",
+    "tasksOverlay",
+    "mediaOverlay",
+    "confirmOverlay",
+    "updatesModal"
+].forEach(
+    overlayId => {
+
+        const overlay =
+            $(overlayId);
+
+
+        if (!overlay) {
+
+            return;
+
+        }
+
+
+        overlay.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    overlay
+                ) {
+
+                    closeOverlayById(
+                        overlayId
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ESCAPE CLOSE
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key !==
+            "Escape"
+        ) {
+
+            return;
+
+        }
+
+
+        const completion =
+            $("rkCompletionOverlay");
+
+
+        if (
+            completion &&
+            completion.classList.contains(
+                "rk-show"
+            )
+        ) {
+
+            hidePomodoroCompletion();
+
+            return;
+
+        }
+
+
+        closeAllOverlays();
+
+    }
+);
+
+
+/* =========================================================
+   FOCUS ONLY
+   ========================================================= */
+
+let focusOnly =
+    false;
+
+
+function toggleFocusOnly() {
+
+    focusOnly =
+        !focusOnly;
+
+
+    document.body
+        .classList.toggle(
+            "focus-only",
+            focusOnly
+        );
+
+}
+
+
+if ($("focusOnlyBtn")) {
+
+    $("focusOnlyBtn").onclick =
+        toggleFocusOnly;
+
+}
+
+
+if ($("focusExit")) {
+
+    $("focusExit").onclick =
+        toggleFocusOnly;
+
+}
+
+
+/* =========================================================
+   RAKKEZ RESET SYSTEM
+   ---------------------------------------------------------
+   RESET CURRENT SEGMENT
+   ---------------------------------------------------------
+   Focus → restart current Focus
+   Short → restart current Short Break
+   Long  → restart current Long Break
+
+   IMPORTANT:
+   - Does NOT change statistics.
+   - Does NOT remove completed Pomodoros.
+   - Does NOT remove focus history.
+
+   ---------------------------------------------------------
+   RESET FULL SESSION
+   ---------------------------------------------------------
+   - Return to Focus.
+   - Reset current Pomodoro cycle.
+   - Undo the completed Focus that belongs to the current
+     session when possible.
+   - Update all related statistics safely.
+   ========================================================= */
+
+
+/* =========================================================
+   RESET OVERLAY HELPERS
+   ========================================================= */
+
+function getResetOverlay() {
+
+    const possibleIds = [
+        "resetOverlay",
+        "resetConfirmOverlay",
+        "resetConfirmation",
+        "resetTimerOverlay",
+        "timerResetOverlay",
+        "rakkezResetOverlay"
+    ];
+
+    for (const id of possibleIds) {
+
+        const element = document.getElementById(id);
+
+        if (element) {
+            return element;
+        }
+    }
+
+    return null;
+}
+
+
+/* =========================================================
+   STOP TIMER INTERVAL
+   ========================================================= */
+
+function stopResetTimerInterval() {
+
+    console.log("RakkeZ: Stopping timer interval for reset");
+
+    if (
+        typeof timerState !== "undefined" &&
+        timerState &&
+        timerState.interval
+    ) {
+
+        try {
+            clearInterval(timerState.interval);
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ: Failed to clear timer interval:",
+                error
+            );
+        }
+    }
+
+    if (
+        typeof timerInterval !== "undefined" &&
+        timerInterval
+    ) {
+
+        try {
+            clearInterval(timerInterval);
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ: Failed to clear global timer interval:",
+                error
+            );
+        }
+
+        try {
+            timerInterval = null;
+        } catch (error) {
+            /* Ignore */
+        }
+    }
+
+    if (
+        typeof timerState !== "undefined" &&
+        timerState
+    ) {
+
+        timerState.interval = null;
+    }
+}
+
+
+/* =========================================================
+   GET CURRENT SEGMENT MINUTES
+   ========================================================= */
+
+function getCurrentSegmentMinutes() {
+
+    let minutes;
+
+    if (
+        typeof timerState === "undefined" ||
+        !timerState
+    ) {
+        return 25;
+    }
+
+    if (
+        typeof settings === "undefined" ||
+        !settings
+    ) {
+        return 25;
+    }
+
+    switch (timerState.mode) {
+
+        case "focus":
+
+            minutes = Number(settings.focus);
+
+            break;
+
+        case "short":
+
+            minutes = Number(settings.shortBreak);
+
+            break;
+
+        case "long":
+
+            minutes = Number(settings.longBreak);
+
+            break;
+
+        default:
+
+            timerState.mode = "focus";
+
+            minutes = Number(settings.focus);
+
+            break;
+    }
+
+    if (
+        !Number.isFinite(minutes) ||
+        minutes <= 0
+    ) {
+
+        if (
+            typeof DEFAULT_SETTINGS !== "undefined" &&
+            DEFAULT_SETTINGS &&
+            Number.isFinite(
+                Number(DEFAULT_SETTINGS.focus)
+            ) &&
+            Number(DEFAULT_SETTINGS.focus) > 0
+        ) {
+
+            minutes = Number(DEFAULT_SETTINGS.focus);
+
+        } else {
+
+            minutes = 25;
+        }
+    }
+
+    return minutes;
+}
+
+
+/* =========================================================
+   GET SAFE FOCUS MINUTES
+   ========================================================= */
+
+function getSafeFocusMinutes() {
+
+    let focusMinutes = 25;
+
+    if (
+        typeof settings !== "undefined" &&
+        settings
+    ) {
+
+        const value = Number(settings.focus);
+
+        if (
+            Number.isFinite(value) &&
+            value > 0
+        ) {
+
+            focusMinutes = value;
+        }
+    }
+
+    if (
+        focusMinutes === 25 &&
+        typeof DEFAULT_SETTINGS !== "undefined" &&
+        DEFAULT_SETTINGS
+    ) {
+
+        const defaultFocus =
+            Number(DEFAULT_SETTINGS.focus);
+
+        if (
+            Number.isFinite(defaultFocus) &&
+            defaultFocus > 0
+        ) {
+
+            focusMinutes = defaultFocus;
+        }
+    }
+
+    return focusMinutes;
+}
+
+
+/* =========================================================
+   SET TIMER TO MINUTES
+   ---------------------------------------------------------
+   Changes ONLY timer state.
+   Does NOT change statistics.
+   ========================================================= */
+
+function setResetTimerMinutes(minutes) {
+
+    let safeMinutes = Number(minutes);
+
+    if (
+        !Number.isFinite(safeMinutes) ||
+        safeMinutes <= 0
+    ) {
+
+        safeMinutes = 25;
+    }
+
+    const seconds = Math.max(
+        1,
+        Math.floor(safeMinutes * 60)
+    );
+
+    if (
+        typeof timerState === "undefined" ||
+        !timerState
+    ) {
+
+        console.error(
+            "RakkeZ: timerState is not available."
+        );
+
+        return false;
+    }
+
+    timerState.total = seconds;
+
+    timerState.remaining = seconds;
+
+    timerState.startedAt = null;
+
+    timerState.timestamp = Date.now();
+
+    timerState.running = false;
+
+    timerState.interval = null;
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            timerState,
+            "elapsed"
+        )
+    ) {
+
+        timerState.elapsed = 0;
+    }
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            timerState,
+            "paused"
+        )
+    ) {
+
+        timerState.paused = false;
+    }
+
+    return true;
+}
+
+
+/* =========================================================
+   SAVE TIMER STATE
+   ========================================================= */
+
+function saveResetTimerState() {
+
+    if (
+        typeof saveTimer === "function"
+    ) {
+
+        try {
+
+            saveTimer();
+
+            console.log(
+                "RakkeZ: Timer reset state saved."
+            );
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                "RakkeZ: saveTimer() failed:",
+                error
+            );
+        }
+    }
+
+    try {
+
+        localStorage.setItem(
+            "rakkez_timer_state",
+            JSON.stringify(timerState)
+        );
+
+        console.log(
+            "RakkeZ: Timer state saved using fallback storage."
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "RakkeZ: Could not save timer state:",
+            error
+        );
+
+        return false;
+    }
+}
+
+
+/* =========================================================
+   SAVE STATS SAFELY
+   ========================================================= */
+
+function saveResetStats() {
+
+    try {
+
+        if (
+            typeof save === "function" &&
+            typeof STORAGE !== "undefined" &&
+            STORAGE &&
+            STORAGE.stats
+        ) {
+
+            save(
+                STORAGE.stats,
+                stats
+            );
+
+            console.log(
+                "RakkeZ: Statistics saved after reset."
+            );
+
+            return true;
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "RakkeZ: Failed to save stats:",
+            error
+        );
+    }
+
+    try {
+
+        localStorage.setItem(
+            "rakkez_stats",
+            JSON.stringify(stats)
+        );
+
+        console.log(
+            "RakkeZ: Statistics saved using fallback storage."
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "RakkeZ: Could not save statistics:",
+            error
+        );
+
+        return false;
+    }
+}
+
+
+/* =========================================================
+   GET TODAY KEY SAFELY
+   ========================================================= */
+
+function getResetTodayKey() {
+
+    if (
+        typeof todayKey === "function"
+    ) {
+
+        try {
+            return todayKey();
+        } catch (error) {
+            /* fallback below */
+        }
+    }
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+
+    const month = String(
+        now.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        now.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+/* =========================================================
+   GET LAST COMPLETED FOCUS PERIOD
+   ---------------------------------------------------------
+   We look for the latest Focus period from today.
+   ========================================================= */
+
+function getLastResettableFocusPeriod() {
+
+    if (
+        typeof stats === "undefined" ||
+        !stats
+    ) {
+
+        return null;
+    }
+
+    if (
+        !Array.isArray(stats.focusPeriods)
+    ) {
+
+        return null;
+    }
+
+    const today = getResetTodayKey();
+
+    const todayPeriods =
+        stats.focusPeriods
+            .filter(period => {
+
+                if (!period) {
+                    return false;
+                }
+
+                return period.date === today;
+            })
+            .filter(period => {
+
+                const duration =
+                    Number(
+                        period.durationSeconds || 0
+                    );
+
+                return (
+                    Number.isFinite(duration) &&
+                    duration > 0
+                );
+            })
+            .sort((a, b) => {
+
+                return (
+                    Number(b.end || b.start || 0) -
+                    Number(a.end || a.start || 0)
+                );
+            });
+
+    if (!todayPeriods.length) {
+        return null;
+    }
+
+    return todayPeriods[0];
+}
+
+
+/* =========================================================
+   REMOVE ONE VALUE FROM OBJECT SAFELY
+   ========================================================= */
+
+function subtractFromResetObject(
+    object,
+    key,
+    amount
+) {
+
+    if (
+        !object ||
+        typeof object !== "object"
+    ) {
+
+        return;
+    }
+
+    const current =
+        Number(object[key] || 0);
+
+    const safeAmount =
+        Number(amount || 0);
+
+    object[key] = Math.max(
+        0,
+        current - safeAmount
+    );
+}
+
+
+/* =========================================================
+   UNDO LAST COMPLETED FOCUS
+   ---------------------------------------------------------
+   This is the important part.
+
+   It removes ONE completed Focus from:
+   - totalFocusSeconds
+   - dailyFocus
+   - sessions
+   - dailySessions
+   - focusPeriods
+
+   It does NOT wipe the whole statistics object.
+   ========================================================= */
+
+function undoLastCompletedFocusForReset() {
+
+    if (
+        typeof stats === "undefined" ||
+        !stats
+    ) {
+
+        console.warn(
+            "RakkeZ: Stats unavailable. Nothing to undo."
+        );
+
+        return false;
+    }
+
+
+    const period =
+        getLastResettableFocusPeriod();
+
+
+    if (!period) {
+
+        console.log(
+            "RakkeZ: No completed Focus found to undo."
+        );
+
+        return false;
+    }
+
+
+    const durationSeconds = Math.max(
+        0,
+        Math.floor(
+            Number(
+                period.durationSeconds || 0
+            )
+        )
+    );
+
+
+    if (durationSeconds <= 0) {
+
+        console.log(
+            "RakkeZ: Invalid Focus period. Nothing to undo."
+        );
+
+        return false;
+    }
+
+
+    const today =
+        getResetTodayKey();
+
+
+    /* =====================================================
+       TOTAL FOCUS
+       ===================================================== */
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            stats,
+            "totalFocusSeconds"
+        )
+    ) {
+
+        stats.totalFocusSeconds =
+            Math.max(
+                0,
+                Number(
+                    stats.totalFocusSeconds || 0
+                ) - durationSeconds
+            );
+    }
+
+
+    /* =====================================================
+       DAILY FOCUS
+       ===================================================== */
+
+    if (
+        stats.dailyFocus &&
+        typeof stats.dailyFocus === "object"
+    ) {
+
+        subtractFromResetObject(
+            stats.dailyFocus,
+            today,
+            durationSeconds
+        );
+
+        if (
+            Number(
+                stats.dailyFocus[today] || 0
+            ) <= 0
+        ) {
+
+            delete stats.dailyFocus[today];
+        }
+    }
+
+
+    /* =====================================================
+       SESSIONS
+       ===================================================== */
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            stats,
+            "sessions"
+        )
+    ) {
+
+        stats.sessions =
+            Math.max(
+                0,
+                Number(stats.sessions || 0) - 1
+            );
+    }
+
+
+    /* =====================================================
+       DAILY SESSIONS
+       ===================================================== */
+
+    if (
+        stats.dailySessions &&
+        typeof stats.dailySessions === "object"
+    ) {
+
+        subtractFromResetObject(
+            stats.dailySessions,
+            today,
+            1
+        );
+
+        if (
+            Number(
+                stats.dailySessions[today] || 0
+            ) <= 0
+        ) {
+
+            delete stats.dailySessions[today];
+        }
+    }
+
+
+    /* =====================================================
+       REMOVE THE EXACT FOCUS PERIOD
+       ===================================================== */
+
+    const periodIndex =
+        stats.focusPeriods.indexOf(period);
+
+    if (periodIndex !== -1) {
+
+        stats.focusPeriods.splice(
+            periodIndex,
+            1
+        );
+
+    } else {
+
+        /*
+         * Fallback in case the object reference
+         * changed somewhere else.
+         */
+
+        const fallbackIndex =
+            stats.focusPeriods.findIndex(item => {
+
+                if (!item) {
+                    return false;
+                }
+
+                return (
+                    Number(item.start) ===
+                    Number(period.start)
+                ) &&
+                (
+                    Number(item.end) ===
+                    Number(period.end)
+                );
+            });
+
+        if (fallbackIndex !== -1) {
+
+            stats.focusPeriods.splice(
+                fallbackIndex,
+                1
+            );
+        }
+    }
+
+
+    /* =====================================================
+       LAST FOCUS DATE
+       ===================================================== */
+
+    /*
+     * If the removed period was the last Focus
+     * of today, recalculate lastFocusDate.
+     */
+
+    if (
+        stats.lastFocusDate === today &&
+        Array.isArray(stats.focusPeriods)
+    ) {
+
+        const remainingPeriods =
+            stats.focusPeriods
+                .filter(period => {
+
+                    return (
+                        period &&
+                        Number(
+                            period.durationSeconds || 0
+                        ) > 0
+                    );
+                })
+                .sort((a, b) => {
+
+                    return (
+                        Number(b.end || b.start || 0) -
+                        Number(a.end || a.start || 0)
+                    );
+                });
+
+        if (remainingPeriods.length) {
+
+            const latest =
+                remainingPeriods[0];
+
+            const latestDate =
+                latest.date || today;
+
+            stats.lastFocusDate =
+                latestDate;
+
+        } else {
+
+            stats.lastFocusDate = null;
+        }
+    }
+
+
+    /* =====================================================
+       SAVE
+       ===================================================== */
+
+    saveResetStats();
+
+
+    /* =====================================================
+       UPDATE STATS UI
+       ===================================================== */
+
+    try {
+
+        if (
+            typeof updateStats === "function"
+        ) {
+
+            updateStats();
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "RakkeZ: updateStats() failed after reset:",
+            error
+        );
+    }
+
+
+    /* =====================================================
+       UPDATE STREAK
+       ===================================================== */
+
+    try {
+
+        if (
+            typeof updateStreak === "function"
+        ) {
+
+            updateStreak();
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "RakkeZ: updateStreak() failed after reset:",
+            error
+        );
+    }
+
+
+    console.log(
+        "RakkeZ: Last completed Focus successfully undone.",
+        {
+            durationSeconds,
+            date: period.date,
+            start: period.start,
+            end: period.end
+        }
+    );
+
+    return true;
+}
+
+
+/* =========================================================
+   UPDATE RESET TIMER UI
+   ========================================================= */
+
+function updateResetTimerUI() {
+
+    if (
+        typeof updateTimerUI === "function"
+    ) {
+
+        try {
+
+            updateTimerUI();
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ: updateTimerUI() failed after reset:",
+                error
+            );
+        }
+    }
+
+
+    if (
+        typeof updateTabTitle === "function"
+    ) {
+
+        try {
+
+            updateTabTitle(
+                timerState.remaining,
+                false
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ: updateTabTitle() failed after reset:",
+                error
+            );
+        }
+    }
+}
+
+
+/* =========================================================
+   RESET CURRENT SEGMENT
+   ---------------------------------------------------------
+   DOES NOT TOUCH STATS
+   ========================================================= */
+
+function resetCurrentSegment() {
+
+    console.log(
+        "RakkeZ: Reset Current Segment"
+    );
+
+
+    /* =====================================================
+       STOP TIMER
+       ===================================================== */
+
+    stopResetTimerInterval();
+
+
+    /* =====================================================
+       KEEP CURRENT MODE
+       ===================================================== */
+
+    const minutes =
+        getCurrentSegmentMinutes();
+
+
+    /* =====================================================
+       RESET TIMER ONLY
+       ===================================================== */
+
+    const success =
+        setResetTimerMinutes(minutes);
+
+
+    if (!success) {
+
+        console.error(
+            "RakkeZ: Current segment reset failed."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       SAVE
+       ===================================================== */
+
+    saveResetTimerState();
+
+
+    /* =====================================================
+       UI
+       ===================================================== */
+
+    updateResetTimerUI();
+
+
+    /* =====================================================
+       CLOSE MODAL
+       ===================================================== */
+
+    closeResetConfirmation();
+
+
+    console.log(
+        "RakkeZ: Current segment reset successfully."
+    );
+}
+
+
+/* =========================================================
+   RESET FULL SESSION
+   ---------------------------------------------------------
+   THIS VERSION ALSO UNDOES THE COMPLETED FOCUS.
+   ========================================================= */
+
+function resetFullSession() {
+
+    console.log(
+        "RakkeZ: Reset Full Session"
+    );
+
+
+    /* =====================================================
+       STOP TIMER
+       ===================================================== */
+
+    stopResetTimerInterval();
+
+
+    /* =====================================================
+       UNDO LAST COMPLETED FOCUS
+       ===================================================== */
+
+    /*
+     * This is the part missing from your old version.
+     *
+     * Previously the code only did:
+     *
+     * completedFocusInCycle = 0;
+     *
+     * So:
+     *
+     * Daily Goal stayed the same
+     * Sessions stayed the same
+     * Focus history stayed the same
+     *
+     * Now the completed Focus is actually removed.
+     */
+
+    const undone =
+        undoLastCompletedFocusForReset();
+
+
+    /* =====================================================
+       RESET CURRENT POMODORO CYCLE
+       ===================================================== */
+
+    if (
+        typeof completedFocusInCycle !== "undefined"
+    ) {
+
+        completedFocusInCycle = 0;
+
+        console.log(
+            "RakkeZ: completedFocusInCycle reset to 0."
+        );
+    }
+
+
+    /* =====================================================
+       TIMER STATE
+       ===================================================== */
+
+    if (
+        typeof timerState === "undefined" ||
+        !timerState
+    ) {
+
+        console.error(
+            "RakkeZ: timerState is not available."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       RETURN TO FOCUS
+       ===================================================== */
+
+    timerState.mode = "focus";
+
+
+    /* =====================================================
+       GET FOCUS DURATION
+       ===================================================== */
+
+    const focusMinutes =
+        getSafeFocusMinutes();
+
+
+    /* =====================================================
+       CREATE FRESH FOCUS TIMER
+       ===================================================== */
+
+    const success =
+        setResetTimerMinutes(
+            focusMinutes
+        );
+
+
+    if (!success) {
+
+        console.error(
+            "RakkeZ: Full session reset failed."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       SAVE TIMER
+       ===================================================== */
+
+    saveResetTimerState();
+
+
+    /* =====================================================
+       UPDATE UI
+       ===================================================== */
+
+    updateResetTimerUI();
+
+
+    /* =====================================================
+       CLOSE POPUP
+       ===================================================== */
+
+    closeResetConfirmation();
+
+
+    console.log(
+        "RakkeZ: Full session reset successfully.",
+        {
+            focusUndone: undone
+        }
+    );
+}
+
+
+/* =========================================================
+   OLD COMPATIBILITY FUNCTION
+   ========================================================= */
+
+function resetTimer() {
+
+    resetFullSession();
+}
+
+
+/* =========================================================
+   OPEN RESET CONFIRMATION
+   ========================================================= */
+
+function openResetConfirmation() {
+
+    console.log(
+        "RakkeZ: Opening reset confirmation"
+    );
+
+
+    let overlay =
+        getResetOverlay();
+
+
+    if (!overlay) {
+
+        overlay =
+            createResetConfirmation();
+    }
+
+
+    if (!overlay) {
+
+        console.error(
+            "RakkeZ: Could not create reset confirmation."
+        );
+
+        return;
+    }
+
+
+    overlay.classList.add("show");
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    overlay.style.display = "flex";
+
+    document.body.style.overflow = "hidden";
+
+
+    initializeResetModalEvents(
+        overlay
+    );
+}
+
+
+/* =========================================================
+   CLOSE RESET CONFIRMATION
+   ========================================================= */
+
+function closeResetConfirmation() {
+
+    const overlays = [];
+
+
+    const possibleIds = [
+        "resetOverlay",
+        "resetConfirmOverlay",
+        "resetConfirmation",
+        "resetTimerOverlay",
+        "timerResetOverlay",
+        "rakkezResetOverlay"
+    ];
+
+
+    possibleIds.forEach(id => {
+
+        const overlay =
+            document.getElementById(id);
+
+        if (
+            overlay &&
+            !overlays.includes(overlay)
+        ) {
+
+            overlays.push(overlay);
+        }
+    });
+
+
+    overlays.forEach(overlay => {
+
+        overlay.classList.remove(
+            "show"
+        );
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        overlay.style.display =
+            "none";
+    });
+
+
+    if (
+        typeof syncBodyScrollLock === "function"
+    ) {
+
+        try {
+
+            syncBodyScrollLock();
+
+        } catch (error) {
+
+            document.body.style.overflow = "";
+        }
+
+    } else {
+
+        document.body.style.overflow = "";
+    }
+}
+
+
+/* =========================================================
+   CREATE RESET CONFIRMATION
+   ========================================================= */
+
+function createResetConfirmation() {
+
+    const existing =
+        document.getElementById(
+            "rakkezResetOverlay"
+        );
+
+
+    if (existing) {
+
+        initializeResetModalEvents(
+            existing
+        );
+
+        return existing;
+    }
+
+
+    const overlay =
+        document.createElement("div");
+
+
+    overlay.id =
+        "rakkezResetOverlay";
+
+
+    overlay.className =
+        "rakkez-reset-overlay";
+
+
+    overlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    overlay.setAttribute(
+        "role",
+        "dialog"
+    );
+
+
+    overlay.setAttribute(
+        "aria-modal",
+        "true"
+    );
+
+
+    overlay.innerHTML = `
+
+        <div
+            class="rakkez-reset-card"
+            role="document"
+        >
+
+            <button
+                id="rakkezResetClose"
+                class="rakkez-reset-close"
+                type="button"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+
+            <div
+                class="rakkez-reset-icon"
+                aria-hidden="true"
+            >
+                ↻
+            </div>
+
+
+            <h2>
+                Reset Timer
+            </h2>
+
+
+            <p>
+                Would you like to reset your current segment, or your full session?
+            </p>
+
+
+            <button
+                id="rakkezResetCurrent"
+                class="rakkez-reset-option"
+                type="button"
+                data-reset-action="current"
+            >
+
+                <span
+                    class="reset-option-icon"
+                    aria-hidden="true"
+                >
+                    ↻
+                </span>
+
+
+                <span
+                    class="reset-option-text"
+                >
+
+                    <strong>
+                        Reset Current Segment
+                    </strong>
+
+                    <small>
+                        Restart the current Focus or Break timer.
+                    </small>
+
+                </span>
+
+            </button>
+
+
+            <button
+                id="rakkezResetFull"
+                class="rakkez-reset-option"
+                type="button"
+                data-reset-action="full"
+            >
+
+                <span
+                    class="reset-option-icon"
+                    aria-hidden="true"
+                >
+                    ⟳
+                </span>
+
+
+                <span
+                    class="reset-option-text"
+                >
+
+                    <strong>
+                        Reset Full Session
+                    </strong>
+
+                    <small>
+                        Return to Focus and undo the completed Focus from this session.
+                    </small>
+
+                </span>
+
+            </button>
+
+        </div>
+    `;
+
+
+    document.body.appendChild(
+        overlay
+    );
+
+
+    /* =====================================================
+       FALLBACK CSS
+       ===================================================== */
+
+    if (
+        !document.getElementById(
+            "rakkezResetStyles"
+        )
+    ) {
+
+        const style =
+            document.createElement("style");
+
+
+        style.id =
+            "rakkezResetStyles";
+
+
+        style.textContent = `
+
+            #rakkezResetOverlay,
+            .rakkez-reset-overlay {
+
+                position: fixed;
+
+                inset: 0;
+
+                z-index: 100001;
+
+                display: none;
+
+                align-items: center;
+
+                justify-content: center;
+
+                padding: 20px;
+
+                background:
+                    rgba(0, 0, 0, .68);
+
+                backdrop-filter:
+                    blur(18px);
+
+                -webkit-backdrop-filter:
+                    blur(18px);
+
+                opacity: 0;
+
+                visibility: hidden;
+
+                transition:
+                    opacity .22s ease,
+                    visibility .22s ease;
+            }
+
+
+            #rakkezResetOverlay.show,
+            .rakkez-reset-overlay.show {
+
+                display: flex;
+
+                opacity: 1;
+
+                visibility: visible;
+            }
+
+
+            .rakkez-reset-card {
+
+                position: relative;
+
+                width:
+                    min(
+                        420px,
+                        calc(100vw - 32px)
+                    );
+
+                padding: 30px;
+
+                border-radius: 26px;
+
+                background:
+                    linear-gradient(
+                        145deg,
+                        rgba(28,28,32,.98),
+                        rgba(14,14,17,.98)
+                    );
+
+                border:
+                    1px solid
+                    rgba(255,255,255,.10);
+
+                box-shadow:
+                    0 30px 90px
+                    rgba(0,0,0,.65);
+
+                transform:
+                    translateY(10px)
+                    scale(.98);
+
+                transition:
+                    transform .22s ease;
+            }
+
+
+            #rakkezResetOverlay.show
+            .rakkez-reset-card,
+            .rakkez-reset-overlay.show
+            .rakkez-reset-card {
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+
+
+            .rakkez-reset-close {
+
+                position: absolute;
+
+                top: 14px;
+
+                right: 14px;
+
+                width: 34px;
+
+                height: 34px;
+
+                border: 0;
+
+                border-radius: 50%;
+
+                background:
+                    rgba(255,255,255,.06);
+
+                color:
+                    rgba(255,255,255,.72);
+
+                font-size: 22px;
+
+                line-height: 1;
+
+                cursor: pointer;
+
+                transition:
+                    background .2s ease,
+                    color .2s ease;
+            }
+
+
+            .rakkez-reset-close:hover {
+
+                background:
+                    rgba(255,255,255,.12);
+
+                color: white;
+            }
+
+
+            .rakkez-reset-icon {
+
+                width: 52px;
+
+                height: 52px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                margin-bottom: 16px;
+
+                border-radius: 16px;
+
+                background:
+                    rgba(255,255,255,.07);
+
+                border:
+                    1px solid
+                    rgba(255,255,255,.08);
+
+                color: white;
+
+                font-size: 27px;
+            }
+
+
+            .rakkez-reset-card h2 {
+
+                margin:
+                    0 0 8px;
+
+                color: white;
+
+                font-family:
+                    "Space Grotesk",
+                    sans-serif;
+
+                font-size: 25px;
+
+                font-weight: 700;
+            }
+
+
+            .rakkez-reset-card > p {
+
+                margin:
+                    0 0 22px;
+
+                color:
+                    rgba(255,255,255,.52);
+
+                font-family:
+                    "DM Sans",
+                    sans-serif;
+
+                font-size: 14px;
+
+                line-height: 1.55;
+            }
+
+
+            .rakkez-reset-option {
+
+                width: 100%;
+
+                display: flex;
+
+                align-items: center;
+
+                gap: 14px;
+
+                margin-top: 10px;
+
+                padding: 15px;
+
+                border-radius: 16px;
+
+                border:
+                    1px solid
+                    rgba(255,255,255,.08);
+
+                background:
+                    rgba(255,255,255,.045);
+
+                color: white;
+
+                text-align: left;
+
+                cursor: pointer;
+
+                transition:
+                    transform .18s ease,
+                    background .18s ease,
+                    border-color .18s ease;
+            }
+
+
+            .rakkez-reset-option:hover {
+
+                transform:
+                    translateY(-1px);
+
+                background:
+                    rgba(255,255,255,.075);
+
+                border-color:
+                    rgba(255,255,255,.15);
+            }
+
+
+            .rakkez-reset-option:active {
+
+                transform:
+                    translateY(0)
+                    scale(.99);
+            }
+
+
+            .reset-option-icon {
+
+                width: 42px;
+
+                height: 42px;
+
+                min-width: 42px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                border-radius: 13px;
+
+                background:
+                    rgba(255,255,255,.07);
+
+                font-size: 21px;
+            }
+
+
+            .reset-option-text {
+
+                display: flex;
+
+                flex-direction: column;
+
+                gap: 4px;
+            }
+
+
+            .reset-option-text strong {
+
+                font-family:
+                    "DM Sans",
+                    sans-serif;
+
+                font-size: 14px;
+
+                font-weight: 700;
+            }
+
+
+            .reset-option-text small {
+
+                color:
+                    rgba(255,255,255,.46);
+
+                font-family:
+                    "DM Sans",
+                    sans-serif;
+
+                font-size: 12px;
+
+                line-height: 1.4;
+            }
+
+
+            @media (max-width: 480px) {
+
+                .rakkez-reset-card {
+
+                    padding: 24px;
+
+                    border-radius: 22px;
+                }
+            }
+
+        `;
+
+
+        document.head.appendChild(
+            style
+        );
+    }
+
+
+    initializeResetModalEvents(
+        overlay
+    );
+
+
+    return overlay;
+}
+
+
+/* =========================================================
+   RESET MODAL EVENTS
+   ========================================================= */
+
+function initializeResetModalEvents(
+    overlay
+) {
+
+    if (!overlay) {
+        return;
+    }
+
+
+    if (
+        overlay.dataset
+            .rakkezResetEvents === "true"
+    ) {
+
+        return;
+    }
+
+
+    overlay.dataset
+        .rakkezResetEvents = "true";
+
+
+    overlay.addEventListener(
+        "click",
+        event => {
+
+            const target =
+                event.target;
+
+
+            /* =============================================
+               CLICK OUTSIDE CARD
+               ============================================= */
+
+            if (
+                target === overlay
+            ) {
+
+                event.preventDefault();
+
+                closeResetConfirmation();
+
+                return;
+            }
+
+
+            const button =
+                target.closest(
+                    "button, [data-reset-action], [data-close-reset]"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            /* =============================================
+               CLOSE
+               ============================================= */
+
+            if (
+                button.id ===
+                    "rakkezResetClose" ||
+
+                button.id ===
+                    "resetClose" ||
+
+                button.id ===
+                    "closeReset" ||
+
+                button.id ===
+                    "resetCancel" ||
+
+                button.id ===
+                    "cancelReset" ||
+
+                button.id ===
+                    "closeResetTimer" ||
+
+                button.hasAttribute(
+                    "data-close-reset"
+                )
+            ) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                closeResetConfirmation();
+
+                return;
+            }
+
+
+            /* =============================================
+               CURRENT
+               ============================================= */
+
+            const action =
+                button.dataset
+                    ? button.dataset.resetAction
+                    : null;
+
+
+            if (
+                action === "current" ||
+                button.id ===
+                    "rakkezResetCurrent"
+            ) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                resetCurrentSegment();
+
+                return;
+            }
+
+
+            /* =============================================
+               FULL
+               ============================================= */
+
+            if (
+                action === "full" ||
+                button.id ===
+                    "rakkezResetFull"
+            ) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                resetFullSession();
+
+                return;
+            }
+        }
+    );
+}
+
+
+/* =========================================================
+   INITIALIZE RESET SYSTEM
+   ========================================================= */
+
+function initializeResetSystem() {
+
+    console.log(
+        "RakkeZ: Initializing Reset System"
+    );
+
+
+    /* =====================================================
+       MAIN RESET BUTTON
+       ===================================================== */
+
+    const resetButton =
+        document.getElementById(
+            "resetBtn"
+        );
+
+
+    if (resetButton) {
+
+        if (
+            resetButton.dataset
+                .rakkezResetMainBound !== "true"
+        ) {
+
+            resetButton.dataset
+                .rakkezResetMainBound = "true";
+
+
+            resetButton.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+                    openResetConfirmation();
+                }
+            );
+        }
+    }
+
+
+    /* =====================================================
+       CURRENT SEGMENT BUTTONS
+       ===================================================== */
+
+    const currentIds = [
+
+        "resetCurrentSegment",
+
+        "resetCurrentBtn",
+
+        "resetSegment",
+
+        "resetSegmentBtn",
+
+        "resetCurrent"
+
+    ];
+
+
+    currentIds.forEach(id => {
+
+        const button =
+            document.getElementById(id);
+
+
+        if (!button) {
+            return;
+        }
+
+
+        if (
+            button.dataset
+                .rakkezResetBound === "true"
+        ) {
+
+            return;
+        }
+
+
+        button.dataset
+            .rakkezResetBound = "true";
+
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                resetCurrentSegment();
+            }
+        );
+    });
+
+
+    /* =====================================================
+       FULL SESSION BUTTONS
+       ===================================================== */
+
+    const fullIds = [
+
+        "resetFullSession",
+
+        "resetFullBtn",
+
+        "resetSession",
+
+        "resetSessionBtn",
+
+        "resetFull"
+
+    ];
+
+
+    fullIds.forEach(id => {
+
+        const button =
+            document.getElementById(id);
+
+
+        if (!button) {
+            return;
+        }
+
+
+        if (
+            button.dataset
+                .rakkezResetBound === "true"
+        ) {
+
+            return;
+        }
+
+
+        button.dataset
+            .rakkezResetBound = "true";
+
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                resetFullSession();
+            }
+        );
+    });
+
+
+    /* =====================================================
+       DATA RESET ACTIONS
+       ===================================================== */
+
+    document
+        .querySelectorAll(
+            "[data-reset-action]"
+        )
+        .forEach(button => {
+
+            if (
+                button.closest(
+                    "#rakkezResetOverlay"
+                )
+            ) {
+
+                return;
+            }
+
+
+            if (
+                button.dataset
+                    .rakkezResetBound === "true"
+            ) {
+
+                return;
+            }
+
+
+            button.dataset
+                .rakkezResetBound = "true";
+
+
+            button.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+
+                    const action =
+                        button.dataset
+                            .resetAction;
+
+
+                    if (
+                        action === "current"
+                    ) {
+
+                        resetCurrentSegment();
+                    }
+
+
+                    if (
+                        action === "full"
+                    ) {
+
+                        resetFullSession();
+                    }
+                }
+            );
+        });
+
+
+    /* =====================================================
+       CLOSE BUTTONS
+       ===================================================== */
+
+    const closeIds = [
+
+        "resetClose",
+
+        "closeReset",
+
+        "resetCancel",
+
+        "cancelReset",
+
+        "closeResetTimer"
+
+    ];
+
+
+    closeIds.forEach(id => {
+
+        const button =
+            document.getElementById(id);
+
+
+        if (!button) {
+            return;
+        }
+
+
+        if (
+            button.dataset
+                .rakkezResetBound === "true"
+        ) {
+
+            return;
+        }
+
+
+        button.dataset
+            .rakkezResetBound = "true";
+
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                closeResetConfirmation();
+            }
+        );
+    });
+
+
+    /* =====================================================
+       EXISTING OVERLAYS
+       ===================================================== */
+
+    const overlayIds = [
+
+        "resetOverlay",
+
+        "resetConfirmOverlay",
+
+        "resetConfirmation",
+
+        "resetTimerOverlay",
+
+        "timerResetOverlay",
+
+        "rakkezResetOverlay"
+
+    ];
+
+
+    overlayIds.forEach(id => {
+
+        const overlay =
+            document.getElementById(id);
+
+
+        if (!overlay) {
+            return;
+        }
+
+
+        initializeResetModalEvents(
+            overlay
+        );
+    });
+
+
+    console.log(
+        "RakkeZ: Reset System Ready"
+    );
+}
+
+
+/* =========================================================
+   GLOBAL RESET API
+   ========================================================= */
+
+window.RakkeZReset = {
+
+    currentSegment:
+        resetCurrentSegment,
+
+    fullSession:
+        resetFullSession,
+
+    open:
+        openResetConfirmation,
+
+    close:
+        closeResetConfirmation,
+
+    undoLastFocus:
+        undoLastCompletedFocusForReset
+
+};
+
+
+/* =========================================================
+   RESET KEYBOARD SHORTCUT
+   ---------------------------------------------------------
+   R = Open reset options
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.target &&
+            (
+                event.target.tagName === "INPUT" ||
+                event.target.tagName === "TEXTAREA" ||
+                event.target.isContentEditable
+            )
+        ) {
+
+            return;
+        }
+
+
+        if (
+            event.key &&
+            event.key.toLowerCase() === "r"
+        ) {
+
+            event.preventDefault();
+
+            openResetConfirmation();
+        }
+    }
+);
+
+
+/* =========================================================
+   RESET ESCAPE
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key !== "Escape"
+        ) {
+
+            return;
+        }
+
+
+        const overlay =
+            getResetOverlay();
+
+
+        if (!overlay) {
+            return;
+        }
+
+
+        const isOpen =
+            overlay.classList.contains(
+                "show"
+            ) ||
+            overlay.getAttribute(
+                "aria-hidden"
+            ) === "false";
+
+
+        if (isOpen) {
+
+            event.preventDefault();
+
+            closeResetConfirmation();
+        }
+    }
+);
+
+
+/* =========================================================
+   RESET BOOT
+   ========================================================= */
+
+function bootRakkeZResetSystem() {
+
+    try {
+
+        initializeResetSystem();
+
+    } catch (error) {
+
+        console.warn(
+            "RakkeZ: Reset system initialization failed:",
+            error
+        );
+    }
+}
+
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        bootRakkeZResetSystem,
+        {
+            once: true
+        }
+    );
+
+} else {
+
+    bootRakkeZResetSystem();
+}
+
+
+/* =========================================================
+   END OF RAKKEZ RESET SYSTEM
+   ========================================================= */
+
+/* =========================================================
+   MEDIA TABS
+   ========================================================= */
+
+document
+    .querySelectorAll(
+        ".media-tab"
+    )
+    .forEach(
+        tab => {
+
+            tab.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".media-tab"
+                        )
+                        .forEach(
+                            t =>
+                                t.classList
+                                    .remove(
+                                        "active"
+                                    )
+                        );
+
+
+                    document
+                        .querySelectorAll(
+                            ".media-content"
+                        )
+                        .forEach(
+                            c =>
+                                c.classList
+                                    .remove(
+                                        "active"
+                                    )
+                        );
+
+
+                    tab.classList.add(
+                        "active"
+                    );
+
+
+                    const content =
+                        $(
+                            tab.dataset.media +
+                            "Content"
+                        );
+
+
+                    if (content) {
+
+                        content.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   YOUTUBE
+   ========================================================= */
+
+function getYouTubeId(url) {
+
+    try {
+
+        const parsed =
+            new URL(url);
+
+
+        const hostname =
+            parsed.hostname.toLowerCase();
+
+
+        if (
+            hostname ===
+            "youtu.be"
+        ) {
+
+            return parsed.pathname
+                .replace("/", "")
+                .split("/")[0]
+                .split("?")[0];
+
+        }
+
+
+        if (
+            hostname.includes(
+                "youtube.com"
+            ) &&
+            parsed.searchParams.get(
+                "v"
+            )
+        ) {
+
+            return parsed.searchParams.get(
+                "v"
+            );
+
+        }
+
+
+        if (
+            parsed.pathname.startsWith(
+                "/embed/"
+            )
+        ) {
+
+            return parsed.pathname
+                .split("/embed/")[1]
+                .split("/")[0];
+
+        }
+
+
+        if (
+            parsed.pathname.startsWith(
+                "/shorts/"
+            )
+        ) {
+
+            return parsed.pathname
+                .split("/shorts/")[1]
+                .split("/")[0];
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Invalid YouTube URL:",
+            error
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+if ($("youtubePlay")) {
+
+    $("youtubePlay").onclick =
+        () => {
+
+            const url =
+                $("youtubeInput")
+                    .value
+                    .trim();
+
+
+            if (!url) {
+
+                alert(
+                    "Please paste a YouTube URL."
+                );
+
+                return;
+
+            }
+
+
+            const videoId =
+                getYouTubeId(
+                    url
+                );
+
+
+            if (!videoId) {
+
+                alert(
+                    "Invalid YouTube URL."
+                );
+
+                return;
+
+            }
+
+
+            const embedUrl =
+                "https://www.youtube.com/embed/" +
+                encodeURIComponent(
+                    videoId
+                ) +
+                "?autoplay=1" +
+                "&rel=0" +
+                "&enablejsapi=1";
+
+
+            $("youtubeEmbed")
+                .innerHTML = `
+
+                    <iframe
+                        src="${embedUrl}"
+                        title="YouTube Player"
+                        allow="
+                            accelerometer;
+                            autoplay;
+                            clipboard-write;
+                            encrypted-media;
+                            gyroscope;
+                            picture-in-picture;
+                            web-share
+                        "
+                        referrerpolicy="
+                            strict-origin-when-cross-origin
+                        "
+                        allowfullscreen
+                    ></iframe>
+
+                `;
+
+
+            $("youtubeEmbed")
+                .classList
+                .add("show");
+
+
+            showNowPlaying(
+                "YouTube Video",
+                "YouTube",
+                "▶"
+            );
+
+        };
+
+}
+
+
+/* =========================================================
+   SPOTIFY EMBED
+   ========================================================= */
+
+function spotifyEmbedUrl(url) {
+
+    try {
+
+        const parsed =
+            new URL(url);
+
+
+        const parts =
+            parsed.pathname
+                .split("/")
+                .filter(Boolean);
+
+
+        if (
+            parts.length >= 2
+        ) {
+
+            return (
+                "https://open.spotify.com/embed/" +
+                parts[0] +
+                "/" +
+                parts[1] +
+                "?utm_source=generator"
+            );
+
+        }
+
+    } catch {}
+
+
+    return null;
+
+}
+
+
+if ($("spotifyPlay")) {
+
+    $("spotifyPlay").onclick =
+        () => {
+
+            const url =
+                $("spotifyInput")
+                    .value
+                    .trim();
+
+
+            const embed =
+                spotifyEmbedUrl(
+                    url
+                );
+
+
+            if (!embed) {
+
+                alert(
+                    "Paste a Spotify track, playlist or album URL."
+                );
+
+                return;
+
+            }
+
+
+            $("spotifyEmbed")
+                .innerHTML = `
+
+                    <iframe
+                        src="${embed}"
+                        allow="
+                            autoplay;
+                            clipboard-write;
+                            encrypted-media;
+                            fullscreen;
+                            picture-in-picture
+                        "
+                    ></iframe>
+
+                `;
+
+
+            $("spotifyEmbed")
+                .classList
+                .add("show");
+
+
+            showNowPlaying(
+                "Spotify",
+                "Spotify",
+                "S"
+            );
+
+        };
+
+}
+
+
+/* =========================================================
+   LOCAL MEDIA
+   ========================================================= */
+
+let localMediaURL =
+    null;
+
+
+/* =========================================================
+   UPLOAD FEEDBACK
+   ========================================================= */
+
+function showUploadFeedback(
+    message,
+    success = true
+) {
+
+    let feedback =
+        document.getElementById(
+            "uploadFeedback"
+        );
+
+
+    if (!feedback) {
+
+        feedback =
+            document.createElement(
+                "div"
+            );
+
+
+        feedback.id =
+            "uploadFeedback";
+
+
+        feedback.style.cssText = `
+
+            margin-top:12px;
+
+            padding:10px 14px;
+
+            border-radius:12px;
+
+            font-size:13px;
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+
+            display:flex;
+
+            align-items:center;
+
+            gap:8px;
+
+            transition:
+                all .25s ease;
+
+        `;
+
+
+        const mediaFile =
+            document.getElementById(
+                "mediaFile"
+            );
+
+
+        if (
+            mediaFile &&
+            mediaFile.parentElement
+        ) {
+
+            mediaFile.parentElement
+                .appendChild(
+                    feedback
+                );
+
+        } else {
+
+            document.body.appendChild(
+                feedback
+            );
+
+        }
+
+    }
+
+
+    feedback.innerHTML =
+        success
+
+            ? `
+
+                <span
+                    style="
+                        display:inline-flex;
+                        width:20px;
+                        height:20px;
+                        align-items:center;
+                        justify-content:center;
+                        border-radius:50%;
+                        background:#22c55e;
+                        color:white;
+                        font-size:12px;
+                        font-weight:700;
+                    "
+                >
+                    ✓
+                </span>
+
+                <span>
+                    ${escapeHTML(message)}
+                </span>
+
+            `
+
+            : `
+
+                <span
+                    style="
+                        display:inline-flex;
+                        width:20px;
+                        height:20px;
+                        align-items:center;
+                        justify-content:center;
+                        border-radius:50%;
+                        background:#ef4444;
+                        color:white;
+                        font-size:12px;
+                        font-weight:700;
+                    "
+                >
+                    !
+                </span>
+
+                <span>
+                    ${escapeHTML(message)}
+                </span>
+
+            `;
+
+
+    feedback.style.background =
+        success
+            ? "rgba(34,197,94,.10)"
+            : "rgba(239,68,68,.10)";
+
+
+    feedback.style.border =
+        success
+            ? "1px solid rgba(34,197,94,.20)"
+            : "1px solid rgba(239,68,68,.20)";
+
+
+    feedback.style.color =
+        success
+            ? "#86efac"
+            : "#fca5a5";
+
+}
+
+
+/* =========================================================
+   LOCAL MEDIA UPLOAD
+   ========================================================= */
+
+if ($("mediaFile")) {
+
+    $("mediaFile")
+        .addEventListener(
+            "change",
+            e => {
+
+                const file =
+                    e.target.files &&
+                    e.target.files[0];
+
+
+                if (!file) {
+
+                    return;
+
+                }
+
+
+                if (localMediaURL) {
+
+                    URL.revokeObjectURL(
+                        localMediaURL
+                    );
+
+
+                    localMediaURL =
+                        null;
+
+                }
+
+
+                if ($("audioPlayer")) {
+
+                    $("audioPlayer").pause();
+
+                    $("audioPlayer")
+                        .removeAttribute(
+                            "src"
+                        );
+
+                    $("audioPlayer")
+                        .style.display =
+                        "none";
+
+                }
+
+
+                if ($("videoPlayer")) {
+
+                    $("videoPlayer").pause();
+
+                    $("videoPlayer")
+                        .removeAttribute(
+                            "src"
+                        );
+
+                    $("videoPlayer")
+                        .style.display =
+                        "none";
+
+                }
+
+
+                const isAudio =
+                    file.type.startsWith(
+                        "audio/"
+                    );
+
+
+                const isVideo =
+                    file.type.startsWith(
+                        "video/"
+                    );
+
+
+                if (
+                    !isAudio &&
+                    !isVideo
+                ) {
+
+                    showUploadFeedback(
+                        "Unsupported file. Please upload an audio or video file.",
+                        false
+                    );
+
+
+                    e.target.value =
+                        "";
+
+
+                    return;
+
+                }
+
+
+                localMediaURL =
+                    URL.createObjectURL(
+                        file
+                    );
+
+
+                if (isAudio) {
+
+                    const player =
+                        $("audioPlayer");
+
+
+                    if (!player) {
+
+                        return;
+
+                    }
+
+
+                    player.src =
+                        localMediaURL;
+
+
+                    player.loop =
+                        true;
+
+
+                    player.volume =
+                        1;
+
+
+                    player.style.display =
+                        "block";
+
+
+                    player.load();
+
+
+                    player.play()
+                        .then(
+                            () => {
+
+                                showUploadFeedback(
+                                    "Uploaded • Playing in loop"
+                                );
+
+                            }
+                        )
+                        .catch(
+                            error => {
+
+                                console.warn(
+                                    "Autoplay blocked:",
+                                    error
+                                );
+
+
+                                showUploadFeedback(
+                                    "Uploaded • Press play to start"
+                                );
+
+                            }
+                        );
+
+
+                    if ($("mediaName")) {
+
+                        $("mediaName")
+                            .textContent =
+                            file.name;
+
+                    }
+
+
+                    if ($("mediaSource")) {
+
+                        $("mediaSource")
+                            .textContent =
+                            "Local Audio";
+
+                    }
+
+
+                    showNowPlaying(
+                        file.name,
+                        "Local Audio",
+                        "♫"
+                    );
+
+                }
+
+
+                if (isVideo) {
+
+                    const player =
+                        $("videoPlayer");
+
+
+                    if (!player) {
+
+                        return;
+
+                    }
+
+
+                    player.src =
+                        localMediaURL;
+
+
+                    player.loop =
+                        true;
+
+
+                    player.muted =
+                        false;
+
+
+                    player.style.display =
+                        "block";
+
+
+                    player.load();
+
+
+                    player.play()
+                        .then(
+                            () => {
+
+                                showUploadFeedback(
+                                    "Uploaded • Playing in loop"
+                                );
+
+                            }
+                        )
+                        .catch(
+                            error => {
+
+                                console.warn(
+                                    "Autoplay blocked:",
+                                    error
+                                );
+
+
+                                showUploadFeedback(
+                                    "Uploaded • Press play to start"
+                                );
+
+                            }
+                        );
+
+
+                    if ($("mediaName")) {
+
+                        $("mediaName")
+                            .textContent =
+                            file.name;
+
+                    }
+
+
+                    if ($("mediaSource")) {
+
+                        $("mediaSource")
+                            .textContent =
+                            "Local Video";
+
+                    }
+
+
+                    showNowPlaying(
+                        file.name,
+                        "Local Video",
+                        "▶"
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   NOW PLAYING
+   ========================================================= */
+
+function showNowPlaying(
+    name,
+    source,
+    artwork
+) {
+
+    if ($("mediaName")) {
+
+        $("mediaName")
+            .textContent =
+            name;
+
+    }
+
+
+    if ($("mediaSource")) {
+
+        $("mediaSource")
+            .textContent =
+            source;
+
+    }
+
+
+    if ($("mediaArtwork")) {
+
+        $("mediaArtwork")
+            .textContent =
+            artwork;
+
+    }
+
+
+    if ($("nowPlaying")) {
+
+        $("nowPlaying")
+            .classList
+            .add("show");
+
+    }
+
+}
+
+
+/* =========================================================
+   SPOTIFY OAUTH — PKCE
+   ========================================================= */
+
+let spotifyUser =
+    null;
+
+
+function randomString(
+    length = 64
+) {
+
+    const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
+
+
+    let result =
+        "";
+
+
+    const array =
+        new Uint8Array(
+            length
+        );
+
+
+    crypto.getRandomValues(
+        array
+    );
+
+
+    array.forEach(
+        value => {
+
+            result +=
+                chars[
+                    value %
+                    chars.length
+                ];
+
+        }
+    );
+
+
+    return result;
+
+}
+
+
+async function sha256(
+    value
+) {
+
+    const data =
+        new TextEncoder()
+            .encode(
+                value
+            );
+
+
+    return crypto.subtle.digest(
+        "SHA-256",
+        data
+    );
+
+}
+
+
+function base64url(
+    buffer
+) {
+
+    return btoa(
+        String.fromCharCode(
+            ...new Uint8Array(
+                buffer
+            )
+        )
+    )
+        .replace(
+            /\+/g,
+            "-"
+        )
+        .replace(
+            /\//g,
+            "_"
+        )
+        .replace(
+            /=/g,
+            ""
+        );
+
+}
+
+
+async function spotifyLogin() {
+
+    if (
+        !window.RAKKEZ_CONFIG ||
+        !RAKKEZ_CONFIG.spotify ||
+        !RAKKEZ_CONFIG.spotify.clientId ||
+        !RAKKEZ_CONFIG.spotify.clientId.trim() ||
+        RAKKEZ_CONFIG.spotify.clientId ===
+            "YOUR_SPOTIFY_CLIENT_ID"
+    ) {
+
+        alert(
+            "Add your Spotify Client ID inside config.js first."
+        );
+
+        return;
+
+    }
+
+
+    const verifier =
+        randomString(
+            64
+        );
+
+
+    const challenge =
+        base64url(
+            await sha256(
+                verifier
+            )
+        );
+
+
+    sessionStorage.setItem(
+        "rakkez_spotify_verifier",
+        verifier
+    );
+
+
+    const params =
+        new URLSearchParams({
+
+            client_id:
+                RAKKEZ_CONFIG
+                    .spotify
+                    .clientId,
+
+            response_type:
+                "code",
+
+            redirect_uri:
+                RAKKEZ_CONFIG
+                    .spotify
+                    .redirectUri,
+
+            code_challenge_method:
+                "S256",
+
+            code_challenge:
+                challenge,
+
+            scope:
+                RAKKEZ_CONFIG
+                    .spotify
+                    .scopes
+
+        });
+
+
+    window.location.href =
+        "https://accounts.spotify.com/authorize?" +
+        params.toString();
+
+}
+
+
+async function handleSpotifyCallback() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const code =
+        params.get(
+            "code"
+        );
+
+
+    if (!code) {
+
+        return;
+
+    }
+
+
+    const verifier =
+        sessionStorage.getItem(
+            "rakkez_spotify_verifier"
+        );
+
+
+    if (!verifier) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const body =
+            new URLSearchParams({
+
+                client_id:
+                    RAKKEZ_CONFIG
+                        .spotify
+                        .clientId,
+
+                grant_type:
+                    "authorization_code",
+
+                code,
+
+                redirect_uri:
+                    RAKKEZ_CONFIG
+                        .spotify
+                        .redirectUri,
+
+                code_verifier:
+                    verifier
+
+            });
+
+
+        const response =
+            await fetch(
+                "https://accounts.spotify.com/api/token",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+
+                    },
+
+                    body
+
+                }
+            );
+
+
+        const token =
+            await response.json();
+
+
+        if (!token.access_token) {
+
+            console.error(
+                token
+            );
+
+            return;
+
+        }
+
+
+        save(
+            STORAGE.spotify,
+            {
+
+                accessToken:
+                    token.access_token,
+
+                expiresAt:
+                    Date.now() +
+                    token.expires_in *
+                    1000
+
+            }
+        );
+
+
+        sessionStorage.removeItem(
+            "rakkez_spotify_verifier"
+        );
+
+
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+
+
+        await loadSpotifyUser();
+
+
+    } catch (error) {
+
+        console.error(
+            "Spotify OAuth:",
+            error
+        );
+
+    }
+
+}
+
+
+async function loadSpotifyUser() {
+
+    const auth =
+        load(
+            STORAGE.spotify,
+            null
+        );
+
+
+    if (
+        !auth ||
+        !auth.accessToken
+    ) {
+
+        updateSpotifyUI(
+            null
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "https://api.spotify.com/v1/me",
+                {
+
+                    headers: {
+
+                        Authorization:
+                            "Bearer " +
+                            auth.accessToken
+
+                    }
+
+                }
+            );
+
+
+        if (!response.ok) {
+
+            localStorage.removeItem(
+                STORAGE.spotify
+            );
+
+
+            updateSpotifyUI(
+                null
+            );
+
+
+            return;
+
+        }
+
+
+        spotifyUser =
+            await response.json();
+
+
+        updateSpotifyUI(
+            spotifyUser
+        );
+
+
+    } catch {
+
+        updateSpotifyUI(
+            null
+        );
+
+    }
+
+}
+
+
+function updateSpotifyUI(
+    user
+) {
+
+    if (user) {
+
+        if ($("spotifyStatus")) {
+
+            $("spotifyStatus")
+                .textContent =
+                user.display_name ||
+                user.id;
+
+        }
+
+
+        if ($("spotifyLogin")) {
+
+            $("spotifyLogin")
+                .textContent =
+                "Connected";
+
+
+            $("spotifyLogin")
+                .classList
+                .add("connected");
+
+        }
+
+
+        if ($("spotifyUser")) {
+
+            $("spotifyUser")
+                .textContent =
+                "Connected: " +
+                (
+                    user.display_name ||
+                    user.id
+                );
+
+        }
+
+    } else {
+
+        if ($("spotifyStatus")) {
+
+            $("spotifyStatus")
+                .textContent =
+                "Not connected";
+
+        }
+
+
+        if ($("spotifyLogin")) {
+
+            $("spotifyLogin")
+                .textContent =
+                "Connect";
+
+
+            $("spotifyLogin")
+                .classList
+                .remove(
+                    "connected"
+                );
+
+        }
+
+    }
+
+}
+
+
+if ($("spotifyLogin")) {
+
+    $("spotifyLogin").onclick =
+        spotifyLogin;
+
+}
+
+
+/* =========================================================
+   GOOGLE / YOUTUBE OAUTH
+   ========================================================= */
+
+let googleUser =
+    null;
+
+let googleTokenClient =
+    null;
+
+
+function initializeGoogle() {
+
+    if (
+        typeof google ===
+        "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !window.RAKKEZ_CONFIG ||
+        !RAKKEZ_CONFIG.google ||
+        !RAKKEZ_CONFIG.google.clientId ||
+        RAKKEZ_CONFIG.google.clientId.includes(
+            "YOUR_GOOGLE"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    googleTokenClient =
+        google.accounts.oauth2
+            .initTokenClient({
+
+                client_id:
+                    RAKKEZ_CONFIG
+                        .google
+                        .clientId,
+
+                scope:
+                    "openid profile email https://www.googleapis.com/auth/youtube.readonly",
+
+                callback:
+                    handleGoogleToken
+
+            });
+
+}
+
+
+function googleLogin() {
+
+    if (!googleTokenClient) {
+
+        alert(
+            "Add your Google Client ID inside config.js first."
+        );
+
+        return;
+
+    }
+
+
+    googleTokenClient
+        .requestAccessToken();
+
+}
+
+
+async function handleGoogleToken(
+    response
+) {
+
+    if (response.error) {
+
+        console.error(
+            response
+        );
+
+        return;
+
+    }
+
+
+    const token =
+        response.access_token;
+
+
+    save(
+        STORAGE.google,
+        {
+
+            accessToken:
+                token,
+
+            created:
+                Date.now()
+
+        }
+    );
+
+
+    try {
+
+        const profileResponse =
+            await fetch(
+                "https://www.googleapis.com/oauth2/v3/userinfo",
+                {
+
+                    headers: {
+
+                        Authorization:
+                            "Bearer " +
+                            token
+
+                    }
+
+                }
+            );
+
+
+        googleUser =
+            await profileResponse.json();
+
+
+        updateGoogleUI(
+            googleUser
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+function updateGoogleUI(
+    user
+) {
+
+    if (user) {
+
+        const name =
+            user.name ||
+            user.email ||
+            "Connected";
+
+
+        if ($("googleStatus")) {
+
+            $("googleStatus")
+                .textContent =
+                name;
+
+        }
+
+
+        if ($("googleLogin")) {
+
+            $("googleLogin")
+                .textContent =
+                "Connected";
+
+
+            $("googleLogin")
+                .classList
+                .add("connected");
+
+        }
+
+
+        if ($("youtubeUser")) {
+
+            $("youtubeUser")
+                .textContent =
+                "Connected: " +
+                name;
+
+        }
+
+    } else {
+
+        if ($("googleStatus")) {
+
+            $("googleStatus")
+                .textContent =
+                "Not connected";
+
+        }
+
+
+        if ($("googleLogin")) {
+
+            $("googleLogin")
+                .textContent =
+                "Connect";
+
+
+            $("googleLogin")
+                .classList
+                .remove(
+                    "connected"
+                );
+
+        }
+
+    }
+
+}
+
+
+if ($("googleLogin")) {
+
+    $("googleLogin").onclick =
+        googleLogin;
+
+}
+
+
+/* =========================================================
+   THEME
+   ========================================================= */
+
+function applyTheme() {
+
+    if (
+        typeof window.applyRakkeZTheme ===
+        "function"
+    ) {
+
+        window.applyRakkeZTheme(
+            settings.theme
+        );
+
+        return;
+
+    }
+
+
+    document.documentElement
+        .dataset.theme =
+        settings.theme;
+
+}
+
+
+/* =========================================================
+   AMBIENT
+   ========================================================= */
+
+function restoreAmbient() {
+
+    if (
+        typeof window.restoreRakkeZAmbient ===
+        "function"
+    ) {
+
+        window.restoreRakkeZAmbient();
+
+    }
+
+}
+
+
+/* =========================================================
+   TIMER BUTTON
+   ========================================================= */
+
+if ($("startBtn")) {
+
+    $("startBtn").onclick =
+        startTimer;
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    e => {
+
+        if (
+            e.target.tagName ===
+            "INPUT" ||
+            e.target.tagName ===
+            "TEXTAREA" ||
+            e.target.isContentEditable
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            e.code ===
+            "Space"
+        ) {
+
+            e.preventDefault();
+
+            startTimer();
+
+        }
+
+
+        if (
+            e.key.toLowerCase() ===
+            "r"
+        ) {
+
+            openResetConfirmation();
+
+        }
+
+
+        if (
+            e.key.toLowerCase() ===
+            "f"
+        ) {
+
+            toggleFocusOnly();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOADING SCREEN SAFE HANDLER
+   ========================================================= */
+
+function finishLoadingScreen() {
+
+    const loading =
+        document.getElementById(
+            "loadingScreen"
+        ) ||
+        document.getElementById(
+            "loader"
+        ) ||
+        document.querySelector(
+            ".loading-screen"
+        ) ||
+        document.querySelector(
+            ".loader"
+        );
+
+
+    if (!loading) {
+
+        return;
+
+    }
+
+
+    loading.classList.add(
+        "hide"
+    );
+
+
+    setTimeout(
+        () => {
+
+            try {
+
+                loading.style.display =
+                    "none";
+
+            } catch {}
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   SAFE ASYNC
+   ========================================================= */
+
+function safeAsync(fn) {
+
+    try {
+
+        const result =
+            fn();
+
+
+        if (
+            result &&
+            typeof result.catch ===
+            "function"
+        ) {
+
+            result.catch(
+                error => {
+
+                    console.warn(
+                        "Background initialization failed:",
+                        error
+                    );
+
+                }
+            );
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Background initialization failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   THEME SYSTEM
+   ---------------------------------------------------------
+   DARK MODE = NIGHT
+   LIGHT MODE = SUN
+   ========================================================= */
+
+const THEME_SELECTORS = {
+
+    dark: [
+        "darkMode",
+        "nightMode",
+        "nightBtn",
+        "darkBtn",
+        "themeDark"
+    ],
+
+    light: [
+        "lightMode",
+        "sunMode",
+        "sunBtn",
+        "lightBtn",
+        "themeLight"
+    ],
+
+    toggle: [
+        "themeToggle",
+        "themeBtn",
+        "themeSwitch"
+    ]
+
+};
+
+
+/* =========================================================
+   GET FIRST EXISTING ELEMENT
+   ========================================================= */
+
+function getFirstExistingElement(
+    ids
+) {
+
+    for (const id of ids) {
+
+        const element =
+            $(id);
+
+
+        if (element) {
+
+            return element;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   APPLY THEME
+   ========================================================= */
+
+function applyTheme() {
+
+    let theme =
+        settings.theme ===
+        "light"
+
+            ? "light"
+            : "dark";
+
+
+    document.documentElement
+        .setAttribute(
+            "data-theme",
+            theme
+        );
+
+
+    document.body
+        .classList.toggle(
+            "light-mode",
+            theme === "light"
+        );
+
+
+    document.body
+        .classList.toggle(
+            "dark-mode",
+            theme === "dark"
+        );
+
+
+    document.body
+        .setAttribute(
+            "data-theme",
+            theme
+        );
+
+
+    const darkButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.dark
+        );
+
+
+    const lightButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.light
+        );
+
+
+    if (darkButton) {
+
+        darkButton.classList.toggle(
+            "active",
+            theme === "dark"
+        );
+
+
+        darkButton.setAttribute(
+            "aria-pressed",
+            theme === "dark"
+                ? "true"
+                : "false"
+        );
+
+    }
+
+
+    if (lightButton) {
+
+        lightButton.classList.toggle(
+            "active",
+            theme === "light"
+        );
+
+
+        lightButton.setAttribute(
+            "aria-pressed",
+            theme === "light"
+                ? "true"
+                : "false"
+        );
+
+    }
+
+
+    const toggleButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.toggle
+        );
+
+
+    if (toggleButton) {
+
+        toggleButton.classList.toggle(
+            "active",
+            theme === "light"
+        );
+
+
+        toggleButton.setAttribute(
+            "aria-pressed",
+            theme === "light"
+                ? "true"
+                : "false"
+        );
+
+    }
+
+
+    settings.theme =
+        theme;
+
+
+    save(
+        STORAGE.settings,
+        settings
+    );
+
+}
+
+
+/* =========================================================
+   SET THEME
+   ========================================================= */
+
+function setTheme(
+    theme
+) {
+
+    if (
+        theme !== "dark" &&
+        theme !== "light"
+    ) {
+
+        theme =
+            "dark";
+
+    }
+
+
+    settings.theme =
+        theme;
+
+
+    save(
+        STORAGE.settings,
+        settings
+    );
+
+
+    applyTheme();
+
+}
+
+
+/* =========================================================
+   TOGGLE THEME
+   ========================================================= */
+
+function toggleTheme() {
+
+    const currentTheme =
+        settings.theme ===
+        "light"
+
+            ? "light"
+            : "dark";
+
+
+    setTheme(
+        currentTheme ===
+            "dark"
+            ? "light"
+            : "dark"
+    );
+
+}
+
+
+/* =========================================================
+   THEME EVENTS
+   ========================================================= */
+
+function initializeThemeEvents() {
+
+    const darkButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.dark
+        );
+
+
+    if (darkButton) {
+
+        darkButton.addEventListener(
+            "click",
+            function () {
+
+                setTheme(
+                    "dark"
+                );
+
+            }
+        );
+
+    }
+
+
+    const lightButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.light
+        );
+
+
+    if (lightButton) {
+
+        lightButton.addEventListener(
+            "click",
+            function () {
+
+                setTheme(
+                    "light"
+                );
+
+            }
+        );
+
+    }
+
+
+    const toggleButton =
+        getFirstExistingElement(
+            THEME_SELECTORS.toggle
+        );
+
+
+    if (
+        toggleButton &&
+        !darkButton &&
+        !lightButton
+    ) {
+
+        toggleButton.addEventListener(
+            "click",
+            toggleTheme
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GLOBAL THEME API
+   ========================================================= */
+
+window.RakkeZTheme = {
+
+    set:
+        setTheme,
+
+    toggle:
+        toggleTheme,
+
+    apply:
+        applyTheme,
+
+    get:
+        function () {
+
+            return settings.theme ===
+                "light"
+
+                ? "light"
+                : "dark";
+
+        }
+
+};
+
+
+/* =========================================================
+   STARTUP
+   ========================================================= */
+
+async function init() {
+
+    /* =====================================================
+       COMPLETION CARD
+       ===================================================== */
+
+    try {
+
+        initializePomodoroCompletion();
+
+    } catch (error) {
+
+        console.warn(
+            "Pomodoro completion initialization failed:",
+            error
+        );
+
+    }
+
+
+    /* =====================================================
+       ALARM POPUP
+       ===================================================== */
+
+    try {
+
+        createAlarmPopup();
+
+    } catch (error) {
+
+        console.warn(
+            "Alarm popup initialization failed:",
+            error
+        );
+
+    }
+
+
+    /* =====================================================
+       CUSTOM ALARM
+       ===================================================== */
+
+    try {
+
+        if (
+            settings.alarmSound ===
+                "custom" &&
+            !customAlarmURL
+        ) {
+
+            settings.alarmSound =
+                "soft";
+
+
+            save(
+                STORAGE.settings,
+                settings
+            );
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Alarm settings initialization failed:",
+            error
+        );
+
+    }
+
+
+    /* =====================================================
+       STREAK
+       ===================================================== */
+
+    try {
+
+        updateStreak();
+
+    } catch (error) {
+
+        console.warn(
+            "Streak initialization failed:",
+            error
+        );
+
+    }
+
+
+    /* =====================================================
+       TIMER
+       ===================================================== */
+
+    try {
+
+        restoreTimer();
+
+    } catch (error) {
+
+        console.warn(
+            "Timer restore failed:",
+            error
+        );
+
+
+        timerState.mode =
+            "focus";
+
+
+        const focusMinutes =
+            Number(
+                settings.focus
+            );
+
+
+        const safeFocus =
+            Number.isFinite(
+                focusMinutes
+            ) &&
+            focusMinutes > 0
+
+                ? focusMinutes
+                : DEFAULT_SETTINGS.focus;
+
+
+        timerState.total =
+            Math.floor(
+                safeFocus * 60
+            );
+
+
+        timerState.remaining =
+            timerState.total;
+
+
+        timerState.running =
+            false;
+
+
+        timerState.startedAt =
+            null;
+
+
+        timerState.timestamp =
+            Date.now();
+
+
+        timerState.interval =
+            null;
+
+    }
+
+
+    /* =====================================================
+       TIMER MODE BUTTONS
+       ===================================================== */
+
+    try {
+
+        initializeTimerModeButtons();
+
+    } catch (error) {
+
+        console.warn(
+            "Timer mode buttons initialization failed:",
+            error
+        );
+
+    }
+
+
+    /* =====================================================
+       UI
+       ===================================================== */
+
+    try {
+
+        updateTimerUI();
+
+    } catch (error) {
+
+        console.warn(
+            "Timer UI initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        updateStats();
+
+    } catch (error) {
+
+        console.warn(
+            "Stats initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        syncSettingsUI();
+
+    } catch (error) {
+
+        console.warn(
+            "Settings UI initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        renderTasks();
+
+    } catch (error) {
+
+        console.warn(
+            "Tasks initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        applyTheme();
+
+    } catch (error) {
+
+        console.warn(
+            "Theme initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        initializeThemeEvents();
+
+    } catch (error) {
+
+        console.warn(
+            "Theme events initialization failed:",
+            error
+        );
+
+    }
+
+
+    /* =====================================================
+       AMBIENT
+       ===================================================== */
+
+    try {
+
+        restoreAmbient();
+
+    } catch (error) {
+
+        console.warn(
+            "Ambient initialization failed:",
+            error
+        );
+
+    }
+
+
+    /* =====================================================
+       LOADING SCREEN
+       ===================================================== */
+
+    finishLoadingScreen();
+
+
+    /* =====================================================
+       BACKGROUND SERVICES
+       ===================================================== */
+
+    safeAsync(
+        async () => {
+
+            await handleSpotifyCallback();
+
+        }
+    );
+
+
+    safeAsync(
+        async () => {
+
+            await loadSpotifyUser();
+
+        }
+    );
+
+
+    safeAsync(
+        async () => {
+
+            initializeGoogle();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   START APPLICATION
+   ========================================================= */
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+            safeAsync(
+                init
+            );
+
+        },
+        {
+            once: true
+        }
+    );
+
+} else {
+
+    safeAsync(
+        init
+    );
+
+}
+
+
+/* =========================================================
+   FINAL SAFETY
+   ========================================================= */
+
+window.RakkeZOverlay = {
+
+    open:
+        openOverlayById,
+
+    close:
+        closeOverlayById,
+
+    closeAll:
+        closeAllOverlays
+
+};
+
+
+/* =========================================================
+   EXACT FOCUS PERIOD HELPERS
+   ========================================================= */
+
+function formatFocusPeriod(
+    period
+) {
+
+    if (!period) {
+
+        return "";
+
+    }
+
+
+    const start =
+        new Date(
+            Number(
+                period.start
+            )
+        );
+
+
+    const end =
+        new Date(
+            Number(
+                period.end
+            )
+        );
+
+
+    const lang =
+        getCurrentLanguage();
+
+
+    const locale =
+        lang === "ar"
+            ? "ar-SA"
+            : "en-US";
+
+
+    const startText =
+        start.toLocaleTimeString(
+            locale,
+            {
+                hour: "numeric",
+                minute: "2-digit"
+            }
+        );
+
+
+    const endText =
+        end.toLocaleTimeString(
+            locale,
+            {
+                hour: "numeric",
+                minute: "2-digit"
+            }
+        );
+
+
+    const minutes =
+        Math.floor(
+            Number(
+                period.durationSeconds ||
+                0
+            ) / 60
+        );
+
+
+    return {
+
+        start:
+            startText,
+
+        end:
+            endText,
+
+        duration:
+            minutes
+
+    };
+
+}
+
+
+/* =========================================================
+   GET TODAY FOCUS PERIODS
+   ========================================================= */
+
+function getTodayFocusPeriods() {
+
+    const today =
+        todayKey();
+
+
+    if (
+        !Array.isArray(
+            stats.focusPeriods
+        )
+    ) {
+
+        return [];
+
+    }
+
+
+    return stats.focusPeriods
+
+        .filter(
+            period =>
+                period.date ===
+                today
+        )
+
+        .sort(
+            (a, b) =>
+                Number(a.start) -
+                Number(b.start)
+        );
+
+}
+
+
+/* =========================================================
+   END OF RAKKEZ MAIN JS
+   ========================================================= */
