@@ -5892,269 +5892,278 @@ if ($("focusExit")) {
    CURRENT SEGMENT + FULL SESSION
    ========================================================= */
 
-(function initRakkeZResetSystem() {
+/* =========================================================
+   STOP EVERYTHING RELATED TO TIMER
+   ========================================================= */
 
-    "use strict";
+function stopTimerCompletely() {
 
-    const OVERLAY_IDS = [
+    /* Stop real alarm */
+    if (typeof stopAlarm === "function") {
+        stopAlarm();
+    }
+
+    /* Stop test alarm */
+    if (typeof stopTestAlarm === "function") {
+        stopTestAlarm();
+    }
+
+    /* Stop timer interval */
+    if (timerState.interval !== null) {
+        clearInterval(timerState.interval);
+        timerState.interval = null;
+    }
+
+    /* Stop timer */
+    timerState.running = false;
+
+    timerState.timestamp = Date.now();
+}
+
+
+/* =========================================================
+   RESET CURRENT SEGMENT
+   ---------------------------------------------------------
+   Focus  → restart current Focus
+   Short  → restart current Short Break
+   Long   → restart current Long Break
+
+   DOES NOT:
+   - change current mode
+   - change cycle count
+   - change stats
+   - change today's Pomodoro count
+   ========================================================= */
+
+function resetCurrentSegment() {
+
+    console.log("RakkeZ: Reset Current Segment");
+
+    stopTimerCompletely();
+
+    let minutes;
+
+    if (timerState.mode === "focus") {
+
+        minutes = Number(settings.focus);
+
+    } else if (timerState.mode === "short") {
+
+        minutes = Number(settings.shortBreak);
+
+    } else if (timerState.mode === "long") {
+
+        minutes = Number(settings.longBreak);
+
+    } else {
+
+        timerState.mode = "focus";
+        minutes = Number(settings.focus);
+
+    }
+
+    if (!Number.isFinite(minutes) || minutes <= 0) {
+        minutes = DEFAULT_SETTINGS.focus;
+    }
+
+    timerState.total = Math.floor(minutes * 60);
+
+    timerState.remaining = timerState.total;
+
+    /*
+     * Important:
+     * Restarting the current segment means
+     * this segment becomes a fresh timer.
+     */
+    timerState.startedAt = null;
+
+    timerState.timestamp = Date.now();
+
+    timerState.interval = null;
+
+    timerState.running = false;
+
+    saveTimer();
+
+    updateTimerUI();
+
+    /* Close reset confirmation */
+    closeResetConfirmation();
+
+}
+
+
+/* =========================================================
+   RESET FULL SESSION
+   ---------------------------------------------------------
+   Return to Focus
+   Reset current Pomodoro cycle
+
+   DOES NOT:
+   - delete lifetime stats
+   - delete today's stats
+   - delete completed Pomodoros
+   - delete streak
+   - delete focus history
+   ========================================================= */
+
+function resetFullSession() {
+
+    console.log("RakkeZ: Reset Full Session");
+
+    stopTimerCompletely();
+
+    /*
+     * Reset the current Pomodoro cycle.
+     *
+     * Example:
+     * Focus #1
+     * Break
+     * Focus #2
+     * Break
+     * ...
+     *
+     * Full Session Reset means we start
+     * the cycle again from Focus.
+     */
+    completedFocusInCycle = 0;
+
+    /* Always return to Focus */
+    timerState.mode = "focus";
+
+    const focusMinutes = Number(settings.focus);
+
+    const safeFocus =
+        Number.isFinite(focusMinutes) && focusMinutes > 0
+            ? focusMinutes
+            : DEFAULT_SETTINGS.focus;
+
+    timerState.total = Math.floor(safeFocus * 60);
+
+    timerState.remaining = timerState.total;
+
+    timerState.startedAt = null;
+
+    timerState.timestamp = Date.now();
+
+    timerState.interval = null;
+
+    timerState.running = false;
+
+    saveTimer();
+
+    updateTimerUI();
+
+    /* Close reset confirmation */
+    closeResetConfirmation();
+
+}
+
+
+/* =========================================================
+   OLD COMPATIBILITY FUNCTION
+   ---------------------------------------------------------
+   Any old code calling resetTimer()
+   will now perform FULL SESSION reset.
+   ========================================================= */
+
+function resetTimer() {
+
+    resetFullSession();
+
+}
+
+
+/* =========================================================
+   RESET CONFIRMATION OVERLAY
+   ========================================================= */
+
+function openResetConfirmation() {
+
+    console.log("RakkeZ: Opening reset confirmation");
+
+    /*
+     * Try the known reset confirmation IDs.
+     */
+
+    const possibleIds = [
         "resetOverlay",
         "resetConfirmOverlay",
         "resetConfirmation",
         "resetTimerOverlay",
-        "timerResetOverlay",
-        "rakkezResetOverlay"
+        "timerResetOverlay"
     ];
 
-    function getElement(id) {
-        return document.getElementById(id);
+    let overlay = null;
+
+    for (const id of possibleIds) {
+
+        const element = $(id);
+
+        if (element) {
+            overlay = element;
+            break;
+        }
+
     }
 
-    function getOverlay() {
-        for (const id of OVERLAY_IDS) {
-            const element = getElement(id);
+    /*
+     * If the normal reset overlay exists,
+     * open it.
+     */
 
-            if (element) {
-                return element;
-            }
-        }
+    if (overlay) {
 
-        return null;
-    }
+        overlay.classList.add("show");
 
-    /* =====================================================
-       STOP TIMER
-       ===================================================== */
-
-    function stopTimerCompletely() {
-
-        try {
-            if (typeof stopAlarm === "function") {
-                stopAlarm();
-            }
-        } catch (error) {
-            console.warn("RakkeZ: stopAlarm failed:", error);
-        }
-
-        try {
-            if (typeof stopTestAlarm === "function") {
-                stopTestAlarm();
-            }
-        } catch (error) {
-            console.warn("RakkeZ: stopTestAlarm failed:", error);
-        }
-
-        if (
-            typeof timerState !== "undefined" &&
-            timerState
-        ) {
-            if (timerState.interval !== null) {
-                clearInterval(timerState.interval);
-                timerState.interval = null;
-            }
-
-            timerState.running = false;
-            timerState.timestamp = Date.now();
-        }
-    }
-
-    /* =====================================================
-       SAFE SEGMENT DURATION
-       ===================================================== */
-
-    function getSegmentSeconds(mode) {
-
-        let minutes;
-
-        if (mode === "focus") {
-            minutes = Number(settings.focus);
-
-        } else if (mode === "short") {
-            minutes = Number(settings.shortBreak);
-
-        } else if (mode === "long") {
-            minutes = Number(settings.longBreak);
-
-        } else {
-            minutes = Number(settings.focus);
-        }
-
-        if (
-            !Number.isFinite(minutes) ||
-            minutes <= 0
-        ) {
-            minutes = Number(DEFAULT_SETTINGS.focus);
-        }
-
-        return Math.max(
-            1,
-            Math.floor(minutes * 60)
-        );
-    }
-
-    /* =====================================================
-       RESET CURRENT SEGMENT
-       ===================================================== */
-
-    function resetCurrentSegment() {
-
-        if (
-            typeof timerState === "undefined" ||
-            !timerState
-        ) {
-            console.warn(
-                "RakkeZ: timerState unavailable."
-            );
-            return;
-        }
-
-        console.log(
-            "RakkeZ: Reset Current Segment"
-        );
-
-        const currentMode =
-            timerState.mode === "focus" ||
-            timerState.mode === "short" ||
-            timerState.mode === "long"
-                ? timerState.mode
-                : "focus";
-
-        stopTimerCompletely();
+        overlay.setAttribute("aria-hidden", "false");
 
         /*
-         * IMPORTANT:
-         *
-         * Keep:
-         * - current mode
-         * - cycle
-         * - stats
-         * - history
-         * - streak
-         * - completed Pomodoros
+         * Some existing RakkeZ overlays use
+         * display:flex directly.
          */
-
-        timerState.mode = currentMode;
-
-        timerState.total =
-            getSegmentSeconds(currentMode);
-
-        timerState.remaining =
-            timerState.total;
-
-        timerState.running = false;
-        timerState.startedAt = null;
-        timerState.timestamp = Date.now();
-        timerState.interval = null;
-
-        try {
-            saveTimer();
-        } catch (error) {
-            console.warn(
-                "RakkeZ: saveTimer failed:",
-                error
-            );
+        if (
+            getComputedStyle(overlay).display === "none" &&
+            !overlay.classList.contains("show")
+        ) {
+            overlay.style.display = "flex";
         }
 
-        try {
-            updateTimerUI();
-        } catch (error) {
-            console.warn(
-                "RakkeZ: updateTimerUI failed:",
-                error
-            );
-        }
+        document.body.style.overflow = "hidden";
 
-        closeResetConfirmation();
-
-        console.log(
-            "RakkeZ: Current segment reset successfully."
-        );
+        return;
     }
 
-    /* =====================================================
-       RESET FULL SESSION
-       ===================================================== */
+    /*
+     * Fallback:
+     * If there is no reset overlay in HTML,
+     * create a simple one automatically.
+     */
 
-    function resetFullSession() {
+    createResetConfirmation();
 
-        if (
-            typeof timerState === "undefined" ||
-            !timerState
-        ) {
-            console.warn(
-                "RakkeZ: timerState unavailable."
-            );
-            return;
-        }
+}
 
-        console.log(
-            "RakkeZ: Reset Full Session"
-        );
 
-        stopTimerCompletely();
+/* =========================================================
+   CLOSE RESET CONFIRMATION
+   ========================================================= */
 
-        /*
-         * Reset only the CURRENT Pomodoro cycle.
-         *
-         * DO NOT reset:
-         * - lifetime stats
-         * - daily stats
-         * - focus history
-         * - streak
-         * - completed sessions
-         */
+function closeResetConfirmation() {
 
-        if (
-            typeof completedFocusInCycle !==
-            "undefined"
-        ) {
-            completedFocusInCycle = 0;
-        }
+    const possibleIds = [
+        "resetOverlay",
+        "resetConfirmOverlay",
+        "resetConfirmation",
+        "resetTimerOverlay",
+        "timerResetOverlay"
+    ];
 
-        timerState.mode = "focus";
+    let closedSomething = false;
 
-        timerState.total =
-            getSegmentSeconds("focus");
+    possibleIds.forEach(id => {
 
-        timerState.remaining =
-            timerState.total;
-
-        timerState.running = false;
-        timerState.startedAt = null;
-        timerState.timestamp = Date.now();
-        timerState.interval = null;
-
-        try {
-            saveTimer();
-        } catch (error) {
-            console.warn(
-                "RakkeZ: saveTimer failed:",
-                error
-            );
-        }
-
-        try {
-            updateTimerUI();
-        } catch (error) {
-            console.warn(
-                "RakkeZ: updateTimerUI failed:",
-                error
-            );
-        }
-
-        closeResetConfirmation();
-
-        console.log(
-            "RakkeZ: Full session reset successfully."
-        );
-    }
-
-    /* =====================================================
-       CLOSE
-       ===================================================== */
-
-    function closeResetConfirmation() {
-
-        const overlay = getOverlay();
+        const overlay = $(id);
 
         if (!overlay) {
             return;
@@ -6162,527 +6171,863 @@ if ($("focusExit")) {
 
         overlay.classList.remove("show");
 
-        overlay.setAttribute(
-            "aria-hidden",
-            "true"
-        );
+        overlay.setAttribute("aria-hidden", "true");
 
-        if (
-            typeof syncBodyScrollLock ===
-            "function"
-        ) {
-            try {
-                syncBodyScrollLock();
-                return;
-            } catch {}
+        /*
+         * Only reset display if it was manually set.
+         */
+        if (overlay.style.display === "flex") {
+            overlay.style.display = "";
         }
+
+        closedSomething = true;
+
+    });
+
+    /*
+     * Also support generated popup.
+     */
+    const generated = $("rakkezResetOverlay");
+
+    if (generated) {
+
+        generated.classList.remove("show");
+
+        generated.setAttribute("aria-hidden", "true");
+
+        closedSomething = true;
+
+    }
+
+    if (typeof syncBodyScrollLock === "function") {
+
+        syncBodyScrollLock();
+
+    } else if (closedSomething) {
 
         document.body.style.overflow = "";
+
     }
 
+}
+
+
+/* =========================================================
+   CREATE RESET CONFIRMATION FALLBACK
+   ---------------------------------------------------------
+   This makes Reset work even if the HTML buttons
+   were not created correctly.
+   ========================================================= */
+
+function createResetConfirmation() {
+
+    /*
+     * Don't create it twice.
+     */
+    if ($("rakkezResetOverlay")) {
+
+        const existing = $("rakkezResetOverlay");
+
+        existing.classList.add("show");
+
+        existing.setAttribute("aria-hidden", "false");
+
+        document.body.style.overflow = "hidden";
+
+        return;
+    }
+
+    const overlay = document.createElement("div");
+
+    overlay.id = "rakkezResetOverlay";
+
+    overlay.setAttribute("aria-hidden", "false");
+
+    overlay.className = "show";
+
+    overlay.innerHTML = `
+
+        <div class="rakkez-reset-card">
+
+            <button
+                id="rakkezResetClose"
+                class="rakkez-reset-close"
+                type="button"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+            <div class="rakkez-reset-icon">
+                ↻
+            </div>
+
+            <h2>
+                Reset Timer
+            </h2>
+
+            <p>
+                Would you like to reset your current segment,
+                or your full session?
+            </p>
+
+            <button
+                id="rakkezResetCurrent"
+                class="rakkez-reset-option"
+                type="button"
+            >
+                <span class="reset-option-icon">
+                    ↻
+                </span>
+
+                <span class="reset-option-text">
+
+                    <strong>
+                        Reset Current Segment
+                    </strong>
+
+                    <small>
+                        Restart the current Focus or Break timer.
+                    </small>
+
+                </span>
+            </button>
+
+            <button
+                id="rakkezResetFull"
+                class="rakkez-reset-option"
+                type="button"
+            >
+                <span class="reset-option-icon">
+                    ⟳
+                </span>
+
+                <span class="reset-option-text">
+
+                    <strong>
+                        Reset Full Session
+                    </strong>
+
+                    <small>
+                        Return to Focus and reset the current session cycle.
+                    </small>
+
+                </span>
+            </button>
+
+        </div>
+
+    `;
+
+    document.body.appendChild(overlay);
+
+
     /* =====================================================
-       CREATE FALLBACK POPUP
+       FALLBACK RESET STYLES
        ===================================================== */
 
-    function createResetConfirmation() {
+    if (!$("rakkezResetStyles")) {
 
-        let overlay =
-            getElement("rakkezResetOverlay");
+        const style = document.createElement("style");
 
-        if (overlay) {
-            return overlay;
-        }
+        style.id = "rakkezResetStyles";
 
-        overlay =
-            document.createElement("div");
+        style.textContent = `
 
-        overlay.id =
-            "rakkezResetOverlay";
+            #rakkezResetOverlay {
+                position: fixed;
+                inset: 0;
+                z-index: 100001;
 
-        overlay.className =
-            "rakkez-reset-overlay";
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
-        overlay.setAttribute(
-            "aria-hidden",
-            "true"
-        );
+                padding: 20px;
 
-        overlay.innerHTML = `
-            <div
-                class="rakkez-reset-card"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="rakkezResetTitle"
-            >
+                background:
+                    rgba(0, 0, 0, .68);
 
-                <button
-                    id="rakkezResetClose"
-                    class="rakkez-reset-close"
-                    type="button"
-                    aria-label="Close"
-                >
-                    ×
-                </button>
+                backdrop-filter:
+                    blur(18px);
 
-                <div class="rakkez-reset-icon">
-                    ↻
-                </div>
+                -webkit-backdrop-filter:
+                    blur(18px);
 
-                <h2 id="rakkezResetTitle">
-                    Reset Timer
-                </h2>
+                opacity: 0;
+                visibility: hidden;
 
-                <p>
-                    Would you like to reset your current segment,
-                    or your full session?
-                </p>
+                transition:
+                    opacity .22s ease,
+                    visibility .22s ease;
+            }
 
-                <button
-                    id="rakkezResetCurrent"
-                    class="rakkez-reset-option"
-                    type="button"
-                >
-                    <span class="reset-option-icon">
-                        ↻
-                    </span>
+            #rakkezResetOverlay.show {
+                opacity: 1;
+                visibility: visible;
+            }
 
-                    <span class="reset-option-text">
-                        <strong>
-                            Reset Current Segment
-                        </strong>
+            .rakkez-reset-card {
+                position: relative;
 
-                        <small>
-                            Restart the current Focus or Break timer.
-                        </small>
-                    </span>
-                </button>
+                width: min(
+                    420px,
+                    calc(100vw - 32px)
+                );
 
-                <button
-                    id="rakkezResetFull"
-                    class="rakkez-reset-option"
-                    type="button"
-                >
-                    <span class="reset-option-icon">
-                        ⟳
-                    </span>
+                padding: 30px;
 
-                    <span class="reset-option-text">
-                        <strong>
-                            Reset Full Session
-                        </strong>
+                border-radius: 26px;
 
-                        <small>
-                            Return to Focus and reset the current session cycle.
-                        </small>
-                    </span>
-                </button>
+                background:
+                    linear-gradient(
+                        145deg,
+                        rgba(28,28,32,.98),
+                        rgba(14,14,17,.98)
+                    );
 
-            </div>
+                border:
+                    1px solid rgba(255,255,255,.10);
+
+                box-shadow:
+                    0 30px 90px rgba(0,0,0,.65);
+
+                transform:
+                    translateY(10px)
+                    scale(.98);
+
+                transition:
+                    transform .22s ease;
+            }
+
+            #rakkezResetOverlay.show
+            .rakkez-reset-card {
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+
+            .rakkez-reset-close {
+                position: absolute;
+
+                top: 14px;
+                right: 14px;
+
+                width: 34px;
+                height: 34px;
+
+                border: 0;
+                border-radius: 50%;
+
+                background:
+                    rgba(255,255,255,.06);
+
+                color:
+                    rgba(255,255,255,.72);
+
+                font-size: 22px;
+
+                cursor: pointer;
+
+                transition:
+                    background .2s ease,
+                    color .2s ease;
+            }
+
+            .rakkez-reset-close:hover {
+                background:
+                    rgba(255,255,255,.12);
+
+                color: white;
+            }
+
+            .rakkez-reset-icon {
+                width: 52px;
+                height: 52px;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                margin-bottom: 16px;
+
+                border-radius: 16px;
+
+                background:
+                    rgba(255,255,255,.07);
+
+                border:
+                    1px solid rgba(255,255,255,.08);
+
+                color: white;
+
+                font-size: 27px;
+            }
+
+            .rakkez-reset-card h2 {
+                margin: 0 0 8px;
+
+                color: white;
+
+                font-family:
+                    "Space Grotesk",
+                    sans-serif;
+
+                font-size: 25px;
+                font-weight: 700;
+            }
+
+            .rakkez-reset-card > p {
+                margin: 0 0 22px;
+
+                color:
+                    rgba(255,255,255,.52);
+
+                font-family:
+                    "DM Sans",
+                    sans-serif;
+
+                font-size: 14px;
+
+                line-height: 1.55;
+            }
+
+            .rakkez-reset-option {
+                width: 100%;
+
+                display: flex;
+                align-items: center;
+
+                gap: 14px;
+
+                margin-top: 10px;
+
+                padding: 15px;
+
+                border-radius: 16px;
+
+                border:
+                    1px solid rgba(255,255,255,.08);
+
+                background:
+                    rgba(255,255,255,.045);
+
+                color: white;
+
+                text-align: left;
+
+                cursor: pointer;
+
+                transition:
+                    transform .18s ease,
+                    background .18s ease,
+                    border-color .18s ease;
+            }
+
+            .rakkez-reset-option:hover {
+                transform: translateY(-1px);
+
+                background:
+                    rgba(255,255,255,.075);
+
+                border-color:
+                    rgba(255,255,255,.15);
+            }
+
+            .reset-option-icon {
+                width: 42px;
+                height: 42px;
+
+                min-width: 42px;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                border-radius: 13px;
+
+                background:
+                    rgba(255,255,255,.07);
+
+                font-size: 21px;
+            }
+
+            .reset-option-text {
+                display: flex;
+                flex-direction: column;
+
+                gap: 4px;
+            }
+
+            .reset-option-text strong {
+                font-family:
+                    "DM Sans",
+                    sans-serif;
+
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            .reset-option-text small {
+                color:
+                    rgba(255,255,255,.46);
+
+                font-family:
+                    "DM Sans",
+                    sans-serif;
+
+                font-size: 12px;
+
+                line-height: 1.4;
+            }
+
         `;
 
-        document.body.appendChild(overlay);
+        document.head.appendChild(style);
 
-        bindFallbackEvents(overlay);
-
-        return overlay;
     }
 
-    /* =====================================================
-       OPEN
-       ===================================================== */
-
-    function openResetConfirmation() {
-
-        let overlay = getOverlay();
-
-        if (!overlay) {
-            overlay =
-                createResetConfirmation();
-        }
-
-        if (!overlay) {
-            return;
-        }
-
-        overlay.classList.add("show");
-
-        overlay.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-
-        document.body.style.overflow =
-            "hidden";
-    }
 
     /* =====================================================
        FALLBACK EVENTS
        ===================================================== */
 
-    function bindFallbackEvents(overlay) {
+    const closeButton = $("rakkezResetClose");
 
-        const close =
-            getElement("rakkezResetClose");
+    if (closeButton) {
 
-        const current =
-            getElement("rakkezResetCurrent");
+        closeButton.onclick = event => {
 
-        const full =
-            getElement("rakkezResetFull");
+            event.preventDefault();
 
-        if (close) {
-            close.onclick = function(event) {
-                event.preventDefault();
-                closeResetConfirmation();
-            };
-        }
-
-        if (current) {
-            current.onclick = function(event) {
-                event.preventDefault();
-                resetCurrentSegment();
-            };
-        }
-
-        if (full) {
-            full.onclick = function(event) {
-                event.preventDefault();
-                resetFullSession();
-            };
-        }
-
-        overlay.onclick = function(event) {
-
-            if (event.target === overlay) {
-                closeResetConfirmation();
-            }
+            closeResetConfirmation();
 
         };
+
     }
 
-    /* =====================================================
-       BIND MAIN RESET BUTTON
-       ===================================================== */
 
-    function bindMainResetButton() {
+    const currentButton = $("rakkezResetCurrent");
 
-        const button =
-            getElement("resetBtn");
+    if (currentButton) {
+
+        currentButton.onclick = event => {
+
+            event.preventDefault();
+
+            resetCurrentSegment();
+
+        };
+
+    }
+
+
+    const fullButton = $("rakkezResetFull");
+
+    if (fullButton) {
+
+        fullButton.onclick = event => {
+
+            event.preventDefault();
+
+            resetFullSession();
+
+        };
+
+    }
+
+
+    overlay.addEventListener("click", event => {
+
+        if (event.target === overlay) {
+
+            closeResetConfirmation();
+
+        }
+
+    });
+
+    document.body.style.overflow = "hidden";
+
+}
+
+
+/* =========================================================
+   INITIALIZE RESET BUTTONS
+   ---------------------------------------------------------
+   Supports multiple possible HTML IDs.
+   ========================================================= */
+
+function initializeResetSystem() {
+
+    /*
+     * Main Reset button
+     */
+    const resetButton = $("resetBtn");
+
+    if (resetButton) {
+
+        resetButton.onclick = event => {
+
+            event.preventDefault();
+
+            openResetConfirmation();
+
+        };
+
+    }
+
+
+    /*
+     * Current Segment buttons
+     */
+
+    const currentIds = [
+
+        "resetCurrentSegment",
+        "resetCurrentBtn",
+        "resetSegment",
+        "resetSegmentBtn",
+        "resetCurrent"
+
+    ];
+
+    currentIds.forEach(id => {
+
+        const button = $(id);
 
         if (!button) {
             return;
         }
 
-        if (
-            button.dataset
-                .rakkezResetBound === "true"
-        ) {
+        if (button.dataset.rakkezResetBound === "true") {
             return;
         }
 
-        button.dataset
-            .rakkezResetBound =
-            "true";
+        button.dataset.rakkezResetBound = "true";
 
-        button.addEventListener(
-            "click",
-            function(event) {
+        button.addEventListener("click", event => {
 
-                event.preventDefault();
+            event.preventDefault();
+            event.stopPropagation();
 
-                openResetConfirmation();
+            resetCurrentSegment();
 
-            }
-        );
-    }
+        });
 
-    /* =====================================================
-       BIND EXISTING RESET BUTTONS
-       ===================================================== */
+    });
 
-    function bindExistingButtons() {
 
-        const currentIds = [
-            "resetCurrentSegment",
-            "resetCurrentBtn",
-            "resetSegment",
-            "resetSegmentBtn",
-            "resetCurrent"
-        ];
+    /*
+     * Full Session buttons
+     */
 
-        const fullIds = [
-            "resetFullSession",
-            "resetFullBtn",
-            "resetSession",
-            "resetSessionBtn",
-            "resetFull"
-        ];
+    const fullIds = [
 
-        const closeIds = [
-            "resetClose",
-            "closeReset",
-            "resetCancel",
-            "cancelReset",
-            "closeResetTimer"
-        ];
+        "resetFullSession",
+        "resetFullBtn",
+        "resetSession",
+        "resetSessionBtn",
+        "resetFull"
 
-        currentIds.forEach(function(id) {
+    ];
 
-            const button = getElement(id);
+    fullIds.forEach(id => {
 
-            if (!button) {
-                return;
-            }
+        const button = $(id);
+
+        if (!button) {
+            return;
+        }
+
+        if (button.dataset.rakkezResetBound === "true") {
+            return;
+        }
+
+        button.dataset.rakkezResetBound = "true";
+
+        button.addEventListener("click", event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            resetFullSession();
+
+        });
+
+    });
+
+
+    /*
+     * Support:
+     *
+     * data-reset-action="current"
+     *
+     * data-reset-action="full"
+     */
+
+    document
+        .querySelectorAll("[data-reset-action]")
+        .forEach(button => {
 
             if (
-                button.dataset
-                    .rakkezResetBound === "true"
+                button.dataset.rakkezResetBound === "true"
             ) {
                 return;
             }
 
-            button.dataset
-                .rakkezResetBound =
-                "true";
+            button.dataset.rakkezResetBound = "true";
 
-            button.addEventListener(
-                "click",
-                function(event) {
+            button.addEventListener("click", event => {
 
-                    event.preventDefault();
+                event.preventDefault();
+                event.stopPropagation();
+
+                const action =
+                    button.dataset.resetAction;
+
+                if (action === "current") {
 
                     resetCurrentSegment();
 
-                }
-            );
-        });
-
-        fullIds.forEach(function(id) {
-
-            const button = getElement(id);
-
-            if (!button) {
-                return;
-            }
-
-            if (
-                button.dataset
-                    .rakkezResetBound === "true"
-            ) {
-                return;
-            }
-
-            button.dataset
-                .rakkezResetBound =
-                "true";
-
-            button.addEventListener(
-                "click",
-                function(event) {
-
-                    event.preventDefault();
+                } else if (action === "full") {
 
                     resetFullSession();
 
                 }
-            );
-        });
 
-        closeIds.forEach(function(id) {
-
-            const button = getElement(id);
-
-            if (!button) {
-                return;
-            }
-
-            if (
-                button.dataset
-                    .rakkezResetBound === "true"
-            ) {
-                return;
-            }
-
-            button.dataset
-                .rakkezResetBound =
-                "true";
-
-            button.addEventListener(
-                "click",
-                function(event) {
-
-                    event.preventDefault();
-
-                    closeResetConfirmation();
-
-                }
-            );
-        });
-    }
-
-    /* =====================================================
-       DATA ATTRIBUTES
-       ===================================================== */
-
-    function bindDataActions() {
-
-        document
-            .querySelectorAll(
-                "[data-reset-action]"
-            )
-            .forEach(function(button) {
-
-                if (
-                    button.dataset
-                        .rakkezResetBound ===
-                    "true"
-                ) {
-                    return;
-                }
-
-                button.dataset
-                    .rakkezResetBound =
-                    "true";
-
-                button.addEventListener(
-                    "click",
-                    function(event) {
-
-                        event.preventDefault();
-
-                        const action =
-                            button.dataset
-                                .resetAction;
-
-                        if (
-                            action === "open"
-                        ) {
-                            openResetConfirmation();
-
-                        } else if (
-                            action === "current"
-                        ) {
-                            resetCurrentSegment();
-
-                        } else if (
-                            action === "full"
-                        ) {
-                            resetFullSession();
-
-                        }
-
-                    }
-                );
             });
-    }
 
-    /* =====================================================
-       INITIALIZE
-       ===================================================== */
+        });
 
-    function initialize() {
 
-        bindMainResetButton();
+    /*
+     * Reset modal close buttons
+     */
 
-        bindExistingButtons();
+    const closeIds = [
 
-        bindDataActions();
+        "resetClose",
+        "closeReset",
+        "resetCancel",
+        "cancelReset",
+        "closeResetTimer"
 
-        const existing =
-            getOverlay();
+    ];
 
-        if (existing) {
+    closeIds.forEach(id => {
 
-            existing.onclick =
-                function(event) {
+        const button = $(id);
 
-                    if (
-                        event.target ===
-                        existing
-                    ) {
-                        closeResetConfirmation();
-                    }
-
-                };
+        if (!button) {
+            return;
         }
-    }
 
-    /* =====================================================
-       PUBLIC API
-       ===================================================== */
+        if (button.dataset.rakkezResetBound === "true") {
+            return;
+        }
 
-    window.RakkeZReset = {
+        button.dataset.rakkezResetBound = "true";
 
-        currentSegment:
-            resetCurrentSegment,
+        button.addEventListener("click", event => {
 
-        fullSession:
-            resetFullSession,
+            event.preventDefault();
+            event.stopPropagation();
 
-        open:
-            openResetConfirmation,
+            closeResetConfirmation();
 
-        close:
-            closeResetConfirmation,
+        });
 
-        resetTimer:
-            resetFullSession,
+    });
 
-        initialize:
-            initialize
-    };
 
-    /* =====================================================
-       START
-       ===================================================== */
+    /*
+     * Any element with data-close-reset
+     */
 
-    function start() {
-        initialize();
-    }
+    document.addEventListener("click", event => {
 
-    if (
-        document.readyState ===
-        "loading"
-    ) {
+        const button =
+            event.target.closest("[data-close-reset]");
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            start,
-            {
-                once: true
+        if (!button) {
+            return;
+        }
+
+        event.preventDefault();
+
+        closeResetConfirmation();
+
+    });
+
+
+    /*
+     * Background click on existing reset overlays
+     */
+
+    const possibleOverlays = [
+
+        "resetOverlay",
+        "resetConfirmOverlay",
+        "resetConfirmation",
+        "resetTimerOverlay",
+        "timerResetOverlay"
+
+    ];
+
+    possibleOverlays.forEach(id => {
+
+        const overlay = $(id);
+
+        if (!overlay) {
+            return;
+        }
+
+        if (overlay.dataset.rakkezResetBound === "true") {
+            return;
+        }
+
+        overlay.dataset.rakkezResetBound = "true";
+
+        overlay.addEventListener("click", event => {
+
+            if (event.target === overlay) {
+
+                closeResetConfirmation();
+
             }
-        );
 
-    } else {
+        });
 
-        start();
+    });
 
-    }
-
-})();
+}
 
 
 /* =========================================================
-   RAKKEZ RESET — GLOBAL COMPATIBILITY BRIDGE
-   ---------------------------------------------------------
-   The reset system is inside an IIFE, but older parts of
-   app.js still call these functions globally.
+   GLOBAL RESET API
    ========================================================= */
 
-window.resetTimer =
-    window.RakkeZReset.resetTimer;
+window.RakkeZReset = {
 
-window.resetCurrentSegment =
-    window.RakkeZReset.currentSegment;
+    currentSegment: resetCurrentSegment,
 
-window.resetFullSession =
-    window.RakkeZReset.fullSession;
+    fullSession: resetFullSession,
 
-window.openResetConfirmation =
-    window.RakkeZReset.open;
+    open: openResetConfirmation,
 
-window.closeResetConfirmation =
-    window.RakkeZReset.close;
+    close: closeResetConfirmation
+
+};
+
+
+/* =========================================================
+   KEYBOARD SHORTCUT
+   ---------------------------------------------------------
+   R = Open Reset Options
+   ========================================================= */
+
+document.addEventListener("keydown", event => {
+
+    /*
+     * Don't trigger shortcuts while typing.
+     */
+    if (
+        event.target.tagName === "INPUT" ||
+        event.target.tagName === "TEXTAREA" ||
+        event.target.isContentEditable
+    ) {
+        return;
+    }
+
+    if (event.key.toLowerCase() === "r") {
+
+        event.preventDefault();
+
+        openResetConfirmation();
+
+    }
+
+});
+
+
+/* =========================================================
+   ESCAPE
+   ---------------------------------------------------------
+   Close reset popup first.
+   ========================================================= */
+
+document.addEventListener("keydown", event => {
+
+    if (event.key !== "Escape") {
+        return;
+    }
+
+    /*
+     * If reset popup is open,
+     * close it first.
+     */
+
+    const generated = $("rakkezResetOverlay");
+
+    if (
+        generated &&
+        generated.classList.contains("show")
+    ) {
+
+        closeResetConfirmation();
+
+        return;
+
+    }
+
+
+    const possibleIds = [
+
+        "resetOverlay",
+        "resetConfirmOverlay",
+        "resetConfirmation",
+        "resetTimerOverlay",
+        "timerResetOverlay"
+
+    ];
+
+    for (const id of possibleIds) {
+
+        const overlay = $(id);
+
+        if (
+            overlay &&
+            overlay.classList.contains("show")
+        ) {
+
+            closeResetConfirmation();
+
+            return;
+
+        }
+
+    }
+
+});
+
+
+/* =========================================================
+   INITIALIZE RESET SYSTEM
+   ========================================================= */
+
+try {
+
+    initializeResetSystem();
+
+} catch (error) {
+
+    console.warn(
+        "RakkeZ: Reset system initialization failed:",
+        error
+    );
+
+}
 
 /* =========================================================
    MEDIA TABS
