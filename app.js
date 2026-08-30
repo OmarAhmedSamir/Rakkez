@@ -5888,1351 +5888,260 @@ if ($("focusExit")) {
 
 
 /* =========================================================
-   RAKKEZ RESET SYSTEM
-   ---------------------------------------------------------
-   RESET CURRENT SEGMENT
-   ---------------------------------------------------------
-   Focus → restart current Focus
-   Short → restart current Short Break
-   Long  → restart current Long Break
-
-   IMPORTANT:
-   - Does NOT change statistics.
-   - Does NOT remove completed Pomodoros.
-   - Does NOT remove focus history.
-
-   ---------------------------------------------------------
-   RESET FULL SESSION
-   ---------------------------------------------------------
-   - Return to Focus.
-   - Reset current Pomodoro cycle.
-   - Undo the completed Focus that belongs to the current
-     session when possible.
-   - Update all related statistics safely.
+   RAKKEZ — RESET SYSTEM
+   CURRENT SEGMENT + FULL SESSION
    ========================================================= */
+
+/* =========================================================
+   STOP EVERYTHING RELATED TO TIMER
+   ========================================================= */
+
+function stopTimerCompletely() {
+
+    /* Stop real alarm */
+    if (typeof stopAlarm === "function") {
+        stopAlarm();
+    }
+
+    /* Stop test alarm */
+    if (typeof stopTestAlarm === "function") {
+        stopTestAlarm();
+    }
+
+    /* Stop timer interval */
+    if (timerState.interval !== null) {
+        clearInterval(timerState.interval);
+        timerState.interval = null;
+    }
+
+    /* Stop timer */
+    timerState.running = false;
+
+    timerState.timestamp = Date.now();
+}
 
 
 /* =========================================================
-   RESET OVERLAY HELPERS
+   RESET CURRENT SEGMENT
+   ---------------------------------------------------------
+   Focus  → restart current Focus
+   Short  → restart current Short Break
+   Long   → restart current Long Break
+
+   DOES NOT:
+   - change current mode
+   - change cycle count
+   - change stats
+   - change today's Pomodoro count
    ========================================================= */
 
-function getResetOverlay() {
+function resetCurrentSegment() {
+
+    console.log("RakkeZ: Reset Current Segment");
+
+    stopTimerCompletely();
+
+    let minutes;
+
+    if (timerState.mode === "focus") {
+
+        minutes = Number(settings.focus);
+
+    } else if (timerState.mode === "short") {
+
+        minutes = Number(settings.shortBreak);
+
+    } else if (timerState.mode === "long") {
+
+        minutes = Number(settings.longBreak);
+
+    } else {
+
+        timerState.mode = "focus";
+        minutes = Number(settings.focus);
+
+    }
+
+    if (!Number.isFinite(minutes) || minutes <= 0) {
+        minutes = DEFAULT_SETTINGS.focus;
+    }
+
+    timerState.total = Math.floor(minutes * 60);
+
+    timerState.remaining = timerState.total;
+
+    /*
+     * Important:
+     * Restarting the current segment means
+     * this segment becomes a fresh timer.
+     */
+    timerState.startedAt = null;
+
+    timerState.timestamp = Date.now();
+
+    timerState.interval = null;
+
+    timerState.running = false;
+
+    saveTimer();
+
+    updateTimerUI();
+
+    /* Close reset confirmation */
+    closeResetConfirmation();
+
+}
+
+
+/* =========================================================
+   RESET FULL SESSION
+   ---------------------------------------------------------
+   Return to Focus
+   Reset current Pomodoro cycle
+
+   DOES NOT:
+   - delete lifetime stats
+   - delete today's stats
+   - delete completed Pomodoros
+   - delete streak
+   - delete focus history
+   ========================================================= */
+
+function resetFullSession() {
+
+    console.log("RakkeZ: Reset Full Session");
+
+    stopTimerCompletely();
+
+    /*
+     * Reset the current Pomodoro cycle.
+     *
+     * Example:
+     * Focus #1
+     * Break
+     * Focus #2
+     * Break
+     * ...
+     *
+     * Full Session Reset means we start
+     * the cycle again from Focus.
+     */
+    completedFocusInCycle = 0;
+
+    /* Always return to Focus */
+    timerState.mode = "focus";
+
+    const focusMinutes = Number(settings.focus);
+
+    const safeFocus =
+        Number.isFinite(focusMinutes) && focusMinutes > 0
+            ? focusMinutes
+            : DEFAULT_SETTINGS.focus;
+
+    timerState.total = Math.floor(safeFocus * 60);
+
+    timerState.remaining = timerState.total;
+
+    timerState.startedAt = null;
+
+    timerState.timestamp = Date.now();
+
+    timerState.interval = null;
+
+    timerState.running = false;
+
+    saveTimer();
+
+    updateTimerUI();
+
+    /* Close reset confirmation */
+    closeResetConfirmation();
+
+}
+
+
+/* =========================================================
+   OLD COMPATIBILITY FUNCTION
+   ---------------------------------------------------------
+   Any old code calling resetTimer()
+   will now perform FULL SESSION reset.
+   ========================================================= */
+
+function resetTimer() {
+
+    resetFullSession();
+
+}
+
+
+/* =========================================================
+   RESET CONFIRMATION OVERLAY
+   ========================================================= */
+
+function openResetConfirmation() {
+
+    console.log("RakkeZ: Opening reset confirmation");
+
+    /*
+     * Try the known reset confirmation IDs.
+     */
 
     const possibleIds = [
         "resetOverlay",
         "resetConfirmOverlay",
         "resetConfirmation",
         "resetTimerOverlay",
-        "timerResetOverlay",
-        "rakkezResetOverlay"
+        "timerResetOverlay"
     ];
+
+    let overlay = null;
 
     for (const id of possibleIds) {
 
-        const element = document.getElementById(id);
+        const element = $(id);
 
         if (element) {
-            return element;
-        }
-    }
-
-    return null;
-}
-
-
-/* =========================================================
-   STOP TIMER INTERVAL
-   ========================================================= */
-
-function stopResetTimerInterval() {
-
-    console.log("RakkeZ: Stopping timer interval for reset");
-
-    if (
-        typeof timerState !== "undefined" &&
-        timerState &&
-        timerState.interval
-    ) {
-
-        try {
-            clearInterval(timerState.interval);
-        } catch (error) {
-
-            console.warn(
-                "RakkeZ: Failed to clear timer interval:",
-                error
-            );
-        }
-    }
-
-    if (
-        typeof timerInterval !== "undefined" &&
-        timerInterval
-    ) {
-
-        try {
-            clearInterval(timerInterval);
-        } catch (error) {
-
-            console.warn(
-                "RakkeZ: Failed to clear global timer interval:",
-                error
-            );
-        }
-
-        try {
-            timerInterval = null;
-        } catch (error) {
-            /* Ignore */
-        }
-    }
-
-    if (
-        typeof timerState !== "undefined" &&
-        timerState
-    ) {
-
-        timerState.interval = null;
-    }
-}
-
-
-/* =========================================================
-   GET CURRENT SEGMENT MINUTES
-   ========================================================= */
-
-function getCurrentSegmentMinutes() {
-
-    let minutes;
-
-    if (
-        typeof timerState === "undefined" ||
-        !timerState
-    ) {
-        return 25;
-    }
-
-    if (
-        typeof settings === "undefined" ||
-        !settings
-    ) {
-        return 25;
-    }
-
-    switch (timerState.mode) {
-
-        case "focus":
-
-            minutes = Number(settings.focus);
-
+            overlay = element;
             break;
-
-        case "short":
-
-            minutes = Number(settings.shortBreak);
-
-            break;
-
-        case "long":
-
-            minutes = Number(settings.longBreak);
-
-            break;
-
-        default:
-
-            timerState.mode = "focus";
-
-            minutes = Number(settings.focus);
-
-            break;
-    }
-
-    if (
-        !Number.isFinite(minutes) ||
-        minutes <= 0
-    ) {
-
-        if (
-            typeof DEFAULT_SETTINGS !== "undefined" &&
-            DEFAULT_SETTINGS &&
-            Number.isFinite(
-                Number(DEFAULT_SETTINGS.focus)
-            ) &&
-            Number(DEFAULT_SETTINGS.focus) > 0
-        ) {
-
-            minutes = Number(DEFAULT_SETTINGS.focus);
-
-        } else {
-
-            minutes = 25;
-        }
-    }
-
-    return minutes;
-}
-
-
-/* =========================================================
-   GET SAFE FOCUS MINUTES
-   ========================================================= */
-
-function getSafeFocusMinutes() {
-
-    let focusMinutes = 25;
-
-    if (
-        typeof settings !== "undefined" &&
-        settings
-    ) {
-
-        const value = Number(settings.focus);
-
-        if (
-            Number.isFinite(value) &&
-            value > 0
-        ) {
-
-            focusMinutes = value;
-        }
-    }
-
-    if (
-        focusMinutes === 25 &&
-        typeof DEFAULT_SETTINGS !== "undefined" &&
-        DEFAULT_SETTINGS
-    ) {
-
-        const defaultFocus =
-            Number(DEFAULT_SETTINGS.focus);
-
-        if (
-            Number.isFinite(defaultFocus) &&
-            defaultFocus > 0
-        ) {
-
-            focusMinutes = defaultFocus;
-        }
-    }
-
-    return focusMinutes;
-}
-
-
-/* =========================================================
-   SET TIMER TO MINUTES
-   ---------------------------------------------------------
-   Changes ONLY timer state.
-   Does NOT change statistics.
-   ========================================================= */
-
-function setResetTimerMinutes(minutes) {
-
-    let safeMinutes = Number(minutes);
-
-    if (
-        !Number.isFinite(safeMinutes) ||
-        safeMinutes <= 0
-    ) {
-
-        safeMinutes = 25;
-    }
-
-    const seconds = Math.max(
-        1,
-        Math.floor(safeMinutes * 60)
-    );
-
-    if (
-        typeof timerState === "undefined" ||
-        !timerState
-    ) {
-
-        console.error(
-            "RakkeZ: timerState is not available."
-        );
-
-        return false;
-    }
-
-    timerState.total = seconds;
-
-    timerState.remaining = seconds;
-
-    timerState.startedAt = null;
-
-    timerState.timestamp = Date.now();
-
-    timerState.running = false;
-
-    timerState.interval = null;
-
-    if (
-        Object.prototype.hasOwnProperty.call(
-            timerState,
-            "elapsed"
-        )
-    ) {
-
-        timerState.elapsed = 0;
-    }
-
-    if (
-        Object.prototype.hasOwnProperty.call(
-            timerState,
-            "paused"
-        )
-    ) {
-
-        timerState.paused = false;
-    }
-
-    return true;
-}
-
-
-/* =========================================================
-   SAVE TIMER STATE
-   ========================================================= */
-
-function saveResetTimerState() {
-
-    if (
-        typeof saveTimer === "function"
-    ) {
-
-        try {
-
-            saveTimer();
-
-            console.log(
-                "RakkeZ: Timer reset state saved."
-            );
-
-            return true;
-
-        } catch (error) {
-
-            console.error(
-                "RakkeZ: saveTimer() failed:",
-                error
-            );
-        }
-    }
-
-    try {
-
-        localStorage.setItem(
-            "rakkez_timer_state",
-            JSON.stringify(timerState)
-        );
-
-        console.log(
-            "RakkeZ: Timer state saved using fallback storage."
-        );
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "RakkeZ: Could not save timer state:",
-            error
-        );
-
-        return false;
-    }
-}
-
-
-/* =========================================================
-   SAVE STATS SAFELY
-   ========================================================= */
-
-function saveResetStats() {
-
-    try {
-
-        if (
-            typeof save === "function" &&
-            typeof STORAGE !== "undefined" &&
-            STORAGE &&
-            STORAGE.stats
-        ) {
-
-            save(
-                STORAGE.stats,
-                stats
-            );
-
-            console.log(
-                "RakkeZ: Statistics saved after reset."
-            );
-
-            return true;
         }
 
-    } catch (error) {
-
-        console.warn(
-            "RakkeZ: Failed to save stats:",
-            error
-        );
     }
 
-    try {
+    /*
+     * If the normal reset overlay exists,
+     * open it.
+     */
 
-        localStorage.setItem(
-            "rakkez_stats",
-            JSON.stringify(stats)
-        );
+    if (overlay) {
 
-        console.log(
-            "RakkeZ: Statistics saved using fallback storage."
-        );
+        overlay.classList.add("show");
 
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "RakkeZ: Could not save statistics:",
-            error
-        );
-
-        return false;
-    }
-}
-
-
-/* =========================================================
-   GET TODAY KEY SAFELY
-   ========================================================= */
-
-function getResetTodayKey() {
-
-    if (
-        typeof todayKey === "function"
-    ) {
-
-        try {
-            return todayKey();
-        } catch (error) {
-            /* fallback below */
-        }
-    }
-
-    const now = new Date();
-
-    const year = now.getFullYear();
-
-    const month = String(
-        now.getMonth() + 1
-    ).padStart(2, "0");
-
-    const day = String(
-        now.getDate()
-    ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
-
-
-/* =========================================================
-   GET LAST COMPLETED FOCUS PERIOD
-   ---------------------------------------------------------
-   We look for the latest Focus period from today.
-   ========================================================= */
-
-function getLastResettableFocusPeriod() {
-
-    if (
-        typeof stats === "undefined" ||
-        !stats
-    ) {
-
-        return null;
-    }
-
-    if (
-        !Array.isArray(stats.focusPeriods)
-    ) {
-
-        return null;
-    }
-
-    const today = getResetTodayKey();
-
-    const todayPeriods =
-        stats.focusPeriods
-            .filter(period => {
-
-                if (!period) {
-                    return false;
-                }
-
-                return period.date === today;
-            })
-            .filter(period => {
-
-                const duration =
-                    Number(
-                        period.durationSeconds || 0
-                    );
-
-                return (
-                    Number.isFinite(duration) &&
-                    duration > 0
-                );
-            })
-            .sort((a, b) => {
-
-                return (
-                    Number(b.end || b.start || 0) -
-                    Number(a.end || a.start || 0)
-                );
-            });
-
-    if (!todayPeriods.length) {
-        return null;
-    }
-
-    return todayPeriods[0];
-}
-
-
-/* =========================================================
-   REMOVE ONE VALUE FROM OBJECT SAFELY
-   ========================================================= */
-
-function subtractFromResetObject(
-    object,
-    key,
-    amount
-) {
-
-    if (
-        !object ||
-        typeof object !== "object"
-    ) {
-
-        return;
-    }
-
-    const current =
-        Number(object[key] || 0);
-
-    const safeAmount =
-        Number(amount || 0);
-
-    object[key] = Math.max(
-        0,
-        current - safeAmount
-    );
-}
-
-
-/* =========================================================
-   UNDO LAST COMPLETED FOCUS
-   ---------------------------------------------------------
-   This is the important part.
-
-   It removes ONE completed Focus from:
-   - totalFocusSeconds
-   - dailyFocus
-   - sessions
-   - dailySessions
-   - focusPeriods
-
-   It does NOT wipe the whole statistics object.
-   ========================================================= */
-
-function undoLastCompletedFocusForReset() {
-
-    if (
-        typeof stats === "undefined" ||
-        !stats
-    ) {
-
-        console.warn(
-            "RakkeZ: Stats unavailable. Nothing to undo."
-        );
-
-        return false;
-    }
-
-
-    const period =
-        getLastResettableFocusPeriod();
-
-
-    if (!period) {
-
-        console.log(
-            "RakkeZ: No completed Focus found to undo."
-        );
-
-        return false;
-    }
-
-
-    const durationSeconds = Math.max(
-        0,
-        Math.floor(
-            Number(
-                period.durationSeconds || 0
-            )
-        )
-    );
-
-
-    if (durationSeconds <= 0) {
-
-        console.log(
-            "RakkeZ: Invalid Focus period. Nothing to undo."
-        );
-
-        return false;
-    }
-
-
-    const today =
-        getResetTodayKey();
-
-
-    /* =====================================================
-       TOTAL FOCUS
-       ===================================================== */
-
-    if (
-        Object.prototype.hasOwnProperty.call(
-            stats,
-            "totalFocusSeconds"
-        )
-    ) {
-
-        stats.totalFocusSeconds =
-            Math.max(
-                0,
-                Number(
-                    stats.totalFocusSeconds || 0
-                ) - durationSeconds
-            );
-    }
-
-
-    /* =====================================================
-       DAILY FOCUS
-       ===================================================== */
-
-    if (
-        stats.dailyFocus &&
-        typeof stats.dailyFocus === "object"
-    ) {
-
-        subtractFromResetObject(
-            stats.dailyFocus,
-            today,
-            durationSeconds
-        );
-
-        if (
-            Number(
-                stats.dailyFocus[today] || 0
-            ) <= 0
-        ) {
-
-            delete stats.dailyFocus[today];
-        }
-    }
-
-
-    /* =====================================================
-       SESSIONS
-       ===================================================== */
-
-    if (
-        Object.prototype.hasOwnProperty.call(
-            stats,
-            "sessions"
-        )
-    ) {
-
-        stats.sessions =
-            Math.max(
-                0,
-                Number(stats.sessions || 0) - 1
-            );
-    }
-
-
-    /* =====================================================
-       DAILY SESSIONS
-       ===================================================== */
-
-    if (
-        stats.dailySessions &&
-        typeof stats.dailySessions === "object"
-    ) {
-
-        subtractFromResetObject(
-            stats.dailySessions,
-            today,
-            1
-        );
-
-        if (
-            Number(
-                stats.dailySessions[today] || 0
-            ) <= 0
-        ) {
-
-            delete stats.dailySessions[today];
-        }
-    }
-
-
-    /* =====================================================
-       REMOVE THE EXACT FOCUS PERIOD
-       ===================================================== */
-
-    const periodIndex =
-        stats.focusPeriods.indexOf(period);
-
-    if (periodIndex !== -1) {
-
-        stats.focusPeriods.splice(
-            periodIndex,
-            1
-        );
-
-    } else {
+        overlay.setAttribute("aria-hidden", "false");
 
         /*
-         * Fallback in case the object reference
-         * changed somewhere else.
+         * Some existing RakkeZ overlays use
+         * display:flex directly.
          */
-
-        const fallbackIndex =
-            stats.focusPeriods.findIndex(item => {
-
-                if (!item) {
-                    return false;
-                }
-
-                return (
-                    Number(item.start) ===
-                    Number(period.start)
-                ) &&
-                (
-                    Number(item.end) ===
-                    Number(period.end)
-                );
-            });
-
-        if (fallbackIndex !== -1) {
-
-            stats.focusPeriods.splice(
-                fallbackIndex,
-                1
-            );
+        if (
+            getComputedStyle(overlay).display === "none" &&
+            !overlay.classList.contains("show")
+        ) {
+            overlay.style.display = "flex";
         }
+
+        document.body.style.overflow = "hidden";
+
+        return;
     }
-
-
-    /* =====================================================
-       LAST FOCUS DATE
-       ===================================================== */
 
     /*
-     * If the removed period was the last Focus
-     * of today, recalculate lastFocusDate.
+     * Fallback:
+     * If there is no reset overlay in HTML,
+     * create a simple one automatically.
      */
 
-    if (
-        stats.lastFocusDate === today &&
-        Array.isArray(stats.focusPeriods)
-    ) {
+    createResetConfirmation();
 
-        const remainingPeriods =
-            stats.focusPeriods
-                .filter(period => {
-
-                    return (
-                        period &&
-                        Number(
-                            period.durationSeconds || 0
-                        ) > 0
-                    );
-                })
-                .sort((a, b) => {
-
-                    return (
-                        Number(b.end || b.start || 0) -
-                        Number(a.end || a.start || 0)
-                    );
-                });
-
-        if (remainingPeriods.length) {
-
-            const latest =
-                remainingPeriods[0];
-
-            const latestDate =
-                latest.date || today;
-
-            stats.lastFocusDate =
-                latestDate;
-
-        } else {
-
-            stats.lastFocusDate = null;
-        }
-    }
-
-
-    /* =====================================================
-       SAVE
-       ===================================================== */
-
-    saveResetStats();
-
-
-    /* =====================================================
-       UPDATE STATS UI
-       ===================================================== */
-
-    try {
-
-        if (
-            typeof updateStats === "function"
-        ) {
-
-            updateStats();
-        }
-
-    } catch (error) {
-
-        console.warn(
-            "RakkeZ: updateStats() failed after reset:",
-            error
-        );
-    }
-
-
-    /* =====================================================
-       UPDATE STREAK
-       ===================================================== */
-
-    try {
-
-        if (
-            typeof updateStreak === "function"
-        ) {
-
-            updateStreak();
-        }
-
-    } catch (error) {
-
-        console.warn(
-            "RakkeZ: updateStreak() failed after reset:",
-            error
-        );
-    }
-
-
-    console.log(
-        "RakkeZ: Last completed Focus successfully undone.",
-        {
-            durationSeconds,
-            date: period.date,
-            start: period.start,
-            end: period.end
-        }
-    );
-
-    return true;
-}
-
-
-/* =========================================================
-   UPDATE RESET TIMER UI
-   ========================================================= */
-
-function updateResetTimerUI() {
-
-    if (
-        typeof updateTimerUI === "function"
-    ) {
-
-        try {
-
-            updateTimerUI();
-
-        } catch (error) {
-
-            console.warn(
-                "RakkeZ: updateTimerUI() failed after reset:",
-                error
-            );
-        }
-    }
-
-
-    if (
-        typeof updateTabTitle === "function"
-    ) {
-
-        try {
-
-            updateTabTitle(
-                timerState.remaining,
-                false
-            );
-
-        } catch (error) {
-
-            console.warn(
-                "RakkeZ: updateTabTitle() failed after reset:",
-                error
-            );
-        }
-    }
-}
-
-
-/* =========================================================
-   RESET CURRENT SEGMENT
-   ---------------------------------------------------------
-   DOES NOT TOUCH STATS
-   ========================================================= */
-
-function resetCurrentSegment() {
-
-    console.log(
-        "RakkeZ: Reset Current Segment"
-    );
-
-
-    /* =====================================================
-       STOP TIMER
-       ===================================================== */
-
-    stopResetTimerInterval();
-
-
-    /* =====================================================
-       KEEP CURRENT MODE
-       ===================================================== */
-
-    const minutes =
-        getCurrentSegmentMinutes();
-
-
-    /* =====================================================
-       RESET TIMER ONLY
-       ===================================================== */
-
-    const success =
-        setResetTimerMinutes(minutes);
-
-
-    if (!success) {
-
-        console.error(
-            "RakkeZ: Current segment reset failed."
-        );
-
-        return;
-    }
-
-
-    /* =====================================================
-       SAVE
-       ===================================================== */
-
-    saveResetTimerState();
-
-
-    /* =====================================================
-       UI
-       ===================================================== */
-
-    updateResetTimerUI();
-
-
-    /* =====================================================
-       CLOSE MODAL
-       ===================================================== */
-
-    closeResetConfirmation();
-
-
-    console.log(
-        "RakkeZ: Current segment reset successfully."
-    );
-}
-
-
-/* =========================================================
-   RESET FULL SESSION
-   ---------------------------------------------------------
-   THIS VERSION ALSO UNDOES THE COMPLETED FOCUS.
-   ========================================================= */
-
-function resetFullSession() {
-
-    console.log(
-        "RakkeZ: Reset Full Session"
-    );
-
-
-    /* =====================================================
-       STOP TIMER
-       ===================================================== */
-
-    stopResetTimerInterval();
-
-
-    /* =====================================================
-       UNDO LAST COMPLETED FOCUS
-       ===================================================== */
-
-    /*
-     * This is the part missing from your old version.
-     *
-     * Previously the code only did:
-     *
-     * completedFocusInCycle = 0;
-     *
-     * So:
-     *
-     * Daily Goal stayed the same
-     * Sessions stayed the same
-     * Focus history stayed the same
-     *
-     * Now the completed Focus is actually removed.
-     */
-
-    const undone =
-        undoLastCompletedFocusForReset();
-
-
-    /* =====================================================
-       RESET CURRENT POMODORO CYCLE
-       ===================================================== */
-
-    if (
-        typeof completedFocusInCycle !== "undefined"
-    ) {
-
-        completedFocusInCycle = 0;
-
-        console.log(
-            "RakkeZ: completedFocusInCycle reset to 0."
-        );
-    }
-
-
-    /* =====================================================
-       TIMER STATE
-       ===================================================== */
-
-    if (
-        typeof timerState === "undefined" ||
-        !timerState
-    ) {
-
-        console.error(
-            "RakkeZ: timerState is not available."
-        );
-
-        return;
-    }
-
-
-    /* =====================================================
-       RETURN TO FOCUS
-       ===================================================== */
-
-    timerState.mode = "focus";
-
-
-    /* =====================================================
-       GET FOCUS DURATION
-       ===================================================== */
-
-    const focusMinutes =
-        getSafeFocusMinutes();
-
-
-    /* =====================================================
-       CREATE FRESH FOCUS TIMER
-       ===================================================== */
-
-    const success =
-        setResetTimerMinutes(
-            focusMinutes
-        );
-
-
-    if (!success) {
-
-        console.error(
-            "RakkeZ: Full session reset failed."
-        );
-
-        return;
-    }
-
-
-    /* =====================================================
-       SAVE TIMER
-       ===================================================== */
-
-    saveResetTimerState();
-
-
-    /* =====================================================
-       UPDATE UI
-       ===================================================== */
-
-    updateResetTimerUI();
-
-
-    /* =====================================================
-       CLOSE POPUP
-       ===================================================== */
-
-    closeResetConfirmation();
-
-
-    console.log(
-        "RakkeZ: Full session reset successfully.",
-        {
-            focusUndone: undone
-        }
-    );
-}
-
-
-/* =========================================================
-   OLD COMPATIBILITY FUNCTION
-   ========================================================= */
-function resetTimer() {
-
-    /* =====================================================
-       STOP TIMER
-       ===================================================== */
-
-    timerState.running = false;
-
-    if (timerState.interval !== null) {
-        clearInterval(timerState.interval);
-    }
-
-    timerState.interval = null;
-
-
-    /* =====================================================
-       RESET ALL STATS
-       ===================================================== */
-
-    stats = {
-
-        totalFocusSeconds: 0,
-
-        sessions: 0,
-
-        streak: 0,
-
-        lastFocusDate: null,
-
-        dailyFocus: {},
-
-        dailySessions: {},
-
-        focusPeriods: []
-
-    };
-
-
-    /* =====================================================
-       RESET CYCLE
-       ===================================================== */
-
-    completedFocusInCycle = 0;
-
-
-    /* =====================================================
-       RESET CURRENT TASK FOCUS
-       ===================================================== */
-
-    tasks.forEach(task => {
-
-        if (typeof task.focusMinutes !== "number") {
-            task.focusMinutes = 0;
-        }
-
-    });
-
-
-    /* =====================================================
-       RESET STREAK STORAGE
-       ===================================================== */
-
-    localStorage.removeItem(
-        "rakkez_last_focus_day"
-    );
-
-
-    /* =====================================================
-       SAVE CLEAN STATS
-       ===================================================== */
-
-    save(
-        STORAGE.stats,
-        stats
-    );
-
-
-    save(
-        STORAGE.tasks,
-        tasks
-    );
-
-
-    /* =====================================================
-       RESET TIMER TO FOCUS
-       ===================================================== */
-
-    timerState.mode = "focus";
-
-    timerState.total =
-        Math.floor(
-            Number(settings.focus) * 60
-        );
-
-    timerState.remaining =
-        timerState.total;
-
-    timerState.running = false;
-
-    timerState.startedAt = null;
-
-    timerState.timestamp = Date.now();
-
-    timerState.interval = null;
-
-
-    /* =====================================================
-       REMOVE SAVED TIMER STATE
-       ===================================================== */
-
-    localStorage.removeItem(
-        STORAGE.timer
-    );
-
-
-    /* =====================================================
-       UPDATE UI
-       ===================================================== */
-
-    updateTimerUI();
-
-    updateStats();
-
-
-    /* =====================================================
-       RESET TAB TITLE
-       ===================================================== */
-
-    document.title = "RakkeZ";
-
-
-    /* =====================================================
-       HIDE COMPLETION CARD
-       ===================================================== */
-
-    if (
-        typeof hidePomodoroCompletion ===
-        "function"
-    ) {
-
-        hidePomodoroCompletion();
-
-    }
-
-
-    /* =====================================================
-       STOP ALARM
-       ===================================================== */
-
-    if (
-        typeof stopAlarm ===
-        "function"
-    ) {
-
-        stopAlarm();
-
-    }
-
-
-    console.log(
-        "RakkeZ: Full session reset completed."
-    );
-
-}
-
-/* =========================================================
-   OPEN RESET CONFIRMATION
-   ========================================================= */
-
-function openResetConfirmation() {
-
-    console.log(
-        "RakkeZ: Opening reset confirmation"
-    );
-
-
-    let overlay =
-        getResetOverlay();
-
-
-    if (!overlay) {
-
-        overlay =
-            createResetConfirmation();
-    }
-
-
-    if (!overlay) {
-
-        console.error(
-            "RakkeZ: Could not create reset confirmation."
-        );
-
-        return;
-    }
-
-
-    overlay.classList.add("show");
-
-    overlay.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-    overlay.style.display = "flex";
-
-    document.body.style.overflow = "hidden";
-
-
-    initializeResetModalEvents(
-        overlay
-    );
 }
 
 
@@ -7242,128 +6151,103 @@ function openResetConfirmation() {
 
 function closeResetConfirmation() {
 
-    const overlays = [];
-
-
     const possibleIds = [
         "resetOverlay",
         "resetConfirmOverlay",
         "resetConfirmation",
         "resetTimerOverlay",
-        "timerResetOverlay",
-        "rakkezResetOverlay"
+        "timerResetOverlay"
     ];
 
+    let closedSomething = false;
 
     possibleIds.forEach(id => {
 
-        const overlay =
-            document.getElementById(id);
+        const overlay = $(id);
 
-        if (
-            overlay &&
-            !overlays.includes(overlay)
-        ) {
-
-            overlays.push(overlay);
-        }
-    });
-
-
-    overlays.forEach(overlay => {
-
-        overlay.classList.remove(
-            "show"
-        );
-
-        overlay.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-
-        overlay.style.display =
-            "none";
-    });
-
-
-    if (
-        typeof syncBodyScrollLock === "function"
-    ) {
-
-        try {
-
-            syncBodyScrollLock();
-
-        } catch (error) {
-
-            document.body.style.overflow = "";
+        if (!overlay) {
+            return;
         }
 
-    } else {
+        overlay.classList.remove("show");
+
+        overlay.setAttribute("aria-hidden", "true");
+
+        /*
+         * Only reset display if it was manually set.
+         */
+        if (overlay.style.display === "flex") {
+            overlay.style.display = "";
+        }
+
+        closedSomething = true;
+
+    });
+
+    /*
+     * Also support generated popup.
+     */
+    const generated = $("rakkezResetOverlay");
+
+    if (generated) {
+
+        generated.classList.remove("show");
+
+        generated.setAttribute("aria-hidden", "true");
+
+        closedSomething = true;
+
+    }
+
+    if (typeof syncBodyScrollLock === "function") {
+
+        syncBodyScrollLock();
+
+    } else if (closedSomething) {
 
         document.body.style.overflow = "";
+
     }
+
 }
 
 
 /* =========================================================
-   CREATE RESET CONFIRMATION
+   CREATE RESET CONFIRMATION FALLBACK
+   ---------------------------------------------------------
+   This makes Reset work even if the HTML buttons
+   were not created correctly.
    ========================================================= */
 
 function createResetConfirmation() {
 
-    const existing =
-        document.getElementById(
-            "rakkezResetOverlay"
-        );
+    /*
+     * Don't create it twice.
+     */
+    if ($("rakkezResetOverlay")) {
 
+        const existing = $("rakkezResetOverlay");
 
-    if (existing) {
+        existing.classList.add("show");
 
-        initializeResetModalEvents(
-            existing
-        );
+        existing.setAttribute("aria-hidden", "false");
 
-        return existing;
+        document.body.style.overflow = "hidden";
+
+        return;
     }
 
+    const overlay = document.createElement("div");
 
-    const overlay =
-        document.createElement("div");
+    overlay.id = "rakkezResetOverlay";
 
+    overlay.setAttribute("aria-hidden", "false");
 
-    overlay.id =
-        "rakkezResetOverlay";
-
-
-    overlay.className =
-        "rakkez-reset-overlay";
-
-
-    overlay.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-
-    overlay.setAttribute(
-        "role",
-        "dialog"
-    );
-
-
-    overlay.setAttribute(
-        "aria-modal",
-        "true"
-    );
-
+    overlay.className = "show";
 
     overlay.innerHTML = `
 
-        <div
-            class="rakkez-reset-card"
-            role="document"
-        >
+        <div class="rakkez-reset-card">
 
             <button
                 id="rakkezResetClose"
@@ -7374,43 +6258,29 @@ function createResetConfirmation() {
                 ×
             </button>
 
-
-            <div
-                class="rakkez-reset-icon"
-                aria-hidden="true"
-            >
+            <div class="rakkez-reset-icon">
                 ↻
             </div>
-
 
             <h2>
                 Reset Timer
             </h2>
 
-
             <p>
-                Would you like to reset your current segment, or your full session?
+                Would you like to reset your current segment,
+                or your full session?
             </p>
-
 
             <button
                 id="rakkezResetCurrent"
                 class="rakkez-reset-option"
                 type="button"
-                data-reset-action="current"
             >
-
-                <span
-                    class="reset-option-icon"
-                    aria-hidden="true"
-                >
+                <span class="reset-option-icon">
                     ↻
                 </span>
 
-
-                <span
-                    class="reset-option-text"
-                >
+                <span class="reset-option-text">
 
                     <strong>
                         Reset Current Segment
@@ -7421,83 +6291,56 @@ function createResetConfirmation() {
                     </small>
 
                 </span>
-
             </button>
-
 
             <button
                 id="rakkezResetFull"
                 class="rakkez-reset-option"
                 type="button"
-                data-reset-action="full"
             >
-
-                <span
-                    class="reset-option-icon"
-                    aria-hidden="true"
-                >
+                <span class="reset-option-icon">
                     ⟳
                 </span>
 
-
-                <span
-                    class="reset-option-text"
-                >
+                <span class="reset-option-text">
 
                     <strong>
                         Reset Full Session
                     </strong>
 
                     <small>
-                        Return to Focus and undo the completed Focus from this session.
+                        Return to Focus and reset the current session cycle.
                     </small>
 
                 </span>
-
             </button>
 
         </div>
+
     `;
 
-
-    document.body.appendChild(
-        overlay
-    );
+    document.body.appendChild(overlay);
 
 
     /* =====================================================
-       FALLBACK CSS
+       FALLBACK RESET STYLES
        ===================================================== */
 
-    if (
-        !document.getElementById(
-            "rakkezResetStyles"
-        )
-    ) {
+    if (!$("rakkezResetStyles")) {
 
-        const style =
-            document.createElement("style");
+        const style = document.createElement("style");
 
-
-        style.id =
-            "rakkezResetStyles";
-
+        style.id = "rakkezResetStyles";
 
         style.textContent = `
 
-            #rakkezResetOverlay,
-            .rakkez-reset-overlay {
-
+            #rakkezResetOverlay {
                 position: fixed;
-
                 inset: 0;
-
                 z-index: 100001;
 
-                display: none;
-
+                display: flex;
                 align-items: center;
-
                 justify-content: center;
 
                 padding: 20px;
@@ -7512,7 +6355,6 @@ function createResetConfirmation() {
                     blur(18px);
 
                 opacity: 0;
-
                 visibility: hidden;
 
                 transition:
@@ -7520,27 +6362,18 @@ function createResetConfirmation() {
                     visibility .22s ease;
             }
 
-
-            #rakkezResetOverlay.show,
-            .rakkez-reset-overlay.show {
-
-                display: flex;
-
+            #rakkezResetOverlay.show {
                 opacity: 1;
-
                 visibility: visible;
             }
 
-
             .rakkez-reset-card {
-
                 position: relative;
 
-                width:
-                    min(
-                        420px,
-                        calc(100vw - 32px)
-                    );
+                width: min(
+                    420px,
+                    calc(100vw - 32px)
+                );
 
                 padding: 30px;
 
@@ -7554,12 +6387,10 @@ function createResetConfirmation() {
                     );
 
                 border:
-                    1px solid
-                    rgba(255,255,255,.10);
+                    1px solid rgba(255,255,255,.10);
 
                 box-shadow:
-                    0 30px 90px
-                    rgba(0,0,0,.65);
+                    0 30px 90px rgba(0,0,0,.65);
 
                 transform:
                     translateY(10px)
@@ -7569,32 +6400,23 @@ function createResetConfirmation() {
                     transform .22s ease;
             }
 
-
             #rakkezResetOverlay.show
-            .rakkez-reset-card,
-            .rakkez-reset-overlay.show
             .rakkez-reset-card {
-
                 transform:
                     translateY(0)
                     scale(1);
             }
 
-
             .rakkez-reset-close {
-
                 position: absolute;
 
                 top: 14px;
-
                 right: 14px;
 
                 width: 34px;
-
                 height: 34px;
 
                 border: 0;
-
                 border-radius: 50%;
 
                 background:
@@ -7605,8 +6427,6 @@ function createResetConfirmation() {
 
                 font-size: 22px;
 
-                line-height: 1;
-
                 cursor: pointer;
 
                 transition:
@@ -7614,26 +6434,19 @@ function createResetConfirmation() {
                     color .2s ease;
             }
 
-
             .rakkez-reset-close:hover {
-
                 background:
                     rgba(255,255,255,.12);
 
                 color: white;
             }
 
-
             .rakkez-reset-icon {
-
                 width: 52px;
-
                 height: 52px;
 
                 display: flex;
-
                 align-items: center;
-
                 justify-content: center;
 
                 margin-bottom: 16px;
@@ -7644,19 +6457,15 @@ function createResetConfirmation() {
                     rgba(255,255,255,.07);
 
                 border:
-                    1px solid
-                    rgba(255,255,255,.08);
+                    1px solid rgba(255,255,255,.08);
 
                 color: white;
 
                 font-size: 27px;
             }
 
-
             .rakkez-reset-card h2 {
-
-                margin:
-                    0 0 8px;
+                margin: 0 0 8px;
 
                 color: white;
 
@@ -7665,15 +6474,11 @@ function createResetConfirmation() {
                     sans-serif;
 
                 font-size: 25px;
-
                 font-weight: 700;
             }
 
-
             .rakkez-reset-card > p {
-
-                margin:
-                    0 0 22px;
+                margin: 0 0 22px;
 
                 color:
                     rgba(255,255,255,.52);
@@ -7687,13 +6492,10 @@ function createResetConfirmation() {
                 line-height: 1.55;
             }
 
-
             .rakkez-reset-option {
-
                 width: 100%;
 
                 display: flex;
-
                 align-items: center;
 
                 gap: 14px;
@@ -7705,8 +6507,7 @@ function createResetConfirmation() {
                 border-radius: 16px;
 
                 border:
-                    1px solid
-                    rgba(255,255,255,.08);
+                    1px solid rgba(255,255,255,.08);
 
                 background:
                     rgba(255,255,255,.045);
@@ -7723,11 +6524,8 @@ function createResetConfirmation() {
                     border-color .18s ease;
             }
 
-
             .rakkez-reset-option:hover {
-
-                transform:
-                    translateY(-1px);
+                transform: translateY(-1px);
 
                 background:
                     rgba(255,255,255,.075);
@@ -7736,27 +6534,14 @@ function createResetConfirmation() {
                     rgba(255,255,255,.15);
             }
 
-
-            .rakkez-reset-option:active {
-
-                transform:
-                    translateY(0)
-                    scale(.99);
-            }
-
-
             .reset-option-icon {
-
                 width: 42px;
-
                 height: 42px;
 
                 min-width: 42px;
 
                 display: flex;
-
                 align-items: center;
-
                 justify-content: center;
 
                 border-radius: 13px;
@@ -7767,31 +6552,23 @@ function createResetConfirmation() {
                 font-size: 21px;
             }
 
-
             .reset-option-text {
-
                 display: flex;
-
                 flex-direction: column;
 
                 gap: 4px;
             }
 
-
             .reset-option-text strong {
-
                 font-family:
                     "DM Sans",
                     sans-serif;
 
                 font-size: 14px;
-
                 font-weight: 700;
             }
 
-
             .reset-option-text small {
-
                 color:
                     rgba(255,255,255,.46);
 
@@ -7804,508 +6581,326 @@ function createResetConfirmation() {
                 line-height: 1.4;
             }
 
-
-            @media (max-width: 480px) {
-
-                .rakkez-reset-card {
-
-                    padding: 24px;
-
-                    border-radius: 22px;
-                }
-            }
-
         `;
 
+        document.head.appendChild(style);
 
-        document.head.appendChild(
-            style
-        );
     }
 
 
-    initializeResetModalEvents(
-        overlay
-    );
+    /* =====================================================
+       FALLBACK EVENTS
+       ===================================================== */
 
+    const closeButton = $("rakkezResetClose");
 
-    return overlay;
-}
+    if (closeButton) {
 
+        closeButton.onclick = event => {
 
-/* =========================================================
-   RESET MODAL EVENTS
-   ========================================================= */
+            event.preventDefault();
 
-function initializeResetModalEvents(
-    overlay
-) {
+            closeResetConfirmation();
 
-    if (!overlay) {
-        return;
+        };
+
     }
 
 
-    if (
-        overlay.dataset
-            .rakkezResetEvents === "true"
-    ) {
+    const currentButton = $("rakkezResetCurrent");
 
-        return;
+    if (currentButton) {
+
+        currentButton.onclick = event => {
+
+            event.preventDefault();
+
+            resetCurrentSegment();
+
+        };
+
     }
 
 
-    overlay.dataset
-        .rakkezResetEvents = "true";
+    const fullButton = $("rakkezResetFull");
+
+    if (fullButton) {
+
+        fullButton.onclick = event => {
+
+            event.preventDefault();
+
+            resetFullSession();
+
+        };
+
+    }
 
 
-    overlay.addEventListener(
-        "click",
-        event => {
+    overlay.addEventListener("click", event => {
 
-            const target =
-                event.target;
+        if (event.target === overlay) {
 
+            closeResetConfirmation();
 
-            /* =============================================
-               CLICK OUTSIDE CARD
-               ============================================= */
-
-            if (
-                target === overlay
-            ) {
-
-                event.preventDefault();
-
-                closeResetConfirmation();
-
-                return;
-            }
-
-
-            const button =
-                target.closest(
-                    "button, [data-reset-action], [data-close-reset]"
-                );
-
-
-            if (!button) {
-                return;
-            }
-
-
-            /* =============================================
-               CLOSE
-               ============================================= */
-
-            if (
-                button.id ===
-                    "rakkezResetClose" ||
-
-                button.id ===
-                    "resetClose" ||
-
-                button.id ===
-                    "closeReset" ||
-
-                button.id ===
-                    "resetCancel" ||
-
-                button.id ===
-                    "cancelReset" ||
-
-                button.id ===
-                    "closeResetTimer" ||
-
-                button.hasAttribute(
-                    "data-close-reset"
-                )
-            ) {
-
-                event.preventDefault();
-
-                event.stopPropagation();
-
-                closeResetConfirmation();
-
-                return;
-            }
-
-
-            /* =============================================
-               CURRENT
-               ============================================= */
-
-            const action =
-                button.dataset
-                    ? button.dataset.resetAction
-                    : null;
-
-
-            if (
-                action === "current" ||
-                button.id ===
-                    "rakkezResetCurrent"
-            ) {
-
-                event.preventDefault();
-
-                event.stopPropagation();
-
-                resetCurrentSegment();
-
-                return;
-            }
-
-
-            /* =============================================
-               FULL
-               ============================================= */
-
-            if (
-                action === "full" ||
-                button.id ===
-                    "rakkezResetFull"
-            ) {
-
-                event.preventDefault();
-
-                event.stopPropagation();
-
-                resetFullSession();
-
-                return;
-            }
         }
-    );
+
+    });
+
+    document.body.style.overflow = "hidden";
+
 }
 
 
 /* =========================================================
-   INITIALIZE RESET SYSTEM
+   INITIALIZE RESET BUTTONS
+   ---------------------------------------------------------
+   Supports multiple possible HTML IDs.
    ========================================================= */
 
 function initializeResetSystem() {
 
-    console.log(
-        "RakkeZ: Initializing Reset System"
-    );
-
-
-    /* =====================================================
-       MAIN RESET BUTTON
-       ===================================================== */
-
-    const resetButton =
-        document.getElementById(
-            "resetBtn"
-        );
-
+    /*
+     * Main Reset button
+     */
+    const resetButton = $("resetBtn");
 
     if (resetButton) {
 
-        if (
-            resetButton.dataset
-                .rakkezResetMainBound !== "true"
-        ) {
+        resetButton.onclick = event => {
 
-            resetButton.dataset
-                .rakkezResetMainBound = "true";
+            event.preventDefault();
 
+            openResetConfirmation();
 
-            resetButton.addEventListener(
-                "click",
-                event => {
+        };
 
-                    event.preventDefault();
-
-                    event.stopPropagation();
-
-                    openResetConfirmation();
-                }
-            );
-        }
     }
 
 
-    /* =====================================================
-       CURRENT SEGMENT BUTTONS
-       ===================================================== */
+    /*
+     * Current Segment buttons
+     */
 
     const currentIds = [
 
         "resetCurrentSegment",
-
         "resetCurrentBtn",
-
         "resetSegment",
-
         "resetSegmentBtn",
-
         "resetCurrent"
 
     ];
 
-
     currentIds.forEach(id => {
 
-        const button =
-            document.getElementById(id);
-
+        const button = $(id);
 
         if (!button) {
             return;
         }
 
-
-        if (
-            button.dataset
-                .rakkezResetBound === "true"
-        ) {
-
+        if (button.dataset.rakkezResetBound === "true") {
             return;
         }
 
+        button.dataset.rakkezResetBound = "true";
 
-        button.dataset
-            .rakkezResetBound = "true";
+        button.addEventListener("click", event => {
 
+            event.preventDefault();
+            event.stopPropagation();
 
-        button.addEventListener(
-            "click",
-            event => {
+            resetCurrentSegment();
 
-                event.preventDefault();
+        });
 
-                event.stopPropagation();
-
-                resetCurrentSegment();
-            }
-        );
     });
 
 
-    /* =====================================================
-       FULL SESSION BUTTONS
-       ===================================================== */
+    /*
+     * Full Session buttons
+     */
 
     const fullIds = [
 
         "resetFullSession",
-
         "resetFullBtn",
-
         "resetSession",
-
         "resetSessionBtn",
-
         "resetFull"
 
     ];
 
-
     fullIds.forEach(id => {
 
-        const button =
-            document.getElementById(id);
-
+        const button = $(id);
 
         if (!button) {
             return;
         }
 
-
-        if (
-            button.dataset
-                .rakkezResetBound === "true"
-        ) {
-
+        if (button.dataset.rakkezResetBound === "true") {
             return;
         }
 
+        button.dataset.rakkezResetBound = "true";
 
-        button.dataset
-            .rakkezResetBound = "true";
+        button.addEventListener("click", event => {
 
+            event.preventDefault();
+            event.stopPropagation();
 
-        button.addEventListener(
-            "click",
-            event => {
+            resetFullSession();
 
-                event.preventDefault();
+        });
 
-                event.stopPropagation();
-
-                resetFullSession();
-            }
-        );
     });
 
 
-    /* =====================================================
-       DATA RESET ACTIONS
-       ===================================================== */
+    /*
+     * Support:
+     *
+     * data-reset-action="current"
+     *
+     * data-reset-action="full"
+     */
 
     document
-        .querySelectorAll(
-            "[data-reset-action]"
-        )
+        .querySelectorAll("[data-reset-action]")
         .forEach(button => {
 
             if (
-                button.closest(
-                    "#rakkezResetOverlay"
-                )
+                button.dataset.rakkezResetBound === "true"
             ) {
-
                 return;
             }
 
+            button.dataset.rakkezResetBound = "true";
 
-            if (
-                button.dataset
-                    .rakkezResetBound === "true"
-            ) {
+            button.addEventListener("click", event => {
 
-                return;
-            }
+                event.preventDefault();
+                event.stopPropagation();
 
+                const action =
+                    button.dataset.resetAction;
 
-            button.dataset
-                .rakkezResetBound = "true";
+                if (action === "current") {
 
+                    resetCurrentSegment();
 
-            button.addEventListener(
-                "click",
-                event => {
+                } else if (action === "full") {
 
-                    event.preventDefault();
+                    resetFullSession();
 
-                    event.stopPropagation();
-
-
-                    const action =
-                        button.dataset
-                            .resetAction;
-
-
-                    if (
-                        action === "current"
-                    ) {
-
-                        resetCurrentSegment();
-                    }
-
-
-                    if (
-                        action === "full"
-                    ) {
-
-                        resetFullSession();
-                    }
                 }
-            );
+
+            });
+
         });
 
 
-    /* =====================================================
-       CLOSE BUTTONS
-       ===================================================== */
+    /*
+     * Reset modal close buttons
+     */
 
     const closeIds = [
 
         "resetClose",
-
         "closeReset",
-
         "resetCancel",
-
         "cancelReset",
-
         "closeResetTimer"
 
     ];
 
-
     closeIds.forEach(id => {
 
-        const button =
-            document.getElementById(id);
-
+        const button = $(id);
 
         if (!button) {
             return;
         }
 
-
-        if (
-            button.dataset
-                .rakkezResetBound === "true"
-        ) {
-
+        if (button.dataset.rakkezResetBound === "true") {
             return;
         }
 
+        button.dataset.rakkezResetBound = "true";
 
-        button.dataset
-            .rakkezResetBound = "true";
+        button.addEventListener("click", event => {
 
+            event.preventDefault();
+            event.stopPropagation();
 
-        button.addEventListener(
-            "click",
-            event => {
+            closeResetConfirmation();
 
-                event.preventDefault();
+        });
 
-                event.stopPropagation();
-
-                closeResetConfirmation();
-            }
-        );
     });
 
 
-    /* =====================================================
-       EXISTING OVERLAYS
-       ===================================================== */
+    /*
+     * Any element with data-close-reset
+     */
 
-    const overlayIds = [
+    document.addEventListener("click", event => {
+
+        const button =
+            event.target.closest("[data-close-reset]");
+
+        if (!button) {
+            return;
+        }
+
+        event.preventDefault();
+
+        closeResetConfirmation();
+
+    });
+
+
+    /*
+     * Background click on existing reset overlays
+     */
+
+    const possibleOverlays = [
 
         "resetOverlay",
-
         "resetConfirmOverlay",
-
         "resetConfirmation",
-
         "resetTimerOverlay",
-
-        "timerResetOverlay",
-
-        "rakkezResetOverlay"
+        "timerResetOverlay"
 
     ];
 
+    possibleOverlays.forEach(id => {
 
-    overlayIds.forEach(id => {
-
-        const overlay =
-            document.getElementById(id);
-
+        const overlay = $(id);
 
         if (!overlay) {
             return;
         }
 
+        if (overlay.dataset.rakkezResetBound === "true") {
+            return;
+        }
 
-        initializeResetModalEvents(
-            overlay
-        );
+        overlay.dataset.rakkezResetBound = "true";
+
+        overlay.addEventListener("click", event => {
+
+            if (event.target === overlay) {
+
+                closeResetConfirmation();
+
+            }
+
+        });
+
     });
 
-
-    console.log(
-        "RakkeZ: Reset System Ready"
-    );
 }
 
 
@@ -8315,146 +6910,124 @@ function initializeResetSystem() {
 
 window.RakkeZReset = {
 
-    currentSegment:
-        resetCurrentSegment,
+    currentSegment: resetCurrentSegment,
 
-    fullSession:
-        resetFullSession,
+    fullSession: resetFullSession,
 
-    open:
-        openResetConfirmation,
+    open: openResetConfirmation,
 
-    close:
-        closeResetConfirmation,
-
-    undoLastFocus:
-        undoLastCompletedFocusForReset
+    close: closeResetConfirmation
 
 };
 
 
 /* =========================================================
-   RESET KEYBOARD SHORTCUT
+   KEYBOARD SHORTCUT
    ---------------------------------------------------------
-   R = Open reset options
+   R = Open Reset Options
    ========================================================= */
 
-document.addEventListener(
-    "keydown",
-    event => {
+document.addEventListener("keydown", event => {
 
-        if (
-            event.target &&
-            (
-                event.target.tagName === "INPUT" ||
-                event.target.tagName === "TEXTAREA" ||
-                event.target.isContentEditable
-            )
-        ) {
-
-            return;
-        }
-
-
-        if (
-            event.key &&
-            event.key.toLowerCase() === "r"
-        ) {
-
-            event.preventDefault();
-
-            openResetConfirmation();
-        }
+    /*
+     * Don't trigger shortcuts while typing.
+     */
+    if (
+        event.target.tagName === "INPUT" ||
+        event.target.tagName === "TEXTAREA" ||
+        event.target.isContentEditable
+    ) {
+        return;
     }
-);
+
+    if (event.key.toLowerCase() === "r") {
+
+        event.preventDefault();
+
+        openResetConfirmation();
+
+    }
+
+});
 
 
 /* =========================================================
-   RESET ESCAPE
+   ESCAPE
+   ---------------------------------------------------------
+   Close reset popup first.
    ========================================================= */
 
-document.addEventListener(
-    "keydown",
-    event => {
+document.addEventListener("keydown", event => {
+
+    if (event.key !== "Escape") {
+        return;
+    }
+
+    /*
+     * If reset popup is open,
+     * close it first.
+     */
+
+    const generated = $("rakkezResetOverlay");
+
+    if (
+        generated &&
+        generated.classList.contains("show")
+    ) {
+
+        closeResetConfirmation();
+
+        return;
+
+    }
+
+
+    const possibleIds = [
+
+        "resetOverlay",
+        "resetConfirmOverlay",
+        "resetConfirmation",
+        "resetTimerOverlay",
+        "timerResetOverlay"
+
+    ];
+
+    for (const id of possibleIds) {
+
+        const overlay = $(id);
 
         if (
-            event.key !== "Escape"
+            overlay &&
+            overlay.classList.contains("show")
         ) {
-
-            return;
-        }
-
-
-        const overlay =
-            getResetOverlay();
-
-
-        if (!overlay) {
-            return;
-        }
-
-
-        const isOpen =
-            overlay.classList.contains(
-                "show"
-            ) ||
-            overlay.getAttribute(
-                "aria-hidden"
-            ) === "false";
-
-
-        if (isOpen) {
-
-            event.preventDefault();
 
             closeResetConfirmation();
+
+            return;
+
         }
+
     }
-);
+
+});
 
 
 /* =========================================================
-   RESET BOOT
+   INITIALIZE RESET SYSTEM
    ========================================================= */
 
-function bootRakkeZResetSystem() {
+try {
 
-    try {
+    initializeResetSystem();
 
-        initializeResetSystem();
+} catch (error) {
 
-    } catch (error) {
-
-        console.warn(
-            "RakkeZ: Reset system initialization failed:",
-            error
-        );
-    }
-}
-
-
-if (
-    document.readyState ===
-    "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        bootRakkeZResetSystem,
-        {
-            once: true
-        }
+    console.warn(
+        "RakkeZ: Reset system initialization failed:",
+        error
     );
 
-} else {
-
-    bootRakkeZResetSystem();
 }
-
-
-/* =========================================================
-   END OF RAKKEZ RESET SYSTEM
-   ========================================================= */
 
 /* =========================================================
    MEDIA TABS
