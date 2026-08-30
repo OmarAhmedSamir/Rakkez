@@ -5921,6 +5921,8 @@ function stopTimerCompletely() {
 }
 
 
+
+
 /* =========================================================
    RAKKEZ RESET SYSTEM
    ---------------------------------------------------------
@@ -5972,6 +5974,79 @@ function getResetOverlay() {
     }
 
     return null;
+}
+
+
+/* =========================================================
+   STOP ONLY THE TIMER INTERVAL
+   ---------------------------------------------------------
+   IMPORTANT:
+   We intentionally DO NOT call stopTimerCompletely()
+   here because reset must completely control the new state.
+   ========================================================= */
+
+function stopResetTimerInterval() {
+
+    console.log("RakkeZ: Stopping timer interval for reset");
+
+    /*
+     * Stop interval stored in timerState.
+     */
+    if (
+        typeof timerState !== "undefined" &&
+        timerState &&
+        timerState.interval
+    ) {
+
+        try {
+            clearInterval(timerState.interval);
+        } catch (error) {
+            console.warn(
+                "RakkeZ: Failed to clear timer interval:",
+                error
+            );
+        }
+
+    }
+
+    /*
+     * Also clear any global interval if your timer
+     * uses one.
+     */
+    if (
+        typeof timerInterval !== "undefined" &&
+        timerInterval
+    ) {
+
+        try {
+            clearInterval(timerInterval);
+        } catch (error) {
+            console.warn(
+                "RakkeZ: Failed to clear global timer interval:",
+                error
+            );
+        }
+
+        try {
+            timerInterval = null;
+        } catch (error) {
+            /*
+             * Ignore if timerInterval is const or otherwise
+             * cannot be reassigned.
+             */
+        }
+
+    }
+
+    /*
+     * Reset interval reference.
+     */
+    if (
+        typeof timerState !== "undefined" &&
+        timerState
+    ) {
+        timerState.interval = null;
+    }
 
 }
 
@@ -5984,53 +6059,391 @@ function getCurrentSegmentMinutes() {
 
     let minutes;
 
+    /*
+     * Make sure timerState exists.
+     */
+    if (
+        typeof timerState === "undefined" ||
+        !timerState
+    ) {
+
+        return 25;
+
+    }
+
+
+    /*
+     * Make sure settings exists.
+     */
+    if (
+        typeof settings === "undefined" ||
+        !settings
+    ) {
+
+        return 25;
+
+    }
+
+
     switch (timerState.mode) {
 
         case "focus":
-            minutes = Number(settings.focus);
+
+            minutes = Number(
+                settings.focus
+            );
+
             break;
+
 
         case "short":
-            minutes = Number(settings.shortBreak);
+
+            minutes = Number(
+                settings.shortBreak
+            );
+
             break;
 
+
         case "long":
-            minutes = Number(settings.longBreak);
+
+            minutes = Number(
+                settings.longBreak
+            );
+
             break;
+
 
         default:
 
             timerState.mode = "focus";
 
-            minutes = Number(settings.focus);
+            minutes = Number(
+                settings.focus
+            );
 
             break;
 
     }
 
 
+    /*
+     * Validate settings.
+     */
     if (
         !Number.isFinite(minutes) ||
         minutes <= 0
     ) {
 
-        minutes =
-            Number(DEFAULT_SETTINGS.focus);
+        if (
+            typeof DEFAULT_SETTINGS !== "undefined" &&
+            DEFAULT_SETTINGS &&
+            Number.isFinite(
+                Number(DEFAULT_SETTINGS.focus)
+            ) &&
+            Number(DEFAULT_SETTINGS.focus) > 0
+        ) {
 
-    }
+            minutes = Number(
+                DEFAULT_SETTINGS.focus
+            );
 
+        } else {
 
-    if (
-        !Number.isFinite(minutes) ||
-        minutes <= 0
-    ) {
+            minutes = 25;
 
-        minutes = 25;
+        }
 
     }
 
 
     return minutes;
+
+}
+
+
+/* =========================================================
+   GET SAFE FOCUS MINUTES
+   ========================================================= */
+
+function getSafeFocusMinutes() {
+
+    let focusMinutes = 25;
+
+
+    /*
+     * First choice: current settings.
+     */
+    if (
+        typeof settings !== "undefined" &&
+        settings
+    ) {
+
+        const value = Number(
+            settings.focus
+        );
+
+        if (
+            Number.isFinite(value) &&
+            value > 0
+        ) {
+
+            focusMinutes = value;
+
+        }
+
+    }
+
+
+    /*
+     * Second choice: default settings.
+     */
+    if (
+        focusMinutes === 25 &&
+        typeof DEFAULT_SETTINGS !== "undefined" &&
+        DEFAULT_SETTINGS
+    ) {
+
+        const defaultFocus = Number(
+            DEFAULT_SETTINGS.focus
+        );
+
+        if (
+            Number.isFinite(defaultFocus) &&
+            defaultFocus > 0
+        ) {
+
+            focusMinutes = defaultFocus;
+
+        }
+
+    }
+
+
+    return focusMinutes;
+
+}
+
+
+/* =========================================================
+   SET TIMER TO MINUTES
+   ---------------------------------------------------------
+   Central helper used by both reset functions.
+   ========================================================= */
+
+function setResetTimerMinutes(minutes) {
+
+    let safeMinutes = Number(minutes);
+
+
+    if (
+        !Number.isFinite(safeMinutes) ||
+        safeMinutes <= 0
+    ) {
+
+        safeMinutes = 25;
+
+    }
+
+
+    const seconds = Math.max(
+        1,
+        Math.floor(
+            safeMinutes * 60
+        )
+    );
+
+
+    /*
+     * Make sure timerState exists.
+     */
+    if (
+        typeof timerState === "undefined" ||
+        !timerState
+    ) {
+
+        console.error(
+            "RakkeZ: timerState is not available."
+        );
+
+        return false;
+
+    }
+
+
+    /*
+     * IMPORTANT:
+     * Reset only timer state.
+     *
+     * Do NOT touch statistics.
+     */
+    timerState.total = seconds;
+
+    timerState.remaining = seconds;
+
+    timerState.startedAt = null;
+
+    timerState.timestamp = Date.now();
+
+    timerState.running = false;
+
+    timerState.interval = null;
+
+
+    /*
+     * Some timer implementations use elapsed.
+     * Reset it if it exists.
+     */
+    if (
+        Object.prototype.hasOwnProperty.call(
+            timerState,
+            "elapsed"
+        )
+    ) {
+
+        timerState.elapsed = 0;
+
+    }
+
+
+    /*
+     * Some implementations use paused.
+     */
+    if (
+        Object.prototype.hasOwnProperty.call(
+            timerState,
+            "paused"
+        )
+    ) {
+
+        timerState.paused = false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   SAVE RESET STATE
+   ========================================================= */
+
+function saveResetTimerState() {
+
+    /*
+     * saveTimer() is the project's normal persistence
+     * function.
+     */
+    if (
+        typeof saveTimer === "function"
+    ) {
+
+        try {
+
+            saveTimer();
+
+            console.log(
+                "RakkeZ: Timer reset state saved."
+            );
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                "RakkeZ: saveTimer() failed:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Fallback:
+     * If saveTimer() is unavailable, try the known
+     * timer storage key.
+     */
+    try {
+
+        localStorage.setItem(
+            "rakkez_timer_state",
+            JSON.stringify(timerState)
+        );
+
+        console.log(
+            "RakkeZ: Timer state saved using fallback storage."
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "RakkeZ: Could not save timer state:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   UPDATE RESET UI
+   ========================================================= */
+
+function updateResetTimerUI() {
+
+    if (
+        typeof updateTimerUI === "function"
+    ) {
+
+        try {
+
+            updateTimerUI();
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ: updateTimerUI() failed after reset:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Optional tab title update.
+     */
+    if (
+        typeof updateTabTitle === "function"
+    ) {
+
+        try {
+
+            updateTabTitle(
+                timerState.remaining,
+                false
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "RakkeZ: updateTabTitle() failed after reset:",
+                error
+            );
+
+        }
+
+    }
 
 }
 
@@ -6047,107 +6460,83 @@ function resetCurrentSegment() {
 
 
     /*
-     * Stop the running timer.
+     * Stop ONLY the interval.
      *
-     * stopTimerCompletely() is intentionally used
-     * only to stop the interval.
+     * We intentionally do NOT call stopTimerCompletely()
+     * because that function may modify timer state.
      */
-    try {
-
-        stopTimerCompletely();
-
-    } catch (error) {
-
-        console.warn(
-            "RakkeZ: Could not stop timer during reset:",
-            error
-        );
-
-    }
+    stopResetTimerInterval();
 
 
     /*
      * IMPORTANT:
      *
-     * Do NOT change:
-     * - timerState.mode
+     * Keep the current mode.
+     *
+     * Focus stays Focus.
+     * Short stays Short.
+     * Long stays Long.
+     *
+     * Also keep:
      * - completedFocusInCycle
      * - stats
      * - Pomodoro count
+     * - streak
+     * - history
      */
-
-
     const minutes =
         getCurrentSegmentMinutes();
 
 
-    const seconds =
-        Math.max(
-            1,
-            Math.floor(
-                minutes * 60
-            )
+    /*
+     * Rebuild current timer.
+     */
+    const success =
+        setResetTimerMinutes(
+            minutes
         );
 
 
-    timerState.total =
-        seconds;
+    if (!success) {
 
-
-    timerState.remaining =
-        seconds;
-
-
-    /*
-     * The timer has not started yet.
-     */
-    timerState.startedAt =
-        null;
-
-
-    timerState.timestamp =
-        Date.now();
-
-
-    timerState.running =
-        false;
-
-
-    timerState.interval =
-        null;
-
-
-    /*
-     * Save ONLY the timer state.
-     * No stats are touched.
-     */
-    saveTimer();
-
-
-    /*
-     * Refresh timer UI.
-     */
-    try {
-
-        updateTimerUI();
-
-    } catch (error) {
-
-        console.warn(
-            "RakkeZ: Failed to update timer UI after current reset:",
-            error
+        console.error(
+            "RakkeZ: Current segment reset failed."
         );
+
+        return;
 
     }
 
 
+    /*
+     * Save ONLY timer state.
+     */
+    saveResetTimerState();
+
+
+    /*
+     * Update UI.
+     */
+    updateResetTimerUI();
+
+
+    /*
+     * Close reset popup.
+     */
     closeResetConfirmation();
+
+
+    console.log(
+        "RakkeZ: Current segment reset successfully."
+    );
 
 }
 
 
 /* =========================================================
    RESET FULL SESSION
+   ---------------------------------------------------------
+   THIS IS THE IMPORTANT FIX.
    ========================================================= */
 
 function resetFullSession() {
@@ -6158,112 +6547,124 @@ function resetFullSession() {
 
 
     /*
-     * Stop timer first.
+     * -------------------------------------------------------
+     * STEP 1
+     * Stop the timer interval.
+     * -------------------------------------------------------
      */
-    try {
-
-        stopTimerCompletely();
-
-    } catch (error) {
-
-        console.warn(
-            "RakkeZ: Could not stop timer during full reset:",
-            error
-        );
-
-    }
+    stopResetTimerInterval();
 
 
     /*
+     * -------------------------------------------------------
+     * STEP 2
      * Reset ONLY the current Pomodoro cycle.
      *
-     * This does NOT touch stats.
+     * This does NOT reset lifetime statistics.
+     * This does NOT remove completed Pomodoros.
+     * This does NOT modify today's statistics.
+     * This does NOT modify streak.
+     * -------------------------------------------------------
      */
-    completedFocusInCycle = 0;
+    if (
+        typeof completedFocusInCycle !== "undefined"
+    ) {
 
+        completedFocusInCycle = 0;
 
-    /*
-     * Always return to Focus.
-     */
-    timerState.mode =
-        "focus";
-
-
-    const focusMinutes =
-        Number(
-            settings.focus
-        );
-
-
-    const safeFocus =
-        Number.isFinite(
-            focusMinutes
-        ) &&
-        focusMinutes > 0
-
-            ? focusMinutes
-            : Number(
-                DEFAULT_SETTINGS.focus
-            );
-
-
-    const seconds =
-        Math.max(
-            1,
-            Math.floor(
-                safeFocus * 60
-            )
-        );
-
-
-    timerState.total =
-        seconds;
-
-
-    timerState.remaining =
-        seconds;
-
-
-    timerState.startedAt =
-        null;
-
-
-    timerState.timestamp =
-        Date.now();
-
-
-    timerState.running =
-        false;
-
-
-    timerState.interval =
-        null;
-
-
-    /*
-     * Save timer only.
-     */
-    saveTimer();
-
-
-    /*
-     * Update UI.
-     */
-    try {
-
-        updateTimerUI();
-
-    } catch (error) {
-
-        console.warn(
-            "RakkeZ: Failed to update timer UI after full reset:",
-            error
+        console.log(
+            "RakkeZ: completedFocusInCycle reset to 0."
         );
 
     }
 
 
+    /*
+     * -------------------------------------------------------
+     * STEP 3
+     * Return to Focus.
+     * -------------------------------------------------------
+     */
+    if (
+        typeof timerState === "undefined" ||
+        !timerState
+    ) {
+
+        console.error(
+            "RakkeZ: timerState is not available."
+        );
+
+        return;
+
+    }
+
+
+    timerState.mode = "focus";
+
+
+    /*
+     * -------------------------------------------------------
+     * STEP 4
+     * Get Focus duration.
+     * -------------------------------------------------------
+     */
+    const focusMinutes =
+        getSafeFocusMinutes();
+
+
+    /*
+     * -------------------------------------------------------
+     * STEP 5
+     * Create a completely fresh Focus timer.
+     * -------------------------------------------------------
+     */
+    const success =
+        setResetTimerMinutes(
+            focusMinutes
+        );
+
+
+    if (!success) {
+
+        console.error(
+            "RakkeZ: Full session reset failed."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * -------------------------------------------------------
+     * STEP 6
+     * Save ONLY timer state.
+     * -------------------------------------------------------
+     */
+    saveResetTimerState();
+
+
+    /*
+     * -------------------------------------------------------
+     * STEP 7
+     * Update UI.
+     * -------------------------------------------------------
+     */
+    updateResetTimerUI();
+
+
+    /*
+     * -------------------------------------------------------
+     * STEP 8
+     * Close popup.
+     * -------------------------------------------------------
+     */
     closeResetConfirmation();
+
+
+    console.log(
+        "RakkeZ: Full session reset successfully."
+    );
 
 }
 
@@ -6294,7 +6695,7 @@ function openResetConfirmation() {
 
 
     /*
-     * First try an existing overlay.
+     * First try existing overlay.
      */
     let overlay =
         getResetOverlay();
@@ -6302,7 +6703,7 @@ function openResetConfirmation() {
 
     /*
      * If no overlay exists,
-     * create the fallback automatically.
+     * create it automatically.
      */
     if (!overlay) {
 
@@ -6324,11 +6725,7 @@ function openResetConfirmation() {
 
 
     /*
-     * Make absolutely sure it is visible.
-     *
-     * This fixes cases where CSS has:
-     * display:none
-     * and the .show class only changes opacity.
+     * Make visible.
      */
     overlay.classList.add(
         "show"
@@ -6353,7 +6750,7 @@ function openResetConfirmation() {
 
 
     /*
-     * Make sure reset events are connected.
+     * Connect events.
      */
     initializeResetModalEvents(
         overlay
@@ -6370,6 +6767,7 @@ function closeResetConfirmation() {
 
     const overlays = [];
 
+
     const possibleIds = [
         "resetOverlay",
         "resetConfirmOverlay",
@@ -6384,16 +6782,12 @@ function closeResetConfirmation() {
         id => {
 
             const overlay =
-                document.getElementById(
-                    id
-                );
+                document.getElementById(id);
 
 
             if (
                 overlay &&
-                !overlays.includes(
-                    overlay
-                )
+                !overlays.includes(overlay)
             ) {
 
                 overlays.push(
@@ -6420,11 +6814,6 @@ function closeResetConfirmation() {
             );
 
 
-            /*
-             * Explicitly hide it.
-             *
-             * This avoids old CSS interfering.
-             */
             overlay.style.display =
                 "none";
 
@@ -6444,7 +6833,7 @@ function closeResetConfirmation() {
 
             syncBodyScrollLock();
 
-        } catch {
+        } catch (error) {
 
             document.body.style.overflow =
                 "";
@@ -6463,8 +6852,6 @@ function closeResetConfirmation() {
 
 /* =========================================================
    CREATE RESET CONFIRMATION
-   ---------------------------------------------------------
-   Returns the created/existing overlay.
    ========================================================= */
 
 function createResetConfirmation() {
@@ -6636,8 +7023,7 @@ function createResetConfirmation() {
 
 
     /*
-     * Add fallback CSS only if
-     * the project doesn't already have it.
+     * Add fallback CSS.
      */
     if (
         !document.getElementById(
@@ -7032,9 +7418,6 @@ function createResetConfirmation() {
 
 /* =========================================================
    RESET MODAL EVENTS
-   ---------------------------------------------------------
-   Uses event delegation so it works even when
-   buttons are generated dynamically.
    ========================================================= */
 
 function initializeResetModalEvents(
@@ -7047,8 +7430,7 @@ function initializeResetModalEvents(
 
 
     /*
-     * Prevent binding the same overlay
-     * multiple times.
+     * Prevent duplicate event listeners.
      */
     if (
         overlay.dataset.rakkezResetEvents ===
@@ -7076,8 +7458,7 @@ function initializeResetModalEvents(
 
 
             /*
-             * Click outside the card
-             * closes the modal.
+             * Click outside card closes modal.
              */
             if (
                 target === overlay
@@ -7154,8 +7535,7 @@ function initializeResetModalEvents(
 
 
             if (
-                action ===
-                    "current" ||
+                action === "current" ||
 
                 button.id ===
                     "rakkezResetCurrent"
@@ -7176,8 +7556,7 @@ function initializeResetModalEvents(
              * FULL SESSION
              */
             if (
-                action ===
-                    "full" ||
+                action === "full" ||
 
                 button.id ===
                     "rakkezResetFull"
@@ -7201,8 +7580,6 @@ function initializeResetModalEvents(
 
 /* =========================================================
    INITIALIZE RESET BUTTONS
-   ---------------------------------------------------------
-   Supports existing HTML + generated modal.
    ========================================================= */
 
 function initializeResetSystem() {
@@ -7213,7 +7590,9 @@ function initializeResetSystem() {
 
 
     /*
-     * Main Reset button.
+     * -------------------------------------------------------
+     * MAIN RESET BUTTON
+     * -------------------------------------------------------
      */
     const resetButton =
         document.getElementById(
@@ -7224,13 +7603,9 @@ function initializeResetSystem() {
     if (resetButton) {
 
         /*
-         * Remove possible previous
-         * onclick handler from this system.
+         * Don't use onclick.
+         * Use our own listener once.
          */
-        resetButton.onclick =
-            null;
-
-
         if (
             resetButton.dataset
                 .rakkezResetMainBound !==
@@ -7261,7 +7636,9 @@ function initializeResetSystem() {
 
 
     /*
-     * Existing Current Segment buttons.
+     * -------------------------------------------------------
+     * EXISTING CURRENT SEGMENT BUTTONS
+     * -------------------------------------------------------
      */
     const currentIds = [
 
@@ -7322,7 +7699,9 @@ function initializeResetSystem() {
 
 
     /*
-     * Existing Full Session buttons.
+     * -------------------------------------------------------
+     * EXISTING FULL SESSION BUTTONS
+     * -------------------------------------------------------
      */
     const fullIds = [
 
@@ -7383,7 +7762,9 @@ function initializeResetSystem() {
 
 
     /*
-     * data-reset-action buttons
+     * -------------------------------------------------------
+     * DATA RESET ACTION BUTTONS
+     * -------------------------------------------------------
      */
     document
         .querySelectorAll(
@@ -7391,6 +7772,21 @@ function initializeResetSystem() {
         )
         .forEach(
             button => {
+
+                /*
+                 * Ignore our generated modal here because
+                 * initializeResetModalEvents handles it.
+                 */
+                if (
+                    button.closest(
+                        "#rakkezResetOverlay"
+                    )
+                ) {
+
+                    return;
+
+                }
+
 
                 if (
                     button.dataset
@@ -7449,7 +7845,9 @@ function initializeResetSystem() {
 
 
     /*
-     * Existing close buttons.
+     * -------------------------------------------------------
+     * EXISTING CLOSE BUTTONS
+     * -------------------------------------------------------
      */
     const closeIds = [
 
@@ -7510,7 +7908,9 @@ function initializeResetSystem() {
 
 
     /*
-     * Existing reset overlays.
+     * -------------------------------------------------------
+     * EXISTING RESET OVERLAYS
+     * -------------------------------------------------------
      */
     const overlayIds = [
 
@@ -7575,7 +7975,7 @@ window.RakkeZReset = {
 
 
 /* =========================================================
-   KEYBOARD SHORTCUTS
+   KEYBOARD SHORTCUT
    ---------------------------------------------------------
    R = Open Reset Options
    ========================================================= */
@@ -7585,8 +7985,7 @@ document.addEventListener(
     event => {
 
         /*
-         * Don't trigger shortcuts
-         * while typing.
+         * Don't trigger shortcuts while typing.
          */
         if (
             event.target &&
@@ -7647,9 +8046,7 @@ document.addEventListener(
 
 
         if (!overlay) {
-
             return;
-
         }
 
 
@@ -7676,20 +8073,155 @@ document.addEventListener(
 
 /* =========================================================
    INITIALIZE RESET SYSTEM
+   ---------------------------------------------------------
+   DOMContentLoaded is important.
+   This guarantees resetBtn exists before we attach
+   the listener if this JS is loaded in <head>.
    ========================================================= */
 
-try {
+function bootRakkeZResetSystem() {
 
-    initializeResetSystem();
+    try {
 
-} catch (error) {
+        initializeResetSystem();
 
-    console.warn(
-        "RakkeZ: Reset system initialization failed:",
-        error
-    );
+    } catch (error) {
+
+        console.warn(
+            "RakkeZ: Reset system initialization failed:",
+            error
+        );
+
+    }
 
 }
+
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        bootRakkeZResetSystem,
+        {
+            once: true
+        }
+    );
+
+} else {
+
+    bootRakkeZResetSystem();
+
+}
+
+
+/* =========================================================
+   MEDIA TABS
+   ========================================================= */
+
+document
+    .querySelectorAll(
+        ".media-tab"
+    )
+    .forEach(
+        tab => {
+
+            tab.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".media-tab"
+                        )
+                        .forEach(
+                            t =>
+                                t.classList
+                                    .remove(
+                                        "active"
+                                    )
+                        );
+
+
+                    document
+                        .querySelectorAll(
+                            ".media-content"
+                        )
+                        .forEach(
+                            c =>
+                                c.classList
+                                    .remove(
+                                        "active"
+                                    )
+                        );
+
+
+                    tab.classList.add(
+                        "active"
+                    );
+
+
+                    /*
+                     * Keep compatibility with
+                     * the existing RakkeZ $ helper.
+                     */
+                    let content = null;
+
+
+                    if (
+                        typeof $ === "function"
+                    ) {
+
+                        try {
+
+                            content =
+                                $(
+                                    tab.dataset.media +
+                                    "Content"
+                                );
+
+                        } catch (error) {
+
+                            console.warn(
+                                "RakkeZ: Media tab lookup failed:",
+                                error
+                            );
+
+                        }
+
+                    }
+
+
+                    /*
+                     * Native DOM fallback.
+                     */
+                    if (!content) {
+
+                        content =
+                            document.getElementById(
+                                tab.dataset.media +
+                                "Content"
+                            );
+
+                    }
+
+
+                    if (content) {
+
+                        content.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
 
 
 /* =========================================================
