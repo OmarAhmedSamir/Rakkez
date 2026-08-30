@@ -5896,7 +5896,7 @@ if ($("focusExit")) {
 
     "use strict";
 
-    const RESET_OVERLAY_IDS = [
+    const OVERLAY_IDS = [
         "resetOverlay",
         "resetConfirmOverlay",
         "resetConfirmation",
@@ -5905,39 +5905,12 @@ if ($("focusExit")) {
         "rakkezResetOverlay"
     ];
 
-    const CURRENT_RESET_IDS = [
-        "resetCurrentSegment",
-        "resetCurrentBtn",
-        "resetSegment",
-        "resetSegmentBtn",
-        "resetCurrent",
-        "rakkezResetCurrent"
-    ];
-
-    const FULL_RESET_IDS = [
-        "resetFullSession",
-        "resetFullBtn",
-        "resetSession",
-        "resetSessionBtn",
-        "resetFull",
-        "rakkezResetFull"
-    ];
-
-    const CLOSE_RESET_IDS = [
-        "resetClose",
-        "closeReset",
-        "resetCancel",
-        "cancelReset",
-        "closeResetTimer",
-        "rakkezResetClose"
-    ];
-
     function getElement(id) {
         return document.getElementById(id);
     }
 
-    function getFirstElement(ids) {
-        for (const id of ids) {
+    function getOverlay() {
+        for (const id of OVERLAY_IDS) {
             const element = getElement(id);
 
             if (element) {
@@ -5948,9 +5921,8 @@ if ($("focusExit")) {
         return null;
     }
 
-
     /* =====================================================
-       STOP TIMER COMPLETELY
+       STOP TIMER
        ===================================================== */
 
     function stopTimerCompletely() {
@@ -5975,7 +5947,6 @@ if ($("focusExit")) {
             typeof timerState !== "undefined" &&
             timerState
         ) {
-
             if (timerState.interval !== null) {
                 clearInterval(timerState.interval);
                 timerState.interval = null;
@@ -5986,9 +5957,8 @@ if ($("focusExit")) {
         }
     }
 
-
     /* =====================================================
-       GET SAFE DURATION
+       SAFE SEGMENT DURATION
        ===================================================== */
 
     function getSegmentSeconds(mode) {
@@ -5996,48 +5966,23 @@ if ($("focusExit")) {
         let minutes;
 
         if (mode === "focus") {
-
-            minutes =
-                Number(
-                    settings &&
-                    settings.focus
-                );
+            minutes = Number(settings.focus);
 
         } else if (mode === "short") {
-
-            minutes =
-                Number(
-                    settings &&
-                    settings.shortBreak
-                );
+            minutes = Number(settings.shortBreak);
 
         } else if (mode === "long") {
-
-            minutes =
-                Number(
-                    settings &&
-                    settings.longBreak
-                );
+            minutes = Number(settings.longBreak);
 
         } else {
-
-            minutes =
-                Number(
-                    settings &&
-                    settings.focus
-                );
+            minutes = Number(settings.focus);
         }
 
         if (
             !Number.isFinite(minutes) ||
             minutes <= 0
         ) {
-
-            minutes =
-                Number(
-                    DEFAULT_SETTINGS.focus
-                );
-
+            minutes = Number(DEFAULT_SETTINGS.focus);
         }
 
         return Math.max(
@@ -6046,82 +5991,65 @@ if ($("focusExit")) {
         );
     }
 
-
     /* =====================================================
        RESET CURRENT SEGMENT
        ===================================================== */
 
     function resetCurrentSegment() {
 
-        console.log(
-            "RakkeZ: Reset Current Segment"
-        );
-
         if (
             typeof timerState === "undefined" ||
             !timerState
         ) {
-
             console.warn(
-                "RakkeZ: timerState is unavailable."
+                "RakkeZ: timerState unavailable."
             );
-
             return;
         }
 
-        stopTimerCompletely();
-
-        /*
-         * IMPORTANT:
-         * Do NOT change:
-         * - mode
-         * - completedFocusInCycle
-         * - stats
-         * - history
-         * - today's sessions
-         * - streak
-         */
+        console.log(
+            "RakkeZ: Reset Current Segment"
+        );
 
         const currentMode =
             timerState.mode === "focus" ||
             timerState.mode === "short" ||
             timerState.mode === "long"
-
                 ? timerState.mode
-
                 : "focus";
 
-        timerState.mode =
-            currentMode;
+        stopTimerCompletely();
 
-        const seconds =
-            getSegmentSeconds(
-                currentMode
-            );
+        /*
+         * IMPORTANT:
+         *
+         * Keep:
+         * - current mode
+         * - cycle
+         * - stats
+         * - history
+         * - streak
+         * - completed Pomodoros
+         */
+
+        timerState.mode = currentMode;
 
         timerState.total =
-            seconds;
+            getSegmentSeconds(currentMode);
 
         timerState.remaining =
-            seconds;
+            timerState.total;
 
-        timerState.running =
-            false;
-
-        timerState.startedAt =
-            null;
-
-        timerState.timestamp =
-            Date.now();
-
-        timerState.interval =
-            null;
+        timerState.running = false;
+        timerState.startedAt = null;
+        timerState.timestamp = Date.now();
+        timerState.interval = null;
 
         try {
             saveTimer();
         } catch (error) {
             console.warn(
-                "RakkeZ: Failed to save reset timer:",
+                "RakkeZ: saveTimer failed:",
                 error
             );
         }
@@ -6130,7 +6058,7 @@ if ($("focusExit")) {
             updateTimerUI();
         } catch (error) {
             console.warn(
-                "RakkeZ: Failed to update timer UI:",
+                "RakkeZ: updateTimerUI failed:",
                 error
             );
         }
@@ -6142,81 +6070,64 @@ if ($("focusExit")) {
         );
     }
 
-
     /* =====================================================
        RESET FULL SESSION
        ===================================================== */
 
     function resetFullSession() {
 
-        console.log(
-            "RakkeZ: Reset Full Session"
-        );
-
         if (
             typeof timerState === "undefined" ||
             !timerState
         ) {
-
             console.warn(
-                "RakkeZ: timerState is unavailable."
+                "RakkeZ: timerState unavailable."
             );
-
             return;
         }
+
+        console.log(
+            "RakkeZ: Reset Full Session"
+        );
 
         stopTimerCompletely();
 
         /*
-         * Reset ONLY the current Pomodoro cycle.
+         * Reset only the CURRENT Pomodoro cycle.
          *
-         * Do NOT delete:
+         * DO NOT reset:
          * - lifetime stats
-         * - today's stats
-         * - completed sessions
-         * - streak
+         * - daily stats
          * - focus history
+         * - streak
+         * - completed sessions
          */
 
         if (
             typeof completedFocusInCycle !==
             "undefined"
         ) {
-
             completedFocusInCycle = 0;
         }
 
-        timerState.mode =
-            "focus";
-
-        const seconds =
-            getSegmentSeconds(
-                "focus"
-            );
+        timerState.mode = "focus";
 
         timerState.total =
-            seconds;
+            getSegmentSeconds("focus");
 
         timerState.remaining =
-            seconds;
+            timerState.total;
 
-        timerState.running =
-            false;
-
-        timerState.startedAt =
-            null;
-
-        timerState.timestamp =
-            Date.now();
-
-        timerState.interval =
-            null;
+        timerState.running = false;
+        timerState.startedAt = null;
+        timerState.timestamp = Date.now();
+        timerState.interval = null;
 
         try {
             saveTimer();
         } catch (error) {
             console.warn(
-                "RakkeZ: Failed to save full session reset:",
+                "RakkeZ: saveTimer failed:",
                 error
             );
         }
@@ -6225,7 +6136,7 @@ if ($("focusExit")) {
             updateTimerUI();
         } catch (error) {
             console.warn(
-                "RakkeZ: Failed to update timer UI:",
+                "RakkeZ: updateTimerUI failed:",
                 error
             );
         }
@@ -6237,38 +6148,48 @@ if ($("focusExit")) {
         );
     }
 
-
     /* =====================================================
-       LEGACY COMPATIBILITY
+       CLOSE
        ===================================================== */
 
-    function resetTimer() {
-        resetFullSession();
+    function closeResetConfirmation() {
+
+        const overlay = getOverlay();
+
+        if (!overlay) {
+            return;
+        }
+
+        overlay.classList.remove("show");
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        if (
+            typeof syncBodyScrollLock ===
+            "function"
+        ) {
+            try {
+                syncBodyScrollLock();
+                return;
+            } catch {}
+        }
+
+        document.body.style.overflow = "";
     }
 
-
     /* =====================================================
-       CREATE FALLBACK OVERLAY
+       CREATE FALLBACK POPUP
        ===================================================== */
 
     function createResetConfirmation() {
 
         let overlay =
-            getElement(
-                "rakkezResetOverlay"
-            );
+            getElement("rakkezResetOverlay");
 
         if (overlay) {
-
-            overlay.classList.add("show");
-            overlay.setAttribute(
-                "aria-hidden",
-                "false"
-            );
-
-            document.body.style.overflow =
-                "hidden";
-
             return overlay;
         }
 
@@ -6279,15 +6200,14 @@ if ($("focusExit")) {
             "rakkezResetOverlay";
 
         overlay.className =
-            "rakkez-reset-overlay show";
+            "rakkez-reset-overlay";
 
         overlay.setAttribute(
             "aria-hidden",
-            "false"
+            "true"
         );
 
         overlay.innerHTML = `
-
             <div
                 class="rakkez-reset-card"
                 role="dialog"
@@ -6322,13 +6242,11 @@ if ($("focusExit")) {
                     class="rakkez-reset-option"
                     type="button"
                 >
-
                     <span class="reset-option-icon">
                         ↻
                     </span>
 
                     <span class="reset-option-text">
-
                         <strong>
                             Reset Current Segment
                         </strong>
@@ -6336,9 +6254,7 @@ if ($("focusExit")) {
                         <small>
                             Restart the current Focus or Break timer.
                         </small>
-
                     </span>
-
                 </button>
 
                 <button
@@ -6346,13 +6262,11 @@ if ($("focusExit")) {
                     class="rakkez-reset-option"
                     type="button"
                 >
-
                     <span class="reset-option-icon">
                         ⟳
                     </span>
 
                     <span class="reset-option-text">
-
                         <strong>
                             Reset Full Session
                         </strong>
@@ -6360,220 +6274,18 @@ if ($("focusExit")) {
                         <small>
                             Return to Focus and reset the current session cycle.
                         </small>
-
                     </span>
-
                 </button>
 
             </div>
         `;
 
-        document.body.appendChild(
-            overlay
-        );
+        document.body.appendChild(overlay);
 
-        addFallbackResetStyles();
-
-        bindFallbackOverlayEvents(
-            overlay
-        );
-
-        document.body.style.overflow =
-            "hidden";
+        bindFallbackEvents(overlay);
 
         return overlay;
     }
-
-
-    /* =====================================================
-       FALLBACK STYLES
-       ===================================================== */
-
-    function addFallbackResetStyles() {
-
-        if (
-            getElement(
-                "rakkezResetStyles"
-            )
-        ) {
-            return;
-        }
-
-        const style =
-            document.createElement("style");
-
-        style.id =
-            "rakkezResetStyles";
-
-        style.textContent = `
-
-            #rakkezResetOverlay {
-                position: fixed;
-                inset: 0;
-                z-index: 100001;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 20px;
-                background: rgba(0,0,0,.68);
-                backdrop-filter: blur(18px);
-                -webkit-backdrop-filter: blur(18px);
-                opacity: 0;
-                visibility: hidden;
-                transition:
-                    opacity .22s ease,
-                    visibility .22s ease;
-            }
-
-            #rakkezResetOverlay.show {
-                opacity: 1;
-                visibility: visible;
-            }
-
-            .rakkez-reset-card {
-                position: relative;
-                width: min(420px, calc(100vw - 32px));
-                padding: 30px;
-                border-radius: 26px;
-                background:
-                    linear-gradient(
-                        145deg,
-                        rgba(28,28,32,.98),
-                        rgba(14,14,17,.98)
-                    );
-                border:
-                    1px solid rgba(255,255,255,.10);
-                box-shadow:
-                    0 30px 90px rgba(0,0,0,.65);
-                transform:
-                    translateY(10px)
-                    scale(.98);
-                transition:
-                    transform .22s ease;
-            }
-
-            #rakkezResetOverlay.show
-            .rakkez-reset-card {
-                transform:
-                    translateY(0)
-                    scale(1);
-            }
-
-            .rakkez-reset-close {
-                position: absolute;
-                top: 14px;
-                right: 14px;
-                width: 34px;
-                height: 34px;
-                border: 0;
-                border-radius: 50%;
-                background: rgba(255,255,255,.06);
-                color: rgba(255,255,255,.72);
-                font-size: 22px;
-                cursor: pointer;
-            }
-
-            .rakkez-reset-icon {
-                width: 52px;
-                height: 52px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 16px;
-                border-radius: 16px;
-                background: rgba(255,255,255,.07);
-                border: 1px solid rgba(255,255,255,.08);
-                color: white;
-                font-size: 27px;
-            }
-
-            .rakkez-reset-card h2 {
-                margin: 0 0 8px;
-                color: white;
-                font-family:
-                    "Space Grotesk",
-                    sans-serif;
-                font-size: 25px;
-                font-weight: 700;
-            }
-
-            .rakkez-reset-card > p {
-                margin: 0 0 22px;
-                color: rgba(255,255,255,.52);
-                font-family:
-                    "DM Sans",
-                    sans-serif;
-                font-size: 14px;
-                line-height: 1.55;
-            }
-
-            .rakkez-reset-option {
-                width: 100%;
-                display: flex;
-                align-items: center;
-                gap: 14px;
-                margin-top: 10px;
-                padding: 15px;
-                border-radius: 16px;
-                border:
-                    1px solid rgba(255,255,255,.08);
-                background:
-                    rgba(255,255,255,.045);
-                color: white;
-                text-align: left;
-                cursor: pointer;
-            }
-
-            .rakkez-reset-option:hover {
-                background:
-                    rgba(255,255,255,.075);
-                border-color:
-                    rgba(255,255,255,.15);
-            }
-
-            .reset-option-icon {
-                width: 42px;
-                height: 42px;
-                min-width: 42px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 13px;
-                background:
-                    rgba(255,255,255,.07);
-                font-size: 21px;
-            }
-
-            .reset-option-text {
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .reset-option-text strong {
-                font-family:
-                    "DM Sans",
-                    sans-serif;
-                font-size: 14px;
-                font-weight: 700;
-            }
-
-            .reset-option-text small {
-                color:
-                    rgba(255,255,255,.46);
-                font-family:
-                    "DM Sans",
-                    sans-serif;
-                font-size: 12px;
-                line-height: 1.4;
-            }
-        `;
-
-        document.head.appendChild(
-            style
-        );
-    }
-
 
     /* =====================================================
        OPEN
@@ -6581,100 +6293,142 @@ if ($("focusExit")) {
 
     function openResetConfirmation() {
 
-        console.log(
-            "RakkeZ: Opening reset confirmation"
-        );
+        let overlay = getOverlay();
 
-        const existing =
-            getFirstElement(
-                RESET_OVERLAY_IDS
-            );
+        if (!overlay) {
+            overlay =
+                createResetConfirmation();
+        }
 
-        if (existing) {
-
-            existing.classList.add(
-                "show"
-            );
-
-            existing.setAttribute(
-                "aria-hidden",
-                "false"
-            );
-
-            document.body.style.overflow =
-                "hidden";
-
+        if (!overlay) {
             return;
         }
 
-        createResetConfirmation();
-    }
+        overlay.classList.add("show");
 
-
-    /* =====================================================
-       CLOSE
-       ===================================================== */
-
-    function closeResetConfirmation() {
-
-        let found = false;
-
-        RESET_OVERLAY_IDS.forEach(
-            id => {
-
-                const overlay =
-                    getElement(id);
-
-                if (!overlay) {
-                    return;
-                }
-
-                overlay.classList.remove(
-                    "show"
-                );
-
-                overlay.setAttribute(
-                    "aria-hidden",
-                    "true"
-                );
-
-                found = true;
-            }
+        overlay.setAttribute(
+            "aria-hidden",
+            "false"
         );
 
-        if (
-            typeof syncBodyScrollLock ===
-            "function"
-        ) {
-
-            try {
-                syncBodyScrollLock();
-            } catch {
-                document.body.style.overflow =
-                    "";
-            }
-
-        } else if (found) {
-
-            document.body.style.overflow =
-                "";
-        }
+        document.body.style.overflow =
+            "hidden";
     }
 
-
     /* =====================================================
-       BIND EXISTING BUTTONS
+       FALLBACK EVENTS
        ===================================================== */
 
-    function bindButtonList(
-        ids,
-        handler
-    ) {
+    function bindFallbackEvents(overlay) {
 
-        ids.forEach(id => {
+        const close =
+            getElement("rakkezResetClose");
 
-            const button =
-                getElement(id);
+        const current =
+            getElement("rakkezResetCurrent");
+
+        const full =
+            getElement("rakkezResetFull");
+
+        if (close) {
+            close.onclick = function(event) {
+                event.preventDefault();
+                closeResetConfirmation();
+            };
+        }
+
+        if (current) {
+            current.onclick = function(event) {
+                event.preventDefault();
+                resetCurrentSegment();
+            };
+        }
+
+        if (full) {
+            full.onclick = function(event) {
+                event.preventDefault();
+                resetFullSession();
+            };
+        }
+
+        overlay.onclick = function(event) {
+
+            if (event.target === overlay) {
+                closeResetConfirmation();
+            }
+
+        };
+    }
+
+    /* =====================================================
+       BIND MAIN RESET BUTTON
+       ===================================================== */
+
+    function bindMainResetButton() {
+
+        const button =
+            getElement("resetBtn");
+
+        if (!button) {
+            return;
+        }
+
+        if (
+            button.dataset
+                .rakkezResetBound === "true"
+        ) {
+            return;
+        }
+
+        button.dataset
+            .rakkezResetBound =
+            "true";
+
+        button.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                openResetConfirmation();
+
+            }
+        );
+    }
+
+    /* =====================================================
+       BIND EXISTING RESET BUTTONS
+       ===================================================== */
+
+    function bindExistingButtons() {
+
+        const currentIds = [
+            "resetCurrentSegment",
+            "resetCurrentBtn",
+            "resetSegment",
+            "resetSegmentBtn",
+            "resetCurrent"
+        ];
+
+        const fullIds = [
+            "resetFullSession",
+            "resetFullBtn",
+            "resetSession",
+            "resetSessionBtn",
+            "resetFull"
+        ];
+
+        const closeIds = [
+            "resetClose",
+            "closeReset",
+            "resetCancel",
+            "cancelReset",
+            "closeResetTimer"
+        ];
+
+        currentIds.forEach(function(id) {
+
+            const button = getElement(id);
 
             if (!button) {
                 return;
@@ -6682,8 +6436,7 @@ if ($("focusExit")) {
 
             if (
                 button.dataset
-                    .rakkezResetBound ===
-                "true"
+                    .rakkezResetBound === "true"
             ) {
                 return;
             }
@@ -6694,144 +6447,78 @@ if ($("focusExit")) {
 
             button.addEventListener(
                 "click",
-                event => {
+                function(event) {
 
                     event.preventDefault();
-                    event.stopPropagation();
 
-                    handler();
+                    resetCurrentSegment();
+
+                }
+            );
+        });
+
+        fullIds.forEach(function(id) {
+
+            const button = getElement(id);
+
+            if (!button) {
+                return;
+            }
+
+            if (
+                button.dataset
+                    .rakkezResetBound === "true"
+            ) {
+                return;
+            }
+
+            button.dataset
+                .rakkezResetBound =
+                "true";
+
+            button.addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    resetFullSession();
+
+                }
+            );
+        });
+
+        closeIds.forEach(function(id) {
+
+            const button = getElement(id);
+
+            if (!button) {
+                return;
+            }
+
+            if (
+                button.dataset
+                    .rakkezResetBound === "true"
+            ) {
+                return;
+            }
+
+            button.dataset
+                .rakkezResetBound =
+                "true";
+
+            button.addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    closeResetConfirmation();
+
                 }
             );
         });
     }
-
-
-    /* =====================================================
-       EXISTING OVERLAYS
-       ===================================================== */
-
-    function bindExistingOverlays() {
-
-        RESET_OVERLAY_IDS.forEach(
-            id => {
-
-                const overlay =
-                    getElement(id);
-
-                if (!overlay) {
-                    return;
-                }
-
-                if (
-                    overlay.dataset
-                        .rakkezResetOverlayBound ===
-                    "true"
-                ) {
-                    return;
-                }
-
-                overlay.dataset
-                    .rakkezResetOverlayBound =
-                    "true";
-
-                overlay.addEventListener(
-                    "click",
-                    event => {
-
-                        if (
-                            event.target ===
-                            overlay
-                        ) {
-
-                            closeResetConfirmation();
-                        }
-                    }
-                );
-            }
-        );
-    }
-
-
-    /* =====================================================
-       FALLBACK EVENTS
-       ===================================================== */
-
-    function bindFallbackOverlayEvents(
-        overlay
-    ) {
-
-        const close =
-            getElement(
-                "rakkezResetClose"
-            );
-
-        const current =
-            getElement(
-                "rakkezResetCurrent"
-            );
-
-        const full =
-            getElement(
-                "rakkezResetFull"
-            );
-
-        if (close) {
-            close.onclick =
-                resetCloseHandler;
-        }
-
-        if (current) {
-            current.onclick =
-                resetCurrentHandler;
-        }
-
-        if (full) {
-            full.onclick =
-                resetFullHandler;
-        }
-
-        overlay.addEventListener(
-            "click",
-            event => {
-
-                if (
-                    event.target ===
-                    overlay
-                ) {
-
-                    closeResetConfirmation();
-                }
-            }
-        );
-    }
-
-
-    function resetCloseHandler(
-        event
-    ) {
-
-        event.preventDefault();
-        closeResetConfirmation();
-    }
-
-
-    function resetCurrentHandler(
-        event
-    ) {
-
-        event.preventDefault();
-        resetCurrentSegment();
-    }
-
-
-    function resetFullHandler(
-        event
-    ) {
-
-        event.preventDefault();
-        resetFullSession();
-    }
-
 
     /* =====================================================
        DATA ATTRIBUTES
@@ -6843,7 +6530,7 @@ if ($("focusExit")) {
             .querySelectorAll(
                 "[data-reset-action]"
             )
-            .forEach(button => {
+            .forEach(function(button) {
 
                 if (
                     button.dataset
@@ -6859,41 +6546,35 @@ if ($("focusExit")) {
 
                 button.addEventListener(
                     "click",
-                    event => {
+                    function(event) {
 
                         event.preventDefault();
-                        event.stopPropagation();
 
                         const action =
                             button.dataset
                                 .resetAction;
 
                         if (
-                            action ===
-                            "current"
+                            action === "open"
                         ) {
+                            openResetConfirmation();
 
+                        } else if (
+                            action === "current"
+                        ) {
                             resetCurrentSegment();
 
                         } else if (
-                            action ===
-                            "full"
+                            action === "full"
                         ) {
-
                             resetFullSession();
 
-                        } else if (
-                            action ===
-                            "open"
-                        ) {
-
-                            openResetConfirmation();
                         }
+
                     }
                 );
             });
     }
-
 
     /* =====================================================
        INITIALIZE
@@ -6901,241 +6582,30 @@ if ($("focusExit")) {
 
     function initialize() {
 
-        bindButtonList(
-            CURRENT_RESET_IDS,
-            resetCurrentSegment
-        );
+        bindMainResetButton();
 
-        bindButtonList(
-            FULL_RESET_IDS,
-            resetFullSession
-        );
+        bindExistingButtons();
 
-        bindButtonList(
-            CLOSE_RESET_IDS,
-            closeResetConfirmation
-        );
-
-        bindExistingOverlays();
         bindDataActions();
 
-        const resetButton =
-            getElement(
-                "resetBtn"
-            );
+        const existing =
+            getOverlay();
 
-        if (
-            resetButton &&
-            resetButton.dataset
-                .rakkezMainResetBound !==
-            "true"
-        ) {
+        if (existing) {
 
-            resetButton.dataset
-                .rakkezMainResetBound =
-                "true";
-
-            resetButton.addEventListener(
-                "click",
-                event => {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    openResetConfirmation();
-                }
-            );
-        }
-    }
-
-
-    /* =====================================================
-       DELEGATED CLICK SAFETY
-       -----------------------------------------------------
-       This solves the original timing problem:
-       buttons are detected even if they appear later.
-       ===================================================== */
-
-    function initializeDelegatedEvents() {
-
-        if (
-            document.documentElement.dataset
-                .rakkezResetDelegated ===
-            "true"
-        ) {
-            return;
-        }
-
-        document.documentElement.dataset
-            .rakkezResetDelegated =
-            "true";
-
-        document.addEventListener(
-            "click",
-            event => {
-
-                const target =
-                    event.target;
-
-                if (
-                    !target ||
-                    typeof target.closest !==
-                    "function"
-                ) {
-                    return;
-                }
-
-                const resetButton =
-                    target.closest(
-                        "#resetBtn"
-                    );
-
-                if (resetButton) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    openResetConfirmation();
-
-                    return;
-                }
-
-                const currentButton =
-                    target.closest(
-                        CURRENT_RESET_IDS
-                            .map(
-                                id =>
-                                    "#" + id
-                            )
-                            .join(",")
-                    );
-
-                if (currentButton) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    resetCurrentSegment();
-
-                    return;
-                }
-
-                const fullButton =
-                    target.closest(
-                        FULL_RESET_IDS
-                            .map(
-                                id =>
-                                    "#" + id
-                            )
-                            .join(",")
-                    );
-
-                if (fullButton) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    resetFullSession();
-
-                    return;
-                }
-
-                const closeButton =
-                    target.closest(
-                        CLOSE_RESET_IDS
-                            .map(
-                                id =>
-                                    "#" + id
-                            )
-                            .join(",")
-                    );
-
-                if (closeButton) {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    closeResetConfirmation();
-                }
-            },
-            true
-        );
-    }
-
-
-    /* =====================================================
-       KEYBOARD
-       ===================================================== */
-
-    function initializeKeyboard() {
-
-        if (
-            document.documentElement.dataset
-                .rakkezResetKeyboard ===
-            "true"
-        ) {
-            return;
-        }
-
-        document.documentElement.dataset
-            .rakkezResetKeyboard =
-            "true";
-
-        document.addEventListener(
-            "keydown",
-            event => {
-
-                const target =
-                    event.target;
-
-                if (
-                    target &&
-                    (
-                        target.tagName ===
-                        "INPUT" ||
-                        target.tagName ===
-                        "TEXTAREA" ||
-                        target.isContentEditable
-                    )
-                ) {
-                    return;
-                }
-
-                if (
-                    event.key.toLowerCase() ===
-                    "r"
-                ) {
-
-                    event.preventDefault();
-
-                    openResetConfirmation();
-                }
-
-                if (
-                    event.key ===
-                    "Escape"
-                ) {
-
-                    const openOverlay =
-                        getFirstElement(
-                            RESET_OVERLAY_IDS
-                        );
+            existing.onclick =
+                function(event) {
 
                     if (
-                        openOverlay &&
-                        openOverlay.classList
-                            .contains("show")
+                        event.target ===
+                        existing
                     ) {
-
-                        event.preventDefault();
-
                         closeResetConfirmation();
                     }
-                }
-            }
-        );
-    }
 
+                };
+        }
+    }
 
     /* =====================================================
        PUBLIC API
@@ -7156,22 +6626,18 @@ if ($("focusExit")) {
             closeResetConfirmation,
 
         resetTimer:
-            resetTimer,
+            resetFullSession,
 
         initialize:
             initialize
     };
 
-
     /* =====================================================
-       START SAFELY
+       START
        ===================================================== */
 
     function start() {
-
         initialize();
-        initializeDelegatedEvents();
-        initializeKeyboard();
     }
 
     if (
@@ -7190,6 +6656,7 @@ if ($("focusExit")) {
     } else {
 
         start();
+
     }
 
 })();
