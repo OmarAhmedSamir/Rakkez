@@ -7021,12 +7021,170 @@ function resetFullSession() {
 /* =========================================================
    OLD COMPATIBILITY FUNCTION
    ========================================================= */
-
 function resetTimer() {
 
-    resetFullSession();
-}
+    /* =====================================================
+       STOP TIMER
+       ===================================================== */
 
+    timerState.running = false;
+
+    if (timerState.interval !== null) {
+        clearInterval(timerState.interval);
+    }
+
+    timerState.interval = null;
+
+
+    /* =====================================================
+       RESET ALL STATS
+       ===================================================== */
+
+    stats = {
+
+        totalFocusSeconds: 0,
+
+        sessions: 0,
+
+        streak: 0,
+
+        lastFocusDate: null,
+
+        dailyFocus: {},
+
+        dailySessions: {},
+
+        focusPeriods: []
+
+    };
+
+
+    /* =====================================================
+       RESET CYCLE
+       ===================================================== */
+
+    completedFocusInCycle = 0;
+
+
+    /* =====================================================
+       RESET CURRENT TASK FOCUS
+       ===================================================== */
+
+    tasks.forEach(task => {
+
+        if (typeof task.focusMinutes !== "number") {
+            task.focusMinutes = 0;
+        }
+
+    });
+
+
+    /* =====================================================
+       RESET STREAK STORAGE
+       ===================================================== */
+
+    localStorage.removeItem(
+        "rakkez_last_focus_day"
+    );
+
+
+    /* =====================================================
+       SAVE CLEAN STATS
+       ===================================================== */
+
+    save(
+        STORAGE.stats,
+        stats
+    );
+
+
+    save(
+        STORAGE.tasks,
+        tasks
+    );
+
+
+    /* =====================================================
+       RESET TIMER TO FOCUS
+       ===================================================== */
+
+    timerState.mode = "focus";
+
+    timerState.total =
+        Math.floor(
+            Number(settings.focus) * 60
+        );
+
+    timerState.remaining =
+        timerState.total;
+
+    timerState.running = false;
+
+    timerState.startedAt = null;
+
+    timerState.timestamp = Date.now();
+
+    timerState.interval = null;
+
+
+    /* =====================================================
+       REMOVE SAVED TIMER STATE
+       ===================================================== */
+
+    localStorage.removeItem(
+        STORAGE.timer
+    );
+
+
+    /* =====================================================
+       UPDATE UI
+       ===================================================== */
+
+    updateTimerUI();
+
+    updateStats();
+
+
+    /* =====================================================
+       RESET TAB TITLE
+       ===================================================== */
+
+    document.title = "RakkeZ";
+
+
+    /* =====================================================
+       HIDE COMPLETION CARD
+       ===================================================== */
+
+    if (
+        typeof hidePomodoroCompletion ===
+        "function"
+    ) {
+
+        hidePomodoroCompletion();
+
+    }
+
+
+    /* =====================================================
+       STOP ALARM
+       ===================================================== */
+
+    if (
+        typeof stopAlarm ===
+        "function"
+    ) {
+
+        stopAlarm();
+
+    }
+
+
+    console.log(
+        "RakkeZ: Full session reset completed."
+    );
+
+}
 
 /* =========================================================
    OPEN RESET CONFIRMATION
