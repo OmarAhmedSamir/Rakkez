@@ -5888,49 +5888,18 @@ if ($("focusExit")) {
 
 
 /* =========================================================
-   RAKKEZ — RESET SYSTEM
-   CURRENT SEGMENT + FULL SESSION
+   RAKKEZ MAIN JS
    ========================================================= */
-
-/* =========================================================
-   STOP EVERYTHING RELATED TO TIMER
-   ========================================================= */
-
-function stopTimerCompletely() {
-
-    /* Stop real alarm */
-    if (typeof stopAlarm === "function") {
-        stopAlarm();
-    }
-
-    /* Stop test alarm */
-    if (typeof stopTestAlarm === "function") {
-        stopTestAlarm();
-    }
-
-    /* Stop timer interval */
-    if (timerState.interval !== null) {
-        clearInterval(timerState.interval);
-        timerState.interval = null;
-    }
-
-    /* Stop timer */
-    timerState.running = false;
-
-    timerState.timestamp = Date.now();
-}
-
-
 
 
 /* =========================================================
-   RAKKEZ RESET SYSTEM
+   RESET SYSTEM
    ---------------------------------------------------------
    RESET CURRENT SEGMENT
    --------------------------------
-   Focus  → restart current Focus
-   Short  → restart current Short Break
-   Long   → restart current Long Break
+   Focus → restart current Focus
+   Short → restart current Short Break
+   Long  → restart current Long Break
 
    RESET FULL SESSION
    --------------------------------
@@ -5974,24 +5943,21 @@ function getResetOverlay() {
     }
 
     return null;
+
 }
 
 
 /* =========================================================
-   STOP ONLY THE TIMER INTERVAL
-   ---------------------------------------------------------
-   IMPORTANT:
-   We intentionally DO NOT call stopTimerCompletely()
-   here because reset must completely control the new state.
+   STOP ONLY TIMER INTERVAL
    ========================================================= */
 
 function stopResetTimerInterval() {
 
-    console.log("RakkeZ: Stopping timer interval for reset");
+    console.log(
+        "RakkeZ: Stopping timer interval for reset"
+    );
 
-    /*
-     * Stop interval stored in timerState.
-     */
+
     if (
         typeof timerState !== "undefined" &&
         timerState &&
@@ -5999,53 +5965,64 @@ function stopResetTimerInterval() {
     ) {
 
         try {
-            clearInterval(timerState.interval);
+
+            clearInterval(
+                timerState.interval
+            );
+
         } catch (error) {
+
             console.warn(
                 "RakkeZ: Failed to clear timer interval:",
                 error
             );
+
         }
 
     }
 
-    /*
-     * Also clear any global interval if your timer
-     * uses one.
-     */
+
     if (
         typeof timerInterval !== "undefined" &&
         timerInterval
     ) {
 
         try {
-            clearInterval(timerInterval);
+
+            clearInterval(
+                timerInterval
+            );
+
         } catch (error) {
+
             console.warn(
                 "RakkeZ: Failed to clear global timer interval:",
                 error
             );
+
         }
 
+
         try {
+
             timerInterval = null;
+
         } catch (error) {
-            /*
-             * Ignore if timerInterval is const or otherwise
-             * cannot be reassigned.
-             */
+
+            /* Ignore */
+
         }
 
     }
 
-    /*
-     * Reset interval reference.
-     */
+
     if (
         typeof timerState !== "undefined" &&
         timerState
     ) {
+
         timerState.interval = null;
+
     }
 
 }
@@ -6059,9 +6036,7 @@ function getCurrentSegmentMinutes() {
 
     let minutes;
 
-    /*
-     * Make sure timerState exists.
-     */
+
     if (
         typeof timerState === "undefined" ||
         !timerState
@@ -6072,9 +6047,6 @@ function getCurrentSegmentMinutes() {
     }
 
 
-    /*
-     * Make sure settings exists.
-     */
     if (
         typeof settings === "undefined" ||
         !settings
@@ -6089,47 +6061,49 @@ function getCurrentSegmentMinutes() {
 
         case "focus":
 
-            minutes = Number(
-                settings.focus
-            );
+            minutes =
+                Number(
+                    settings.focus
+                );
 
             break;
 
 
         case "short":
 
-            minutes = Number(
-                settings.shortBreak
-            );
+            minutes =
+                Number(
+                    settings.shortBreak
+                );
 
             break;
 
 
         case "long":
 
-            minutes = Number(
-                settings.longBreak
-            );
+            minutes =
+                Number(
+                    settings.longBreak
+                );
 
             break;
 
 
         default:
 
-            timerState.mode = "focus";
+            timerState.mode =
+                "focus";
 
-            minutes = Number(
-                settings.focus
-            );
+            minutes =
+                Number(
+                    settings.focus
+                );
 
             break;
 
     }
 
 
-    /*
-     * Validate settings.
-     */
     if (
         !Number.isFinite(minutes) ||
         minutes <= 0
@@ -6139,14 +6113,19 @@ function getCurrentSegmentMinutes() {
             typeof DEFAULT_SETTINGS !== "undefined" &&
             DEFAULT_SETTINGS &&
             Number.isFinite(
-                Number(DEFAULT_SETTINGS.focus)
+                Number(
+                    DEFAULT_SETTINGS.focus
+                )
             ) &&
-            Number(DEFAULT_SETTINGS.focus) > 0
+            Number(
+                DEFAULT_SETTINGS.focus
+            ) > 0
         ) {
 
-            minutes = Number(
-                DEFAULT_SETTINGS.focus
-            );
+            minutes =
+                Number(
+                    DEFAULT_SETTINGS.focus
+                );
 
         } else {
 
@@ -6171,49 +6150,49 @@ function getSafeFocusMinutes() {
     let focusMinutes = 25;
 
 
-    /*
-     * First choice: current settings.
-     */
     if (
         typeof settings !== "undefined" &&
         settings
     ) {
 
-        const value = Number(
-            settings.focus
-        );
+        const value =
+            Number(
+                settings.focus
+            );
+
 
         if (
             Number.isFinite(value) &&
             value > 0
         ) {
 
-            focusMinutes = value;
+            focusMinutes =
+                value;
 
         }
 
     }
 
 
-    /*
-     * Second choice: default settings.
-     */
     if (
         focusMinutes === 25 &&
         typeof DEFAULT_SETTINGS !== "undefined" &&
         DEFAULT_SETTINGS
     ) {
 
-        const defaultFocus = Number(
-            DEFAULT_SETTINGS.focus
-        );
+        const defaultFocus =
+            Number(
+                DEFAULT_SETTINGS.focus
+            );
+
 
         if (
             Number.isFinite(defaultFocus) &&
             defaultFocus > 0
         ) {
 
-            focusMinutes = defaultFocus;
+            focusMinutes =
+                defaultFocus;
 
         }
 
@@ -6228,12 +6207,16 @@ function getSafeFocusMinutes() {
 /* =========================================================
    SET TIMER TO MINUTES
    ---------------------------------------------------------
-   Central helper used by both reset functions.
+   This function changes ONLY timer state.
+   It does NOT modify statistics.
    ========================================================= */
 
-function setResetTimerMinutes(minutes) {
+function setResetTimerMinutes(
+    minutes
+) {
 
-    let safeMinutes = Number(minutes);
+    let safeMinutes =
+        Number(minutes);
 
 
     if (
@@ -6246,17 +6229,15 @@ function setResetTimerMinutes(minutes) {
     }
 
 
-    const seconds = Math.max(
-        1,
-        Math.floor(
-            safeMinutes * 60
-        )
-    );
+    const seconds =
+        Math.max(
+            1,
+            Math.floor(
+                safeMinutes * 60
+            )
+        );
 
 
-    /*
-     * Make sure timerState exists.
-     */
     if (
         typeof timerState === "undefined" ||
         !timerState
@@ -6273,27 +6254,29 @@ function setResetTimerMinutes(minutes) {
 
     /*
      * IMPORTANT:
-     * Reset only timer state.
-     *
-     * Do NOT touch statistics.
+     * Only timer state is reset.
+     * Statistics are untouched.
      */
-    timerState.total = seconds;
 
-    timerState.remaining = seconds;
+    timerState.total =
+        seconds;
 
-    timerState.startedAt = null;
+    timerState.remaining =
+        seconds;
 
-    timerState.timestamp = Date.now();
+    timerState.startedAt =
+        null;
 
-    timerState.running = false;
+    timerState.timestamp =
+        Date.now();
 
-    timerState.interval = null;
+    timerState.running =
+        false;
+
+    timerState.interval =
+        null;
 
 
-    /*
-     * Some timer implementations use elapsed.
-     * Reset it if it exists.
-     */
     if (
         Object.prototype.hasOwnProperty.call(
             timerState,
@@ -6301,14 +6284,12 @@ function setResetTimerMinutes(minutes) {
         )
     ) {
 
-        timerState.elapsed = 0;
+        timerState.elapsed =
+            0;
 
     }
 
 
-    /*
-     * Some implementations use paused.
-     */
     if (
         Object.prototype.hasOwnProperty.call(
             timerState,
@@ -6316,7 +6297,8 @@ function setResetTimerMinutes(minutes) {
         )
     ) {
 
-        timerState.paused = false;
+        timerState.paused =
+            false;
 
     }
 
@@ -6327,15 +6309,11 @@ function setResetTimerMinutes(minutes) {
 
 
 /* =========================================================
-   SAVE RESET STATE
+   SAVE RESET TIMER STATE
    ========================================================= */
 
 function saveResetTimerState() {
 
-    /*
-     * saveTimer() is the project's normal persistence
-     * function.
-     */
     if (
         typeof saveTimer === "function"
     ) {
@@ -6362,21 +6340,20 @@ function saveResetTimerState() {
     }
 
 
-    /*
-     * Fallback:
-     * If saveTimer() is unavailable, try the known
-     * timer storage key.
-     */
     try {
 
         localStorage.setItem(
             "rakkez_timer_state",
-            JSON.stringify(timerState)
+            JSON.stringify(
+                timerState
+            )
         );
+
 
         console.log(
             "RakkeZ: Timer state saved using fallback storage."
         );
+
 
         return true;
 
@@ -6386,6 +6363,7 @@ function saveResetTimerState() {
             "RakkeZ: Could not save timer state:",
             error
         );
+
 
         return false;
 
@@ -6420,9 +6398,6 @@ function updateResetTimerUI() {
     }
 
 
-    /*
-     * Optional tab title update.
-     */
     if (
         typeof updateTabTitle === "function"
     ) {
@@ -6460,37 +6435,31 @@ function resetCurrentSegment() {
 
 
     /*
-     * Stop ONLY the interval.
-     *
-     * We intentionally do NOT call stopTimerCompletely()
-     * because that function may modify timer state.
+     * Stop timer interval only.
      */
     stopResetTimerInterval();
 
 
     /*
      * IMPORTANT:
+     * Keep current mode.
      *
-     * Keep the current mode.
+     * Focus → Focus
+     * Short  → Short
+     * Long   → Long
      *
-     * Focus stays Focus.
-     * Short stays Short.
-     * Long stays Long.
-     *
-     * Also keep:
+     * Do NOT change:
      * - completedFocusInCycle
      * - stats
      * - Pomodoro count
      * - streak
      * - history
      */
+
     const minutes =
         getCurrentSegmentMinutes();
 
 
-    /*
-     * Rebuild current timer.
-     */
     const success =
         setResetTimerMinutes(
             minutes
@@ -6508,21 +6477,10 @@ function resetCurrentSegment() {
     }
 
 
-    /*
-     * Save ONLY timer state.
-     */
     saveResetTimerState();
 
-
-    /*
-     * Update UI.
-     */
     updateResetTimerUI();
 
-
-    /*
-     * Close reset popup.
-     */
     closeResetConfirmation();
 
 
@@ -6536,7 +6494,9 @@ function resetCurrentSegment() {
 /* =========================================================
    RESET FULL SESSION
    ---------------------------------------------------------
-   THIS IS THE IMPORTANT FIX.
+   Return to Focus.
+   Reset only current Pomodoro cycle.
+   Stats remain untouched.
    ========================================================= */
 
 function resetFullSession() {
@@ -6547,30 +6507,32 @@ function resetFullSession() {
 
 
     /*
-     * -------------------------------------------------------
      * STEP 1
-     * Stop the timer interval.
-     * -------------------------------------------------------
+     * Stop timer interval.
      */
+
     stopResetTimerInterval();
 
 
     /*
-     * -------------------------------------------------------
      * STEP 2
-     * Reset ONLY the current Pomodoro cycle.
+     * Reset ONLY current Pomodoro cycle.
      *
-     * This does NOT reset lifetime statistics.
-     * This does NOT remove completed Pomodoros.
-     * This does NOT modify today's statistics.
-     * This does NOT modify streak.
-     * -------------------------------------------------------
+     * This does NOT reset:
+     * - lifetime statistics
+     * - today's statistics
+     * - completed Pomodoros
+     * - streak
+     * - focus history
      */
+
     if (
         typeof completedFocusInCycle !== "undefined"
     ) {
 
-        completedFocusInCycle = 0;
+        completedFocusInCycle =
+            0;
+
 
         console.log(
             "RakkeZ: completedFocusInCycle reset to 0."
@@ -6580,11 +6542,10 @@ function resetFullSession() {
 
 
     /*
-     * -------------------------------------------------------
      * STEP 3
      * Return to Focus.
-     * -------------------------------------------------------
      */
+
     if (
         typeof timerState === "undefined" ||
         !timerState
@@ -6599,25 +6560,24 @@ function resetFullSession() {
     }
 
 
-    timerState.mode = "focus";
+    timerState.mode =
+        "focus";
 
 
     /*
-     * -------------------------------------------------------
      * STEP 4
      * Get Focus duration.
-     * -------------------------------------------------------
      */
+
     const focusMinutes =
         getSafeFocusMinutes();
 
 
     /*
-     * -------------------------------------------------------
      * STEP 5
-     * Create a completely fresh Focus timer.
-     * -------------------------------------------------------
+     * Create fresh Focus timer.
      */
+
     const success =
         setResetTimerMinutes(
             focusMinutes
@@ -6636,29 +6596,26 @@ function resetFullSession() {
 
 
     /*
-     * -------------------------------------------------------
      * STEP 6
-     * Save ONLY timer state.
-     * -------------------------------------------------------
+     * Save only timer state.
      */
+
     saveResetTimerState();
 
 
     /*
-     * -------------------------------------------------------
      * STEP 7
      * Update UI.
-     * -------------------------------------------------------
      */
+
     updateResetTimerUI();
 
 
     /*
-     * -------------------------------------------------------
      * STEP 8
      * Close popup.
-     * -------------------------------------------------------
      */
+
     closeResetConfirmation();
 
 
@@ -6671,9 +6628,6 @@ function resetFullSession() {
 
 /* =========================================================
    OLD COMPATIBILITY FUNCTION
-   ---------------------------------------------------------
-   Old code calling resetTimer()
-   will perform FULL SESSION RESET.
    ========================================================= */
 
 function resetTimer() {
@@ -6694,17 +6648,10 @@ function openResetConfirmation() {
     );
 
 
-    /*
-     * First try existing overlay.
-     */
     let overlay =
         getResetOverlay();
 
 
-    /*
-     * If no overlay exists,
-     * create it automatically.
-     */
     if (!overlay) {
 
         overlay =
@@ -6724,9 +6671,6 @@ function openResetConfirmation() {
     }
 
 
-    /*
-     * Make visible.
-     */
     overlay.classList.add(
         "show"
     );
@@ -6742,16 +6686,10 @@ function openResetConfirmation() {
         "flex";
 
 
-    /*
-     * Prevent background scrolling.
-     */
     document.body.style.overflow =
         "hidden";
 
 
-    /*
-     * Connect events.
-     */
     initializeResetModalEvents(
         overlay
     );
@@ -6782,12 +6720,16 @@ function closeResetConfirmation() {
         id => {
 
             const overlay =
-                document.getElementById(id);
+                document.getElementById(
+                    id
+                );
 
 
             if (
                 overlay &&
-                !overlays.includes(overlay)
+                !overlays.includes(
+                    overlay
+                )
             ) {
 
                 overlays.push(
@@ -6821,9 +6763,6 @@ function closeResetConfirmation() {
     );
 
 
-    /*
-     * Restore body scrolling.
-     */
     if (
         typeof syncBodyScrollLock ===
         "function"
@@ -6856,9 +6795,6 @@ function closeResetConfirmation() {
 
 function createResetConfirmation() {
 
-    /*
-     * Already exists?
-     */
     const existing =
         document.getElementById(
             "rakkezResetOverlay"
@@ -6876,9 +6812,6 @@ function createResetConfirmation() {
     }
 
 
-    /*
-     * Create overlay.
-     */
     const overlay =
         document.createElement(
             "div"
@@ -7023,8 +6956,9 @@ function createResetConfirmation() {
 
 
     /*
-     * Add fallback CSS.
+     * Fallback CSS.
      */
+
     if (
         !document.getElementById(
             "rakkezResetStyles"
@@ -7403,9 +7337,6 @@ function createResetConfirmation() {
     }
 
 
-    /*
-     * Connect events.
-     */
     initializeResetModalEvents(
         overlay
     );
@@ -7429,9 +7360,6 @@ function initializeResetModalEvents(
     }
 
 
-    /*
-     * Prevent duplicate event listeners.
-     */
     if (
         overlay.dataset.rakkezResetEvents ===
         "true"
@@ -7446,9 +7374,6 @@ function initializeResetModalEvents(
         "true";
 
 
-    /*
-     * CLICK EVENTS
-     */
     overlay.addEventListener(
         "click",
         event => {
@@ -7458,8 +7383,9 @@ function initializeResetModalEvents(
 
 
             /*
-             * Click outside card closes modal.
+             * Click outside card.
              */
+
             if (
                 target === overlay
             ) {
@@ -7473,9 +7399,6 @@ function initializeResetModalEvents(
             }
 
 
-            /*
-             * Find clicked button.
-             */
             const button =
                 target.closest(
                     "button, [data-reset-action], [data-close-reset]"
@@ -7490,6 +7413,7 @@ function initializeResetModalEvents(
             /*
              * CLOSE
              */
+
             if (
                 button.id ===
                     "rakkezResetClose" ||
@@ -7526,8 +7450,9 @@ function initializeResetModalEvents(
 
 
             /*
-             * CURRENT SEGMENT
+             * CURRENT
              */
+
             const action =
                 button.dataset
                     ? button.dataset.resetAction
@@ -7553,8 +7478,9 @@ function initializeResetModalEvents(
 
 
             /*
-             * FULL SESSION
+             * FULL
              */
+
             if (
                 action === "full" ||
 
@@ -7579,7 +7505,7 @@ function initializeResetModalEvents(
 
 
 /* =========================================================
-   INITIALIZE RESET BUTTONS
+   INITIALIZE RESET SYSTEM
    ========================================================= */
 
 function initializeResetSystem() {
@@ -7590,10 +7516,9 @@ function initializeResetSystem() {
 
 
     /*
-     * -------------------------------------------------------
      * MAIN RESET BUTTON
-     * -------------------------------------------------------
      */
+
     const resetButton =
         document.getElementById(
             "resetBtn"
@@ -7602,10 +7527,6 @@ function initializeResetSystem() {
 
     if (resetButton) {
 
-        /*
-         * Don't use onclick.
-         * Use our own listener once.
-         */
         if (
             resetButton.dataset
                 .rakkezResetMainBound !==
@@ -7636,10 +7557,9 @@ function initializeResetSystem() {
 
 
     /*
-     * -------------------------------------------------------
-     * EXISTING CURRENT SEGMENT BUTTONS
-     * -------------------------------------------------------
+     * CURRENT SEGMENT BUTTONS
      */
+
     const currentIds = [
 
         "resetCurrentSegment",
@@ -7699,10 +7619,9 @@ function initializeResetSystem() {
 
 
     /*
-     * -------------------------------------------------------
-     * EXISTING FULL SESSION BUTTONS
-     * -------------------------------------------------------
+     * FULL SESSION BUTTONS
      */
+
     const fullIds = [
 
         "resetFullSession",
@@ -7762,10 +7681,9 @@ function initializeResetSystem() {
 
 
     /*
-     * -------------------------------------------------------
-     * DATA RESET ACTION BUTTONS
-     * -------------------------------------------------------
+     * DATA RESET ACTIONS
      */
+
     document
         .querySelectorAll(
             "[data-reset-action]"
@@ -7773,10 +7691,6 @@ function initializeResetSystem() {
         .forEach(
             button => {
 
-                /*
-                 * Ignore our generated modal here because
-                 * initializeResetModalEvents handles it.
-                 */
                 if (
                     button.closest(
                         "#rakkezResetOverlay"
@@ -7845,10 +7759,9 @@ function initializeResetSystem() {
 
 
     /*
-     * -------------------------------------------------------
-     * EXISTING CLOSE BUTTONS
-     * -------------------------------------------------------
+     * CLOSE BUTTONS
      */
+
     const closeIds = [
 
         "resetClose",
@@ -7908,10 +7821,9 @@ function initializeResetSystem() {
 
 
     /*
-     * -------------------------------------------------------
-     * EXISTING RESET OVERLAYS
-     * -------------------------------------------------------
+     * EXISTING OVERLAYS
      */
+
     const overlayIds = [
 
         "resetOverlay",
@@ -7975,18 +7887,15 @@ window.RakkeZReset = {
 
 
 /* =========================================================
-   KEYBOARD SHORTCUT
+   RESET KEYBOARD SHORTCUT
    ---------------------------------------------------------
-   R = Open Reset Options
+   R = Open reset options
    ========================================================= */
 
 document.addEventListener(
     "keydown",
     event => {
 
-        /*
-         * Don't trigger shortcuts while typing.
-         */
         if (
             event.target &&
             (
@@ -8022,9 +7931,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   ESCAPE
-   ---------------------------------------------------------
-   Close reset popup first.
+   RESET ESCAPE
    ========================================================= */
 
 document.addEventListener(
@@ -8072,11 +7979,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   INITIALIZE RESET SYSTEM
-   ---------------------------------------------------------
-   DOMContentLoaded is important.
-   This guarantees resetBtn exists before we attach
-   the listener if this JS is loaded in <head>.
+   RESET BOOT
    ========================================================= */
 
 function bootRakkeZResetSystem() {
@@ -8119,257 +8022,156 @@ if (
 
 /* =========================================================
    MEDIA TABS
+   =========================================================
+   NOTE:
+   This used to appear multiple times.
+   Keep ONE listener system only.
    ========================================================= */
 
-document
-    .querySelectorAll(
-        ".media-tab"
-    )
-    .forEach(
-        tab => {
+function initializeMediaTabs() {
 
-            tab.addEventListener(
-                "click",
-                () => {
+    document
+        .querySelectorAll(
+            ".media-tab"
+        )
+        .forEach(
+            tab => {
 
-                    document
-                        .querySelectorAll(
-                            ".media-tab"
-                        )
-                        .forEach(
-                            t =>
-                                t.classList
-                                    .remove(
+                if (
+                    tab.dataset
+                        .rakkezMediaBound ===
+                    "true"
+                ) {
+
+                    return;
+
+                }
+
+
+                tab.dataset
+                    .rakkezMediaBound =
+                    "true";
+
+
+                tab.addEventListener(
+                    "click",
+                    () => {
+
+                        document
+                            .querySelectorAll(
+                                ".media-tab"
+                            )
+                            .forEach(
+                                t => {
+
+                                    t.classList.remove(
                                         "active"
-                                    )
+                                    );
+
+                                }
+                            );
+
+
+                        document
+                            .querySelectorAll(
+                                ".media-content"
+                            )
+                            .forEach(
+                                content => {
+
+                                    content.classList.remove(
+                                        "active"
+                                    );
+
+                                }
+                            );
+
+
+                        tab.classList.add(
+                            "active"
                         );
 
 
-                    document
-                        .querySelectorAll(
-                            ".media-content"
-                        )
-                        .forEach(
-                            c =>
-                                c.classList
-                                    .remove(
-                                        "active"
-                                    )
-                        );
+                        const mediaName =
+                            tab.dataset.media;
 
 
-                    tab.classList.add(
-                        "active"
-                    );
+                        if (!mediaName) {
+                            return;
+                        }
 
 
-                    /*
-                     * Keep compatibility with
-                     * the existing RakkeZ $ helper.
-                     */
-                    let content = null;
+                        let content =
+                            null;
 
 
-                    if (
-                        typeof $ === "function"
-                    ) {
+                        if (
+                            typeof $ ===
+                            "function"
+                        ) {
 
-                        try {
+                            try {
+
+                                content =
+                                    $(
+                                        mediaName +
+                                        "Content"
+                                    );
+
+                            } catch (error) {
+
+                                console.warn(
+                                    "RakkeZ: Media tab lookup failed:",
+                                    error
+                                );
+
+                            }
+
+                        }
+
+
+                        if (!content) {
 
                             content =
-                                $(
-                                    tab.dataset.media +
+                                document.getElementById(
+                                    mediaName +
                                     "Content"
                                 );
 
-                        } catch (error) {
+                        }
 
-                            console.warn(
-                                "RakkeZ: Media tab lookup failed:",
-                                error
+
+                        if (content) {
+
+                            content.classList.add(
+                                "active"
                             );
 
                         }
 
                     }
+                );
 
+            }
+        );
 
-                    /*
-                     * Native DOM fallback.
-                     */
-                    if (!content) {
-
-                        content =
-                            document.getElementById(
-                                tab.dataset.media +
-                                "Content"
-                            );
-
-                    }
-
-
-                    if (content) {
-
-                        content.classList.add(
-                            "active"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-
-/* =========================================================
-   MEDIA TABS
-   ========================================================= */
-
-document
-    .querySelectorAll(
-        ".media-tab"
-    )
-    .forEach(
-        tab => {
-
-            tab.addEventListener(
-                "click",
-                () => {
-
-                    document
-                        .querySelectorAll(
-                            ".media-tab"
-                        )
-                        .forEach(
-                            t =>
-                                t.classList
-                                    .remove(
-                                        "active"
-                                    )
-                        );
-
-
-                    document
-                        .querySelectorAll(
-                            ".media-content"
-                        )
-                        .forEach(
-                            c =>
-                                c.classList
-                                    .remove(
-                                        "active"
-                                    )
-                        );
-
-
-                    tab.classList.add(
-                        "active"
-                    );
-
-
-                    const content =
-                        $(
-                            tab.dataset.media +
-                            "Content"
-                        );
-
-
-                    if (content) {
-
-                        content.classList.add(
-                            "active"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   MEDIA TABS
-   ========================================================= */
-
-document
-    .querySelectorAll(
-        ".media-tab"
-    )
-    .forEach(
-        tab => {
-
-            tab.addEventListener(
-                "click",
-                () => {
-
-                    document
-                        .querySelectorAll(
-                            ".media-tab"
-                        )
-                        .forEach(
-                            t =>
-                                t.classList
-                                    .remove(
-                                        "active"
-                                    )
-                        );
-
-
-                    document
-                        .querySelectorAll(
-                            ".media-content"
-                        )
-                        .forEach(
-                            c =>
-                                c.classList
-                                    .remove(
-                                        "active"
-                                    )
-                        );
-
-
-                    tab.classList.add(
-                        "active"
-                    );
-
-
-                    const content =
-                        $(
-                            tab.dataset.media +
-                            "Content"
-                        );
-
-
-                    if (content) {
-
-                        content.classList.add(
-                            "active"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
+}
 
 
 /* =========================================================
    YOUTUBE
    ========================================================= */
 
-function getYouTubeId(url) {
+function getYouTubeId(
+    url
+) {
 
     try {
 
         const parsed =
-            new URL(url);
+            new URL(
+                url
+            );
 
 
         const hostname =
@@ -8382,9 +8184,16 @@ function getYouTubeId(url) {
         ) {
 
             return parsed.pathname
-                .replace("/", "")
-                .split("/")[0]
-                .split("?")[0];
+                .replace(
+                    "/",
+                    ""
+                )
+                .split(
+                    "/"
+                )[0]
+                .split(
+                    "?"
+                )[0];
 
         }
 
@@ -8412,8 +8221,12 @@ function getYouTubeId(url) {
         ) {
 
             return parsed.pathname
-                .split("/embed/")[1]
-                .split("/")[0];
+                .split(
+                    "/embed/"
+                )[1]
+                .split(
+                    "/"
+                )[0];
 
         }
 
@@ -8425,8 +8238,12 @@ function getYouTubeId(url) {
         ) {
 
             return parsed.pathname
-                .split("/shorts/")[1]
-                .split("/")[0];
+                .split(
+                    "/shorts/"
+                )[1]
+                .split(
+                    "/"
+                )[0];
 
         }
 
@@ -8445,14 +8262,67 @@ function getYouTubeId(url) {
 }
 
 
-if ($("youtubePlay")) {
+/* =========================================================
+   YOUTUBE BUTTON
+   ========================================================= */
 
-    $("youtubePlay").onclick =
+function initializeYouTube() {
+
+    const button =
+        typeof $ === "function"
+            ? $("youtubePlay")
+            : document.getElementById(
+                "youtubePlay"
+            );
+
+
+    if (!button) {
+        return;
+    }
+
+
+    if (
+        button.dataset
+            .rakkezYoutubeBound ===
+        "true"
+    ) {
+
+        return;
+
+    }
+
+
+    button.dataset
+        .rakkezYoutubeBound =
+        "true";
+
+
+    button.onclick =
         () => {
 
+            const input =
+                typeof $ === "function"
+                    ? $("youtubeInput")
+                    : document.getElementById(
+                        "youtubeInput"
+                    );
+
+
+            const embed =
+                typeof $ === "function"
+                    ? $("youtubeEmbed")
+                    : document.getElementById(
+                        "youtubeEmbed"
+                    );
+
+
+            if (!input || !embed) {
+                return;
+            }
+
+
             const url =
-                $("youtubeInput")
-                    .value
+                input.value
                     .trim();
 
 
@@ -8494,33 +8364,32 @@ if ($("youtubePlay")) {
                 "&enablejsapi=1";
 
 
-            $("youtubeEmbed")
-                .innerHTML = `
+            embed.innerHTML = `
 
-                    <iframe
-                        src="${embedUrl}"
-                        title="YouTube Player"
-                        allow="
-                            accelerometer;
-                            autoplay;
-                            clipboard-write;
-                            encrypted-media;
-                            gyroscope;
-                            picture-in-picture;
-                            web-share
-                        "
-                        referrerpolicy="
-                            strict-origin-when-cross-origin
-                        "
-                        allowfullscreen
-                    ></iframe>
+                <iframe
+                    src="${embedUrl}"
+                    title="YouTube Player"
+                    allow="
+                        accelerometer;
+                        autoplay;
+                        clipboard-write;
+                        encrypted-media;
+                        gyroscope;
+                        picture-in-picture;
+                        web-share
+                    "
+                    referrerpolicy="
+                        strict-origin-when-cross-origin
+                    "
+                    allowfullscreen
+                ></iframe>
 
-                `;
+            `;
 
 
-            $("youtubeEmbed")
-                .classList
-                .add("show");
+            embed.classList.add(
+                "show"
+            );
 
 
             showNowPlaying(
@@ -8538,18 +8407,26 @@ if ($("youtubePlay")) {
    SPOTIFY EMBED
    ========================================================= */
 
-function spotifyEmbedUrl(url) {
+function spotifyEmbedUrl(
+    url
+) {
 
     try {
 
         const parsed =
-            new URL(url);
+            new URL(
+                url
+            );
 
 
         const parts =
             parsed.pathname
-                .split("/")
-                .filter(Boolean);
+                .split(
+                    "/"
+                )
+                .filter(
+                    Boolean
+                );
 
 
         if (
@@ -8566,7 +8443,14 @@ function spotifyEmbedUrl(url) {
 
         }
 
-    } catch {}
+    } catch (error) {
+
+        console.warn(
+            "RakkeZ: Invalid Spotify URL.",
+            error
+        );
+
+    }
 
 
     return null;
@@ -8574,14 +8458,72 @@ function spotifyEmbedUrl(url) {
 }
 
 
-if ($("spotifyPlay")) {
+/* =========================================================
+   SPOTIFY EMBED BUTTON
+   ========================================================= */
 
-    $("spotifyPlay").onclick =
+function initializeSpotifyEmbed() {
+
+    const button =
+        typeof $ === "function"
+            ? $("spotifyPlay")
+            : document.getElementById(
+                "spotifyPlay"
+            );
+
+
+    if (!button) {
+        return;
+    }
+
+
+    if (
+        button.dataset
+            .rakkezSpotifyEmbedBound ===
+        "true"
+    ) {
+
+        return;
+
+    }
+
+
+    button.dataset
+        .rakkezSpotifyEmbedBound =
+        "true";
+
+
+    button.onclick =
         () => {
 
+            const input =
+                typeof $ === "function"
+                    ? $("spotifyInput")
+                    : document.getElementById(
+                        "spotifyInput"
+                    );
+
+
+            const embedElement =
+                typeof $ === "function"
+                    ? $("spotifyEmbed")
+                    : document.getElementById(
+                        "spotifyEmbed"
+                    );
+
+
+            if (
+                !input ||
+                !embedElement
+            ) {
+
+                return;
+
+            }
+
+
             const url =
-                $("spotifyInput")
-                    .value
+                input.value
                     .trim();
 
 
@@ -8602,26 +8544,25 @@ if ($("spotifyPlay")) {
             }
 
 
-            $("spotifyEmbed")
-                .innerHTML = `
+            embedElement.innerHTML = `
 
-                    <iframe
-                        src="${embed}"
-                        allow="
-                            autoplay;
-                            clipboard-write;
-                            encrypted-media;
-                            fullscreen;
-                            picture-in-picture
-                        "
-                    ></iframe>
+                <iframe
+                    src="${embed}"
+                    allow="
+                        autoplay;
+                        clipboard-write;
+                        encrypted-media;
+                        fullscreen;
+                        picture-in-picture
+                    "
+                ></iframe>
 
-                `;
+            `;
 
 
-            $("spotifyEmbed")
-                .classList
-                .add("show");
+            embedElement.classList.add(
+                "show"
+            );
 
 
             showNowPlaying(
@@ -8723,6 +8664,19 @@ function showUploadFeedback(
     }
 
 
+    const safeMessage =
+        typeof escapeHTML ===
+        "function"
+
+            ? escapeHTML(
+                message
+            )
+
+            : String(
+                message
+            );
+
+
     feedback.innerHTML =
         success
 
@@ -8746,7 +8700,7 @@ function showUploadFeedback(
                 </span>
 
                 <span>
-                    ${escapeHTML(message)}
+                    ${safeMessage}
                 </span>
 
             `
@@ -8771,7 +8725,7 @@ function showUploadFeedback(
                 </span>
 
                 <span>
-                    ${escapeHTML(message)}
+                    ${safeMessage}
                 </span>
 
             `;
@@ -8801,281 +8755,335 @@ function showUploadFeedback(
    LOCAL MEDIA UPLOAD
    ========================================================= */
 
-if ($("mediaFile")) {
+function initializeLocalMedia() {
 
-    $("mediaFile")
-        .addEventListener(
-            "change",
-            e => {
-
-                const file =
-                    e.target.files &&
-                    e.target.files[0];
+    const mediaFile =
+        typeof $ === "function"
+            ? $("mediaFile")
+            : document.getElementById(
+                "mediaFile"
+            );
 
 
-                if (!file) {
-
-                    return;
-
-                }
+    if (!mediaFile) {
+        return;
+    }
 
 
-                if (localMediaURL) {
+    if (
+        mediaFile.dataset
+            .rakkezLocalMediaBound ===
+        "true"
+    ) {
 
-                    URL.revokeObjectURL(
-                        localMediaURL
-                    );
+        return;
 
-
-                    localMediaURL =
-                        null;
-
-                }
+    }
 
 
-                if ($("audioPlayer")) {
-
-                    $("audioPlayer").pause();
-
-                    $("audioPlayer")
-                        .removeAttribute(
-                            "src"
-                        );
-
-                    $("audioPlayer")
-                        .style.display =
-                        "none";
-
-                }
+    mediaFile.dataset
+        .rakkezLocalMediaBound =
+        "true";
 
 
-                if ($("videoPlayer")) {
+    mediaFile.addEventListener(
+        "change",
+        e => {
 
-                    $("videoPlayer").pause();
-
-                    $("videoPlayer")
-                        .removeAttribute(
-                            "src"
-                        );
-
-                    $("videoPlayer")
-                        .style.display =
-                        "none";
-
-                }
+            const file =
+                e.target.files &&
+                e.target.files[0];
 
 
-                const isAudio =
-                    file.type.startsWith(
-                        "audio/"
-                    );
+            if (!file) {
+                return;
+            }
 
 
-                const isVideo =
-                    file.type.startsWith(
-                        "video/"
-                    );
+            if (localMediaURL) {
 
-
-                if (
-                    !isAudio &&
-                    !isVideo
-                ) {
-
-                    showUploadFeedback(
-                        "Unsupported file. Please upload an audio or video file.",
-                        false
-                    );
-
-
-                    e.target.value =
-                        "";
-
-
-                    return;
-
-                }
+                URL.revokeObjectURL(
+                    localMediaURL
+                );
 
 
                 localMediaURL =
-                    URL.createObjectURL(
-                        file
-                    );
-
-
-                if (isAudio) {
-
-                    const player =
-                        $("audioPlayer");
-
-
-                    if (!player) {
-
-                        return;
-
-                    }
-
-
-                    player.src =
-                        localMediaURL;
-
-
-                    player.loop =
-                        true;
-
-
-                    player.volume =
-                        1;
-
-
-                    player.style.display =
-                        "block";
-
-
-                    player.load();
-
-
-                    player.play()
-                        .then(
-                            () => {
-
-                                showUploadFeedback(
-                                    "Uploaded • Playing in loop"
-                                );
-
-                            }
-                        )
-                        .catch(
-                            error => {
-
-                                console.warn(
-                                    "Autoplay blocked:",
-                                    error
-                                );
-
-
-                                showUploadFeedback(
-                                    "Uploaded • Press play to start"
-                                );
-
-                            }
-                        );
-
-
-                    if ($("mediaName")) {
-
-                        $("mediaName")
-                            .textContent =
-                            file.name;
-
-                    }
-
-
-                    if ($("mediaSource")) {
-
-                        $("mediaSource")
-                            .textContent =
-                            "Local Audio";
-
-                    }
-
-
-                    showNowPlaying(
-                        file.name,
-                        "Local Audio",
-                        "♫"
-                    );
-
-                }
-
-
-                if (isVideo) {
-
-                    const player =
-                        $("videoPlayer");
-
-
-                    if (!player) {
-
-                        return;
-
-                    }
-
-
-                    player.src =
-                        localMediaURL;
-
-
-                    player.loop =
-                        true;
-
-
-                    player.muted =
-                        false;
-
-
-                    player.style.display =
-                        "block";
-
-
-                    player.load();
-
-
-                    player.play()
-                        .then(
-                            () => {
-
-                                showUploadFeedback(
-                                    "Uploaded • Playing in loop"
-                                );
-
-                            }
-                        )
-                        .catch(
-                            error => {
-
-                                console.warn(
-                                    "Autoplay blocked:",
-                                    error
-                                );
-
-
-                                showUploadFeedback(
-                                    "Uploaded • Press play to start"
-                                );
-
-                            }
-                        );
-
-
-                    if ($("mediaName")) {
-
-                        $("mediaName")
-                            .textContent =
-                            file.name;
-
-                    }
-
-
-                    if ($("mediaSource")) {
-
-                        $("mediaSource")
-                            .textContent =
-                            "Local Video";
-
-                    }
-
-
-                    showNowPlaying(
-                        file.name,
-                        "Local Video",
-                        "▶"
-                    );
-
-                }
+                    null;
 
             }
-        );
+
+
+            const audioPlayer =
+                typeof $ === "function"
+                    ? $("audioPlayer")
+                    : document.getElementById(
+                        "audioPlayer"
+                    );
+
+
+            const videoPlayer =
+                typeof $ === "function"
+                    ? $("videoPlayer")
+                    : document.getElementById(
+                        "videoPlayer"
+                    );
+
+
+            if (audioPlayer) {
+
+                audioPlayer.pause();
+
+                audioPlayer.removeAttribute(
+                    "src"
+                );
+
+                audioPlayer.style.display =
+                    "none";
+
+            }
+
+
+            if (videoPlayer) {
+
+                videoPlayer.pause();
+
+                videoPlayer.removeAttribute(
+                    "src"
+                );
+
+                videoPlayer.style.display =
+                    "none";
+
+            }
+
+
+            const isAudio =
+                file.type.startsWith(
+                    "audio/"
+                );
+
+
+            const isVideo =
+                file.type.startsWith(
+                    "video/"
+                );
+
+
+            if (
+                !isAudio &&
+                !isVideo
+            ) {
+
+                showUploadFeedback(
+                    "Unsupported file. Please upload an audio or video file.",
+                    false
+                );
+
+
+                e.target.value =
+                    "";
+
+
+                return;
+
+            }
+
+
+            localMediaURL =
+                URL.createObjectURL(
+                    file
+                );
+
+
+            if (isAudio) {
+
+                if (!audioPlayer) {
+                    return;
+                }
+
+
+                audioPlayer.src =
+                    localMediaURL;
+
+
+                audioPlayer.loop =
+                    true;
+
+
+                audioPlayer.volume =
+                    1;
+
+
+                audioPlayer.style.display =
+                    "block";
+
+
+                audioPlayer.load();
+
+
+                audioPlayer.play()
+                    .then(
+                        () => {
+
+                            showUploadFeedback(
+                                "Uploaded • Playing in loop"
+                            );
+
+                        }
+                    )
+                    .catch(
+                        error => {
+
+                            console.warn(
+                                "Autoplay blocked:",
+                                error
+                            );
+
+
+                            showUploadFeedback(
+                                "Uploaded • Press play to start"
+                            );
+
+                        }
+                    );
+
+
+                const mediaName =
+                    typeof $ === "function"
+                        ? $("mediaName")
+                        : document.getElementById(
+                            "mediaName"
+                        );
+
+
+                const mediaSource =
+                    typeof $ === "function"
+                        ? $("mediaSource")
+                        : document.getElementById(
+                            "mediaSource"
+                        );
+
+
+                if (mediaName) {
+
+                    mediaName.textContent =
+                        file.name;
+
+                }
+
+
+                if (mediaSource) {
+
+                    mediaSource.textContent =
+                        "Local Audio";
+
+                }
+
+
+                showNowPlaying(
+                    file.name,
+                    "Local Audio",
+                    "♫"
+                );
+
+            }
+
+
+            if (isVideo) {
+
+                if (!videoPlayer) {
+                    return;
+                }
+
+
+                videoPlayer.src =
+                    localMediaURL;
+
+
+                videoPlayer.loop =
+                    true;
+
+
+                videoPlayer.muted =
+                    false;
+
+
+                videoPlayer.style.display =
+                    "block";
+
+
+                videoPlayer.load();
+
+
+                videoPlayer.play()
+                    .then(
+                        () => {
+
+                            showUploadFeedback(
+                                "Uploaded • Playing in loop"
+                            );
+
+                        }
+                    )
+                    .catch(
+                        error => {
+
+                            console.warn(
+                                "Autoplay blocked:",
+                                error
+                            );
+
+
+                            showUploadFeedback(
+                                "Uploaded • Press play to start"
+                            );
+
+                        }
+                    );
+
+
+                const mediaName =
+                    typeof $ === "function"
+                        ? $("mediaName")
+                        : document.getElementById(
+                            "mediaName"
+                        );
+
+
+                const mediaSource =
+                    typeof $ === "function"
+                        ? $("mediaSource")
+                        : document.getElementById(
+                            "mediaSource"
+                        );
+
+
+                if (mediaName) {
+
+                    mediaName.textContent =
+                        file.name;
+
+                }
+
+
+                if (mediaSource) {
+
+                    mediaSource.textContent =
+                        "Local Video";
+
+                }
+
+
+                showNowPlaying(
+                    file.name,
+                    "Local Video",
+                    "▶"
+                );
+
+            }
+
+        }
+    );
 
 }
 
@@ -9090,38 +9098,67 @@ function showNowPlaying(
     artwork
 ) {
 
-    if ($("mediaName")) {
+    const mediaName =
+        typeof $ === "function"
+            ? $("mediaName")
+            : document.getElementById(
+                "mediaName"
+            );
 
-        $("mediaName")
-            .textContent =
+
+    const mediaSource =
+        typeof $ === "function"
+            ? $("mediaSource")
+            : document.getElementById(
+                "mediaSource"
+            );
+
+
+    const mediaArtwork =
+        typeof $ === "function"
+            ? $("mediaArtwork")
+            : document.getElementById(
+                "mediaArtwork"
+            );
+
+
+    const nowPlaying =
+        typeof $ === "function"
+            ? $("nowPlaying")
+            : document.getElementById(
+                "nowPlaying"
+            );
+
+
+    if (mediaName) {
+
+        mediaName.textContent =
             name;
 
     }
 
 
-    if ($("mediaSource")) {
+    if (mediaSource) {
 
-        $("mediaSource")
-            .textContent =
+        mediaSource.textContent =
             source;
 
     }
 
 
-    if ($("mediaArtwork")) {
+    if (mediaArtwork) {
 
-        $("mediaArtwork")
-            .textContent =
+        mediaArtwork.textContent =
             artwork;
 
     }
 
 
-    if ($("nowPlaying")) {
+    if (nowPlaying) {
 
-        $("nowPlaying")
-            .classList
-            .add("show");
+        nowPlaying.classList.add(
+            "show"
+        );
 
     }
 
@@ -9135,6 +9172,10 @@ function showNowPlaying(
 let spotifyUser =
     null;
 
+
+/* =========================================================
+   RANDOM STRING
+   ========================================================= */
 
 function randomString(
     length = 64
@@ -9177,6 +9218,10 @@ function randomString(
 }
 
 
+/* =========================================================
+   SHA256
+   ========================================================= */
+
 async function sha256(
     value
 ) {
@@ -9195,6 +9240,10 @@ async function sha256(
 
 }
 
+
+/* =========================================================
+   BASE64 URL
+   ========================================================= */
 
 function base64url(
     buffer
@@ -9222,6 +9271,10 @@ function base64url(
 
 }
 
+
+/* =========================================================
+   SPOTIFY LOGIN
+   ========================================================= */
 
 async function spotifyLogin() {
 
@@ -9300,6 +9353,10 @@ async function spotifyLogin() {
 }
 
 
+/* =========================================================
+   HANDLE SPOTIFY CALLBACK
+   ========================================================= */
+
 async function handleSpotifyCallback() {
 
     const params =
@@ -9315,9 +9372,7 @@ async function handleSpotifyCallback() {
 
 
     if (!code) {
-
         return;
-
     }
 
 
@@ -9328,9 +9383,7 @@ async function handleSpotifyCallback() {
 
 
     if (!verifier) {
-
         return;
-
     }
 
 
@@ -9439,6 +9492,10 @@ async function handleSpotifyCallback() {
 }
 
 
+/* =========================================================
+   LOAD SPOTIFY USER
+   ========================================================= */
+
 async function loadSpotifyUser() {
 
     const auth =
@@ -9518,83 +9575,113 @@ async function loadSpotifyUser() {
 }
 
 
+/* =========================================================
+   SPOTIFY UI
+   ========================================================= */
+
 function updateSpotifyUI(
     user
 ) {
 
     if (user) {
 
-        if ($("spotifyStatus")) {
+        const spotifyStatus =
+            typeof $ === "function"
+                ? $("spotifyStatus")
+                : document.getElementById(
+                    "spotifyStatus"
+                );
 
-            $("spotifyStatus")
-                .textContent =
-                user.display_name ||
-                user.id;
+
+        const spotifyLoginButton =
+            typeof $ === "function"
+                ? $("spotifyLogin")
+                : document.getElementById(
+                    "spotifyLogin"
+                );
+
+
+        const spotifyUserElement =
+            typeof $ === "function"
+                ? $("spotifyUser")
+                : document.getElementById(
+                    "spotifyUser"
+                );
+
+
+        const name =
+            user.display_name ||
+            user.id;
+
+
+        if (spotifyStatus) {
+
+            spotifyStatus.textContent =
+                name;
 
         }
 
 
-        if ($("spotifyLogin")) {
+        if (spotifyLoginButton) {
 
-            $("spotifyLogin")
-                .textContent =
+            spotifyLoginButton.textContent =
                 "Connected";
 
 
-            $("spotifyLogin")
-                .classList
-                .add("connected");
+            spotifyLoginButton.classList.add(
+                "connected"
+            );
 
         }
 
 
-        if ($("spotifyUser")) {
+        if (spotifyUserElement) {
 
-            $("spotifyUser")
-                .textContent =
+            spotifyUserElement.textContent =
                 "Connected: " +
-                (
-                    user.display_name ||
-                    user.id
-                );
+                name;
 
         }
 
     } else {
 
-        if ($("spotifyStatus")) {
+        const spotifyStatus =
+            typeof $ === "function"
+                ? $("spotifyStatus")
+                : document.getElementById(
+                    "spotifyStatus"
+                );
 
-            $("spotifyStatus")
-                .textContent =
+
+        const spotifyLoginButton =
+            typeof $ === "function"
+                ? $("spotifyLogin")
+                : document.getElementById(
+                    "spotifyLogin"
+                );
+
+
+        if (spotifyStatus) {
+
+            spotifyStatus.textContent =
                 "Not connected";
 
         }
 
 
-        if ($("spotifyLogin")) {
+        if (spotifyLoginButton) {
 
-            $("spotifyLogin")
-                .textContent =
+            spotifyLoginButton.textContent =
                 "Connect";
 
 
-            $("spotifyLogin")
-                .classList
-                .remove(
-                    "connected"
-                );
+            spotifyLoginButton.classList.remove(
+                "connected"
+            );
 
         }
 
     }
-
-}
-
-
-if ($("spotifyLogin")) {
-
-    $("spotifyLogin").onclick =
-        spotifyLogin;
 
 }
 
@@ -9606,9 +9693,14 @@ if ($("spotifyLogin")) {
 let googleUser =
     null;
 
+
 let googleTokenClient =
     null;
 
+
+/* =========================================================
+   INITIALIZE GOOGLE
+   ========================================================= */
 
 function initializeGoogle() {
 
@@ -9656,6 +9748,10 @@ function initializeGoogle() {
 }
 
 
+/* =========================================================
+   GOOGLE LOGIN
+   ========================================================= */
+
 function googleLogin() {
 
     if (!googleTokenClient) {
@@ -9674,6 +9770,10 @@ function googleLogin() {
 
 }
 
+
+/* =========================================================
+   HANDLE GOOGLE TOKEN
+   ========================================================= */
 
 async function handleGoogleToken(
     response
@@ -9747,6 +9847,10 @@ async function handleGoogleToken(
 }
 
 
+/* =========================================================
+   GOOGLE UI
+   ========================================================= */
+
 function updateGoogleUI(
     user
 ) {
@@ -9759,33 +9863,54 @@ function updateGoogleUI(
             "Connected";
 
 
-        if ($("googleStatus")) {
+        const googleStatus =
+            typeof $ === "function"
+                ? $("googleStatus")
+                : document.getElementById(
+                    "googleStatus"
+                );
 
-            $("googleStatus")
-                .textContent =
+
+        const googleLoginButton =
+            typeof $ === "function"
+                ? $("googleLogin")
+                : document.getElementById(
+                    "googleLogin"
+                );
+
+
+        const youtubeUser =
+            typeof $ === "function"
+                ? $("youtubeUser")
+                : document.getElementById(
+                    "youtubeUser"
+                );
+
+
+        if (googleStatus) {
+
+            googleStatus.textContent =
                 name;
 
         }
 
 
-        if ($("googleLogin")) {
+        if (googleLoginButton) {
 
-            $("googleLogin")
-                .textContent =
+            googleLoginButton.textContent =
                 "Connected";
 
 
-            $("googleLogin")
-                .classList
-                .add("connected");
+            googleLoginButton.classList.add(
+                "connected"
+            );
 
         }
 
 
-        if ($("youtubeUser")) {
+        if (youtubeUser) {
 
-            $("youtubeUser")
-                .textContent =
+            youtubeUser.textContent =
                 "Connected: " +
                 name;
 
@@ -9793,243 +9918,41 @@ function updateGoogleUI(
 
     } else {
 
-        if ($("googleStatus")) {
+        const googleStatus =
+            typeof $ === "function"
+                ? $("googleStatus")
+                : document.getElementById(
+                    "googleStatus"
+                );
 
-            $("googleStatus")
-                .textContent =
+
+        const googleLoginButton =
+            typeof $ === "function"
+                ? $("googleLogin")
+                : document.getElementById(
+                    "googleLogin"
+                );
+
+
+        if (googleStatus) {
+
+            googleStatus.textContent =
                 "Not connected";
 
         }
 
 
-        if ($("googleLogin")) {
+        if (googleLoginButton) {
 
-            $("googleLogin")
-                .textContent =
+            googleLoginButton.textContent =
                 "Connect";
 
 
-            $("googleLogin")
-                .classList
-                .remove(
-                    "connected"
-                );
-
-        }
-
-    }
-
-}
-
-
-if ($("googleLogin")) {
-
-    $("googleLogin").onclick =
-        googleLogin;
-
-}
-
-
-/* =========================================================
-   THEME
-   ========================================================= */
-
-function applyTheme() {
-
-    if (
-        typeof window.applyRakkeZTheme ===
-        "function"
-    ) {
-
-        window.applyRakkeZTheme(
-            settings.theme
-        );
-
-        return;
-
-    }
-
-
-    document.documentElement
-        .dataset.theme =
-        settings.theme;
-
-}
-
-
-/* =========================================================
-   AMBIENT
-   ========================================================= */
-
-function restoreAmbient() {
-
-    if (
-        typeof window.restoreRakkeZAmbient ===
-        "function"
-    ) {
-
-        window.restoreRakkeZAmbient();
-
-    }
-
-}
-
-
-/* =========================================================
-   TIMER BUTTON
-   ========================================================= */
-
-if ($("startBtn")) {
-
-    $("startBtn").onclick =
-        startTimer;
-
-}
-
-
-/* =========================================================
-   KEYBOARD SHORTCUTS
-   ========================================================= */
-
-document.addEventListener(
-    "keydown",
-    e => {
-
-        if (
-            e.target.tagName ===
-            "INPUT" ||
-            e.target.tagName ===
-            "TEXTAREA" ||
-            e.target.isContentEditable
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            e.code ===
-            "Space"
-        ) {
-
-            e.preventDefault();
-
-            startTimer();
-
-        }
-
-
-        if (
-            e.key.toLowerCase() ===
-            "r"
-        ) {
-
-            openResetConfirmation();
-
-        }
-
-
-        if (
-            e.key.toLowerCase() ===
-            "f"
-        ) {
-
-            toggleFocusOnly();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   LOADING SCREEN SAFE HANDLER
-   ========================================================= */
-
-function finishLoadingScreen() {
-
-    const loading =
-        document.getElementById(
-            "loadingScreen"
-        ) ||
-        document.getElementById(
-            "loader"
-        ) ||
-        document.querySelector(
-            ".loading-screen"
-        ) ||
-        document.querySelector(
-            ".loader"
-        );
-
-
-    if (!loading) {
-
-        return;
-
-    }
-
-
-    loading.classList.add(
-        "hide"
-    );
-
-
-    setTimeout(
-        () => {
-
-            try {
-
-                loading.style.display =
-                    "none";
-
-            } catch {}
-
-        },
-        500
-    );
-
-}
-
-
-/* =========================================================
-   SAFE ASYNC
-   ========================================================= */
-
-function safeAsync(fn) {
-
-    try {
-
-        const result =
-            fn();
-
-
-        if (
-            result &&
-            typeof result.catch ===
-            "function"
-        ) {
-
-            result.catch(
-                error => {
-
-                    console.warn(
-                        "Background initialization failed:",
-                        error
-                    );
-
-                }
+            googleLoginButton.classList.remove(
+                "connected"
             );
 
         }
-
-    } catch (error) {
-
-        console.warn(
-            "Background initialization failed:",
-            error
-        );
 
     }
 
@@ -10081,7 +10004,11 @@ function getFirstExistingElement(
     for (const id of ids) {
 
         const element =
-            $(id);
+            typeof $ === "function"
+                ? $(id)
+                : document.getElementById(
+                    id
+                );
 
 
         if (element) {
@@ -10109,6 +10036,7 @@ function applyTheme() {
         "light"
 
             ? "light"
+
             : "dark";
 
 
@@ -10269,13 +10197,16 @@ function toggleTheme() {
         "light"
 
             ? "light"
+
             : "dark";
 
 
     setTheme(
         currentTheme ===
             "dark"
+
             ? "light"
+
             : "dark"
     );
 
@@ -10294,7 +10225,17 @@ function initializeThemeEvents() {
         );
 
 
-    if (darkButton) {
+    if (
+        darkButton &&
+        darkButton.dataset
+            .rakkezThemeBound !==
+        "true"
+    ) {
+
+        darkButton.dataset
+            .rakkezThemeBound =
+            "true";
+
 
         darkButton.addEventListener(
             "click",
@@ -10316,7 +10257,17 @@ function initializeThemeEvents() {
         );
 
 
-    if (lightButton) {
+    if (
+        lightButton &&
+        lightButton.dataset
+            .rakkezThemeBound !==
+        "true"
+    ) {
+
+        lightButton.dataset
+            .rakkezThemeBound =
+            "true";
+
 
         lightButton.addEventListener(
             "click",
@@ -10341,8 +10292,16 @@ function initializeThemeEvents() {
     if (
         toggleButton &&
         !darkButton &&
-        !lightButton
+        !lightButton &&
+        toggleButton.dataset
+            .rakkezThemeBound !==
+        "true"
     ) {
+
+        toggleButton.dataset
+            .rakkezThemeBound =
+            "true";
+
 
         toggleButton.addEventListener(
             "click",
@@ -10376,6 +10335,7 @@ window.RakkeZTheme = {
                 "light"
 
                 ? "light"
+
                 : "dark";
 
         }
@@ -10384,7 +10344,237 @@ window.RakkeZTheme = {
 
 
 /* =========================================================
-   STARTUP
+   TIMER BUTTON
+   ========================================================= */
+
+function initializeStartButton() {
+
+    const button =
+        typeof $ === "function"
+            ? $("startBtn")
+            : document.getElementById(
+                "startBtn"
+            );
+
+
+    if (!button) {
+        return;
+    }
+
+
+    if (
+        button.dataset
+            .rakkezStartBound ===
+        "true"
+    ) {
+
+        return;
+
+    }
+
+
+    button.dataset
+        .rakkezStartBound =
+        "true";
+
+
+    button.onclick =
+        startTimer;
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ---------------------------------------------------------
+   SPACE = Start / Pause
+   R     = Reset
+   F     = Focus Only
+   ========================================================= */
+
+document.addEventListener(
+    "keydown",
+    e => {
+
+        if (
+            e.target &&
+            (
+                e.target.tagName ===
+                    "INPUT" ||
+
+                e.target.tagName ===
+                    "TEXTAREA" ||
+
+                e.target.isContentEditable
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            e.code ===
+            "Space"
+        ) {
+
+            e.preventDefault();
+
+            startTimer();
+
+        }
+
+
+        if (
+            e.key &&
+            e.key.toLowerCase() ===
+            "r"
+        ) {
+
+            e.preventDefault();
+
+            openResetConfirmation();
+
+        }
+
+
+        if (
+            e.key &&
+            e.key.toLowerCase() ===
+            "f"
+        ) {
+
+            if (
+                typeof toggleFocusOnly ===
+                "function"
+            ) {
+
+                toggleFocusOnly();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOADING SCREEN
+   ========================================================= */
+
+function finishLoadingScreen() {
+
+    const loading =
+        document.getElementById(
+            "loadingScreen"
+        ) ||
+        document.getElementById(
+            "loader"
+        ) ||
+        document.querySelector(
+            ".loading-screen"
+        ) ||
+        document.querySelector(
+            ".loader"
+        );
+
+
+    if (!loading) {
+
+        return;
+
+    }
+
+
+    loading.classList.add(
+        "hide"
+    );
+
+
+    setTimeout(
+        () => {
+
+            try {
+
+                loading.style.display =
+                    "none";
+
+            } catch {}
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   SAFE ASYNC
+   ========================================================= */
+
+function safeAsync(
+    fn
+) {
+
+    try {
+
+        const result =
+            fn();
+
+
+        if (
+            result &&
+            typeof result.catch ===
+            "function"
+        ) {
+
+            result.catch(
+                error => {
+
+                    console.warn(
+                        "Background initialization failed:",
+                        error
+                    );
+
+                }
+            );
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Background initialization failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   AMBIENT
+   ========================================================= */
+
+function restoreAmbient() {
+
+    if (
+        typeof window.restoreRakkeZAmbient ===
+        "function"
+    ) {
+
+        window.restoreRakkeZAmbient();
+
+    }
+
+}
+
+
+/* =========================================================
+   APPLICATION INIT
    ========================================================= */
 
 async function init() {
@@ -10477,7 +10667,7 @@ async function init() {
 
 
     /* =====================================================
-       TIMER
+       TIMER RESTORE
        ===================================================== */
 
     try {
@@ -10509,6 +10699,7 @@ async function init() {
             focusMinutes > 0
 
                 ? focusMinutes
+
                 : DEFAULT_SETTINGS.focus;
 
 
@@ -10559,7 +10750,7 @@ async function init() {
 
 
     /* =====================================================
-       UI
+       TIMER UI
        ===================================================== */
 
     try {
@@ -10576,6 +10767,10 @@ async function init() {
     }
 
 
+    /* =====================================================
+       STATS
+       ===================================================== */
+
     try {
 
         updateStats();
@@ -10589,6 +10784,10 @@ async function init() {
 
     }
 
+
+    /* =====================================================
+       SETTINGS UI
+       ===================================================== */
 
     try {
 
@@ -10604,6 +10803,10 @@ async function init() {
     }
 
 
+    /* =====================================================
+       TASKS
+       ===================================================== */
+
     try {
 
         renderTasks();
@@ -10617,6 +10820,10 @@ async function init() {
 
     }
 
+
+    /* =====================================================
+       THEME
+       ===================================================== */
 
     try {
 
@@ -10640,6 +10847,84 @@ async function init() {
 
         console.warn(
             "Theme events initialization failed:",
+            error
+        );
+
+    }
+
+
+    /* =====================================================
+       MEDIA
+       ===================================================== */
+
+    try {
+
+        initializeMediaTabs();
+
+    } catch (error) {
+
+        console.warn(
+            "Media tabs initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        initializeYouTube();
+
+    } catch (error) {
+
+        console.warn(
+            "YouTube initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        initializeSpotifyEmbed();
+
+    } catch (error) {
+
+        console.warn(
+            "Spotify embed initialization failed:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        initializeLocalMedia();
+
+    } catch (error) {
+
+        console.warn(
+            "Local media initialization failed:",
+            error
+        );
+
+    }
+
+
+    /* =====================================================
+       START BUTTON
+       ===================================================== */
+
+    try {
+
+        initializeStartButton();
+
+    } catch (error) {
+
+        console.warn(
+            "Start button initialization failed:",
             error
         );
 
@@ -10672,7 +10957,7 @@ async function init() {
 
 
     /* =====================================================
-       BACKGROUND SERVICES
+       SPOTIFY CALLBACK
        ===================================================== */
 
     safeAsync(
@@ -10684,6 +10969,10 @@ async function init() {
     );
 
 
+    /* =====================================================
+       SPOTIFY USER
+       ===================================================== */
+
     safeAsync(
         async () => {
 
@@ -10692,6 +10981,10 @@ async function init() {
         }
     );
 
+
+    /* =====================================================
+       GOOGLE
+       ===================================================== */
 
     safeAsync(
         async () => {
@@ -10705,29 +10998,84 @@ async function init() {
 
 
 /* =========================================================
-   START APPLICATION
+   GOOGLE / SPOTIFY BUTTON INITIALIZATION
    ========================================================= */
 
-if (
-    document.readyState ===
-    "loading"
-) {
+function initializeOAuthButtons() {
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        () => {
-
-            safeAsync(
-                init
+    const spotifyButton =
+        typeof $ === "function"
+            ? $("spotifyLogin")
+            : document.getElementById(
+                "spotifyLogin"
             );
 
-        },
-        {
-            once: true
-        }
-    );
 
-} else {
+    if (
+        spotifyButton &&
+        spotifyButton.dataset
+            .rakkezOAuthBound !==
+        "true"
+    ) {
+
+        spotifyButton.dataset
+            .rakkezOAuthBound =
+            "true";
+
+
+        spotifyButton.onclick =
+            spotifyLogin;
+
+    }
+
+
+    const googleButton =
+        typeof $ === "function"
+            ? $("googleLogin")
+            : document.getElementById(
+                "googleLogin"
+            );
+
+
+    if (
+        googleButton &&
+        googleButton.dataset
+            .rakkezOAuthBound !==
+        "true"
+    ) {
+
+        googleButton.dataset
+            .rakkezOAuthBound =
+            "true";
+
+
+        googleButton.onclick =
+            googleLogin;
+
+    }
+
+}
+
+
+/* =========================================================
+   APPLICATION START
+   ========================================================= */
+
+function startRakkeZApplication() {
+
+    try {
+
+        initializeOAuthButtons();
+
+    } catch (error) {
+
+        console.warn(
+            "OAuth button initialization failed:",
+            error
+        );
+
+    }
+
 
     safeAsync(
         init
@@ -10736,20 +11084,57 @@ if (
 }
 
 
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        startRakkeZApplication,
+        {
+            once: true
+        }
+    );
+
+} else {
+
+    startRakkeZApplication();
+
+}
+
+
 /* =========================================================
-   FINAL SAFETY
+   FINAL OVERLAY API
    ========================================================= */
 
 window.RakkeZOverlay = {
 
     open:
-        openOverlayById,
+        typeof openOverlayById ===
+        "function"
+
+            ? openOverlayById
+
+            : function () {},
+
 
     close:
-        closeOverlayById,
+        typeof closeOverlayById ===
+        "function"
+
+            ? closeOverlayById
+
+            : function () {},
+
 
     closeAll:
-        closeAllOverlays
+        typeof closeAllOverlays ===
+        "function"
+
+            ? closeAllOverlays
+
+            : function () {}
 
 };
 
@@ -10786,7 +11171,12 @@ function formatFocusPeriod(
 
 
     const lang =
-        getCurrentLanguage();
+        typeof getCurrentLanguage ===
+        "function"
+
+            ? getCurrentLanguage()
+
+            : "en";
 
 
     const locale =
