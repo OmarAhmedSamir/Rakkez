@@ -184,8 +184,8 @@
             name: "Water Bubble",
             icon: "💧",
             description: "Water Bubbels Sound for focus",
-            image: "bubble.jpg",
-            src: "bubble.mp3",
+            image: "Bubble.jpg",
+            src: "Bubble.mp3",
             defaultVolume: 0.50
         },
 
