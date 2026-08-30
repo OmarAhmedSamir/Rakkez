@@ -275,6 +275,33 @@
 
     const AMBIENT_PRESETS = [
 
+       {
+            id: "Beach",
+
+            name: "Beach",
+
+            url:
+                "https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701316049-1200x675.jpg"
+        },
+
+        {
+            id: "Caffee",
+
+            name: "Caffe",
+
+            url:
+                "https://i.pinimg.com/originals/78/a2/57/78a257dd61f47c26fd7f4859c092343a.jpg"
+        },
+
+        {
+            id: "House",
+
+            name: "Forest House",
+
+            url:
+                "https://wallpaperaccess.com/full/2506695.jpg"
+        },
+
         {
             id: "anime-girl",
 
