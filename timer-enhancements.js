@@ -1,7 +1,7 @@
 (function () {
 "use strict";
 
-```
+
 /*
  * =========================================================
  * RAKKEZ TIMER ENHANCEMENTS
@@ -1478,6 +1478,5 @@ if (
 
     initRakkeZTimerEnhancements();
 }
-```
 
 })();
