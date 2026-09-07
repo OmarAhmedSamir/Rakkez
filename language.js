@@ -110,6 +110,9 @@
             sessionsBeforeLong:
                 "Sessions Before Long Break",
 
+            sessionsBeforeLongDescription:
+                "How many focus sessions before a long break",
+
             dailyGoalTitle:
                 "Daily Goal",
 
@@ -300,10 +303,10 @@
             ================================================= */
 
             resetEverything:
-                "Reset everything?",
+                "Reset All Statistics?",
 
             resetDescription:
-                "This will remove your sessions, focus time, streak and tasks. This cannot be undone.",
+                "This will set your Focus time, Sessions and Daily Goal back to 0. Your streak and tasks are kept safe. This cannot be undone.",
 
             cancel:
                 "Cancel",
@@ -338,7 +341,25 @@
                 "hour",
 
             hoursWord:
-                "hours"
+                "hours",
+
+            rakkezResetTitle:
+                "Reset",
+
+            rakkezResetDescription:
+                "What would you like to reset?",
+
+            rakkezResetCurrentTitle:
+                "Reset Current Session",
+
+            rakkezResetCurrentDescription:
+                "Restart the current Focus or Break timer from the beginning.",
+
+            rakkezResetAllTitle:
+                "Reset Everything (Keep Streak)",
+
+            rakkezResetAllDescription:
+                "Set Focus time, Sessions and Daily Goal back to 0. Your streak stays safe."
 
         },
 
@@ -437,6 +458,9 @@
 
             sessionsBeforeLong:
                 "عدد الجلسات قبل الاستراحة الطويلة",
+
+            sessionsBeforeLongDescription:
+                "كم عدد جلسات التركيز قبل الاستراحة الطويلة",
 
             dailyGoalTitle:
                 "الهدف اليومي",
@@ -628,10 +652,10 @@
             ================================================= */
 
             resetEverything:
-                "إعادة ضبط كل شيء؟",
+                "إعادة تعيين كل الإحصائيات؟",
 
             resetDescription:
-                "سيؤدي هذا إلى حذف جلساتك ووقت التركيز والأيام المتتالية والمهام. لا يمكن التراجع عن ذلك.",
+                "سيؤدي هذا إلى إعادة وقت التركيز والجلسات والهدف اليومي إلى 0. يبقى تتابعك ومهامك محفوظين. لا يمكن التراجع عن ذلك.",
 
             cancel:
                 "إلغاء",
@@ -666,7 +690,25 @@
                 "ساعة",
 
             hoursWord:
-                "ساعات"
+                "ساعات",
+
+            rakkezResetTitle:
+                "إعادة تعيين",
+
+            rakkezResetDescription:
+                "ماذا تريد إعادة تعيينه؟",
+
+            rakkezResetCurrentTitle:
+                "إعادة تعيين الجلسة الحالية",
+
+            rakkezResetCurrentDescription:
+                "إعادة تشغيل مؤقت التركيز أو الاستراحة الحالي من البداية.",
+
+            rakkezResetAllTitle:
+                "إعادة تعيين كل شيء (مع الحفاظ على التتابع)",
+
+            rakkezResetAllDescription:
+                "إعادة وقت التركيز والجلسات والهدف اليومي إلى 0. تتابعك يبقى محفوظاً."
 
         }
 
@@ -1340,7 +1382,40 @@
                     "Ambient",
 
                 focusExit:
-                    "Exit Focus"
+                    "Exit Focus",
+
+                resetBtn:
+                    "Reset Timer",
+
+                miniTimerBtn:
+                    "Mini Timer",
+
+                rakkezShuffle:
+                    "Shuffle",
+
+                rakkezPrevious:
+                    "Previous",
+
+                rakkezPlay:
+                    "Play",
+
+                rakkezNext:
+                    "Next",
+
+                rakkezLoop:
+                    "Loop",
+
+                rakkezMediaClose:
+                    "Close",
+
+                rakkezMiniPlay:
+                    "Play",
+
+                rakkezMiniNext:
+                    "Next",
+
+                rakkezMiniClose:
+                    "Close"
 
             },
 
@@ -1372,7 +1447,40 @@
                     "الأجواء",
 
                 focusExit:
-                    "الخروج من التركيز"
+                    "الخروج من التركيز",
+
+                resetBtn:
+                    "إعادة تعيين المؤقت",
+
+                miniTimerBtn:
+                    "المؤقت المصغر",
+
+                rakkezShuffle:
+                    "عشوائي",
+
+                rakkezPrevious:
+                    "السابق",
+
+                rakkezPlay:
+                    "تشغيل",
+
+                rakkezNext:
+                    "التالي",
+
+                rakkezLoop:
+                    "تكرار",
+
+                rakkezMediaClose:
+                    "إغلاق",
+
+                rakkezMiniPlay:
+                    "تشغيل",
+
+                rakkezMiniNext:
+                    "التالي",
+
+                rakkezMiniClose:
+                    "إغلاق"
 
             }
 
@@ -1399,6 +1507,20 @@
 
                     element.title =
                         selected[id];
+
+
+                    if (
+                        element.hasAttribute(
+                            "aria-label"
+                        )
+                    ) {
+
+                        element.setAttribute(
+                            "aria-label",
+                            selected[id]
+                        );
+
+                    }
 
                 }
             );
@@ -1628,7 +1750,7 @@
 
             t.longBreakDescription,
 
-            "",
+            t.sessionsBeforeLongDescription,
 
             t.dailyGoalDescription,
 
@@ -2061,6 +2183,50 @@
 
 
     /* =========================================================
+       RESET TIMER MODAL (the live one, wired to #resetBtn)
+    ========================================================= */
+
+    function applyRakkezResetModal(t) {
+
+        setText(
+            get("rakkezResetTitle"),
+            t.rakkezResetTitle
+        );
+
+        setText(
+            get("rakkezResetDescription"),
+            t.rakkezResetDescription
+        );
+
+        setText(
+            get("rakkezResetCurrentTitle"),
+            t.rakkezResetCurrentTitle
+        );
+
+        setText(
+            get("rakkezResetCurrentDescription"),
+            t.rakkezResetCurrentDescription
+        );
+
+        setText(
+            get("rakkezResetAllTitle"),
+            t.rakkezResetAllTitle
+        );
+
+        setText(
+            get("rakkezResetAllDescription"),
+            t.rakkezResetAllDescription
+        );
+
+        setText(
+            get("rakkezResetCancelLabel"),
+            t.cancel
+        );
+
+    }
+
+
+    /* =========================================================
        APPLY LANGUAGE
     ========================================================= */
 
@@ -2268,6 +2434,8 @@
         ===================================================== */
 
         applyReset(t);
+
+        applyRakkezResetModal(t);
 
 
         /* =====================================================
