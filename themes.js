@@ -330,31 +330,61 @@
     const AMBIENT_PRESETS = [
 
        {
-            id: "Beach",
+            id: "City",
 
-            name: "Beach",
+            name: "City",
 
             url:
-                "https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701316049-1200x675.jpg"
+                "https://wallpaperaccess.com/full/10976608.jpg"
         },
 
         {
-            id: "Caffee",
+            id: "City2",
 
-            name: "Caffe",
+            name: "City",
 
             url:
-                "https://i.pinimg.com/originals/78/a2/57/78a257dd61f47c26fd7f4859c092343a.jpg"
+                "https://wallpapers.com/images/hd/from-up-on-poppy-hill-background-41tabdfpcx7kasgf.jpg"
         },
 
         {
-            id: "House",
+            id: "Cafe",
 
-            name: "Forest House",
+            name: "Cafe",
 
             url:
-                "https://wallpaperaccess.com/full/2506695.jpg"
+                "https://wallpapercave.com/wp/wp8174943.jpg"
         },
+
+             {
+            id: "Forest2",
+
+            name: "Forest",
+
+            url:
+                "https://wallpapercave.com/wp/wp16523260.webp"
+        },
+
+             {
+            id: "Train",
+
+            name: "Train",
+
+            url:
+                "https://wallpapercave.com/wp/wp16281445.webp"
+        },
+
+             {
+            id: "Italia Coast",
+
+            name: "Italia Coast",
+
+            url:
+                "https://wallpapercave.com/wp/wp16420822.webp"
+        },
+
+
+
 
         {
             id: "anime-girl",
