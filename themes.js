@@ -221,6 +221,20 @@
                     transparent 40%
                 ),
                 #02040b
+            `,
+
+            backgroundLight: `
+                radial-gradient(
+                    circle at 25% 25%,
+                    rgba(0,108,255,.35),
+                    transparent 40%
+                ),
+                radial-gradient(
+                    circle at 75% 70%,
+                    rgba(0,60,200,.16),
+                    transparent 45%
+                ),
+                #f5f7fb
             `
         },
 
@@ -267,6 +281,46 @@
         }
 
     ];
+
+
+    /* =========================================================
+       11b — THEME-AWARE AMBIENT BACKGROUND
+       -----------------------------------------------------
+       Only "RakkeZ Gradient" (the default, no-choice-made
+       ambient) adapts to light/dark theme. Solar Yellow and
+       Neon Pink are deliberate vivid mood choices the person
+       picked on purpose, so they stay as designed regardless
+       of theme — same idea as picking a wallpaper.
+       ========================================================= */
+
+    function getAmbientBackground(item) {
+
+        if (!item) return "";
+
+
+        const isLight =
+            document.documentElement.classList.contains(
+                "light"
+            ) ||
+            document.body.classList.contains(
+                "light"
+            );
+
+
+        if (
+            isLight &&
+            item.id === "gradient" &&
+            item.backgroundLight
+        ) {
+
+            return item.backgroundLight;
+
+        }
+
+
+        return item.background;
+
+    }
 
 
     /* =========================================================
@@ -673,6 +727,31 @@
 
 
         /* =====================================================
+           RE-APPLY AMBIENT
+
+           "RakkeZ Gradient" (the default ambient) has a
+           light and dark variant — re-apply it so switching
+           theme doesn't leave the old-theme gradient stuck
+           on screen. Other ambients (photos, video, vivid
+           mood presets) are a deliberate choice and don't
+           need to change with theme.
+           ===================================================== */
+
+        if (
+            selectedAmbient ===
+            "gradient"
+        ) {
+
+            try {
+
+                restoreAmbient();
+
+            } catch (error) {}
+
+        }
+
+
+        /* =====================================================
            EVENT
 
            يسمح لملفات أخرى بمعرفة أن Theme تغير.
@@ -1009,7 +1088,7 @@
 
 
         preview.style.background =
-            item.background;
+            getAmbientBackground(item);
 
 
         card.appendChild(
@@ -1037,7 +1116,7 @@
 
 
                 applyGradient(
-                    item.background
+                    getAmbientBackground(item)
                 );
 
 
@@ -1387,7 +1466,7 @@
 
 
             applyGradient(
-                gradient.background
+                getAmbientBackground(gradient)
             );
 
 
@@ -1462,7 +1541,7 @@
         if (fallback) {
 
             applyGradient(
-                fallback.background
+                getAmbientBackground(fallback)
             );
 
         }
