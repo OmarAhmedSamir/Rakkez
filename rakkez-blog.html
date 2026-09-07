@@ -12,6 +12,94 @@
 
 <title>RakkeZ Blog</title>
 
+<!-- =====================================================
+     THEME SYNC (runs before CSS paints, prevents flash)
+     Reads the same theme the user picked in RakkeZ itself.
+====================================================== -->
+
+<script>
+(function () {
+    try {
+        var raw = localStorage.getItem("rakkez_theme_settings");
+        var theme = "dark";
+        if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed.theme === "light") {
+                theme = "light";
+            }
+        }
+        if (theme === "light") {
+            document.documentElement.classList.add("light");
+            document.documentElement.dataset.theme = "light";
+        }
+    } catch (error) {}
+})();
+</script>
+
+<!-- =====================================================
+     LANGUAGE SYNC
+     Translates the blog's static chrome (not the article
+     content itself, which stays in its authored language)
+     to match whatever language was chosen in RakkeZ.
+====================================================== -->
+
+<script>
+(function () {
+    var lang =
+        localStorage.getItem("rakkez_language") ||
+        localStorage.getItem("language") ||
+        "en";
+
+    var t = {
+        en: {
+            heroLine1: "Ideas that help you",
+            heroSpan: "focus.",
+            heroSubtitle:
+                "Productivity, focus, studying, technology and everything behind the RakkeZ experience.",
+            toolbarLabel: "Latest articles",
+            searchPlaceholder: "Search articles..."
+        },
+        ar: {
+            heroLine1: "أفكار تساعدك على",
+            heroSpan: "التركيز.",
+            heroSubtitle:
+                "الإنتاجية والتركيز والدراسة والتقنية وكل ما يخص تجربة RakkeZ.",
+            toolbarLabel: "أحدث المقالات",
+            searchPlaceholder: "ابحث في المقالات..."
+        }
+    };
+
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+    window.__rakkezBlogTranslate = function () {
+        var dict = t[lang] || t.en;
+
+        var title = document.getElementById("blogHeroTitle");
+        if (title) {
+            var span = title.querySelector("span");
+            var spanText = span ? span.textContent : dict.heroSpan;
+            title.innerHTML = "";
+            title.append(document.createTextNode(dict.heroLine1 + " "));
+            var newSpan = document.createElement("span");
+            newSpan.textContent = dict.heroSpan;
+            title.appendChild(newSpan);
+        }
+
+        var subtitle = document.getElementById("blogHeroSubtitle");
+        if (subtitle) subtitle.textContent = dict.heroSubtitle;
+
+        var toolbarLabel = document.getElementById("blogToolbarLabel");
+        if (toolbarLabel) toolbarLabel.textContent = dict.toolbarLabel;
+
+        var search = document.getElementById("searchInput");
+        if (search) search.placeholder = dict.searchPlaceholder;
+    };
+
+    document.addEventListener("DOMContentLoaded", window.__rakkezBlogTranslate);
+})();
+</script>
+
 <link rel="icon" type="image/png" href="R.png">
 
 <link
@@ -40,11 +128,17 @@
 
 :root{
 
+    --surface-rgb:8,13,22;
+
+    --ink-rgb:255,255,255;
+
     --bg:#03050a;
 
-    --panel:rgba(8,13,22,.86);
+    --bg-solid:#02040a;
 
-    --panel-strong:rgba(8,13,22,.94);
+    --panel:rgba(var(--surface-rgb),.86);
+
+    --panel-strong:rgba(var(--surface-rgb),.94);
 
     --border:rgba(255,255,255,.10);
 
@@ -66,6 +160,37 @@
         0 30px 100px rgba(0,0,0,.55);
 
     --radius:24px;
+
+}
+
+
+/* =========================================================
+   LIGHT MODE
+   Same token system as the main RakkeZ app, so the blog
+   respects whatever theme was chosen there.
+========================================================= */
+
+html.light,
+body.light{
+
+    --surface-rgb:248,250,255;
+
+    --ink-rgb:17,24,39;
+
+    --bg:#f5f7fb;
+
+    --bg-solid:#eef1f8;
+
+    --text:#111827;
+
+    --muted:rgba(17,24,39,.58);
+
+    --border:rgba(0,0,0,.10);
+
+    --border-hover:rgba(0,0,0,.20);
+
+    --shadow:
+        0 30px 100px rgba(20,30,50,.14);
 
 }
 
@@ -99,9 +224,11 @@ body{
 
     font-family:"DM Sans",sans-serif;
 
-    background:#02040a;
+    background:var(--bg-solid);
 
     color:var(--text);
+
+    transition:background .25s ease,color .25s ease;
 
 }
 
@@ -149,6 +276,35 @@ body::before{
 }
 
 
+body.light::before{
+
+    background:
+
+        radial-gradient(
+            circle at 20% 30%,
+            rgba(0,94,255,.55) 0%,
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 75% 20%,
+            rgba(60,110,220,.4) 0%,
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 60% 80%,
+            rgba(30,80,200,.3) 0%,
+            transparent 32%
+        ),
+
+        #eef1f8;
+
+    opacity:.55;
+
+}
+
+
 body::after{
 
     content:"";
@@ -168,6 +324,19 @@ body::after{
         );
 
     pointer-events:none;
+
+}
+
+
+body.light::after{
+
+    background:
+
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.15),
+            rgba(255,255,255,.6)
+        );
 
 }
 
@@ -198,7 +367,7 @@ body::after{
         rgba(3,5,10,.62);
 
     border-bottom:
-        1px solid rgba(255,255,255,.07);
+        1px solid rgba(var(--ink-rgb),.07);
 
     backdrop-filter:blur(20px);
 
@@ -408,7 +577,7 @@ body::after{
     color:white;
 
     background:
-        rgba(255,255,255,.05);
+        rgba(var(--ink-rgb),.05);
 
     border:
         1px solid var(--border);
@@ -444,12 +613,12 @@ body::after{
     overflow:hidden;
 
     border:
-        1px solid rgba(255,255,255,.09);
+        1px solid rgba(var(--ink-rgb),.09);
 
     border-radius:20px;
 
     background:
-        rgba(8,13,22,.68);
+        rgba(var(--surface-rgb),.68);
 
     backdrop-filter:blur(18px);
 
@@ -465,7 +634,7 @@ body::after{
     transform:translateY(-5px);
 
     border-color:
-        rgba(255,255,255,.18);
+        rgba(var(--ink-rgb),.18);
 
 }
 
@@ -552,12 +721,12 @@ body::after{
     text-align:center;
 
     border:
-        1px solid rgba(255,255,255,.08);
+        1px solid rgba(var(--ink-rgb),.08);
 
     border-radius:20px;
 
     background:
-        rgba(255,255,255,.025);
+        rgba(var(--ink-rgb),.025);
 
     color:var(--muted);
 
@@ -606,12 +775,12 @@ body::after{
     padding:30px;
 
     border:
-        1px solid rgba(255,255,255,.12);
+        1px solid rgba(var(--ink-rgb),.12);
 
     border-radius:28px;
 
     background:
-        rgba(8,13,22,.95);
+        rgba(var(--surface-rgb),.95);
 
     box-shadow:var(--shadow);
 
@@ -669,7 +838,7 @@ body::after{
     margin-top:28px;
 
     color:
-        rgba(255,255,255,.80);
+        rgba(var(--ink-rgb),.80);
 
     font-size:15px;
 
@@ -789,12 +958,12 @@ body::after{
     padding:25px;
 
     border:
-        1px solid rgba(255,255,255,.12);
+        1px solid rgba(var(--ink-rgb),.12);
 
     border-radius:28px;
 
     background:
-        rgba(8,13,22,.95);
+        rgba(var(--surface-rgb),.95);
 
     box-shadow:var(--shadow);
 
@@ -811,7 +980,7 @@ body::after{
 .panel::-webkit-scrollbar-thumb{
 
     background:
-        rgba(255,255,255,.15);
+        rgba(var(--ink-rgb),.15);
 
     border-radius:10px;
 
@@ -851,7 +1020,7 @@ body::after{
     border-radius:12px;
 
     background:
-        rgba(255,255,255,.07);
+        rgba(var(--ink-rgb),.07);
 
     border:
         1px solid var(--border);
@@ -902,7 +1071,7 @@ body::after{
     color:white;
 
     background:
-        rgba(255,255,255,.05);
+        rgba(var(--ink-rgb),.05);
 
     border:
         1px solid var(--border);
@@ -949,12 +1118,12 @@ textarea.input{
     padding:15px;
 
     border:
-        1px dashed rgba(255,255,255,.18);
+        1px dashed rgba(var(--ink-rgb),.18);
 
     border-radius:15px;
 
     background:
-        rgba(255,255,255,.025);
+        rgba(var(--ink-rgb),.025);
 
     cursor:pointer;
 
@@ -1091,7 +1260,7 @@ textarea.input{
         rgba(0,0,0,.65);
 
     border:
-        1px solid rgba(255,255,255,.15);
+        1px solid rgba(var(--ink-rgb),.15);
 
     color:white;
 
@@ -1130,7 +1299,7 @@ textarea.input{
     padding:8px;
 
     background:
-        rgba(255,255,255,.035);
+        rgba(var(--ink-rgb),.035);
 
     border:
         1px solid var(--border);
@@ -1154,10 +1323,10 @@ textarea.input{
     border-radius:8px;
 
     background:
-        rgba(255,255,255,.06);
+        rgba(var(--ink-rgb),.06);
 
     border:
-        1px solid rgba(255,255,255,.06);
+        1px solid rgba(var(--ink-rgb),.06);
 
     color:white;
 
@@ -1183,7 +1352,7 @@ textarea.input{
     color:white;
 
     background:
-        rgba(255,255,255,.025);
+        rgba(var(--ink-rgb),.025);
 
     border:
         1px solid var(--border);
@@ -1210,7 +1379,7 @@ textarea.input{
     content:"Write your article here...";
 
     color:
-        rgba(255,255,255,.28);
+        rgba(var(--ink-rgb),.28);
 
 }
 
@@ -1276,7 +1445,7 @@ textarea.input{
     border-radius:13px;
 
     background:
-        rgba(255,255,255,.06);
+        rgba(var(--ink-rgb),.06);
 
     border:
         1px solid var(--border);
@@ -1316,12 +1485,12 @@ textarea.input{
     padding:12px;
 
     border:
-        1px solid rgba(255,255,255,.08);
+        1px solid rgba(var(--ink-rgb),.08);
 
     border-radius:14px;
 
     background:
-        rgba(255,255,255,.035);
+        rgba(var(--ink-rgb),.035);
 
 }
 
@@ -1398,7 +1567,7 @@ textarea.input{
     border-radius:9px;
 
     background:
-        rgba(255,255,255,.07);
+        rgba(var(--ink-rgb),.07);
 
     border:
         1px solid var(--border);
@@ -1497,10 +1666,10 @@ textarea.input{
     border-radius:11px;
 
     background:
-        rgba(255,255,255,.04);
+        rgba(var(--ink-rgb),.04);
 
     border:
-        1px solid rgba(255,255,255,.07);
+        1px solid rgba(var(--ink-rgb),.07);
 
     color:var(--muted);
 
@@ -1630,6 +1799,12 @@ textarea.input{
 
 <body>
 
+<script>
+    if (document.documentElement.classList.contains("light")) {
+        document.body.classList.add("light");
+    }
+</script>
+
 
 <!-- =====================================================
      HEADER
@@ -1681,7 +1856,7 @@ textarea.input{
     </div>
 
 
-    <h1>
+    <h1 id="blogHeroTitle">
 
         Ideas that help you
 
@@ -1690,7 +1865,7 @@ textarea.input{
     </h1>
 
 
-    <p>
+    <p id="blogHeroSubtitle">
 
         Productivity, focus, studying, technology and everything
         behind the RakkeZ experience.
@@ -1709,6 +1884,7 @@ textarea.input{
     <div class="blog-toolbar">
 
         <div
+            id="blogToolbarLabel"
             style="
                 color:var(--muted);
                 font-size:12px;
@@ -1978,7 +2154,7 @@ textarea.input{
             style="
                 margin-top:30px;
                 padding-top:25px;
-                border-top:1px solid rgba(255,255,255,.08);
+                border-top:1px solid rgba(var(--ink-rgb),.08);
             "
         >
 
@@ -2098,7 +2274,7 @@ textarea.input{
                         style="
                             height:1px;
                             flex:1;
-                            background:rgba(255,255,255,.08);
+                            background:rgba(var(--ink-rgb),.08);
                         "
                     ></div>
 
@@ -2110,7 +2286,7 @@ textarea.input{
                         style="
                             height:1px;
                             flex:1;
-                            background:rgba(255,255,255,.08);
+                            background:rgba(var(--ink-rgb),.08);
                         "
                     ></div>
 
@@ -2307,7 +2483,7 @@ textarea.input{
             style="
                 margin-top:30px;
                 padding-top:25px;
-                border-top:1px solid rgba(255,255,255,.08);
+                border-top:1px solid rgba(var(--ink-rgb),.08);
             "
         >
 
