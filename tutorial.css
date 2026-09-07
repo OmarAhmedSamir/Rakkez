@@ -1,8 +1,12 @@
 :root{
 
+    --surface-rgb:9,14,24;
+
+    --ink-rgb:255,255,255;
+
     --bg:#03050a;
 
-    --panel:rgba(9,14,24,.72);
+    --panel:rgba(var(--surface-rgb),.72);
 
     --border:rgba(255,255,255,.10);
 
@@ -15,6 +19,75 @@
     --blue:#147cff;
 
     --blue-light:#49a4ff;
+
+}
+
+
+/* =========================
+   LIGHT MODE
+   Mirrors the main app's theme tokens so the
+   tutorial respects whatever theme was chosen
+   in RakkeZ itself.
+========================= */
+
+html.light,
+body.light{
+
+    --surface-rgb:248,250,255;
+
+    --ink-rgb:17,24,39;
+
+    --bg:#f5f7fb;
+
+    --border:rgba(0,0,0,.10);
+
+    --border-hover:rgba(0,0,0,.18);
+
+    --text:#111827;
+
+    --muted:rgba(17,24,39,.58);
+
+}
+
+
+body.light .gradient{
+
+    background:
+
+        radial-gradient(
+            circle at 20% 25%,
+            rgba(70,145,255,.28),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(40,110,255,.20),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(20,80,200,.14),
+            transparent 45%
+        ),
+
+        #eef1f8;
+
+}
+
+
+body.light .demo-progress,
+body.light .goal-bar{
+
+    background:rgba(0,0,0,.08);
+
+}
+
+
+body.light .final-screen{
+
+    background:rgba(238,241,248,.96);
 
 }
 
@@ -74,7 +147,9 @@ button{
 
     overflow:hidden;
 
-    background:#03050a;
+    background:var(--bg);
+
+    transition:background .25s ease;
 
 }
 
@@ -244,7 +319,7 @@ button{
 
     height:2px;
 
-    background:rgba(255,255,255,.07);
+    background:rgba(var(--ink-rgb),.07);
 
     z-index:10;
 
@@ -457,7 +532,7 @@ h1{
         var(--border);
 
     background:
-        rgba(8,13,22,.55);
+        rgba(var(--surface-rgb),.55);
 
     backdrop-filter:
         blur(20px);
@@ -545,7 +620,7 @@ h1{
 
     overflow:hidden;
 
-    background:rgba(255,255,255,.08);
+    background:rgba(var(--ink-rgb),.08);
 
 }
 
@@ -575,9 +650,9 @@ h1{
 
     border-radius:13px;
 
-    background:rgba(255,255,255,.035);
+    background:rgba(var(--ink-rgb),.035);
 
-    border:1px solid rgba(255,255,255,.07);
+    border:1px solid rgba(var(--ink-rgb),.07);
 
 }
 
@@ -635,7 +710,7 @@ h1{
 
     overflow:hidden;
 
-    background:rgba(255,255,255,.08);
+    background:rgba(var(--ink-rgb),.08);
 
     margin-top:14px;
 
@@ -678,7 +753,7 @@ h1{
         var(--border);
 
     background:
-        rgba(255,255,255,.035);
+        rgba(var(--ink-rgb),.035);
 
     font-size:11px;
 
@@ -718,7 +793,7 @@ h1{
         var(--border);
 
     background:
-        rgba(255,255,255,.035);
+        rgba(var(--ink-rgb),.035);
 
     text-align:left;
 
@@ -815,7 +890,7 @@ h1{
 .nav-button.secondary{
 
     background:
-        rgba(8,13,22,.55);
+        rgba(var(--surface-rgb),.55);
 
     border:
         1px solid
@@ -874,7 +949,7 @@ h1{
     background:none;
 
     color:
-        rgba(255,255,255,.4);
+        rgba(var(--ink-rgb),.4);
 
     font-size:11px;
 
@@ -906,7 +981,7 @@ h1{
     border-radius:50%;
 
     background:
-        rgba(255,255,255,.16);
+        rgba(var(--ink-rgb),.16);
 
     transition:.3s;
 
@@ -1107,7 +1182,7 @@ h1{
 .final-button.secondary{
 
     background:
-        rgba(255,255,255,.05);
+        rgba(var(--ink-rgb),.05);
 
     border:
         1px solid
