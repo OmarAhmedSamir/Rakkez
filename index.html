@@ -26,6 +26,30 @@
 </script>
 
 
+<!-- =====================================================
+     THEME SYNC (runs before CSS paints, prevents flash)
+===================================================== -->
+
+<script>
+(function () {
+    try {
+        var raw = localStorage.getItem("rakkez_theme_settings");
+        var theme = "dark";
+        if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed.theme === "light") {
+                theme = "light";
+            }
+        }
+        if (theme === "light") {
+            document.documentElement.classList.add("light");
+            document.documentElement.dataset.theme = "light";
+        }
+    } catch (error) {}
+})();
+</script>
+
+
 <meta charset="UTF-8">
 
 <meta
@@ -191,7 +215,7 @@
 
     border-radius: 50%;
 
-    border: 3px solid rgba(255,255,255,.10);
+    border: 3px solid rgba(var(--ink-rgb),.10);
 
     border-top-color: #1683ff;
 
@@ -378,7 +402,7 @@
             rgba(4,8,15,.98)
         );
 
-    border: 1px solid rgba(255,255,255,.10);
+    border: 1px solid rgba(var(--ink-rgb),.10);
 
     box-shadow:
         0 35px 120px rgba(0,0,0,.65);
@@ -393,9 +417,23 @@
     scrollbar-width: thin;
 
     scrollbar-color:
-        rgba(255,255,255,.15)
+        rgba(var(--ink-rgb),.15)
         transparent;
 
+}
+
+html.light .rakkez-media-panel,
+body.light .rakkez-media-panel,
+[data-theme="light"] .rakkez-media-panel {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.98),
+            rgba(240,243,250,.98)
+        );
+
+    box-shadow:
+        0 35px 120px rgba(20,30,50,.2);
 }
 
 
@@ -424,7 +462,7 @@
 
 .rakkez-media-panel::-webkit-scrollbar-thumb {
 
-    background: rgba(255,255,255,.14);
+    background: rgba(var(--ink-rgb),.14);
 
     border-radius: 20px;
 
@@ -452,7 +490,7 @@
 
     margin-bottom: 5px;
 
-    color: rgba(255,255,255,.35);
+    color: rgba(var(--ink-rgb),.35);
 
     font-size: 10px;
 
@@ -465,7 +503,7 @@
 
 .rakkez-media-title {
 
-    color: #fff;
+    color:var(--text);
 
     font-family: "Space Grotesk", sans-serif;
 
@@ -490,9 +528,9 @@
 
     border-radius: 12px;
 
-    background: rgba(255,255,255,.055);
+    background: rgba(var(--ink-rgb),.055);
 
-    color: rgba(255,255,255,.65);
+    color: rgba(var(--ink-rgb),.65);
 
     font-size: 22px;
 
@@ -505,9 +543,9 @@
 
 .rakkez-media-close:hover {
 
-    background: rgba(255,255,255,.11);
+    background: rgba(var(--ink-rgb),.11);
 
-    color: #fff;
+    color:var(--text);
 
     transform: rotate(90deg);
 
@@ -528,9 +566,9 @@
 
     border-radius: 15px;
 
-    background: rgba(255,255,255,.035);
+    background: rgba(var(--ink-rgb),.035);
 
-    border: 1px solid rgba(255,255,255,.06);
+    border: 1px solid rgba(var(--ink-rgb),.06);
 
 }
 
@@ -549,7 +587,7 @@
 
     background: transparent;
 
-    color: rgba(255,255,255,.43);
+    color: rgba(var(--ink-rgb),.43);
 
     font-family: "DM Sans", sans-serif;
 
@@ -566,18 +604,18 @@
 
 .rakkez-media-tab:hover {
 
-    color: #fff;
+    color:var(--text);
 
-    background: rgba(255,255,255,.045);
+    background: rgba(var(--ink-rgb),.045);
 
 }
 
 
 .rakkez-media-tab.active {
 
-    color: #fff;
+    color:var(--text);
 
-    background: rgba(255,255,255,.09);
+    background: rgba(var(--ink-rgb),.09);
 
     box-shadow:
         0 4px 18px rgba(0,0,0,.18);
@@ -633,9 +671,9 @@
 
     border-radius: 24px;
 
-    background: rgba(255,255,255,.035);
+    background: rgba(var(--ink-rgb),.035);
 
-    border: 1px solid rgba(255,255,255,.07);
+    border: 1px solid rgba(var(--ink-rgb),.07);
 
     text-align: center;
 
@@ -680,7 +718,7 @@
             #080c13
         );
 
-    border: 1px solid rgba(255,255,255,.10);
+    border: 1px solid rgba(var(--ink-rgb),.10);
 
     box-shadow:
         0 25px 55px rgba(0,0,0,.35);
@@ -726,7 +764,7 @@
 
     z-index: 2;
 
-    color: rgba(255,255,255,.85);
+    color: rgba(var(--ink-rgb),.85);
 
     font-size: 54px;
 
@@ -746,7 +784,7 @@
 
 .rakkez-track-name {
 
-    color: #fff;
+    color:var(--text);
 
     font-family: "Space Grotesk", sans-serif;
 
@@ -763,7 +801,7 @@
 
     margin-top: 5px;
 
-    color: rgba(255,255,255,.42);
+    color: rgba(var(--ink-rgb),.42);
 
     font-size: 12px;
 
@@ -798,7 +836,7 @@
     cursor: pointer;
 
     background:
-        rgba(255,255,255,.10);
+        rgba(var(--ink-rgb),.10);
 
 }
 
@@ -850,7 +888,7 @@
 
     margin-top: 7px;
 
-    color: rgba(255,255,255,.35);
+    color: rgba(var(--ink-rgb),.35);
 
     font-size: 10px;
 
@@ -905,9 +943,9 @@
 
     border-radius: 12px;
 
-    background: rgba(255,255,255,.045);
+    background: rgba(var(--ink-rgb),.045);
 
-    color: rgba(255,255,255,.65);
+    color: rgba(var(--ink-rgb),.65);
 
     font-size: 15px;
 
@@ -916,9 +954,9 @@
 
 .rakkez-control:hover {
 
-    background: rgba(255,255,255,.09);
+    background: rgba(var(--ink-rgb),.09);
 
-    color: #fff;
+    color:var(--text);
 
     transform: translateY(-1px);
 
@@ -929,7 +967,7 @@
 
     font-size: 17px;
 
-    color: rgba(255,255,255,.42);
+    color: rgba(var(--ink-rgb),.42);
 
 }
 
@@ -984,7 +1022,7 @@
 
     margin-top: 20px;
 
-    color: rgba(255,255,255,.42);
+    color: rgba(var(--ink-rgb),.42);
 
     font-size: 12px;
 
@@ -1008,7 +1046,7 @@
     cursor: pointer;
 
     background:
-        rgba(255,255,255,.10);
+        rgba(var(--ink-rgb),.10);
 
 }
 
@@ -1086,7 +1124,7 @@
 
 .rakkez-playlist-title {
 
-    color: #fff;
+    color:var(--text);
 
     font-family: "Space Grotesk", sans-serif;
 
@@ -1101,7 +1139,7 @@
 
     margin-top: 2px;
 
-    color: rgba(255,255,255,.35);
+    color: rgba(var(--ink-rgb),.35);
 
     font-size: 10px;
 
@@ -1110,15 +1148,15 @@
 
 .rakkez-auto-next {
 
-    border: 1px solid rgba(255,255,255,.08);
+    border: 1px solid rgba(var(--ink-rgb),.08);
 
     border-radius: 9px;
 
     padding: 7px 9px;
 
-    background: rgba(255,255,255,.035);
+    background: rgba(var(--ink-rgb),.035);
 
-    color: rgba(255,255,255,.42);
+    color: rgba(var(--ink-rgb),.42);
 
     font-size: 9px;
 
@@ -1135,7 +1173,7 @@
 
 .rakkez-auto-next.active {
 
-    color: #fff;
+    color:var(--text);
 
     border-color: rgba(22,131,255,.25);
 
@@ -1159,7 +1197,7 @@
     scrollbar-width: thin;
 
     scrollbar-color:
-        rgba(255,255,255,.12)
+        rgba(var(--ink-rgb),.12)
         transparent;
 
 }
@@ -1174,7 +1212,7 @@
 
 .rakkez-playlist::-webkit-scrollbar-thumb {
 
-    background: rgba(255,255,255,.12);
+    background: rgba(var(--ink-rgb),.12);
 
     border-radius: 20px;
 
@@ -1197,9 +1235,9 @@
 
     border-radius: 13px;
 
-    background: rgba(255,255,255,.025);
+    background: rgba(var(--ink-rgb),.025);
 
-    color: #fff;
+    color:var(--text);
 
     text-align: left;
 
@@ -1212,10 +1250,10 @@
 
 .rakkez-track:hover {
 
-    background: rgba(255,255,255,.055);
+    background: rgba(var(--ink-rgb),.055);
 
     border-color:
-        rgba(255,255,255,.06);
+        rgba(var(--ink-rgb),.06);
 
 }
 
@@ -1254,7 +1292,7 @@
             #090d14
         );
 
-    color: rgba(255,255,255,.65);
+    color: rgba(var(--ink-rgb),.65);
 
     font-size: 15px;
 
@@ -1274,7 +1312,7 @@
 
     overflow: hidden;
 
-    color: rgba(255,255,255,.82);
+    color: rgba(var(--ink-rgb),.82);
 
     font-size: 12px;
 
@@ -1291,7 +1329,7 @@
 
     margin-top: 3px;
 
-    color: rgba(255,255,255,.32);
+    color: rgba(var(--ink-rgb),.32);
 
     font-size: 9px;
 
@@ -1300,7 +1338,7 @@
 
 .rakkez-track-duration {
 
-    color: rgba(255,255,255,.30);
+    color: rgba(var(--ink-rgb),.30);
 
     font-size: 9px;
 
@@ -1317,9 +1355,9 @@
 
     border-radius: 22px;
 
-    background: rgba(255,255,255,.035);
+    background: rgba(var(--ink-rgb),.035);
 
-    border: 1px solid rgba(255,255,255,.07);
+    border: 1px solid rgba(var(--ink-rgb),.07);
 
     text-align: center;
 
@@ -1342,9 +1380,9 @@
 
     border-radius: 16px;
 
-    background: rgba(255,255,255,.06);
+    background: rgba(var(--ink-rgb),.06);
 
-    color: #fff;
+    color:var(--text);
 
     font-family: "Space Grotesk", sans-serif;
 
@@ -1357,14 +1395,14 @@
 
 .rakkez-external-icon.spotify {
 
-    color: #fff;
+    color:var(--text);
 
 }
 
 
 .rakkez-external-title {
 
-    color: #fff;
+    color:var(--text);
 
     font-family: "Space Grotesk", sans-serif;
 
@@ -1381,7 +1419,7 @@
 
     margin: 7px auto 20px;
 
-    color: rgba(255,255,255,.40);
+    color: rgba(var(--ink-rgb),.40);
 
     font-size: 12px;
 
@@ -1413,15 +1451,15 @@
 
     padding: 0 14px;
 
-    border: 1px solid rgba(255,255,255,.08);
+    border: 1px solid rgba(var(--ink-rgb),.08);
 
     border-radius: 12px;
 
     outline: none;
 
-    background: rgba(255,255,255,.045);
+    background: rgba(var(--ink-rgb),.045);
 
-    color: #fff;
+    color:var(--text);
 
     font-family: "DM Sans", sans-serif;
 
@@ -1434,7 +1472,7 @@
 
 .rakkez-media-input::placeholder {
 
-    color: rgba(255,255,255,.28);
+    color: rgba(var(--ink-rgb),.28);
 
 }
 
@@ -1445,7 +1483,7 @@
         rgba(22,131,255,.35);
 
     background:
-        rgba(255,255,255,.06);
+        rgba(var(--ink-rgb),.06);
 
 }
 
@@ -1527,11 +1565,11 @@
 
     border-radius: 12px;
 
-    background: rgba(255,255,255,.07);
+    background: rgba(var(--ink-rgb),.07);
 
-    border: 1px solid rgba(255,255,255,.08);
+    border: 1px solid rgba(var(--ink-rgb),.08);
 
-    color: #fff;
+    color:var(--text);
 
     font-size: 12px;
 
@@ -1546,7 +1584,7 @@
 
 .rakkez-file-button:hover {
 
-    background: rgba(255,255,255,.11);
+    background: rgba(var(--ink-rgb),.11);
 
 }
 
@@ -1814,13 +1852,21 @@
 
 
         <button
-            class="language-btn"
+            class="icon-btn language-btn"
             id="languageToggle"
             type="button"
             title="Change language"
         >
 
-            <span id="languageLabel">
+            <span class="language-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M3 12h18"></path>
+                    <path d="M12 3c2.8 2.6 4.2 5.7 4.2 9s-1.4 6.4-4.2 9c-2.8-2.6-4.2-5.7-4.2-9s1.4-6.4 4.2-9z"></path>
+                </svg>
+            </span>
+
+            <span id="languageLabel" class="sr-only">
                 العربية
             </span>
 
@@ -1946,14 +1992,14 @@
     </button>
 
 
-   <!-- <button
+    <button
         class="secondary"
         id="resetBtn"
         type="button"
         title="Reset Timer"
     >
         ↻
-    </button> -->
+    </button>
 
 
     <button
@@ -2188,6 +2234,10 @@
 
 <div class="setting-name">
     Sessions Before Long Break
+</div>
+
+<div class="setting-description">
+    How many focus sessions before a long break
 </div>
 
 </div>
@@ -2487,10 +2537,10 @@
         margin-top:10px;
         padding:12px 14px;
         border-radius:14px;
-        background:rgba(255,255,255,.045);
-        border:1px solid rgba(255,255,255,.09);
+        background:rgba(var(--ink-rgb),.045);
+        border:1px solid rgba(var(--ink-rgb),.09);
         font-size:12px;
-        color:rgba(255,255,255,.68);
+        color:rgba(var(--ink-rgb),.68);
     "
 >
 
@@ -2511,8 +2561,8 @@
         display:flex;
         align-items:center;
         justify-content:center;
-        background:rgba(255,255,255,.08);
-        color:white;
+        background:rgba(var(--ink-rgb),.08);
+        color:var(--text);
         font-size:14px;
         flex-shrink:0;
     "
@@ -2531,7 +2581,7 @@
 <div
     id="alarmUploadStatus"
     style="
-        color:rgba(255,255,255,.82);
+        color:rgba(var(--ink-rgb),.82);
         font-weight:600;
         margin-bottom:3px;
     "
@@ -2543,7 +2593,7 @@
 <div
     id="customAlarmName"
     style="
-        color:rgba(255,255,255,.45);
+        color:rgba(var(--ink-rgb),.45);
         white-space:nowrap;
         overflow:hidden;
         text-overflow:ellipsis;
@@ -3559,12 +3609,12 @@ Add something you want to accomplish.
         </div>
 
         <div class="panel-title">
-            Reset everything?
+            Reset All Statistics?
         </div>
 
         <div class="confirm-description">
-            This will remove your sessions, focus time, streak and tasks.
-            This cannot be undone.
+            This will set your Focus time, Sessions and Daily Goal back to 0.
+            Your streak and tasks are kept safe. This cannot be undone.
         </div>
 
         <div class="confirm-actions">
@@ -3606,9 +3656,9 @@ Add something you want to accomplish.
     width: 100%;
     margin-top: 22px;
     padding: 16px;
-    border: 1px solid rgba(255,255,255,.09);
+    border: 1px solid rgba(var(--ink-rgb),.09);
     border-radius: 16px;
-    background: rgba(255,255,255,.035);
+    background: rgba(var(--ink-rgb),.035);
     box-sizing: border-box;
 }
 
@@ -3628,7 +3678,7 @@ Add something you want to accomplish.
     background: linear-gradient(
         135deg,
         rgba(22,131,255,.22),
-        rgba(255,255,255,.05)
+        rgba(var(--ink-rgb),.05)
     );
     font-size: 21px;
 }
@@ -3641,7 +3691,7 @@ Add something you want to accomplish.
 
 .rakkez-effect-subtitle {
     margin-top: 4px;
-    color: var(--muted, rgba(255,255,255,.56));
+    color: var(--muted, rgba(var(--ink-rgb),.56));
     font-size: 11px;
 }
 
@@ -3652,7 +3702,7 @@ Add something you want to accomplish.
     border: 1px solid rgba(22,131,255,.28);
     border-radius: 12px;
     background: rgba(22,131,255,.10);
-    color: #fff;
+    color:var(--text);
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
@@ -3678,7 +3728,7 @@ Add something you want to accomplish.
     align-items: center;
     gap: 10px;
     margin-top: 14px;
-    color: var(--muted, rgba(255,255,255,.56));
+    color: var(--muted, rgba(var(--ink-rgb),.56));
     font-size: 12px;
 }
 
@@ -3690,7 +3740,7 @@ Add something you want to accomplish.
 #rakkezAirplaneVolumeValue {
     width: 36px;
     text-align: right;
-    color: var(--muted, rgba(255,255,255,.56));
+    color: var(--muted, rgba(var(--ink-rgb),.56));
     font-size: 11px;
 }
 
@@ -3713,10 +3763,10 @@ Add something you want to accomplish.
 
     padding: 10px 12px;
 
-    border: 1px solid rgba(255,255,255,.12);
+    border: 1px solid rgba(var(--ink-rgb),.12);
     border-radius: 18px;
 
-    background: rgba(8,13,22,.94);
+    background: rgba(var(--surface-rgb),.94);
 
     backdrop-filter: blur(22px);
     -webkit-backdrop-filter: blur(22px);
@@ -3758,13 +3808,13 @@ Add something you want to accomplish.
     background: linear-gradient(
         135deg,
         rgba(22,131,255,.30),
-        rgba(255,255,255,.06)
+        rgba(var(--ink-rgb),.06)
     );
 
     background-size: cover;
     background-position: center;
 
-    color: #fff;
+    color:var(--text);
     font-size: 21px;
 
     overflow: hidden;
@@ -3788,7 +3838,7 @@ Add something you want to accomplish.
 .rakkez-mini-artist {
     margin-top: 4px;
 
-    color: var(--muted, rgba(255,255,255,.56));
+    color: var(--muted, rgba(var(--ink-rgb),.56));
     font-size: 11px;
 
     white-space: nowrap;
@@ -3805,10 +3855,10 @@ Add something you want to accomplish.
     display: grid;
     place-items: center;
 
-    border: 1px solid rgba(255,255,255,.09);
+    border: 1px solid rgba(var(--ink-rgb),.09);
     border-radius: 10px;
 
-    background: rgba(255,255,255,.055);
+    background: rgba(var(--ink-rgb),.055);
 
     color: var(--text, #fff);
 
@@ -3823,8 +3873,8 @@ Add something you want to accomplish.
 .rakkez-mini-control:hover,
 .rakkez-mini-close:hover {
     transform: translateY(-1px);
-    background: rgba(255,255,255,.10);
-    border-color: rgba(255,255,255,.18);
+    background: rgba(var(--ink-rgb),.10);
+    border-color: rgba(var(--ink-rgb),.18);
 }
 
 .rakkez-mini-close {
@@ -3843,7 +3893,7 @@ Add something you want to accomplish.
 
     border-radius: 99px;
 
-    background: rgba(255,255,255,.08);
+    background: rgba(var(--ink-rgb),.08);
 }
 
 .rakkez-mini-progress span {
@@ -3889,10 +3939,10 @@ Add something you want to accomplish.
 
     padding: 10px 12px;
 
-    border: 1px solid rgba(255,255,255,.08);
+    border: 1px solid rgba(var(--ink-rgb),.08);
     border-radius: 12px;
 
-    background: rgba(255,255,255,.035);
+    background: rgba(var(--ink-rgb),.035);
 
     color: var(--text, #fff);
 
@@ -3906,8 +3956,8 @@ Add something you want to accomplish.
 }
 
 .rakkez-local-track:hover {
-    background: rgba(255,255,255,.065);
-    border-color: rgba(255,255,255,.15);
+    background: rgba(var(--ink-rgb),.065);
+    border-color: rgba(var(--ink-rgb),.15);
 }
 
 .rakkez-local-track.active {
@@ -3925,7 +3975,7 @@ Add something you want to accomplish.
 
     border-radius: 9px;
 
-    background: rgba(255,255,255,.07);
+    background: rgba(var(--ink-rgb),.07);
 
     font-size: 14px;
 }
@@ -3949,7 +3999,7 @@ Add something you want to accomplish.
 
     font-size: 10px;
 
-    color: var(--muted, rgba(255,255,255,.5));
+    color: var(--muted, rgba(var(--ink-rgb),.5));
 }
 
 
@@ -4166,9 +4216,9 @@ body.light .rakkez-mini-close,
 
     border-radius: 14px;
 
-    background: rgba(255,255,255,.035);
+    background: rgba(var(--ink-rgb),.035);
 
-    border: 1px solid rgba(255,255,255,.07);
+    border: 1px solid rgba(var(--ink-rgb),.07);
 
     box-sizing: border-box;
 }
@@ -4188,7 +4238,7 @@ body.light .rakkez-mini-close,
 
     background: transparent;
 
-    color: rgba(255,255,255,.38);
+    color: rgba(var(--ink-rgb),.38);
 
     font-family: "DM Sans", sans-serif;
 
@@ -4205,15 +4255,15 @@ body.light .rakkez-mini-close,
 }
 
 .rakkez-timer-tab:hover {
-    color: rgba(255,255,255,.85);
+    color: rgba(var(--ink-rgb),.85);
 
-    background: rgba(255,255,255,.045);
+    background: rgba(var(--ink-rgb),.045);
 }
 
 .rakkez-timer-tab.active {
-    color: #fff;
+    color:var(--text);
 
-    background: rgba(255,255,255,.095);
+    background: rgba(var(--ink-rgb),.095);
 
     box-shadow: 0 4px 15px rgba(0,0,0,.16);
 }
@@ -4254,13 +4304,13 @@ body.light .rakkez-mini-close,
 
     gap: 15px;
 
-    border: 1px solid rgba(255,255,255,.08);
+    border: 1px solid rgba(var(--ink-rgb),.08);
 
     border-radius: 13px;
 
-    background: rgba(255,255,255,.035);
+    background: rgba(var(--ink-rgb),.035);
 
-    color: #fff;
+    color:var(--text);
 
     cursor: pointer;
 
@@ -4271,9 +4321,9 @@ body.light .rakkez-mini-close,
 }
 
 .rakkez-reset-option:hover {
-    background: rgba(255,255,255,.07);
+    background: rgba(var(--ink-rgb),.07);
 
-    border-color: rgba(255,255,255,.15);
+    border-color: rgba(var(--ink-rgb),.15);
 
     transform: translateY(-1px);
 }
@@ -4285,7 +4335,7 @@ body.light .rakkez-mini-close,
 }
 
 .rakkez-reset-option-title {
-    color: #fff;
+    color:var(--text);
 
     font-size: 12px;
 
@@ -4295,7 +4345,7 @@ body.light .rakkez-mini-close,
 .rakkez-reset-option-description {
     margin-top: 4px;
 
-    color: rgba(255,255,255,.38);
+    color: rgba(var(--ink-rgb),.38);
 
     font-size: 10px;
 }
@@ -4312,9 +4362,9 @@ body.light .rakkez-mini-close,
 
     border-radius: 9px;
 
-    background: rgba(255,255,255,.055);
+    background: rgba(var(--ink-rgb),.055);
 
-    color: rgba(255,255,255,.75);
+    color: rgba(var(--ink-rgb),.75);
 }
 
 
@@ -4386,7 +4436,7 @@ body.light .rakkez-mini-close,
 .rakkez-mini-mode {
     margin-bottom: 9px;
 
-    color: rgba(255,255,255,.42);
+    color: rgba(var(--ink-rgb),.42);
 
     font-size: 10px;
 
@@ -4430,11 +4480,11 @@ body.light .rakkez-mini-close,
 
     padding: 0 13px;
 
-    border: 1px solid rgba(255,255,255,.10);
+    border: 1px solid rgba(var(--ink-rgb),.10);
 
     border-radius: 11px;
 
-    background: rgba(255,255,255,.07);
+    background: rgba(var(--ink-rgb),.07);
 
     color: #fff;
 
@@ -4448,7 +4498,7 @@ body.light .rakkez-mini-close,
 }
 
 .rakkez-mini-buttons button:hover {
-    background: rgba(255,255,255,.12);
+    background: rgba(var(--ink-rgb),.12);
 }
 
 .rakkez-mini-buttons button:active {
@@ -4487,7 +4537,7 @@ body.light .rakkez-mini-close,
 
     overflow: hidden;
 
-    border: 1px solid rgba(255,255,255,.12);
+    border: 1px solid rgba(var(--ink-rgb),.12);
 
     border-radius: 20px;
 
@@ -4543,13 +4593,12 @@ body.light .rakkez-mini-close,
             ↻
         </div>
 
-        <div class="panel-title">
-            Reset Timer
+        <div class="panel-title" id="rakkezResetTitle">
+            Reset
         </div>
 
-        <div class="confirm-description">
-            Would you like to reset your current segment,
-            or your full session?
+        <div class="confirm-description" id="rakkezResetDescription">
+            What would you like to reset?
         </div>
 
         <div class="rakkez-reset-options">
@@ -4562,12 +4611,12 @@ body.light .rakkez-mini-close,
 
                 <div class="rakkez-reset-option-text">
 
-                    <div class="rakkez-reset-option-title">
-                        Reset Current Segment
+                    <div class="rakkez-reset-option-title" id="rakkezResetCurrentTitle">
+                        Reset Current Session
                     </div>
 
-                    <div class="rakkez-reset-option-description">
-                        Restart the current Focus or Break timer.
+                    <div class="rakkez-reset-option-description" id="rakkezResetCurrentDescription">
+                        Restart the current Focus or Break timer from the beginning.
                     </div>
 
                 </div>
@@ -4587,12 +4636,12 @@ body.light .rakkez-mini-close,
 
                 <div class="rakkez-reset-option-text">
 
-                    <div class="rakkez-reset-option-title">
-                        Reset Full Session
+                    <div class="rakkez-reset-option-title" id="rakkezResetAllTitle">
+                        Reset Everything (Keep Streak)
                     </div>
 
-                    <div class="rakkez-reset-option-description">
-                        Return to Focus and reset the current session cycle.
+                    <div class="rakkez-reset-option-description" id="rakkezResetAllDescription">
+                        Set Focus time, Sessions and Daily Goal back to 0. Your streak stays safe.
                     </div>
 
                 </div>
@@ -4609,7 +4658,7 @@ body.light .rakkez-mini-close,
                 class="secondary"
                 type="button"
             >
-                Cancel
+                <span id="rakkezResetCancelLabel">Cancel</span>
             </button>
 
         </div>
@@ -5172,10 +5221,40 @@ body.light .rakkez-mini-close,
        DIRECT TIMER RESET
     ===================================================== */
 
-    function directReset(mode) {
+    function directReset(mode, isFullReset) {
 
         const seconds =
             getTimerMinutes(mode) * 60;
+
+
+        /* ---------------------------------------------
+           RESET THE LIVE, RUNNING TIMER
+
+           This is the actual fix: setMode() (in app.js)
+           owns the live in-memory timer + its running
+           interval. Without calling it, this function
+           was only ever writing to localStorage/DOM —
+           the live countdown (driven by app.js's own
+           1-second interval) would just overwrite that
+           a moment later, which is why "Reset" looked
+           like it did nothing.
+        --------------------------------------------- */
+
+        if (typeof window.setMode === "function") {
+
+            window.setMode(mode);
+
+        }
+
+
+        if (
+            isFullReset &&
+            typeof window.resetFocusCycle === "function"
+        ) {
+
+            window.resetFocusCycle();
+
+        }
 
 
         let state = {};
@@ -5394,7 +5473,7 @@ body.light .rakkez-mini-close,
 
 
     /* =====================================================
-       RESET FULL SESSION
+       RESET EVERYTHING (KEEP STREAK)
     ===================================================== */
 
     if (resetFull) {
@@ -5412,13 +5491,19 @@ body.light .rakkez-mini-close,
 
 
                 /*
-                 * Full Session:
-                 * Always return to Focus.
+                 * Wipes lifetime + daily focus/session stats.
+                 * streak + lastFocusDate are deliberately left
+                 * untouched — see resetAllStats() in app.js.
                  */
 
-                directReset(
-                    "focus"
-                );
+                if (
+                    typeof window.resetAllStats ===
+                    "function"
+                ) {
+
+                    window.resetAllStats();
+
+                }
 
             }
         );
@@ -5918,7 +6003,7 @@ body.light .rakkez-mini-close,
                     margin-bottom: 8px;
 
                     color:
-                        rgba(255,255,255,.42);
+                        rgba(var(--ink-rgb),.42);
 
                     font-size: 10px;
 
@@ -5973,12 +6058,12 @@ body.light .rakkez-mini-close,
 
                     border:
                         1px solid
-                        rgba(255,255,255,.10);
+                        rgba(var(--ink-rgb),.10);
 
                     border-radius: 10px;
 
                     background:
-                        rgba(255,255,255,.07);
+                        rgba(var(--ink-rgb),.07);
 
                     color: #fff;
 
@@ -5989,7 +6074,7 @@ body.light .rakkez-mini-close,
 
                 .rakkez-mini-buttons button:hover {
                     background:
-                        rgba(255,255,255,.13);
+                        rgba(var(--ink-rgb),.13);
                 }
 
                 .rakkez-mini-start {
