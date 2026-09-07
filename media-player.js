@@ -107,7 +107,79 @@
             src: "Music/lofi (7).mp3",
             artwork: "assets/blog/effects/2.png",
             type: "lofi"
-        }
+        },
+
+{
+    title: "Lofi Chill Music 8",
+    artist: "RakkeZ",
+    src: "Music/lofi (8).mp3",
+    artwork: "assets/blog/effects/8.png",
+    type: "lofi"
+},
+
+{
+    title: "Lofi Chill Music 9",
+    artist: "RakkeZ",
+    src: "Music/lofi (9).mp3",
+    artwork: "assets/blog/effects/9.png",
+    type: "lofi"
+},
+
+{
+    title: "Lofi Chill Music 10",
+    artist: "RakkeZ",
+    src: "Music/lofi (10).mp3",
+    artwork: "assets/blog/effects/10.png",
+    type: "lofi"
+},
+
+{
+    title: "Lofi Chill Music 11",
+    artist: "RakkeZ",
+    src: "Music/lofi (11).mp3",
+    artwork: "assets/blog/effects/11.png",
+    type: "lofi"
+},
+
+{
+    title: "Lofi Chill Music 12",
+    artist: "RakkeZ",
+    src: "Music/lofi (12).mp3",
+    artwork: "assets/blog/effects/12.png",
+    type: "lofi"
+},
+
+{
+    title: "Lofi Chill Music 13",
+    artist: "RakkeZ",
+    src: "Music/lofi (13).mp3",
+    artwork: "assets/blog/effects/13.png",
+    type: "lofi"
+},
+
+{
+    title: "Lofi Chill Music 14",
+    artist: "RakkeZ",
+    src: "Music/lofi (14).mp3",
+    artwork: "assets/blog/effects/14.png",
+    type: "lofi"
+},
+
+{
+    title: "Lofi Chill Music 15",
+    artist: "RakkeZ",
+    src: "Music/lofi (15).mp3",
+    artwork: "assets/blog/effects/15.png",
+    type: "lofi"
+},
+
+{
+    title: "Lofi Chill Music 16",
+    artist: "RakkeZ",
+    src: "Music/lofi (16).mp3",
+    artwork: "assets/blog/effects/16.png",
+    type: "lofi"
+}
 
     ];
 
