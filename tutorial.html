@@ -14,6 +14,31 @@
 
 
     <!-- =====================================================
+         THEME SYNC (runs before CSS paints, prevents flash)
+         Reads the same theme the user picked in RakkeZ itself.
+    ====================================================== -->
+
+    <script>
+    (function () {
+        try {
+            var raw = localStorage.getItem("rakkez_theme_settings");
+            var theme = "dark";
+            if (raw) {
+                var parsed = JSON.parse(raw);
+                if (parsed && parsed.theme === "light") {
+                    theme = "light";
+                }
+            }
+            if (theme === "light") {
+                document.documentElement.classList.add("light");
+                document.documentElement.dataset.theme = "light";
+            }
+        } catch (error) {}
+    })();
+    </script>
+
+
+    <!-- =====================================================
          FONTS
     ====================================================== -->
 
@@ -47,6 +72,12 @@
 
 
 <body>
+
+<script>
+    if (document.documentElement.classList.contains("light")) {
+        document.body.classList.add("light");
+    }
+</script>
 
 <div class="tutorial-app">
 
